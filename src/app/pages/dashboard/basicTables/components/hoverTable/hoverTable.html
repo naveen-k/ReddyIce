@@ -1,0 +1,25 @@
+<div class="horizontal-scroll">
+  <table class="table table-hover">
+    <thead>
+    <tr class="black-muted-bg">
+      <th>Action</th>
+      <th>Customer#</th>
+      <th class="align-left">Customer Name</th>
+      <th class="align-left">RI Customer</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of metricsTableData" class="no-top-border">
+      <td>
+         <div class="checkbox">
+          <ba-checkbox [(ngModel)]="item.action" [label]="item.action" [ngModelOptions]="{standalone: true}" (click)="onEditClick(!item.action)"></ba-checkbox>
+        </div>
+        <!-- <i class="ion-edit edit"></i> -->
+      </td>
+      <td ngClass="nowrap">{{item.customerId}}</td>
+      <td class="align-left">{{item.customerName}}</td>
+      <td class="align-left">{{item.isReddyIceCustomer}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
