@@ -14,7 +14,19 @@ export class ManualTicketService {
       ticketId: 6776247,
       customerId: 456,
       amount: '128$',
-      status: 'Pending Approval'
+      status: 'Approved'
+    },
+    {
+      ticketId: 6776257,
+      customerId: 789,
+      amount: '158$',
+      status: 'Approved'
+    },
+    {
+      ticketId: 6776267,
+      customerId: 102,
+      amount: '178$',
+      status: 'Approved'
     }
   ]
   smartTableData = [
