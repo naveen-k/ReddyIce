@@ -1,6 +1,7 @@
 <div baCardBlur class="animated fadeIn card {{cardType}} {{baCardClass || ''}}" zoom-in>
     <div *ngIf="cardTitle" class="card-header clearfix">
-        <h3 class="card-title" translate>{{cardTitle}}</h3>
+        <h3 class="card-title" [ngClass]="{'titleWithIcon': showAddIcon}" translate>{{cardTitle}}</h3>
+        <div *ngIf="showAddIcon" style="float: right; font-size: 22px;" (click)="onClickIcon()"><i [ngClass]="{'ion-ios-plus-outline': !isExpanded, 'ion-ios-minus-outline': isExpanded}"></i></div>
     </div>
     <div class="card-body">
         <ng-content></ng-content>

@@ -1,0 +1,30 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NgaModule } from '../../theme/nga.module';
+import { AppTranslationModule } from '../../app.translation.module';
+
+import { ManualTicketComponent } from './manual-ticket.component';
+import { routing } from './manual-ticket.routing';
+import { TicketManagementComponent } from './ticket-management/ticket-management.component';
+import { ManualTicketService } from './ticket-management/manual-ticket.service';
+
+@NgModule({
+  imports: [
+    Ng2SmartTableModule,
+    CommonModule,
+    FormsModule,
+    AppTranslationModule,
+    NgaModule,
+    routing,
+  ],
+  declarations: [
+    TicketManagementComponent,
+    ManualTicketComponent,
+  ],
+  providers: [
+    ManualTicketService,
+  ],
+})
+export class ManualTicketModule {}

@@ -39,6 +39,18 @@ export const PAGES_MENU = [
         },
       },
       {
+        path: 'manualticket',
+        data: {
+          menu: {
+            title: 'general.menu.manualticket',
+            icon: 'ion-person',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
+      {
         path: 'dashboard',
         data: {
           menu: {

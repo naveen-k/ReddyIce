@@ -22,6 +22,7 @@ export const routes: Routes = [
       { path: 'home', loadChildren: './home/home.module#HomeModule' },
       { path: 'customers', loadChildren: './customer-management/customer-management.module#CustomerManagementModule' },
       { path: 'user-management', loadChildren: './user-management/user-management.module#UserManagementModule' },
+      { path: 'manualticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: 'editors', loadChildren: './editors/editors.module#EditorsModule' },
       { path: 'components', loadChildren: './components/components.module#ComponentsModule' },

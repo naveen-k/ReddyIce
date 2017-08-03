@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-lg-6 col-md-12">
+    <ba-card cardTitle="Basic Example" baCardClass="medium-card" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)">
+      <ticket-table></ticket-table>
+    </ba-card>
+  </div>
+  <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12">
+    <ba-card cardTitle="Basic Example" baCardClass="medium-card" class="smart-table-container">
+      <ticket-table></ticket-table>
+    </ba-card>
+  </div>
+</div>
