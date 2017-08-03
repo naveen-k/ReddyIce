@@ -6,19 +6,20 @@ import { Routes, RouterModule } from '@angular/router';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { NgModule, Provider } from '@angular/core';
 import { UserTablesService } from './user-management.service';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
     {
         path: '',
-        component: UserManagementComponent,
+        component: CreateUserComponent,
     },
 ];
 
 
 @NgModule({
-    declarations: [UserManagementComponent, DataFilterPipe],
+    declarations: [UserManagementComponent, DataFilterPipe, CreateUserComponent],
     imports: [Ng2SmartTableModule, RouterModule.forChild(routes), FormsModule, CommonModule, NgaModule],
     providers: [UserTablesService],
 })

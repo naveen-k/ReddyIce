@@ -3,10 +3,10 @@ import { UserTablesService } from '../../user-management.service';
 import { Component } from '@angular/core';
 
 @Component({
-    templateUrl: './user-management.component.html',
-    styleUrls: ['./user-management.component.scss'],
+    templateUrl: './create-user.component.html',
+    styleUrls: ['./create-user.component.scss'],
 })
-export class UserManagementComponent {
+export class CreateUserComponent {
     
     settings = {
         add: {
@@ -48,8 +48,8 @@ export class UserManagementComponent {
             city: {
                 title: 'City',
                 type: 'string',
-            }
-        }
+            },
+        },
     };
 
     source: LocalDataSource = new LocalDataSource();
