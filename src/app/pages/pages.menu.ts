@@ -42,7 +42,7 @@ export const PAGES_MENU = [
         path: 'manualticket',
         data: {
           menu: {
-            title: 'general.menu.manualticket',
+            title: 'Manual Ticket',
             icon: 'ion-person',
             selected: false,
             expanded: false,
