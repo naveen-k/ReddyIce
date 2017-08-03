@@ -15,7 +15,7 @@ export const PAGES_MENU = [
         },
       },
       {
-        path: 'customer-management',
+        path: 'customers',
         data: {
           menu: {
             title: 'Customer Management',
@@ -43,7 +43,7 @@ export const PAGES_MENU = [
         data: {
           menu: {
             title: 'general.menu.dashboard',
-            icon: 'ion-android-home',
+            icon: 'ion-person',
             selected: false,
             expanded: false,
             order: 0,

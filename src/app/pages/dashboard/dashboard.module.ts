@@ -1,3 +1,4 @@
+import { TablesModule } from '../tables/tables.module';
 import { NgModule }      from '@angular/core';
 import { CommonModule }  from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -29,7 +30,8 @@ import { UsersMapService } from './usersMap/usersMap.service';
     FormsModule,
     AppTranslationModule,
     NgaModule,
-    routing
+    routing,
+    TablesModule
   ],
   declarations: [
     PopularApp,

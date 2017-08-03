@@ -1,10 +1,16 @@
+import { CustomerManagementService } from './customer-management.service';
+
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '../forms/forms.module';
+import { NgaModule } from '../../theme/nga.module';
 import { Routes, RouterModule } from '@angular/router';
 import { CustomerManagementComponent } from './components/customer-management/customer-management.component';
 import { NgModule } from '@angular/core';
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'management',
         component: CustomerManagementComponent,
     },
 ];
@@ -12,7 +18,8 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [CustomerManagementComponent],
-    imports: [RouterModule.forChild(routes)],
+    imports: [Ng2SmartTableModule, RouterModule.forChild(routes), NgaModule, FormsModule, CommonModule],
+    providers: [CustomerManagementService],
 })
 export class CustomerManagementModule {
 
