@@ -1,18 +1,14 @@
+import { Routes, Router, RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home.component';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
-import { HomeComponent } from './home.component';
-import { routing } from './home.routing';
+const routes: Routes = [{ path: '', component: HomeComponent }];
+
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    routing,
-  ],
-  declarations: [
-    HomeComponent,
-  ],
+    declarations: [HomeComponent],
+    imports: [ RouterModule.forChild(routes) ]
 })
-export class HomeModule {}
+export class HomeModule {
+
+}

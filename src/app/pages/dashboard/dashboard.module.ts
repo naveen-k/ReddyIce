@@ -15,9 +15,6 @@ import { LineChart } from './lineChart';
 import { Feed } from './feed';
 import { Todo } from './todo';
 import { Calendar } from './calendar';
-import { BasicTables } from './BasicTables';
-import { BasicForm } from './basicForm';
-import { HoverTable } from './basicTables/components/hoverTable';
 import { CalendarService } from './calendar/calendar.service';
 import { FeedService } from './feed/feed.service';
 import { LineChartService } from './lineChart/lineChart.service';
@@ -25,7 +22,6 @@ import { PieChartService } from './pieChart/pieChart.service';
 import { TodoService } from './todo/todo.service';
 import { TrafficChartService } from './trafficChart/trafficChart.service';
 import { UsersMapService } from './usersMap/usersMap.service';
-import { BasicTablesService } from './basicTables/basicTables.service';
 
 @NgModule({
   imports: [
@@ -33,7 +29,7 @@ import { BasicTablesService } from './basicTables/basicTables.service';
     FormsModule,
     AppTranslationModule,
     NgaModule,
-    routing,
+    routing
   ],
   declarations: [
     PopularApp,
@@ -44,10 +40,7 @@ import { BasicTablesService } from './basicTables/basicTables.service';
     Feed,
     Todo,
     Calendar,
-    BasicTables,
-    HoverTable,
-    BasicForm,
-    Dashboard,
+    Dashboard
   ],
   providers: [
     CalendarService,
@@ -56,8 +49,7 @@ import { BasicTablesService } from './basicTables/basicTables.service';
     PieChartService,
     TodoService,
     TrafficChartService,
-    UsersMapService,
-    BasicTablesService,
-  ],
+    UsersMapService
+  ]
 })
 export class DashboardModule {}

@@ -6,11 +6,8 @@ import {Component} from '@angular/core';
   templateUrl: './dashboard.html'
 })
 export class Dashboard {
-  showDetails: boolean = false;
+
   constructor() {
   }
-  selectedCustomer(showCustomerDetail) {
-    console.log(showCustomerDetail);
-    this.showDetails = showCustomerDetail;
-  }
+
 }

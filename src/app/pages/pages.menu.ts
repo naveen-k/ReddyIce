@@ -6,23 +6,35 @@ export const PAGES_MENU = [
         path: 'home',
         data: {
           menu: {
-            title: 'general.menu.home',
+            title: 'Home',
             icon: 'ion-android-home',
             selected: false,
             expanded: false,
             order: 0,
-          }
-        }
+          },
+        },
+      },
+      {
+        path: 'customer-management',
+        data: {
+          menu: {
+            title: 'Customer Management',
+            icon: 'ion-android-home',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
       },
       {
         path: 'dashboard',
         data: {
           menu: {
-            title: 'general.menu.customer',
-            icon: 'ion-ios-people',
+            title: 'general.menu.dashboard',
+            icon: 'ion-android-home',
             selected: false,
             expanded: false,
-            order: 10,
+            order: 0
           }
         }
       },
@@ -220,14 +232,14 @@ export const PAGES_MENU = [
               }
             }
           },
-           {
-             path: 'hottables',
-             data: {
-               menu: {
-                 title: 'Hot Tables',
-               }
-             }
-           }
+          {
+            path: 'hottables',
+            data: {
+              menu: {
+                title: 'Hot Tables',
+              }
+            }
+          }
         ]
       },
       {

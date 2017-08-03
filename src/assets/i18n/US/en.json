@@ -18,9 +18,7 @@
       "option1": "Option 1"
     },
     "menu": {
-      "home": "Home",
       "dashboard": "Dashboard",
-      "customer": "Customer Management",
       "editors": "Editors",
       "ck_editor": "CKEditor",
       "components": "Components",
