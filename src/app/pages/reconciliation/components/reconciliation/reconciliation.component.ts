@@ -51,10 +51,116 @@ export class ReconciliationComponent {
         },
     };
 
+     settings2 = {
+         mode: 'external',
+        add: {
+            addButtonContent: '',
+        },
+        edit: {
+            editButtonContent: '<i class="ion-edit"></i>',
+            saveButtonContent: '<i class="ion-checkmark"></i>',
+            cancelButtonContent: '<i class="ion-close"></i>',
+            confirmEdit: true,
+        },
+        actions: {
+            delete: false ,
+        },
+        delete: {
+            deleteButtonContent: '<i class="ion-trash-a"></i>',
+            confirmDelete: true,
+        },
+        editable: false,
+        columns: {
+            product: {
+                title: 'Product',
+                type: 'number',
+            },
+            load: {
+                title: 'Load',
+                type: 'string',
+            },
+            return: {
+                title: 'Return',
+                type: 'number',
+            },
+            damage: {
+                title: 'Damage',
+                type: 'number',
+            },
+             sale: {
+                title: 'Sale',
+                type: 'number',
+            },
+             over: {
+                title: 'Over/Short',
+                type: 'number',
+            },
+        },
+    };
+
+     settings3 = {
+         mode: 'external',
+        add: {
+            addButtonContent: '',
+        },
+        edit: {
+            editButtonContent: '<i class="ion-edit"></i>',
+            saveButtonContent: '<i class="ion-checkmark"></i>',
+            cancelButtonContent: '<i class="ion-close"></i>',
+            confirmEdit: true,
+        },
+        actions: {
+            delete: false ,
+        },
+        delete: {
+            deleteButtonContent: '<i class="ion-trash-a"></i>',
+            confirmDelete: true,
+        },
+        editable: false,
+        columns: {
+            custNumber: {
+                title: 'Customer Number',
+                type: 'number',
+            },
+            customer: {
+                title: 'Customer Name',
+                type: 'string',
+            },
+            ticket: {
+                title: 'Ticket',
+                type: 'number',
+            },
+             invoiceAmount: {
+                title: 'Invoice Amount',
+                type: 'number',
+            },
+             check: {
+                title: 'Check',
+                type: 'number',
+            },
+             cash: {
+                title: 'Cash',
+                type: 'number',
+            },
+             charge: {
+                title: 'Charge',
+                type: 'number',
+            },
+        },
+    };
+
     source: LocalDataSource = new LocalDataSource();
+    source2: LocalDataSource = new LocalDataSource();
+    source3: LocalDataSource = new LocalDataSource();
     constructor(private service: ReconciliationService) {
         this.service.getData().then((data) => {
             this.source.load(data);
+        });
+         this.service.getData2().then((data) => {
+            this.source2.load(data);
+        });
+         this.service.getData3().then((data) => {
+            this.source3.load(data);
         });
     }
 
