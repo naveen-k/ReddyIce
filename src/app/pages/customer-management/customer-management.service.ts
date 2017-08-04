@@ -5,51 +5,88 @@ export class CustomerManagementService {
 
   smartTableData = [
     {
-      id: 1,
-      firstName: 'Mark',
-      lastName: 'Otto',
-      username: '@mdo',
-      email: 'mdo@gmail.com',
-      age: '28'
+      customerNumber: 1,
+      customerName: 'Jack Kelsey',
+      isRICustomer: 'Y',
     },
     {
-      id: 2,
-      firstName: 'Jacob',
-      lastName: 'Thornton',
-      username: '@fat',
-      email: 'fat@yandex.ru',
-      age: '45'
+      customerNumber: 2,
+      customerName: 'Shaun Michael',
+      isRICustomer: 'Y',
     },
     {
-      id: 3,
-      firstName: 'Larry',
-      lastName: 'Bird',
-      username: '@twitter',
-      email: 'twitter@outlook.com',
-      age: '18'
+      customerNumber: 3,
+      customerName: 'Gill Ambrose',
+      isRICustomer: 'N',
     },
     {
-      id: 4,
-      firstName: 'John',
-      lastName: 'Snow',
-      username: '@snow',
-      email: 'snow@gmail.com',
-      age: '20'
+      customerNumber: 4,
+      customerName: 'Bill Courtney',
+      isRICustomer: 'Y',
     },
     {
-      id: 5,
-      firstName: 'Jack',
-      lastName: 'Sparrow',
-      username: '@jack',
-      email: 'jack@yandex.ru',
-      age: '30'
+      customerNumber: 5,
+      customerName: 'Jill Franko',
+      isRICustomer: 'N',
     }
+  ];
+
+  products = [
+    {
+      name: 'Cocktail',
+    },
+    {
+      name: 'BoxIce',
+    },
+    {
+      name: 'Cloudtails',
+    },
+    {
+      name: 'IceBucket',
+    },
+    {
+      name: 'FrankyIce',
+    },
+  ];
+
+  mappedProds = [
+    {
+      name: 'Cocktail',
+    },
+    {
+      name: 'BoxIce',
+    },
+    {
+      name: 'Cloudtails',
+    },
+    {
+      name: 'IceBucket',
+    },
+    {
+      name: 'FrankyIce',
+    },
   ];
 
   getData(): Promise<any> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(this.smartTableData);
+      }, 2000);
+    });
+  }
+
+  getProducts(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(this.products);
+      }, 2000);
+    });
+  }
+
+  mappedProducts(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(this.mappedProds);
       }, 2000);
     });
   }

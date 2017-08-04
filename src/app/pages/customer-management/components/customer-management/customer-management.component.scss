@@ -3,3 +3,12 @@
 .page-header {
     margin: 20px 0;
 };
+
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.25rem + -1px);
+}
+
+.ioiIconsLR {
+    padding-left: 48px;
+    padding-top: 45px;
+}

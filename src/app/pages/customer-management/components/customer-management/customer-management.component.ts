@@ -8,11 +8,9 @@ import { LocalDataSource } from 'ng2-smart-table';
     styleUrls: ['./customer-management.component.scss'],
 })
 export class CustomerManagementComponent {
-    settings = {
+    settings1 = {
         add: {
-            addButtonContent: '<i class="ion-ios-plus-outline"></i>',
-            createButtonContent: '<i class="ion-checkmark"></i>',
-            cancelButtonContent: '<i class="ion-close"></i>',
+            addButtonContent: '',
         },
         edit: {
             editButtonContent: '<i class="ion-edit"></i>',
@@ -24,38 +22,81 @@ export class CustomerManagementComponent {
             confirmDelete: true,
         },
         columns: {
-            id: {
-                title: 'ID',
+            customerNumber: {
+                title: 'Customer#',
                 type: 'number',
             },
-            firstName: {
-                title: 'First Name',
+            customerName: {
+                title: 'Name',
                 type: 'string',
             },
-            lastName: {
-                title: 'Last Name',
+            isRICustomer: {
+                title: 'IsReddyIce?',
                 type: 'string',
-            },
-            username: {
-                title: 'Username',
-                type: 'string',
-            },
-            email: {
-                title: 'E-mail',
-                type: 'string',
-            },
-            age: {
-                title: 'Age',
-                type: 'number',
             },
         },
     };
 
-    source: LocalDataSource = new LocalDataSource();
+    settings2 = {
+        add: {
+            addButtonContent: '',
+        },
+        edit: {
+            editButtonContent: '<i class="ion-edit"></i>',
+            saveButtonContent: '<i class="ion-checkmark"></i>',
+            cancelButtonContent: '<i class="ion-close"></i>',
+        },
+        delete: {
+            deleteButtonContent: '<i class="ion-trash-a"></i>',
+            confirmDelete: true,
+        },
+        columns: {
+            name: {
+                title: 'Products',
+                type: 'string',
+            },
+        },
+    };
+
+    settings3 = {
+        add: {
+            addButtonContent: '',
+        },
+        edit: {
+            editButtonContent: '<i class="ion-edit"></i>',
+            saveButtonContent: '<i class="ion-checkmark"></i>',
+            cancelButtonContent: '<i class="ion-close"></i>',
+        },
+        delete: {
+            deleteButtonContent: '<i class="ion-trash-a"></i>',
+            confirmDelete: true,
+        },
+        columns: {
+            name: {
+                title: 'Products',
+                type: 'string',
+            },
+        },
+    };
+
+    source1: LocalDataSource = new LocalDataSource();
+    source2: LocalDataSource = new LocalDataSource();
+    source3: LocalDataSource = new LocalDataSource();
 
     constructor(protected service: CustomerManagementService) {
         this.service.getData().then((data) => {
-            this.source.load(data);
+            this.source1.load(data);
         });
+        this.service.getProducts().then((data) => {
+            this.source2.load(data);
+        });
+        this.service.mappedProducts().then((data) => {
+            this.source3.load(data);
+        });
+    }
+    isNewCustomer: boolean = true;
+
+    showNewCustomer(newCustomer) {
+        this.isNewCustomer = newCustomer;
     }
 }
