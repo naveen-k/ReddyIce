@@ -43,7 +43,7 @@ export const PAGES_MENU = [
         data: {
           menu: {
             title: 'Manual Ticket',
-            icon: 'ion-person',
+            icon: 'ion-compose',
             selected: false,
             expanded: false,
             order: 0,
