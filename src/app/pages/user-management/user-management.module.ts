@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 const routes: Routes = [
     {
         path: '',
-        component: CreateUserComponent,
+        component: UserManagementComponent,
     },
 ];
 

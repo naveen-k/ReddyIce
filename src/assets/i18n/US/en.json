@@ -19,6 +19,7 @@
     },
     "menu": {
       "dashboard": "Dashboard",
+      "home": "Home",
       "manualticket": "Manual Ticket",
       "editors": "Editors",
       "ck_editor": "CKEditor",

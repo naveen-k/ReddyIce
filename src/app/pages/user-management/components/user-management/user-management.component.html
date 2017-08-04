@@ -1,4 +1,4 @@
-<div class="row page-header">
+<!-- <div class="row page-header">
     <div class="col-md-6 padding-eater">
         <h3>Distributor:Dist 001</h3>
     </div>
@@ -6,7 +6,6 @@
         <button class="btn btn-primary pull-right">Create User</button>
     </div>
 </div>
-
 <div class="widgets">
 
   <div class="row">
@@ -16,4 +15,19 @@
   </div>
 
 </div>
-  
+   -->
+<div class="row page-header">
+  <div class="col-md-6">
+    <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)">
+      <div class="col-md-5 padding-eater">
+        <h4>Distributor:Dist 001</h4>
+      </div>
+      <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>
+    </ba-card>
+  </div>
+   <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12">
+    <ba-card cardTitle="Create New User" baCardClass="with-scroll" class="smart-table-container">
+      <create-user [user]="selectedUser"></create-user>
+    </ba-card>
+  </div>
+</div>

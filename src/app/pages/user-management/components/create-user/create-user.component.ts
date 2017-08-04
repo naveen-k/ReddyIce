@@ -1,18 +1,21 @@
+import { selector } from 'rxjs/operator/multicast';
 import { LocalDataSource } from 'ng2-smart-table';
 import { UserTablesService } from '../../user-management.service';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     templateUrl: './create-user.component.html',
     styleUrls: ['./create-user.component.scss'],
+    selector: 'create-user',
 })
 export class CreateUserComponent {
-    
+    @Input() user: any;
+OnCancelClick() {
+    this.user = {};
+}
     settings = {
         add: {
-            addButtonContent: '<i class="ion-ios-plus-outline"></i>',
-            createButtonContent: '<i class="ion-checkmark"></i>',
-            cancelButtonContent: '<i class="ion-close"></i>',
+            addButtonContent: '',
         },
         edit: {
             editButtonContent: '<i class="ion-edit"></i>',
@@ -25,30 +28,15 @@ export class CreateUserComponent {
         },
         editable: false,
         columns: {
-            id: {
-                title: 'ID',
-                type: 'number',
-            },
-            name: {
-                title: 'Name',
-                type: 'string',
-            },
-            email: {
-                title: 'Email',
-                type: 'string',
-            },
-            regDate: {
-                title: 'Reg date',
-                type: 'date',
-            },
-            age: {
-                title: 'Age',
-                type: 'number',
-            },
             city: {
-                title: 'City',
+                title: 'Location',
+                type: 'number',
+            },
+            branch: {
+                title: 'Branch',
                 type: 'string',
             },
+
         },
     };
 

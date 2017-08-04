@@ -1,0 +1,72 @@
+<div class="row page-header">
+    <div class="col-md-6 padding-eater">
+        <ba-card cardTitle="Reconciliation List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)">
+            <div class="row bottom-margin">
+                <div class="col-md-6">
+                    <select class="form-control">
+                        <option value="volvo">301/301</option>
+                        <option value="saab">302/302</option>
+                        <option value="opel">303/303</option>
+                    </select>
+                </div>
+            </div>
+            <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" class="page-header"></ng2-smart-table>
+        </ba-card>
+    </div>
+    <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12">
+        <ba-card cardTitle="Details" baCardClass="medium-card" class="smart-table-container">
+            <div class="row">
+                <div class="col-md-3">
+                    <span>Route :</span>
+                    <label>801</label>
+                </div>
+                <div class="col-md-4">
+                    <span>Driver :</span>
+                    <label>Deangelo Parks</label>
+                </div>
+                <div class="col-md-5">
+                    <div class="pull-right">
+                    <span>Status :</span>
+                    <label>Pending Checker Approval</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row page-header">
+                <div class="col-md-12">
+                    <button class="btn btn-danger pull-right">Approve</button>
+                </div>
+                <div class="col-md-12 padding-eater">
+                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                    <label>Cash Reconciliation</label>
+                </div>
+            </div>
+            <div class="row page-header">
+                <div class="col-md-12">
+                    <table class="cash-reconciliation-table">
+                        <thead>
+                            <th></th>
+                            <th>Payment</th>
+                            <th>Actual</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Check</td>
+                                <td>$10.90</td>
+                                <td>10.90</td>
+                                <td>Coins</td>
+                                <td>0.00</td>
+                                <td>Total Deposit</td>
+                                <td>$15.90</td>
+                            </tr>
+                            <tr></tr> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ba-card>
+    </div>
+</div>

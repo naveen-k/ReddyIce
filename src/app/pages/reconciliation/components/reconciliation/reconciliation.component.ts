@@ -1,20 +1,19 @@
 import { LocalDataSource } from 'ng2-smart-table';
-import { UserTablesService } from '../../user-management.service';
+import { ReconciliationService } from '../../reconciliation.service';
 import { Component } from '@angular/core';
 
 @Component({
-    templateUrl: './user-management.component.html',
-    styleUrls: ['./user-management.component.scss'],
+    templateUrl: './reconciliation.component.html',
+    styleUrls: ['./reconciliation.component.scss'],
 })
-export class UserManagementComponent {
+export class ReconciliationComponent {
     isNewCustomer: boolean = true;
-    selectedUser = {};
-    showNewCustomer(newCustomer) {
-        this.isNewCustomer = newCustomer;
-    }
 
+  showNewCustomer(newCustomer) {
+    this.isNewCustomer = newCustomer;
+  }
     settings = {
-        mode: 'external',
+         mode: 'external',
         add: {
             addButtonContent: '',
         },
@@ -25,7 +24,7 @@ export class UserManagementComponent {
             confirmEdit: true,
         },
         actions: {
-            delete: false,
+            delete: false ,
         },
         delete: {
             deleteButtonContent: '<i class="ion-trash-a"></i>',
@@ -33,24 +32,28 @@ export class UserManagementComponent {
         },
         editable: false,
         columns: {
-            name: {
-                title: 'Name',
+            routename: {
+                title: 'Route Number',
+                type: 'number',
+            },
+            location: {
+                title: 'Location/Branch',
                 type: 'string',
             },
-            role: {
-                title: 'Role',
-                type: 'string',
+            ticketno: {
+                title: '# of Tickets',
+                type: 'number',
             },
-
-        }
+            amount: {
+                title: 'Amount',
+                type: 'number',
+            },
+        },
     };
 
     source: LocalDataSource = new LocalDataSource();
-    constructor(private service: UserTablesService) {
+    constructor(private service: ReconciliationService) {
         this.service.getData().then((data) => {
-            data.forEach(element => {
-                element['name'] = `${element.fname} ${element.lname}`;
-            });
             this.source.load(data);
         });
     }
@@ -60,11 +63,7 @@ export class UserManagementComponent {
     }
 
     sortByWordLength = (a: any) => {
-        return a.city.length;
-    }
-
-    onEditCliked($event) {        
-        this.selectedUser = $event.data;
+        return a.location.length;
     }
 
 }

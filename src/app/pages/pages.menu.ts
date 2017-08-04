@@ -19,7 +19,7 @@ export const PAGES_MENU = [
         data: {
           menu: {
             title: 'Customer Management',
-            icon: 'ion-person-stalker',
+            icon: 'ion-ios-people',
             selected: false,
             expanded: false,
             order: 0,
@@ -32,6 +32,18 @@ export const PAGES_MENU = [
           menu: {
             title: 'User Management',
             icon: 'ion-person',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
+       {
+        path: 'reconciliation',
+        data: {
+          menu: {
+            title: 'Reconciliation',
+            icon: 'ion-happy',
             selected: false,
             expanded: false,
             order: 0,
