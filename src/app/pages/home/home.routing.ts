@@ -1,5 +1,5 @@
-import { HomeComponent } from './';
-import { DashboardComponent } from './components/dashboard';
+import { HomeComponent } from './home.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { Routes, RouterModule } from '@angular/router';
 
 // noinspection TypeScriptValidateTypes

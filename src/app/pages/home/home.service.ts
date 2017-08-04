@@ -1,9 +1,56 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {BaThemeConfigProvider} from '../../../../theme';
+import { BaThemeConfigProvider } from '../../theme';
 
 @Injectable()
-export class DashboardService {
+export class HomeService {
+
+  smartTableData = [
+    {
+      routeNumber: 1,
+      driverName: 'Jack Kelsey',
+      numberOfTickets: 12,
+      amount: 1234,
+    },
+    {
+      routeNumber: 2,
+      driverName: 'Shaun',
+      numberOfTickets: 122,
+      amount: 4521,
+    }, 
+    {
+      routeNumber: 3,
+      driverName: 'Bill Brown',
+      numberOfTickets: 112,
+      amount: 7856,
+    }, 
+    {
+      routeNumber: 4,
+      driverName: 'Bill Brown',
+      numberOfTickets: 112,
+      amount: 7856,
+    }, 
+    {
+      routeNumber: 5,
+      driverName: 'James',
+      numberOfTickets: 322,
+      amount: 1587,
+    }, 
+    {
+      routeNumber: 6,
+      driverName: 'Gary Richards',
+      numberOfTickets: 232,
+      amount: 4526,
+    }
+  ];
+
+  getData(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(this.smartTableData);
+      }, 2000);
+    });
+  }
 
   private _data = {
     simpleLineOptions: {
@@ -170,7 +217,7 @@ export class DashboardService {
     }
   };
 
-  constructor(private _baConfig:BaThemeConfigProvider) {
+  constructor(private _baConfig: BaThemeConfigProvider) {
   }
 
   public getAll() {
