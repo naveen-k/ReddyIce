@@ -1,14 +1,88 @@
 <form>
-  <div class="form-group">
-    <label for="exampleInputEmail1">Customer Name</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Name">
+  <div class="row calendarRow">
+    <div class="form-group col-md-6">
+      <label for="exampleInputEmail1">Date</label>
+      <div class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd"
+              name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+        <button class="input-group-addon" (click)="d.toggle()" type="button">
+          <i class="ion-calendar"></i>
+          <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+        </button>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label>Ticket Type</label>
+      <div class="radioList">
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+          <span>DSD</span>
+        </label>
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+          <span>PBM</span>
+        </label>
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+          <span>PBS</span>
+        </label>
+      </div>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Ticket No.</label>
-    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #">
+  <div class="row">
+    <div class="form-group col-md-6">
+        <label for="exampleSelect1">Customer Name</label>
+        <select class="form-control" id="exampleSelect1">
+            <option>Jack</option>
+            <option>Smith</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+      <label>Type</label>
+      <div class="radioList">
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+          <span>Sale</span>
+        </label>
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+          <span>Credit</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="exampleInputPassword1">Ticket No.</label>
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #">
+    </div>
+    <div class="col-md-6">
+      <label>POD</label>
+      <div class="radioList">
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+          <span>Received</span>
+        </label>
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+          <span>No-Received</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <label for="exampleInputPassword1">PO#</label>
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="PO #">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="exampleInputPassword1">Check #</label>
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Check #">
+    </div>
   </div>
   <div class="checkbox">
     <ba-checkbox [(ngModel)]="isChecked" [label]="'Check me out'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
   </div>
+
   <button type="submit" class="btn btn-danger">Submit</button>
 </form>
