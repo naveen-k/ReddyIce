@@ -8,9 +8,14 @@ import { LocalDataSource } from 'ng2-smart-table';
     styleUrls: ['./customer-management.component.scss'],
 })
 export class CustomerManagementComponent {
+    selectedUser = {};
     settings1 = {
+        mode: 'external',
         add: {
             addButtonContent: '',
+        },
+        actions: {
+            delete: false,
         },
         edit: {
             editButtonContent: '<i class="ion-edit"></i>',
@@ -98,5 +103,9 @@ export class CustomerManagementComponent {
 
     showNewCustomer(newCustomer) {
         this.isNewCustomer = newCustomer;
+    }
+
+    onEditCliked(event) {        
+        this.selectedUser = event.data;        
     }
 }

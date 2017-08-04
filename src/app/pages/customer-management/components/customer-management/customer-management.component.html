@@ -1,62 +1,21 @@
-<!-- <div class="row page-header">    
-    <div class="col-md-8 padding-eater">
-        <label><b>Distributor : Dist-001</b></label>
-    </div>
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-primary pull-right">Set Generic Price</button>
-    </div>
-    <div class="col-md-2 padding-eater">
-        <button type="submit" class="btn btn-primary pull-right">Add Customer</button>
-    </div>
-</div> 
- <div class="widgets">
-    <div class="row">
-        <ba-card cardTitle="Basic Example" baCardClass="with-scroll" class="smart-table-container">
-            <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
-        </ba-card>
-    </div>
-</div>  -->
-
-<!-- <form>
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label for="exampleInputEmail1">Customer Name</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Name">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="exampleInputPassword1">Ticket No.</label>
-            <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #">
-        </div>
-    </div>
-    <button type="submit" class="btn btn-danger">Submit</button>
-</form> -->
-
 <div class="row page-header">
     <div class="col-md-8 padding-eater">
         <h4>Distributor : Dist-001</h4>
     </div>
-    <!-- <div class="col-md-2">
-        <button type="submit" class="btn btn-primary pull-right">Set Generic Price</button>
-    </div>
-    <div class="col-md-2 padding-eater">
-        <button type="submit" class="btn btn-primary pull-right">Add Customer</button>
-    </div> -->
 </div>
 <div class="row">
     <div class="col-lg-6 col-md-12">
-        <!-- <ba-card cardTitle="Basic Example" baCardClass="with-scroll" class="smart-table-container"> -->
-
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)">
-            <ng2-smart-table [settings]="settings1" [source]="source1"></ng2-smart-table>
+            <ng2-smart-table [settings]="settings1" [source]="source1" (edit)="onEditCliked($event)"></ng2-smart-table>
         </ba-card>
     </div>
     <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12">
         <ba-card cardTitle="Add New Customer" baCardClass="with-scroll" class="smart-table-container">
-            <form>
+            
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="exampleInputEmail1">Customer Name</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Name">
+                        <input [(ngModel)]="selectedUser.customerName" type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Name">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="exampleSelect1">Type</label>
@@ -69,7 +28,7 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="exampleInputEmail1">Customer Number</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Number">
+                        <input [(ngModel)]="selectedUser.customerNumber" type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Number">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="exampleSelect1">Location</label>
@@ -135,7 +94,7 @@
                 <div>
                     <button class="btn btn-danger">Save</button>
                 </div>
-            </form>
+            
         </ba-card>
     </div>
 </div>
