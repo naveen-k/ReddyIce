@@ -10,7 +10,7 @@ import { NgModule } from '@angular/core';
 
 const routes: Routes = [
     {
-        path: 'management',
+        path: '',
         component: CustomerManagementComponent,
     },
 ];
@@ -18,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [CustomerManagementComponent],
-    imports: [Ng2SmartTableModule, RouterModule.forChild(routes), NgaModule, FormsModule, CommonModule],
+    imports: [Ng2SmartTableModule, RouterModule.forChild(routes), NgaModule, CommonModule],
     providers: [CustomerManagementService],
 })
 export class CustomerManagementModule {

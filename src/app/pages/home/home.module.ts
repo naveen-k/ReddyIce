@@ -1,3 +1,5 @@
+import { CommonModule } from '@angular/common';
+import { DashboardComponent } from './components/dashboard';
 import { TablesModule } from '../tables/tables.module';
 import { Routes, Router, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -8,12 +10,10 @@ import { homeRouting } from './home.routing';
 import { DashboardService } from './components/dashboard/dashboard.service';
 import { AppTranslationModule } from '../../app.translation.module';
 
-const routes: Routes = [{ path: '', component: HomeComponent }];
-
-
 @NgModule({
-    declarations: [HomeComponent],
-    imports: [TablesModule, RouterModule.forChild(routes)],
+    declarations: [HomeComponent, DashboardComponent],
+    imports: [homeRouting, NgaModule, CommonModule],
+    providers: [DashboardService],
 })
 export class HomeModule {
 
