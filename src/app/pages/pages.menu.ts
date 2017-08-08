@@ -63,6 +63,18 @@ export const PAGES_MENU = [
         },
       },
       {
+        path: 'reports',
+        data: {
+          menu: {
+            title: 'Reports',
+            icon: 'ion-clipboard',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
+      {
         path: 'dashboard',
         data: {
           menu: {

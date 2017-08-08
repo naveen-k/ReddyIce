@@ -24,6 +24,7 @@ export const routes: Routes = [
       { path: 'user-management', loadChildren: './user-management/user-management.module#UserManagementModule' },
       { path: 'reconciliation', loadChildren: './reconciliation/reconciliation.module#ReconciliationModule' },
       { path: 'manualticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },
+      { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: 'editors', loadChildren: './editors/editors.module#EditorsModule' },
       { path: 'components', loadChildren: './components/components.module#ComponentsModule' },
