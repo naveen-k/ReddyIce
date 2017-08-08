@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
     add: {
       addButtonContent: '',
     },
+    hideSubHeader : true,
     edit: {
       editButtonContent: '<i class="ion-edit"></i>',
       saveButtonContent: '<i class="ion-checkmark"></i>',

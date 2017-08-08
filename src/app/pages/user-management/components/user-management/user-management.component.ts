@@ -27,6 +27,7 @@ export class UserManagementComponent {
         actions: {
             delete: false,
         },
+        hideSubHeader : true,
         delete: {
             deleteButtonContent: '<i class="ion-trash-a"></i>',
             confirmDelete: true,
