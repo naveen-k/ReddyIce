@@ -4,12 +4,16 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-6 col-md-12">
-        <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)">
+    <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
+        <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
+        <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container">
+            <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
+                Add Customer
+            </button>
             <ng2-smart-table [settings]="settings1" [source]="source1" (edit)="onEditCliked($event)"></ng2-smart-table>
         </ba-card>
     </div>
-    <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12">
+    <div *ngIf="!isNewCustomer" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
         <ba-card cardTitle="Add New Customer" baCardClass="with-scroll" class="smart-table-container">
             
                 <div class="row">

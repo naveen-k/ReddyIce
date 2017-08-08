@@ -17,6 +17,7 @@ export class CustomerManagementComponent {
         actions: {
             delete: false,
         },
+        hideSubHeader : true,
         edit: {
             editButtonContent: '<i class="ion-edit"></i>',
             saveButtonContent: '<i class="ion-checkmark"></i>',
@@ -102,7 +103,8 @@ export class CustomerManagementComponent {
     isNewCustomer: boolean = true;
 
     showNewCustomer(newCustomer) {
-        this.isNewCustomer = newCustomer;
+        // this.isNewCustomer = newCustomer;
+        this.isNewCustomer = !this.isNewCustomer;
     }
 
     onEditCliked(event) {        
