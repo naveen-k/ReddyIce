@@ -1,6 +1,7 @@
 import { LocalDataSource } from 'ng2-smart-table';
 import { UserTablesService } from '../../user-management.service';
 import { Component } from '@angular/core';
+import { User } from '../../user-management.interface';
 
 @Component({
     templateUrl: './user-management.component.html',
@@ -9,11 +10,12 @@ import { Component } from '@angular/core';
 export class UserManagementComponent {
     isNewCustomer: boolean = true;
     selectedUser = {};
+    newUser: any;
     showNewCustomer(newCustomer) {
         // this.isNewCustomer = newCustomer;
         this.isNewCustomer = !this.isNewCustomer;
+        this.newUser = <User>{};
     }
-
     settings = {
         mode: 'external',
         add: {
@@ -65,8 +67,13 @@ export class UserManagementComponent {
         return a.city.length;
     }
 
-    onEditCliked($event) {        
+    onEditCliked($event) {
         this.selectedUser = $event.data;
+    }
+
+    onSaveUser(user) {
+      this.source.append(user);
+      this.isNewCustomer = !this.isNewCustomer;
     }
 
 }

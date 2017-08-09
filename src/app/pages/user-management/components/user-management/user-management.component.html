@@ -41,7 +41,8 @@
   <div *ngIf="!isNewCustomer" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
     <ba-card cardTitle="Create New User" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
-      <create-user [user]="selectedUser"></create-user>
+
+      <create-user [user]="newUser" (onSaveUser)="onSaveUser($event)" (closeNewUser)="showNewCustomer($event)"></create-user>
     </ba-card>
   </div>
 </div>
