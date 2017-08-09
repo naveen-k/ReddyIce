@@ -7,6 +7,7 @@
     <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
         <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container">
+            <input type="text" class="form-control homeSearchBox" [ngClass]="{'col-md-8':isNewCustomer, 'col-md-4':!isNewCustomer}" id="input01" placeholder="Search">
             <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
                 Add Customer
             </button>
