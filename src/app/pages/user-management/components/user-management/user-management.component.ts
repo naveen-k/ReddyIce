@@ -10,7 +10,8 @@ export class UserManagementComponent {
     isNewCustomer: boolean = true;
     selectedUser = {};
     showNewCustomer(newCustomer) {
-        this.isNewCustomer = newCustomer;
+        // this.isNewCustomer = newCustomer;
+        this.isNewCustomer = !this.isNewCustomer;
     }
 
     settings = {

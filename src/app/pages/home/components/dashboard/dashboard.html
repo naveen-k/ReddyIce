@@ -2,6 +2,9 @@
   <div class="row">
     <div class="col-md-6 ">
       <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container">
+        <!-- <input type="text" class="form-control col-md-4 homeSearchBox" id="input01" placeholder="Text" [(ngModel)]="filterText">
+        <ng2-smart-table [settings]="settings | homeSearch:filterText" [source]="dataSource"></ng2-smart-table> -->
+        <input type="text" class="form-control col-md-8 homeSearchBox" id="input01" placeholder="Search">
         <ng2-smart-table [settings]="settings" [source]="dataSource"></ng2-smart-table>
       </ba-card>
     </div>

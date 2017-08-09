@@ -1,3 +1,4 @@
+import { DASHBOARD_PIPE } from './pages.pipes';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +11,7 @@ import { Pages } from './pages.component';
 
 @NgModule({
   imports: [CommonModule, AppTranslationModule, NgbModule, NgaModule, routing],
-  declarations: [Pages]
+  declarations: [Pages, DASHBOARD_PIPE]
 })
 export class PagesModule {
 }

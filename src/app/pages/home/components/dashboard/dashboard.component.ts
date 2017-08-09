@@ -6,7 +6,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss']
+  styleUrls: ['./dashboard.scss'],
 })
 
 export class DashboardComponent implements OnInit {
@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
   dataSource: LocalDataSource = new LocalDataSource();
 
   data: any;
-
+  filterText: string = '';
   constructor(private homeService: HomeService) {
     
   }

@@ -17,16 +17,21 @@
 </div>
    -->
 <div class="row page-header">
-  <div class="col-md-6">
-    <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)">
+  <div class="col-md-6" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
+    <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
+    <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container">
+      <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
+          Add New Customer
+      </button>
       <div class="col-md-5 padding-eater">
         <h4>Distributor:Dist 001</h4>
       </div>
       <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>
     </ba-card>
   </div>
-   <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12">
+  <div *ngIf="!isNewCustomer" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
     <ba-card cardTitle="Create New User" baCardClass="with-scroll" class="smart-table-container">
+      <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
       <create-user [user]="selectedUser"></create-user>
     </ba-card>
   </div>
