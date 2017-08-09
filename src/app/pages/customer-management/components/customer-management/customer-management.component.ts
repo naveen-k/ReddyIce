@@ -31,27 +31,27 @@ export class CustomerManagementComponent {
             customerNumber: {
                 title: 'Customer#',
                 type: 'number',
-                show: true,
+            //    show: true,
             },
             customerName: {
                 title: 'Name',
                 type: 'string',
-                show: true,
+            //    show: true,
             },
             isRICustomer: {
                 title: 'IsReddyIce?',
                 type: 'string',
-                show: true,
+            //    show: true,
             },
             email: {
                 title: 'Email',
                 type: 'string',
-                show: true,
+            //    show: true,
             },
             contact: {
                 title: 'Contact Number',
                 type: 'number',
-                show: true,
+            //    show: true,
             },
         },
     };
@@ -118,11 +118,11 @@ export class CustomerManagementComponent {
     showNewCustomer(newCustomer) {
         // this.isNewCustomer = newCustomer;
         this.isNewCustomer = !this.isNewCustomer;
-        if (this.isNewCustomer === false) {
-            this.settings1.columns.isRICustomer.show = false;
-        } else {
-            this.settings1.columns.isRICustomer.show = true;
-        }
+        // if (this.isNewCustomer === false) {
+        //     this.settings1.columns.isRICustomer.show = false;
+        // } else {
+        //     this.settings1.columns.isRICustomer.show = true;
+        // }
     }
 
     onEditCliked(event) {        
