@@ -7,7 +7,8 @@
     <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
         <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container">
-            <input type="text" class="form-control homeSearchBox" [ngClass]="{'col-md-8':isNewCustomer, 'col-md-4':!isNewCustomer}" id="input01" placeholder="Search">
+            <input type="text" class="form-control homeSearchBox" [ngClass]="{'col-md-8':isNewCustomer, 'col-md-4':!isNewCustomer}" id="input01"
+                placeholder="Search">
             <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
                 Add Customer
             </button>
@@ -20,7 +21,16 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="exampleInputEmail1">Customer Name</label>
-                    <input [(ngModel)]="selectedUser.customerName" type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Name">
+                    <input [(ngModel)]="selectedUser.customerName" type="text" class="form-control" id="customerName" placeholder="Customer Name"
+                        required maxlength="30" #nameValidationTitle="ngModel">
+                    <div *ngIf="nameValidationTitle.errors && (nameValidationTitle.dirty || nameValidationTitle.touched)" class="alert alert-danger">
+                        <div [hidden]="!nameValidationTitle.errors.required">
+                            Customer name is required!
+                        </div>
+                        <div [hidden]="!nameValidationTitle.errors.maxlength">
+                            Title cannot be more than 30 characters long.
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="exampleSelect1">Type</label>
@@ -55,50 +65,105 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <label for="exampleInputEmail1">Address</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Address">
+                    <input [(ngModel)]="selectedUser.address" type="text" class="form-control" id="address" placeholder="Address" required maxlength="128"
+                        #addressValidationTitle="ngModel">
+                    <div *ngIf="addressValidationTitle.errors && (addressValidationTitle.dirty || addressValidationTitle.touched)" class="alert alert-danger">
+                        <div [hidden]="!addressValidationTitle.errors.required">
+                            Address is required!
+                        </div>
+                        <div [hidden]="!addressValidationTitle.errors.maxlength">
+                            Title cannot be more than 30 characters long.
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="exampleInputEmail1">City</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="City">
+                    <input [(ngModel)]="selectedUser.city" type="text" class="form-control" id="city" placeholder="City" required maxlength="30"
+                        #cityValidationTitle="ngModel">
+                    <div *ngIf="cityValidationTitle.errors && (cityValidationTitle.dirty || cityValidationTitle.touched)" class="alert alert-danger">
+                        <div [hidden]="!cityValidationTitle.errors.required">
+                            City is required!
+                        </div>
+                        <div [hidden]="!cityValidationTitle.errors.maxlength">
+                            City cannot be more than 30 characters long.
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="exampleInputEmail1">State</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="State">
+                    <input [(ngModel)]="selectedUser.state" type="text" class="form-control" id="state" placeholder="State" required maxlength="30"
+                        #stateValidationTitle="ngModel">
+                    <div *ngIf="stateValidationTitle.errors && (stateValidationTitle.dirty || stateValidationTitle.touched)" class="alert alert-danger">
+                        <div [hidden]="!stateValidationTitle.errors.required">
+                            State is required!
+                        </div>
+                        <div [hidden]="!stateValidationTitle.errors.maxlength">
+                            State cannot be more than 30 characters long.
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="exampleInputEmail1">Zip</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Zip">
+                    <input [(ngModel)]="selectedUser.zip" type="text" class="form-control" id="zip" placeholder="Zip" required maxlength="30"
+                        #zipValidationTitle="ngModel">
+                    <div *ngIf="zipValidationTitle.errors && (zipValidationTitle.dirty || zipValidationTitle.touched)" class="alert alert-danger">
+                        <div [hidden]="!zipValidationTitle.errors.required">
+                            Zip is required!
+                        </div>
+                        <div [hidden]="!zipValidationTitle.errors.maxlength">
+                            Zip cannot be more than 30 characters long.
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="exampleInputEmail1">Phone</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Phone">
+                    <input [(ngModel)]="selectedUser.phone" type="text" class="form-control" id="phone" placeholder="Phone"
+                        required pattern="[789][0-9]{9}" #phoneValidationTitle="ngModel">
+                    <div *ngIf="phoneValidationTitle.errors && (phoneValidationTitle.dirty || phoneValidationTitle.touched)" class="alert alert-danger">
+                        <div [hidden]="!phoneValidationTitle.errors.required">
+                            Phone is required
+                        </div>
+                        <div [hidden]="!phoneValidationTitle.errors.pattern">
+                            Please enter valid phone number
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="exampleInputEmail1">Email</label>
-                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                    <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email"
+                        required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                        #emailValidationTitle="ngModel">
+                    <div *ngIf="emailValidationTitle.errors && (emailValidationTitle.dirty || emailValidationTitle.touched)" class="alert alert-danger">
+                        <div [hidden]="!emailValidationTitle.errors.required">
+                            Email id is required
+                        </div>
+                        <div [hidden]="!emailValidationTitle.errors.pattern">
+                            Must be a valid URL!
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-5">
-                    <label for="exampleInputEmail1">All Products</label>
-                    <ng2-smart-table [settings]="settings2" [source]="source2"></ng2-smart-table>
+                <div class="row">
+                    <div class="form-group col-md-5">
+                        <label for="exampleInputEmail1">All Products</label>
+                        <ng2-smart-table [settings]="settings2" [source]="source2"></ng2-smart-table>
+                    </div>
+                    <div class="form-group col-md-2 ioiIconsLR">
+                        <p><span class="ion-arrow-left-a"></span></p>
+                        <p><span class="ion-arrow-right-a"></span></p>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="exampleInputEmail1">Mapped Products</label>
+                        <ng2-smart-table [settings]="settings3" [source]="source3"></ng2-smart-table>
+                    </div>
                 </div>
-                <div class="form-group col-md-2 ioiIconsLR">
-                    <p><span class="ion-arrow-left-a"></span></p>
-                    <p><span class="ion-arrow-right-a"></span></p>
+                <div>
+                    <button class="btn btn-danger">Save</button>
                 </div>
-                <div class="form-group col-md-5">
-                    <label for="exampleInputEmail1">Mapped Products</label>
-                    <ng2-smart-table [settings]="settings3" [source]="source3"></ng2-smart-table>
-                </div>
-            </div>
-            <div>
-                <button class="btn btn-danger">Save</button>
             </div>
         </ba-card>
+        </div>
     </div>
-</div>
