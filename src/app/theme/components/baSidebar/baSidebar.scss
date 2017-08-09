@@ -1,8 +1,8 @@
 @import '../../sass/conf/conf';
 
 $sidebar-scroll-width: 4px;
-$angle-left: '\f100';
-$angle-right: '\f101';
+$angle-left: '';
+$angle-right: '';
 
 @mixin default-sublist() {
   padding: 0;
