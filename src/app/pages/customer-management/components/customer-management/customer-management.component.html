@@ -7,10 +7,10 @@
     <!-- <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}"> -->
         <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
         <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
-        <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container">
+        <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="row">
                 <div [ngClass]="{'col-md-6':isNewCustomer, 'col-md-4':!isNewCustomer}">
-                    <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" id="input01"
+                    <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" [(ngModel)]="customer.searchString"
                         placeholder="Search">
                 </div>
                 <div class="col-md-4">
@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of smartTableData">
+                        <tr *ngFor="let item of smartTableData | filter:customer.searchString">
                             <td class="table-id"></td>
                             <td>{{ item.customerNumber }}</td>
                             <td>{{ item.customerName }}</td>
@@ -220,7 +220,7 @@
                 <div class="row">
                     <div class="form-group col-md-5">
                         <label for="exampleInputEmail1">All Products</label>
-                        <ng2-smart-table [settings]="settings2" [source]="source2"></ng2-smart-table>
+                        <!-- <ng2-smart-table [settings]="settings2" [source]="source2"></ng2-smart-table> -->
                     </div>
                     <div class="form-group col-md-2 ioiIconsLR">
                         <p><span class="ion-arrow-left-a"></span></p>
@@ -228,7 +228,7 @@
                     </div>
                     <div class="form-group col-md-5">
                         <label for="exampleInputEmail1">Mapped Products</label>
-                        <ng2-smart-table [settings]="settings3" [source]="source3"></ng2-smart-table>
+                        <!-- <ng2-smart-table [settings]="settings3" [source]="source3"></ng2-smart-table> -->
                     </div>
                 </div>
                 <div>

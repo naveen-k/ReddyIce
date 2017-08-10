@@ -1,7 +1,7 @@
+import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { CustomerManagementService } from './customer-management.service';
 
-import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CommonModule } from '@angular/common';
 import { NgaModule } from '../../theme/nga.module';
 import { Routes, RouterModule } from '@angular/router';
@@ -18,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [CustomerManagementComponent],
-    imports: [Ng2SmartTableModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule],
+    imports: [SharedModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule],
     providers: [CustomerManagementService],
 })
 export class CustomerManagementModule {
