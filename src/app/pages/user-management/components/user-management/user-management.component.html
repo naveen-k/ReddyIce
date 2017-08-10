@@ -16,17 +16,17 @@
 
 </div>
    -->
-<div class="row page-header">
-  <div class="col-md-6" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
+<div class="row page-header user-details">
+  <div class="col-md-6" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
     <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
     <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
-        <div class="col-md-6">
-          <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" id="input01" [(ngModel)]="customer.searchString"
+        <div class="col-md-12">
+          <input type="text" class="form-control" [ngClass]="{'col-md-10':!isNewCustomer, 'col-md-12':isNewCustomer}" id="input01" [(ngModel)]="customer.searchString"
             placeholder="Search">
         </div>
-        <div class="col-md-6">
-          <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
+        <div class="col-md-6 add-new-user">
+          <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right" [disabled]="isNewCustomer">
               Add User
           </button>
         </div>
@@ -41,28 +41,52 @@
           <thead>
             <tr>
               <th>Actions</th>
-              <th>
+              <th *ngIf="!isNewCustomer">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'fname';customer.isAsc=!customer.isAsc;">
+                    First Name
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'fname')" [ngClass]="(customer.isAsc && customer.sortField === 'fname' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
+              <th *ngIf="!isNewCustomer">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'lname';customer.isAsc=!customer.isAsc;">
+                    Last Name
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'lname')" [ngClass]="(customer.isAsc && customer.sortField === 'lname' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'username';customer.isAsc=!customer.isAsc;">
                     Username
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'fname')" [ngClass]="(customer.isAsc && customer.sortField == 'fname' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'username')" [ngClass]="(customer.isAsc && customer.sortField === 'username' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
+              <th *ngIf="!isNewCustomer">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'email';customer.isAsc=!customer.isAsc;">
+                    Email
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'email')" [ngClass]="(customer.isAsc && customer.sortField === 'email' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'phone';customer.isAsc=!customer.isAsc;">
+                    Phone
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'phone')" [ngClass]="(customer.isAsc && customer.sortField === 'phone' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                 </span>
               </th>
               <th>
                 <span style="cursor:pointer;" (click)="customer.sortField = 'role';customer.isAsc=!customer.isAsc;">
                     Role
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'role')" [ngClass]="(customer.isAsc && customer.sortField == 'role' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'role')" [ngClass]="(customer.isAsc && customer.sortField === 'role' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                 </span>
               </th>
-              <th>
+              <th *ngIf="!isNewCustomer">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                     Branch
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'branch')" [ngClass]="(customer.isAsc && customer.sortField == 'branch' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                 </span>
               </th>
               <th>
                 <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
                     RI Internal
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField == 'riinternal' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i class="fa fa-sort" *ngIf="(customer.sortField === 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField === 'riinternal' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                 </span>
               </th>
             </tr>
@@ -70,17 +94,22 @@
           <tbody>
             <tr *ngFor="let item of smartTableData | filter:customer.searchString | sortCustomer:customer.sortField:customer.isAsc">
               <td class="table-id ion-edit"></td>
-              <td>{{ item.fname }}</td>
+              <td *ngIf="!isNewCustomer">{{ item.fname }}</td>
+              <td *ngIf="!isNewCustomer">{{ item.lname }}</td>
+              <td>{{ item.username }}</td>
+              <td *ngIf="!isNewCustomer">{{ item.email }}</td>
+              <td>{{ item.phone }}</td>
               <td>{{ item.role }}</td>
-              <td>{{ item.branch }}</td>
-              <td>{{ item.riinternal }}</td>
+              <td *ngIf="!isNewCustomer">{{ item.branch }}</td>
+              <td *ngIf="item.isRiInternal">Y</td>
+              <td *ngIf="!item.isRiInternal">N</td>
             </tr>
           </tbody>
         </table>
-      </div> 
+      </div>
     </ba-card>
   </div>
-  <div *ngIf="!isNewCustomer" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
+  <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
     <ba-card cardTitle="Create New User" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
       <create-user [user]="newUser" (onSaveUser)="onSaveUser($event)" (closeNewUser)="showNewCustomer($event)"></create-user>

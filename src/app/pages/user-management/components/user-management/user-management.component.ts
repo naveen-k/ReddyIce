@@ -8,13 +8,28 @@ import { User } from '../../user-management.interface';
     styleUrls: ['./user-management.component.scss'],
 })
 export class UserManagementComponent {
-    isNewCustomer: boolean = true;
+    isNewCustomer: boolean = false;
     selectedUser = {};
     newUser: any;
     showNewCustomer(newCustomer) {
         // this.isNewCustomer = newCustomer;
         this.isNewCustomer = !this.isNewCustomer;
-        this.newUser = <User>{};
+        this.newUser = <User>{
+          fname: '',
+          lname: '',
+          username: '',
+          email: '',
+          phone: '',
+          role: 'Driver',
+          branch: '305',
+          isActive: false,
+          availableBranches: ['301', '301', '303', '304', '305'],
+          availableRoles: ['Admin', 'Driver'],
+          availableDistributor: ['Dist-001', 'Dist-002'],
+          distributor: 'Dist-002',
+          isSeasonal: true,
+          isRiInternal: false,
+        };
     }
     settings = {
         mode: 'external',
@@ -75,7 +90,7 @@ export class UserManagementComponent {
     }
 
     onSaveUser(user) {
-      this.source.append(user);
+      this.smartTableData.push(user);
       this.isNewCustomer = !this.isNewCustomer;
     }
 

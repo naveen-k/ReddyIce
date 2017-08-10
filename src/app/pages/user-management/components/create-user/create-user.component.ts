@@ -10,44 +10,9 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class CreateUserComponent {
     @Input() user: any;
+    @Input() isNewUser: boolean;
     @Output() onSaveUser: EventEmitter<any> = new EventEmitter();
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
-
-    roles = ['Admin', 'Driver'];
-    settings = {
-        add: {
-            addButtonContent: '',
-        },
-        edit: {
-            editButtonContent: '<i class="ion-edit"></i>',
-            saveButtonContent: '<i class="ion-checkmark"></i>',
-            cancelButtonContent: '<i class="ion-close"></i>',
-        },
-        delete: {
-            deleteButtonContent: '<i class="ion-trash-a"></i>',
-            confirmDelete: true,
-        },
-        editable: false,
-        columns: {
-            city: {
-                title: 'Location',
-                type: 'number',
-            },
-            branch: {
-                title: 'Branch',
-                type: 'string',
-            },
-
-        },
-    };
-    isChecked: boolean = false;
-
-    source: LocalDataSource = new LocalDataSource();
-    constructor(private service: UserTablesService) {
-        this.service.getData().then((data) => {
-            this.source.load(data);
-        });
-    }
 
     toInt(num: string) {
         return +num;
@@ -57,9 +22,7 @@ export class CreateUserComponent {
         return a.city.length;
     }
     onSubmit () {
-      this.user.isActive = this.isChecked;
       this.user.id = Math.random();
-      this.user.name = `${this.user.fname} ${this.user.lname}`;
       this.onSaveUser.emit(this.user);
     }
     OnCancelClick() {

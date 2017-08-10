@@ -7,6 +7,11 @@
     margin-left: 1px;
 }
 
+.customerHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
 .form-control:focus {
   border: 1px solid #5bc0de;
 }
@@ -15,7 +20,7 @@
   border-color: #cbcbcb!important;
 }
 
-input:focus + .alert {
+input:focus + .error-message {
   display: none;
 }
 
@@ -36,4 +41,73 @@ input:focus + .alert {
 .userMgmtSelect {
   width: 193px;
 }
+// .user-form .first-form-row, .user-form .last-form-row{
+//   margin-top: 20px
+// }
 
+
+.showError {
+  color: #ed7878;
+  position: absolute;
+  right: 9px;
+  top: 33px;
+}
+
+.custom-tooltip {
+  background: #ed7878;
+  color: white;
+  padding: 5px;
+  display: inline;
+  position: absolute;
+  border-radius: 4px;
+  top: 3px;
+  right: -50px;
+}
+
+.custom-tooltip:after {
+  content: '';
+  width: 0;
+  display: inline;
+  position: absolute;
+  right: -5px;
+  margin: -5px;
+  top: 50%;
+  border: 5px solid #ed7878;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+.bottom:after {
+  top: 31px;
+  border-top-color: #ed7878;
+  border-left-color: transparent;
+  left: 56%;
+}
+
+.rowContainer {
+  .first-column {
+    position: relative;
+
+    .custom-tooltip {
+      top: 3px;
+      right: -50px;
+    }
+    .bottom:after {
+      left: 56%;
+    }
+    #phone + .error-message .custom-tooltip {
+      right: -60px;
+    }
+  }
+  .second-column {
+    position: relative;
+
+    .custom-tooltip {
+      top: 3px;
+      right: 0px;
+    }
+    .bottom:after {
+      left: 90%;
+    }
+  }
+}

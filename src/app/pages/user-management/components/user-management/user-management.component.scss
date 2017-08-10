@@ -1,5 +1,17 @@
 @import '../../../../theme/sass/smartTable';
 
+.smart-table-container {
+  position: relative;
+  .add-new-user {
+    position: absolute;
+    right: 0;
+    top: 5px;
+  }
+}
+
+.form-control:focus {
+  border: 1px solid #5bc0de;
+}
 .page-header {
     margin: 20px 0;
 };
@@ -22,4 +34,8 @@
 
 .pull-right {
     float: right;
+}
+
+.user-details .vertical-scroll {
+  min-height: 422px;
 }

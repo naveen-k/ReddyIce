@@ -1,90 +1,94 @@
-<form (ngSubmit)="onSubmit()" #customerForm="ngForm">
-  <div class="row">
-    <div class="col-md-4">
-      <h4 class="paddingTopCreateUser">Add User Details</h4>
+<form (ngSubmit)="onSubmit()" #customerForm="ngForm" class="user-form">
+  <div class="row customerHeader">
+    <div class="col-md-3" style="margin-top: 7px;">
+       <ba-checkbox [(ngModel)]="user.isRiInternal" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
     </div>
-    <div class="col-md-3">
-      <label class="custom-checkbox nowrap">
-        <input type="checkbox">
-        <span class="paddingTopCreateUser">RI Internal User</span>
-      </label>
-    </div>
-    <div class="col-md-3">
+    <div *ngIf="user.isRiInternal" class="col-md-5">
       <input type="text" class="form-control" placeholder="Search">
     </div>
     <div class="col-md-2">
-      <button type="submit" class="btn btn-primary userMgmtSaveBtn">Save</button>
+      <!--How can we allow user to submit a form without validations?  -->
+      <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid">Save</button>
     </div>
   </div>
-  <div class="row page-header">
-    <div class="col-md-5 padding-eater">
+  <div class="row page-header rowContainer first-form-row">
+    <div class="col-md-5 padding-eater first-column">
       <label for="fname" class="control-label">First Name</label>
       <input type="text" class="form-control" id="fname" placeholder="First Name" minlength="2" [(ngModel)]="user.fname" name="fname"
         #fname="ngModel" required>
-      <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="alert alert-danger">
+      <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="fname.errors.required" class="custom-tooltip bottom">First Name is required</div>
+         <div *ngIf="fname.errors.minlength" class="custom-tooltip bottom">Minimum 2 characters</div>
+      </div>
+      <!-- <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="alert alert-danger">
         <div *ngIf="fname.errors.required">
           First Name is required.
         </div>
         <div *ngIf="fname.errors.minlength">
           First Name must be at least 2 characters long.
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="col-md-2"></div>
-    <div class="col-md-5 padding-eater">
+    <div class="col-md-5 padding-eater second-column">
       <label for="lname" class="control-label">Last Name</label>
       <input type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.lname" name="lname" #lname="ngModel"
         required minlength="2">
-      <div *ngIf="lname.invalid && (lname.dirty || lname.touched)" class="alert alert-danger">
-        <div *ngIf="lname.errors.required">
+      <div *ngIf="lname.invalid && (lname.dirty || lname.touched)" class="error-message">
+         <i class="ion-android-alert showError"></i>
+        <div *ngIf="lname.errors.required" class="custom-tooltip bottom">
           Last Name is required.
         </div>
-        <div *ngIf="lname.errors.minlength">
-          Last Name must be at least 2 characters long.
+        <div *ngIf="lname.errors.minlength" class="custom-tooltip bottom">
+          Minimum 2 characters.
         </div>
       </div>
     </div>
   </div>
-  <div class="row page-header">
-    <div class="col-md-5 padding-eater">
+  <div class="row page-header rowContainer">
+    <div class="col-md-5 padding-eater first-column">
       <label for="username" class="control-label">Username</label>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.username" name="username"
         #username="ngModel" required minlength="4">
-      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
-        <div *ngIf="username.errors.required">
+      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="username.errors.required" class="custom-tooltip bottom">
           Username is required.
         </div>
-        <div *ngIf="username.errors.minlength">
-          Username must be at least 4 characters long.
+        <div *ngIf="username.errors.minlength" class="custom-tooltip bottom">
+          Minimum 2 characters.
         </div>
       </div>
     </div>
     <div class="col-md-2"></div>
-    <div class="col-md-5 padding-eater">
+    <div class="col-md-5 padding-eater second-column">
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.email" name="email" #email="ngModel"
         required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
-        <div *ngIf="email.errors.required">
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="email.errors.required" class="custom-tooltip bottom">
           Email is required.
         </div>
-        <div *ngIf="email.errors && email.errors.pattern">
-          Email is invalid
+        <div *ngIf="email.errors && email.errors.pattern" class="custom-tooltip bottom">
+          Email is invalid.
         </div>
       </div>
     </div>
   </div>
-  <div class="row page-header">
-    <div class="col-md-5 padding-eater">
+  <div class="row page-header rowContainer">
+    <div class="col-md-5 padding-eater first-column">
       <label for="inputEmail3" class="control-label">Phone</label>
       <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.phone" name="phone" #phone="ngModel"
         required pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$">
-      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
-        <div *ngIf="phone.errors.required">
+      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="phone.errors.required" class="custom-tooltip bottom">
           Phone number is required.
         </div>
-        <div *ngIf="phone.errors && phone.errors.pattern">
-          Phone number is invalid
+        <div *ngIf="phone.errors && phone.errors.pattern" class="custom-tooltip bottom">
+          Phone number is invalid.
         </div>
       </div>
     </div>
@@ -92,27 +96,45 @@
     <div class="col-md-5 padding-eater">
       <label for="exampleSelect1">Role</label>
       <select class="form-control" id="role" [(ngModel)]="user.role" name="role" #role="ngModel">
-        <option *ngFor="let role of roles" [value]="role">{{role}}</option>
+        <option *ngFor="let role of user.availableRoles" [value]="role">{{role}}</option>
       </select>
     </div>
   </div>
-  <div class="checkbox active-user">
+  <div class="checkbox active-user page-header rowContainer">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <label for="exampleSelect1">Branch</label>
-        <select class="form-control userMgmtSelect" id="exampleSelect1">
-            <option>301</option>
-            <option>302</option>
+        <select class="form-control userMgmtSelect" id="branchSelection"
+          [(ngModel)]="user.branch" name="branch" #branch="ngModel">
+            <option *ngFor="let _branch of user.availableBranches" [value]="_branch">{{_branch}}</option>
         </select>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-2"></div>
+      <div class="col-md-5 padding-eater">
         <br/><br/>
-        <!-- <ba-checkbox [(ngModel)]="isChecked" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox> -->
-        <label class="custom-checkbox nowrap userMgmtIsActive">
-          <input type="checkbox">
+        <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+         <ba-checkbox [(ngModel)]="user.isActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+        <!-- <label class="custom-checkbox nowrap userMgmtIsActive">
+          <input type="checkbox" [(ngModel)]="isChecked">
           <span class="">isActive?</span>
-        </label>
+          {{isChecked}}
+        </label> -->
       </div>
+    </div>
+  </div>
+  <div *ngIf="!user.isRiInternal" class="row page-header rowContainer last-form-row">
+    <div class="col-md-5 padding-eater">
+      <label for="distributor">Distributor</label>
+      <select class="form-control userMgmtSelect" id="distributorSelection"
+        [(ngModel)]="user.distributor" name="distributor" #distributor="ngModel" required>
+          <option *ngFor="let distributor of user.availableDistributor" [value]="distributor">{{distributor}}</option>
+      </select>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 padding-eater">
+      <br/><br/>
+      <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+        <ba-checkbox [ngModel]="user.isSeasonal" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
     </div>
   </div>
 </form>
