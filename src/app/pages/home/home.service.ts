@@ -34,20 +34,7 @@ export class HomeService {
       amount: 7856,
       branch: 319,
     }, 
-    {
-      routeNumber: 5,
-      driverName: 'James',
-      numberOfTickets: 322,
-      amount: 1587,
-      branch: 317,
-    }, 
-    {
-      routeNumber: 6,
-      driverName: 'Gary Richards',
-      numberOfTickets: 232,
-      amount: 4526,
-      branch: 312,
-    }
+    
   ];
 
   getData(): Promise<any> {

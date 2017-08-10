@@ -41,6 +41,9 @@ export class AccordionComponent {
                     <h5 class="panel-title">
                       <a href tabindex="0"><span>{{heading}}</span></a>
                     </h5>
+                   <i class="ion-plus-round icon-right" [hidden]="isOpen"></i>
+                   <i class="ion-minus-round icon-right" [hidden]="!isOpen"></i>
+
                   </div>
                   <div class="panel-collapse" [hidden]="!isOpen">
                     <div class="panel-body">

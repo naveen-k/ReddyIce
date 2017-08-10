@@ -4,13 +4,13 @@
     </div>
 </div>
 <div class="row">
-    <div [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
+    <div [ngClass]="{'col-md-12':!isNewCustomer && !setPrice, 'col-md-6':isNewCustomer}">
         <!-- <div [ngClass]="[!isNewCustomer ? 'col-md-12' : 'col-md-6', !setPrice ? 'col-md-12' : 'col-md-6']">  -->
         <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="row">
-                <div [ngClass]="{'col-md-6':!isNewCustomer, 'col-md-4':isNewCustomer}">
-                    <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" [(ngModel)]="customer.searchString"
+                <div [ngClass]="{'col-md-6':!isNewCustomer && !setPrice, 'col-md-4':isNewCustomer}">
+                    <input type="text" class="form-control"  [(ngModel)]="customer.searchString"
                         placeholder="Search">
                 </div>
                 <div class="col-md-4">
@@ -18,7 +18,7 @@
                         Set Generic Price
                     </button>
                 </div>
-                <div [ngClass]="{'col-md-2':!isNewCustomer, 'col-md-4':isNewCustomer}">
+                <div [ngClass]="{'col-md-2':!isNewCustomer  && !setPrice, 'col-md-4':isNewCustomer}">
                     <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
                         Add Customer
                     </button>
@@ -49,13 +49,13 @@
                                     <i class="fa fa-sort" *ngIf="(customer.sortField == 'isRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'isRICustomer' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                                 </span>
                             </th>
-                            <th *ngIf="!isNewCustomer">
+                            <th *ngIf="!isNewCustomer && !setPrice">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'email';customer.isAsc=!customer.isAsc;">
                                     Email
                                     <i class="fa fa-sort" *ngIf="(customer.sortField == 'email')" [ngClass]="(customer.isAsc && customer.sortField == 'email' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                                 </span>
                             </th>
-                            <th *ngIf="!isNewCustomer">
+                            <th *ngIf="!isNewCustomer && !setPrice">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'contact';customer.isAsc=!customer.isAsc;">
                                     Contact
                                     <i class="fa fa-sort" *ngIf="(customer.sortField == 'contact')" [ngClass]="(customer.isAsc && customer.sortField == 'contact' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
@@ -69,8 +69,8 @@
                             <td>{{ item.customerNumber }}</td>
                             <td>{{ item.customerName }}</td>
                             <td>{{ item.isRICustomer }}</td>
-                            <td *ngIf="!isNewCustomer"><a class="email-link">{{ item.email }}</a></td>
-                            <td *ngIf="!isNewCustomer">{{ item.contact }}</td>
+                            <td *ngIf="!isNewCustomer && !setPrice"><a class="email-link">{{ item.email }}</a></td>
+                            <td *ngIf="!isNewCustomer && !setPrice">{{ item.contact }}</td>
                         </tr>
                     </tbody>
                 </table>
