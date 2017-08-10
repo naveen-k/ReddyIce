@@ -41,14 +41,34 @@
           <thead>
             <tr>
               <th>Actions</th>
-              <th>Username</th>
-              <th>Role</th>
-              <th>Branch</th>
-              <th>RI Internal</th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'fname';customer.isAsc=!customer.isAsc;">
+                    Username
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'fname')" [ngClass]="(customer.isAsc && customer.sortField == 'fname' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'role';customer.isAsc=!customer.isAsc;">
+                    Role
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'role')" [ngClass]="(customer.isAsc && customer.sortField == 'role' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
+                    Branch
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'branch')" [ngClass]="(customer.isAsc && customer.sortField == 'branch' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
+                    RI Internal
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField == 'riinternal' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                </span>
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of smartTableData | filter:customer.searchString">
+            <tr *ngFor="let item of smartTableData | filter:customer.searchString | sortCustomer:customer.sortField:customer.isAsc">
               <td class="table-id ion-edit"></td>
               <td>{{ item.fname }}</td>
               <td>{{ item.role }}</td>
