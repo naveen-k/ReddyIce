@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { HomeService } from './home.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -14,7 +15,7 @@ import { AppTranslationModule } from '../../app.translation.module';
 
 @NgModule({
     declarations: [HomeComponent, DashboardComponent],
-    imports: [SharedModule, homeRouting, NgaModule, CommonModule, Ng2SmartTableModule],
+    imports: [FormsModule, SharedModule, homeRouting, NgaModule, CommonModule, Ng2SmartTableModule],
     providers: [HomeService],
 })
 export class HomeModule {
