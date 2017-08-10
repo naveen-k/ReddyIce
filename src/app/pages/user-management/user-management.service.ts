@@ -14,7 +14,8 @@ export class UserTablesService {
         'role':'Admin',
         'location':'NY',
         'branch':'301',
-        'phone':'997674687'
+        'phone':'997674687',
+        'riinternal': 'Y',
     },
     {
         'id': 2,
@@ -27,7 +28,8 @@ export class UserTablesService {
         'role':'Admin',
         'location':'Australia',
         'branch':'302',
-        'phone':'995644687'
+        'phone':'995644687',
+        'riinternal': 'Y',
     },
     {
         'id': 3,
@@ -40,7 +42,8 @@ export class UserTablesService {
         'role':'Admin',
         'location':'Austria',
         'branch':'303',
-        'phone':'993324687'
+        'phone':'993324687',
+        'riinternal': 'Y',
     },
     {
         'id': 4,
@@ -53,7 +56,8 @@ export class UserTablesService {
         'role':'Admin',
         'location':'Andenne',
         'branch':'304',
-        'phone':'998874687'
+        'phone':'998874687',
+        'riinternal': 'Y',
     },
     {
         'id': 5,
@@ -66,7 +70,8 @@ export class UserTablesService {
         'role':'Admin',
         'location':'Canada',
         'branch':'305',
-        'phone':'998976687'
+        'phone':'998976687',
+        'riinternal': 'N',
     },
     {
         'id': 6,
@@ -79,7 +84,8 @@ export class UserTablesService {
         'role':'Admin',
         'location':'Washington',
         'branch':'306',
-        'phone':'993424687'
+        'phone':'993424687',
+        'riinternal': 'Y',
     },
     {
         'id': 7,
@@ -92,7 +98,8 @@ export class UserTablesService {
         'role':'Admin',
         'location':'LA',
         'branch':'307',
-        'phone':'9925954687'
+        'phone':'9925954687',
+        'riinternal': 'N',
     },
 
     ];

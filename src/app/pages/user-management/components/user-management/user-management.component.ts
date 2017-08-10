@@ -50,13 +50,16 @@ export class UserManagementComponent {
     };
 
     source: LocalDataSource = new LocalDataSource();
+
+    smartTableData: any;
     constructor(private service: UserTablesService) {
-        this.service.getData().then((data) => {
-            data.forEach(element => {
-                element['name'] = `${element.fname} ${element.lname}`;
-            });
-            this.source.load(data);
-        });
+        // this.service.getData().then((data) => {
+        //     data.forEach(element => {
+        //         element['name'] = `${element.fname} ${element.lname}`;
+        //     });
+        //     this.source.load(data);
+        // });
+        this.smartTableData = service.dataTableData;
     }
 
     toInt(num: string) {

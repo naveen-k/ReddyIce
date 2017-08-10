@@ -11,36 +11,42 @@ export class HomeService {
       driverName: 'Jack Kelsey',
       numberOfTickets: 12,
       amount: 1234,
+      branch: 311,
     },
     {
       routeNumber: 2,
       driverName: 'Shaun',
       numberOfTickets: 122,
       amount: 4521,
+      branch: 316,
     }, 
     {
       routeNumber: 3,
       driverName: 'Bill Brown',
       numberOfTickets: 112,
       amount: 7856,
+      branch: 313,
     }, 
     {
       routeNumber: 4,
       driverName: 'Bill Brown',
       numberOfTickets: 112,
       amount: 7856,
+      branch: 319,
     }, 
     {
       routeNumber: 5,
       driverName: 'James',
       numberOfTickets: 322,
       amount: 1587,
+      branch: 317,
     }, 
     {
       routeNumber: 6,
       driverName: 'Gary Richards',
       numberOfTickets: 232,
       amount: 4526,
+      branch: 312,
     }
   ];
 

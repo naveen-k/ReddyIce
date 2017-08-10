@@ -54,8 +54,9 @@ export class DashboardComponent implements OnInit {
 
   data: any;
   filterText: string = '';
+  smartTableData: any;
   constructor(private homeService: HomeService) {
-    
+    this.smartTableData = homeService.smartTableData;
   }
 
   ngOnInit() {
