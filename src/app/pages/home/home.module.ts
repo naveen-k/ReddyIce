@@ -1,3 +1,4 @@
+import { SharedModule } from '../../shared/shared.module';
 import { HomeService } from './home.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CommonModule } from '@angular/common';
@@ -13,7 +14,7 @@ import { AppTranslationModule } from '../../app.translation.module';
 
 @NgModule({
     declarations: [HomeComponent, DashboardComponent],
-    imports: [homeRouting, NgaModule, CommonModule, Ng2SmartTableModule],
+    imports: [SharedModule, homeRouting, NgaModule, CommonModule, Ng2SmartTableModule],
     providers: [HomeService],
 })
 export class HomeModule {

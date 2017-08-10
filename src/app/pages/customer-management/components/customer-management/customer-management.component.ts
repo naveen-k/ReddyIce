@@ -120,16 +120,16 @@ export class CustomerManagementComponent {
         this.products = service.products;
         this.mappedProds = service.mappedProds;
     }
-    isNewCustomer: boolean = true;
+    isNewCustomer: boolean = false;
     setPrice: boolean = false;
 
     showNewCustomer(newCustomer) {
         this.isNewCustomer = !this.isNewCustomer;
-        // this.setPrice = !this.setPrice;
+        this.setPrice = false;
     }
     showPrice() {
-        // this.isNewCustomer = !this.isNewCustomer;
         this.setPrice = !this.setPrice;
+        this.isNewCustomer = false;
     }
 
     onEditCliked(event) {        

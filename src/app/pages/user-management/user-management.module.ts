@@ -1,3 +1,4 @@
+import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CommonModule } from '@angular/common';
 import { NgaModule } from '../../theme/nga.module';
@@ -20,7 +21,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [UserManagementComponent, DataFilterPipe, CreateUserComponent],
-    imports: [Ng2SmartTableModule, RouterModule.forChild(routes), FormsModule, CommonModule, NgaModule],
+    imports: [SharedModule, Ng2SmartTableModule, RouterModule.forChild(routes), FormsModule, CommonModule, NgaModule],
     providers: [UserTablesService],
 })
 export class UserManagementModule {
