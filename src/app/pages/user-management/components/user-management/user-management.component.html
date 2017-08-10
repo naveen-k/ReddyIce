@@ -20,10 +20,18 @@
   <div class="col-md-6" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
     <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
     <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container">
-      <input type="text" class="form-control homeSearchBox" [ngClass]="{'col-md-8':isNewCustomer, 'col-md-4':!isNewCustomer}" id="input01" placeholder="Search">
-      <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
-          Add New User
-      </button>
+      <div class="row">
+        <div class="col-md-6">
+          <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" id="input01"
+            placeholder="Search">
+        </div>
+        <div class="col-md-6">
+          <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
+              Add User
+          </button>
+        </div>
+      </div>
+      <br>
       <div class="col-md-5 padding-eater">
         <h4>Distributor:Dist 001</h4>
       </div>
@@ -33,7 +41,8 @@
   <div *ngIf="!isNewCustomer" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
     <ba-card cardTitle="Create New User" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
-      <create-user [user]="selectedUser"></create-user>
+
+      <create-user [user]="newUser" (onSaveUser)="onSaveUser($event)" (closeNewUser)="showNewCustomer($event)"></create-user>
     </ba-card>
   </div>
 </div>

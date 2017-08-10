@@ -5,9 +5,7 @@
 };
 
 .addCustBtn {
-    position:absolute;
-    margin-top:-52px;
-    right:17px;
+    margin-top: 2px;
 }
 
 .addCustCloseIcon {
@@ -20,4 +18,8 @@
     position: absolute;
     right: 165px;
     top: 4px;
+}
+
+.pull-right {
+    float: right;
 }

@@ -1,7 +1,7 @@
 import { selector } from 'rxjs/operator/multicast';
 import { LocalDataSource } from 'ng2-smart-table';
 import { UserTablesService } from '../../user-management.service';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     templateUrl: './create-user.component.html',
@@ -10,9 +10,10 @@ import { Component, Input } from '@angular/core';
 })
 export class CreateUserComponent {
     @Input() user: any;
-OnCancelClick() {
-    this.user = {};
-}
+    @Output() onSaveUser: EventEmitter<any> = new EventEmitter();
+    @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
+
+    roles = ['Admin', 'Driver'];
     settings = {
         add: {
             addButtonContent: '',
@@ -39,6 +40,7 @@ OnCancelClick() {
 
         },
     };
+    isChecked: boolean = false;
 
     source: LocalDataSource = new LocalDataSource();
     constructor(private service: UserTablesService) {
@@ -53,6 +55,15 @@ OnCancelClick() {
 
     sortByWordLength = (a: any) => {
         return a.city.length;
+    }
+    onSubmit () {
+      this.user.isActive = this.isChecked;
+      this.user.id = Math.random();
+      this.user.name = `${this.user.fname} ${this.user.lname}`;
+      this.onSaveUser.emit(this.user);
+    }
+    OnCancelClick() {
+        this.closeNewUser.emit();
     }
 
 }
