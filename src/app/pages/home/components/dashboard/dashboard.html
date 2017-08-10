@@ -16,14 +16,34 @@
             <thead>
               <tr>
                 <th>Actions</th>
-                <th>Route Number</th>
-                <th>Location/Branch</th>
-                <th># Of Tickets</th>
-                <th>Amount</th>
+                <th>
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'routeNumber';customer.isAsc=!customer.isAsc;">
+                    Route Number
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'routeNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'routeNumber' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                  </span>
+                </th>
+                <th>
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
+                    Location/Branch
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'branch')" [ngClass]="(customer.isAsc && customer.sortField == 'branch' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                  </span>
+                </th>
+                <th>
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'numberOfTickets';customer.isAsc=!customer.isAsc;">
+                    # Of Tickets
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'numberOfTickets')" [ngClass]="(customer.isAsc && customer.sortField == 'numberOfTickets' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                  </span>
+                </th>
+                <th>
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'amount';customer.isAsc=!customer.isAsc;">
+                    Amount
+                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'amount')" [ngClass]="(customer.isAsc && customer.sortField == 'amount' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of smartTableData | filter:customer.searchString">
+              <tr *ngFor="let item of smartTableData | filter:customer.searchString | sortCustomer:customer.sortField:customer.isAsc">
                 <td class="table-id ion-edit"></td>
                 <td>{{ item.routeNumber }}</td>
                 <td>{{ item.branch }}</td>

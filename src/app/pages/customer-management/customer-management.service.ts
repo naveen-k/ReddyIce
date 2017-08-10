@@ -62,18 +62,23 @@ export class CustomerManagementService {
   mappedProds = [
     {
       name: 'Cocktail',
+      price: '$1245',
     },
     {
       name: 'BoxIce',
+      price: '$5624',
     },
     {
       name: 'Cloudtails',
+      price: '$1524',
     },
     {
       name: 'IceBucket',
+      price: '$5686',
     },
     {
       name: 'FrankyIce',
+      price: '$145',
     },
   ];
 
