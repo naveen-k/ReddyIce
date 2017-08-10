@@ -1,12 +1,12 @@
 <section class="chartist">
   <div class="row">
     <div class="col-md-6 ">
-      <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container">
+      <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
         <!-- <input type="text" class="form-control col-md-4 homeSearchBox" id="input01" placeholder="Text" [(ngModel)]="filterText">
         <ng2-smart-table [settings]="settings | homeSearch:filterText" [source]="dataSource"></ng2-smart-table> -->
         <div class="row">
           <div class="col-md-8">
-            <input type="text" class="form-control col-md-8" id="input01" placeholder="Search">
+            <input type="text" class="form-control col-md-8" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
           </div>
         </div>
         <br/>
@@ -23,7 +23,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of smartTableData">
+              <tr *ngFor="let item of smartTableData | filter:customer.searchString">
                 <td class="table-id ion-edit"></td>
                 <td>{{ item.routeNumber }}</td>
                 <td>{{ item.branch }}</td>

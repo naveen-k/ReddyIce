@@ -19,10 +19,10 @@
 <div class="row page-header">
   <div class="col-md-6" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
     <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
-    <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container">
+    <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
         <div class="col-md-6">
-          <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" id="input01"
+          <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" id="input01" [(ngModel)]="customer.searchString"
             placeholder="Search">
         </div>
         <div class="col-md-6">
@@ -48,7 +48,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of smartTableData">
+            <tr *ngFor="let item of smartTableData | filter:customer.searchString">
               <td class="table-id ion-edit"></td>
               <td>{{ item.fname }}</td>
               <td>{{ item.role }}</td>

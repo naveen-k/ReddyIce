@@ -105,7 +105,9 @@ export class CustomerManagementComponent {
     smartTableData: any;
     products: any;
     mappedProds: any;
-
+    isNewCustomer: boolean = false;
+    setPrice: boolean = false;
+    
     constructor(protected service: CustomerManagementService) {
         // this.service.getData().then((data) => {
         //     this.source1.load(data);
@@ -120,8 +122,6 @@ export class CustomerManagementComponent {
         this.products = service.products;
         this.mappedProds = service.mappedProds;
     }
-    isNewCustomer: boolean = false;
-    setPrice: boolean = false;
 
     showNewCustomer(newCustomer) {
         this.isNewCustomer = !this.isNewCustomer;
