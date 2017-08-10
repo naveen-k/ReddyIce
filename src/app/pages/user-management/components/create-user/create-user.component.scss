@@ -14,3 +14,7 @@
 .checkbox label.custom-checkbox > span:hover:before {
   border-color: #cbcbcb!important;
 }
+
+input:focus + .alert {
+  display: none;
+}

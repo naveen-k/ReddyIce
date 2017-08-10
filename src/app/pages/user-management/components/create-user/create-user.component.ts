@@ -58,13 +58,11 @@ export class CreateUserComponent {
     }
     onSubmit () {
       this.user.isActive = this.isChecked;
-      this.user.id = 9
+      this.user.id = Math.random();
       this.user.name = `${this.user.fname} ${this.user.lname}`;
       this.onSaveUser.emit(this.user);
-      this.user = {};
     }
     OnCancelClick() {
-        this.user = {};
         this.closeNewUser.emit();
     }
 
