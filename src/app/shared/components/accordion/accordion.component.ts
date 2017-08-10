@@ -7,7 +7,8 @@ import { Component, Input, OnDestroy } from '@angular/core';
           `,
   host: {
     'class': 'panel-group'
-  }
+  },
+  styleUrls : ['./accordion.component.scss'],
 })
 export class AccordionComponent {
   groups: AccordionGroupComponent[] = [];
@@ -37,9 +38,9 @@ export class AccordionComponent {
   template: `
                 <div class="accordion-panel" [ngClass]="{'panel-open': isOpen}">
                   <div class="panel-heading" (click)="toggleOpen($event)">
-                    <h4 class="panel-title">
+                    <h5 class="panel-title">
                       <a href tabindex="0"><span>{{heading}}</span></a>
-                    </h4>
+                    </h5>
                   </div>
                   <div class="panel-collapse" [hidden]="!isOpen">
                     <div class="panel-body">
