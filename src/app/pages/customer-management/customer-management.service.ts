@@ -15,29 +15,29 @@ export class CustomerManagementService {
       customerNumber: 2,
       customerName: 'Shaun Michael',
       isRICustomer: 'Y',
-      email: 'jk@reddyice.com',
-      contact: '1234567890',
+      email: 'sm@reddyice.com',
+      contact: '8794563210',
     },
     {
       customerNumber: 3,
       customerName: 'Gill Ambrose',
       isRICustomer: 'N',
-      email: 'jk@reddyice.com',
-      contact: '1234567890',
+      email: 'ga@reddyice.com',
+      contact: '9456123878',
     },
     {
       customerNumber: 4,
       customerName: 'Bill Courtney',
       isRICustomer: 'Y',
-      email: 'jk@reddyice.com',
-      contact: '1234567890',
+      email: 'bc@reddyice.com',
+      contact: '0123645678',
     },
     {
       customerNumber: 5,
       customerName: 'Jill Franko',
       isRICustomer: 'N',
-      email: 'jk@reddyice.com',
-      contact: '1234567890',
+      email: 'jf@reddyice.com',
+      contact: '7854512963',
     }
   ];
 
