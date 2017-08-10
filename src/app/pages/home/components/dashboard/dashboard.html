@@ -10,7 +10,29 @@
           </div>
         </div>
         <br/>
-        <ng2-smart-table [settings]="settings" [source]="dataSource"></ng2-smart-table>
+        <!-- <ng2-smart-table [settings]="settings" [source]="dataSource"></ng2-smart-table> -->
+        <div class="vertical-scroll">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Actions</th>
+                <th>Route Number</th>
+                <th>Location/Branch</th>
+                <th># Of Tickets</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of smartTableData">
+                <td class="table-id ion-edit"></td>
+                <td>{{ item.routeNumber }}</td>
+                <td>{{ item.branch }}</td>
+                <td>{{ item.numberOfTickets }}</td>
+                <td>{{ item.amount }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </ba-card>
     </div>
 
