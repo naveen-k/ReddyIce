@@ -103,18 +103,22 @@ export class CustomerManagementComponent {
     source3: LocalDataSource = new LocalDataSource();
 
     smartTableData: any;
+    products: any;
+    mappedProds: any;
 
     constructor(protected service: CustomerManagementService) {
-        this.service.getData().then((data) => {
-            this.source1.load(data);
-        });
+        // this.service.getData().then((data) => {
+        //     this.source1.load(data);
+        // });
+        // this.service.getProducts().then((data) => {
+        //     this.source2.load(data);
+        // });
+        // this.service.mappedProducts().then((data) => {
+        //     this.source3.load(data);
+        // });
         this.smartTableData = service.smartTableData;
-        this.service.getProducts().then((data) => {
-            this.source2.load(data);
-        });
-        this.service.mappedProducts().then((data) => {
-            this.source3.load(data);
-        });
+        this.products = service.products;
+        this.mappedProds = service.mappedProds;
     }
     isNewCustomer: boolean = true;
     setPrice: boolean = false;
