@@ -102,10 +102,13 @@ export class CustomerManagementComponent {
     source2: LocalDataSource = new LocalDataSource();
     source3: LocalDataSource = new LocalDataSource();
 
+    smartTableData: any;
+
     constructor(protected service: CustomerManagementService) {
         this.service.getData().then((data) => {
             this.source1.load(data);
         });
+        this.smartTableData = service.smartTableData;
         this.service.getProducts().then((data) => {
             this.source2.load(data);
         });
@@ -114,15 +117,15 @@ export class CustomerManagementComponent {
         });
     }
     isNewCustomer: boolean = true;
+    setPrice: boolean = false;
 
     showNewCustomer(newCustomer) {
-        // this.isNewCustomer = newCustomer;
         this.isNewCustomer = !this.isNewCustomer;
-        // if (this.isNewCustomer === false) {
-        //     this.settings1.columns.isRICustomer.show = false;
-        // } else {
-        //     this.settings1.columns.isRICustomer.show = true;
-        // }
+        // this.setPrice = !this.setPrice;
+    }
+    showPrice() {
+        // this.isNewCustomer = !this.isNewCustomer;
+        this.setPrice = !this.setPrice;
     }
 
     onEditCliked(event) {        

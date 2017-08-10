@@ -4,21 +4,87 @@
     </div>
 </div>
 <div class="row">
-    <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
+    <!-- <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}"> -->
+        <div [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
         <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container">
             <div class="row">
-                <div class="col-md-6">
-                    <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" id="input01" placeholder="Search">
+                <div [ngClass]="{'col-md-6':isNewCustomer, 'col-md-4':!isNewCustomer}">
+                    <input type="text" class="form-control" [ngClass]="{'col-md-10':isNewCustomer, 'col-md-12':!isNewCustomer}" id="input01"
+                        placeholder="Search">
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <button (click)="showPrice($event)" class="btn btn-primary addCustBtn pull-right">
+                        Set Generic Price
+                    </button>
+                </div>
+                <div [ngClass]="{'col-md-2':isNewCustomer, 'col-md-4':!isNewCustomer}">
                     <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
                         Add Customer
                     </button>
                 </div>
             </div>
             <br>
-            <ng2-smart-table [settings]="settings1" [source]="source1" (edit)="onEditCliked($event)"></ng2-smart-table>
+            <!-- <ng2-smart-table [settings]="settings1" [source]="source1" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
+            <div class="vertical-scroll">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="table-id">Actions</th>
+                            <th>Customer#</th>
+                            <th>Customer Name</th>
+                            <th>isRICustomer?</th>
+                            <th *ngIf="isNewCustomer">Email</th>
+                            <th *ngIf="isNewCustomer">Contact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of smartTableData">
+                            <td class="table-id"></td>
+                            <td>{{ item.customerNumber }}</td>
+                            <td>{{ item.customerName }}</td>
+                            <td>{{ item.isRICustomer }}</td>
+                            <td *ngIf="isNewCustomer"><a class="email-link">{{ item.email }}</a></td>
+                            <td *ngIf="isNewCustomer">{{ item.contact }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ba-card>
+    </div>
+    <div *ngIf="setPrice" [ngClass]="{'col-md-12':!setPrice, 'col-md-6':setPrice}">
+        <ba-card cardTitle="Set Generic Price" baCardClass="with-scroll" class="smart-table-container">
+            <span (click)="showPrice($event)" class="ion-close-round addCustCloseIcon"></span>
+            <div class="row">
+                <div class="col-md-10">
+                    <h4 style="padding-top: 8px;">Product Generic Price</h4>
+                </div>
+                <div>
+                    <button class="btn btn-danger">Save</button>
+                </div>
+            </div>
+            <br/>
+            <div class="vertical-scroll">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of smartTableData">
+                            <td>{{ item.customerNumber }}</td>
+                            <td>{{ item.customerName }}</td>
+                            <td>
+                                <input type="text" class="form-control" id="price" placeholder="Price"
+                                style="padding: 5px; margin-top: 3px;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </ba-card>
     </div>
     <div *ngIf="!isNewCustomer" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
