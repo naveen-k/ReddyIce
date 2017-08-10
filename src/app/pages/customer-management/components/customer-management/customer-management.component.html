@@ -33,14 +33,14 @@
                             <th class="table-id">Actions</th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'customerNumber';customer.isAsc=!customer.isAsc;">
-                                    Customer Name
+                                    Customer Number
                                     <i class="fa fa-sort" *ngIf="(customer.sortField == 'customerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'customerNumber' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'customerName';customer.isAsc=!customer.isAsc;">
                                     Customer Name
-                                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'customerName')" [ngClass]="(customer.isAsc && customer.sortField == 'isReddyIceCustomer' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'customerName')" [ngClass]="(customer.isAsc && customer.sortField == 'customerName' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
                                 </span>
                             </th>
                             <th>
