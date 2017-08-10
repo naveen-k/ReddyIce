@@ -1,12 +1,12 @@
 <div class="page-top clearfix" baScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}">
-     <a href (click)="toggleMenu()" class="collapse-menu-link ion-navicon"></a>
-   <!--  <a routerLink="/pages/dashboard" class="al-logo clearfix">Reddy<span>Ice</span></a> -->
+    <a href (click)="toggleMenu()" class="collapse-menu-link ion-navicon"></a>
+    <!--  <a routerLink="/pages/dashboard" class="al-logo clearfix">Reddy<span>Ice</span></a> -->
     <a routerLink="/pages" class="al-logo clearfix">
     <img src="assets/reddyIce/logo.png">
     </a>
-    
-     <a class="al-logo clearfix app-head"><b>My Icebox</b></a> 
-   
+
+    <a class="al-logo clearfix app-head"><b>My Icebox</b></a>
+
 
     <div class="row">
         <div class="col-md-6">
@@ -20,17 +20,27 @@
                 <option>302/302</option>
             </select>
         </div> -->
-        
+
+       
+
         <div class="col-md-11 navbar-label-margin-top">
             <span class="navbarUsername">John Hue</span>
         </div>
         <div class="col-md-1">
             <div class="user-profile clearfix">
-                <div class="al-user-profile">
-                    <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
+                <div class="al-user-profile dropdown open" uib-dropdown="">
+                    <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd"  data-toggle="dropdown" aria-expanded="false">
+                       
                         <!-- <img src="{{ ( 'Nasta' | baProfilePicture ) }}"> -->
                         <img src="assets/img/app/profile/male-user-close-up_318-39701.jpg">
                     </a>
+                     <ul
+                class="top-dropdown-menu profile-dropdown dropdown-menu" uib-dropdown-menu="">
+                <li><i class="dropdown-arr"></i></li>
+                <li><a ><i class="fa fa-user"></i>Profile</a></li>
+                <li><a ><i class="fa fa-cog"></i>Settings</a></li>
+                <li><a  class="signout"><i class="fa fa-power-off"></i>Sign out</a></li>
+                </ul>
                 </div>
             </div>
         </div>
