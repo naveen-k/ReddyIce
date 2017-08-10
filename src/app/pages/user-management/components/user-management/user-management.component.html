@@ -35,13 +35,34 @@
       <div class="col-md-5 padding-eater">
         <h4>Distributor:Dist 001</h4>
       </div>
-      <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>
+      <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
+      <div class="vertical-scroll">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Actions</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Branch</th>
+              <th>RI Internal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of smartTableData">
+              <td class="table-id ion-edit"></td>
+              <td>{{ item.fname }}</td>
+              <td>{{ item.role }}</td>
+              <td>{{ item.branch }}</td>
+              <td>{{ item.riinternal }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div> 
     </ba-card>
   </div>
   <div *ngIf="!isNewCustomer" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
     <ba-card cardTitle="Create New User" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
-
       <create-user [user]="newUser" (onSaveUser)="onSaveUser($event)" (closeNewUser)="showNewCustomer($event)"></create-user>
     </ba-card>
   </div>

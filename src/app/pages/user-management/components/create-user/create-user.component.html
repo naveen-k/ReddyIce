@@ -92,7 +92,19 @@
     </div>
 </div>
 <div class="checkbox active-user">
-  <ba-checkbox [(ngModel)]="isChecked" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+  <div class="row">
+    <div class="col-md-6">
+        <label for="exampleSelect1">Branch</label>
+        <select class="form-control" id="exampleSelect1">
+            <option>301</option>
+            <option>302</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+      <br/><br/>
+      <ba-checkbox [(ngModel)]="isChecked" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+    </div>
+  </div>
 </div>
 </form>
 
