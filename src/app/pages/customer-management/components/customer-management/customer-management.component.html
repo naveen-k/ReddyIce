@@ -4,21 +4,20 @@
     </div>
 </div>
 <div class="row">
-    <div [ngClass]="{'col-md-12':!isNewCustomer && !setPrice, 'col-md-6':isNewCustomer}">
-        <!-- <div [ngClass]="[!isNewCustomer ? 'col-md-12' : 'col-md-6', !setPrice ? 'col-md-12' : 'col-md-6']">  -->
+    <!-- <div [ngClass]="{'col-md-12':!isNewCustomer && !setPrice, 'col-md-6':isNewCustomer}"> -->
+        <div [ngClass]="[!isNewCustomer && !setPrice ? 'col-md-12' : 'col-md-6']">  
         <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="row">
-                <div [ngClass]="{'col-md-6':!isNewCustomer && !setPrice, 'col-md-4':isNewCustomer}">
-                    <input type="text" class="form-control"  [(ngModel)]="customer.searchString"
-                        placeholder="Search">
+                <div [ngClass]="[isNewCustomer || setPrice ? 'col-md-4' : 'col-md-6']">
+                    <input type="text" class="form-control"  [(ngModel)]="customer.searchString" placeholder="Search">
                 </div>
                 <div class="col-md-4">
                     <button (click)="showPrice($event)" class="btn btn-primary addCustBtn pull-right">
                         Set Generic Price
                     </button>
                 </div>
-                <div [ngClass]="{'col-md-2':!isNewCustomer  && !setPrice, 'col-md-4':isNewCustomer}">
+                <div [ngClass]="[isNewCustomer || setPrice ? 'col-md-4' : 'col-md-2']">
                     <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
                         Add Customer
                     </button>
