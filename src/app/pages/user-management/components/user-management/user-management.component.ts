@@ -94,4 +94,10 @@ export class UserManagementComponent {
       this.isNewCustomer = !this.isNewCustomer;
     }
 
+    ngOnInit() {
+        this.service.getUsers().subscribe((res) => {
+            debugger;
+        })
+    }
+
 }

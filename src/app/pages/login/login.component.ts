@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
-import {FormGroup, AbstractControl, FormBuilder, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoginService } from './login.service';
+import { Component } from '@angular/core';
+import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'login',
@@ -8,12 +10,12 @@ import {FormGroup, AbstractControl, FormBuilder, Validators} from '@angular/form
 })
 export class Login {
 
-  public form:FormGroup;
-  public email:AbstractControl;
-  public password:AbstractControl;
-  public submitted:boolean = false;
+  form: FormGroup;
+  email: AbstractControl;
+  password: AbstractControl;
+  submitted: boolean = false;
 
-  constructor(fb:FormBuilder) {
+  constructor(fb: FormBuilder, private loginService: LoginService, private router: Router) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])]
@@ -23,11 +25,16 @@ export class Login {
     this.password = this.form.controls['password'];
   }
 
-  public onSubmit(values:Object):void {
+  onSubmit(values: Object): void {    
     this.submitted = true;
     if (this.form.valid) {
       // your code goes here
-      // console.log(values);
+      const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
+
+      this.loginService.login(user).subscribe((res) => {
+        localStorage.setItem('auth_token', res.access_token);
+        this.router.navigate(['']);
+      });
     }
   }
 }

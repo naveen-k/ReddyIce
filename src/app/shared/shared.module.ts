@@ -1,5 +1,5 @@
 import { GenericSort } from './pipes/generic-sort.pipe';
-
+import { HttpService } from './http.service';
 import { CommonModule } from '@angular/common';
 import { AccordionGroupComponent, AccordionComponent } from './components/accordion/accordion.component';
 
@@ -9,6 +9,7 @@ import { NgModule } from '@angular/core';
     declarations: [GenericFilter, AccordionComponent, AccordionGroupComponent, GenericSort],
     exports: [GenericFilter, AccordionComponent, AccordionGroupComponent, GenericSort],
     imports: [CommonModule],
+    providers: [HttpService],
 })
 export class SharedModule {
 
