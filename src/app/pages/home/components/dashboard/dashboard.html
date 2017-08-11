@@ -19,25 +19,25 @@
                 <th>
                   <span style="cursor:pointer;" (click)="customer.sortField = 'routeNumber';customer.isAsc=!customer.isAsc;">
                     Route Number
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'routeNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'routeNumber' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i *ngIf="(customer.sortField == 'routeNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'routeNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                   </span>
                 </th>
                 <th>
                   <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                     Location/Branch
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'branch')" [ngClass]="(customer.isAsc && customer.sortField == 'branch' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i *ngIf="(customer.sortField == 'branch')" [ngClass]="(customer.isAsc && customer.sortField == 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                   </span>
                 </th>
                 <th>
                   <span style="cursor:pointer;" (click)="customer.sortField = 'numberOfTickets';customer.isAsc=!customer.isAsc;">
                     # Of Tickets
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'numberOfTickets')" [ngClass]="(customer.isAsc && customer.sortField == 'numberOfTickets' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i *ngIf="(customer.sortField == 'numberOfTickets')" [ngClass]="(customer.isAsc && customer.sortField == 'numberOfTickets' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                   </span>
                 </th>
                 <th>
                   <span style="cursor:pointer;" (click)="customer.sortField = 'amount';customer.isAsc=!customer.isAsc;">
                     Amount
-                    <i class="fa fa-sort" *ngIf="(customer.sortField == 'amount')" [ngClass]="(customer.isAsc && customer.sortField == 'amount' ? 'fa-sort-up' : 'fa-sort-down')" aria-hidden="false"></i>
+                    <i *ngIf="(customer.sortField == 'amount')" [ngClass]="(customer.isAsc && customer.sortField == 'amount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                   </span>
                 </th>
               </tr>
