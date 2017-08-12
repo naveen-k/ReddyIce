@@ -14,12 +14,12 @@
   <div class="row page-header rowContainer first-form-row">
     <div class="col-md-5 padding-eater first-column">
       <label for="fname" class="control-label">First Name</label>
-      <input type="text" class="form-control" id="fname" placeholder="First Name" minlength="2" [(ngModel)]="user.fname" name="fname"
-        #fname="ngModel" required>
-      <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="error-message">
+      <input type="text" class="form-control" id="fname" placeholder="First Name" minlength="2" [(ngModel)]="user.FirstName" name="FirstName"
+        #FirstName="ngModel" required>
+      <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
-        <div *ngIf="fname.errors.required" class="custom-tooltip bottom">First Name is required</div>
-         <div *ngIf="fname.errors.minlength" class="custom-tooltip bottom">Minimum 2 characters</div>
+        <div *ngIf="FirstName.errors.required" class="custom-tooltip bottom">First Name is required</div>
+         <div *ngIf="FirstName.errors.minlength" class="custom-tooltip bottom">Minimum 2 characters</div>
       </div>
       <!-- <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="alert alert-danger">
         <div *ngIf="fname.errors.required">
@@ -33,14 +33,14 @@
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater second-column">
       <label for="lname" class="control-label">Last Name</label>
-      <input type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.lname" name="lname" #lname="ngModel"
+      <input type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName" name="LastName" #LastName="ngModel"
         required minlength="2">
-      <div *ngIf="lname.invalid && (lname.dirty || lname.touched)" class="error-message">
+      <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
          <i class="ion-android-alert showError"></i>
-        <div *ngIf="lname.errors.required" class="custom-tooltip bottom">
+        <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">
           Last Name is required.
         </div>
-        <div *ngIf="lname.errors.minlength" class="custom-tooltip bottom">
+        <div *ngIf="LastName.errors.minlength" class="custom-tooltip bottom">
           Minimum 2 characters.
         </div>
       </div>
@@ -49,14 +49,14 @@
   <div class="row page-header rowContainer">
     <div class="col-md-5 padding-eater first-column">
       <label for="username" class="control-label">Username</label>
-      <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.username" name="username"
-        #username="ngModel" required minlength="4">
-      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="error-message">
+      <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
+        #UserName="ngModel" required minlength="4">
+      <div *ngIf="UserName.invalid && (UserName.dirty || UserName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
-        <div *ngIf="username.errors.required" class="custom-tooltip bottom">
+        <div *ngIf="UserName.errors.required" class="custom-tooltip bottom">
           Username is required.
         </div>
-        <div *ngIf="username.errors.minlength" class="custom-tooltip bottom">
+        <div *ngIf="UserName.errors.minlength" class="custom-tooltip bottom">
           Minimum 2 characters.
         </div>
       </div>
@@ -64,14 +64,14 @@
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater second-column">
       <label for="inputEmail3" class="control-label">Email</label>
-      <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.email" name="email" #email="ngModel"
+      <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
         required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
+      <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
-        <div *ngIf="email.errors.required" class="custom-tooltip bottom">
+        <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">
           Email is required.
         </div>
-        <div *ngIf="email.errors && email.errors.pattern" class="custom-tooltip bottom">
+        <div *ngIf="EmailID.errors && EmailID.errors.pattern" class="custom-tooltip bottom">
           Email is invalid.
         </div>
       </div>
@@ -80,14 +80,14 @@
   <div class="row page-header rowContainer">
     <div class="col-md-5 padding-eater first-column">
       <label for="inputEmail3" class="control-label">Phone</label>
-      <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.phone" name="phone" #phone="ngModel"
+      <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
         required pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$">
-      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="error-message">
+      <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
-        <div *ngIf="phone.errors.required" class="custom-tooltip bottom">
+        <div *ngIf="Phone.errors.required" class="custom-tooltip bottom">
           Phone number is required.
         </div>
-        <div *ngIf="phone.errors && phone.errors.pattern" class="custom-tooltip bottom">
+        <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
           Phone number is invalid.
         </div>
       </div>

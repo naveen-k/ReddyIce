@@ -5,12 +5,12 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class HttpService extends Http {
-    API_ENDPOINT = 'http://frozen.reddyice.com/dpserivces/';
+    API_ENDPOINT = 'http://frozen.reddyice.com/DPServices/';
     constructor(backend: XHRBackend, defaultOptions: RequestOptions, private router: Router) {
         super(backend, defaultOptions);
         // const token = localStorage.getItem('auth_token'); // your custom token getter function here
         // defaultOptions.headers.set('Authorization', `bearer ${token}`);
-        
+
     }
 
     request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
@@ -26,7 +26,7 @@ export class HttpService extends Http {
             // we have to add the token to the url object
             url.headers.set('Authorization', `Bearer ${token}`);
             url['url'] = `${this.API_ENDPOINT}${url['url']}`;
-        }        
+        }
         return super.request(url, options).catch(this.catchAuthError(this));
     }
 

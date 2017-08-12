@@ -22,7 +22,7 @@
     <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
         <div class="col-md-12">
-          <input type="text" class="form-control" [ngClass]="{'col-md-10':!isNewCustomer, 'col-md-12':isNewCustomer}" id="input01" [(ngModel)]="customer.searchString"
+          <input type="text" class="form-control" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-12':isNewCustomer}" id="input01" [(ngModel)]="customer.searchString"
             placeholder="Search">
         </div>
         <div class="col-md-6 add-new-user">
@@ -41,34 +41,34 @@
           <thead>
             <tr>
               <th>Actions</th>
-              <th *ngIf="!isNewCustomer">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'fname';customer.isAsc=!customer.isAsc;">
+              <th *ngIf="!hideColumn">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'FirstName';customer.isAsc=!customer.isAsc;">
                     First Name
-                    <i *ngIf="(customer.sortField === 'fname')" [ngClass]="(customer.isAsc && customer.sortField === 'fname' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'FirstName')" [ngClass]="(customer.isAsc && customer.sortField === 'FirstName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
-              <th *ngIf="!isNewCustomer">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'lname';customer.isAsc=!customer.isAsc;">
+              <th *ngIf="!hideColumn">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'LastName';customer.isAsc=!customer.isAsc;">
                     Last Name
-                    <i *ngIf="(customer.sortField === 'lname')" [ngClass]="(customer.isAsc && customer.sortField === 'lname' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'LastName')" [ngClass]="(customer.isAsc && customer.sortField === 'LastName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th>
-                <span style="cursor:pointer;" (click)="customer.sortField = 'username';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;">
                     Username
-                    <i *ngIf="(customer.sortField === 'username')" [ngClass]="(customer.isAsc && customer.sortField === 'username' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'UserName')" [ngClass]="(customer.isAsc && customer.sortField === 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
-              <th *ngIf="!isNewCustomer">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'email';customer.isAsc=!customer.isAsc;">
+              <th *ngIf="!hideColumn">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'EmailID';customer.isAsc=!customer.isAsc;">
                     Email
-                    <i *ngIf="(customer.sortField === 'email')" [ngClass]="(customer.isAsc && customer.sortField === 'email' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'EmailID')" [ngClass]="(customer.isAsc && customer.sortField === 'EmailID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th>
-                <span style="cursor:pointer;" (click)="customer.sortField = 'phone';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'Phone';customer.isAsc=!customer.isAsc;">
                     Phone
-                    <i *ngIf="(customer.sortField === 'phone')" [ngClass]="(customer.isAsc && customer.sortField === 'phone' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'Phone')" [ngClass]="(customer.isAsc && customer.sortField === 'phone' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th>
@@ -77,7 +77,7 @@
                     <i *ngIf="(customer.sortField === 'role')" [ngClass]="(customer.isAsc && customer.sortField === 'role' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
-              <th *ngIf="!isNewCustomer">
+              <th *ngIf="!hideColumn">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                     Branch
                     <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
@@ -92,17 +92,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of smartTableData | filter:customer.searchString | sortCustomer:customer.sortField:customer.isAsc">
+            <!--Removed sorting functionality as it was causing rendering issues  -->
+            <tr *ngFor="let item of userTableData; trackBy: trackByTable">
               <td class="table-id ion-edit"></td>
-              <td *ngIf="!isNewCustomer">{{ item.fname }}</td>
-              <td *ngIf="!isNewCustomer">{{ item.lname }}</td>
-              <td>{{ item.username }}</td>
-              <td *ngIf="!isNewCustomer">{{ item.email }}</td>
-              <td>{{ item.phone }}</td>
-              <td>{{ item.role }}</td>
-              <td *ngIf="!isNewCustomer">{{ item.branch }}</td>
-              <td *ngIf="item.isRiInternal">Y</td>
-              <td *ngIf="!item.isRiInternal">N</td>
+              <td *ngIf="!hideColumn">{{ item.FirstName || 'NA' }}</td>
+              <td *ngIf="!hideColumn">{{ item.LastName || 'NA' }}</td>
+              <td>{{ item.UserName || 'NA' }}</td>
+              <td *ngIf="!hideColumn">{{ item.EmailID }}</td>
+              <td>{{ item.Phone || 'NA' }}</td>
+              <td>{{ item.role || 'NA' }}</td>
+              <td *ngIf="!hideColumn">{{ item.branch || 'NA' }}</td>
+              <!-- <td *ngIf="item.isRiInternal">Y</td> -->
+              <td>N</td>
             </tr>
           </tbody>
         </table>

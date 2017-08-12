@@ -1,13 +1,13 @@
 export interface User {
   id?: number;
-  fname: string;
-  lname: string;
-  username: string;
-  email: string;
-  phone: string;
+  FirstName: string;
+  LastName: string;
+  UserName: string;
+  EmailID: string;
+  Phone: string;
   availableRoles: string[];
   role: string;
-  isActive: boolean;
+  IsActive: boolean;
   availableDistributor: string[];
   distributor?: string;
   availableBranches: string[];

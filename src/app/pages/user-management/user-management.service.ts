@@ -1,14 +1,22 @@
-import { Response } from '@angular/http';
+import { Response, Headers, RequestOptions } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
+import { User } from './user-management.interface';
 
 @Injectable()
 export class UserTablesService {
     constructor(private http: HttpService) { }
 
-    getUsers(): Observable<Response> {
+    getUsers(): Observable<User[]> {
         return this.http.get('api/user/GetUsersList').map((res) => res.json());
+    }
+
+    createUser(data): Observable<Response> {
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      const options = new RequestOptions({ 'headers': headers });
+      return this.http.post('api/user/CreateUser', data, options).map((res => res.json()));
     }
 
     dataTableData = [{
