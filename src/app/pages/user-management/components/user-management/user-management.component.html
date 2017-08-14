@@ -93,7 +93,7 @@
           </thead>
           <tbody>
             <!--Removed sorting functionality as it was causing rendering issues  -->
-            <tr *ngFor="let item of userTableData; trackBy: trackByTable">
+            <tr *ngFor="let item of userTableData | filter:customer.searchString">
               <td class="table-id ion-edit"></td>
               <td *ngIf="!hideColumn">{{ item.FirstName || 'NA' }}</td>
               <td *ngIf="!hideColumn">{{ item.LastName || 'NA' }}</td>
