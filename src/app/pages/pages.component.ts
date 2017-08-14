@@ -1,5 +1,6 @@
+import { UserService } from '../shared/user.service';
 import { Component, OnInit } from '@angular/core';
-import { Routes } from '@angular/router';
+import { Router, Routes } from '@angular/router';
 
 import { BaMenuService } from '../theme';
 import { PAGES_MENU } from './pages.menu';
@@ -23,10 +24,17 @@ import { PAGES_MENU } from './pages.menu';
 })
 export class Pages implements OnInit {
 
-  constructor(private _menuService: BaMenuService) {
+  constructor(private _menuService: BaMenuService, private userService: UserService, private router: Router) {
   }
 
   ngOnInit() {
+    const user = this.userService.getUser() || {};
+
+    // filter menus based on user
+    PAGES_MENU[0].children = PAGES_MENU[0].children.filter((child) => {      
+      return !!user[child.path];
+    });
     this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
+    this.router.navigateByUrl(`/pages/${PAGES_MENU[0].children[0].path}`);
   }
 }

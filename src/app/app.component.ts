@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ViewContainerRef } from '@angular/core';
 import * as $ from 'jquery';
 
 import { GlobalState } from './global.state';
@@ -18,17 +18,24 @@ import { layoutPaths } from './theme/theme.constants';
       <div class="additional-bg"></div>
       <router-outlet></router-outlet>
     </main>
-  `
+    <simple-notifications [options]= "options"></simple-notifications>
+  `,
 })
-export class App {
+export class AppComponent implements AfterViewInit {
 
   isMenuCollapsed: boolean = false;
+  options: any = {
+    position: ['bottom', 'right'],
+    timeOut: 5000,
+    lastOnBottom: true,
+
+  };
 
   constructor(private _state: GlobalState,
-              private _imageLoader: BaImageLoaderService,
-              private _spinner: BaThemeSpinner,
-              private viewContainerRef: ViewContainerRef,
-              private themeConfig: BaThemeConfig) {
+    private _imageLoader: BaImageLoaderService,
+    private _spinner: BaThemeSpinner,
+    private viewContainerRef: ViewContainerRef,
+    private themeConfig: BaThemeConfig) {
 
     themeConfig.config();
 
@@ -39,7 +46,7 @@ export class App {
     });
   }
 
-  public ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     // hide spinner once all loaders are completed
     BaThemePreloader.load().then((values) => {
       this._spinner.hide();

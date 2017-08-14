@@ -1,14 +1,14 @@
 <form (ngSubmit)="onSubmit()" #customerForm="ngForm" class="user-form">
   <div class="row customerHeader">
     <div class="col-md-3" style="margin-top: 7px;">
-       <ba-checkbox [(ngModel)]="user.isRiInternal" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+      <ba-checkbox [(ngModel)]="user.isRiInternal" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
     </div>
     <div *ngIf="user.isRiInternal" class="col-md-5">
       <input type="text" class="form-control" placeholder="Search">
     </div>
     <div class="col-md-2">
       <!--How can we allow user to submit a form without validations?  -->
-      <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid">Save</button>
+      <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid" (click)="onSubmit()">Save</button>
     </div>
   </div>
   <div class="row page-header rowContainer first-form-row">
@@ -19,7 +19,7 @@
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="FirstName.errors.required" class="custom-tooltip bottom">First Name is required</div>
-         <div *ngIf="FirstName.errors.minlength" class="custom-tooltip bottom">Minimum 2 characters</div>
+        <div *ngIf="FirstName.errors.minlength" class="custom-tooltip bottom">Minimum 2 characters</div>
       </div>
       <!-- <div *ngIf="fname.invalid && (fname.dirty || fname.touched)" class="alert alert-danger">
         <div *ngIf="fname.errors.required">
@@ -36,7 +36,7 @@
       <input type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName" name="LastName" #LastName="ngModel"
         required minlength="2">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
-         <i class="ion-android-alert showError"></i>
+        <i class="ion-android-alert showError"></i>
         <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">
           Last Name is required.
         </div>
@@ -95,8 +95,8 @@
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater">
       <label for="exampleSelect1">Role</label>
-      <select class="form-control" id="role" [(ngModel)]="user.role" name="role" #role="ngModel">
-        <option *ngFor="let role of user.availableRoles" [value]="role">{{role}}</option>
+      <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel">
+        <option *ngFor="let role of roles" [value]="role.RoleID">{{role.Role}}</option>
       </select>
     </div>
   </div>
@@ -104,8 +104,7 @@
     <div class="row">
       <div class="col-md-5">
         <label for="exampleSelect1">Branch</label>
-        <select class="form-control userMgmtSelect" id="branchSelection"
-          [(ngModel)]="user.branch" name="branch" #branch="ngModel">
+        <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.branch" name="branch" #branch="ngModel">
             <option *ngFor="let _branch of user.availableBranches" [value]="_branch">{{_branch}}</option>
         </select>
       </div>
@@ -113,7 +112,7 @@
       <div class="col-md-5 padding-eater">
         <br/><br/>
         <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-         <ba-checkbox [(ngModel)]="user.isActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+        <ba-checkbox [(ngModel)]="user.isActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
         <!-- <label class="custom-checkbox nowrap userMgmtIsActive">
           <input type="checkbox" [(ngModel)]="isChecked">
           <span class="">isActive?</span>
@@ -125,16 +124,16 @@
   <div *ngIf="!user.isRiInternal" class="row page-header rowContainer last-form-row">
     <div class="col-md-5 padding-eater">
       <label for="distributor">Distributor</label>
-      <select class="form-control userMgmtSelect" id="distributorSelection"
-        [(ngModel)]="user.distributor" name="distributor" #distributor="ngModel" required>
-          <option *ngFor="let distributor of user.availableDistributor" [value]="distributor">{{distributor}}</option>
+      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor" #distributor="ngModel"
+        required>
+          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
       </select>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater">
       <br/><br/>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-        <ba-checkbox [ngModel]="user.isSeasonal" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
+      <ba-checkbox [ngModel]="user.isSeasonal" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
     </div>
   </div>
 </form>

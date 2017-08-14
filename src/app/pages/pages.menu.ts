@@ -51,7 +51,7 @@ export const PAGES_MENU = [
         },
       },
       {
-        path: 'manualticket',
+        path: 'manual-ticket',
         data: {
           menu: {
             title: 'Manual Ticket',

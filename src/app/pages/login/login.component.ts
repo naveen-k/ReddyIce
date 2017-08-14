@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { LoginService } from './login.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -8,7 +8,7 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
   templateUrl: './login.html',
   styleUrls: ['./login.scss']
 })
-export class Login {
+export class Login implements OnInit {
 
   form: FormGroup;
   email: AbstractControl;
@@ -25,14 +25,17 @@ export class Login {
     this.password = this.form.controls['password'];
   }
 
-  onSubmit(values: Object): void {    
+  ngOnInit() {
+    // Just to make sure `auth_token` is clear when, landed on this page
+    this.loginService.signOut();
+  }
+  onSubmit(values: Object): void {
     this.submitted = true;
     if (this.form.valid) {
       // your code goes here
       const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
 
       this.loginService.login(user).subscribe((res) => {
-        localStorage.setItem('auth_token', res.access_token);
         this.router.navigate(['']);
       });
     }

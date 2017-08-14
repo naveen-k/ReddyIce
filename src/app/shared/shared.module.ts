@@ -1,3 +1,4 @@
+import { UserService } from './user.service';
 import { GenericSort } from './pipes/generic-sort.pipe';
 import { HttpService } from './http.service';
 import { CommonModule } from '@angular/common';
@@ -9,7 +10,7 @@ import { NgModule } from '@angular/core';
     declarations: [GenericFilter, AccordionComponent, AccordionGroupComponent, GenericSort],
     exports: [GenericFilter, AccordionComponent, AccordionGroupComponent, GenericSort],
     imports: [CommonModule],
-    providers: [HttpService],
+    providers: [HttpService, UserService],
 })
 export class SharedModule {
 
