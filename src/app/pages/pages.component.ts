@@ -17,7 +17,7 @@ import { PAGES_MENU } from './pages.menu';
       </div>
     </div>
     <footer class="al-footer clearfix">
-      
+
     </footer>
     <ba-back-top position="200"></ba-back-top>
     `
@@ -31,9 +31,10 @@ export class Pages implements OnInit {
     const user = this.userService.getUser() || {};
 
     // filter menus based on user
-    PAGES_MENU[0].children = PAGES_MENU[0].children.filter((child) => {      
+    PAGES_MENU[0].children = PAGES_MENU[0].children.filter((child) => {
       return !!user[child.path];
     });
+    console.log('user--', JSON.stringify(user), PAGES_MENU)
     this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
     this.router.navigateByUrl(`/pages/${PAGES_MENU[0].children[0].path}`);
   }

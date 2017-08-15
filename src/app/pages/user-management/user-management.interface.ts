@@ -8,6 +8,9 @@ export interface User {
   availableRoles: string[];
   role: string;
   IsActive: boolean;
+  RoleID?: string;
+  BranchID: string;
+  DistributorMasterID?: string;
   availableDistributor: string[];
   distributor?: string;
   availableBranches: string[];

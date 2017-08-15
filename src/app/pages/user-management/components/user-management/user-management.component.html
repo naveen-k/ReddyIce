@@ -17,22 +17,22 @@
 </div>
    -->
 <div class="row page-header user-details">
-  <div class="col-md-6" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-6':isNewCustomer}">
+  <div class="col-md-6" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
     <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
     <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
         <div class="col-md-12">
-          <input type="text" class="form-control" [ngClass]="{'col-md-12':!isNewCustomer, 'col-md-12':isNewCustomer}" id="input01" [(ngModel)]="customer.searchString"
+          <input type="text" class="form-control" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-12':rightCardOpen}" id="input01" [(ngModel)]="customer.searchString"
             placeholder="Search">
         </div>
         <div class="col-md-6 add-new-user">
-          <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right" [disabled]="isNewCustomer">
+          <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right" [disabled]="rightCardOpen">
               Add User
           </button>
         </div>
       </div>
       <br>
-      <div class="col-md-5 padding-eater">
+      <div *ngIf="this.userDetails.Role === 'Distributor Admin'" class="col-md-5 padding-eater">
         <h4>Distributor : Dist 001</h4>
       </div>
       <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
@@ -94,14 +94,14 @@
           <tbody>
             <!--Removed sorting functionality as it was causing rendering issues  -->
             <tr *ngFor="let item of userTableData | filter:customer.searchString">
-              <td class="table-id ion-edit"></td>
+              <td class="table-id ion-edit" (click)="onEditClicked(item)" style="cursor: pointer"></td>
               <td *ngIf="!hideColumn">{{ item.FirstName || 'NA' }}</td>
               <td *ngIf="!hideColumn">{{ item.LastName || 'NA' }}</td>
               <td>{{ item.UserName || 'NA' }}</td>
               <td *ngIf="!hideColumn">{{ item.EmailID }}</td>
               <td>{{ item.Phone || 'NA' }}</td>
-              <td>{{ item.role || 'NA' }}</td>
-              <td *ngIf="!hideColumn">{{ item.branch || 'NA' }}</td>
+              <td>{{ item.RoleID || 'NA' }}</td>
+              <td *ngIf="!hideColumn">{{ item.BranchID || 'NA' }}</td>
               <!-- <td *ngIf="item.isRiInternal">Y</td> -->
               <td>N</td>
             </tr>
@@ -110,10 +110,10 @@
       </div>
     </ba-card>
   </div>
-  <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':isNewCustomer, 'col-md-6':!isNewCustomer}">
-    <ba-card cardTitle="Create New User" baCardClass="with-scroll" class="smart-table-container">
-      <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
-      <create-user [user]="newUser" (onSaveUser)="onSaveUser($event)" (closeNewUser)="showNewCustomer($event)"></create-user>
+  <div *ngIf="rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
+    <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
+      <span (click)="closeRightCard($event)" class="ion-close-round addCustCloseIcon"></span>
+      <create-user [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" (closeNewUser)="showNewCustomer($event)"></create-user>
     </ba-card>
   </div>
 </div>

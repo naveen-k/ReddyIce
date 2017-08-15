@@ -21,11 +21,16 @@ export class UserManagementService {
 
     getRoles(): Observable<any> {
         // change `tempHttp` to `http` once actual api is ready
-        return this.tempHttp.get('https://private-e13c7-reddyice.apiary-mock.com/getRoles').map((res) => res.json());
+        return this.http.get('api/user/GetUserRoles').map((res) => res.json());
     }
 
     getDistributerAndCopacker(): Observable<any> {
         // change `tempHttp` to `http` once actual api is ready
         return this.tempHttp.get('https://private-e13c7-reddyice.apiary-mock.com/getDisco').map((res) => res.json());
+    }
+
+    getBranches(): Observable<any> {
+        // change `tempHttp` to `http` once actual api is ready
+        return this.http.get('api/user/GetUserBranches').map((res) => res.json());
     }
 }

@@ -15,7 +15,7 @@
     <div class="col-md-5 padding-eater first-column">
       <label for="fname" class="control-label">First Name</label>
       <input type="text" class="form-control" id="fname" placeholder="First Name" minlength="2" [(ngModel)]="user.FirstName" name="FirstName"
-        #FirstName="ngModel" required>
+        #FirstName="ngModel" required [readOnly]="user.isRiInternal">
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="FirstName.errors.required" class="custom-tooltip bottom">First Name is required</div>
@@ -34,7 +34,7 @@
     <div class="col-md-5 padding-eater second-column">
       <label for="lname" class="control-label">Last Name</label>
       <input type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName" name="LastName" #LastName="ngModel"
-        required minlength="2">
+        required minlength="2" [readOnly]="user.isRiInternal">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">
@@ -50,7 +50,7 @@
     <div class="col-md-5 padding-eater first-column">
       <label for="username" class="control-label">Username</label>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
-        #UserName="ngModel" required minlength="4">
+        #UserName="ngModel" required minlength="4" [readOnly]="user.isRiInternal">
       <div *ngIf="UserName.invalid && (UserName.dirty || UserName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="UserName.errors.required" class="custom-tooltip bottom">
@@ -65,7 +65,7 @@
     <div class="col-md-5 padding-eater second-column">
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
-        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [readOnly]="user.isRiInternal">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">
@@ -81,7 +81,7 @@
     <div class="col-md-5 padding-eater first-column">
       <label for="inputEmail3" class="control-label">Phone</label>
       <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-        required pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$">
+        required pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [readOnly]="user.isRiInternal">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="Phone.errors.required" class="custom-tooltip bottom">
@@ -96,7 +96,7 @@
     <div class="col-md-5 padding-eater">
       <label for="exampleSelect1">Role</label>
       <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel">
-        <option *ngFor="let role of roles" [value]="role.RoleID">{{role.Role}}</option>
+        <option *ngFor="let role of roles" [value]="role.LookupID">{{role.Value}}</option>
       </select>
     </div>
   </div>
@@ -104,8 +104,8 @@
     <div class="row">
       <div class="col-md-5">
         <label for="exampleSelect1">Branch</label>
-        <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.branch" name="branch" #branch="ngModel">
-            <option *ngFor="let _branch of user.availableBranches" [value]="_branch">{{_branch}}</option>
+        <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel">
+            <option *ngFor="let _branch of branches" [value]="_branch.BranchID">{{_branch.BranchID}}</option>
         </select>
       </div>
       <div class="col-md-2"></div>

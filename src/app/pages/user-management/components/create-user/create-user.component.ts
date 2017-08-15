@@ -16,10 +16,12 @@ export class CreateUserComponent implements OnInit {
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
 
     roles: any[] = [];
+    userDetails: any;
 
     distributorsAndCopackers: any[] = [];
+    branches: any[] = [];
 
-    constructor(private umService: UserManagementService) { }
+    constructor(private umService: UserManagementService, private userService: UserService) { }
 
     toInt(num: string) {
         return +num;
@@ -29,7 +31,10 @@ export class CreateUserComponent implements OnInit {
         return a.city.length;
     }
     onSubmit() {
-        // this.user.id = Math.random();
+        // If user is RI internal user then distributor ID should be set to empty
+        if (this.user.isRiInternal || this.userDetails.Role === 'Distributor Admin') {
+          this.user.DistributorMasterID = '';
+        }
         this.onSaveUser.emit(this.user);
     }
     OnCancelClick() {
@@ -37,12 +42,27 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.umService.getRoles().subscribe((response) => {            
+      this.userDetails = this.userService.getUser() || {};
+      if (this.userDetails.Role === 'DSD Admin') {
+        this.umService.getRoles().subscribe((response) => {
             this.roles = response;
+            if (this.isNewUser) {
+              this.user.RoleID = response[0].LookupID;
+            }
         });
 
-        this.umService.getDistributerAndCopacker().subscribe((response) => {            
+        this.umService.getDistributerAndCopacker().subscribe((response) => {
             this.distributorsAndCopackers = response;
+            if (this.isNewUser) {
+              this.user.DistributorMasterID = response[0].DistributorCopackerID;
+            }
         });
+        this.umService.getBranches().subscribe((response) => {
+          this.branches = response;
+          if (this.isNewUser) {
+            this.user.BranchID = response[0].BranchID;
+          }
+        });
+       }
     }
 }
