@@ -12,14 +12,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class CreateUserComponent implements OnInit {
     @Input() user: any;
     @Input() isNewUser: boolean;
+    @Input() roles: any;
+    @Input() branches: any;
+    @Input() distributorsAndCopackers: any;
+    @Input() isDistributorAdmin: boolean;
     @Output() onSaveUser: EventEmitter<any> = new EventEmitter();
+    @Output() onUpdateUser: EventEmitter<any> = new EventEmitter();
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
 
-    roles: any[] = [];
     userDetails: any;
-
-    distributorsAndCopackers: any[] = [];
-    branches: any[] = [];
 
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
@@ -32,10 +33,10 @@ export class CreateUserComponent implements OnInit {
     }
     onSubmit() {
         // If user is RI internal user then distributor ID should be set to empty
-        if (this.user.isRiInternal || this.userDetails.Role === 'Distributor Admin') {
+        if (this.user.IsRIInternal || this.userDetails.Role === 'Distributor Admin') {
           this.user.DistributorMasterID = '';
         }
-        this.onSaveUser.emit(this.user);
+         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
     OnCancelClick() {
         this.closeNewUser.emit();
@@ -43,26 +44,10 @@ export class CreateUserComponent implements OnInit {
 
     ngOnInit() {
       this.userDetails = this.userService.getUser() || {};
-      if (this.userDetails.Role === 'DSD Admin') {
-        this.umService.getRoles().subscribe((response) => {
-            this.roles = response;
-            if (this.isNewUser) {
-              this.user.RoleID = response[0].LookupID;
-            }
-        });
-
-        this.umService.getDistributerAndCopacker().subscribe((response) => {
-            this.distributorsAndCopackers = response;
-            if (this.isNewUser) {
-              this.user.DistributorMasterID = response[0].DistributorCopackerID;
-            }
-        });
-        this.umService.getBranches().subscribe((response) => {
-          this.branches = response;
-          if (this.isNewUser) {
-            this.user.BranchID = response[0].BranchID;
-          }
-        });
-       }
+      if (this.isNewUser) {
+        this.user.RoleID = this.roles ? this.roles[0].LookupID : '';
+        this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
+        this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
+      }
     }
 }

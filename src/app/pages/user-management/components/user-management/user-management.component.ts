@@ -16,6 +16,7 @@ export class UserManagementComponent implements OnInit {
     selectedUser = {};
     newUser: any;
     hideColumn: boolean = false;
+    isDistributorAdmin: boolean = false;
     cardTitle: string;
     userDetails: any;
     showNewCustomer(newCustomer) {
@@ -28,13 +29,12 @@ export class UserManagementComponent implements OnInit {
             LastName: '',
             UserName: '',
             EmailID: '',
+            BranchID: '',
             Phone: '',
             role: '',
-            branch: '305',
             IsActive: false,
-            availableBranches: ['301', '301', '303', '304', '305'],
             isSeasonal: true,
-            isRiInternal: false,
+            IsRIInternal: false,
         };
     }
     closeRightCard() {
@@ -53,6 +53,9 @@ export class UserManagementComponent implements OnInit {
     }
 
     userTableData: User[];
+    userRoles: any[] = [];
+    userBranches: any[] = [];
+    distributorsAndCopackers: any[] = [];
     constructor(private service: UserManagementService, private notification: NotificationsService, private userService: UserService) {}
 
     toInt(num: string) {
@@ -65,6 +68,9 @@ export class UserManagementComponent implements OnInit {
 
     onEditClicked(user) {
         this.newUser = user;
+        this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+        this.newUser.RoleID = user.Role ? user.Role.RoleId : '';
+        this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.cardTitle = 'Edit User';
         this.isNewUser = false;
         if (!this.rightCardOpen) {
@@ -75,22 +81,88 @@ export class UserManagementComponent implements OnInit {
 
     onSaveUser(user) {
         this.service.createUser(user).subscribe((res) => {
-            this.notification.success('Success', 'User created successfully');
+          this.notification.success('Success', 'User created successfully');
+          this.userTableData.push(user);
         });
         this.rightCardOpen = !this.rightCardOpen;
         this.hideColumn = !this.hideColumn;
         this.isNewUser = false;
-        this.userTableData.push(user);
+    }
+
+    onUpdateUser(user) {
+      delete user.Role;
+      delete user.MenuOptions;
+      delete user.Branch;
+      delete user.Distributor;
+      this.service.updateUser(user, user.UserId).subscribe((res) => {
+        this.notification.success('Success', 'User updated successfully');
+        let indexPos: any;
+        this.userTableData.forEach((_user, index) => {
+          if (_user.UserId === user.UserId) {
+            indexPos = index;
+          }
+        });
+        this.userTableData.splice(indexPos, 1, user);
+      });
+      this.rightCardOpen = !this.rightCardOpen;
+      this.hideColumn = !this.hideColumn;
+      this.isNewUser = false;
+    }
+
+    deleteUser(user) {
+      this.service.deleteUser(user.UserId).subscribe((res) => {
+        this.notification.success('Success', 'User deleted successfully');
+        let indexPos: any;
+        this.userTableData.forEach((_user, index) => {
+          if (_user.UserId === user.UserId) {
+            indexPos = index;
+          }
+        });
+        this.userTableData.splice(indexPos, 1);
+      });
+    }
+
+    getRole() {
+      this.service.getRoles().subscribe((response) => {
+        this.userRoles = response;
+      });
+    }
+
+    getBranches() {
+      this.service.getBranches().subscribe((response) => {
+        this.userBranches = response;
+      });
+    }
+
+    getDistributors() {
+      this.service.getDistributerAndCopacker().subscribe((response) => {
+        this.distributorsAndCopackers = response;
+      });
+    }
+
+    getUserList(id?: number) {
+      this.service.getUsers(id).subscribe((res) => {
+          this.userTableData = res;
+      });
     }
 
     ngOnInit() {
-        this.userDetails = this.userService.getUser();
-        this.service.getUsers().subscribe((res) => {
-            res.forEach((user, index) => {
-                user.id = index;
-            });
-            this.userTableData = res;
-        });
+      const userId = localStorage.getItem('userId') || '';
+      this.userService.getUserDetails(userId).subscribe((response) => {
+        this.userDetails = response;
+        if (response.Role.RoleName === 'DSD Admin') {
+          this.getUserList();
+          this.getRole();
+          this.getBranches();
+          this.getDistributors();
+        } else if (response.Role.RoleName === 'Distributor Admin') {
+          this.getRole();
+          this.getBranches();
+          this.isDistributorAdmin = true;
+          this.getUserList(response.Distributor.DistributorMasterId);
+        }
+      });
+
     }
 
     trackByTable(i, item) {
