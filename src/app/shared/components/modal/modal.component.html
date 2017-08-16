@@ -9,6 +9,7 @@
     {{modalContent}}
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary confirm-btn" (click)="closeModal()">Save changes</button>
+    <button class="btn btn-primary confirm-btn" (click)="closeModal()">{{BUTTONS.OK}}</button>
+    <button *ngIf="showCancel" class="btn btn-default" (click)="dismiss()">{{BUTTONS.Cancel}}</button>
   </div>
 </div>

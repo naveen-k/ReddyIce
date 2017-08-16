@@ -75,6 +75,8 @@ export class UserManagementComponent implements OnInit {
   userBranches: any[] = [];
   distributorsAndCopackers: any[] = [];
 
+  paginationData: any = [];
+
 
   toInt(num: string) {
     return +num;

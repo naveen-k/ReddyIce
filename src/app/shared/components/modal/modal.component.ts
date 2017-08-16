@@ -1,28 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-@Component({
-  selector: 'add-modal',
-  styleUrls: [('./modal.component.scss')],
-  templateUrl: './modal.component.html',
+@Component({    
+    styleUrls: [('./modal.component.scss')],
+    templateUrl: './modal.component.html',
 })
 
 export class ModalComponent implements OnInit {
 
-  modalHeader: string;
-  modalContent: string = `Lorem ipsum dolor sit amet,
-   consectetuer adipiscing elit, sed diam nonummy
-   nibh euismod tincidunt ut laoreet dolore magna aliquam
-   erat volutpat. Ut wisi enim ad minim veniam, quis
-   nostrud exerci tation ullamcorper suscipit lobortis
-   nisl ut aliquip ex ea commodo consequat.`;
+    BUTTONS = { OK: 'OK', Cancel: 'Cancel' };
+    showCancel: boolean = false;
+    modalHeader: string;
+    modalContent: string = `modal content`;
 
-  constructor(private activeModal: NgbActiveModal) {
-  }
+    constructor(private activeModal: NgbActiveModal) {
+    }
 
-  ngOnInit() {}
+    ngOnInit() { }
 
-  closeModal() {
-    this.activeModal.close();
-  }
+    closeModal() {
+        this.activeModal.close();
+    }
+
+    dismiss() {
+        this.activeModal.dismiss('cancel');
+    }
 }

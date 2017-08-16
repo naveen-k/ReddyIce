@@ -23,6 +23,7 @@ export const routes: Routes = [
       { path: 'customer-management', loadChildren: './customer-management/customer-management.module#CustomerManagementModule' },
       { path: 'user-management', loadChildren: './user-management/user-management.module#UserManagementModule' },
       { path: 'reconciliation', loadChildren: './reconciliation/reconciliation.module#ReconciliationModule' },
+      { path: 'day-end', loadChildren: './day-end/day-end.module#DayEndModule' },
       { path: 'manual-ticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },
       { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
