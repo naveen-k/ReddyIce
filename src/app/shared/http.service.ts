@@ -27,6 +27,15 @@ export class HttpService extends Http {
             url.headers.set('Authorization', `Bearer ${token}`);
             url['url'] = `${this.API_ENDPOINT}${url['url']}`;
         }
+
+        // to avoid cashing of get request
+        if (!url['method']) {
+            if (url['url'] && url['url'].indexOf('?') >= 0) {
+                url['url'] = `${url['url']}&nocache=${Date.now()}`;
+            } else if (url['url']) {
+                url['url'] = `${url['url']}?nocache=${Date.now()}`;
+            }
+        }
         return super.request(url, options).catch(this.catchAuthError(this));
     }
 
