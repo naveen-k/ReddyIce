@@ -22,8 +22,8 @@
     <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
         <div class="col-md-12">
-          <input type="text" class="form-control" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-12':rightCardOpen}" id="input01" [(ngModel)]="customer.searchString"
-            placeholder="Search">
+          <input type="text" class="form-control" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-12':rightCardOpen}" id="input01"
+            [(ngModel)]="customer.searchString" placeholder="Search">
         </div>
         <div class="col-md-6 add-new-user">
           <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right" [disabled]="rightCardOpen">
@@ -99,7 +99,7 @@
           </thead>
           <tbody>
             <!--Removed sorting functionality as it was causing rendering issues  -->
-            <tr *ngFor="let item of userTableData | filter:customer.searchString">
+            <tr *ngFor="let item of paginationData | filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-edit" (click)="onEditClicked(item)" style="margin-right: 5px"></i>
                 <i class="ion-trash-a" *ngIf="!item.IsRIInternal" (click)="deleteUser(item)"></i>
@@ -116,21 +116,27 @@
             </tr>
           </tbody>
         </table>
+        <pagination [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
+        <!-- <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-end">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li *ngFor="let a of pageArray; let i = index" class="page-item"><a class="page-link" (click)="paginationUpdate(i+1)">{{i+1}}</a></li>
+
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav> -->
       </div>
     </ba-card>
   </div>
   <div *ngIf="rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
     <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="closeRightCard($event)" class="ion-close-round addCustCloseIcon"></span>
-      <create-user
-        [user]="newUser"
-        [isNewUser]="isNewUser"
-        (onSaveUser)="onSaveUser($event)"
-        (onUpdateUser)="onUpdateUser($event)"
-        (closeNewUser)="showNewCustomer($event)"
-        [roles]="userRoles"
-        [branches]="userBranches"
-        [isDistributorAdmin]="isDistributorAdmin"
+      <create-user [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" (onUpdateUser)="onUpdateUser($event)"
+        (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches" [isDistributorAdmin]="isDistributorAdmin"
         [distributorsAndCopackers]="distributorsAndCopackers">
       </create-user>
     </ba-card>
