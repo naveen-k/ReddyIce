@@ -20,7 +20,7 @@ export const routes: Routes = [
     children: [
       
       { path: 'home', loadChildren: './home/home.module#HomeModule' },
-      { path: 'customers', loadChildren: './customer-management/customer-management.module#CustomerManagementModule' },
+      { path: 'customer-management', loadChildren: './customer-management/customer-management.module#CustomerManagementModule' },
       { path: 'user-management', loadChildren: './user-management/user-management.module#UserManagementModule' },
       { path: 'reconciliation', loadChildren: './reconciliation/reconciliation.module#ReconciliationModule' },
       { path: 'manual-ticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },

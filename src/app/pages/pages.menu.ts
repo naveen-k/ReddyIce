@@ -15,7 +15,7 @@ export const PAGES_MENU = [
         },
       },
       {
-        path: 'customers',
+        path: 'customer-management',
         data: {
           menu: {
             title: 'Customer Management',
@@ -43,6 +43,18 @@ export const PAGES_MENU = [
         data: {
           menu: {
             title: 'Reconciliation',
+            icon: 'ion-happy',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
+      {
+        path: 'day-end',
+        data: {
+          menu: {
+            title: 'Day End',
             icon: 'ion-happy',
             selected: false,
             expanded: false,
