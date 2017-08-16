@@ -381,6 +381,14 @@ export const PAGES_MENU = [
             },
           },
           {
+            path: ['/resetpassword'],
+            data: {
+              menu: {
+                title: 'Reset Password',
+              },
+            },
+          },
+          {
             path: ['/register'],
             data: {
               menu: {

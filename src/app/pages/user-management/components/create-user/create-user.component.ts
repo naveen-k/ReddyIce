@@ -14,6 +14,7 @@ export class CreateUserComponent implements OnInit {
     @Input() isNewUser: boolean;
     @Input() roles: any;
     @Input() branches: any;
+    @Input() userDetails: any;
     @Input() distributorsAndCopackers: any;
     @Input() isDistributorAdmin: boolean;
     @Output() onSaveUser: EventEmitter<any> = new EventEmitter();
@@ -22,7 +23,7 @@ export class CreateUserComponent implements OnInit {
 
     @Output() formChanged = new EventEmitter();
 
-    userDetails: any;
+    //userDetails: any;
 
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
@@ -38,8 +39,8 @@ export class CreateUserComponent implements OnInit {
         if (this.user.IsRIInternal) {
             this.user.DistributorMasterID = '';
         }
-        if (this.userDetails.Role === 'Distributor Admin') {
-          this.user.DistributorMasterID = this.userDetails.DistributorMasterID;
+        if (this.userDetails.Role.RoleName === 'Distributor Admin') {
+          this.user.DistributorMasterID = this.userDetails.Distributor.DistributorMasterId;
         }
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
@@ -49,7 +50,7 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.userDetails = this.userService.getUser() || {};
+        //this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].LookupID : '';
             if (!this.isDistributorAdmin) {

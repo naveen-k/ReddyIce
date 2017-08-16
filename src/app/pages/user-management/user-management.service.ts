@@ -13,7 +13,7 @@ export class UserManagementService {
         return this.http.get(url).map((res) => res.json());
     }
 
-    createUser(data): Observable<Response> {
+    createUser(data): Observable<User> {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const options = new RequestOptions({ 'headers': headers });

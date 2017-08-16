@@ -15,10 +15,14 @@ export const routes: Routes = [
     loadChildren: 'app/pages/register/register.module#RegisterModule',
   },
   {
+    path: 'resetpassword',
+    loadChildren: 'app/pages/reset-password/reset-password.module#ResetPasswordModule',
+  },
+  {
     path: 'pages',
     component: Pages,
     children: [
-      
+
       { path: 'home', loadChildren: './home/home.module#HomeModule' },
       { path: 'customer-management', loadChildren: './customer-management/customer-management.module#CustomerManagementModule' },
       { path: 'user-management', loadChildren: './user-management/user-management.module#UserManagementModule' },

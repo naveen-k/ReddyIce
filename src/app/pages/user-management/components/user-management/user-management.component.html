@@ -107,7 +107,7 @@
       <span (click)="closeRightCard($event)" class="ion-close-round addCustCloseIcon"></span>
       <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" (onUpdateUser)="onUpdateUser($event)"
         (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches" [isDistributorAdmin]="isDistributorAdmin"
-        [distributorsAndCopackers]="distributorsAndCopackers">
+        [distributorsAndCopackers]="distributorsAndCopackers" [userDetails]="userDetails">
       </create-user>
     </ba-card>
   </div>

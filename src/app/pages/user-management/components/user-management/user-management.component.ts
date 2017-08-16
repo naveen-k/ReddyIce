@@ -43,7 +43,7 @@ export class UserManagementComponent implements OnInit {
       BranchID: '',
       Phone: '',
       role: '',
-      IsActive: false,
+      IsActive: true,
       isSeasonal: true,
       IsRIInternal: false,
     };
@@ -106,7 +106,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
-    this.newUser = user;
+    this.newUser = Object.assign({}, user);
     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
     this.newUser.RoleID = user.Role ? user.Role.RoleId : '';
     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
@@ -121,11 +121,14 @@ export class UserManagementComponent implements OnInit {
   onSaveUser(user) {
     this.service.createUser(user).subscribe((res) => {
       this.notification.success('Success', 'User created successfully');
-      this.userTableData.push(user);
+      this.userTableData = [...this.userTableData, res];
+      //this.userTableData.push(res);
+
     });
     this.rightCardOpen = !this.rightCardOpen;
     this.hideColumn = !this.hideColumn;
     this.isNewUser = false;
+
   }
 
   onUpdateUser(user) {
@@ -135,13 +138,13 @@ export class UserManagementComponent implements OnInit {
     delete user.Distributor;
     this.service.updateUser(user, user.UserId).subscribe((res) => {
       this.notification.success('Success', 'User updated successfully');
-      let indexPos: any;
-      this.userTableData.forEach((_user, index) => {
-        if (_user.UserId === user.UserId) {
-          indexPos = index;
-        }
-      });
-      this.userTableData.splice(indexPos, 1, user);
+      // let indexPos: any;
+      // this.userTableData.forEach((_user, index) => {
+      //   if (_user.UserId === user.UserId) {
+      //     indexPos = index;
+      //   }
+      // });
+      // this.userTableData.splice(indexPos, 1, user);
     });
     this.rightCardOpen = !this.rightCardOpen;
     this.hideColumn = !this.hideColumn;
