@@ -6,13 +6,14 @@ import { Pages } from '../../../pages/pages.component';
         <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-end">
             <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">Previous</a>
+              <a class="page-link" (click)="prev()">Previous</a>
             </li>
-            <li *ngFor="let a of options.pages; let i = index" class="page-item">
-                <a class="page-link" (click)="pageChangeHandler(i+1)">{{i+1}}</a>
+            <li *ngFor="let a of options.pages; let i = index" class="page-item"
+             [ngClass]="{'active': i+1 == currentPageIndex}">
+                <a class="page-link" (click)="pageChangeHandler(i+1, 2)">{{i+1}}</a>
             </li>
             <li class="page-item">
-              <a class="page-link" (click)="pageChangeHandler(++currentPageIndex)">Next</a>
+              <a class="page-link" (click)="next()">Next</a>
             </li>
           </ul>
         </nav>
@@ -48,9 +49,22 @@ export class PaginationComponent {
     currentPageChange = new EventEmitter();
 
     pageChangeHandler(page) {
+
+
         this.currentPageIndex = page;
         this.currentPage = this._tableData.slice((page - 1) * this.options.itemPerPage, page * this.options.itemPerPage);
         this.currentPageChange.emit(this.currentPage);
+
+    }
+    next() {
+        if (this.currentPageIndex < this.options.pages.length) {
+            this.pageChangeHandler(++this.currentPageIndex);
+        }
+    }
+    prev() {
+        if (this.currentPageIndex > 1) {
+            this.pageChangeHandler(--this.currentPageIndex);
+        }
     }
 
     setPagination() {
