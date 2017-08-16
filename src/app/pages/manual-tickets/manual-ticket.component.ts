@@ -1,3 +1,4 @@
+import { ManualTicketService } from './ticket-management/manual-ticket.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -5,11 +6,15 @@ import { Component } from '@angular/core';
   templateUrl: './manual-ticket.component.html',
   styleUrls: ['./manual-ticket.component.scss'],
 })
-export class ManualTicketComponent {
-  constructor() {}
-  isNewCustomer: boolean = true;
 
-  showNewCustomer(newCustomer) {
-    this.isNewCustomer = newCustomer;
+export class ManualTicketComponent {
+  smartTableData: any;
+  constructor(protected service: ManualTicketService) {
+    this.smartTableData = service.smartTableData;
+  }
+  isNewTicket: boolean = false;
+
+  createNewTicket(newCustomer) {
+    this.isNewTicket = !this.isNewTicket;
   }
 }

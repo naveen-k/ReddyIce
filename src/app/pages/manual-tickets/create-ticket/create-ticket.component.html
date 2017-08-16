@@ -1,15 +1,22 @@
 <form>
+  <div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-4">
+      <button type="submit" class="btn btn-danger pull-right">Upload POD</button>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-danger pull-right">Save</button>
+    </div>
+  </div>
+  <br>
   <div class="row calendarRow">
     <div class="form-group col-md-6">
-      <label for="exampleInputEmail1">Date</label>
-      <div class="input-group">
-        <input class="form-control" placeholder="yyyy-mm-dd"
-              name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-        <button class="input-group-addon" (click)="d.toggle()" type="button">
-          <i class="ion-calendar"></i>
-          <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
-        </button>
-      </div>
+      <label for="exampleSelect1">Branch</label>
+      <select class="form-control" id="exampleSelect1">
+          <option>301</option>
+          <option>302</option>
+      </select>
     </div>
     <div class="col-md-6">
       <label>Ticket Type</label>
@@ -31,11 +38,15 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6">
-        <label for="exampleSelect1">Customer Name</label>
-        <select class="form-control" id="exampleSelect1">
-            <option>Jack</option>
-            <option>Smith</option>
-        </select>
+      <label for="exampleInputEmail1">Date</label>
+      <div class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd"
+              name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+        <button class="input-group-addon" (click)="d.toggle()" type="button">
+          <i class="ion-calendar"></i>
+          <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+        </button>
+      </div>
     </div>
     <div class="col-md-6">
       <label>Type</label>
@@ -53,8 +64,11 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6">
-      <label for="exampleInputPassword1">Ticket No.</label>
-      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #">
+      <label for="exampleSelect1">Customer Name</label>
+      <select class="form-control" id="exampleSelect1">
+          <option>Jack</option>
+          <option>Smith</option>
+      </select>
     </div>
     <div class="col-md-6">
       <label>POD</label>
@@ -72,17 +86,95 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6">
+      <label for="exampleInputPassword1">Ticket No.</label>
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #">
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
       <label for="exampleInputPassword1">PO#</label>
       <input type="text" class="form-control" id="exampleInputPassword1" placeholder="PO #">
     </div>
     <div class="form-group col-md-6">
-      <label for="exampleInputPassword1">Check #</label>
-      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Check #">
+      <!-- <label for="exampleInputPassword1">Check #</label>
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Check #"> -->
+      <button type="submit" class="btn btn-danger addProdManualTickets pull-right">Add Product</button>
     </div>
   </div>
-  <div class="checkbox">
+  <!-- <div class="checkbox">
     <ba-checkbox [(ngModel)]="isChecked" [label]="'Check me out'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+  </div> -->
+  <div class="vertical-scroll" #customer>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="table-id">Actions</th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;">
+                Machine
+                  <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'unit';customer.isAsc=!customer.isAsc;">
+                Unit
+                <i *ngIf="(customer.sortField == 'unit')" [ngClass]="(customer.isAsc && customer.sortField == 'unit' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;">
+                Delivered Bags
+                <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+          <th *ngIf="!isNewCustomer && !setPrice" (click)="customer.sortField = 'currentInv';customer.isAsc=!customer.isAsc;">
+            <span style="cursor:pointer;">
+                Current Inv
+                <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+          <th *ngIf="!isNewCustomer && !setPrice" (click)="customer.sortField = 'damagedBag';customer.isAsc=!customer.isAsc;">
+            <span style="cursor:pointer;">
+                Damaged Bags
+                <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
+          <td class="table-id ion-edit"></td>
+          <td contenteditable="">{{ item.machine }}</td>
+          <td>{{ item.unit }}</td>
+          <td contenteditable="">{{ item.deliveredBag }}</td>
+          <td contenteditable="">{{ item.currentInv }}</td>
+          <td contenteditable="">{{ item.damagedBag }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-
-  <button type="submit" class="btn btn-danger">Submit</button>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-6">
+          <b>Total Sale</b>
+        </div>
+        <div class="col-md-6">
+          <b>$151.25</b>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <b>Tax</b>
+        </div>
+        <div class="col-md-6">
+          <b>$0.00</b>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 createNewTicket">
+      <b>$156.25</b>
+    </div>
+  </div>
 </form>

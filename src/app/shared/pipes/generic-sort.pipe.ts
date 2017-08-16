@@ -1,7 +1,7 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'sortCustomer', pure: false,
+    name: 'sort', pure: false,
 })
 
 export class GenericSort implements PipeTransform {
