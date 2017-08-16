@@ -69,7 +69,7 @@ export class UserManagementComponent implements OnInit {
         this.hideColumn = !this.hideColumn;
 
       });
-      
+
     } else {
       this.rightCardOpen = !this.rightCardOpen;
       this.isNewUser = false;
@@ -151,13 +151,7 @@ export class UserManagementComponent implements OnInit {
   deleteUser(user) {
     this.service.deleteUser(user.UserId).subscribe((res) => {
       this.notification.success('Success', 'User deleted successfully');
-      let indexPos: any;
-      this.userTableData.forEach((_user, index) => {
-        if (_user.UserId === user.UserId) {
-          indexPos = index;
-        }
-      });
-      this.userTableData.splice(indexPos, 1);
+      this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
     });
   }
 

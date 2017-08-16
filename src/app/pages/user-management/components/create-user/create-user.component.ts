@@ -41,7 +41,7 @@ export class CreateUserComponent implements OnInit {
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
     OnCancelClick() {
-        
+
 
     }
 
@@ -49,7 +49,9 @@ export class CreateUserComponent implements OnInit {
         this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].LookupID : '';
-            this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
+            if (!this.isDistributorAdmin) {
+              this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
+            }
             this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
         }
     }
