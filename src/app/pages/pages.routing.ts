@@ -26,6 +26,7 @@ export const routes: Routes = [
       { path: 'day-end', loadChildren: './day-end/day-end.module#DayEndModule' },
       { path: 'manual-ticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },
       { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
+      { path: 'tracker', loadChildren: './tracker/tracker.module#TrackerModule' },
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: 'editors', loadChildren: './editors/editors.module#EditorsModule' },
       { path: 'components', loadChildren: './components/components.module#ComponentsModule' },

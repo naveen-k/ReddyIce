@@ -41,7 +41,7 @@
       <label for="exampleInputEmail1">Date</label>
       <div class="input-group">
         <input class="form-control" placeholder="yyyy-mm-dd"
-              name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+              name="dp" ngbDatepicker #d="ngbDatepicker">
         <button class="input-group-addon" (click)="d.toggle()" type="button">
           <i class="ion-calendar"></i>
           <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
@@ -127,13 +127,13 @@
                 <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
             </span>
           </th>
-          <th *ngIf="!isNewCustomer && !setPrice" (click)="customer.sortField = 'currentInv';customer.isAsc=!customer.isAsc;">
+          <th (click)="customer.sortField = 'currentInv';customer.isAsc=!customer.isAsc;">
             <span style="cursor:pointer;">
                 Current Inv
                 <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
             </span>
           </th>
-          <th *ngIf="!isNewCustomer && !setPrice" (click)="customer.sortField = 'damagedBag';customer.isAsc=!customer.isAsc;">
+          <th (click)="customer.sortField = 'damagedBag';customer.isAsc=!customer.isAsc;">
             <span style="cursor:pointer;">
                 Damaged Bags
                 <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 

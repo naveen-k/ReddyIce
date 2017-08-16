@@ -7,7 +7,7 @@
         <div class="form-group col-md-4">
           <!-- <label for="exampleInputEmail1">Date</label> -->
           <div class="input-group">
-            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
             <button class="input-group-addon" (click)="d.toggle()" type="button">
               <i class="ion-calendar"></i>
               <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
@@ -64,7 +64,7 @@
                     <i *ngIf="(customer.sortField == 'amount')" [ngClass]="(customer.isAsc && customer.sortField == 'amount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                 </span>
               </th>
-              <th *ngIf="!isNewCustomer && !setPrice" (click)="customer.sortField = 'status';customer.isAsc=!customer.isAsc;">
+              <th (click)="customer.sortField = 'status';customer.isAsc=!customer.isAsc;">
                 <span style="cursor:pointer;">
                     Status
                     <i *ngIf="(customer.sortField == 'status')" [ngClass]="(customer.isAsc && customer.sortField == 'status' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
