@@ -71,7 +71,7 @@
                     <!-- <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> -->
                 </span>
               </th>
-              <th>
+              <th *ngIf="!isDistributorAdmin">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
                     RI Internal
                     <!-- <i *ngIf="(customer.sortField === 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField === 'riinternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> -->
@@ -94,7 +94,7 @@
               <td>{{ item.Role ? item.Role.RoleId : 'NA' }}</td>
               <td *ngIf="!hideColumn">{{ item.Distributor ? item.Distributor.DistributorName : 'NA' }}</td>
               <td *ngIf="!hideColumn">{{ item.Branch ? item.Branch.BranchID : 'NA' }}</td>
-              <td>{{item.IsRIInternal ? 'Y' : 'N'}}</td>
+              <td *ngIf="!isDistributorAdmin">{{item.IsRIInternal ? 'Y' : 'N'}}</td>
             </tr>
           </tbody>
         </table>

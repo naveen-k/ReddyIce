@@ -67,7 +67,7 @@ export class UserManagementComponent implements OnInit {
         this.rightCardOpen = !this.rightCardOpen;
         this.isNewUser = false;
         this.hideColumn = !this.hideColumn;
-
+        this.formIsDirty = false;
       });
 
     } else {
@@ -149,10 +149,21 @@ export class UserManagementComponent implements OnInit {
   }
 
   deleteUser(user) {
-    this.service.deleteUser(user.UserId).subscribe((res) => {
-      this.notification.success('Success', 'User deleted successfully');
-      this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
+    const activeModal = this.modalService.open(ModalComponent, {
+      size: 'sm',
+      backdrop: 'static',
     });
+    activeModal.componentInstance.BUTTONS.OK = 'OK';
+    activeModal.componentInstance.showCancel = true;
+    activeModal.componentInstance.modalHeader = 'Warning!';
+    activeModal.componentInstance.modalContent = `Are you sure you want to delete ${user.UserName}?`;
+    activeModal.componentInstance.closeModalHandler = (() => {
+      this.service.deleteUser(user.UserId).subscribe((res) => {
+        this.notification.success('Success', 'User deleted successfully');
+        this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
+      });
+    });
+
   }
 
   getRole() {
