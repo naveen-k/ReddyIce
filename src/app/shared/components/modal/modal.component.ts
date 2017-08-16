@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-@Component({    
+@Component({
     styleUrls: [('./modal.component.scss')],
     templateUrl: './modal.component.html',
 })
@@ -13,6 +13,8 @@ export class ModalComponent implements OnInit {
     modalHeader: string;
     modalContent: string = `modal content`;
 
+    closeModalHandler: Function;
+    dismissHandler: Function;
     constructor(private activeModal: NgbActiveModal) {
     }
 
@@ -20,9 +22,15 @@ export class ModalComponent implements OnInit {
 
     closeModal() {
         this.activeModal.close();
+        if (this.closeModalHandler) {
+            this.closeModalHandler();
+        }
     }
 
     dismiss() {
         this.activeModal.dismiss('cancel');
+        if (this.dismissHandler) {
+            this.dismissHandler();
+        }
     }
 }

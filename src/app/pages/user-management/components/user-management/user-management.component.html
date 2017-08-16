@@ -1,21 +1,3 @@
-<!-- <div class="row page-header">
-    <div class="col-md-6 padding-eater">
-        <h3>Distributor:Dist 001</h3>
-    </div>
-    <div class="col-md-6 padding-eater">
-        <button class="btn btn-primary pull-right">Create User</button>
-    </div>
-</div>
-<div class="widgets">
-
-  <div class="row">
-    <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container">
-      <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
-    </ba-card>
-  </div>
-
-</div>
-   -->
 <div class="row page-header user-details">
   <div class="col-md-6" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
     <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
@@ -117,25 +99,13 @@
           </tbody>
         </table>
         <pagination [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
-        <!-- <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-end">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li *ngFor="let a of pageArray; let i = index" class="page-item"><a class="page-link" (click)="paginationUpdate(i+1)">{{i+1}}</a></li>
-
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav> -->
-      </div>
+        </div>
     </ba-card>
   </div>
   <div *ngIf="rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
     <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="closeRightCard($event)" class="ion-close-round addCustCloseIcon"></span>
-      <create-user [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" (onUpdateUser)="onUpdateUser($event)"
+      <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" (onUpdateUser)="onUpdateUser($event)"
         (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches" [isDistributorAdmin]="isDistributorAdmin"
         [distributorsAndCopackers]="distributorsAndCopackers">
       </create-user>

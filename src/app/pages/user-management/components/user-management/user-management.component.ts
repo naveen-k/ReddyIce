@@ -21,6 +21,7 @@ export class UserManagementComponent implements OnInit {
   isDistributorAdmin: boolean = false;
   cardTitle: string;
   userDetails: any;
+  formIsDirty: boolean = false;
 
   constructor(
     private service: UserManagementService,
@@ -47,18 +48,36 @@ export class UserManagementComponent implements OnInit {
       IsRIInternal: false,
     };
   }
-  closeRightCard() {
-    this.rightCardOpen = !this.rightCardOpen;
-    this.isNewUser = false;
-    this.hideColumn = !this.hideColumn;
 
-    const activeModal = this.modalService.open(ModalComponent, {
-      size: 'sm',
-      backdrop: 'static',
-    });
-    activeModal.componentInstance.modalHeader = 'Static modal';
-    activeModal.componentInstance.modalContent = `This is static modal, backdrop click
-                                                    will not close it. Click × or confirmation button to close modal.`;
+  formChangedHandler() {
+    this.formIsDirty = true;
+  }
+
+  closeRightCard() {
+    if (this.formIsDirty) {
+      const activeModal = this.modalService.open(ModalComponent, {
+        size: 'sm',
+        backdrop: 'static',
+      });
+      activeModal.componentInstance.BUTTONS.OK = 'Discard';
+      activeModal.componentInstance.showCancel = true;
+      activeModal.componentInstance.modalHeader = 'Warning!';
+      activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+      activeModal.componentInstance.closeModalHandler = (() => {
+        this.rightCardOpen = !this.rightCardOpen;
+        this.isNewUser = false;
+        this.hideColumn = !this.hideColumn;
+
+      });
+      
+    } else {
+      this.rightCardOpen = !this.rightCardOpen;
+      this.isNewUser = false;
+      this.hideColumn = !this.hideColumn;
+    }
+
+
+
   }
 
   @HostListener('window:resize', ['$event'])
@@ -170,7 +189,7 @@ export class UserManagementComponent implements OnInit {
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
-      if (response.Role.RoleName === 'DSD Admin') {
+      if (response.Role.RoleName === 'DSD Admin' || response.Role.RoleName === 'Checker' ) {
         this.getUserList();
         this.getRole();
         this.getBranches();

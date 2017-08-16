@@ -20,6 +20,8 @@ export class CreateUserComponent implements OnInit {
     @Output() onUpdateUser: EventEmitter<any> = new EventEmitter();
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
 
+    @Output() formChanged = new EventEmitter();
+
     userDetails: any;
 
     constructor(private umService: UserManagementService, private userService: UserService) { }
@@ -34,20 +36,25 @@ export class CreateUserComponent implements OnInit {
     onSubmit() {
         // If user is RI internal user then distributor ID should be set to empty
         if (this.user.IsRIInternal || this.userDetails.Role === 'Distributor Admin') {
-          this.user.DistributorMasterID = '';
+            this.user.DistributorMasterID = '';
         }
-         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
+        this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
     OnCancelClick() {
-        this.closeNewUser.emit();
+        
+
     }
 
     ngOnInit() {
-      this.userDetails = this.userService.getUser() || {};
-      if (this.isNewUser) {
-        this.user.RoleID = this.roles ? this.roles[0].LookupID : '';
-        this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
-        this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
-      }
+        this.userDetails = this.userService.getUser() || {};
+        if (this.isNewUser) {
+            this.user.RoleID = this.roles ? this.roles[0].LookupID : '';
+            this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
+            this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
+        }
+    }
+
+    changeHandler() {
+        this.formChanged.emit('changed');
     }
 }
