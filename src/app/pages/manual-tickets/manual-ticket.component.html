@@ -1,11 +1,93 @@
 <div class="row">
-  <div class="col-lg-6 col-md-12">
-    <ba-card cardTitle="Ticket List" baCardClass="medium-card" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)">
-      <ticket-table></ticket-table>
+  <div [ngClass]="[!isNewTicket ? 'col-md-12' : 'col-md-6']">
+    <ba-card cardTitle="Ticket List" baCardClass="medium-card" class="smart-table-container" (onClickAddIcon)="createNewTicket($event)"
+      #customer>
+      <!-- <ticket-table></ticket-table> -->
+      <div class="row">
+        <div class="form-group col-md-4">
+          <!-- <label for="exampleInputEmail1">Date</label> -->
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+            <button class="input-group-addon" (click)="d.toggle()" type="button">
+              <i class="ion-calendar"></i>
+              <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+            </button>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <!-- <label for="exampleSelect1">Branch</label> -->
+          <select class="form-control" id="exampleSelect1">
+            <option>311</option>
+            <option>312</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <button (click)="createNewTicket($event)" class="btn btn-primary addCustBtn pull-right">
+              Create Ticket
+          </button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="radioList">
+          <label class="radioItem radio-inline custom-radio nowrap">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+            <span>My Tickets</span>
+          </label>
+            <label class="radioItem radio-inline custom-radio nowrap">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+            <span>All Tickets</span>
+          </label>
+        </div>
+      </div>
+      <br>
+      <!-- <ng2-smart-table [settings]="settings1" [source]="source1" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
+      <div class="vertical-scroll">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th class="table-id">Actions</th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'ticketId';customer.isAsc=!customer.isAsc;">
+                    Ticket Number
+                     <i *ngIf="(customer.sortField == 'ticketId')" [ngClass]="(customer.isAsc && customer.sortField == 'ticketId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
+              </th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'customerId';customer.isAsc=!customer.isAsc;">
+                    Customer Number
+                    <i *ngIf="(customer.sortField == 'customerId')" [ngClass]="(customer.isAsc && customer.sortField == 'customerId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
+              </th>
+              <th>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'amount';customer.isAsc=!customer.isAsc;">
+                    Amount
+                    <i *ngIf="(customer.sortField == 'amount')" [ngClass]="(customer.isAsc && customer.sortField == 'amount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
+              </th>
+              <th *ngIf="!isNewCustomer && !setPrice" (click)="customer.sortField = 'status';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;">
+                    Status
+                    <i *ngIf="(customer.sortField == 'status')" [ngClass]="(customer.isAsc && customer.sortField == 'status' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
+              <td class="table-id ion-edit"></td>
+              <td>{{ item.ticketId }}</td>
+              <td>{{ item.customerId }}</td>
+              <td>{{ item.amount }}</td>
+              <td>{{ item.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </ba-card>
   </div>
-  <div *ngIf="isNewCustomer" class="col-lg-6 col-md-12">
+  <div *ngIf="isNewTicket" [ngClass]="{'col-md-6':isNewTicket}">
     <ba-card cardTitle="Create New Ticket" baCardClass="with-scroll" class="smart-table-container">
+      <span (click)="createNewTicket($event)" class="ion-close-round addCustCloseIcon"></span>
       <create-new-ticket></create-new-ticket>
     </ba-card>
   </div>

@@ -43,7 +43,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of smartTableData | filter:customer.searchString | sortCustomer:customer.sortField:customer.isAsc">
+              <tr *ngFor="let item of smartTableData | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
                 <td class="table-id ion-edit"></td>
                 <td>{{ item.routeNumber }}</td>
                 <td>{{ item.branch }}</td>

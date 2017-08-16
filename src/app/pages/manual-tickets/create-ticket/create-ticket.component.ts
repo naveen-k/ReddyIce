@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import { ManualTicketService } from '../ticket-management/manual-ticket.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'create-new-ticket',
@@ -6,8 +7,9 @@ import {Component} from '@angular/core';
   styleUrls: ['./create-ticket.component.scss'],
 })
 export class CreateTicketComponent {
-
-  constructor() {
+  smartTableData: any;
+  constructor(protected service: ManualTicketService) {
+    this.smartTableData = service.machineSmartTableData;
   }
 
   isChecked: boolean = false;

@@ -6,6 +6,17 @@
   }
 }
 
+.addCustCloseIcon {
+    position: absolute;
+    right: 22px;
+    top: 15px;
+    cursor: pointer;
+}
+
+select.form-control:not([size]):not([multiple]) {
+    height: calc(2.25rem + -1px);
+}
+
 :host /deep/ {
   ng2-smart-table {
     th, td {
