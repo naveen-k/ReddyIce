@@ -31,18 +31,20 @@ export class Pages implements OnInit {
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
-      PAGES_MENU[0].children = PAGES_MENU[0].children.filter((child) => {
-        let exist = false;
-        this.userDetails.MenuOptions.forEach((option) => {
-          if (option.Key === child.path) {
-            exist = true;
+      if (this.userDetails.MenuOptions.length) {
+        PAGES_MENU[0].children = PAGES_MENU[0].children.filter((child) => {
+          let exist = false;
+          this.userDetails.MenuOptions.forEach((option) => {
+            if (option.Key === child.path) {
+              exist = true;
+            }
+          });
+          if (exist) {
+            return child;
           }
         });
-        if (exist) {
-          return child;
-        }
-      });
-      //console.log(`/pages/${PAGES_MENU[0].children[0].path}`);
+      }
+
       this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
       this.router.navigateByUrl(`/pages/${PAGES_MENU[0].children[0].path}`);
     });
