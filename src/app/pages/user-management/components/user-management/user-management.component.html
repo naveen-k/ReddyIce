@@ -84,7 +84,7 @@
             <tr *ngFor="let item of paginationData | filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-edit" (click)="onEditClicked(item)" style="margin-right: 5px"></i>
-                <i class="ion-trash-a" *ngIf="item.Role.RoleID === 3 || userDetails.Role.RoleID === 1" (click)="deleteUser(item)"></i>
+                <i class="ion-trash-a" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"></i>
               </td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }}</td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.LastName || 'NA' }}</td>
@@ -93,7 +93,7 @@
               <td class="userCell">{{ item.Phone || 'NA' }}</td>
               <td class="userCell">{{ item.Role ? item.Role.RoleName : 'NA' }}</td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.Distributor ? item.Distributor.DistributorName : 'NA' }}</td>
-              <td *ngIf="!hideColumn" class="userCell">{{item.Branch ? item.Branch.BranchID  : ''}} ({{ item.Branch ? item.Branch.BranchName  : 'NA' }})</td>
+              <td *ngIf="!hideColumn" class="userCell">{{item.Branch ? item.Branch.BranchID  : 'NA'}} ({{ item.Branch ? item.Branch.BranchName  : 'NA' }})</td>
               <td *ngIf="!isDistributorAdmin" class="userCell">{{item.IsRIInternal ? 'Y' : 'N'}}</td>
             </tr>
           </tbody>
