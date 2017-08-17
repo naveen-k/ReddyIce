@@ -7,15 +7,19 @@ import { Injectable } from '@angular/core';
 export class LoginService {
     API_ENDPOINT = 'http://frozen.reddyice.com/DPServicesnew/';
     constructor(private http: Http, private userService: UserService) { }
-
+    userInfo: any;
     login(data: any): Observable<any> {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const options = new RequestOptions({ 'headers': headers });
         return this.http.post(`${this.API_ENDPOINT}api/token`, data, options).map((res) => res.json()).map((res) => {
-            localStorage.setItem('auth_token', res.access_token);
-            localStorage.setItem('userId', res.UserID);
-            return res;
+          this.userInfo = res;
+          localStorage.setItem('auth_token', res.access_token);
+          localStorage.setItem('userId', res.UserID);
+          return res;
+        }).catch((err) => {
+          console.log(err.statusCode);
+          return Observable.throw(new Error(err.status));
         });
     }
 

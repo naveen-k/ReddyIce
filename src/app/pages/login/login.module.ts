@@ -16,10 +16,10 @@ import { routing } from './login.routing';
     ReactiveFormsModule,
     FormsModule,
     NgaModule,
-    routing
+    routing,
   ],
   declarations: [
-    Login
+    Login,
   ],
   providers: [LoginService],
 })

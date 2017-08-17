@@ -197,12 +197,12 @@ export class UserManagementComponent implements OnInit {
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
-      if (response.Role.RoleName === 'DSD Admin' || response.Role.RoleName === 'Checker' ) {
+      if (!response.IsDistributor) {
         this.getUserList();
         this.getRole();
         this.getBranches();
         this.getDistributors();
-      } else if (response.Role.RoleName === 'Distributor Admin') {
+      } else if (response.IsDistributor) {
         this.getRole();
         this.getBranches();
         this.isDistributorAdmin = true;

@@ -1,14 +1,12 @@
-import { ResetPasswordService } from './reset-password.service';
+import { ForgetPasswordService } from './forget-apssword.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppTranslationModule } from '../../app.translation.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgaModule } from '../../theme/nga.module';
-import { LoginService } from '../login/login.service';
 
-import { ResetPasswordComponent } from './reset-password.component';
-import { routing } from './reset-password.routing';
-import { EqualValidator } from './equal-validator.directive';
+import { ForgetPasswordComponent } from './forget-password.component';
+import { routing } from './forget-password.routing';
 
 
 @NgModule({
@@ -21,9 +19,8 @@ import { EqualValidator } from './equal-validator.directive';
     routing,
   ],
   declarations: [
-    ResetPasswordComponent,
-    EqualValidator,
+    ForgetPasswordComponent,
   ],
-  providers: [ResetPasswordService, LoginService],
+  providers: [ForgetPasswordService],
 })
-export class ResetPasswordModule { }
+export class ForgetPasswordModule { }

@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { LoginService } from './login.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'login',
@@ -15,7 +16,10 @@ export class Login implements OnInit {
   password: AbstractControl;
   submitted: boolean = false;
 
-  constructor(fb: FormBuilder, private loginService: LoginService, private router: Router) {
+  constructor(fb: FormBuilder,
+    private loginService: LoginService,
+    private router: Router,
+    private notification: NotificationsService) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])]
@@ -36,7 +40,15 @@ export class Login implements OnInit {
       const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
 
       this.loginService.login(user).subscribe((res) => {
-        this.router.navigate(['']);
+        console.log('in-subscribe');
+        if (res.IsNewUser !== 'False') {
+          this.router.navigate(['resetpassword']);
+        } else {
+          this.router.navigate(['']);
+        }
+      }, (error) => {
+        console.log('login-error', error);
+        this.notification.error('Error', 'Failed to login.');
       });
     }
   }

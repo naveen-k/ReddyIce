@@ -2,21 +2,29 @@ import { Router } from '@angular/router';
 import { ResetPasswordService } from './reset-password.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { LoginService } from '../login/login.service';
+import { UserService } from '../../shared/user.service';
+import { UserDetails } from '../../shared/user.interface';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.scss'],
 })
-export class ResetPasswordComponent {
+export class ResetPasswordComponent implements OnInit {
 
   form: FormGroup;
   password: AbstractControl;
   confirmPassword: AbstractControl;
   newPassword: AbstractControl;
   submitted: boolean = false;
-
-  constructor(fb: FormBuilder, private loginService: ResetPasswordService, private router: Router) {
+  userDetails: UserDetails;
+  constructor(fb: FormBuilder,
+    private loginService: ResetPasswordService,
+    private router: Router,
+    private userService: UserService,
+    private notification: NotificationsService) {
     const exp = new RegExp(/^(?!OTP).*$/, 'i');
     this.form = fb.group({
       'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -29,15 +37,28 @@ export class ResetPasswordComponent {
     this.confirmPassword = this.form.controls['confirmPassword'];
   }
 
+  ngOnInit() {
+    const userId = localStorage.getItem('userId') || '';
+    this.userService.getUserDetails(userId).subscribe((response) => {
+      this.userDetails = response;
+    });
+  }
+
   onSubmit(values: Object): void {
     this.submitted = true;
     if (this.form.valid) {
       // your code goes here
-      const user = `password=${values['password']}&newPassword=${values['newPassword']}
-      &confirmPassword=${values['confirmPassword']}&grant_type=password`;
+      const user: any = {};
+      user.EmailId = this.userDetails.EmailID;
+      user.OldPassword = values['password'];
+      user.NewPassword = values['newPassword'];
+      user.ConfirmPassword = values['confirmPassword'];
 
       this.loginService.resetPassword(user).subscribe((res) => {
-        this.router.navigate(['']);
+        this.notification.success('Success', 'Password has been updated successfully.');
+        this.router.navigate(['/login']);
+      }, (error) => {
+        this.notification.error('Error', 'Failed to update password.');
       });
     }
   }

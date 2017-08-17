@@ -73,7 +73,7 @@
               </th>
               <th *ngIf="!isDistributorAdmin">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
-                    RI Internal
+                    RI
                     <!-- <i *ngIf="(customer.sortField === 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField === 'riinternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> -->
                 </span>
               </th>
@@ -86,15 +86,15 @@
                 <i class="ion-edit" (click)="onEditClicked(item)" style="margin-right: 5px"></i>
                 <i class="ion-trash-a" *ngIf="!item.IsRIInternal" (click)="deleteUser(item)"></i>
               </td>
-              <td *ngIf="!hideColumn">{{ item.FirstName || 'NA' }}</td>
-              <td *ngIf="!hideColumn">{{ item.LastName || 'NA' }}</td>
-              <td>{{ item.UserName || 'NA' }}</td>
-              <td *ngIf="!hideColumn">{{ item.EmailID }}</td>
-              <td>{{ item.Phone || 'NA' }}</td>
-              <td>{{ item.Role ? item.Role.RoleId : 'NA' }}</td>
-              <td *ngIf="!hideColumn">{{ item.Distributor ? item.Distributor.DistributorName : 'NA' }}</td>
-              <td *ngIf="!hideColumn">{{ item.Branch ? item.Branch.BranchID : 'NA' }}</td>
-              <td *ngIf="!isDistributorAdmin">{{item.IsRIInternal ? 'Y' : 'N'}}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{ item.LastName || 'NA' }}</td>
+              <td class="userCell">{{ item.UserName || 'NA' }}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{ item.EmailID }}</td>
+              <td class="userCell">{{ item.Phone || 'NA' }}</td>
+              <td class="userCell">{{ item.Role ? item.Role.RoleName : 'NA' }}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{ item.Distributor ? item.Distributor.DistributorName : 'NA' }}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{ item.Branch ? item.Branch.BranchName : 'NA' }}</td>
+              <td *ngIf="!isDistributorAdmin" class="userCell">{{item.IsRIInternal ? 'Y' : 'N'}}</td>
             </tr>
           </tbody>
         </table>

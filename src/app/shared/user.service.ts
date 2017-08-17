@@ -7,7 +7,7 @@ import { HttpService } from './http.service';
 export class UserService {
     API_ENDPOINT = 'http://frozen.reddyice.com/DPServicesnew/';
     constructor(private http: HttpService) { }
-
+    userDetails: UserDetails;
     getUser(): any {
         if (!localStorage.getItem('user')) { return {}; }
         return JSON.parse(localStorage.getItem('user'));
@@ -18,6 +18,9 @@ export class UserService {
     }
 
     getUserDetails(id: string): Observable<UserDetails> {
-      return this.http.get(`api/user?UserId=${id}`).map((res) => res.json());
+      return this.http.get(`api/user?UserId=${id}`).map((res) => res.json()).map((user) => {
+        this.userDetails = user;
+        return user;
+      });
     }
 }
