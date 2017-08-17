@@ -36,10 +36,9 @@ export class CreateUserComponent implements OnInit {
     }
     onSubmit() {
         // If user is RI internal user then distributor ID should be set to empty
-
         if (this.userDetails.IsDistributor) {
           this.user.DistributorMasterID = this.userDetails.Distributor.DistributorMasterId;
-        } else if (!this.userDetails.IsDistributor) {
+        } else if (this.user.IsRIInternal) {
           this.user.DistributorMasterID = '';
         }
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);

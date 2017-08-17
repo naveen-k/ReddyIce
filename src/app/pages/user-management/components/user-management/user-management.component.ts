@@ -144,11 +144,11 @@ export class UserManagementComponent implements OnInit {
           indexPos = index;
         }
       });
-      this.userTableData.splice(indexPos, 1, user);
+      this.userTableData.splice(indexPos, 1, res);
+      this.rightCardOpen = !this.rightCardOpen;
+      this.hideColumn = !this.hideColumn;
+      this.isNewUser = false;
     });
-    this.rightCardOpen = !this.rightCardOpen;
-    this.hideColumn = !this.hideColumn;
-    this.isNewUser = false;
   }
 
   deleteUser(user) {

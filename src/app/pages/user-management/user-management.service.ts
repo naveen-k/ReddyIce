@@ -20,7 +20,7 @@ export class UserManagementService {
         return this.http.post('api/user', data, options).map((res => res.json()));
     }
 
-    updateUser(data, id): Observable<Response> {
+    updateUser(data, id): Observable<User> {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const options = new RequestOptions({ 'headers': headers });
