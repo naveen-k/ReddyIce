@@ -1,1 +1,57 @@
-<h4>in progress...</h4>
+<div class="row">
+    <div class='col-md-12'>
+        <ba-card cardTitle="Tracker" baCardClass="medium-card" class="smart-table-container" (onClickAddIcon)="createNewTicket($event)">
+            <div class="row">
+                <div class="col-md-3 textAlign">
+                    <div class="block" style="background:brown;"></div>
+                    <span class="blockContent">Planned Service</span>
+                </div>
+                <div class="col-md-3 textAlign">
+                    <div class="block" style="background:blue;"></div>
+                    <span class="blockContent">Unplanned Service</span>
+                </div>
+                <div class="col-md-3 textAlign">
+                    <div class="block" style="background:red;"></div>
+                    <span class="blockContent">Skipped Stops</span>
+                </div>
+                <div class="col-md-3 textAlign">
+                    <div class="block" style="background:yellow;"></div>
+                    <span class="blockContent">Did Not Service</span>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group col-md-12">
+                        <label for="exampleInputEmail1">Date</label>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
+                            <button class="input-group-addon" (click)="d.toggle()" type="button">
+                            <i class="ion-calendar"></i>
+                            <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="exampleSelect1">Route</label>
+                        <select class="form-control" id="exampleSelect1">
+                            <option>801</option>
+                            <option>802</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="exampleSelect1">Trip</label>
+                        <select class="form-control" id="exampleSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-8" style="overflow-y: hidden;height: 255px;">
+                    <img src="../../../assets/img/Tracker-Map.PNG">
+                </div>
+            </div>
+        </ba-card>
+    </div>
+</div>

@@ -12,7 +12,7 @@
 .showError {
   color: #ed7878;
   position: absolute;
-  right: 9px;
+  right: 23px;
   top: 33px;
 }
 
@@ -24,7 +24,7 @@
   position: absolute;
   border-radius: 4px;
   top: 3px;
-  right: -50px;
+  right: -45px;
 }
 
 .custom-tooltip:after {
@@ -45,6 +45,14 @@
   border-top-color: #ed7878;
   border-left-color: transparent;
   left: 56%;
+}
+
+#poTooltip.bottom:after {
+  top: 31px;
+  border-top-color: #ed7878;
+  border-left-color: transparent;
+  left: 56%;
+  margin-left: -13px;
 }
 
 .pull-right {
