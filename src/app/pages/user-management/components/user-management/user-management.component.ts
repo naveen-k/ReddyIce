@@ -132,6 +132,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onUpdateUser(user) {
+    console.log('update')
     delete user.Role;
     delete user.MenuOptions;
     delete user.Branch;
@@ -139,16 +140,19 @@ export class UserManagementComponent implements OnInit {
     this.service.updateUser(user, user.UserId).subscribe((res) => {
       this.notification.success('Success', 'User updated successfully');
       let indexPos: any;
+      const users = [...this.userTableData];
       this.userTableData.forEach((_user, index) => {
         if (_user.UserId === user.UserId) {
           indexPos = index;
         }
       });
-      this.userTableData.splice(indexPos, 1, res);
-      this.rightCardOpen = !this.rightCardOpen;
-      this.hideColumn = !this.hideColumn;
-      this.isNewUser = false;
+      users.splice(indexPos, 1, res);
+      this.userTableData = users;
     });
+
+    this.rightCardOpen = !this.rightCardOpen;
+    this.hideColumn = !this.hideColumn;
+    this.isNewUser = false;
   }
 
   deleteUser(user) {
