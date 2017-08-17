@@ -1,11 +1,12 @@
+import { DayEndContainerComponent } from './components/day-end-container/day-end-container.component';
+import { DetailsComponent } from './components/day-end-details/details.component';
 import { SharedModule } from '../../shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CommonModule } from '@angular/common';
 import { NgaModule } from '../../theme/nga.module';
 import { Routes, RouterModule } from '@angular/router';
 import { DayEndComponent } from './components/day-end/day-end.component';
-import { NgModule, Provider } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { DayEndService } from './day-end.service';
 
 import { FormsModule } from '@angular/forms';
@@ -13,18 +14,29 @@ import { FormsModule } from '@angular/forms';
 const routes: Routes = [
     {
         path: '',
-        component: DayEndComponent,
+        component: DayEndContainerComponent,
+        children: [{
+            path: 'list',
+            component: DayEndComponent,
+        },
+        {
+            path: 'detail',
+            component: DetailsComponent,
+        },
+        {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+        }],
     },
 ];
 
 
 @NgModule({
-    declarations: [DayEndComponent],
+    declarations: [DayEndContainerComponent, DayEndComponent, DetailsComponent],
     imports: [
-        Ng2SmartTableModule,
-        RouterModule.forChild(routes), 
-        FormsModule, 
-        CommonModule, 
+
+        RouterModule.forChild(routes),
+        FormsModule,
+        CommonModule,
         NgaModule,
         NgbModule,
         SharedModule,

@@ -4,21 +4,14 @@ import { DayEndService } from '../../day-end.service';
 import { Component } from '@angular/core';
 
 @Component({
-    templateUrl: './day-end.component.html',
-    styleUrls: ['./day-end.component.scss'],
+    templateUrl: './details.component.html',
+    styleUrls: ['./details.component.scss'],
 })
-export class DayEndComponent {
-    isNewCustomer: boolean = true;
-    userDataTable: any;
+export class DetailsComponent {
     unitReconciliation: any;
     ticketDetails: any;
 
-    showNewCustomer(newCustomer) {
-        this.isNewCustomer = newCustomer;
-    }
-
     constructor(private service: DayEndService) {
-        this.userDataTable = service.dataTableData;
         this.unitReconciliation = service.dataTableData2;
         this.ticketDetails = service.dataTableData3;
     }
