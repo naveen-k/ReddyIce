@@ -67,6 +67,9 @@ export class DayEndService {
         'check': '21.0',
         'cash': '0.00',
         'charge': '0.00',
+        'ri': 'N',
+        'drayage': '1.00',
+        'buyBack': '2.00',
     },
     {
         'custNumber': '122',
@@ -76,6 +79,9 @@ export class DayEndService {
         'check': '22.0',
         'cash': '0.00',
         'charge': '0.00',
+        'ri': 'N',
+        'drayage': '3.00',
+        'buyBack': '10.00',
     },
     {
        'custNumber': '123',
@@ -85,6 +91,9 @@ export class DayEndService {
         'check': '23.0',
         'cash': '0.00',
         'charge': '0.00',
+        'ri': 'Y',
+        'drayage': '0.00',
+        'buyBack': '0.00',
     },
     {
         'custNumber': '124',
@@ -94,6 +103,9 @@ export class DayEndService {
         'check': '24.0',
         'cash': '0.00',
         'charge': '0.00',
+        'ri': 'Y',
+        'drayage': '4.00',
+        'buyBack': '3.00',
     },
     {
         'custNumber': '125',
@@ -103,6 +115,9 @@ export class DayEndService {
         'check': '25.0',
         'cash': '0.00',
         'charge': '0.00',
+        'ri': 'Y',
+        'drayage': '1.00',
+        'buyBack': '6.00',
     },
     {
        'custNumber': '126',
@@ -112,6 +127,9 @@ export class DayEndService {
         'check': '26.0',
         'cash': '0.00',
         'charge': '0.00',
+        'ri': 'N',
+        'drayage': '10.00',
+        'buyBack': '5.00',
     },
     {
         'custNumber': '127',
@@ -121,6 +139,9 @@ export class DayEndService {
         'check': '27.0',
         'cash': '0.00',
         'charge': '0.00',
+        'ri': 'Y',
+        'drayage': '2.00',
+        'buyBack': '7.00',
     },
 
     ];

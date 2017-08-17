@@ -5,7 +5,7 @@
             <div class="row bottom-margin">
                 <div class="form-group col-md-6">
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
@@ -43,7 +43,7 @@
                                      <i *ngIf="(customer.sortField == 'routeNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'routeNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <th *ngIf="!hideColumn">
+                            <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                                     Branch
                                      <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -73,8 +73,8 @@
                         <!--Removed sorting functionality as it was causing rendering issues  -->
                         <tr *ngFor="let item of userDataTable|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i class="ion-edit" [routerLink]="['./detail']" style="margin-right: 5px"></i>
-                                <i class="ion-trash-a" (click)="deleteUser(item)"></i>
+                                <i class="ion-edit" [routerLink]="['../detail']" style="margin-right: 5px"></i>
+                                <i class="ion-trash-a"></i>
                             </td>
                             <td>{{item.routeNumber}}</td>
                             <td>{{item.branch }}</td>

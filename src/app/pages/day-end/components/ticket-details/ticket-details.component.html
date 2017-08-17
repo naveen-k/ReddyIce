@@ -1,0 +1,151 @@
+<div class="row page-header">
+    <div class=" col-md-12">
+        <ba-card cardTitle="Ticket Details" baCardClass="with-scroll" class="smart-table-container" #customer>
+            <div class="row page-header">
+                <div class="col-md-3">
+                    <span>Driver :</span>
+                    <label>Deangelo Parks</label>
+                </div>
+                <div class="col-md-3">
+                    <div>
+                        <span>Status :</span>
+                        <label>Pending Checker Approval</label>
+                    </div>
+                </div>
+                <div class="col-md-3 right-text-alignment">
+                    <span>Date :</span>
+                    <label>17/08/2017</label>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-danger pull-right" [routerLink]="['../list']">Submit</button>
+                </div>
+            </div>
+            <div class="row page-header">
+                <div class="col-md-12">
+                    <label>Ticket Details</label>
+                </div>
+                <div class="col-md-12 page-header">
+                    <!-- <ng2-smart-table [settings]="settings3" [source]="source3" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table> -->
+                    <div class="vertical-scroll">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'custNumber';customer.isAsc=!customer.isAsc;">
+                                  Customer Number
+                                     <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'customer';customer.isAsc=!customer.isAsc;">
+                                  Customer
+                                     <i *ngIf="(customer.sortField == 'customer')" [ngClass]="(customer.isAsc && customer.sortField == 'customer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'ri';customer.isAsc=!customer.isAsc;">
+                                  RI Customer?
+                                     <i *ngIf="(customer.sortField == 'ri')" [ngClass]="(customer.isAsc && customer.sortField == 'ri' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
+                                    Ticket Number
+                                     <i *ngIf="(customer.sortField === 'ticket')" [ngClass]="(customer.isAsc && customer.sortField === 'ticket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
+                                    Invoice Amount
+                                     <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'cash';customer.isAsc=!customer.isAsc;">
+                                    Cash
+                                     <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'check';customer.isAsc=!customer.isAsc;">
+                                    Check
+                                     <i *ngIf="(customer.sortField === 'check')" [ngClass]="(customer.isAsc && customer.sortField === 'check' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'charge';customer.isAsc=!customer.isAsc;">
+                                    Charge
+                                     <i *ngIf="(customer.sortField === 'charge')" [ngClass]="(customer.isAsc && customer.sortField === 'charge' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'drayage';customer.isAsc=!customer.isAsc;">
+                                    Drayage
+                                     <i *ngIf="(customer.sortField === 'drayage')" [ngClass]="(customer.isAsc && customer.sortField === 'drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'buyBack';customer.isAsc=!customer.isAsc;">
+                                    Buy Back
+                                     <i *ngIf="(customer.sortField === 'buyBack')" [ngClass]="(customer.isAsc && customer.sortField === 'buyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--Removed sorting functionality as it was causing rendering issues  -->
+                                <tr *ngFor="let item of ticketDetails|sort:customer.sortField:customer.isAsc">
+                                    <td>{{item.custNumber}}</td>
+                                    <td>{{item.customer }}</td>
+                                    <td>{{item.ri }}</td>
+                                    <td>{{item.ticket}}</td>
+                                    <td>{{item.invoiceAmount}}</td>
+                                    <td>{{item.cash}}</td>
+                                    <td>{{item.check}}</td>
+                                    <td>{{item.charge}}</td>
+                                    <td>{{item.drayage}}</td>
+                                    <td>{{item.buyBack}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top:88px;">
+                <div class="col-md-2"></div>
+                <div class="col-md-8" style="border:1px solid black;">
+                    <div class="col-md-12 page-header">
+                        <span><b><u>Total</u></b></span>
+                    </div>
+                    <div class="row page-header">
+                        <span class="col-md-4">
+                            <span>Cash:  </span>
+                            <label><b>$50.00</b></label>
+                        </span>
+                        <span class="col-md-4">
+                            <span>Charge:  </span>
+                            <label><b>$50.00</b></label>
+                        </span>
+                        <span class="col-md-4">
+                            <span>Total Sale:  </span>
+                            <label><b>$100.00</b></label>
+                        </span>
+                    </div>
+                    <div class="row page-header">
+                        <span class="col-md-4">
+                            <span>Darayage:  </span>
+                            <label><b>$6.00</b></label>
+                        </span>
+                        <span class="col-md-4">
+                            <span>BuyBack:  </span>
+                            <label><b>$38.00</b></label>
+                        </span>
+                        <span class="col-md-4">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </ba-card>
+    </div>
+</div>

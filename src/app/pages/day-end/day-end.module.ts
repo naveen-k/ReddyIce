@@ -1,5 +1,6 @@
 import { DayEndContainerComponent } from './components/day-end-container/day-end-container.component';
 import { DetailsComponent } from './components/day-end-details/details.component';
+import { TicketDetailsComponent } from './components/ticket-details/ticket-details.component';
 import { SharedModule } from '../../shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
@@ -24,14 +25,18 @@ const routes: Routes = [
             component: DetailsComponent,
         },
         {
-            path: '', redirectTo: 'list', pathMatch: 'full'
+            path: 'ticket-detail',
+            component: TicketDetailsComponent,
+        },
+        {
+            path: '', redirectTo: 'list', pathMatch: 'full',
         }],
     },
 ];
 
 
 @NgModule({
-    declarations: [DayEndContainerComponent, DayEndComponent, DetailsComponent],
+    declarations: [DayEndContainerComponent, DayEndComponent, DetailsComponent, TicketDetailsComponent],
     imports: [
 
         RouterModule.forChild(routes),
