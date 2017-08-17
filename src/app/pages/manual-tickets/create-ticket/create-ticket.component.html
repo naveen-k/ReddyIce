@@ -22,15 +22,15 @@
       <label>Ticket Type</label>
       <div class="radioList">
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+          <input type="radio" name="ticketType" id="ticketTypeRadio1" value="option1">
           <span>DSD</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+          <input type="radio" name="ticketType" id="ticketTypeRadio2" value="option2">
           <span>PBM</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+          <input type="radio" name="ticketType" id="ticketTypeRadio3" value="option3" checked>
           <span>PBS</span>
         </label>
       </div>
@@ -52,11 +52,11 @@
       <label>Type</label>
       <div class="radioList">
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+          <input type="radio" name="type" id="typeRadio1" value="option1" checked>
           <span>Sale</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+          <input type="radio" name="type" id="typeRadio2" value="option2">
           <span>Credit</span>
         </label>
       </div>
@@ -74,11 +74,11 @@
       <label>POD</label>
       <div class="radioList">
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+          <input type="radio" name="pod" id="podRadio1" value="option1" checked>
           <span>Received</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+          <input type="radio" name="pod" id="podRadio2" value="option2">
           <span>No-Received</span>
         </label>
       </div>
@@ -87,13 +87,25 @@
   <div class="row">
     <div class="form-group col-md-6">
       <label for="exampleInputPassword1">Ticket No.</label>
-      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #">
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #" minlength="2" [(ngModel)]="ticketObj.TicketNumber" name="TicketNumber"
+        #TicketNumber="ngModel" required>
+      <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
+        <!-- <div *ngIf="TicketNumber.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="form-group col-md-6">
       <label for="exampleInputPassword1">PO#</label>
-      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="PO #">
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="PO #" minlength="2" [(ngModel)]="ticketObj.PONumber" name="PONumber"
+        #PONumber="ngModel" required>
+      <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div id="poTooltip" *ngIf="PONumber.errors.required" class="custom-tooltip bottom">PO number is required</div>
+        <!-- <div *ngIf="PONumber.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
+      </div>
     </div>
     <div class="form-group col-md-6">
       <!-- <label for="exampleInputPassword1">Check #</label>

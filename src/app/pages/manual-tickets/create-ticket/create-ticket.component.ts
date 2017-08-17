@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 })
 export class CreateTicketComponent {
   smartTableData: any;
+  ticketObj: any = {};
   constructor(protected service: ManualTicketService) {
     this.smartTableData = service.machineSmartTableData;
   }

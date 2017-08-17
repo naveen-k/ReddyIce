@@ -6,7 +6,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
-    template: '<h4>in progress...</h4>',
+    templateUrl: 'tracker.component.html',
+    styleUrls: ['./tracker.component.scss'],
 })
 export class TrackerComponent implements OnInit {
 

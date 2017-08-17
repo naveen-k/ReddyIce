@@ -1,0 +1,24 @@
+.padding {
+    padding: 10px;
+}
+
+.border {
+    border:1px solid lightblue
+}
+
+.textAlign {
+    text-align:center;
+}
+
+.block {
+    width:25px;
+    height:25px;
+    display:inline-block;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.blockContent {
+    margin-left:5px;
+    vertical-align:super;
+}

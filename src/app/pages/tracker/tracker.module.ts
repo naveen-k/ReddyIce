@@ -1,3 +1,4 @@
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TrackerComponent } from './components/tracker.component';
 import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -27,6 +28,7 @@ const routes: Routes = [
         FormsModule, 
         CommonModule, 
         NgaModule,
+        NgbModule,
     ],
     providers: [],
 })
