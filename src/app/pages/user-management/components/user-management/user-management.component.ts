@@ -138,13 +138,13 @@ export class UserManagementComponent implements OnInit {
     delete user.Distributor;
     this.service.updateUser(user, user.UserId).subscribe((res) => {
       this.notification.success('Success', 'User updated successfully');
-      // let indexPos: any;
-      // this.userTableData.forEach((_user, index) => {
-      //   if (_user.UserId === user.UserId) {
-      //     indexPos = index;
-      //   }
-      // });
-      // this.userTableData.splice(indexPos, 1, user);
+      let indexPos: any;
+      this.userTableData.forEach((_user, index) => {
+        if (_user.UserId === user.UserId) {
+          indexPos = index;
+        }
+      });
+      this.userTableData.splice(indexPos, 1, user);
     });
     this.rightCardOpen = !this.rightCardOpen;
     this.hideColumn = !this.hideColumn;
