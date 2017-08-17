@@ -79,7 +79,7 @@ export const PAGES_MENU = [
         data: {
           menu: {
             title: 'Tracker',
-            icon: 'ion-clipboard',
+            icon: 'ion-ios-paw',
             selected: false,
             expanded: false,
             order: 0,
