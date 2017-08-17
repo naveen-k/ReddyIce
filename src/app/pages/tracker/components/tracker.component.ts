@@ -15,8 +15,7 @@ export class TrackerComponent {
   }
 
   ngAfterViewInit() {
-    let el = this._elementRef.nativeElement.querySelector('.google-maps');
-    debugger;
+    let el = this._elementRef.nativeElement.querySelector('.google-maps');    
     // TODO: do not load this each time as we already have the library after first attempt
     GoogleMapsLoader.load((google) => {
       new google.maps.Map(el, {

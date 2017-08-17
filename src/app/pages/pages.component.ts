@@ -1,6 +1,6 @@
 import { UserService } from '../shared/user.service';
-import { Component, OnInit } from '@angular/core';
-import { Router, Routes } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, Routes } from '@angular/router';
 
 import { BaMenuService } from '../theme';
 import { PAGES_MENU } from './pages.menu';
@@ -24,7 +24,14 @@ import { PAGES_MENU } from './pages.menu';
 })
 export class Pages implements OnInit {
   userDetails: any;
-  constructor(private _menuService: BaMenuService, private userService: UserService, private router: Router) {
+  _onRouteChange: any;
+  _redirectToHome: boolean = false;
+
+  constructor(
+    private _menuService: BaMenuService,
+    private userService: UserService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -46,13 +53,18 @@ export class Pages implements OnInit {
       }
 
       this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
-      this.router.navigateByUrl(`/pages/${PAGES_MENU[0].children[0].path}`);
+
+      if (this._redirectToHome) {
+        this.router.navigateByUrl(`/pages/${PAGES_MENU[0].children[0].path}`);
+      } 
     });
-    // this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
-    // this.router.navigateByUrl(`/pages/${PAGES_MENU[0].children[0].path}`);
 
-    // filter menus based on user
-
+    this._onRouteChange = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this._redirectToHome = event.urlAfterRedirects === '/pages';        
+        this._onRouteChange.unsubscribe();
+      }
+    });
 
   }
 }
