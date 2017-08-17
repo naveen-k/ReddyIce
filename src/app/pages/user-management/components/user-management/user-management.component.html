@@ -84,7 +84,7 @@
             <tr *ngFor="let item of paginationData | filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-edit" (click)="onEditClicked(item)" style="margin-right: 5px"></i>
-                <i class="ion-trash-a" *ngIf="!item.IsRIInternal" (click)="deleteUser(item)"></i>
+                <i class="ion-trash-a" *ngIf="item.Role.RoleID === 3 || userDetails.Role.RoleID === 1" (click)="deleteUser(item)"></i>
               </td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }}</td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.LastName || 'NA' }}</td>

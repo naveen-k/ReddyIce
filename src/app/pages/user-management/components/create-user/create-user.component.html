@@ -96,7 +96,7 @@
     <div class="col-md-5 padding-eater">
       <label for="exampleSelect1">Role</label>
       <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler()">
-        <option *ngFor="let role of roles" [value]="role.LookupID">{{role.Value}}</option>
+        <option *ngFor="let role of roles" [value]="role.RoleID">{{role.RoleName}}</option>
       </select>
     </div>
   </div>

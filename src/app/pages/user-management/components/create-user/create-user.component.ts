@@ -52,7 +52,7 @@ export class CreateUserComponent implements OnInit {
     ngOnInit() {
         //this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
-            this.user.RoleID = this.roles ? this.roles[0].LookupID : '';
+            this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
               this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
             }

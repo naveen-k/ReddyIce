@@ -108,7 +108,7 @@ export class UserManagementComponent implements OnInit {
   onEditClicked(user) {
     this.newUser = Object.assign({}, user);
     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-    this.newUser.RoleID = user.Role ? user.Role.RoleId : '';
+    this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
     this.cardTitle = 'Edit User';
     this.isNewUser = false;
@@ -197,13 +197,12 @@ export class UserManagementComponent implements OnInit {
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
+      this.userRoles = response.RoleList;
       if (!response.IsDistributor) {
         this.getUserList();
-        this.getRole();
         this.getBranches();
         this.getDistributors();
       } else if (response.IsDistributor) {
-        this.getRole();
         this.getBranches();
         this.isDistributorAdmin = true;
         this.getUserList(response.Distributor.DistributorMasterId);

@@ -8,6 +8,7 @@ export interface UserDetails {
   IsDistributor: boolean;
   IsActive: boolean;
   Role: UserRole;
+  RoleList: UserRoles[];
   Distributor?: UserDistributor;
   MenuOptions: UserMenuOptions[];
 }
@@ -17,11 +18,18 @@ export interface UserDistributor {
   DistributorName: string;
 }
 export interface UserRole {
-  RoleId: number;
+  RoleID: number;
   RoleName: string;
 }
 
 export interface UserMenuOptions {
   Key: string;
   DisplayValue: string;
+}
+
+export interface UserRoles {
+  RoleID: number;
+  RoleAuthID: number;
+  RoleName: string;
+  ShowExternal: boolean;
 }
