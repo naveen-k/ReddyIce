@@ -129,6 +129,9 @@ export class UserManagementComponent implements OnInit {
       this.userTableData = savedUserlist;
       //this.userTableData.push(res);
 
+    },
+    (error) => {
+      this.notification.error('Error', 'Failed to create user.');
     });
     this.rightCardOpen = !this.rightCardOpen;
     this.hideColumn = !this.hideColumn;
@@ -153,6 +156,9 @@ export class UserManagementComponent implements OnInit {
       });
       users.splice(indexPos, 1, res);
       this.userTableData = users;
+    },
+    (error) => {
+      this.notification.error('Error', `Failed to update user ${user.UserName}`);
     });
 
     this.rightCardOpen = !this.rightCardOpen;
@@ -171,8 +177,11 @@ export class UserManagementComponent implements OnInit {
     activeModal.componentInstance.modalContent = `Are you sure you want to delete ${user.UserName}?`;
     activeModal.componentInstance.closeModalHandler = (() => {
       this.service.deleteUser(user.UserId).subscribe((res) => {
-        this.notification.success('Success', 'User deleted successfully');
+        this.notification.success('Success', `User ${user.UserName} deleted successfully`);
         this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
+      },
+      (error) => {
+        this.notification.error('Error', `Failed to delete user.`);
       });
     });
 
