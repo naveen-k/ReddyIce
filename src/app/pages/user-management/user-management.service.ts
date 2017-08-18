@@ -28,10 +28,10 @@ export class UserManagementService {
     }
 
     deleteUser(id): Observable<Response> {
-      const headers = new Headers();
-      headers.append('Content-Type', 'application/json');
-      const options = new RequestOptions({ 'headers': headers });
-      return this.http.delete(`api/user?id=${id}`).map((res => res.json()));
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        const options = new RequestOptions({ 'headers': headers });
+        return this.http.delete(`api/user?id=${id}`).map((res => res.json()));
     }
 
     getRoles(): Observable<any> {
@@ -47,5 +47,10 @@ export class UserManagementService {
     getBranches(): Observable<any> {
         // change `tempHttp` to `http` once actual api is ready
         return this.http.get('api/branch').map((res) => res.json());
+    }
+
+    searchInternalUsers(searchString: string): Observable<any[]> {
+        const searchObj = { 'PrivateKey1': 'asaxena@reddyice.com', 'PrivateKey2': 'C10571', 'SearchString': searchString };
+        return this.http.post('api/user/searchriuser', searchObj).map((res) => res.json());
     }
 }

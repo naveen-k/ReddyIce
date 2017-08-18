@@ -38,7 +38,7 @@ export class PaginationComponent {
 
     @Input()
     options: any = {
-        itemPerPage: 10,
+        itemPerPage: 15,
         pages: [],
     };
 
