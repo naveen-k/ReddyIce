@@ -24,35 +24,23 @@
   position: absolute;
   border-radius: 4px;
   top: 3px;
-  right: -45px;
+  right: 1%;
 }
 
-.custom-tooltip:after {
+.showError:after {
   content: '';
   width: 0;
   display: inline;
   position: absolute;
   right: -5px;
   margin: -5px;
-  top: 50%;
+  top: 9%;
   border: 5px solid #ed7878;
-  border-top-color: transparent;
   border-right-color: transparent;
-  border-bottom-color: transparent;
-}
-.bottom:after {
-  top: 31px;
+  border-bottom-color: transparent; 
   border-top-color: #ed7878;
   border-left-color: transparent;
   left: 56%;
-}
-
-#poTooltip.bottom:after {
-  top: 31px;
-  border-top-color: #ed7878;
-  border-left-color: transparent;
-  left: 56%;
-  margin-left: -13px;
 }
 
 .pull-right {
