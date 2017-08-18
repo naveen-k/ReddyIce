@@ -45,6 +45,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
+              <!-- <th>Select</th> -->
               <th class="table-id">Actions</th>
               <th>
                 <span style="cursor:pointer;" (click)="customer.sortField = 'ticketId';customer.isAsc=!customer.isAsc;">
@@ -74,6 +75,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
+              <!-- <td><input type="checkbox" value="Select"></td> -->
               <td class="table-id" style="cursor: pointer">
                   <i class="ion-edit" style="margin-right: 5px"></i>
                   <i class="ion-trash-a"></i>

@@ -99,8 +99,17 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6">
+      <label for="exampleSelect1">Driver</label>
+      <select class="form-control" id="exampleSelect1">
+          <option>Daniel</option>
+          <option>Ron</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
       <label for="exampleInputPassword1">Ticket No.</label>
-      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Ticket #" minlength="2" [(ngModel)]="ticketObj.TicketNumber" name="TicketNumber"
+      <input type="text" class="form-control" id="TicketNumber" placeholder="Ticket #" minlength="2" [(ngModel)]="ticketObj.TicketNumber" name="TicketNumber"
         #TicketNumber="ngModel" required>
       <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -123,13 +132,56 @@
     <div class="form-group col-md-6">
       <!-- <label for="exampleInputPassword1">Check #</label>
       <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Check #"> -->
-      <button type="submit" class="btn btn-danger addProdManualTickets pull-right">Add Product</button>
+      <button type="submit" class="btn btn-danger addProdManualTickets pull-right" *ngIf="!showDamagedCol">Add Product</button>
+      <button type="submit" class="btn btn-danger addProdManualTickets pull-right" *ngIf="showDamagedCol">Add Machine</button>
     </div>
   </div>
   <!-- <div class="checkbox">
     <ba-checkbox [(ngModel)]="isChecked" [label]="'Check me out'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
   </div> -->
-  <div class="vertical-scroll" #customer>
+  <div class="vertical-scroll" #customer *ngIf="showHideDSDCols">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="table-id">Actions</th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;">
+                Products
+                  <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'unit';customer.isAsc=!customer.isAsc;">
+                Unit
+                <i *ngIf="(customer.sortField == 'unit')" [ngClass]="(customer.isAsc && customer.sortField == 'unit' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;">
+                Unit Price
+                <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+          <th (click)="customer.sortField = 'currentInv';customer.isAsc=!customer.isAsc;">
+            <span style="cursor:pointer;">
+                Total Amount
+                <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
+          <td class="table-id ion-edit"></td>
+          <td contenteditable="">{{ item.machine }}</td>
+          <td>{{ item.unit }}</td>
+          <td contenteditable="">{{ item.deliveredBag }}</td>
+          <td contenteditable="">{{ item.currentInv }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="vertical-scroll" #customer *ngIf="!showHideDSDCols">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -200,18 +252,31 @@
   <div class="row">
     <div class="col-md-6">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
           <b>Total Sale</b>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <b>$151.25</b>
         </div>
       </div>
-      <div class="row">
+      <br>
+      <div class="row" *ngIf="!showHideTableCols && showDamagedCol">
         <div class="col-md-6">
+          <b>Store Credit</b>
+        </div>
+        <div class="col-md-2">
+          <b>4</b>
+        </div>
+        <div class="col-md-4">
+          <b>-$5.00</b>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-8">
           <b>Tax</b>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <b>$0.00</b>
         </div>
       </div>

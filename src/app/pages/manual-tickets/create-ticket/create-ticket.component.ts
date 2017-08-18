@@ -11,6 +11,7 @@ export class CreateTicketComponent {
   ticketObj: any = {};
   showDamagedCol: boolean = false;
   showHideTableCols: boolean = true;
+  showHideDSDCols: boolean = false;
   constructor(protected service: ManualTicketService) {
     this.smartTableData = service.machineSmartTableData;
   }
@@ -18,8 +19,13 @@ export class CreateTicketComponent {
   showHideDamagedColumn = function(arg) {
     if (arg === 3) {
       this.showDamagedCol = false;
+      this.showHideDSDCols = false;
     } else if (arg === 2) {
       this.showDamagedCol = true;
+      this.showHideDSDCols = false;
+    } else if (arg === 1) {
+      this.showDamagedCol = false;
+      this.showHideDSDCols = true;
     }
   };
 
