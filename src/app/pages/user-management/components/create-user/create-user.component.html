@@ -1,16 +1,12 @@
-<form (ngSubmit)="onSubmit()" #customerForm="ngForm" class="user-form">
+<form #customerForm="ngForm" class="user-form" >
   <div class="row customerHeader">
     <div *ngIf="!isDistributorAdmin" class="col-md-3" style="margin-top: 7px;">
       <ba-checkbox [(ngModel)]="user.IsRIInternal" (ngModelChange)="changeHandler()" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
     </div>
     <div *ngIf="user.IsRIInternal" class="col-md-5">
-      <input name="riUser" type="text" class="form-control"  placeholder="Search"
-       [(ngModel)]="riUserName" (ngModelChange)="searchUserHandler(riUserName)">
-      <div *ngIf="riUserList.length > 0" class="search-container">
-          <div class="search-item" >User 1 </div>
-          <div class="search-item" >User 1 </div>
-          <div class="search-item" >User 1 </div>
-          <div class="search-item" >User 1 </div>
+      <input name="riUser" type="text" (blur) = "showList = false;" class="form-control" placeholder="Search" [(ngModel)]="riUserName" (ngModelChange)="searchUserHandler(riUserName)">
+      <div *ngIf="showList" class="search-container">
+        <div class="search-item" *ngFor="let u of riUserList" (click)="userSelected(u)">{{u}}</div>
       </div>
     </div>
     <div class="col-md-2">
@@ -57,7 +53,7 @@
     <div class="col-md-5 padding-eater first-column">
       <label for="username" class="control-label">Username</label>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
-        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()">
+        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="isNewUser">
       <div *ngIf="UserName.invalid && (UserName.dirty || UserName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="UserName.errors.required" class="custom-tooltip bottom">
@@ -88,12 +84,12 @@
     <div class="col-md-5 padding-eater first-column">
       <label for="inputEmail3" class="control-label">Phone</label>
       <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-        required pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [readOnly]="user.IsRIInternal" (change)="changeHandler()">
+        pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [readOnly]="user.IsRIInternal" (change)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
-        <div *ngIf="Phone.errors.required" class="custom-tooltip bottom">
+        <!-- <div *ngIf="Phone.errors.required" class="custom-tooltip bottom">
           Phone number is required.
-        </div>
+        </div> -->
         <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
           Phone number is invalid.
         </div>
@@ -111,7 +107,8 @@
     <div class="row">
       <div class="col-md-5">
         <label for="exampleSelect1">Branch</label>
-        <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel" (ngModelChange)="changeHandler()">
+        <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
+          (ngModelChange)="changeHandler()">
             <option *ngFor="let _branch of branches" [value]="_branch.BranchID">{{_branch.BranchID}}</option>
         </select>
       </div>
@@ -131,8 +128,8 @@
   <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row">
     <div class="col-md-5 padding-eater">
       <label for="distributor">Distributor</label>
-      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor" #distributor="ngModel" (ngModelChange)="changeHandler()"
-        required>
+      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+        #distributor="ngModel" (ngModelChange)="changeHandler()" required>
           <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
       </select>
     </div>
@@ -140,7 +137,8 @@
     <div class="col-md-5 padding-eater">
       <br/><br/>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-      <ba-checkbox [ngModel]="user.isSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
+      <ba-checkbox [ngModel]="user.isSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
+        disabled="true"></ba-checkbox>
     </div>
   </div>
 </form>

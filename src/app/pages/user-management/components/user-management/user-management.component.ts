@@ -1,3 +1,4 @@
+import { UserDetails } from '../../../../shared/user.interface';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -16,11 +17,11 @@ export class UserManagementComponent implements OnInit {
   rightCardOpen: boolean = false;
   isNewUser: boolean = false;
   selectedUser = {};
-  newUser: any;
+  newUser: any = {};
   hideColumn: boolean = false;
   isDistributorAdmin: boolean = false;
   cardTitle: string;
-  userDetails: any;
+  userDetails: UserDetails;
   formIsDirty: boolean = false;
 
   constructor(
@@ -194,6 +195,9 @@ export class UserManagementComponent implements OnInit {
   getUserList(id?: number) {
     this.service.getUsers(id).subscribe((res) => {
       this.userTableData = res;
+      if (res.length <= 15) {
+        this.paginationData = res;
+      }
     });
   }
 

@@ -25,7 +25,9 @@ export class CreateUserComponent implements OnInit {
 
     riUserList: any = [];
     riUserName: string = '';
-
+    searchedUsers: any;
+    showList: boolean = false;
+    timeOut: any;
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
     toInt(num: string) {
@@ -36,11 +38,35 @@ export class CreateUserComponent implements OnInit {
         return a.city.length;
     }
     searchUserHandler(user) {
-        // call api for user 
-        console.log(user);
-        return this.riUserList.push('abc');
-
+        if (this.timeOut) {
+            clearTimeout(this.timeOut);
+            this.timeOut = null;
+        }
+        this.searchedUsers = {};
+        this.riUserList = [];
+        if (!user) { return; }
+        this.timeOut = setTimeout(() => {
+            this.umService.searchInternalUsers(user).subscribe((res) => {
+                this.searchedUsers = res;
+                this.riUserList = Object.keys(res);
+                this.showList = true;
+            }, (err) => {
+                this.riUserList.push('No data found');
+            });
+        }, 1000);
     }
+
+    userSelected(_user) {
+        this.showList = false;
+        const user = this.searchedUsers[_user];
+        if (!user) { return; }
+        this.user.FirstName = user.displayname[0].split(' ')[0] || '';
+        this.user.LastName = user.displayname[0].split(' ')[1] || '';
+        this.user.UserName = user.cn[0] || '';
+        this.user.EmailID = user.mail[0] || '';
+        this.riUserName = _user;
+    }
+
     onSubmit() {
         // If user is RI internal user then distributor ID should be set to empty
         if (this.userDetails.IsDistributor) {
@@ -60,9 +86,9 @@ export class CreateUserComponent implements OnInit {
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
-              //  this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
+                //  this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
             }
-           // this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
+            // this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
         }
     }
 

@@ -98,7 +98,7 @@
             </tr>
           </tbody>
         </table>
-        <pagination [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
+        <pagination *ngIf="userTableData?.length > 15" [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
         </div>
     </ba-card>
   </div>
