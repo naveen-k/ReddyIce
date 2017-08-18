@@ -42,15 +42,16 @@ export class CreateUserComponent implements OnInit {
             clearTimeout(this.timeOut);
             this.timeOut = null;
         }
-
         this.searchedUsers = {};
         this.riUserList = [];
         if (!user) { return; }
         this.timeOut = setTimeout(() => {
-            this.umService.searchInternalUsers(user).debounceTime(2000).subscribe((res) => {
+            this.umService.searchInternalUsers(user).subscribe((res) => {
                 this.searchedUsers = res;
                 this.riUserList = Object.keys(res);
                 this.showList = true;
+            }, (err) => {
+                this.riUserList.push('No data found');
             });
         }, 1000);
     }
@@ -58,6 +59,7 @@ export class CreateUserComponent implements OnInit {
     userSelected(_user) {
         this.showList = false;
         const user = this.searchedUsers[_user];
+        if (!user) { return; }
         this.user.FirstName = user.displayname[0].split(' ')[0] || '';
         this.user.LastName = user.displayname[0].split(' ')[1] || '';
         this.user.UserName = user.cn[0] || '';

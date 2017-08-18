@@ -113,16 +113,25 @@ input:focus + .error-message {
 }
 .search-container{
  position: absolute;
-    height: 200px;
+    max-height: 200px;
     overflow-y: scroll;
     width: calc(100% - 30px);
-    padding: 10px 5px;
+    padding:0px;
     border: 1px solid #ccc;
     background: #fff;
     z-index: 12;
     .search-item{
-      padding: 5px 0px;
+      padding: 6px 12px;
       border-bottom: 1px solid #d6cccc;
+      cursor: pointer;
+      &:hover{
+        background: #5bc0de;
+        color:#fff;
+      }
 
+    }
+    
+    .search-item:last-child{
+       border-bottom: 0px solid #d6cccc;
     }
 }
