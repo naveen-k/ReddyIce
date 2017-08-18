@@ -64,7 +64,10 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of smartTableData | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
-                            <td class="table-id ion-edit"></td>
+                            <td class="table-id" style="cursor: pointer">
+                                <i class="ion-edit" style="margin-right: 5px"></i>
+                                <i class="ion-trash-a" *ngIf="item.isRICustomer === 'N'"></i>
+                            </td>
                             <td>{{ item.customerNumber }}</td>
                             <td>{{ item.customerName }}</td>
                             <td>{{ item.isRICustomer }}</td>
@@ -125,129 +128,111 @@
                 <accordion-group heading="Customer Details" isGroupOpen="true">
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for="exampleInputEmail1">Customer Name</label>
-                            <input [(ngModel)]="selectedUser.customerName" type="text" class="form-control" id="customerName" placeholder="Customer Name"
-                                required maxlength="30" #nameValidationTitle="ngModel">
-                            <div *ngIf="nameValidationTitle.errors && (nameValidationTitle.dirty || nameValidationTitle.touched)" class="alert alert-danger">
-                                <div [hidden]="!nameValidationTitle.errors.required">
-                                    Customer name is required!
-                                </div>
-                                <div [hidden]="!nameValidationTitle.errors.maxlength">
-                                    Title cannot be more than 30 characters long.
-                                </div>
+                            <label>Customer Name</label>
+                            <input type="text" class="form-control" id="customerName" placeholder="Customer Name"
+                                 minlength="2" [(ngModel)]="customerObj.customerName" name="customerName"
+                                #customerName="ngModel" required>
+                            <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)" class="error-message">
+                                <i class="ion-android-alert showError"></i>
+                                <div id="" *ngIf="customerName.errors.required" class="custom-tooltip bottom">Customer name is required</div>
+                                <!-- <div *ngIf="customerName.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="exampleSelect1">Type</label>
                             <select class="form-control" id="exampleSelect1">
-                        <option>Cloudtail</option>
-                        <option>Icebox</option>
-                    </select>
+                                <option>Cloudtail</option>
+                                <option>Icebox</option>
+                            </select>
                         </div>
                     </div>
                     <!-- <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1">Customer Number</label>
-                        <input [(ngModel)]="selectedUser.customerNumber" type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Number">
+                        <div class="form-group col-md-6">
+                            <label for="exampleInputEmail1">Customer Number</label>
+                            <input [(ngModel)]="selectedUser.customerNumber" type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Number">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="exampleSelect1">Location</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>301</option>
+                                <option>302</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleSelect1">Location</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>301</option>
-                            <option>302</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="exampleSelect1">Branch</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>301</option>
-                            <option>302</option>
-                        </select>
-                    </div>
-                </div> -->
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="exampleSelect1">Branch</label>
+                            <select class="form-control" id="exampleSelect1">
+                                <option>301</option>
+                                <option>302</option>
+                            </select>
+                        </div>
+                    </div> -->
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <label for="exampleInputEmail1">Address</label>
-                            <input [(ngModel)]="selectedUser.address" type="text" class="form-control" id="address" placeholder="Address" required maxlength="128"
-                                #addressValidationTitle="ngModel">
-                            <div *ngIf="addressValidationTitle.errors && (addressValidationTitle.dirty || addressValidationTitle.touched)" class="alert alert-danger">
-                                <div [hidden]="!addressValidationTitle.errors.required">
-                                    Address is required!
-                                </div>
-                                <div [hidden]="!addressValidationTitle.errors.maxlength">
-                                    Title cannot be more than 30 characters long.
-                                </div>
+                            <label>Address</label>
+                            <input type="text" class="form-control" id="address" placeholder="Address" required maxlength="128"
+                                minlength="2" [(ngModel)]="customerObj.address" name="address"
+                                #address="ngModel" required>
+                            <div *ngIf="address.invalid && (address.dirty || address.touched)" class="error-message">
+                                <i class="ion-android-alert showError"></i>
+                                <div id="" *ngIf="address.errors.required" class="custom-tooltip bottom">Address is required</div>
+                                <!-- <div *ngIf="address.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4">
-                            <label for="exampleInputEmail1">City</label>
-                            <input [(ngModel)]="selectedUser.city" type="text" class="form-control" id="city" placeholder="City" required maxlength="30"
-                                #cityValidationTitle="ngModel">
-                            <div *ngIf="cityValidationTitle.errors && (cityValidationTitle.dirty || cityValidationTitle.touched)" class="alert alert-danger">
-                                <div [hidden]="!cityValidationTitle.errors.required">
-                                    City is required!
-                                </div>
-                                <div [hidden]="!cityValidationTitle.errors.maxlength">
-                                    City cannot be more than 30 characters long.
-                                </div>
+                            <label>City</label>
+                            <input type="text" class="form-control" id="city" placeholder="City" minlength="2" [(ngModel)]="customerObj.city" name="city"
+                                #city="ngModel" required>
+                            <div *ngIf="city.invalid && (city.dirty || city.touched)" class="error-message">
+                                <i class="ion-android-alert showError"></i>
+                                <div id="" *ngIf="city.errors.required" class="custom-tooltip bottom">City is required</div>
+                                <!-- <div *ngIf="city.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
                             </div>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="exampleInputEmail1">State</label>
-                            <input [(ngModel)]="selectedUser.state" type="text" class="form-control" id="state" placeholder="State" required maxlength="30"
-                                #stateValidationTitle="ngModel">
-                            <div *ngIf="stateValidationTitle.errors && (stateValidationTitle.dirty || stateValidationTitle.touched)" class="alert alert-danger">
-                                <div [hidden]="!stateValidationTitle.errors.required">
-                                    State is required!
-                                </div>
-                                <div [hidden]="!stateValidationTitle.errors.maxlength">
-                                    State cannot be more than 30 characters long.
-                                </div>
+                            <label>State</label>
+                            <input type="text" class="form-control" id="state" placeholder="State" minlength="2" [(ngModel)]="customerObj.state" name="state"
+                                #state="ngModel" required>
+                            <div *ngIf="state.invalid && (state.dirty || state.touched)" class="error-message">
+                                <i class="ion-android-alert showError"></i>
+                                <div id="" *ngIf="state.errors.required" class="custom-tooltip bottom">State is required</div>
+                                <!-- <div *ngIf="state.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="exampleInputEmail1">Zip</label>
-                            <input [(ngModel)]="selectedUser.zip" type="text" class="form-control" id="zip" placeholder="Zip" required maxlength="30"
-                                #zipValidationTitle="ngModel">
-                            <div *ngIf="zipValidationTitle.errors && (zipValidationTitle.dirty || zipValidationTitle.touched)" class="alert alert-danger">
-                                <div [hidden]="!zipValidationTitle.errors.required">
-                                    Zip is required!
-                                </div>
-                                <div [hidden]="!zipValidationTitle.errors.maxlength">
-                                    Zip cannot be more than 30 characters long.
-                                </div>
+                            <input [(ngModel)]="selectedUser.zip" type="text" class="form-control" id="zip" placeholder="Zip" minlength="2" [(ngModel)]="customerObj.zip" name="zip"
+                                #zip="ngModel" required>
+                            <div *ngIf="zip.invalid && (zip.dirty || zip.touched)" class="error-message">
+                                <i class="ion-android-alert showError"></i>
+                                <div id="" *ngIf="zip.errors.required" class="custom-tooltip bottom">Zip is required</div>
+                                <!-- <div *ngIf="zip.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="exampleInputEmail1">Phone</label>
-                            <input [(ngModel)]="selectedUser.phone" type="text" class="form-control" id="phone" placeholder="Phone" required pattern="[789][0-9]{9}"
-                                #phoneValidationTitle="ngModel">
-                            <div *ngIf="phoneValidationTitle.errors && (phoneValidationTitle.dirty || phoneValidationTitle.touched)" class="alert alert-danger">
-                                <div [hidden]="!phoneValidationTitle.errors.required">
-                                    Phone is required
-                                </div>
-                                <div [hidden]="!phoneValidationTitle.errors.pattern">
-                                    Please enter valid phone number
-                                </div>
+                            <input [(ngModel)]="selectedUser.phone" type="text" class="form-control" id="phone" placeholder="Phone" minlength="2" [(ngModel)]="customerObj.phone" name="phone"
+                                #phone="ngModel" required>
+                            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="error-message">
+                                <i class="ion-android-alert showError"></i>
+                                <div id="" *ngIf="phone.errors.required" class="custom-tooltip bottom">Phone is required</div>
+                                <!-- <div *ngIf="phone.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="exampleInputEmail1">Email</label>
-                            <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                                #emailValidationTitle="ngModel">
-                            <div *ngIf="emailValidationTitle.errors && (emailValidationTitle.dirty || emailValidationTitle.touched)" class="alert alert-danger">
-                                <div [hidden]="!emailValidationTitle.errors.required">
-                                    Email id is required
-                                </div>
-                                <div [hidden]="!emailValidationTitle.errors.pattern">
-                                    Must be a valid URL!
-                                </div>
+                            <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email"
+                            minlength="2" [(ngModel)]="customerObj.email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                #email="ngModel" required>
+                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
+                                <i class="ion-android-alert showError"></i>
+                                <div id="" *ngIf="email.errors.required" class="custom-tooltip bottom">Email is required</div>
+                                <div *ngIf="email.errors.pattern" class="custom-tooltip bottom">Please enter valid email</div> 
                             </div>
                         </div>
                     </div>

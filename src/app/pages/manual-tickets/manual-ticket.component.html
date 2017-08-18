@@ -74,7 +74,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
-              <td class="table-id ion-edit"></td>
+              <td class="table-id" style="cursor: pointer">
+                  <i class="ion-edit" style="margin-right: 5px"></i>
+                  <i class="ion-trash-a"></i>
+              </td>
               <td>{{ item.ticketId }}</td>
               <td>{{ item.customerId }}</td>
               <td>{{ item.amount }}</td>

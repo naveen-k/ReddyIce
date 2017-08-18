@@ -107,6 +107,7 @@ export class CustomerManagementComponent {
     mappedProds: any;
     isNewCustomer: boolean = false;
     setPrice: boolean = false;
+    customerObj: any = {};
     
     constructor(protected service: CustomerManagementService) {
         // this.service.getData().then((data) => {
