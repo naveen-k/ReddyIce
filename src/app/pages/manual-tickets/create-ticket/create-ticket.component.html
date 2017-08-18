@@ -97,13 +97,23 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="showHideDSDCols">
     <div class="form-group col-md-6">
       <label for="exampleSelect1">Driver</label>
       <select class="form-control" id="exampleSelect1">
           <option>Daniel</option>
           <option>Ron</option>
       </select>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="exampleInputPassword1">Check No.</label>
+      <input type="text" class="form-control" id="checkNumber" placeholder="Check #" minlength="2" [(ngModel)]="ticketObj.checkNumber" name="checkNumber"
+        #checkNumber="ngModel" required>
+      <div *ngIf="checkNumber.invalid && (checkNumber.dirty || checkNumber.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="checkNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
+        <!-- <div *ngIf="checkNumber.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
+      </div>
     </div>
   </div>
   <div class="row">
