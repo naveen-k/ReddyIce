@@ -22,15 +22,15 @@
       <label>Ticket Type</label>
       <div class="radioList">
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="ticketType" id="ticketTypeRadio1" value="option1">
+          <input type="radio" name="ticketType" id="ticketTypeRadio1" value="option1" (click)="showHideDamagedColumn(1)">
           <span>DSD</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="ticketType" id="ticketTypeRadio2" value="option2">
+          <input type="radio" name="ticketType" id="ticketTypeRadio2" value="option2" (click)="showHideDamagedColumn(2)">
           <span>PBM</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="ticketType" id="ticketTypeRadio3" value="option3" checked>
+          <input type="radio" name="ticketType" id="ticketTypeRadio3" value="option3" checked (click)="showHideDamagedColumn(3)">
           <span>PBS</span>
         </label>
       </div>
@@ -48,7 +48,7 @@
         </button>
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" *ngIf="!showDamagedCol">
       <label>Type</label>
       <div class="radioList">
         <label class="radioItem radio-inline custom-radio nowrap">
@@ -58,6 +58,19 @@
         <label class="radioItem radio-inline custom-radio nowrap">
           <input type="radio" name="type" id="typeRadio2" value="option2">
           <span>Credit</span>
+        </label>
+      </div>
+    </div>
+    <div class="col-md-6" *ngIf="showDamagedCol">
+      <label>Type</label>
+      <div class="radioList">
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="type" id="typeRadio1" value="option1" (click)="showHideCols(1)">
+          <span>Meter Reading</span>
+        </label>
+        <label class="radioItem radio-inline custom-radio nowrap">
+          <input type="radio" name="type" id="typeRadio2" value="option2" checked (click)="showHideCols(2)">
+          <span>Inventory</span>
         </label>
       </div>
     </div>
@@ -122,8 +135,12 @@
         <tr>
           <th class="table-id">Actions</th>
           <th>
-            <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;">
-                Machine
+            <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;" *ngIf="!showDamagedCol">
+                Products
+                  <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;" *ngIf="showDamagedCol">
+                Machines
                   <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
             </span>
           </th>
@@ -134,21 +151,35 @@
             </span>
           </th>
           <th>
-            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;">
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;"
+             *ngIf="showHideTableCols || !showDamagedCol">
                 Delivered Bags
                 <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
             </span>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;"
+             *ngIf="!showHideTableCols && showDamagedCol">
+              Previous Reading
+              <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
           </th>
           <th (click)="customer.sortField = 'currentInv';customer.isAsc=!customer.isAsc;">
-            <span style="cursor:pointer;">
+            <span style="cursor:pointer;" *ngIf="showHideTableCols || !showDamagedCol">
                 Current Inv
                 <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
             </span>
+            <span style="cursor:pointer;" *ngIf="!showHideTableCols && showDamagedCol">
+              Current Reading
+              <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
           </th>
-          <th (click)="customer.sortField = 'damagedBag';customer.isAsc=!customer.isAsc;">
-            <span style="cursor:pointer;">
+          <th (click)="customer.sortField = 'damagedBag';customer.isAsc=!customer.isAsc;" *ngIf="showDamagedCol">
+            <span style="cursor:pointer;" *ngIf="showHideTableCols && showDamagedCol">
                 Damaged Bags
                 <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+            </span>
+            <span style="cursor:pointer;" *ngIf="!showHideTableCols && showDamagedCol">
+              Total Units
+              <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
             </span>
           </th>
         </tr>
@@ -160,7 +191,7 @@
           <td>{{ item.unit }}</td>
           <td contenteditable="">{{ item.deliveredBag }}</td>
           <td contenteditable="">{{ item.currentInv }}</td>
-          <td contenteditable="">{{ item.damagedBag }}</td>
+          <td contenteditable="" *ngIf="showDamagedCol">{{ item.damagedBag }}</td>
         </tr>
       </tbody>
     </table>
