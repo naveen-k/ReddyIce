@@ -23,6 +23,7 @@ export class UserManagementComponent implements OnInit {
   cardTitle: string;
   userDetails: UserDetails;
   formIsDirty: boolean = false;
+  isDistributorExist: boolean = false;
 
   constructor(
     private service: UserManagementService,
@@ -205,6 +206,7 @@ export class UserManagementComponent implements OnInit {
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
+      this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
       if (!response.IsDistributor) {
         this.getUserList();

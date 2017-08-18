@@ -59,7 +59,7 @@
                     <!-- <i *ngIf="(customer.sortField === 'role')" [ngClass]="(customer.isAsc && customer.sortField === 'role' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> -->
                 </span>
               </th>
-              <th *ngIf="!hideColumn">
+              <th *ngIf="!hideColumn && !isDistributorExist">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'distributor';customer.isAsc=!customer.isAsc;">
                     Distributor
                     <!-- <i *ngIf="(customer.sortField === 'role')" [ngClass]="(customer.isAsc && customer.sortField === 'role' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> -->
@@ -102,7 +102,7 @@
         </div>
     </ba-card>
   </div>
-  <div [hidden]="!rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
+  <div *ngIf="rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
     <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="closeRightCard($event)" class="ion-close-round addCustCloseIcon"></span>
       <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" (onUpdateUser)="onUpdateUser($event)"

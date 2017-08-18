@@ -3,6 +3,7 @@ import { selector } from 'rxjs/operator/multicast';
 import { LocalDataSource } from 'ng2-smart-table';
 import { UserManagementService } from '../../user-management.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { User } from '../../user-management.interface';
 
 @Component({
     templateUrl: './create-user.component.html',
@@ -28,6 +29,7 @@ export class CreateUserComponent implements OnInit {
     searchedUsers: any;
     showList: boolean = false;
     timeOut: any;
+    roleList: any = [];
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
     toInt(num: string) {
@@ -86,13 +88,49 @@ export class CreateUserComponent implements OnInit {
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
-                //  this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
+                this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
             }
-            // this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
+            this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
         }
+        //this.roles = this.roles.filter((role) => role.ShowExternal);
+        this.roleList = this.roles.reduce((accumulator, child) => {
+          if (child.ShowExternal) {
+            return [
+              ...accumulator,
+              child,
+            ];
+          }
+          return accumulator;
+        }, []);
     }
 
     changeHandler() {
+        if (this.user.IsRIInternal) {
+          this.roleList = this.roles;
+        } else if (!this.user.IsRIInternal) {
+          this.riUserName = '';
+          this.roleList = this.roles.reduce((accumulator, child) => {
+            if (child.ShowExternal) {
+              return [
+                ...accumulator,
+                child,
+              ];
+            }
+            return accumulator;
+          }, []);
+          this.user = <User>{
+            FirstName: '',
+            LastName: '',
+            UserName: '',
+            EmailID: '',
+            BranchID: '',
+            Phone: '',
+            role: '',
+            IsActive: true,
+            isSeasonal: true,
+            IsRIInternal: false,
+          };
+        }
         this.formChanged.emit('changed');
     }
 

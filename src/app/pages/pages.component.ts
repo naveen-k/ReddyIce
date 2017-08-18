@@ -37,31 +37,42 @@ export class Pages implements OnInit {
   ngOnInit() {
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
-      this.userDetails = response;
+      this.userDetails = Object.assign({}, response);
+      let pages: any;
+      //const pages = PAGES_MENU.slice();
       if (this.userDetails.MenuOptions.length) {
-        PAGES_MENU[0].children = PAGES_MENU[0].children.filter((child) => {
-          let exist = false;
-          this.userDetails.MenuOptions.forEach((option) => {
-            if (option.Key === child.path) {
-              exist = true;
-            }
-          });
-          if (exist) {
-            return child;
-          }
-        });
+        pages = PAGES_MENU.reduce((acc, menu) => (
+          [
+            {
+              ...menu,
+              children: menu.children.reduce((accumulator, child) => {
+                let exist = false;
+                this.userDetails.MenuOptions.forEach((option) => {
+                  if (option.Key === child.path) {
+                    exist = true;
+                  }
+                });
+                if (exist) {
+                  return [
+                    ...accumulator,
+                    child,
+                  ];
+                }
+                return accumulator;
+              }, []),
+            },
+          ]), []);
       }
-
-      this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
+      this._menuService.updateMenuByRoutes(<Routes>pages);
 
       if (this._redirectToHome) {
-        this.router.navigateByUrl(`/pages/${PAGES_MENU[0].children[0].path}`);
-      } 
+        this.router.navigateByUrl(`/pages/${pages[0].children[0].path}`);
+      }
     });
 
     this._onRouteChange = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this._redirectToHome = event.urlAfterRedirects === '/pages';        
+        this._redirectToHome = event.urlAfterRedirects === '/pages';
         this._onRouteChange.unsubscribe();
       }
     });

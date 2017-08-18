@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="row page-header rowContainer">
-    <div class="col-md-5 padding-eater first-column">
+    <div *ngIf="!isNewUser" class="col-md-5 padding-eater first-column">
       <label for="username" class="control-label">Username</label>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
         #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="isNewUser">
@@ -64,8 +64,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5 padding-eater second-column">
+    <div *ngIf="!isNewUser" class="col-md-2"></div>
+    <div [ngClass]="{'col-md-12': isNewUser}" class="col-md-5 padding-eater second-column">
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
         required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [readOnly]="user.IsRIInternal" (change)="changeHandler()">
@@ -84,7 +84,7 @@
     <div class="col-md-5 padding-eater first-column">
       <label for="inputEmail3" class="control-label">Phone</label>
       <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-        pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [readOnly]="user.IsRIInternal" (change)="changeHandler()">
+        pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (change)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <!-- <div *ngIf="Phone.errors.required" class="custom-tooltip bottom">
@@ -99,7 +99,7 @@
     <div class="col-md-5 padding-eater">
       <label for="exampleSelect1">Role</label>
       <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler()">
-        <option *ngFor="let role of roles" [value]="role.RoleID">{{role.RoleName}}</option>
+        <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
       </select>
     </div>
   </div>
