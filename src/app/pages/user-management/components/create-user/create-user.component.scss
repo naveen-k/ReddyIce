@@ -111,3 +111,18 @@ input:focus + .error-message {
     }
   }
 }
+.search-container{
+ position: absolute;
+    height: 200px;
+    overflow-y: scroll;
+    width: calc(100% - 30px);
+    padding: 10px 5px;
+    border: 1px solid #ccc;
+    background: #fff;
+    z-index: 12;
+    .search-item{
+      padding: 5px 0px;
+      border-bottom: 1px solid #d6cccc;
+
+    }
+}

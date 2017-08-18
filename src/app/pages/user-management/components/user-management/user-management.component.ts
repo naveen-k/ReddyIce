@@ -209,7 +209,7 @@ export class UserManagementComponent implements OnInit {
       } else if (response.IsDistributor) {
         this.getBranches();
         this.isDistributorAdmin = true;
-        this.getUserList(response.Distributor.DistributorMasterId);
+       // this.getUserList(response.Distributor.DistributorMasterId);
       }
     });
 

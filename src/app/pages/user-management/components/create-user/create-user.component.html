@@ -4,7 +4,14 @@
       <ba-checkbox [(ngModel)]="user.IsRIInternal" (ngModelChange)="changeHandler()" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
     </div>
     <div *ngIf="user.IsRIInternal" class="col-md-5">
-      <input type="text" class="form-control" placeholder="Search">
+      <input name="riUser" type="text" class="form-control"  placeholder="Search"
+       [(ngModel)]="riUserName" (ngModelChange)="searchUserHandler(riUserName)">
+      <div *ngIf="riUserList.length > 0" class="search-container">
+          <div class="search-item" >User 1 </div>
+          <div class="search-item" >User 1 </div>
+          <div class="search-item" >User 1 </div>
+          <div class="search-item" >User 1 </div>
+      </div>
     </div>
     <div class="col-md-2">
       <!--How can we allow user to submit a form without validations?  -->
