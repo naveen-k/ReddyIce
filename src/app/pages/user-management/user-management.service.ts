@@ -1,3 +1,4 @@
+import { UserService } from '../../shared/user.service';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from '../../shared/http.service';
@@ -6,7 +7,11 @@ import { User } from './user-management.interface';
 
 @Injectable()
 export class UserManagementService {
-    constructor(private http: HttpService, private tempHttp: Http) { }
+    constructor(
+        private http: HttpService,
+        private tempHttp: Http,
+        private userService: UserService,
+    ) { }
 
     getUsers(id?: number): Observable<User[]> {
         const url = id ? `api/user?DistributorCopackerID=${id}` : 'api/user';
@@ -50,7 +55,11 @@ export class UserManagementService {
     }
 
     searchInternalUsers(searchString: string): Observable<any[]> {
-        const searchObj = { 'PrivateKey1': 'asaxena@reddyice.com', 'PrivateKey2': 'C10571', 'SearchString': searchString };
+        let searchObj = {};
+        if (this.userService.getPrivateKeys()) {
+            searchObj = this.userService.getPrivateKeys();            
+        }
+        searchObj['SearchString'] = searchString;
         return this.http.post('api/user/searchriuser', searchObj).map((res) => res.json());
     }
 }

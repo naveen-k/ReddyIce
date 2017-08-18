@@ -1,10 +1,10 @@
 <form #customerForm="ngForm" class="user-form" >
   <div class="row customerHeader">
     <div *ngIf="!isDistributorAdmin" class="col-md-3" style="margin-top: 7px;">
-      <ba-checkbox [(ngModel)]="user.IsRIInternal" (ngModelChange)="changeHandler()" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+      <ba-checkbox [(ngModel)]="user.IsRIInternal" (ngModelChange)="changeHandler();" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
     </div>
     <div *ngIf="user.IsRIInternal" class="col-md-5">
-      <input name="riUser" type="text" (blur) = "showList = false;" class="form-control" placeholder="Search" [(ngModel)]="riUserName" (ngModelChange)="searchUserHandler(riUserName)">
+      <input name="riUser" autocomplete="off" type="text"  class="form-control" placeholder="Search" [(ngModel)]="riUserName" (ngModelChange)="searchUserHandler(riUserName)">
       <div *ngIf="showList" class="search-container">
         <div class="search-item" *ngFor="let u of riUserList" (click)="userSelected(u)">{{u}}</div>
       </div>

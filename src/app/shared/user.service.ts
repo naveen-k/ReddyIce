@@ -8,6 +8,7 @@ export class UserService {
     API_ENDPOINT = 'http://frozen.reddyice.com/DPServicesnew/';
     constructor(private http: HttpService) { }
     userDetails: UserDetails;
+    privateKeys: any;
     getUser(): any {
         if (!localStorage.getItem('user')) { return {}; }
         return JSON.parse(localStorage.getItem('user'));
@@ -22,5 +23,15 @@ export class UserService {
         this.userDetails = user;
         return user;
       });
+    }
+
+    setPrivateKeys(values) {
+        // this.privateKeys = values;        
+        values = values || '';
+        localStorage.setItem('privateKeys', JSON.stringify(values));
+    }
+
+    getPrivateKeys(): any {
+        return JSON.parse(localStorage.getItem('privateKeys'));
     }
 }

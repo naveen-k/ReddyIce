@@ -95,4 +95,8 @@ export class CreateUserComponent implements OnInit {
     changeHandler() {
         this.formChanged.emit('changed');
     }
+
+    resetUser() {
+        this.user = {};
+    }
 }
