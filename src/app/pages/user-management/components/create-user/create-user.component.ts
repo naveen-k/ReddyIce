@@ -28,6 +28,7 @@ export class CreateUserComponent implements OnInit {
     riUserName: string = '';
     searchedUsers: any;
     showList: boolean = false;
+    selectedSearchUser: boolean = false;
     timeOut: any;
     roleList: any = [];
     constructor(private umService: UserManagementService, private userService: UserService) { }
@@ -67,6 +68,7 @@ export class CreateUserComponent implements OnInit {
         this.user.UserName = user.cn[0] || '';
         this.user.EmailID = user.mail[0] || '';
         this.riUserName = _user;
+        this.selectedSearchUser = true;
     }
 
     onSubmit() {
@@ -118,18 +120,22 @@ export class CreateUserComponent implements OnInit {
             }
             return accumulator;
           }, []);
-          this.user = <User>{
-            FirstName: '',
-            LastName: '',
-            UserName: '',
-            EmailID: '',
-            BranchID: '',
-            Phone: '',
-            role: '',
-            IsActive: true,
-            isSeasonal: true,
-            IsRIInternal: false,
-          };
+          if (this.selectedSearchUser) {
+            this.user = <User>{
+              FirstName: '',
+              LastName: '',
+              UserName: '',
+              EmailID: '',
+              BranchID: '',
+              Phone: '',
+              role: '',
+              IsActive: true,
+              IsSeasonal: true,
+              IsRIInternal: false,
+            };
+            this.selectedSearchUser = false;
+          }
+
         }
         this.formChanged.emit('changed');
     }

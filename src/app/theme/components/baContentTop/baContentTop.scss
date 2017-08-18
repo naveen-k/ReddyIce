@@ -15,6 +15,10 @@ h1.al-title {
   font-size: 24px;
   text-transform: uppercase;
   opacity: 0.9;
+  .distributorName {
+    font-weight: 300;
+    text-transform: capitalize;
+  }
 }
 
 .al-breadcrumb {

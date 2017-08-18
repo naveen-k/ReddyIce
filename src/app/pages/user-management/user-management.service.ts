@@ -14,7 +14,7 @@ export class UserManagementService {
     ) { }
 
     getUsers(id?: number): Observable<User[]> {
-        const url = id ? `api/user?DistributorCopackerID=${id}` : 'api/user';
+        const url = `api/users?id=${id}`;
         return this.http.get(url).map((res) => res.json());
     }
 
@@ -57,7 +57,7 @@ export class UserManagementService {
     searchInternalUsers(searchString: string): Observable<any[]> {
         let searchObj = {};
         if (this.userService.getPrivateKeys()) {
-            searchObj = this.userService.getPrivateKeys();            
+            searchObj = this.userService.getPrivateKeys();
         }
         searchObj['SearchString'] = searchString;
         return this.http.post('api/user/searchriuser', searchObj).map((res) => res.json());

@@ -11,6 +11,6 @@ export interface User {
   BranchID: string;
   DistributorMasterID?: string;
   distributor?: string;
-  isSeasonal: boolean;
+  IsSeasonal: boolean;
   IsRIInternal?: boolean;
 }

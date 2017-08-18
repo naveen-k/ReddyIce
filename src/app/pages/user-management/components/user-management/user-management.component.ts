@@ -46,7 +46,7 @@ export class UserManagementComponent implements OnInit {
       Phone: '',
       role: '',
       IsActive: true,
-      isSeasonal: true,
+      IsSeasonal: true,
       IsRIInternal: false,
     };
   }
@@ -121,9 +121,12 @@ export class UserManagementComponent implements OnInit {
   }
 
   onSaveUser(user) {
+    delete user.role;
+    delete user.UserName;
     this.service.createUser(user).subscribe((res) => {
       this.notification.success('Success', 'User created successfully');
-      this.userTableData = [...this.userTableData, res];
+      const savedUserlist = [...this.userTableData, res];
+      this.userTableData = savedUserlist;
       //this.userTableData.push(res);
 
     });
@@ -197,7 +200,7 @@ export class UserManagementComponent implements OnInit {
     this.service.getUsers(id).subscribe((res) => {
       this.userTableData = res;
       if (res.length <= 15) {
-        this.paginationData = res;
+        this.userTableData = res;
       }
     });
   }
@@ -209,13 +212,13 @@ export class UserManagementComponent implements OnInit {
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
       if (!response.IsDistributor) {
-        this.getUserList();
+        this.getUserList(parseInt(userId, 10));
         this.getBranches();
         this.getDistributors();
       } else if (response.IsDistributor) {
         this.getBranches();
         this.isDistributorAdmin = true;
-       // this.getUserList(response.Distributor.DistributorMasterId);
+        this.getUserList(parseInt(userId, 10));
       }
     });
 

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 import {GlobalState} from '../../../global.state';
 
@@ -10,7 +10,7 @@ import {GlobalState} from '../../../global.state';
 export class BaContentTop {
 
   public activePageTitle:string = '';
-
+  @Input() userDetails: any;
   constructor(private _state:GlobalState) {
     this._state.subscribe('menu.activeLink', (activeLink) => {
       if (activeLink) {
