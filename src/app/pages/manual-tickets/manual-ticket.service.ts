@@ -49,27 +49,6 @@ export class ManualTicketService {
       currentInv: '12',
       damagedBag: '54',
     },
-    {
-      machine: 'Product2',
-      unit: '$135',
-      deliveredBag: '100',
-      currentInv: '19',
-      damagedBag: '50',
-    },
-    {
-      machine: 'Product3',
-      unit: '$145',
-      deliveredBag: '135',
-      currentInv: '13',
-      damagedBag: '12',
-    },
-    {
-      machine: 'Product4',
-      unit: '$125',
-      deliveredBag: '125',
-      currentInv: '12',
-      damagedBag: '54',
-    },
   ];
 
   getData(): Promise<any> {

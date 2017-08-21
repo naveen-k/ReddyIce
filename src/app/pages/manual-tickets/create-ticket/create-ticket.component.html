@@ -182,11 +182,17 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
-          <td class="table-id ion-edit"></td>
-          <td contenteditable="">{{ item.machine }}</td>
-          <td>{{ item.unit }}</td>
-          <td contenteditable="">{{ item.deliveredBag }}</td>
-          <td contenteditable="">{{ item.currentInv }}</td>
+          <td class="table-id ion-edit alignMiddle"></td>
+          <!-- <td contenteditable="">{{ item.machine }}</td> -->
+          <td class="alignMiddle">
+            <select class="form-control select">
+              <option>301</option>
+              <option>302</option>
+            </select>
+          </td>
+          <td class="alignMiddle">{{ item.unit }}</td>
+          <td class="alignMiddle">{{ item.deliveredBag }}</td>
+          <td class="alignMiddle">{{ item.currentInv }}</td>
         </tr>
       </tbody>
     </table>
@@ -248,12 +254,18 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
-          <td class="table-id ion-edit"></td>
-          <td contenteditable="">{{ item.machine }}</td>
-          <td>{{ item.unit }}</td>
-          <td contenteditable="">{{ item.deliveredBag }}</td>
-          <td contenteditable="">{{ item.currentInv }}</td>
-          <td contenteditable="" *ngIf="showDamagedCol">{{ item.damagedBag }}</td>
+          <td class="table-id ion-edit alignMiddle"></td>
+          <!-- <td contenteditable="">{{ item.machine }}</td> -->
+          <td class="alignMiddle">
+            <select class="form-control select">
+              <option>301</option>
+              <option>302</option>
+            </select>
+          </td>
+          <td class="alignMiddle">{{ item.unit }}</td>
+          <td class="alignMiddle">{{ item.deliveredBag }}</td>
+          <td class="alignMiddle">{{ item.currentInv }}</td>
+          <td class="alignMiddle" *ngIf="showDamagedCol">{{ item.damagedBag }}</td>
         </tr>
       </tbody>
     </table>
