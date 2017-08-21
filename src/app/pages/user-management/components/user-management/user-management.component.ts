@@ -127,12 +127,12 @@ export class UserManagementComponent implements OnInit {
       this.notification.success('Success', 'User created successfully');
       const savedUserlist = [...this.userTableData, res];
       this.userTableData = savedUserlist;
-      //this.userTableData.push(res);
+    
 
     },
-    (error) => {
-      this.notification.error('Error', 'Failed to create user.');
-    });
+      (error) => {
+        this.notification.error('Error', 'Failed to create user.');
+      });
     this.rightCardOpen = !this.rightCardOpen;
     this.hideColumn = !this.hideColumn;
     this.isNewUser = false;
@@ -140,7 +140,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onUpdateUser(user) {
-    console.log('update')
+   
     delete user.Role;
     delete user.MenuOptions;
     delete user.Branch;
@@ -157,9 +157,9 @@ export class UserManagementComponent implements OnInit {
       users.splice(indexPos, 1, res);
       this.userTableData = users;
     },
-    (error) => {
-      this.notification.error('Error', `Failed to update user ${user.UserName}`);
-    });
+      (error) => {
+        this.notification.error('Error', `Failed to update user ${user.UserName}`);
+      });
 
     this.rightCardOpen = !this.rightCardOpen;
     this.hideColumn = !this.hideColumn;
@@ -180,9 +180,9 @@ export class UserManagementComponent implements OnInit {
         this.notification.success('Success', `User ${user.UserName} deleted successfully`);
         this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
       },
-      (error) => {
-        this.notification.error('Error', `Failed to delete user.`);
-      });
+        (error) => {
+          this.notification.error('Error', `Failed to delete user.`);
+        });
     });
 
   }
