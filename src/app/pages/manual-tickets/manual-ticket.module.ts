@@ -1,3 +1,4 @@
+import { ManualTicketService } from './manual-ticket.service';
 import { SharedModule } from '../../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,7 +13,6 @@ import { routing } from './manual-ticket.routing';
 import { TicketManagementComponent } from './ticket-management/ticket-management.component';
 import { CreateTicketComponent } from './create-ticket/create-ticket.component';
 
-import { ManualTicketService } from './ticket-management/manual-ticket.service';
 
 @NgModule({
   imports: [

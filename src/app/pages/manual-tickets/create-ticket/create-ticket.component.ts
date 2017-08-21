@@ -1,4 +1,5 @@
-import { ManualTicketService } from '../ticket-management/manual-ticket.service';
+import { ManualTicketService } from '../manual-ticket.service';
+
 import { Component } from '@angular/core';
 
 @Component({

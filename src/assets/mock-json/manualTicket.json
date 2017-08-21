@@ -1,0 +1,137 @@
+[
+  {
+    "TicketID": 1232,
+    "CustomerID": {
+      "CustomerID": 111,
+      "CustomerName": ""
+    },
+    "HHCustomer": {},
+    "TripID": 1,
+    "TicketTypeID": 1,
+    "SaleTypeID": 1,
+    "DNSImageID": 0,
+    "DNSReason": {},
+    "PODImage": {
+      "PODImageID": "001",
+      "Image": ""
+    },
+    "ReceiverSignatureImageID": "",
+    "CreditCardTransactionID": "",
+    "TicketNumber": "",
+    "IsInvoice": true,
+    "DeliveryDate": "",
+    "PONumber": "",
+    "CashAmount": "$125",
+    "CheckAmount": "",
+    "CheckNumber": "",
+    "CreditCardAmount": "",
+    "ReceiverName": "",
+    "IsDexed": false,
+    "PrintedCopies": 2,
+    "Notes": "",
+    "TaxAmount": "",
+    "IsPaperTicket": true,
+    "IsNoPayment": false,
+    "CardPaymentStatus": "Pending Approval",
+    "TicketDetail": [{
+      "TicketDetailID": 121,
+      "ProductID": 122,
+      "Quantity": 12,
+      "Rate": 1.90,
+      "IsTaxable": true,
+      "TaxPercentage": "",
+      "StartMeterReading": 112,
+      "EndMeterReading": 212
+    }]
+  },
+  {
+    "TicketID": 1233,
+    "CustomerID": {
+      "CustomerID": 112,
+      "CustomerName": ""
+    },
+    "HHCustomer": {},
+    "TripID": 1,
+    "TicketTypeID": 1,
+    "SaleTypeID": 1,
+    "DNSImageID": 0,
+    "DNSReason": {},
+    "PODImage": {
+      "PODImageID": "001",
+      "Image": ""
+    },
+    "ReceiverSignatureImageID": "",
+    "CreditCardTransactionID": "",
+    "TicketNumber": "",
+    "IsInvoice": true,
+    "DeliveryDate": "",
+    "PONumber": "",
+    "CashAmount": "$225",
+    "CheckAmount": "",
+    "CheckNumber": "",
+    "CreditCardAmount": "",
+    "ReceiverName": "",
+    "IsDexed": false,
+    "PrintedCopies": 2,
+    "Notes": "",
+    "TaxAmount": "",
+    "IsPaperTicket": true,
+    "IsNoPayment": false,
+    "CardPaymentStatus": "Approved",
+    "TicketDetail": [{
+      "TicketDetailID": 121,
+      "ProductID": 122,
+      "Quantity": 12,
+      "Rate": 1.90,
+      "IsTaxable": true,
+      "TaxPercentage": "",
+      "StartMeterReading": 112,
+      "EndMeterReading": 212
+    }]
+  },
+  {
+    "TicketID": 1231,
+    "CustomerID": {
+      "CustomerID": 113,
+      "CustomerName": ""
+    },
+    "HHCustomer": {},
+    "TripID": 1,
+    "TicketTypeID": 1,
+    "SaleTypeID": 1,
+    "DNSImageID": 0,
+    "DNSReason": {},
+    "PODImage": {
+      "PODImageID": "001",
+      "Image": ""
+    },
+    "ReceiverSignatureImageID": "",
+    "CreditCardTransactionID": "",
+    "TicketNumber": "",
+    "IsInvoice": true,
+    "DeliveryDate": "",
+    "PONumber": "",
+    "CashAmount": "$325",
+    "CheckAmount": "",
+    "CheckNumber": "",
+    "CreditCardAmount": "",
+    "ReceiverName": "",
+    "IsDexed": false,
+    "PrintedCopies": 2,
+    "Notes": "",
+    "TaxAmount": "",
+    "IsPaperTicket": true,
+    "IsNoPayment": false,
+    "CardPaymentStatus": "Approved",
+    "TicketDetail": [{
+      "TicketDetailID": 121,
+      "ProductID": 122,
+      "Quantity": 12,
+      "Rate": 1.90,
+      "IsTaxable": true,
+      "TaxPercentage": "",
+      "StartMeterReading": 112,
+      "EndMeterReading": 212
+    }]
+  }
+]

@@ -1,6 +1,6 @@
+import { ManualTicketService } from '../manual-ticket.service';
 import { Component } from '@angular/core';
 
-import { ManualTicketService } from './manual-ticket.service';
 import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({

@@ -48,27 +48,27 @@
               <!-- <th>Select</th> -->
               <th class="table-id">Actions</th>
               <th>
-                <span style="cursor:pointer;" (click)="customer.sortField = 'ticketId';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
                     Ticket Number
-                     <i *ngIf="(customer.sortField == 'ticketId')" [ngClass]="(customer.isAsc && customer.sortField == 'ticketId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                     <i *ngIf="(customer.sortField == 'TicketID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                 </span>
               </th>
               <th>
-                <span style="cursor:pointer;" (click)="customer.sortField = 'customerId';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
                     Customer Number
-                    <i *ngIf="(customer.sortField == 'customerId')" [ngClass]="(customer.isAsc && customer.sortField == 'customerId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                    <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                 </span>
               </th>
               <th>
-                <span style="cursor:pointer;" (click)="customer.sortField = 'amount';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
                     Amount
-                    <i *ngIf="(customer.sortField == 'amount')" [ngClass]="(customer.isAsc && customer.sortField == 'amount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                    <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                 </span>
               </th>
-              <th (click)="customer.sortField = 'status';customer.isAsc=!customer.isAsc;">
+              <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;">
                 <span style="cursor:pointer;">
                     Status
-                    <i *ngIf="(customer.sortField == 'status')" [ngClass]="(customer.isAsc && customer.sortField == 'status' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                    <i *ngIf="(customer.sortField == 'CardPaymentStatus')" [ngClass]="(customer.isAsc && customer.sortField == 'CardPaymentStatus' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                 </span>
               </th>
             </tr>
@@ -80,10 +80,10 @@
                   <i class="ion-edit" style="margin-right: 5px"></i>
                   <i class="ion-trash-a"></i>
               </td>
-              <td>{{ item.ticketId }}</td>
-              <td>{{ item.customerId }}</td>
-              <td>{{ item.amount }}</td>
-              <td>{{ item.status }}</td>
+              <td>{{ item.TicketID }}</td>
+              <td>{{ item.CustomerID.CustomerID }}</td>
+              <td>{{ item.CashAmount }}</td>
+              <td>{{ item.CardPaymentStatus }}</td>
             </tr>
           </tbody>
         </table>

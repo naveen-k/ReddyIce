@@ -1,5 +1,6 @@
-import { ManualTicketService } from './ticket-management/manual-ticket.service';
-import { Component } from '@angular/core';
+import { ManualTicketService } from './manual-ticket.service';
+
+import { Component, OnInit, NgModule } from '@angular/core';
 
 @Component({
   selector: 'manual-ticket',
@@ -7,12 +8,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./manual-ticket.component.scss'],
 })
 
-export class ManualTicketComponent {
+export class ManualTicketComponent implements OnInit {
   smartTableData: any;
   constructor(protected service: ManualTicketService) {
-    this.smartTableData = service.smartTableData;
+    // this.smartTableData = service.smartTableData;
+    service.getTickets().subscribe (
+      val => this.smartTableData = val,
+      // err => console.error(err)
+    );
   }
   isNewTicket: boolean = false;
+
+  ngOnInit() {
+
+  }
 
   createNewTicket(newCustomer) {
     this.isNewTicket = !this.isNewTicket;

@@ -1,8 +1,19 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ManualTicketService {
-
+  result: any;
+  constructor(private _http: Http) {
+    // console.log('http', this._http);
+  }
+  getTickets() {
+    // return this._http.get('../../shared/manualTicket.json')
+    return this._http.get('./assets/mock-json/manualTicket.json')
+    .map(res => res.json());
+  }
   smartTableData = [
     {
       ticketId: 6776237,
