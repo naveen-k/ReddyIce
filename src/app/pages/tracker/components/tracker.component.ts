@@ -26,4 +26,6 @@ export class TrackerComponent {
     });
   }
 
+  createNewTicket(event) {}
+
 }

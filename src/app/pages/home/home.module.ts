@@ -4,7 +4,7 @@ import { HomeService } from './home.service';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { TablesModule } from '../tables/tables.module';
+// import { TablesModule } from '../tables/tables.module';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NgaModule } from '../../theme/nga.module';
