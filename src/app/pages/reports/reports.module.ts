@@ -1,3 +1,4 @@
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CommonModule } from '@angular/common';
@@ -16,7 +17,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [ReportsComponent],
-    imports: [Ng2SmartTableModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule],
+    imports: [Ng2SmartTableModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule, NgbModule],
 })
 export class ReportsModule {
 

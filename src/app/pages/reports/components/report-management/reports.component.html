@@ -20,19 +20,31 @@
     <hr>
     <div class="row">
         <div class="col-md-2 padding-top text-right">
-            <label>Start Date</label>
+            <label class="paddingTopDate">Start Date</label>
         </div>
         <div class="col-md-3">
-            07/08/2017
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
+                <button class="input-group-addon" (click)="d.toggle()" type="button">
+                  <i class="ion-calendar"></i>
+                  <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                </button>
+            </div>
         </div>
         <div class="col-md-2 padding-top text-right">
-            <label>End Date</label>
+            <label class="paddingTopDate">End Date</label>
         </div>
         <div class="col-md-3">
-            08/08/2017
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
+                <button class="input-group-addon" (click)="d.toggle()" type="button">
+                  <i class="ion-calendar"></i>
+                  <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                </button>
+            </div>
         </div>
         <div class="col-md-2">
-            <a class="btn btn-danger btn-round" style="margin-top: -7px;">View Report</a>
+            <a class="btn btn-danger btn-round" style="margin-top: 2px;">View Report</a>
         </div>
     </div>
     <hr>
