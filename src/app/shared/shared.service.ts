@@ -11,8 +11,8 @@ export class SharedService {
     private _branches: any;
     constructor(http: HttpService) { }
 
-    getBranches(): Observable<any[]> {
-        if (!this._branches) { return this._branches; }
+    getBranches(): Observable<any> {
+        if (this._branches) { return this._branches; }
         return this.http.get('api/branch').map((res) => res.json());
     }
 }
