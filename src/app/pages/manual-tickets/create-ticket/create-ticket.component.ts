@@ -13,6 +13,7 @@ export class CreateTicketComponent {
   showDamagedCol: boolean = false;
   showHideTableCols: boolean = true;
   showHideDSDCols: boolean = false;
+  toggleTextbox: boolean = false;
   constructor(protected service: ManualTicketService) {
     this.smartTableData = service.machineSmartTableData;
   }
@@ -37,6 +38,10 @@ export class CreateTicketComponent {
       this.showHideTableCols = true;
     }
   };
+
+  editManualTicketsPBS() {
+    this.toggleTextbox = !this.toggleTextbox;
+  }
 
   isChecked: boolean = false;
 }

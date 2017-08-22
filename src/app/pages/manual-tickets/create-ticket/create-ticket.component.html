@@ -182,7 +182,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
-          <td class="table-id ion-edit alignMiddle"></td>
+          <td class="table-id alignMiddle" style="cursor: pointer;">
+            <i class="ion-edit" (click)="editManualTickets()"></i>
+          </td>
           <!-- <td contenteditable="">{{ item.machine }}</td> -->
           <td class="alignMiddle">
             <select class="form-control select">
@@ -254,7 +256,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
-          <td class="table-id ion-edit alignMiddle"></td>
+          <td class="table-id alignMiddle" style="cursor: pointer;">
+            <i class="ion-edit" (click)="editManualTicketsPBS()"></i>
+          </td>
           <!-- <td contenteditable="">{{ item.machine }}</td> -->
           <td class="alignMiddle">
             <select class="form-control select">
@@ -262,10 +266,22 @@
               <option>302</option>
             </select>
           </td>
-          <td class="alignMiddle">{{ item.unit }}</td>
-          <td class="alignMiddle">{{ item.deliveredBag }}</td>
-          <td class="alignMiddle">{{ item.currentInv }}</td>
-          <td class="alignMiddle" *ngIf="showDamagedCol">{{ item.damagedBag }}</td>
+          <td class="alignMiddle">
+            <input *ngIf = "toggleTextbox" type="text" class="form-control" value="{{ item.unit }}">
+            <span *ngIf = "!toggleTextbox">{{ item.unit }}</span>
+          </td>
+          <td class="alignMiddle">
+            <input *ngIf = "toggleTextbox" type="text" class="form-control" value="{{ item.deliveredBag }}">
+            <span *ngIf = "!toggleTextbox">{{ item.deliveredBag }}</span>
+          </td>
+          <td class="alignMiddle">
+            <input *ngIf = "toggleTextbox" type="text" class="form-control" value="{{ item.currentInv }}">
+            <span *ngIf = "!toggleTextbox">{{ item.currentInv }}</span>
+          </td>
+          <td class="alignMiddle">
+            <input *ngIf = "showDamagedCol && toggleTextbox" type="text" class="form-control" value="{{ item.damagedBag }}">
+            <span *ngIf = "showDamagedCol && !toggleTextbox">{{ item.damagedBag }}</span>
+          </td>
         </tr>
       </tbody>
     </table>
