@@ -94,7 +94,7 @@ export class CreateUserComponent implements OnInit {
             }
             this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
         }
-        //this.roles = this.roles.filter((role) => role.ShowExternal);
+        // this.roles = this.roles.filter((role) => role.ShowExternal);
         this.roleList = this.roles.reduce((accumulator, child) => {
           if (child.ShowExternal) {
             return [

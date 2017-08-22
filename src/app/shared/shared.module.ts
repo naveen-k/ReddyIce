@@ -1,3 +1,4 @@
+import { SharedService } from './shared.service';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from './components/modal/modal.component';
 import { UserService } from './user.service';
@@ -30,7 +31,7 @@ import { NgModule } from '@angular/core';
         ModalComponent,
     ],
     imports: [CommonModule, NgbModalModule],
-    providers: [HttpService, UserService],
+    providers: [HttpService, UserService, SharedService],
 })
 export class SharedModule {
 
