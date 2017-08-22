@@ -116,7 +116,7 @@
       <div class="col-md-5 padding-eater">
         <br/><br/>
         <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-        <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"></ba-checkbox>
+        <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()" [disabled]="isNewUser"></ba-checkbox>
         <!-- <label class="custom-checkbox nowrap userMgmtIsActive">
           <input type="checkbox" [(ngModel)]="isChecked">
           <span class="">isActive?</span>
