@@ -12,7 +12,11 @@ export class SharedService {
     constructor(http: HttpService) { }
 
     getBranches(): Observable<any> {
-        if (this._branches) { return this._branches; }
-        return this.http.get('api/branch').map((res) => res.json());
+        if (this._branches) { return Observable.of(this._branches); }
+        return this.http.get('api/branch').map((res) => res.json()).map((res) => {
+            // Cache branch response
+            this._branches = res;
+            return res;
+        });
     }
 }

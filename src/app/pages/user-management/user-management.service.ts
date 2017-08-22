@@ -8,16 +8,23 @@ import { User } from './user-management.interface';
 
 @Injectable()
 export class UserManagementService extends SharedService {
+    private _users: any = {};
+
     constructor(
-        protected http: HttpService,        
+        protected http: HttpService,
         private userService: UserService,
     ) {
         super(http);
-     }
+    }
+
 
     getUsers(id?: number): Observable<User[]> {
+        if (id && this._users[id]) { return Observable.of(this._users[id]); }
         const url = `api/users?id=${id}`;
-        return this.http.get(url).map((res) => res.json());
+        return this.http.get(url).map((res) => res.json()).map((res) => {
+            this._users[id] = res;
+            return res;
+        });
     }
 
     createUser(data): Observable<User> {
