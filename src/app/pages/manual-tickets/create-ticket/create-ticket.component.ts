@@ -14,7 +14,12 @@ export class CreateTicketComponent {
   showHideTableCols: boolean = true;
   showHideDSDCols: boolean = false;
   toggleTextbox: boolean = false;
+  allBranches: any;
   constructor(protected service: ManualTicketService) {
+    this.service.getBranches().subscribe((response) => {
+      this.allBranches = response;
+      alert(this.allBranches);
+    });
     this.smartTableData = service.machineSmartTableData;
   }
 
