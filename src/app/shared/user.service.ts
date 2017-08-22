@@ -5,10 +5,12 @@ import { UserDetails } from './user.interface';
 import { HttpService } from './http.service';
 @Injectable()
 export class UserService {
-    API_ENDPOINT = 'http://frozen.reddyice.com/DPServicesnew/';
-    constructor(private http: HttpService) { }
     userDetails: UserDetails;
+
+    constructor(private http: HttpService) { }
     privateKeys: any;
+
+
     getUser(): any {
         if (!localStorage.getItem('user')) { return {}; }
         return JSON.parse(localStorage.getItem('user'));
@@ -19,10 +21,12 @@ export class UserService {
     }
 
     getUserDetails(id: string): Observable<UserDetails> {
-      return this.http.get(`api/user?UserId=${id}`).map((res) => res.json()).map((user) => {
-        this.userDetails = user;
-        return user;
-      });
+        if (this.userDetails) { return Observable.of(this.userDetails); }
+        return this.http.get(`api/user?UserId=${id}`).map((res) => res.json()).map((user) => {
+            this.setUser(user);
+            this.userDetails = user;
+            return user;
+        });
     }
 
     setPrivateKeys(values) {
