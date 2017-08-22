@@ -1,3 +1,4 @@
+import { SharedService } from '../../shared/shared.service';
 import { UserService } from '../../shared/user.service';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
@@ -6,16 +7,24 @@ import { Observable } from 'rxjs/Rx';
 import { User } from './user-management.interface';
 
 @Injectable()
-export class UserManagementService {
+export class UserManagementService extends SharedService {
+    private _users: any = {};
+
     constructor(
-        private http: HttpService,
-        private tempHttp: Http,
+        protected http: HttpService,
         private userService: UserService,
-    ) { }
+    ) {
+        super(http);
+    }
+
 
     getUsers(id?: number): Observable<User[]> {
+        if (id && this._users[id]) { return Observable.of(this._users[id]); }
         const url = `api/users?id=${id}`;
-        return this.http.get(url).map((res) => res.json());
+        return this.http.get(url).map((res) => res.json()).map((res) => {
+            this._users[id] = res;
+            return res;
+        });
     }
 
     createUser(data): Observable<User> {
@@ -47,11 +56,6 @@ export class UserManagementService {
     getDistributerAndCopacker(): Observable<any> {
         // change `tempHttp` to `http` once actual api is ready
         return this.http.get('api/Distributor').map((res) => res.json());
-    }
-
-    getBranches(): Observable<any> {
-        // change `tempHttp` to `http` once actual api is ready
-        return this.http.get('api/branch').map((res) => res.json());
     }
 
     searchInternalUsers(searchString: string): Observable<any[]> {

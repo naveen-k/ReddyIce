@@ -10,6 +10,7 @@ import { Component, OnInit, NgModule } from '@angular/core';
 
 export class ManualTicketComponent implements OnInit {
   smartTableData: any;
+  allBranches: any;
   constructor(protected service: ManualTicketService) {
     // this.smartTableData = service.smartTableData;
     service.getTickets().subscribe (
@@ -20,7 +21,13 @@ export class ManualTicketComponent implements OnInit {
   isNewTicket: boolean = false;
 
   ngOnInit() {
+    this.getBranches();
+  }
 
+  getBranches() {
+    this.service.getBranches().subscribe((response) => {
+      this.allBranches = response;
+    });
   }
 
   createNewTicket(newCustomer) {

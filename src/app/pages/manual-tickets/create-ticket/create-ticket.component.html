@@ -13,9 +13,8 @@
   <div class="row calendarRow">
     <div class="form-group col-md-6">
       <label for="exampleSelect1">Branch</label>
-      <select class="form-control" id="exampleSelect1">
-          <option>301</option>
-          <option>302</option>
+      <select class="form-control">
+          <option *ngFor="let obj of allBranches" [value]="obj.value">{{obj.BranchID}}</option>
       </select>
     </div>
     <div class="col-md-6">
