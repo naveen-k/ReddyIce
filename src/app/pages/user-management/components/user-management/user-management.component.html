@@ -100,7 +100,7 @@
   </div>
   <div [hidden]="!rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
     <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
-      <span (click)="closeRightCard($event)" class="ion-close-round addCustCloseIcon"></span>
+      <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
       <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)"
         (onUpdateUser)="onUpdateUser($event)" (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches"
         [isDistributorAdmin]="isDistributorAdmin" [distributorsAndCopackers]="distributorsAndCopackers" [userDetails]="userDetails">
