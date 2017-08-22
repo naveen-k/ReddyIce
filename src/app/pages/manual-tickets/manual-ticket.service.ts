@@ -1,3 +1,4 @@
+import { Http } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { SharedService } from '../../shared/shared.service';
 import { Injectable } from '@angular/core';
@@ -7,14 +8,14 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ManualTicketService extends SharedService {
   result: any;
-  constructor(protected http: HttpService ) {
+  constructor(protected http: HttpService, private tmpHttp: Http ) {
     super(http);
   }
   getTickets() {
     
     // return this._http.get('../../shared/manualTicket.json')
-    // return this.http.get('./assets/mock-json/manualTicket.json')
-    return this.http.get('api/manualticket')
+    return this.tmpHttp.get('./assets/mock-json/manualTicket.json')
+    // return this.http.get('api/manualticket')
     .map(res => res.json());
   }
   smartTableData = [
