@@ -47,8 +47,8 @@ export class Login implements OnInit {
           this.router.navigate(['']);
         }
       }, (error) => {
-        console.log('login-error', error);
-        this.notification.error('Error', 'Failed to login.');
+        console.log('login-error', error );
+        this.notification.error('Error', 'Provided username or password is incorrect');
       });
     }
   }

@@ -6,7 +6,7 @@ import { Injectable, Pipe, PipeTransform } from '@angular/core';
 
 export class GenericSort implements PipeTransform {
     transform(array: any, sortField: string, isAsc: boolean): any {
-        if (!array) { return array; }
+        if (!array || !sortField) { return array; }
         array.sort((a: any, b: any) => {
             if (isAsc) {
                 if (a[sortField] < b[sortField]) {

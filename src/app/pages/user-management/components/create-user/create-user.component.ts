@@ -11,9 +11,21 @@ import { User } from '../../user-management.interface';
     selector: 'create-user',
 })
 export class CreateUserComponent implements OnInit {
+
+    private _roles: any[];
+
     @Input() user: any;
     @Input() isNewUser: boolean;
-    @Input() roles: any;
+    @Input()
+    get roles(): any {
+        return this._roles;
+    }
+    set roles(values) {
+        if (!values) { return; }
+        this._roles = values;
+        this.filterRoles();
+    }
+
     @Input() branches: any;
     @Input() userDetails: any;
     @Input() distributorsAndCopackers: any;
@@ -95,46 +107,58 @@ export class CreateUserComponent implements OnInit {
             this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
         }
         // this.roles = this.roles.filter((role) => role.ShowExternal);
+        // this.roleList = this.roles.reduce((accumulator, child) => {
+        //   if (child.ShowExternal) {
+        //     return [
+        //       ...accumulator,
+        //       child,
+        //     ];
+        //   }
+        //   return accumulator;
+        // }, []);        
+    }
+
+    filterRoles() {
         this.roleList = this.roles.reduce((accumulator, child) => {
-          if (child.ShowExternal) {
-            return [
-              ...accumulator,
-              child,
-            ];
-          }
-          return accumulator;
+            if (child.ShowExternal) {
+                return [
+                    ...accumulator,
+                    child,
+                ];
+            }
+            return accumulator;
         }, []);
     }
 
     changeHandler() {
         if (this.user.IsRIInternal) {
-          this.roleList = this.roles;
+            this.roleList = this.roles;
         } else if (!this.user.IsRIInternal) {
-          this.riUserName = '';
-          this.roleList = this.roles.reduce((accumulator, child) => {
-            if (child.ShowExternal) {
-              return [
-                ...accumulator,
-                child,
-              ];
+            this.riUserName = '';
+            this.roleList = this.roles.reduce((accumulator, child) => {
+                if (child.ShowExternal) {
+                    return [
+                        ...accumulator,
+                        child,
+                    ];
+                }
+                return accumulator;
+            }, []);
+            if (this.selectedSearchUser) {
+                this.user = <User>{
+                    FirstName: '',
+                    LastName: '',
+                    UserName: '',
+                    EmailID: '',
+                    BranchID: '',
+                    Phone: '',
+                    role: '',
+                    IsActive: true,
+                    IsSeasonal: true,
+                    IsRIInternal: false,
+                };
+                this.selectedSearchUser = false;
             }
-            return accumulator;
-          }, []);
-          if (this.selectedSearchUser) {
-            this.user = <User>{
-              FirstName: '',
-              LastName: '',
-              UserName: '',
-              EmailID: '',
-              BranchID: '',
-              Phone: '',
-              role: '',
-              IsActive: true,
-              IsSeasonal: true,
-              IsRIInternal: false,
-            };
-            this.selectedSearchUser = false;
-          }
 
         }
         this.formChanged.emit('changed');

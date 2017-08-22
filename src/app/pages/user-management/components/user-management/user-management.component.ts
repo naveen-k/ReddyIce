@@ -220,6 +220,7 @@ export class UserManagementComponent implements OnInit {
       this.userDetails = response;
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
+      console.log(this.userRoles);
       if (!response.IsDistributor) {
         this.getUserList(parseInt(userId, 10));
         this.getBranches();
