@@ -20,7 +20,7 @@ export class UserManagementService extends SharedService {
 
     getUsers(id?: number): Observable<User[]> {
         if (id && this._users[id]) { return Observable.of(this._users[id]); }
-        const url = `api/users?id=${id}`;
+        const url = `api/user?id=${id}`;
         return this.http.get(url).map((res) => res.json()).map((res) => {
             this._users[id] = res;
             return res;

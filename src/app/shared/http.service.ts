@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class HttpService extends Http {
-    API_ENDPOINT = 'http://frozen.reddyice.com/DPServicesnew/';
+    // API_ENDPOINT = 'http://frozen.reddyice.com/DPServicesnew/';
+    API_ENDPOINT = 'http://frozen.reddyice.com/myiceboxservice_dev/';
     constructor(backend: XHRBackend, defaultOptions: RequestOptions, private router: Router) {
         super(backend, defaultOptions);
         // const token = localStorage.getItem('auth_token'); // your custom token getter function here
