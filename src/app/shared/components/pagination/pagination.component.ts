@@ -4,8 +4,9 @@ import { Pages } from '../../../pages/pages.component';
     selector: 'pagination',
     template: `
         <nav aria-label="Page navigation example" [hidden]="tableData.length<=options.itemPerPage">
-          <span> records {{options.start}} - {{options.end}} of {{tableData.length}}</span>
-          <ul class="pagination justify-content-end">
+        <div class="row"> 
+        <div class='col-md-4' style="padding: 10px;"> records {{options.start}} - {{options.end}} of {{tableData.length}}</div>
+          <ul class="pagination justify-content-end col-md-8">
             <li class="page-item" [ngClass]="{'disabled':currentPageIndex==1}">
               <a class="page-link" (click)="pageChangeHandler(currentPageIndex-1)">Previous</a>
             </li>
@@ -17,6 +18,7 @@ import { Pages } from '../../../pages/pages.component';
               <a class="page-link" (click)="pageChangeHandler(currentPageIndex+1)">Next</a>
             </li>
           </ul>
+          </div>
         </nav>
     `,
 })

@@ -67,17 +67,3 @@ select.form-control:not([size]):not([multiple]) {
   border-left-color: transparent;
   left: 56%;
 }
-.custom-tooltip-ion:hover .tooltiptext{
-visibility: visible;
-}
-.tooltiptext {
-    visibility: hidden;
-    background-color: #ed7878;
-    width: auto;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    position: absolute;
-    padding: 2px 5px;
-    line-height: 20px;
-}

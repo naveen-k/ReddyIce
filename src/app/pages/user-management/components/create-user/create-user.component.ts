@@ -26,6 +26,15 @@ export class CreateUserComponent implements OnInit {
         this._roles = values;
         this.filterRoles();
     }
+     @Input() 
+     get action(): any {
+         return this;
+     }
+    set action(values) {
+        if (values === '') { return; }
+      this.actionName = values;
+      console.log(values);
+    }
 
     @Input() branches: any;
     @Input() userDetails: any;
@@ -36,7 +45,8 @@ export class CreateUserComponent implements OnInit {
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
 
     @Output() formChanged = new EventEmitter();
-
+   
+    actionName: string;
     riUserList: any = [];
     riUserName: string = '';
     searchedUsers: any;
@@ -44,6 +54,7 @@ export class CreateUserComponent implements OnInit {
     selectedSearchUser: boolean = false;
     timeOut: any;
     roleList: any = [];
+    
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
     toInt(num: string) {
@@ -99,6 +110,7 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log( this.user);
         // this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';

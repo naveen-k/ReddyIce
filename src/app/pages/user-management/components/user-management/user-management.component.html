@@ -1,16 +1,22 @@
-<div class="row page-header user-details">
-  <div class="col-md-6" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
+<div class="row page-header user-details padding-eater">
+  <div class="col-md-6 padding-eater" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
     <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
     <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
-        <div class="col-md-12">
-          <input type="text" class="form-control" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-12':rightCardOpen}" id="input01"
-            [(ngModel)]="customer.searchString" placeholder="Search">
-        </div>
-        <div class="col-md-6 add-new-user">
-          <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right" [disabled]="rightCardOpen">
+        <div class="col-md-12 add-new-user">
+
+          <div style="float:right; width:60%; width:auto;">
+            <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn" [disabled]="rightCardOpen">
               Add User
           </button>
+          </div>
+          <div style="float:right;  width:40%;; width:auto; margin-right:30px;">
+            <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
+          </div>
+
+
+
+
         </div>
       </div>
       <br>
@@ -22,7 +28,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Action</th>
+              <th width="100px;">Action</th>
               <th *ngIf="!hideColumn">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'FirstName';customer.isAsc=!customer.isAsc;">
                     First Name
@@ -66,9 +72,9 @@
                     Branch
                     <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
-              </th>
-              <th *ngIf="!isDistributorAdmin">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
+                </th>
+                <th *ngIf="!isDistributorAdmin">
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
                     RI Internal
                     <i *ngIf="(customer.sortField === 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField === 'riinternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
@@ -79,11 +85,15 @@
             <!--Removed sorting functionality as it was causing rendering issues  -->
             <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
+                <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px">
+                   <span class="tooltiptext">View</span>
+                </i>
+                
                 <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px">
-                  <span class="tooltiptext">Edit</span>
+                   <span class="tooltiptext">Edit</span>
                 </i>
                 <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)">
-                  <span class="tooltiptext">Delete</span>
+                   <span class="tooltiptext">Delete</span>
                 </i>
               </td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }}</td>
@@ -107,8 +117,12 @@
       <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
       <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)"
         (onUpdateUser)="onUpdateUser($event)" (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches"
-        [isDistributorAdmin]="isDistributorAdmin" [distributorsAndCopackers]="distributorsAndCopackers" [userDetails]="userDetails">
+        [isDistributorAdmin]="isDistributorAdmin" [distributorsAndCopackers]="distributorsAndCopackers" [userDetails]="userDetails"
+        [action]='action'>
       </create-user>
+
     </ba-card>
+
   </div>
+
 </div>
