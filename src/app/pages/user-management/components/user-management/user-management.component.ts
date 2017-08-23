@@ -24,6 +24,7 @@ export class UserManagementComponent implements OnInit {
   userDetails: UserDetails;
   formIsDirty: boolean = false;
   isDistributorExist: boolean = false;
+  isEditClicked: boolean = false;
 
   constructor(
     private service: UserManagementService,
@@ -108,6 +109,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
+    this.isEditClicked = true;
     this.newUser = Object.assign({}, user);
     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
     this.newUser.RoleID = user.Role ? user.Role.RoleID : '';

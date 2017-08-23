@@ -54,15 +54,15 @@
                 </span>
               </th> -->
               <th>
-                    Role
-              <th *ngIf="!hideColumn && !isDistributorExist">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'distributor';customer.isAsc=!customer.isAsc;">
+                Role
+                <th *ngIf="!hideColumn && !isDistributorExist">
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'distributor';customer.isAsc=!customer.isAsc;">
                     Distributor
                     <i *ngIf="(customer.sortField === 'role')" [ngClass]="(customer.isAsc && customer.sortField === 'role' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
-              </th>
-              <th *ngIf="!hideColumn">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
+                </th>
+                <th *ngIf="!hideColumn">
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                     Branch
                     <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
@@ -72,7 +72,7 @@
                     RI Internal
                     <i *ngIf="(customer.sortField === 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField === 'riinternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
-              </th>
+                </th>
             </tr>
           </thead>
           <tbody>

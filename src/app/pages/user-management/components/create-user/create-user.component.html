@@ -1,7 +1,7 @@
 <form #customerForm="ngForm" class="user-form" >
   <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid" (click)="onSubmit()">Save</button>
 
-  <div class="row rowContainer margin-eater">
+  <div class="row rowContainer margin-eater" [hidden]="!isNewUser">
     <div *ngIf="!isDistributorAdmin" class="col-md-5 padding-eater" style="margin-top: 7px;">
       <ba-checkbox [(ngModel)]="user.IsRIInternal" (ngModelChange)="changeHandler();" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
     </div>
@@ -113,7 +113,7 @@
           (ngModelChange)="changeHandler()">
            <option *ngIf="user.RoleID == '1'|| user.RoleID == '2'" selected [value]="All">All</option>
   
-            <option *ngFor="let _branch of branches" [value]="_branch.BranchID">{{_branch.BranchID}}</option>
+            <option *ngFor="let _branch of branches" [value]="_branch.BranchID">{{_branch.BranchID}} - {{_branch.BranchName}}</option>
         </select>
       </div>
       <div class="col-md-2"></div>
