@@ -8,6 +8,7 @@ import { NgaModule } from '../../theme/nga.module';
 
 import { Login } from './login.component';
 import { routing } from './login.routing';
+import { ForgetPasswordService } from '../forget-password/forget-apssword.service';
 
 
 @NgModule({
@@ -23,6 +24,6 @@ import { routing } from './login.routing';
   declarations: [
     Login,
   ],
-  providers: [LoginService],
+  providers: [LoginService, ForgetPasswordService],
 })
 export class LoginModule { }

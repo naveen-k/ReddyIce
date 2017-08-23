@@ -4,6 +4,7 @@ import { LoginService } from './login.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { NotificationsService } from 'angular2-notifications';
+import { ForgetPasswordService } from '../forget-password/forget-apssword.service';
 
 @Component({
   selector: 'login',
@@ -12,10 +13,12 @@ import { NotificationsService } from 'angular2-notifications';
 })
 export class Login implements OnInit {
 
-  form: FormGroup;
+  loginForm: FormGroup;
+  fpForm: FormGroup;
   email: AbstractControl;
   password: AbstractControl;
   forgotEmail: AbstractControl;
+  forgotUsername: AbstractControl;
   submitted: boolean = false;
   isLoginMode: boolean = true;
 
@@ -24,43 +27,66 @@ export class Login implements OnInit {
     fb: FormBuilder,
     private loginService: LoginService,
     private router: Router,
-    private notification: NotificationsService) {
-    this.form = fb.group({
+    private notification: NotificationsService,
+    private fpService: ForgetPasswordService) {
+
+    this.fpForm = fb.group({
+      'forgotUsername': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+      'forgotEmail': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+    });
+    this.loginForm = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      'forgotEmail': ['', Validators.compose([])],
+
     });
 
-    this.email = this.form.controls['email'];
-    this.password = this.form.controls['password'];
-    this.forgotEmail = this.form.controls['forgotEmail'];
+
+    this.email = this.loginForm.controls['email'];
+    this.password = this.loginForm.controls['password'];
+    this.forgotUsername = this.fpForm.controls['forgotUsername'];
+    this.forgotEmail = this.fpForm.controls['forgotEmail'];
   }
 
   ngOnInit() {
     // Just to make sure `auth_token` is clear when, landed on this page
     this.loginService.signOut();
     const user = this.userService.getUserForAutoLogin();
-    if (user) {     
+    if (user) {
       this.autoLoginUser(user);
-    }    
+    }
   }
 
   onSubmit(values: Object): void {
     this.submitted = true;
-    if (this.form.valid) {
-      // your code goes here
-      const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
+    if (this.isLoginMode) {
+      if (this.loginForm.valid) {
+        // your code goes here
+        const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
 
-      this.loginService.login(user).subscribe((res) => {
-        if (res.IsNewUser !== 'False') {
-          this.router.navigate(['resetpassword']);
-        } else {
-          this.router.navigate(['']);
-        }
-      }, (error) => {
-        this.notification.error('Error', 'Provided username or password is incorrect');
-      });
+        this.loginService.login(user).subscribe((res) => {
+          if (res.IsNewUser !== 'False') {
+            this.router.navigate(['resetpassword']);
+          } else {
+            this.router.navigate(['']);
+          }
+        }, (error) => {
+          this.notification.error('Error', 'Provided username or password is incorrect');
+        });
+      }
     }
+   else{
+      const user: any = {};
+      user.EmailId = values['forgotEmail'];
+      this.fpService.forgetPassword(user).subscribe((res) => {
+        console.log('forget-pw-success');
+        this.notification.success('Success', res.Message);
+        this.router.navigate(['/login']);
+      }, (error) => {
+        console.log('in-forget-pw-error', error);
+        this.notification.error('Error', 'Failed to reset. Email ID does not exist.');
+      });
+   }
+
   }
 
   autoLoginUser(values) {
@@ -76,7 +102,9 @@ export class Login implements OnInit {
     });
   }
 
-  changeModeHandler() {
+
+  changeModeHandler(status) {
+
     this.isLoginMode = !this.isLoginMode;
   }
 }
