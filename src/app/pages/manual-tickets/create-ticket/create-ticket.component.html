@@ -16,7 +16,7 @@
     <div class="form-group col-md-6">
       <label for="exampleSelect1">Branch</label>
       <select class="form-control">
-          <option *ngFor="let obj of allBranches" [value]="obj.value">{{obj.BranchID}}</option>
+          <option *ngFor="let obj of allBranches" [value]="obj.value">{{obj.BranchID}}-{{obj.BranchName}}</option>
       </select>
     </div>
     <div class="col-md-6">
