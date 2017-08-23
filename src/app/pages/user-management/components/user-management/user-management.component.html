@@ -79,8 +79,12 @@
             <!--Removed sorting functionality as it was causing rendering issues  -->
             <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
-                <i class="ion-edit" (click)="onEditClicked(item)" style="margin-right: 5px"></i>
-                <i class="ion-trash-a" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"></i>
+                <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px">
+                  <span class="tooltiptext">Edit</span>
+                </i>
+                <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)">
+                  <span class="tooltiptext">Delete</span>
+                </i>
               </td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }}</td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.LastName || 'NA' }}</td>

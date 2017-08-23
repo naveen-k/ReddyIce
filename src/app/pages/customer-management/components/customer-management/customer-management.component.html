@@ -65,8 +65,12 @@
                     <tbody>
                         <tr *ngFor="let item of smartTableData | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i class="ion-edit" style="margin-right: 5px"></i>
-                                <i class="ion-trash-a" *ngIf="item.isRICustomer === 'N'"></i>
+                                <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                                    <span class="tooltiptext">Edit</span>
+                                </i>
+                                <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.isRICustomer === 'N'">
+                                    <span class="tooltiptext">Delete</span>
+                                </i>
                             </td>
                             <td>{{ item.customerNumber }}</td>
                             <td>{{ item.customerName }}</td>

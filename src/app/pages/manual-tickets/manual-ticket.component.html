@@ -77,8 +77,12 @@
             <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
               <!-- <td><input type="checkbox" value="Select"></td> -->
               <td class="table-id" style="cursor: pointer">
-                  <i class="ion-edit" style="margin-right: 5px"></i>
-                  <i class="ion-trash-a"></i>
+                  <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                    <span class="tooltiptext">Edit</span>
+                  </i>
+                  <i class="ion-trash-a custom-tooltip-ion">
+                    <span class="tooltiptext">Delete</span>
+                  </i>
               </td>
               <td>{{ item.TicketID }}</td>
               <td>{{ item.CustomerID.CustomerID }}</td>

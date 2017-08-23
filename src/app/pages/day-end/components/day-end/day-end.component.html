@@ -73,8 +73,12 @@
                         <!--Removed sorting functionality as it was causing rendering issues  -->
                         <tr *ngFor="let item of userDataTable|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i class="ion-edit" [routerLink]="['../detail']" style="margin-right: 5px"></i>
-                                <i class="ion-trash-a"></i>
+                                <i class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" style="margin-right: 5px">
+                                    <span class="tooltiptext">Edit</span>
+                                </i>
+                                <i class="ion-trash-a custom-tooltip-ion">
+                                    <span class="tooltiptext">Delete</span>
+                                </i>
                             </td>
                             <td>{{item.routeNumber}}</td>
                             <td>{{item.branch }}</td>
