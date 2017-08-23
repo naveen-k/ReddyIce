@@ -11,13 +11,18 @@ export class ManualTicketService extends SharedService {
   constructor(protected http: HttpService, private tmpHttp: Http ) {
     super(http);
   }
-  getTickets() {
-    
+
+  getTickets(userId: string) {
     // return this._http.get('../../shared/manualTicket.json')
-    return this.tmpHttp.get('./assets/mock-json/manualTicket.json')
-    // return this.http.get('api/manualticket')
+    // return this.tmpHttp.get('./assets/mock-json/manualTicket.json')
+    return this.http.get(`api/manualticket/userid?userId=${userId}`)
     .map(res => res.json());
   }
+
+  getLoggedInUserDetails() {
+    return this.http.get('api/user').map(res => res.json());
+  }
+
   smartTableData = [
     {
       ticketId: 6776237,
