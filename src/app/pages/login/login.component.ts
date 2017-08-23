@@ -14,7 +14,9 @@ export class Login implements OnInit {
   form: FormGroup;
   email: AbstractControl;
   password: AbstractControl;
+  forgotEmail: AbstractControl;
   submitted: boolean = false;
+  isLoginMode: boolean = true;
 
   constructor(fb: FormBuilder,
     private loginService: LoginService,
@@ -22,11 +24,13 @@ export class Login implements OnInit {
     private notification: NotificationsService) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])]
+      'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+      'forgotEmail': ['', Validators.compose([])],
     });
 
     this.email = this.form.controls['email'];
     this.password = this.form.controls['password'];
+    this.forgotEmail = this.form.controls['forgotEmail'];
   }
 
   ngOnInit() {
@@ -39,17 +43,19 @@ export class Login implements OnInit {
       // your code goes here
       const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
 
-      this.loginService.login(user).subscribe((res) => {
-        console.log('in-subscribe');
+      this.loginService.login(user).subscribe((res) => {        
         if (res.IsNewUser !== 'False') {
           this.router.navigate(['resetpassword']);
         } else {
           this.router.navigate(['']);
         }
-      }, (error) => {
-        console.log('login-error', error );
+      }, (error) => {        
         this.notification.error('Error', 'Provided username or password is incorrect');
       });
     }
+  }
+
+  changeModeHandler() {
+    this.isLoginMode = !this.isLoginMode;    
   }
 }
