@@ -13,4 +13,11 @@ export interface User {
   distributor?: string;
   IsSeasonal: boolean;
   IsRIInternal?: boolean;
+  tmp_branch?: string;
+  Branch: Branch;
+}
+export interface Branch {
+  BranchCode: number;
+  BranchID: number;
+  BranchName: string;
 }

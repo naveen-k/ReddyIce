@@ -77,7 +77,7 @@
           </thead>
           <tbody>
             <!--Removed sorting functionality as it was causing rendering issues  -->
-            <tr *ngFor="let item of userTableData | sort:customer.sortField:customer.isAsc|filter:customer.searchString">
+            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-edit" (click)="onEditClicked(item)" style="margin-right: 5px"></i>
                 <i class="ion-trash-a" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"></i>
@@ -89,12 +89,12 @@
               <td class="userCell">{{ item.Phone || 'NA' }}</td> -->
               <td class="userCell">{{ item.Role ? item.Role.RoleName : 'NA' }}</td>
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor ? item.Distributor.DistributorName : 'NA' }}</td>
-              <td *ngIf="!hideColumn" class="userCell">{{item.Branch ? item.Branch.BranchID : 'NA'}} ({{ item.Branch ? item.Branch.BranchName : 'NA' }})</td>
+              <td *ngIf="!hideColumn" class="userCell">{{item.tmp_branch}}</td>
               <td *ngIf="!isDistributorAdmin" class="userCell">{{item.IsRIInternal ? 'Y' : 'N'}}</td>
             </tr>
           </tbody>
         </table>
-        <pagination *ngIf="userTableData && userTableData.length > 15" [tableData]="userTableData" [(currentPage)]="userTableData"></pagination>
+        <pagination [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
       </div>
     </ba-card>
   </div>

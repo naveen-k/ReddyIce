@@ -3,7 +3,8 @@ import { Pages } from '../../../pages/pages.component';
 @Component({
     selector: 'pagination',
     template: `
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" [hidden]="tableData.length<=options.itemPerPage">
+          <span> records {{options.start}} - {{options.end}} of {{tableData.length}}</span>
           <ul class="pagination justify-content-end">
             <li class="page-item" [ngClass]="{'disabled':currentPageIndex==1}">
               <a class="page-link" (click)="pageChangeHandler(currentPageIndex-1)">Previous</a>
@@ -40,6 +41,8 @@ export class PaginationComponent {
     options: any = {
         itemPerPage: 15,
         pages: [],
+        start: 0,
+        end: 0,
     };
 
     @Input()
@@ -53,9 +56,12 @@ export class PaginationComponent {
             this.currentPageIndex = page;
             this.currentPage = this._tableData.slice((page - 1) * this.options.itemPerPage, page * this.options.itemPerPage);
             this.currentPageChange.emit(this.currentPage);
+            this.options.start = ((this.currentPageIndex - 1) * this.options.itemPerPage + 1);
+            const end = (this.currentPageIndex * this.options.itemPerPage);
+            this.options.end = end > this.tableData.length ? this.tableData.length : end;
         });
     }
-    
+
     setPagination() {
         this.options.pages = new Array(Math.ceil(this.tableData.length / this.options.itemPerPage));
     }

@@ -127,7 +127,7 @@ export class UserManagementComponent implements OnInit {
       this.notification.success('Success', 'User created successfully');
       const savedUserlist = [...this.userTableData, res];
       this.userTableData = savedUserlist;
-    
+
 
     },
       (error) => {
@@ -140,7 +140,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onUpdateUser(user) {
-   
+
     delete user.Role;
     delete user.MenuOptions;
     delete user.Branch;
@@ -207,10 +207,10 @@ export class UserManagementComponent implements OnInit {
 
   getUserList(id?: number) {
     this.service.getUsers(id).subscribe((res) => {
-      this.userTableData = res;
-      if (res.length <= 15) {
-        this.userTableData = res;
-      }
+      res.forEach((u) => {
+        u.tmp_branch = `${(u.Branch ? u.Branch.BranchID : 'NA')} (${(u.Branch ? u.Branch.BranchName : 'NA')})`;
+      });
+      this.userTableData = res;      
     });
   }
 
@@ -220,7 +220,7 @@ export class UserManagementComponent implements OnInit {
       this.userDetails = response;
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
-      console.log(this.userRoles);
+      // console.log(this.userRoles);
       if (!response.IsDistributor) {
         this.getUserList(parseInt(userId, 10));
         this.getBranches();
