@@ -4,7 +4,7 @@
     </div>
     <div class="col-md-4">
       <!-- <button type="submit" class="btn btn-danger pull-right">Upload POD</button> -->
-      <input type="button" value="Upload POD" onclick="$('#myInput').click();" class="btn btn-danger pull-right"/>
+      <input type="button" value="Upload POD" onclick="$('#myInput').click();" class="btn btn-danger pull-right" />
       <input id="myInput" type="file" style="visibility:hidden" />
     </div>
     <div class="col-md-2">
@@ -41,8 +41,7 @@
     <div class="form-group col-md-6">
       <label for="exampleInputEmail1">Date</label>
       <div class="input-group">
-        <input class="form-control" placeholder="yyyy-mm-dd"
-              name="dp" ngbDatepicker #d="ngbDatepicker">
+        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
         <button class="input-group-addon" (click)="d.toggle()" type="button">
           <i class="ion-calendar"></i>
           <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
@@ -108,8 +107,8 @@
     </div>
     <div class="form-group col-md-6">
       <label for="exampleInputPassword1">Check No.</label>
-      <input type="text" class="form-control" id="checkNumber" placeholder="Check #" minlength="2" [(ngModel)]="ticketObj.checkNumber" name="checkNumber"
-        #checkNumber="ngModel" required>
+      <input type="text" class="form-control" id="checkNumber" placeholder="Check #" minlength="2" [(ngModel)]="ticketObj.checkNumber"
+        name="checkNumber" #checkNumber="ngModel" required>
       <div *ngIf="checkNumber.invalid && (checkNumber.dirty || checkNumber.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="checkNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
@@ -120,8 +119,8 @@
   <div class="row">
     <div class="form-group col-md-6">
       <label for="exampleInputPassword1">Ticket No.</label>
-      <input type="text" class="form-control" id="TicketNumber" placeholder="Ticket #" minlength="2" [(ngModel)]="ticketObj.TicketNumber" name="TicketNumber"
-        #TicketNumber="ngModel" required>
+      <input type="text" class="form-control" id="TicketNumber" placeholder="Ticket #" minlength="2" [(ngModel)]="ticketObj.TicketNumber"
+        name="TicketNumber" #TicketNumber="ngModel" required>
       <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
@@ -132,8 +131,8 @@
   <div class="row">
     <div class="form-group col-md-6">
       <label for="exampleInputPassword1">PO#</label>
-      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="PO #" minlength="2" [(ngModel)]="ticketObj.PONumber" name="PONumber"
-        #PONumber="ngModel" required>
+      <input type="text" class="form-control" id="exampleInputPassword1" placeholder="PO #" minlength="2" [(ngModel)]="ticketObj.PONumber"
+        name="PONumber" #PONumber="ngModel" required>
       <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div id="poTooltip" *ngIf="PONumber.errors.required" class="custom-tooltip bottom">PO number is required</div>
@@ -150,7 +149,9 @@
   <!-- <div class="checkbox">
     <ba-checkbox [(ngModel)]="isChecked" [label]="'Check me out'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
   </div> -->
-  <div class="vertical-scroll" #customer *ngIf="showHideDSDCols">
+
+  <!-- DSD Section begins -->
+  <div class="vertical-scroll" #customer *ngIf="isDSDSelected">
     <table class="table table-striped">
       <thead>
         <tr>
@@ -182,7 +183,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
+        <tr *ngFor="let item of dsdTableData | sort:customer.sortField:customer.isAsc">
           <td class="table-id alignMiddle" style="cursor: pointer;">
             <i class="ion-edit" (click)="editManualTickets()"></i>
           </td>
@@ -193,102 +194,214 @@
               <option>302</option>
             </select>
           </td>
-          <td class="alignMiddle">{{ item.unit }}</td>
-          <td class="alignMiddle">{{ item.deliveredBag }}</td>
-          <td class="alignMiddle">{{ item.currentInv }}</td>
+          <td class="alignMiddle">
+            <input *ngIf="toggleTextbox" name="unit" type="text" class="form-control" value="{{ item.unit }}" 
+            [(ngModel)]="item.unit">
+            <span *ngIf="!toggleTextbox">{{ item.unit }}</span>
+          </td>
+          <td class="alignMiddle">
+            <span>{{ item.unitPrice }}</span>
+          </td>
+          <td class="alignMiddle">
+            <span>{{ item.totalAmount }}</span>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="vertical-scroll" #customer *ngIf="!showHideDSDCols">
+  <!-- DSD Section ends -->
+
+  <!-- PBM Section begins -->
+  <div class="vertical-scroll" #customer *ngIf="isPBMSelected">
     <table class="table table-striped">
       <thead>
         <tr>
           <th class="table-id">Actions</th>
           <th>
             <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;" *ngIf="!showDamagedCol">
-                Products
-                  <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+                    Products
+                      <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
             <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;" *ngIf="showDamagedCol">
-                Machines
-                  <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+                    Machines
+                      <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
           </th>
           <th>
             <span style="cursor:pointer;" (click)="customer.sortField = 'unit';customer.isAsc=!customer.isAsc;">
-                Unit
-                <i *ngIf="(customer.sortField == 'unit')" [ngClass]="(customer.isAsc && customer.sortField == 'unit' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+                    Unit
+                    <i *ngIf="(customer.sortField == 'unit')" [ngClass]="(customer.isAsc && customer.sortField == 'unit' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
           </th>
           <th>
-            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;"
-             *ngIf="showHideTableCols || !showDamagedCol">
-                Delivered Bags
-                <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
-            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;"
-             *ngIf="!showHideTableCols && showDamagedCol">
-              Previous Reading
-              <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;" *ngIf="showHideTableCols || !showDamagedCol">
+                    Delivered Bags
+                    <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;" *ngIf="!showHideTableCols && showDamagedCol">
+                  Previous Reading
+                  <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
           </th>
           <th (click)="customer.sortField = 'currentInv';customer.isAsc=!customer.isAsc;">
             <span style="cursor:pointer;" *ngIf="showHideTableCols || !showDamagedCol">
-                Current Inv
-                <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+                    Current Inv
+                    <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
             <span style="cursor:pointer;" *ngIf="!showHideTableCols && showDamagedCol">
-              Current Reading
-              <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+                  Current Reading
+                  <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
           </th>
           <th (click)="customer.sortField = 'damagedBag';customer.isAsc=!customer.isAsc;" *ngIf="showDamagedCol">
             <span style="cursor:pointer;" *ngIf="showHideTableCols && showDamagedCol">
-                Damaged Bags
-                <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+                    Damaged Bags
+                    <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
             <span style="cursor:pointer;" *ngIf="!showHideTableCols && showDamagedCol">
-              Total Units
-              <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-            </span>
+                  Total Units
+                  <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                </span>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
+        <tr *ngFor="let item of pbmTableData | sort:customer.sortField:customer.isAsc">
           <td class="table-id alignMiddle" style="cursor: pointer;">
-            <i class="ion-edit" (click)="editManualTicketsPBS()"></i>
+            <i class="ion-edit" (click)="editManualTickets()"></i>
           </td>
           <!-- <td contenteditable="">{{ item.machine }}</td> -->
           <td class="alignMiddle">
             <select class="form-control select">
-              <option>301</option>
-              <option>302</option>
-            </select>
+                  <option>301</option>
+                  <option>302</option>
+                </select>
           </td>
           <td class="alignMiddle">
             <span>{{ item.unit }}</span>
           </td>
-          <td class="alignMiddle">
-            <input *ngIf = "toggleTextbox" name="deliveredBag" type="text" class="form-control"
-            value="{{ item.deliveredBag }}" [(ngModel)] ="item.deliveredBag">
-            <span *ngIf = "!toggleTextbox">{{ item.deliveredBag }}</span>
+          <td class="alignMiddle" *ngIf="showHideTableCols || !showDamagedCol">
+            <input *ngIf="toggleTextbox" name="deliveredBag" type="text" class="form-control" value="{{ item.deliveredBag }}" 
+            [(ngModel)]="item.deliveredBag">
+            <span *ngIf="!toggleTextbox">{{ item.deliveredBag }}</span>
           </td>
-          <td class="alignMiddle">
-            <input *ngIf = "toggleTextbox" type="text" name="currentInv" class="form-control"
-            value="{{ item.currentInv }}" [(ngModel)] ="item.currentInv">
-            <span *ngIf = "!toggleTextbox">{{ item.currentInv }}</span>
+          <td class="alignMiddle" *ngIf="!showHideTableCols && showDamagedCol">
+            <input *ngIf="toggleTextbox" name="previousReading" type="text" class="form-control" value="{{ item.previousReading }}" 
+            [(ngModel)]="item.previousReading">
+            <span *ngIf="!toggleTextbox">{{ item.previousReading }}</span>
           </td>
-          <td class="alignMiddle">
-            <input *ngIf = "showDamagedCol && toggleTextbox" name="damagedBag" type="text" class="form-control"
-            value="{{ item.damagedBag }}" [(ngModel)] ="item.damagedBag">
-            <span *ngIf = "showDamagedCol && !toggleTextbox">{{ item.damagedBag }}</span>
+          <td class="alignMiddle" *ngIf="showHideTableCols || !showDamagedCol">
+            <input *ngIf="toggleTextbox" type="text" name="currentInv" class="form-control" value="{{ item.currentInv }}" 
+            [(ngModel)]="item.currentInv">
+            <span *ngIf="!toggleTextbox">{{ item.currentInv }}</span>
+          </td>
+          <td class="alignMiddle" *ngIf="!showHideTableCols && showDamagedCol">
+            <input *ngIf="toggleTextbox" type="text" name="currentReading" class="form-control" value="{{ item.currentReading }}" 
+            [(ngModel)]="item.currentReading">
+            <span *ngIf="!toggleTextbox">{{ item.currentReading }}</span>
+          </td>
+          <td class="alignMiddle" *ngIf="showHideTableCols && showDamagedCol">
+            <input *ngIf="showDamagedCol && toggleTextbox" name="damagedBag" type="text" class="form-control" value="{{ item.damagedBag }}"
+              [(ngModel)]="item.damagedBag">
+            <span *ngIf="showDamagedCol && !toggleTextbox">{{ item.damagedBag }}</span>
+          </td>
+          <td class="alignMiddle" *ngIf="!showHideTableCols && showDamagedCol">
+            <span>{{ item.totalUnit }}</span>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <!-- PBM Section ends -->
+
+  <!-- PBS Section begins -->
+  <div class="vertical-scroll" #customer *ngIf="isPBSSelected">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th class="table-id">Actions</th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;" *ngIf="!showDamagedCol">
+                  Products
+                    <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'machine';customer.isAsc=!customer.isAsc;" *ngIf="showDamagedCol">
+                  Machines
+                    <i *ngIf="(customer.sortField == 'machine')" [ngClass]="(customer.isAsc && customer.sortField == 'machine' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+          </th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'unit';customer.isAsc=!customer.isAsc;">
+                  Unit
+                  <i *ngIf="(customer.sortField == 'unit')" [ngClass]="(customer.isAsc && customer.sortField == 'unit' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+          </th>
+          <th>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;" *ngIf="showHideTableCols || !showDamagedCol">
+                  Delivered Bags
+                  <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+            <span style="cursor:pointer;" (click)="customer.sortField = 'deliveredBag';customer.isAsc=!customer.isAsc;" *ngIf="!showHideTableCols && showDamagedCol">
+                Previous Reading
+                <i *ngIf="(customer.sortField == 'deliveredBag')" [ngClass]="(customer.isAsc && customer.sortField == 'deliveredBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+          </th>
+          <th (click)="customer.sortField = 'currentInv';customer.isAsc=!customer.isAsc;">
+            <span style="cursor:pointer;" *ngIf="showHideTableCols || !showDamagedCol">
+                  Current Inv
+                  <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+            <span style="cursor:pointer;" *ngIf="!showHideTableCols && showDamagedCol">
+                Current Reading
+                <i *ngIf="(customer.sortField == 'currentInv')" [ngClass]="(customer.isAsc && customer.sortField == 'currentInv' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+          </th>
+          <th (click)="customer.sortField = 'damagedBag';customer.isAsc=!customer.isAsc;" *ngIf="showDamagedCol">
+            <span style="cursor:pointer;" *ngIf="showHideTableCols && showDamagedCol">
+                  Damaged Bags
+                  <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+            <span style="cursor:pointer;" *ngIf="!showHideTableCols && showDamagedCol">
+                Total Units
+                <i *ngIf="(customer.sortField == 'damagedBag')" [ngClass]="(customer.isAsc && customer.sortField == 'damagedBag' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+              </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of pbsTableData | sort:customer.sortField:customer.isAsc">
+          <td class="table-id alignMiddle" style="cursor: pointer;">
+            <i class="ion-edit" (click)="editManualTickets()"></i>
+          </td>
+          <!-- <td contenteditable="">{{ item.machine }}</td> -->
+          <td class="alignMiddle">
+            <select class="form-control select">
+                <option>301</option>
+                <option>302</option>
+              </select>
+          </td>
+          <td class="alignMiddle">
+            <span>{{ item.unit }}</span>
+          </td>
+          <td class="alignMiddle">
+            <input *ngIf="toggleTextbox" name="deliveredBag" type="text" class="form-control" value="{{ item.deliveredBag }}" [(ngModel)]="item.deliveredBag">
+            <span *ngIf="!toggleTextbox">{{ item.deliveredBag }}</span>
+          </td>
+          <td class="alignMiddle">
+            <input *ngIf="toggleTextbox" type="text" name="currentInv" class="form-control" value="{{ item.currentInv }}" [(ngModel)]="item.currentInv">
+            <span *ngIf="!toggleTextbox">{{ item.currentInv }}</span>
+          </td>
+          <td class="alignMiddle">
+            <input *ngIf="showDamagedCol && toggleTextbox" name="damagedBag" type="text" class="form-control" value="{{ item.damagedBag }}"
+              [(ngModel)]="item.damagedBag">
+            <span *ngIf="showDamagedCol && !toggleTextbox">{{ item.damagedBag }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- PBS Section ends -->
+
   <br>
   <div class="row">
     <div class="col-md-6">

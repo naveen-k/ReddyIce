@@ -12,28 +12,15 @@ import { Component, OnInit, NgModule } from '@angular/core';
 export class ManualTicketComponent implements OnInit {
   smartTableData: any;
   allBranches: any;
-  constructor(protected service: ManualTicketService, protected userService: UserService) {
-    // this.smartTableData = service.smartTableData;
-    // service.getTickets().subscribe (
-    //   val => this.smartTableData = val,
-    //   // err => console.error(err)
-    // );
+  constructor(protected service: ManualTicketService) {
+    
   }
   isNewTicket: boolean = false;
 
   ngOnInit() {
-  //  this.getCurrentUserDetails();
     this.getBranches();
     this.getAllManualTickets();
   }
-
-  // getCurrentUserDetails() {
-  //   this.service.getLoggedInUserDetails().subscribe((response) => {
-  //     this.loggedInUserDetails = response;
-  //     this.loggedInUser = this.loggedInUserDetails[0].UserId;
-  //     console.log(this.loggedInUser);
-  //   });
-  // }
 
   getAllManualTickets() {
     const userId = localStorage.getItem('userId') || '';

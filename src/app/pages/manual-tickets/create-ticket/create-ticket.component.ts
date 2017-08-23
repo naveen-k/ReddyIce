@@ -9,29 +9,47 @@ import { Component } from '@angular/core';
 })
 export class CreateTicketComponent {
   smartTableData: any;
+  dsdTableData: any;
+  pbmTableData: any;
+  pbsTableData: any;
   ticketObj: any = {};
   showDamagedCol: boolean = false;
   showHideTableCols: boolean = true;
   showHideDSDCols: boolean = false;
   toggleTextbox: boolean = false;
   allBranches: any;
+
+  isDSDSelected: boolean = false;
+  isPBMSelected: boolean = false;
+  isPBSSelected: boolean = true;
   constructor(protected service: ManualTicketService) {
     this.service.getBranches().subscribe((response) => {
       this.allBranches = response;
     });
-    this.smartTableData = service.machineSmartTableData;
+    this.dsdTableData = service.dsdSmartTableData;
+    this.pbmTableData = service.pbmSmartTableData;
+    this.pbsTableData = service.pbsSmartTableData;
   }
 
   showHideDamagedColumn = function(arg) {
     if (arg === 3) {
       this.showDamagedCol = false;
       this.showHideDSDCols = false;
+      this.isDSDSelected = false;
+      this.isPBMSelected = false;
+      this.isPBSSelected = true;
     } else if (arg === 2) {
       this.showDamagedCol = true;
       this.showHideDSDCols = false;
+      this.isDSDSelected = false;
+      this.isPBMSelected = true;
+      this.isPBSSelected = false;
     } else if (arg === 1) {
       this.showDamagedCol = false;
       this.showHideDSDCols = true;
+      this.isDSDSelected = true;
+      this.isPBMSelected = false;
+      this.isPBSSelected = false;
     }
   };
 
@@ -43,7 +61,7 @@ export class CreateTicketComponent {
     }
   };
 
-  editManualTicketsPBS() {
+  editManualTickets() {
     this.toggleTextbox = !this.toggleTextbox;
   }
 

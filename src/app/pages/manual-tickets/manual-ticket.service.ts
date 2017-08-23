@@ -23,40 +23,34 @@ export class ManualTicketService extends SharedService {
     return this.http.get('api/user').map(res => res.json());
   }
 
-  smartTableData = [
+  dsdSmartTableData = [
     {
-      ticketId: 6776237,
-      customerId: 123,
-      amount: '200$',
-      status: 'Approved',
-    },
-    {
-      ticketId: 6776247,
-      customerId: 456,
-      amount: '128$',
-      status: 'Approved',
-    },
-    {
-      ticketId: 6776257,
-      customerId: 789,
-      amount: '158$',
-      status: 'Approved',
-    },
-    {
-      ticketId: 6776267,
-      customerId: 102,
-      amount: '178$',
-      status: 'Approved',
+      product: 'Product1',
+      unit: '$125',
+      unitPrice: '$1.25',
+      totalAmount: '$125.00',
     },
   ];
 
-  machineSmartTableData = [
+  pbmSmartTableData = [
     {
       machine: 'Product1',
       unit: '$125',
+      deliveredBag: '135',
+      currentInv: '5',
+      damagedBag: '59',
+      previousReading: '1231',
+      currentReading: '1356',
+      totalUnit: '125',
+    },
+  ];
+
+  pbsSmartTableData = [
+    {
+      product: 'Product1',
+      unit: '$125',
       deliveredBag: '125',
       currentInv: '12',
-      damagedBag: '54',
     },
   ];
 }
