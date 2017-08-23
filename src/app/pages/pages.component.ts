@@ -36,10 +36,11 @@ export class Pages implements OnInit {
 
   ngOnInit() {
     const userId = localStorage.getItem('userId') || '';
+    if (!userId) { this.router.navigateByUrl('/login'); }
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = Object.assign({}, response);
       let pages: any;
-      //const pages = PAGES_MENU.slice();
+      // const pages = PAGES_MENU.slice();
       if (this.userDetails.MenuOptions.length) {
         pages = PAGES_MENU.reduce((acc, menu) => (
           [

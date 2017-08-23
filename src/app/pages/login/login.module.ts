@@ -1,3 +1,4 @@
+import { SharedModule } from '../../shared/shared.module';
 import { LoginService } from './login.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,6 +18,7 @@ import { routing } from './login.routing';
     FormsModule,
     NgaModule,
     routing,
+    SharedModule,
   ],
   declarations: [
     Login,

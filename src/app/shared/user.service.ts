@@ -38,4 +38,12 @@ export class UserService {
     getPrivateKeys(): any {
         return JSON.parse(localStorage.getItem('privateKeys'));
     }
+
+    getUserForAutoLogin() {
+        let user = localStorage.getItem('auto_login_user');
+        if (user) {
+            user = JSON.parse(user);
+        }
+        return user;
+    }
 }
