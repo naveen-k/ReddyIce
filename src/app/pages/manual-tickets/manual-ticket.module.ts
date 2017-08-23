@@ -10,7 +10,6 @@ import { AppTranslationModule } from '../../app.translation.module';
 
 import { ManualTicketComponent } from './manual-ticket.component';
 import { routing } from './manual-ticket.routing';
-import { TicketManagementComponent } from './ticket-management/ticket-management.component';
 import { CreateTicketComponent } from './create-ticket/create-ticket.component';
 
 
@@ -27,7 +26,6 @@ import { CreateTicketComponent } from './create-ticket/create-ticket.component';
   ],
   declarations: [
     CreateTicketComponent,
-    TicketManagementComponent,
     ManualTicketComponent,
   ],
   providers: [

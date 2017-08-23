@@ -59,12 +59,4 @@ export class ManualTicketService extends SharedService {
       damagedBag: '54',
     },
   ];
-
-  getData(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.smartTableData);
-      }, 2000);
-    });
-  }
 }

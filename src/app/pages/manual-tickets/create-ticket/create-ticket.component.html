@@ -268,19 +268,21 @@
             </select>
           </td>
           <td class="alignMiddle">
-            <input *ngIf = "toggleTextbox" type="text" class="form-control" value="{{ item.unit }}">
-            <span *ngIf = "!toggleTextbox">{{ item.unit }}</span>
+            <span>{{ item.unit }}</span>
           </td>
           <td class="alignMiddle">
-            <input *ngIf = "toggleTextbox" type="text" class="form-control" value="{{ item.deliveredBag }}">
+            <input *ngIf = "toggleTextbox" name="deliveredBag" type="text" class="form-control"
+            value="{{ item.deliveredBag }}" [(ngModel)] ="item.deliveredBag">
             <span *ngIf = "!toggleTextbox">{{ item.deliveredBag }}</span>
           </td>
           <td class="alignMiddle">
-            <input *ngIf = "toggleTextbox" type="text" class="form-control" value="{{ item.currentInv }}">
+            <input *ngIf = "toggleTextbox" type="text" name="currentInv" class="form-control"
+            value="{{ item.currentInv }}" [(ngModel)] ="item.currentInv">
             <span *ngIf = "!toggleTextbox">{{ item.currentInv }}</span>
           </td>
           <td class="alignMiddle">
-            <input *ngIf = "showDamagedCol && toggleTextbox" type="text" class="form-control" value="{{ item.damagedBag }}">
+            <input *ngIf = "showDamagedCol && toggleTextbox" name="damagedBag" type="text" class="form-control"
+            value="{{ item.damagedBag }}" [(ngModel)] ="item.damagedBag">
             <span *ngIf = "showDamagedCol && !toggleTextbox">{{ item.damagedBag }}</span>
           </td>
         </tr>
