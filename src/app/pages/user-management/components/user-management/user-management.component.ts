@@ -31,7 +31,7 @@ export class UserManagementComponent implements OnInit {
     private service: UserManagementService,
     private notification: NotificationsService,
     private userService: UserService,
-    private modalService: NgbModal,    
+    private modalService: NgbModal,
   ) { }
 
   showNewCustomer(newCustomer) {
@@ -139,7 +139,7 @@ export class UserManagementComponent implements OnInit {
 
   onSaveUser(user) {
     delete user.role;
-    delete user.UserName;
+    if (!user.IsRIInternal) { delete user.UserName; }
     this.service.createUser(user).subscribe((res) => {
       this.notification.success('Success', 'User created successfully');
       const savedUserlist = [...this.userTableData, res];
@@ -231,8 +231,8 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  ngOnInit() {    
-    const userId = localStorage.getItem('userId') || '';    
+  ngOnInit() {
+    const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
       this.isDistributorExist = response.IsDistributor;

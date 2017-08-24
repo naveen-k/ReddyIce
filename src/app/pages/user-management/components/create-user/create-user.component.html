@@ -52,7 +52,7 @@
     </div>
   </div>
   <div class="row page-header rowContainer">
-    <div *ngIf="!isNewUser" class="col-md-5 padding-eater first-column">
+    <div *ngIf="!isNewUser || user.IsRIInternal" class="col-md-5 padding-eater first-column">
       <label for="username" class="control-label">Username</label>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
         #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="true">
