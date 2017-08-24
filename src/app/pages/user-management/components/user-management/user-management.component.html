@@ -82,13 +82,13 @@
             </tr>
           </thead>
           <tbody>
+            
             <!--Removed sorting functionality as it was causing rendering issues  -->
             <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px">
                    <span class="tooltiptext">View</span>
                 </i>
-                
                 <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px">
                    <span class="tooltiptext">Edit</span>
                 </i>
@@ -108,6 +108,7 @@
             </tr>
           </tbody>
         </table>
+        <div style='text-align:center'> <a> <img [hidden]='paginationData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
         <pagination [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
       </div>
     </ba-card>

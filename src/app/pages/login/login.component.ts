@@ -21,6 +21,7 @@ export class Login implements OnInit {
   forgotUsername: AbstractControl;
   submitted: boolean = false;
   isLoginMode: boolean = true;
+ isProcessing: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -57,6 +58,7 @@ export class Login implements OnInit {
   }
 
   onSubmit(values: Object): void {
+    this.isProcessing = true;
     this.submitted = true;
     if (this.isLoginMode) {
       if (this.loginForm.valid) {
@@ -64,12 +66,14 @@ export class Login implements OnInit {
         const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
 
         this.loginService.login(user).subscribe((res) => {
+           this.isProcessing = false;
           if (res.IsNewUser !== 'False') {
             this.router.navigate(['resetpassword']);
           } else {
             this.router.navigate(['']);
           }
         }, (error) => {
+           this.isProcessing = false;
           this.notification.error('Error', 'Provided username or password is incorrect');
         });
       }
@@ -78,11 +82,11 @@ export class Login implements OnInit {
       const user: any = {};
       user.EmailId = values['forgotEmail'];
       this.fpService.forgetPassword(user).subscribe((res) => {
-        console.log('forget-pw-success');
+         this.isProcessing = false;
         this.notification.success('Success', res.Message);
         this.router.navigate(['/login']);
       }, (error) => {
-        console.log('in-forget-pw-error', error);
+        this.isProcessing = false;
         this.notification.error('Error', 'Failed to reset. Email ID does not exist.');
       });
    }
