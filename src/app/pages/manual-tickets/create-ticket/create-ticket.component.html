@@ -15,8 +15,10 @@
   <div class="row calendarRow">
     <div class="form-group col-md-6">
       <label for="exampleSelect1">Branch</label>
-      <select class="form-control">
-          <option *ngFor="let obj of allBranches" [value]="obj.value">{{obj.BranchID}}-{{obj.BranchName}}</option>
+      <select class="form-control" name="branch" #option
+      [(ngModel)]="searchBranch"
+      (ngModelChange)="onChange()">
+          <option *ngFor="let branch of allBranches">{{branch.BranchID}}</option>
       </select>
     </div>
     <div class="col-md-6">
@@ -78,9 +80,8 @@
   <div class="row">
     <div class="form-group col-md-6">
       <label for="exampleSelect1">Customer Name</label>
-      <select class="form-control" id="exampleSelect1">
-          <option>Jack</option>
-          <option>Smith</option>
+      <select class="form-control" name="customer">
+          <option *ngFor="let customer of branchBasedCustomers">{{customer.CustomerName}}</option>
       </select>
     </div>
     <div class="col-md-6">
@@ -375,10 +376,9 @@
           </td>
           <!-- <td contenteditable="">{{ item.machine }}</td> -->
           <td class="alignMiddle">
-            <select class="form-control select">
-                <option>301</option>
-                <option>302</option>
-              </select>
+            <select class="form-control">
+                <option *ngFor="let product of products" [value]="product.value">{{product.ProductID}}</option>
+            </select>
           </td>
           <td class="alignMiddle">
             <span>{{ item.unit }}</span>

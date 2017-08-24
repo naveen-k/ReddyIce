@@ -22,13 +22,31 @@ export class CreateTicketComponent {
   isDSDSelected: boolean = false;
   isPBMSelected: boolean = false;
   isPBSSelected: boolean = true;
+  ticketTypes: any;
+  products: any;
+  branchBasedCustomers: any;
+  searchBranch: any;
   constructor(protected service: ManualTicketService) {
     this.service.getBranches().subscribe((response) => {
       this.allBranches = response;
+      this.searchBranch = response[0].branchId;
+    });
+    this.service.getTicketTypes().subscribe ((response) => {
+      this.ticketTypes = response;
+    });
+    this.service.getProducts().subscribe ((response) => {
+      this.products = response;
     });
     this.dsdTableData = service.dsdSmartTableData;
     this.pbmTableData = service.pbmSmartTableData;
     this.pbsTableData = service.pbsSmartTableData;
+  }
+
+  onChange() {
+    console.log("this.searchBranch", this.searchBranch);
+    this.service.getBranchBasedCustomers(this.searchBranch).subscribe ((response) => {
+      this.branchBasedCustomers = response;
+    });
   }
 
   showHideDamagedColumn = function(arg) {

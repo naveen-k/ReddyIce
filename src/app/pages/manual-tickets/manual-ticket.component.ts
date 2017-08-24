@@ -13,7 +13,7 @@ export class ManualTicketComponent implements OnInit {
   smartTableData: any;
   allBranches: any;
   constructor(protected service: ManualTicketService) {
-    
+
   }
   isNewTicket: boolean = false;
 

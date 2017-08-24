@@ -18,9 +18,20 @@ export class ManualTicketService extends SharedService {
     return this.http.get(`api/manualticket/userid?userId=${userId}`)
     .map(res => res.json());
   }
+  
+  getTicketTypes() {
+    return this.http.get(`api/manualticket/ticketType`)
+    .map(res => res.json());
+  }
+  
+  getProducts() {
+    return this.http.get(`api/product`)
+    .map(res => res.json());
+  }
 
-  getLoggedInUserDetails() {
-    return this.http.get('api/user').map(res => res.json());
+  getBranchBasedCustomers(branchId: string) {
+    return this.http.get(`api/customer?branchID=${branchId}`)
+    .map(res => res.json());
   }
 
   dsdSmartTableData = [
