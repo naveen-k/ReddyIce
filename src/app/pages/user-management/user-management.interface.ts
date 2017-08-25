@@ -1,3 +1,4 @@
+import { Branch } from '../../shared/interfaces/interfaces';
 export interface User {
   UserId?: number;
   FirstName: string;
@@ -16,8 +17,4 @@ export interface User {
   tmp_branch?: string;
   Branch: Branch;
 }
-export interface Branch {
-  BranchCode: number;
-  BranchID: number;
-  BranchName: string;
-}
+

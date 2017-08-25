@@ -20,8 +20,8 @@
       (ngModelChange)="onBranchChange(option.value)">
           <option *ngFor="let branch of allBranches">{{branch.BranchID}}</option>
       </select> -->
-      <select class="form-control" name="branch" [(ngModel)]="searchBranch" (ngModelChange)="onBranchChange($event)" >
-        <option *ngFor="let branch of allBranches" [ngValue]="branch"> {{branch.BranchID}} </option>
+      <select class="form-control" name="branch" [(ngModel)]="searchBranch" (ngModelChange)="onBranchChange()" >
+        <option *ngFor="let branch of allBranches" [ngValue]="branch.BranchID"> {{branch.BranchID}} </option>
       </select>
     </div>
     <div class="col-md-6">
@@ -88,8 +88,8 @@
       (ngModelChange)="onCustomerChange(option.value)">
           <option *ngFor="let customer of branchBasedCustomers">{{customer.CustomerName}}</option>
       </select> -->
-      <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange($event)" >
-        <option *ngFor="let customer of branchBasedCustomers" [ngValue]="customer"> {{customer.CustomerName}} </option>
+      <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()" >
+        <option *ngFor="let customer of branchBasedCustomers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
       </select>
     </div>
     <div class="col-md-6">

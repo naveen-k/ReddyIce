@@ -1,13 +1,14 @@
+import { Branch } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'create-new-ticket',
   templateUrl: './create-ticket.component.html',
   styleUrls: ['./create-ticket.component.scss'],
 })
-export class CreateTicketComponent {
+export class CreateTicketComponent implements OnInit {
   smartTableData: any;
   dsdTableData: any;
   pbmTableData: any;
@@ -17,7 +18,7 @@ export class CreateTicketComponent {
   showHideTableCols: boolean = true;
   showHideDSDCols: boolean = false;
   toggleTextbox: boolean = false;
-  allBranches: any;
+  allBranches: Branch;
 
   isDSDSelected: boolean = false;
   isPBMSelected: boolean = false;
@@ -27,14 +28,9 @@ export class CreateTicketComponent {
   branchBasedCustomers: any;
   customerBasedProducts: any;
   searchBranch: any;
+  searchCustomer: any;
   constructor(protected service: ManualTicketService) {
-    this.service.getBranches().subscribe((response) => {
-      this.allBranches = response;
-      this.searchBranch = response[0].branchId;
-    });
-    this.service.getTicketTypes().subscribe ((response) => {
-      this.ticketTypes = response;
-    });
+
     // this.service.getProducts().subscribe ((response) => {
     //   this.products = response;
     // });
@@ -43,20 +39,35 @@ export class CreateTicketComponent {
     this.pbsTableData = service.pbsSmartTableData;
   }
 
-  onBranchChange(branchId) {
-    this.service.getBranchBasedCustomers(branchId.BranchID).subscribe ((response) => {
+  ngOnInit() {
+
+    this.service.getBranches().subscribe((response) => {
+      this.allBranches = response;
+      this.searchBranch = response[0].BranchID;
+      this.onBranchChange();
+    });
+
+
+    this.service.getTicketTypes().subscribe((response) => {
+      this.ticketTypes = response;
+    });
+  }
+
+  onBranchChange() {
+    this.service.getBranchBasedCustomers(this.searchBranch).subscribe((response) => {
+      this.searchCustomer = response[0].CustomerId;
       this.branchBasedCustomers = response;
     });
   }
 
-  onCustomerChange(customerId) {
-    this.service.getCustomerBasedProducts(customerId.CustomerId).subscribe ((response) => {
+  onCustomerChange() {
+    this.service.getCustomerBasedProducts(this.searchCustomer).subscribe((response) => {
       this.customerBasedProducts = response;
-      console.log("customerBasedProducts : ", this.customerBasedProducts);
+      
     });
   }
 
-  showHideDamagedColumn = function(arg) {
+  showHideDamagedColumn = function (arg) {
     if (arg === 3) {
       this.showDamagedCol = false;
       this.showHideDSDCols = false;
@@ -78,7 +89,7 @@ export class CreateTicketComponent {
     }
   };
 
-  showHideCols = function(arg) {
+  showHideCols = function (arg) {
     if (arg === 1) {
       this.showHideTableCols = false;
     } else if (arg === 2) {
