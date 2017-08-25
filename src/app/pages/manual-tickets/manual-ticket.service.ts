@@ -20,7 +20,7 @@ export class ManualTicketService extends SharedService {
   }
   
   getTicketTypes() {
-    return this.http.get(`api/manualticket/ticketType`)
+    return this.http.get(`api/manualticket/`)
     .map(res => res.json());
   }
   

@@ -5,12 +5,12 @@
 </div>
 <div class="row">
     <!-- <div [ngClass]="{'col-md-12':!isNewCustomer && !setPrice, 'col-md-6':isNewCustomer}"> -->
-        <div [ngClass]="[!isNewCustomer && !setPrice ? 'col-md-12' : 'col-md-6']">  
+    <div [ngClass]="[!isNewCustomer && !setPrice ? 'col-md-12' : 'col-md-6']">
         <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="row">
                 <div [ngClass]="[isNewCustomer || setPrice ? 'col-md-4' : 'col-md-6']">
-                    <input type="text" class="form-control"  [(ngModel)]="customer.searchString" placeholder="Search">
+                    <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
                 </div>
                 <div class="col-md-4">
                     <button (click)="showPrice()" class="btn btn-primary addCustBtn pull-right">
@@ -80,6 +80,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <div style='text-align:center'> <a> <img [hidden]='smartTableData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+                <pagination [tableData]="userTableData" [(currentPage)]="smartTableData"></pagination>
             </div>
         </ba-card>
     </div>
@@ -133,9 +135,8 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>Customer Name</label>
-                            <input type="text" class="form-control" id="customerName" placeholder="Customer Name"
-                                 minlength="2" [(ngModel)]="customerObj.customerName" name="customerName"
-                                #customerName="ngModel" required>
+                            <input type="text" class="form-control" id="customerName" placeholder="Customer Name" minlength="2" [(ngModel)]="customerObj.customerName"
+                                name="customerName" #customerName="ngModel" required>
                             <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)" class="error-message">
                                 <i class="ion-android-alert showError"></i>
                                 <div id="" *ngIf="customerName.errors.required" class="custom-tooltip bottom">Customer name is required</div>
@@ -175,9 +176,8 @@
                     <div class="row">
                         <div class="form-group col-md-12">
                             <label>Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="Address" required maxlength="128"
-                                minlength="2" [(ngModel)]="customerObj.address" name="address"
-                                #address="ngModel" required>
+                            <input type="text" class="form-control" id="address" placeholder="Address" required maxlength="128" minlength="2" [(ngModel)]="customerObj.address"
+                                name="address" #address="ngModel" required>
                             <div *ngIf="address.invalid && (address.dirty || address.touched)" class="error-message">
                                 <i class="ion-android-alert showError"></i>
                                 <div id="" *ngIf="address.errors.required" class="custom-tooltip bottom">Address is required</div>
@@ -208,8 +208,8 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="exampleInputEmail1">Zip</label>
-                            <input [(ngModel)]="selectedUser.zip" type="text" class="form-control" id="zip" placeholder="Zip" minlength="2" [(ngModel)]="customerObj.zip" name="zip"
-                                #zip="ngModel" required>
+                            <input [(ngModel)]="selectedUser.zip" type="text" class="form-control" id="zip" placeholder="Zip" minlength="2" [(ngModel)]="customerObj.zip"
+                                name="zip" #zip="ngModel" required>
                             <div *ngIf="zip.invalid && (zip.dirty || zip.touched)" class="error-message">
                                 <i class="ion-android-alert showError"></i>
                                 <div id="" *ngIf="zip.errors.required" class="custom-tooltip bottom">Zip is required</div>
@@ -220,8 +220,8 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="exampleInputEmail1">Phone</label>
-                            <input [(ngModel)]="selectedUser.phone" type="text" class="form-control" id="phone" placeholder="Phone" minlength="2" [(ngModel)]="customerObj.phone" name="phone"
-                                #phone="ngModel" required>
+                            <input [(ngModel)]="selectedUser.phone" type="text" class="form-control" id="phone" placeholder="Phone" minlength="2" [(ngModel)]="customerObj.phone"
+                                name="phone" #phone="ngModel" required>
                             <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="error-message">
                                 <i class="ion-android-alert showError"></i>
                                 <div id="" *ngIf="phone.errors.required" class="custom-tooltip bottom">Phone is required</div>
@@ -230,13 +230,12 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="exampleInputEmail1">Email</label>
-                            <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email"
-                            minlength="2" [(ngModel)]="customerObj.email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                                #email="ngModel" required>
+                            <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email" minlength="2" [(ngModel)]="customerObj.email"
+                                name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" required>
                             <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
                                 <i class="ion-android-alert showError"></i>
                                 <div id="" *ngIf="email.errors.required" class="custom-tooltip bottom">Email is required</div>
-                                <div *ngIf="email.errors.pattern" class="custom-tooltip bottom">Please enter valid email</div> 
+                                <div *ngIf="email.errors.pattern" class="custom-tooltip bottom">Please enter valid email</div>
                             </div>
                         </div>
                     </div>

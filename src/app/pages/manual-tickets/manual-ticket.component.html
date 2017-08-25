@@ -33,7 +33,7 @@
             <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
             <span>My Tickets</span>
           </label>
-            <label class="radioItem radio-inline custom-radio nowrap">
+          <label class="radioItem radio-inline custom-radio nowrap">
             <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
             <span>All Tickets</span>
           </label>
@@ -77,10 +77,10 @@
             <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
               <!-- <td><input type="checkbox" value="Select"></td> -->
               <td class="table-id" style="cursor: pointer">
-                  <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                     <span class="tooltiptext">Edit</span>
                   </i>
-                  <i class="ion-trash-a custom-tooltip-ion">
+                <i class="ion-trash-a custom-tooltip-ion">
                     <span class="tooltiptext">Delete</span>
                   </i>
               </td>
@@ -91,6 +91,8 @@
             </tr>
           </tbody>
         </table>
+        <div style='text-align:center'> <a> <img [hidden]='smartTableData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+        <pagination [tableData]="smartTableData" [(currentPage)]="smartTableData"></pagination>
       </div>
     </ba-card>
   </div>

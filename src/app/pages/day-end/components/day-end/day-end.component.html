@@ -88,6 +88,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <div style='text-align:center'> <a> <img [hidden]='userDataTable.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+                <pagination [tableData]="userDataTable" [(currentPage)]="userDataTable"></pagination>
             </div>
         </ba-card>
     </div>
