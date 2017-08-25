@@ -47,9 +47,11 @@ export class ResetPasswordComponent implements OnInit {
   onSubmit(values: Object): void {
     this.submitted = true;
     if (this.form.valid) {
+      const _tmpUser = JSON.parse(localStorage.getItem('user_token'));
+
       // your code goes here
       const user: any = {};
-      user.EmailId = this.userDetails.EmailID;
+      user.EmailId = _tmpUser.EmailID;
       user.OldPassword = values['password'];
       user.NewPassword = values['newPassword'];
       user.ConfirmPassword = values['confirmPassword'];

@@ -57,6 +57,7 @@ export class CreateTicketComponent implements OnInit {
     this.service.getBranchBasedCustomers(this.searchBranch).subscribe((response) => {
       this.searchCustomer = response[0].CustomerId;
       this.branchBasedCustomers = response;
+      this.onCustomerChange();
     });
   }
 
@@ -65,6 +66,10 @@ export class CreateTicketComponent implements OnInit {
       this.customerBasedProducts = response;
       
     });
+  }
+
+  addPbsProduct() {
+    console.log("reached");
   }
 
   showHideDamagedColumn = function (arg) {

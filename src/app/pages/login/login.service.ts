@@ -16,6 +16,7 @@ export class LoginService {
             this.userInfo = res;
             localStorage.setItem('auth_token', res.access_token);
             localStorage.setItem('userId', res.UserID);
+            localStorage.setItem('user_token', JSON.stringify(res));
             // clear private keys
             this.userService.setPrivateKeys(null);
             if (res.PrivateKey1 && res.PrivateKey2) {
