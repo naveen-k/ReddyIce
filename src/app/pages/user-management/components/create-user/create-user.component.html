@@ -53,9 +53,9 @@
   </div>
   <div class="row page-header rowContainer">
     <div *ngIf="!isNewUser || user.IsRIInternal" class="col-md-5 padding-eater first-column">
-      <label for="username" class="control-label">Username</label>
+      <label for="username" class="control-label" [hidden]="!isNewUser">Username</label>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
-        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="true">
+        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="true" [hidden]="!isNewUser">
       <div *ngIf="UserName.invalid && (UserName.dirty || UserName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="UserName.errors.required" class="custom-tooltip bottom">
@@ -70,7 +70,7 @@
     <div [ngClass]="{'col-md-12': isNewUser}" class="col-md-5 padding-eater second-column">
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
-        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [disabled]="user.IsRIInternal" (change)="changeHandler()">
+        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [disabled]="user.IsRIInternal || !isNewUser" (change)="changeHandler()">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">

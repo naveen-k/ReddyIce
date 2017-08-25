@@ -26,7 +26,7 @@ export class UserManagementComponent implements OnInit {
   isDistributorExist: boolean = false;
   isEditClicked: boolean = false;
   action: string = '';
-
+  userObject:any=[];
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
@@ -232,6 +232,8 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.userObject = this.userService.getUser();
+    // console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
@@ -254,5 +256,6 @@ export class UserManagementComponent implements OnInit {
   trackByTable(i, item) {
     return item ? item.id : undefined;
   }
+
 
 }

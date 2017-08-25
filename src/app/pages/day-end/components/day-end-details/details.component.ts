@@ -10,7 +10,9 @@ import { Component } from '@angular/core';
 export class DetailsComponent {
     unitReconciliation: any;
     ticketDetails: any;
-
+    Actual: any;
+    Coins: any;
+    totalDeposit: any = "0.00";
     constructor(private service: DayEndService) {
         this.unitReconciliation = service.dataTableData2;
         this.ticketDetails = service.dataTableData3;
@@ -23,5 +25,9 @@ export class DetailsComponent {
     sortByWordLength = (a: any) => {
         return a.location.length;
     }
-
+    doAddition() {        
+        this.totalDeposit = Number(this.Actual ? this.Actual : 0) + Number(this.Coins ? this.Coins : 0);
+        return this.totalDeposit;
+    }
 }
+

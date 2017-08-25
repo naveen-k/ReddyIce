@@ -56,11 +56,11 @@
                                     <tr>
                                         <td>Check</td>
                                         <td>$10.90</td>
-                                        <td style="max-width:70px"><input class="form-control" type="text" value="$10.90"></td>
+                                        <td style="max-width:70px"><input class="form-control" type="text" [value]="Actual" [(ngModel)]="Actual" (ngModelChange)="doAddition()"></td>
                                         <td>Coins</td>
-                                        <td style="max-width:70px"><input class="form-control" type="text" value="$0.00"></td>
+                                        <td style="max-width:70px"><input class="form-control" type="text" [value]="Coins" [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
                                         <td>Total Deposit</td>
-                                        <td>$15.90</td>
+                                        <td>${{totalDeposit}}</td>
                                     </tr>
                                     <tr>
                                         <td>Cash</td>

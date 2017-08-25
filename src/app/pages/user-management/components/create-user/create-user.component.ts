@@ -54,6 +54,8 @@ export class CreateUserComponent implements OnInit {
     selectedSearchUser: boolean = false;
     timeOut: any;
     roleList: any = [];
+    userObject:any= [];
+    roleNameAllowed: boolean= true;
     
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
@@ -110,6 +112,8 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.userObject = this.userService.getUser();
+    console.log(this.userObject.Role.RoleName);
         console.log( this.user);
         // this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
