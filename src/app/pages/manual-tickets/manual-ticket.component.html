@@ -85,13 +85,15 @@
                   </i>
               </td>
               <td>{{ item.TicketID }}</td>
-              <td>{{ item.CustomerID.CustomerID }}</td>
+              <td>{{ item.Customer.CustomerID }}</td>
               <td>{{ item.CashAmount }}</td>
               <td>{{ item.CardPaymentStatus }}</td>
             </tr>
           </tbody>
         </table>
-        <div style='text-align:center'> <a> <img [hidden]='smartTableData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+        <div style='text-align:center'>
+          <!-- <a> <img [hidden]='smartTableData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a>  -->
+        </div>
         <pagination [tableData]="smartTableData" [(currentPage)]="smartTableData"></pagination>
       </div>
     </ba-card>

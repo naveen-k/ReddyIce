@@ -34,6 +34,11 @@ export class ManualTicketService extends SharedService {
     .map(res => res.json());
   }
 
+  getCustomerBasedProducts(customerId: string) {
+    return this.http.get(`api/product?CustomerId=${customerId}`)
+    .map(res => res.json());
+  }
+
   dsdSmartTableData = [
     {
       product: 'Product1',

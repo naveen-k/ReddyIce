@@ -25,6 +25,7 @@ export class CreateTicketComponent {
   ticketTypes: any;
   products: any;
   branchBasedCustomers: any;
+  customerBasedProducts: any;
   searchBranch: any;
   constructor(protected service: ManualTicketService) {
     this.service.getBranches().subscribe((response) => {
@@ -34,18 +35,24 @@ export class CreateTicketComponent {
     this.service.getTicketTypes().subscribe ((response) => {
       this.ticketTypes = response;
     });
-    this.service.getProducts().subscribe ((response) => {
-      this.products = response;
-    });
+    // this.service.getProducts().subscribe ((response) => {
+    //   this.products = response;
+    // });
     this.dsdTableData = service.dsdSmartTableData;
     this.pbmTableData = service.pbmSmartTableData;
     this.pbsTableData = service.pbsSmartTableData;
   }
 
-  onChange() {
-    console.log("this.searchBranch", this.searchBranch);
-    this.service.getBranchBasedCustomers(this.searchBranch).subscribe ((response) => {
+  onBranchChange(branchId) {
+    this.service.getBranchBasedCustomers(branchId.BranchID).subscribe ((response) => {
       this.branchBasedCustomers = response;
+    });
+  }
+
+  onCustomerChange(customerId) {
+    this.service.getCustomerBasedProducts(customerId.CustomerId).subscribe ((response) => {
+      this.customerBasedProducts = response;
+      console.log("customerBasedProducts : ", this.customerBasedProducts);
     });
   }
 
