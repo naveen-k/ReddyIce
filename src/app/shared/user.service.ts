@@ -21,7 +21,7 @@ export class UserService {
     }
 
     getUserDetails(id: string): Observable<UserDetails> {
-        if (this.userDetails) { return Observable.of(this.userDetails); }
+        // if (this.userDetails) { return Observable.of(this.userDetails); }
         return this.http.get(`api/user?UserId=${id}`).map((res) => res.json()).map((user) => {
             this.setUser(user);
             this.userDetails = user;
