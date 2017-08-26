@@ -32,8 +32,8 @@ export class Login implements OnInit {
     private fpService: ForgetPasswordService) {
 
     this.fpForm = fb.group({
-      'forgotUsername': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      'forgotEmail': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+      // 'forgotUsername': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+      'forgotEmail': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
     });
     this.loginForm = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],

@@ -122,17 +122,44 @@ export class UserManagementComponent implements OnInit {
 
   }
   onView(user) {
+     if (this.formIsDirty) {
+      const activeModal = this.modalService.open(ModalComponent, {
+        size: 'sm',
+        backdrop: 'static',
+      });
+      activeModal.componentInstance.BUTTONS.OK = 'Discard';
+      activeModal.componentInstance.showCancel = true;
+      activeModal.componentInstance.modalHeader = 'Warning!';
+      activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+      activeModal.componentInstance.closeModalHandler = (() => {
+        this.formIsDirty = false;
+        
     this.cardTitle = 'User Detail';
     this.newUser = Object.assign({}, user);
     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
     this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-
     this.isNewUser = false;
     this.action = 'view';
-    if (!this.rightCardOpen) {
+
+      });
+
+    } else {
+      
+      this.cardTitle = 'User Detail';
+    this.newUser = Object.assign({}, user);
+    this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+    this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+    this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+    this.isNewUser = false;
+    this.action = 'view'; 
+   
+    }
+   
+    if (!this.rightCardOpen ) {
       this.rightCardOpen = !this.rightCardOpen;
       this.hideColumn = !this.hideColumn;
+
     }
 
   }
