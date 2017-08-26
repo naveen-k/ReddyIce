@@ -28,7 +28,11 @@ export class UserService {
             return user;
         });
     }
-
+    isUserExist(email) {
+        return this.http.get(`api/user/IsUserExist?email=${email}`).map((res) => {
+            return res.json();
+        });
+    }
     setPrivateKeys(values) {
         // this.privateKeys = values;        
         values = values || '';

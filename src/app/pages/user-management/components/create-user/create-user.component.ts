@@ -26,14 +26,14 @@ export class CreateUserComponent implements OnInit {
         this._roles = values;
         this.filterRoles();
     }
-     @Input() 
-     get action(): any {
-         return this;
-     }
+    @Input()
+    get action(): any {
+        return this;
+    }
     set action(values) {
         if (values === '') { return; }
-      this.actionName = values;
-      console.log(values);
+        this.actionName = values;
+        console.log(values);
     }
 
     @Input() branches: any;
@@ -45,7 +45,7 @@ export class CreateUserComponent implements OnInit {
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
 
     @Output() formChanged = new EventEmitter();
-   
+
     actionName: string;
     riUserList: any = [];
     riUserName: string = '';
@@ -54,9 +54,10 @@ export class CreateUserComponent implements OnInit {
     selectedSearchUser: boolean = false;
     timeOut: any;
     roleList: any = [];
-    userObject:any= [];
-    roleNameAllowed: boolean= true;
-    
+    userObject: any = [];
+    roleNameAllowed: boolean = true;
+    isEmailExist: boolean = false;
+
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
     toInt(num: string) {
@@ -113,8 +114,8 @@ export class CreateUserComponent implements OnInit {
 
     ngOnInit() {
         this.userObject = this.userService.getUser();
-    console.log(this.userObject.Role.RoleName);
-        console.log( this.user);
+        console.log(this.userObject.Role.RoleName);
+        console.log(this.user);
         // this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
@@ -183,5 +184,21 @@ export class CreateUserComponent implements OnInit {
 
     resetUser() {
         this.user = {};
+    }
+    checkEmail(email) {
+        this.userService.isUserExist(email).subscribe((res) => {
+            console.log(res);
+            if (res.Message == 'Email already exists') {
+
+                this.isEmailExist = true;
+            }
+            else {
+
+                this.isEmailExist = false;
+            }
+
+        }, (err) => {
+
+        });
     }
 }
