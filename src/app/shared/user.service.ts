@@ -22,6 +22,7 @@ export class UserService {
 
     getUserDetails(id: string): Observable<UserDetails> {
         // if (this.userDetails) { return Observable.of(this.userDetails); }
+       // http://frozen.reddyice.com/myiceboxservice_dev/api/users?id=1
         return this.http.get(`api/user?UserId=${id}`).map((res) => res.json()).map((user) => {
             this.setUser(user);
             this.userDetails = user;

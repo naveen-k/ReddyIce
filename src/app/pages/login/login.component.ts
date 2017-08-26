@@ -36,8 +36,8 @@ export class Login implements OnInit {
       'forgotEmail': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
     });
     this.loginForm = fb.group({
-      'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+      'email': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
 
     });
 
@@ -73,8 +73,9 @@ export class Login implements OnInit {
             this.router.navigate(['']);
           }
         }, (error) => {
+          error = JSON.parse(error._body);
            this.isProcessing = false;
-          this.notification.error('Error', 'Provided username or password is incorrect');
+          this.notification.error('Error', error.error_description);
         });
       }
     }
@@ -86,8 +87,10 @@ export class Login implements OnInit {
         this.notification.success('Success', res.Message);
         this.router.navigate(['/login']);
       }, (error) => {
+        console.log(error);
+        error = JSON.parse(error._body);
         this.isProcessing = false;
-        this.notification.error('Error', 'Failed to reset. Email ID does not exist.');
+        this.notification.error('Error', error.Message);
       });
    }
 

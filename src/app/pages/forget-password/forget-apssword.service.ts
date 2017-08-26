@@ -13,11 +13,10 @@ export class ForgetPasswordService {
         headers.append('Content-Type', 'application/json');
         const options = new RequestOptions({ 'headers': headers });
         return this.http.post(`${this.API_ENDPOINT}api/account/forgetpassword`, data, options)
-          .map((res) => res.json())
-          .catch((err) => {
-            console.log(err.status);
-            return Observable.throw(new Error(err.status));
+          .map((res) => res.json()).map((res) => {
+           return res;
           });
+         
     }
 
 }

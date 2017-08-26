@@ -24,9 +24,6 @@ export class LoginService {
             }
 
             return res;
-        }).catch((err) => {
-            console.log(err.statusCode);
-            return Observable.throw(new Error(err.status));
         });
     }
 
