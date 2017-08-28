@@ -37,7 +37,7 @@ export class Login implements OnInit {
     });
     this.loginForm = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
 
     });
 

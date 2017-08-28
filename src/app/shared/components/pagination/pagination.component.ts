@@ -5,17 +5,19 @@ import { Pages } from '../../../pages/pages.component';
     template: `
         <nav aria-label="Page navigation example" [hidden]="tableData.length<=options.itemPerPage">
         <div class="row"> 
-        <div class='col-md-4' style="padding: 10px;"> records {{options.start}} - {{options.end}} of {{tableData.length}}</div>
-          <ul class="pagination justify-content-end col-md-8">
+        <div class='' style="padding: 10px;"> Records {{options.start}} - {{options.end}} of {{tableData.length}}</div>
+          <ul class="pagination justify-content-end ">
             <li class="page-item" [ngClass]="{'disabled':currentPageIndex==1}">
-              <a class="page-link" (click)="pageChangeHandler(currentPageIndex-1)">Previous</a>
+              <a class="page-link" (click)="pageChangeHandler(currentPageIndex-1)" href="javascript:void(0);">
+                <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
             </li>
             <li *ngFor="let a of options.pages; let i = index" class="page-item"
-             [ngClass]="{'btn-danger': i+1 == currentPageIndex}">
+             [ngClass]="{'btn-danger': i+1 == currentPageIndex}" [hidden]="!showPages">
                 <a class="page-link" (click)="pageChangeHandler(i+1, 2)">{{i+1}}</a>
             </li>
             <li class="page-item" [ngClass]="{'disabled':currentPageIndex==options.pages.length}">
-              <a class="page-link" (click)="pageChangeHandler(currentPageIndex+1)">Next</a>
+              <a class="page-link" (click)="pageChangeHandler(currentPageIndex+1)" href="javascript:void(0);">
+                <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
             </li>
           </ul>
           </div>
@@ -26,6 +28,9 @@ export class PaginationComponent {
 
     currentPageIndex: number = 1;
     _tableData = [];
+
+    @Input()
+    showPages: boolean = true;
 
     @Input()
     set tableData(data) {
@@ -41,7 +46,7 @@ export class PaginationComponent {
 
     @Input()
     options: any = {
-        itemPerPage: 30,
+        itemPerPage: 15,
         pages: [],
         start: 0,
         end: 0,

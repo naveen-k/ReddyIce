@@ -255,6 +255,7 @@ export class UserManagementComponent implements OnInit {
     this.service.getUsers(id).subscribe((res) => {
       res.forEach((u) => {
         u.tmp_branch = `${(u.Branch ? u.Branch.BranchID : 'NA')} (${(u.Branch ? u.Branch.BranchName : 'NA')})`;
+        u['tmp_role'] = `${(u.Role ? u.Role.RoleName : '')}`;
       });
       this.userTableData = res;
     });

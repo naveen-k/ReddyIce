@@ -16,5 +16,6 @@ export interface User {
   IsRIInternal?: boolean;
   tmp_branch?: string;
   Branch: Branch;
+  Role: any;
 }
 

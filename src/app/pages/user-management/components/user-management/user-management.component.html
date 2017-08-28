@@ -10,12 +10,6 @@
               Add User
           </button>
           </div>
-          <div style="float:right;  width:40%;; width:auto; margin-right:30px;">
-            <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
-          </div>
-
-
-
 
         </div>
       </div>
@@ -23,9 +17,17 @@
       <div *ngIf="this.userDetails && this.userDetails.Role.RoleName === 'Distributor Admin'" class="col-md-5 padding-eater">
         <h4>Distributor : Dist 001</h4>
       </div>
+      <div class="row">
+      <div class="col-sm-4">
+          <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
+      </div>
+      <div class="col-sm-8" style="padding-right: 30px;">
+        <pagination [tableData]="userTableData" [(currentPage)]="paginationData" style="float: right;" [showPages]="false"></pagination>
+      </div>
+      </div>
       <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
       <div class="vertical-scroll">
-        <table class="table table-striped">
+        <table class="table table-striped table-condensed">
           <thead>
             <tr>
               <th width="100px;">Action</th>
@@ -61,28 +63,29 @@
               </th> -->
               <th>
                 Role
-                <th *ngIf="!hideColumn && !isDistributorExist">
-                  <span style="cursor:pointer;" (click)="customer.sortField = 'distributor';customer.isAsc=!customer.isAsc;">
+              </th>
+              <th *ngIf="!hideColumn && !isDistributorExist">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'distributor';customer.isAsc=!customer.isAsc;">
                     Distributor
                     <i *ngIf="(customer.sortField === 'role')" [ngClass]="(customer.isAsc && customer.sortField === 'role' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
-                </th>
-                <th *ngIf="!hideColumn">
-                  <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
+              </th>
+              <th *ngIf="!hideColumn">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_branch';customer.isAsc=!customer.isAsc;">
                     Branch
-                    <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
-                </th>
-                <th *ngIf="!isDistributorAdmin">
-                  <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
+              </th>
+              <th *ngIf="!isDistributorAdmin">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
                     RI Internal
                     <i *ngIf="(customer.sortField === 'riinternal')" [ngClass]="(customer.isAsc && customer.sortField === 'riinternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
-                </th>
+              </th>
             </tr>
           </thead>
           <tbody>
-            
+
             <!--Removed sorting functionality as it was causing rendering issues  -->
             <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString">
               <td class="table-id" style="cursor: pointer">
@@ -92,7 +95,8 @@
                 <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px">
                    <span class="tooltiptext">Edit</span>
                 </i>
-                <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)" [hidden]="item.IsRIInternal || !item.IsActive">
+                <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"
+                  [hidden]="item.IsRIInternal || !item.IsActive">
                    <span class="tooltiptext">Deactivate</span>
                 </i>
               </td>
@@ -101,7 +105,8 @@
               <td class="userCell">{{ item.UserName || 'NA' }}</td>
               <!-- <td *ngIf="!hideColumn" class="userCell">{{ item.EmailID }}</td>
               <td class="userCell">{{ item.Phone || 'NA' }}</td> -->
-              <td class="userCell">{{ item.Role ? item.Role.RoleName : 'NA' }}</td>
+              <!--<td class="userCell">{{ item.Role ? item.Role.RoleName : 'NA' }}</td>-->
+              <td class="userCell">{{ item.tmp_role}}</td>
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor ? item.Distributor.DistributorName : 'NA' }}</td>
               <td *ngIf="!hideColumn" class="userCell">{{item.tmp_branch}}</td>
               <td *ngIf="!isDistributorAdmin" class="userCell">{{item.IsRIInternal ? 'Y' : 'N'}}</td>
@@ -109,7 +114,7 @@
           </tbody>
         </table>
         <div style='text-align:center'> <a> <img [hidden]='paginationData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-        <pagination [hidden]='true' [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
+
       </div>
     </ba-card>
   </div>
