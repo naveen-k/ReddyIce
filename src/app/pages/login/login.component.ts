@@ -21,7 +21,7 @@ export class Login implements OnInit {
   forgotUsername: AbstractControl;
   submitted: boolean = false;
   isLoginMode: boolean = true;
- isProcessing: boolean = false;
+  isProcessing: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -36,7 +36,7 @@ export class Login implements OnInit {
       'forgotEmail': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
     });
     this.loginForm = fb.group({
-      'email': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
 
     });
@@ -66,7 +66,7 @@ export class Login implements OnInit {
         const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
 
         this.loginService.login(user).subscribe((res) => {
-           this.isProcessing = false;
+          this.isProcessing = false;
           if (res.IsNewUser !== 'False') {
             this.router.navigate(['resetpassword']);
           } else {
@@ -74,16 +74,23 @@ export class Login implements OnInit {
           }
         }, (error) => {
           error = JSON.parse(error._body);
-           this.isProcessing = false;
+          this.isProcessing = false;
           this.notification.error('Error', error.error_description);
         });
       }
     }
-   else{
+    else {
+      
       const user: any = {};
-      user.EmailId = values['forgotEmail'];
+     
+      if(this.ValidateEmail(user.EmailId)) {
+        user.EmailId = values['forgotEmail'];
+      }else {
+        user.UserName = values['forgotEmail'];
+      }
+      
       this.fpService.forgetPassword(user).subscribe((res) => {
-         this.isProcessing = false;
+        this.isProcessing = false;
         this.notification.success('Success', res.Message);
         this.router.navigate(['/login']);
       }, (error) => {
@@ -92,10 +99,16 @@ export class Login implements OnInit {
         this.isProcessing = false;
         this.notification.error('Error', error.Message);
       });
-   }
+    }
 
   }
-
+  ValidateEmail(mail) {
+    if (/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/.test(mail)) {
+      return true;
+    }
+    else { return false; }
+    
+  }
   autoLoginUser(values) {
     const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
     this.loginService.login(user).subscribe((res) => {
