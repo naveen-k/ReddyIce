@@ -41,7 +41,7 @@
 
 .form-control {
   color: $content-text;
-  @include placeholderStyle($content-text, 0.7);
+  @include placeholderStyle($content-text, 0.5);
   border: 1px solid $input-border;
   border-radius: 5px;
   background-color: $input-background;
@@ -392,7 +392,7 @@ label.custom-input-danger {
   background-color: $input-background;
   color: $disabled;
   border-color: $disabled-bg;
-  @include placeholderStyle($default-text, 0.5);
+  @include placeholderStyle($default-text, 0.7);
 }
 
 .form-control-rounded {

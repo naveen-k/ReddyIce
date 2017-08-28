@@ -172,14 +172,15 @@ export class UserManagementComponent implements OnInit {
       const savedUserlist = [...this.userTableData, res];
       this.userTableData = savedUserlist;
 
+    this.rightCardOpen = !this.rightCardOpen;
+    this.hideColumn = !this.hideColumn;
+    this.isNewUser = false;
 
     },
       (error) => {
         this.notification.error('Error', 'Failed to create user.');
       });
-    this.rightCardOpen = !this.rightCardOpen;
-    this.hideColumn = !this.hideColumn;
-    this.isNewUser = false;
+    
 
   }
 
@@ -202,6 +203,7 @@ export class UserManagementComponent implements OnInit {
       this.userTableData = users;
     },
       (error) => {
+        console.log(error);
         this.notification.error('Error', `Failed to update user ${user.UserName}`);
       });
 

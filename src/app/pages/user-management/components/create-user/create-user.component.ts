@@ -186,9 +186,10 @@ export class CreateUserComponent implements OnInit {
         this.user = {};
     }
     checkEmail(email) {
+        console.log(email);
         this.userService.isUserExist(email).subscribe((res) => {
             console.log(res);
-            if (res.Message == 'Email already exists') {
+            if (res.Message === 'Email already exists') {
 
                 this.isEmailExist = true;
             }
@@ -200,5 +201,17 @@ export class CreateUserComponent implements OnInit {
         }, (err) => {
 
         });
+    }
+    rolChange(roleID) {
+        if (roleID == 1 || roleID == 2) {
+            if (this.branches[0].BranchID != 'All') { this.branches.unshift({ BranchID: '-1', BranchName: 'All' }) }
+            //else { }
+            this.user.BranchID = '-1';
+        }
+        else{
+             if (this.branches[0].BranchID == '-1') { this.branches.shift() };
+           
+        }
+
     }
 }

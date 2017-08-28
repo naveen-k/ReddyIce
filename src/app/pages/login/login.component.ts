@@ -33,7 +33,7 @@ export class Login implements OnInit {
 
     this.fpForm = fb.group({
       // 'forgotUsername': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      'forgotEmail': ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      'forgotEmail': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
     });
     this.loginForm = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -67,6 +67,7 @@ export class Login implements OnInit {
 
         this.loginService.login(user).subscribe((res) => {
           this.isProcessing = false;
+         // console.log(res);
           if (res.IsNewUser !== 'False') {
             this.router.navigate(['resetpassword']);
           } else {
@@ -81,20 +82,13 @@ export class Login implements OnInit {
     }
     else {
       
-      const user: any = {};
-     
-      if(this.ValidateEmail(user.EmailId)) {
-        user.EmailId = values['forgotEmail'];
-      }else {
-        user.UserName = values['forgotEmail'];
-      }
-      
+      const user: any = {};   
+        user.EmailId = values['forgotEmail'];   
       this.fpService.forgetPassword(user).subscribe((res) => {
         this.isProcessing = false;
         this.notification.success('Success', res.Message);
         this.router.navigate(['/login']);
       }, (error) => {
-        console.log(error);
         error = JSON.parse(error._body);
         this.isProcessing = false;
         this.notification.error('Error', error.Message);
@@ -102,13 +96,7 @@ export class Login implements OnInit {
     }
 
   }
-  ValidateEmail(mail) {
-    if (/^\w+([\.-]?\ w+)*@\w+([\.-]?\ w+)*(\.\w{2,3})+$/.test(mail)) {
-      return true;
-    }
-    else { return false; }
-    
-  }
+ 
   autoLoginUser(values) {
     const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
     this.loginService.login(user).subscribe((res) => {
