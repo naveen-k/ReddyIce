@@ -64,7 +64,7 @@
                 Role
               </th>
               <th *ngIf="!hideColumn && !isDistributorExist">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'distributor';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_distributor';customer.isAsc=!customer.isAsc;">
                     Distributor
                     <i *ngIf="(customer.sortField === 'role')" [ngClass]="(customer.isAsc && customer.sortField === 'role' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
