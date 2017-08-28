@@ -11,9 +11,9 @@ export class SharedService {
     private _branches: any;
     constructor(http: HttpService) { }
 
-    getBranches(): Observable<any> {
-        if (this._branches) { return Observable.of(this._branches); }
-        return this.http.get('api/DistributorBranches').map((res) => res.json()).map((res) => {
+    getBranches(userId): Observable<any> {
+        // if (this._branches) { return Observable.of(this._branches); }
+        return this.http.get(`api/DistributorBranches?Id=${userId}`).map((res) => res.json()).map((res) => {
             // Cache branch response
             this._branches = res;
             return res;

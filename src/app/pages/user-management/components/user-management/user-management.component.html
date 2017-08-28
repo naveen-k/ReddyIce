@@ -86,7 +86,7 @@
           <tbody>
 
             <!--Removed sorting functionality as it was causing rendering issues  -->
-            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString:['FirstName', 'LastName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal']">
+            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString:['FirstName', 'LastName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor']">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
                    <span class="tooltiptext">View</span>
@@ -106,7 +106,7 @@
               <td class="userCell">{{ item.Phone || 'NA' }}</td> -->
               <!--<td class="userCell">{{ item.Role ? item.Role.RoleName : 'NA' }}</td>-->
               <td class="userCell">{{ item.tmp_role}}</td>
-              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor ? item.Distributor.DistributorName : 'NA' }}</td>
+              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.tmp_distributor}}</td>
               <td *ngIf="!hideColumn" class="userCell">{{item.tmp_branch}}</td>
               <td *ngIf="!isDistributorAdmin" class="userCell">{{item.IsRIInternal ? 'Y' : 'N'}}</td>
             </tr>

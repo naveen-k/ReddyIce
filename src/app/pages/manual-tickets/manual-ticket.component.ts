@@ -13,7 +13,10 @@ export class ManualTicketComponent implements OnInit {
   smartTableData: any;
   allBranches: any;
   disableCreateTicketFields: boolean = false;
-  constructor(protected service: ManualTicketService) {
+  constructor(
+    protected service: ManualTicketService,
+    protected userService: UserService,
+  ) {
 
   }
   isNewTicket: boolean = false;
@@ -31,7 +34,8 @@ export class ManualTicketComponent implements OnInit {
   }
 
   getBranches() {
-    this.service.getBranches().subscribe((response) => {
+    const user = this.userService.getUser();
+    this.service.getBranches(user.UserId).subscribe((response) => {
       this.allBranches = response;
     });
   }

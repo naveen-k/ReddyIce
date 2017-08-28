@@ -17,5 +17,6 @@ export interface User {
   tmp_branch?: string;
   Branch: Branch;
   Role: any;
+  Distributor: any;
 }
 

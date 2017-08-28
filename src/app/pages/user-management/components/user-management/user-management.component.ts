@@ -240,7 +240,8 @@ export class UserManagementComponent implements OnInit {
   }
 
   getBranches() {
-    this.service.getBranches().subscribe((response) => {
+    const user = this.userService.getUser();
+    this.service.getBranches(user.UserId).subscribe((response) => {
       this.userBranches = response;
     });
   }
@@ -256,6 +257,7 @@ export class UserManagementComponent implements OnInit {
       res.forEach((u) => {
         u.tmp_branch = `${(u.Branch ? u.Branch.BranchID : 'NA')} (${(u.Branch ? u.Branch.BranchName : 'NA')})`;
         u['tmp_role'] = `${(u.Role ? u.Role.RoleName : '')}`;
+        u['tmp_distributor'] = `${(u.Distributor ? u.Distributor.DistributorName : '')}`;
       });
       this.userTableData = res;
     });

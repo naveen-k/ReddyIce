@@ -1,3 +1,4 @@
+import { UserService } from '../../../shared/user.service';
 import { UploadImageService } from '../../../shared/uploadImage.service';
 import { Branch } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
@@ -34,7 +35,10 @@ export class CreateTicketComponent implements OnInit {
   tempObj: any;
   tempDisableCreateTicketFields: boolean = false;
   uploadPodButton: boolean = false;
-  constructor(protected service: ManualTicketService, protected uploadImgService: UploadImageService) {
+  constructor(
+    protected userService: UserService,
+    protected service: ManualTicketService, 
+    protected uploadImgService: UploadImageService) {
 
     // this.service.getProducts().subscribe ((response) => {
     //   this.products = response;
@@ -46,13 +50,15 @@ export class CreateTicketComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('this.service.disableCreateTicketFields : ', this.service.disableCreateTicketFields);
+    // console.log('this.service.disableCreateTicketFields : ', this.service.disableCreateTicketFields);
     if (this.service.disableCreateTicketFields) {
       this.tempDisableCreateTicketFields = true;
     } else {
       this.tempDisableCreateTicketFields = false;
     }
-    this.service.getBranches().subscribe((response) => {
+    const user = this.userService.getUser();
+
+    this.service.getBranches(user.UserId).subscribe((response) => {
       this.allBranches = response;
       this.searchBranch = response[0].BranchID;
       this.onBranchChange();
