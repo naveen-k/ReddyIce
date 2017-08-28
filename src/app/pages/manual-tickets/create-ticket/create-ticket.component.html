@@ -1,11 +1,13 @@
 <form>
   <div class="row">
     <div class="col-md-6">
+        <button type="submit" class="btn btn-danger pull-right" [hidden] = "!tempDisableCreateTicketFields">Approve</button>
     </div>
     <div class="col-md-4">
       <!-- <button type="submit" class="btn btn-danger pull-right">Upload POD</button> -->
-      <input type="button" value="Upload POD" onclick="$('#myInput').click();" class="btn btn-danger pull-right" />
-      <input id="myInput" type="file" style="visibility:hidden" />
+      <input type="button" value="Upload POD" onclick="$('#myInput').click();"
+      [disabled] = "uploadPodButton" class="btn btn-danger pull-right" />
+      <input id="myInput" type="file" style="visibility:hidden" (change)="onImageSelect($event)"/>
     </div>
     <div class="col-md-2">
       <button type="submit" class="btn btn-danger pull-right">Save</button>
@@ -96,12 +98,12 @@
       <label>POD</label>
       <div class="radioList">
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="pod" id="podRadio1" value="option1" checked>
+          <input type="radio" name="pod" id="podRadio1" value="option1" checked (click)="ifPodReceived(1)">
           <span>Received</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="pod" id="podRadio2" value="option2">
-          <span>No-Received</span>
+          <input type="radio" name="pod" id="podRadio2" value="option2" (click)="ifPodReceived(2)">
+          <span>Not-Received</span>
         </label>
       </div>
     </div>
@@ -129,7 +131,7 @@
     <div class="form-group col-md-6">
       <label for="exampleInputPassword1">Ticket No.</label>
       <input type="text" class="form-control" id="TicketNumber" placeholder="Ticket #" minlength="2" [(ngModel)]="ticketObj.TicketNumber"
-        name="TicketNumber" #TicketNumber="ngModel" required>
+        name="TicketNumber" #TicketNumber="ngModel" required [disabled] = "tempDisableCreateTicketFields">
       <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>

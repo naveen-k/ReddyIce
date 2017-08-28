@@ -1,3 +1,4 @@
+import { UploadImageService } from '../../../shared/uploadImage.service';
 import { Branch } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
 
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'create-new-ticket',
   templateUrl: './create-ticket.component.html',
   styleUrls: ['./create-ticket.component.scss'],
+  providers: [UploadImageService],
 })
 export class CreateTicketComponent implements OnInit {
   smartTableData: any;
@@ -29,7 +31,10 @@ export class CreateTicketComponent implements OnInit {
   customerBasedProducts: any;
   searchBranch: any;
   searchCustomer: any;
-  constructor(protected service: ManualTicketService) {
+  tempObj: any;
+  tempDisableCreateTicketFields: boolean = false;
+  uploadPodButton: boolean = false;
+  constructor(protected service: ManualTicketService, protected uploadImgService: UploadImageService) {
 
     // this.service.getProducts().subscribe ((response) => {
     //   this.products = response;
@@ -37,10 +42,16 @@ export class CreateTicketComponent implements OnInit {
     this.dsdTableData = service.dsdSmartTableData;
     this.pbmTableData = service.pbmSmartTableData;
     this.pbsTableData = service.pbsSmartTableData;
+    
   }
 
   ngOnInit() {
-
+    console.log('this.service.disableCreateTicketFields : ', this.service.disableCreateTicketFields);
+    if (this.service.disableCreateTicketFields) {
+      this.tempDisableCreateTicketFields = true;
+    } else {
+      this.tempDisableCreateTicketFields = false;
+    }
     this.service.getBranches().subscribe((response) => {
       this.allBranches = response;
       this.searchBranch = response[0].BranchID;
@@ -64,12 +75,35 @@ export class CreateTicketComponent implements OnInit {
   onCustomerChange() {
     this.service.getCustomerBasedProducts(this.searchCustomer).subscribe((response) => {
       this.customerBasedProducts = response;
-      
     });
+  }
+
+  ifPodReceived(arg) {
+    if (arg === 1) {
+      this.uploadPodButton = false;
+    } else {
+      this.uploadPodButton = true;
+    }
+  }
+
+  onImageSelect(event) {
+    console.log('onChange');
+    const files = event.srcElement.files;
+    console.log(files);
+    // this.uploadImgService.makeFileRequest('http://localhost:8182/upload', [], files).subscribe(() => {
+    //   console.log('sent');
+    // });
   }
 
   addPbsProduct() {
     console.log("reached");
+    this.tempObj = {
+      product: 'Product1',
+      unit: '$125',
+      deliveredBag: '125',
+      currentInv: '12',
+    };
+    this.pbsTableData.push(this.tempObj);
   }
 
   showHideDamagedColumn = function (arg) {
