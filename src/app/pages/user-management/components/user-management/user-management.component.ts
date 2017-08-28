@@ -49,7 +49,7 @@ export class UserManagementComponent implements OnInit {
       role: '',
       IsActive: true,
       IsSeasonal: true,
-      IsRIInternal: false,
+     // IsRIInternal: false,
     };
   }
 
