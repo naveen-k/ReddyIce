@@ -26,7 +26,7 @@ export class UserManagementComponent implements OnInit {
   isDistributorExist: boolean = false;
   isEditClicked: boolean = false;
   action: string = '';
-  userObject:any=[];
+  userObject: any= [];
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
