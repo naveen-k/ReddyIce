@@ -18,7 +18,7 @@ export const PAGES_MENU = [
         path: 'customer-management',
         data: {
           menu: {
-            title: 'Customer Management',
+            title: 'Customer',
             icon: 'ion-ios-people',
             selected: false,
             expanded: false,
@@ -30,7 +30,7 @@ export const PAGES_MENU = [
         path: 'user-management',
         data: {
           menu: {
-            title: 'User Management',
+            title: 'User',
             icon: 'ion-person',
             selected: false,
             expanded: false,

@@ -124,7 +124,7 @@
       <div class="col-md-5">
         <label for="exampleSelect1">Branch</label>
         <select class="form-control userMgmtSelect" [disabled]="user.RoleID == '1'|| user.RoleID == '2'" id="branchSelection" [(ngModel)]="user.BranchID"
-          name="branch" #branch="ngModel" (ngModelChange)="changeHandler()">
+          name="branch" #branch="ngModel" (ngModelChange)="changeHandler(); loadBranches()">
             <option *ngFor="let _branch of branches" [value]="_branch.BranchID"><span *ngIf="_branch.BranchID != ''"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
               <span *ngIf="_branch.BranchID == ''">
                {{_branch.BranchName}}
@@ -150,7 +150,7 @@
       <label for="distributor">Distributor</label>
       <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
         #distributor="ngModel" (ngModelChange)="changeHandler()" required>
-          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
+          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorID">{{distributor.DistributorName}}</option>
       </select>
     </div>
     <div class="col-md-2"></div>

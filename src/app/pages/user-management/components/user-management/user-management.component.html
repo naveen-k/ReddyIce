@@ -1,5 +1,5 @@
-<div class="row page-header user-details padding-eater">
-  <div class="col-md-6 padding-eater" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
+<div class="row user-details">
+  <div class="col-md-6" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
     <!-- <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
     <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
@@ -13,7 +13,6 @@
 
         </div>
       </div>
-      <br>
       <div *ngIf="this.userDetails && this.userDetails.Role.RoleName === 'Distributor Admin'" class="col-md-5 padding-eater">
         <h4>Distributor : Dist 001</h4>
       </div>
@@ -87,7 +86,7 @@
           <tbody>
 
             <!--Removed sorting functionality as it was causing rendering issues  -->
-            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString">
+            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString:['FirstName', 'LastName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal']">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
                    <span class="tooltiptext">View</span>

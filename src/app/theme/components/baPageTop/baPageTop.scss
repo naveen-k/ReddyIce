@@ -172,11 +172,17 @@
     .search {
       display: none;
     }
+    .navbar-label-margin-top {
+      display: none;
+    }
   }
 
   @media screen and (max-width: $resXS) {
     .page-top {
       padding: 0 20px;
+    }
+    .navbar-label-margin-top {
+      display: none;
     }
   }
 
@@ -192,6 +198,9 @@
     }
 
     .al-skin-dropdown {
+      display: none;
+    }
+    .navbar-label-margin-top {
       display: none;
     }
   }

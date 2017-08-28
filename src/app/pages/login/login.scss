@@ -1,8 +1,11 @@
 @import '../../theme/sass/auth';
-
+.auth-block{
+  background: #1C2B36;
+}
 .auth-main .forgot-pass, .auth-main .forgot-pass:hover {
   color: #fff;
-  font-weight: 500
+  font-weight: 500;
+  text-decoration: underline;
 }
 .cursor{
   cursor: pointer;

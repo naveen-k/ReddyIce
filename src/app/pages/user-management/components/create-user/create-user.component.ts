@@ -196,7 +196,7 @@ export class CreateUserComponent implements OnInit {
     checkEmail(email) {
         console.log(email);
         this.userService.isUserExist(email).subscribe((res) => {
-            console.log(res);
+            // console.log(res);
             if (res.Message === 'Email already exists') {
 
                 this.isEmailExist = true;
@@ -216,10 +216,16 @@ export class CreateUserComponent implements OnInit {
             //else { }
             this.user.BranchID = '';
         }
-        else{
-             if (this.branches[0].BranchID == '') { this.branches.shift() };
-           
+        else {
+            if (this.branches[0].BranchID == '') { this.branches.shift() };
+
         }
 
+    }
+
+    loadBranches() {
+        this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
+            this.distributorsAndCopackers = res;
+        });
     }
 }

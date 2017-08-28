@@ -45,9 +45,9 @@ export class UserManagementService extends SharedService {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         const options = new RequestOptions({ 'headers': headers });
-      //  return this.http.delete(`api/user?id=${id}`).map((res => res.json()));\
-      return this.http.put(`api/user/deactivateuser?id=${id}`, {}).map((res => res.json()));
-      
+        //  return this.http.delete(`api/user?id=${id}`).map((res => res.json()));\
+        return this.http.put(`api/user/deactivateuser?id=${id}`, {}).map((res => res.json()));
+
     }
 
     getRoles(): Observable<any> {
@@ -67,5 +67,9 @@ export class UserManagementService extends SharedService {
         }
         searchObj['SearchString'] = searchString;
         return this.http.post('api/user/searchriuser', searchObj).map((res) => res.json());
+    }
+
+    getDistributorsByBranch(branchId: string): Observable<any[]> {
+        return this.http.get(`api/DistributorBranches?BranchId=${branchId}`).map((res) => res.json());
     }
 }
