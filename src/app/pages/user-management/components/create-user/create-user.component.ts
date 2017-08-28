@@ -204,12 +204,12 @@ export class CreateUserComponent implements OnInit {
     }
     rolChange(roleID) {
         if (roleID == 1 || roleID == 2) {
-            if (this.branches[0].BranchID != 'All') { this.branches.unshift({ BranchID: '-1', BranchName: 'All' }) }
+            if (this.branches[0].BranchID != 'All') { this.branches.unshift({ BranchID: '', BranchName: 'All' }) }
             //else { }
-            this.user.BranchID = '-1';
+            this.user.BranchID = '';
         }
         else{
-             if (this.branches[0].BranchID == '-1') { this.branches.shift() };
+             if (this.branches[0].BranchID == '') { this.branches.shift() };
            
         }
 

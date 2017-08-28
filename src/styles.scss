@@ -21,14 +21,15 @@ visibility: visible;
 }
 .tooltiptext {
     visibility: hidden;
-    background-color: #ed7878;
-    width: auto;
+    background-color: #333;
     color: #fff;
+    width: auto;
     text-align: center;
     border-radius: 6px;
     position: absolute;
     padding: 2px 5px;
-    line-height: 20px;
+    line-height: 15px;
+    font-size: 12px;
 }
 
 

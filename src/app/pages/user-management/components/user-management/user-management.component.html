@@ -93,7 +93,7 @@
                    <span class="tooltiptext">Edit</span>
                 </i>
                 <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)" [hidden]="item.IsRIInternal || !item.IsActive">
-                   <span class="tooltiptext">Delete</span>
+                   <span class="tooltiptext">Deactivate</span>
                 </i>
               </td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }}</td>
@@ -109,7 +109,7 @@
           </tbody>
         </table>
         <div style='text-align:center'> <a> <img [hidden]='paginationData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-        <pagination [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
+        <pagination [hidden]='true' [tableData]="userTableData" [(currentPage)]="paginationData"></pagination>
       </div>
     </ba-card>
   </div>

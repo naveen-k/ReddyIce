@@ -67,8 +67,8 @@ export class Login implements OnInit {
 
         this.loginService.login(user).subscribe((res) => {
           this.isProcessing = false;
-         // console.log(res);
-          if (res.IsNewUser !== 'False') {
+          console.log(res);
+          if (res.IsNewUser !== 'False' && !res.IsRIInternal) {
             this.router.navigate(['resetpassword']);
           } else {
             this.router.navigate(['']);
