@@ -7,7 +7,7 @@
       <!-- <button type="submit" class="btn btn-danger pull-right">Upload POD</button> -->
       <input type="button" value="Upload POD" onclick="$('#myInput').click();"
       [disabled] = "uploadPodButton" class="btn btn-danger pull-right" />
-      <input id="myInput" type="file" style="visibility:hidden" />
+      <input id="myInput" type="file" style="visibility:hidden" (change)="onImageSelect($event)"/>
     </div>
     <div class="col-md-2">
       <button type="submit" class="btn btn-danger pull-right">Save</button>

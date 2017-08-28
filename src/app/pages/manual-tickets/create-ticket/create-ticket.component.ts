@@ -1,3 +1,4 @@
+import { UploadImageService } from '../../../shared/uploadImage.service';
 import { Branch } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
 
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'create-new-ticket',
   templateUrl: './create-ticket.component.html',
   styleUrls: ['./create-ticket.component.scss'],
+  providers: [UploadImageService],
 })
 export class CreateTicketComponent implements OnInit {
   smartTableData: any;
@@ -32,7 +34,7 @@ export class CreateTicketComponent implements OnInit {
   tempObj: any;
   tempDisableCreateTicketFields: boolean = false;
   uploadPodButton: boolean = false;
-  constructor(protected service: ManualTicketService) {
+  constructor(protected service: ManualTicketService, protected uploadImgService: UploadImageService) {
 
     // this.service.getProducts().subscribe ((response) => {
     //   this.products = response;
@@ -82,7 +84,15 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.uploadPodButton = true;
     }
-    
+  }
+
+  onImageSelect(event) {
+    console.log('onChange');
+    const files = event.srcElement.files;
+    console.log(files);
+    // this.uploadImgService.makeFileRequest('http://localhost:8182/upload', [], files).subscribe(() => {
+    //   console.log('sent');
+    // });
   }
 
   addPbsProduct() {
