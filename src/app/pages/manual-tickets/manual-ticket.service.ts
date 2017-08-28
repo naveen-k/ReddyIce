@@ -69,4 +69,6 @@ export class ManualTicketService extends SharedService {
       currentInv: '12',
     },
   ];
+
+  disableCreateTicketFields = false;
 }

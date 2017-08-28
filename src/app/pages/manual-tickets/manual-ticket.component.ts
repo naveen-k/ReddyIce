@@ -12,6 +12,7 @@ import { Component, OnInit, NgModule } from '@angular/core';
 export class ManualTicketComponent implements OnInit {
   smartTableData: any;
   allBranches: any;
+  disableCreateTicketFields: boolean = false;
   constructor(protected service: ManualTicketService) {
 
   }
@@ -35,7 +36,13 @@ export class ManualTicketComponent implements OnInit {
     });
   }
 
-  createNewTicket(newCustomer) {
+  createNewTicket(callingElement) {
+    if (callingElement === 1) {
+      this.service.disableCreateTicketFields = false;
+    } else if (callingElement === 2) {
+      this.service.disableCreateTicketFields = true;
+    }
+    
     this.isNewTicket = !this.isNewTicket;
   }
 }

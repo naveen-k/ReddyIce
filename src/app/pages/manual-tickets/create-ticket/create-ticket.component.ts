@@ -29,6 +29,9 @@ export class CreateTicketComponent implements OnInit {
   customerBasedProducts: any;
   searchBranch: any;
   searchCustomer: any;
+  tempObj: any;
+  tempDisableCreateTicketFields: boolean = false;
+  uploadPodButton: boolean = false;
   constructor(protected service: ManualTicketService) {
 
     // this.service.getProducts().subscribe ((response) => {
@@ -37,10 +40,16 @@ export class CreateTicketComponent implements OnInit {
     this.dsdTableData = service.dsdSmartTableData;
     this.pbmTableData = service.pbmSmartTableData;
     this.pbsTableData = service.pbsSmartTableData;
+    
   }
 
   ngOnInit() {
-
+    console.log('this.service.disableCreateTicketFields : ', this.service.disableCreateTicketFields);
+    if (this.service.disableCreateTicketFields) {
+      this.tempDisableCreateTicketFields = true;
+    } else {
+      this.tempDisableCreateTicketFields = false;
+    }
     this.service.getBranches().subscribe((response) => {
       this.allBranches = response;
       this.searchBranch = response[0].BranchID;
@@ -64,12 +73,27 @@ export class CreateTicketComponent implements OnInit {
   onCustomerChange() {
     this.service.getCustomerBasedProducts(this.searchCustomer).subscribe((response) => {
       this.customerBasedProducts = response;
-      
     });
+  }
+
+  ifPodReceived(arg) {
+    if (arg === 1) {
+      this.uploadPodButton = false;
+    } else {
+      this.uploadPodButton = true;
+    }
+    
   }
 
   addPbsProduct() {
     console.log("reached");
+    this.tempObj = {
+      product: 'Product1',
+      unit: '$125',
+      deliveredBag: '125',
+      currentInv: '12',
+    };
+    this.pbsTableData.push(this.tempObj);
   }
 
   showHideDamagedColumn = function (arg) {
