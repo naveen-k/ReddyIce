@@ -58,6 +58,9 @@ export class CreateUserComponent implements OnInit {
     roleNameAllowed: boolean = true;
     isEmailExist: boolean = false;
 
+    searching: boolean = false;
+
+
     constructor(private umService: UserManagementService, private userService: UserService) { }
 
     toInt(num: string) {
@@ -72,6 +75,8 @@ export class CreateUserComponent implements OnInit {
             clearTimeout(this.timeOut);
             this.timeOut = null;
         }
+        this.searching = user.length;
+        this.showList = false;
         this.searchedUsers = {};
         this.riUserList = [];
         if (!user) { return; }
@@ -80,7 +85,10 @@ export class CreateUserComponent implements OnInit {
                 this.searchedUsers = res;
                 this.riUserList = Object.keys(res);
                 this.showList = true;
+                this.searching = false;
             }, (err) => {
+                this.searching = false;
+                this.showList = true;
                 this.riUserList.push('No data found');
             });
         }, 1000);

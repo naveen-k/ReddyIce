@@ -26,7 +26,7 @@ export class UserManagementComponent implements OnInit {
   isDistributorExist: boolean = false;
   isEditClicked: boolean = false;
   action: string = '';
-  userObject: any= [];
+  userObject: any = [];
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
@@ -49,7 +49,7 @@ export class UserManagementComponent implements OnInit {
       role: '',
       IsActive: true,
       IsSeasonal: true,
-     // IsRIInternal: false,
+      // IsRIInternal: false,
     };
   }
 
@@ -122,7 +122,7 @@ export class UserManagementComponent implements OnInit {
 
   }
   onView(user) {
-     if (this.formIsDirty) {
+    if (this.formIsDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
@@ -133,30 +133,30 @@ export class UserManagementComponent implements OnInit {
       activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
       activeModal.componentInstance.closeModalHandler = (() => {
         this.formIsDirty = false;
-        
-    this.cardTitle = 'User Detail';
-    this.newUser = Object.assign({}, user);
-    this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-    this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-    this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-    this.isNewUser = false;
-    this.action = 'view';
+
+        this.cardTitle = 'User Detail';
+        this.newUser = Object.assign({}, user);
+        this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+        this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+        this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+        this.isNewUser = false;
+        this.action = 'view';
 
       });
 
     } else {
-      
+
       this.cardTitle = 'User Detail';
-    this.newUser = Object.assign({}, user);
-    this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-    this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-    this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-    this.isNewUser = false;
-    this.action = 'view'; 
-   
+      this.newUser = Object.assign({}, user);
+      this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+      this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+      this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+      this.isNewUser = false;
+      this.action = 'view';
+
     }
-   
-    if (!this.rightCardOpen ) {
+
+    if (!this.rightCardOpen) {
       this.rightCardOpen = !this.rightCardOpen;
       this.hideColumn = !this.hideColumn;
 
@@ -172,15 +172,15 @@ export class UserManagementComponent implements OnInit {
       const savedUserlist = [...this.userTableData, res];
       this.userTableData = savedUserlist;
 
-    this.rightCardOpen = !this.rightCardOpen;
-    this.hideColumn = !this.hideColumn;
-    this.isNewUser = false;
+      this.rightCardOpen = !this.rightCardOpen;
+      this.hideColumn = !this.hideColumn;
+      this.isNewUser = false;
 
     },
       (error) => {
         this.notification.error('Error', 'Failed to create user.');
       });
-    
+
 
   }
 

@@ -7,10 +7,6 @@
     margin-left: 1px;
 }
 
-.customerHeader {
-  // display: flex;
-  // justify-content: space-between;
-}
 
 .form-control:focus {
   border: 1px solid #5bc0de;
@@ -117,7 +113,7 @@ input:focus + .error-message {
  position: absolute;
     max-height: 200px;
     overflow-y: scroll;
-    width: calc(100% - 30px);
+    width: calc(100%);
     padding:0px;
     border: 1px solid #ccc;
     background: #fff;

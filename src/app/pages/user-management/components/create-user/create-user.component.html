@@ -10,8 +10,11 @@
     </div>
     <div *ngIf="user.IsRIInternal" class="col-md-5 padding-eater">
       <input name="riUser" autocomplete="off" type="text" class="form-control" placeholder="Search" [(ngModel)]="riUserName" (ngModelChange)="searchUserHandler(riUserName)">
-      <div *ngIf="showList" class="search-container">
-        <div class="search-item" *ngFor="let u of riUserList" (click)="userSelected(u)">{{u}}</div>
+      <div class="search-container" [hidden]="!searching">
+        <div [hidden]="!searching" class="search-item">Searching...</div>
+      </div>
+      <div class="search-container" [hidden]="!showList">
+        <div [hidden]="!showList" class="search-item" *ngFor="let u of riUserList" (click)="userSelected(u)">{{u}}</div>
       </div>
     </div>
 
@@ -19,8 +22,8 @@
   <div class="row page-header rowContainer first-form-row">
     <div class="col-md-5 padding-eater first-column">
       <label for="fname" class="control-label">First Name</label>
-      <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name" minlength="2" [(ngModel)]="user.FirstName" name="FirstName"
-        #FirstName="ngModel" required  (change)="changeHandler()">
+      <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
+        minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (change)="changeHandler()">
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="FirstName.errors.required" class="custom-tooltip bottom">First Name is required</div>
@@ -38,8 +41,8 @@
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater second-column">
       <label for="lname" class="control-label">Last Name</label>
-      <input [disabled]="!isNewUser || user.IsRIInternal"  type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName" name="LastName" #LastName="ngModel"
-        required minlength="2"  (change)="changeHandler()">
+      <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
+        name="LastName" #LastName="ngModel" required minlength="2" (change)="changeHandler()">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">
@@ -51,11 +54,12 @@
       </div>
     </div>
   </div>
-  <div  class="row page-header rowContainer">
+  <div class="row page-header rowContainer">
     <div *ngIf="!isNewUser" class="col-md-5 padding-eater first-column">
-      <label for="username" class="control-label" >Username</label>
-      <input  type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
-        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="true" [disabled]="!isNewUser">
+      <label for="username" class="control-label">Username</label>
+      <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
+        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="true"
+        [disabled]="!isNewUser">
       <div *ngIf="UserName.invalid && (UserName.dirty || UserName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="UserName.errors.required" class="custom-tooltip bottom">
@@ -70,7 +74,8 @@
     <div [ngClass]="{'col-md-12':isNewUser}" class="col-md-5 padding-eater second-column">
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
-        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)" (change)="changeHandler()">
+        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)"
+        (change)="changeHandler()">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">
@@ -83,7 +88,7 @@
           Email already exist.
         </div>
       </div>
-       <div *ngIf="!EmailID.invalid && isEmailExist">
+      <div *ngIf="!EmailID.invalid && isEmailExist">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="isEmailExist" class="custom-tooltip bottom">
           Email already exist.
@@ -118,8 +123,8 @@
     <div class="row">
       <div class="col-md-5">
         <label for="exampleSelect1">Branch</label>
-        <select class="form-control userMgmtSelect" [disabled]= "user.RoleID == '1'|| user.RoleID == '2'" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
-          (ngModelChange)="changeHandler()">
+        <select class="form-control userMgmtSelect" [disabled]="user.RoleID == '1'|| user.RoleID == '2'" id="branchSelection" [(ngModel)]="user.BranchID"
+          name="branch" #branch="ngModel" (ngModelChange)="changeHandler()">
             <option *ngFor="let _branch of branches" [value]="_branch.BranchID"><span *ngIf="_branch.BranchID != ''"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
               <span *ngIf="_branch.BranchID == ''">
                {{_branch.BranchName}}
@@ -157,36 +162,83 @@
     </div>
   </div>
 </form>
+
+
 <form *ngIf="actionName == 'view'">
-  <div class="form-group row">
-    <label for="example-text-input" class="col-6 col-form-label"><b> Username</b></label>
-    <label for="example-text-input" class="col-6 col-form-label">{{user.UserName}}</label>
+  <div class="row page-header rowContainer first-form-row">
+    <div class="col-md-5 padding-eater first-column">
+      <label for="fname" class="control-label">First Name</label>
+      <input disabled type="text" class="form-control" id="fname" placeholder="First Name" minlength="2" [(ngModel)]="user.FirstName"
+        name="FirstName" #FirstName="ngModel">
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 padding-eater second-column">
+      <label for="lname" class="control-label">Last Name</label>
+      <input disabled type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName" name="LastName"
+        #LastName="ngModel" required minlength="2">
+    </div>
   </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-6 col-form-label"><b>First Name</b></label>
-    <label for="example-text-input" class="col-6 col-form-label">{{user.FirstName}}</label>
+  <div class="row page-header rowContainer">
+    <div *ngIf="!isNewUser" class="col-md-5 padding-eater first-column">
+      <label for="username" class="control-label">Username</label>
+      <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
+        #UserName="ngModel" disabled>
+    </div>
+    <div *ngIf="!isNewUser" class="col-md-2"></div>
+    <div [ngClass]="{'col-md-12':isNewUser}" class="col-md-5 padding-eater second-column">
+      <label for="inputEmail3" class="control-label">Email</label>
+      <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
+        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" disabled>
+    </div>
   </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-6 col-form-label"><b>Last Name</b></label>
-    <label for="example-text-input" class="col-6 col-form-label">{{user.LastName}}</label>
+  <div class="row page-header rowContainer">
+    <div class="col-md-5 padding-eater first-column">
+      <label for="inputEmail3" class="control-label">Phone</label>
+      <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
+        pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" disabled>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 padding-eater">
+      <label for="exampleSelect1">Role</label>
+      <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" disabled>
+        <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
+      </select>
+    </div>
   </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-6 col-form-label"><b>Phone</b></label>
-    <label for="example-text-input" class="col-6 col-form-label">{{user.Phone}}</label>
+  <div class="checkbox active-user page-header rowContainer">
+    <div class="row">
+      <div class="col-md-5">
+        <label for="exampleSelect1">Branch</label>
+        <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
+          disabled>
+            <option *ngFor="let _branch of branches" [value]="_branch.BranchID"><span *ngIf="_branch.BranchID != ''"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
+              <span *ngIf="_branch.BranchID == ''">
+               {{_branch.BranchName}}
+            </span></option>
+        </select>
+      </div>
+      <div class="col-md-2"></div>
+      <div class="col-md-5 padding-eater">
+        <br/><br/>
+        <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+        <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
+
+      </div>
+    </div>
   </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-6 col-form-label"><b>Email ID</b></label>
-    <label for="example-text-input" class="col-6 col-form-label">{{user.EmailID}}</label>
+  <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row">
+    <div class="col-md-5 padding-eater">
+      <label for="distributor">Distributor</label>
+      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+        #distributor="ngModel" disabled>
+          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
+      </select>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 padding-eater">
+      <br/><br/>
+      <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+      <ba-checkbox [ngModel]="user.IsSeasonal" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
+    </div>
   </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-6 col-form-label"><b>Is Distributor</b></label>
-    <label for="example-text-input" class="col-6 col-form-label">{{user.IsDistributor}}</label>
-  </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-6 col-form-label"><b>Is RI Internal</b></label>
-    <label for="example-text-input" class="col-6 col-form-label">{{user.IsRIInternal}}</label>
-  </div>
-  
-  
- 
 </form>

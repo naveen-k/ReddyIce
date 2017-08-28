@@ -18,12 +18,12 @@
         <h4>Distributor : Dist 001</h4>
       </div>
       <div class="row">
-      <div class="col-sm-4">
+        <div class="col-sm-4">
           <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
-      </div>
-      <div class="col-sm-8" style="padding-right: 30px;">
-        <pagination [tableData]="userTableData" [(currentPage)]="paginationData" style="float: right;" [showPages]="false"></pagination>
-      </div>
+        </div>
+        <div class="col-sm-8" style="padding-right: 30px;">
+          <pagination [tableData]="userTableData" [(currentPage)]="paginationData" style="float: right;" [showPages]="false"></pagination>
+        </div>
       </div>
       <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
       <div class="vertical-scroll">
