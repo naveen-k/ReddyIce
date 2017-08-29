@@ -95,6 +95,7 @@ export class CreateUserComponent implements OnInit {
     }
 
     userSelected(_user) {
+        this.riUserName = '';
         this.showList = false;
         const user = this.searchedUsers[_user];
         if (!user) { return; }
@@ -118,6 +119,9 @@ export class CreateUserComponent implements OnInit {
     OnCancelClick() {
 
 
+    }
+    ngAfterContentInit() {
+       this.riUserName = '';
     }
 
     ngOnInit() {
@@ -226,9 +230,15 @@ export class CreateUserComponent implements OnInit {
     }
 
     loadBranches() {
-        this.umService.getDistributerAndCopacker().subscribe((res) => {
+        this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
             this.distributorsAndCopackers = res;
             console.log(res);
         });
+    }
+    spaceRemover(value) {
+        this.user.LastName = value.replace(/^\s+|\s+$/g,'');
+    }
+    spaceRemoverFn(value) {
+        this.user.FirstName = value.replace(/^\s+|\s+$/g,'');
     }
 }

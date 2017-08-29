@@ -116,7 +116,8 @@
             </tr>
           </tbody>
         </table>
-        <div style='text-align:center'> <a> <img [hidden]='paginationData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+        <div style='text-align:center'> <a> <img [hidden]='isError' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+      <div *ngIf="isError" style='text-align:center'>  No data found </div>
 
       </div>
     </ba-card>

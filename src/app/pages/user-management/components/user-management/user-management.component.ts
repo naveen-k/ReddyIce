@@ -31,6 +31,7 @@ export class UserManagementComponent implements OnInit {
   isEditClicked: boolean = false;
   action: string = '';
   userObject: any = [];
+  isError:boolean = false;
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
@@ -51,7 +52,7 @@ export class UserManagementComponent implements OnInit {
       BranchID: '',
       Phone: '',
       role: '',
-      IsActive: true,
+      IsActive: this.action === 'edit' ? true : false,
       IsSeasonal: true,
       // IsRIInternal: false,
     };
@@ -178,13 +179,13 @@ export class UserManagementComponent implements OnInit {
 
     // } else {
 
-      this.cardTitle = 'User Detail';
-      this.newUser = Object.assign({}, user);
-      this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-      this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-      this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-      this.isNewUser = false;
-      this.action = 'view';
+    this.cardTitle = 'User Detail';
+    this.newUser = Object.assign({}, user);
+    this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+    this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+    this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+    this.isNewUser = false;
+    this.action = 'view';
 
     // }
 
@@ -207,7 +208,7 @@ export class UserManagementComponent implements OnInit {
       this.rightCardOpen = !this.rightCardOpen;
       this.hideColumn = !this.hideColumn;
       this.isNewUser = false;
-
+      this.formIsDirty = false;
     },
       (error) => {
         this.notification.error('Error', 'Failed to create user.');
@@ -233,16 +234,17 @@ export class UserManagementComponent implements OnInit {
       });
       users.splice(indexPos, 1, res);
       this.userTableData = users;
-     
+
+      this.rightCardOpen = !this.rightCardOpen;
+      this.hideColumn = !this.hideColumn;
+      this.isNewUser = false;
+      this.formIsDirty = false;
     },
       (error) => {
         console.log(error);
         this.notification.error('Error', `Failed to update user ${user.UserName}`);
       });
 
-    this.rightCardOpen = !this.rightCardOpen;
-    this.hideColumn = !this.hideColumn;
-    this.isNewUser = false;
   }
 
   deleteUser(user) {
@@ -253,11 +255,11 @@ export class UserManagementComponent implements OnInit {
     activeModal.componentInstance.BUTTONS.OK = 'OK';
     activeModal.componentInstance.showCancel = true;
     activeModal.componentInstance.modalHeader = 'Warning!';
-    activeModal.componentInstance.modalContent = `Are you sure you want to delete ${user.UserName}?`;
+    activeModal.componentInstance.modalContent = `Are you sure you want to deactivate ${user.UserName}?`;
     activeModal.componentInstance.closeModalHandler = (() => {
       this.service.deleteUser(user.UserId).subscribe((res) => {
         this.notification.success('Success', `User ${user.UserName} deactivated successfully`);
-        this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
+        // this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
       },
         (error) => {
           this.notification.error('Error', `Failed to deactivate user.`);
@@ -293,12 +295,15 @@ export class UserManagementComponent implements OnInit {
         u['tmp_distributor'] = `${(u.Distributor ? u.Distributor.DistributorName : '')}`;
       });
       this.userTableData = res;
+      this.isError = false;
+    }, (error)=>{
+ this.isError = true;
     });
   }
 
   ngOnInit() {
     this.userObject = this.userService.getUser();
-    console.log(this.userObject.Role.RoleName);
+    // console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;

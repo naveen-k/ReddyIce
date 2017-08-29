@@ -233,3 +233,16 @@ color: white;
     left: -18px;
     bottom: 0px;
 }
+.user-icon-container{
+  position: absolute;
+  right: 15px;
+  .user-icon{
+    display: inline-block;
+    margin-top:10px;
+    margin-left:25px;
+  }
+  .user-name{
+    vertical-align: super;
+     display: inline-block;
+  }
+}  

@@ -10,12 +10,12 @@
     <!-- <a class="al-logo clearfix app-head"><b>My Icebox</b></a> -->
 
 
-    <div class="row">
-        <div class="col-md-11 navbar-label-margin-top ">
-            <span class="navbarUsername userTextColor">{{userDetails ? userDetails.FirstName : ''}}&nbsp;{{userDetails ? userDetails.LastName : ''}}</span>
+    <div class="user-icon-container">
+        <div class="user-name">
+            <span class="userTextColor">{{userDetails ? userDetails.FirstName : ''}}&nbsp;{{userDetails ? userDetails.LastName : ''}}</span>
         </div>
-        <div class="col-md-1">
-            <div class="user-profile clearfix">
+        <div class="user-icon">
+            <div class="clearfix">
                 <div class="al-user-profile dropdown open" uib-dropdown="">
                     <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
 
@@ -23,9 +23,11 @@
                         <i class="ion-arrow-down-b down-icon"></i>
                         <img src="assets/img/app/profile/male-user-close-up_318-39701.jpg">
                     </a>
-                    <ul class="top-dropdown-menu profile-dropdown dropdown-menu" uib-dropdown-menu="">
+                    <ul class="top-dropdown-menu profile-dropdown dropdown-menu" uib-dropdown-menu="" style='min-width:185px;' >
                         <li><i class="dropdown-arr"></i></li>
                         <li><a class="signout" [routerLink]="['../login']"><i class="fa fa-power-off"></i>Sign out</a></li>
+                         <li><a class="signout" [routerLink]="['../resetpassword']"><i class="ion-edit"></i>Reset password </a></li>
+   
                     </ul>
                 </div>
             </div>
