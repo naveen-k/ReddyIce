@@ -22,7 +22,7 @@
           </select>
         </div>
         <div class="col-md-4">
-          <button (click)="createNewTicket(1)" class="btn btn-primary addCustBtn pull-right">
+          <button (click)="createNewTicket(1)" class="btn btn-primary addCustBtn pull-right" [disabled]="isNewTicket">
               Create Ticket
           </button>
         </div>
@@ -35,7 +35,7 @@
           </label>
           <label class="radioItem radio-inline custom-radio nowrap">
             <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-            <span>All Tickets</span>
+            <span [hidden] = "showAllTicketsRadioButton">All Tickets</span>
           </label>
         </div>
       </div>
@@ -46,16 +46,17 @@
           <thead>
             <tr>
               <!-- <th>Select</th> -->
-              <th class="table-id">Actions</th>
+              <th>Select</th>
+              <th class="table-id" *ngIf="!isNewTicket">Actions</th>
               <th>
                 <span style="cursor:pointer;" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
-                    Ticket Number
+                    Ticket #
                      <i *ngIf="(customer.sortField == 'TicketID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                 </span>
               </th>
               <th>
                 <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
-                    Customer Number
+                    Customer #
                     <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                 </span>
               </th>
@@ -76,8 +77,14 @@
           <tbody>
             <tr *ngFor="let item of smartTableData | sort:customer.sortField:customer.isAsc">
               <!-- <td><input type="checkbox" value="Select"></td> -->
-              <td class="table-id" style="cursor: pointer">
-                <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+              <td>
+                <input type="checkbox" name="manualTicketMultiSelect">
+              </td>
+              <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" (click)="createNewTicket(3)">
+                    <span class="tooltiptext">View</span>
+                  </i>
+                <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="createNewTicket(2)">
                     <span class="tooltiptext">Edit</span>
                   </i>
                 <i class="ion-trash-a custom-tooltip-ion">
@@ -98,10 +105,16 @@
       </div>
     </ba-card>
   </div>
-  <div *ngIf="isNewTicket" [ngClass]="{'col-md-6':isNewTicket}">
-    <ba-card cardTitle="Create New Ticket" baCardClass="with-scroll" class="smart-table-container">
+  <div *ngIf="isNewTicket && showCreateTicketPanel" [ngClass]="{'col-md-6':isNewTicket}">
+    <ba-card cardTitle="{{cardTitle}}" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="createNewTicket($event)" class="ion-close-round addCustCloseIcon"></span>
       <create-new-ticket></create-new-ticket>
     </ba-card>
   </div>
+  <div *ngIf="isNewTicket && showViewTicketPanel" [ngClass]="{'col-md-6':isNewTicket}">
+      <ba-card cardTitle="View Ticket Details" baCardClass="with-scroll" class="smart-table-container">
+        <span (click)="createNewTicket($event)" class="ion-close-round addCustCloseIcon"></span>
+        <view-ticket-details></view-ticket-details>
+      </ba-card>
+    </div>
 </div>

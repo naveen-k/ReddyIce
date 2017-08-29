@@ -6,7 +6,7 @@
     <div class="col-md-4">
       <!-- <button type="submit" class="btn btn-danger pull-right">Upload POD</button> -->
       <input type="button" value="Upload POD" onclick="$('#myInput').click();"
-      [disabled] = "uploadPodButton" class="btn btn-danger pull-right" />
+      [disabled] = "uploadPodButton" class="btn btn-danger pull-right" style="margin-right: 18px;" />
       <input id="myInput" type="file" style="visibility:hidden" (change)="onImageSelect($event)"/>
     </div>
     <div class="col-md-2">
@@ -22,7 +22,7 @@
       (ngModelChange)="onBranchChange(option.value)">
           <option *ngFor="let branch of allBranches">{{branch.BranchID}}</option>
       </select> -->
-      <select class="form-control" name="branch" [(ngModel)]="searchBranch" (ngModelChange)="onBranchChange()" >
+      <select class="form-control" name="branch" [(ngModel)]="searchBranch" (ngModelChange)="onBranchChange()">
         <option *ngFor="let branch of allBranches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
       </select>
     </div>
@@ -98,11 +98,11 @@
       <label>POD</label>
       <div class="radioList">
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="pod" id="podRadio1" value="option1" checked (click)="ifPodReceived(1)">
+          <input type="radio" name="pod" id="podRadio1" value="option1" (click)="ifPodReceived(1)">
           <span>Received</span>
         </label>
         <label class="radioItem radio-inline custom-radio nowrap">
-          <input type="radio" name="pod" id="podRadio2" value="option2" (click)="ifPodReceived(2)">
+          <input type="radio" name="pod" id="podRadio2" value="option2" checked (click)="ifPodReceived(2)">
           <span>Not-Received</span>
         </label>
       </div>

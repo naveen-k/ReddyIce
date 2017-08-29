@@ -1,3 +1,4 @@
+import { ViewTicketComponent } from './view-ticket-details/view-ticket.component';
 import { ManualTicketService } from './manual-ticket.service';
 import { SharedModule } from '../../shared/shared.module';
 import { NgModule } from '@angular/core';
@@ -27,6 +28,7 @@ import { CreateTicketComponent } from './create-ticket/create-ticket.component';
   declarations: [
     CreateTicketComponent,
     ManualTicketComponent,
+    ViewTicketComponent,
   ],
   providers: [
     ManualTicketService,

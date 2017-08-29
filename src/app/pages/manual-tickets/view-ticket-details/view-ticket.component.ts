@@ -6,12 +6,12 @@ import { ManualTicketService } from '../manual-ticket.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'create-new-ticket',
-  templateUrl: './create-ticket.component.html',
-  styleUrls: ['./create-ticket.component.scss'],
+  selector: 'view-ticket-details',
+  templateUrl: './view-ticket.component.html',
+  styleUrls: ['./view-ticket.component.scss'],
   providers: [UploadImageService],
 })
-export class CreateTicketComponent implements OnInit {
+export class ViewTicketComponent implements OnInit {
   smartTableData: any;
   dsdTableData: any;
   pbmTableData: any;
