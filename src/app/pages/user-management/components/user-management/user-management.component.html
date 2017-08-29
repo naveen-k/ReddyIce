@@ -32,7 +32,7 @@
               <th width="100px;" class="allign">Action</th>
               <th *ngIf="!hideColumn" class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'FirstName';customer.isAsc=!customer.isAsc;">
-                    First Name
+                    Name
                     <i *ngIf="(customer.sortField === 'FirstName')" [ngClass]="(customer.isAsc && customer.sortField === 'FirstName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
@@ -94,7 +94,7 @@
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
                    <span class="tooltiptext">View</span>
                 </i>
-                <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px">
+                <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px" >
                    <span class="tooltiptext">Edit</span>
                 </i>
                 <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"

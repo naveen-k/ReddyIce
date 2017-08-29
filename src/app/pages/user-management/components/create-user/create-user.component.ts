@@ -219,7 +219,7 @@ export class CreateUserComponent implements OnInit {
             this.user.BranchID = '1';
         }
         else {
-            if (this.branches[0].BranchID == '1' || this.branches[0].BranchID == '0') { this.branches.shift() };
+            if (this.branches[0].BranchID == '1' || this.branches[0].BranchID == '') { this.branches.shift(); };
 
         }
 

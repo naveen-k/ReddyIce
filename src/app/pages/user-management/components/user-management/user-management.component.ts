@@ -1,3 +1,4 @@
+import { timeInterval } from 'rxjs/operator/timeInterval';
 import { UserDetails } from '../../../../shared/user.interface';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -110,21 +111,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
-    this.isEditClicked = true;
-    this.action = 'edit';
-    this.newUser = Object.assign({}, user);
-    this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-    this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-    this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-    this.cardTitle = 'Edit User';
-    this.isNewUser = false;
-    if (!this.rightCardOpen) {
-      this.rightCardOpen = !this.rightCardOpen;
-      this.hideColumn = !this.hideColumn;
-    }
 
-  }
-  onView(user) {
     if (this.formIsDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
@@ -137,17 +124,59 @@ export class UserManagementComponent implements OnInit {
       activeModal.componentInstance.closeModalHandler = (() => {
         this.formIsDirty = false;
 
-        this.cardTitle = 'User Detail';
+        this.cardTitle = 'Edit Detail';
         this.newUser = Object.assign({}, user);
         this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
         this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
         this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.isNewUser = false;
-        this.action = 'view';
+        this.action = 'edit';
+        //location.reload();
 
       });
 
     } else {
+      //this.isEditClicked = true;
+      this.action = 'edit';
+      this.newUser = Object.assign({}, user);
+      this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+      this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+      this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+      this.cardTitle = 'Edit User';
+      this.isNewUser = false;
+    }
+    if (!this.rightCardOpen) {
+      this.rightCardOpen = !this.rightCardOpen;
+      this.hideColumn = !this.hideColumn;
+    }
+
+  }
+
+
+  onView(user) {
+    // if (this.formIsDirty) {
+    //   const activeModal = this.modalService.open(ModalComponent, {
+    //     size: 'sm',
+    //     backdrop: 'static',
+    //   });
+    //   activeModal.componentInstance.BUTTONS.OK = 'Discard';
+    //   activeModal.componentInstance.showCancel = true;
+    //   activeModal.componentInstance.modalHeader = 'Warning!';
+    //   activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+    //   activeModal.componentInstance.closeModalHandler = (() => {
+    //     this.formIsDirty = false;
+
+    //     this.cardTitle = 'User Detail';
+    //     this.newUser = Object.assign({}, user);
+    //     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+    //     this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+    //     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+    //     this.isNewUser = false;
+    //     this.action = 'view';
+
+    //   });
+
+    // } else {
 
       this.cardTitle = 'User Detail';
       this.newUser = Object.assign({}, user);
@@ -157,7 +186,7 @@ export class UserManagementComponent implements OnInit {
       this.isNewUser = false;
       this.action = 'view';
 
-    }
+    // }
 
     if (!this.rightCardOpen) {
       this.rightCardOpen = !this.rightCardOpen;
@@ -204,6 +233,7 @@ export class UserManagementComponent implements OnInit {
       });
       users.splice(indexPos, 1, res);
       this.userTableData = users;
+     
     },
       (error) => {
         console.log(error);
@@ -267,8 +297,8 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit() {
-     this.userObject = this.userService.getUser();
-     console.log(this.userObject.Role.RoleName);
+    this.userObject = this.userService.getUser();
+    console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
