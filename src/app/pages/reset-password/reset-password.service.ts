@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ResetPasswordService {
-    API_ENDPOINT = 'http://frozen.reddyice.com/DPServicesnew/';
+    API_ENDPOINT = 'http://frozen.reddyice.com/myiceboxservice_dev/';
     constructor(private http: Http, private userService: UserService) { }
 
     resetPassword(data: any): Observable<any> {

@@ -121,9 +121,11 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.loadBranches();
+       // this.rolChange(0);
         this.userObject = this.userService.getUser();
-        console.log(this.userObject.Role.RoleName);
-        console.log(this.user);
+       // console.log(this.userObject.Role.RoleName);
+       // console.log(this.user);
         // this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
@@ -212,20 +214,21 @@ export class CreateUserComponent implements OnInit {
     }
     rolChange(roleID) {
         if (roleID == 1 || roleID == 2) {
-            if (this.branches[0].BranchID != 'All') { this.branches.unshift({ BranchID: '', BranchName: 'All' }) }
+            if (this.branches[0].BranchID != '1') { this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' }); }
             //else { }
-            this.user.BranchID = '';
+            this.user.BranchID = '1';
         }
         else {
-            if (this.branches[0].BranchID == '') { this.branches.shift() };
+            if (this.branches[0].BranchID == '1' || this.branches[0].BranchID == '0') { this.branches.shift() };
 
         }
 
     }
 
     loadBranches() {
-        this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
+        this.umService.getDistributerAndCopacker().subscribe((res) => {
             this.distributorsAndCopackers = res;
+            console.log(res);
         });
     }
 }

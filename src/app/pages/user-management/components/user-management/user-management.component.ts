@@ -6,6 +6,9 @@ import { UserService } from '../../../../shared/user.service';
 import { UserManagementService } from '../../user-management.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { User } from '../../user-management.interface';
+import { selector } from 'rxjs/operator/multicast';
+import { any } from 'codelyzer/util/function';
+
 
 import { NotificationsService } from 'angular2-notifications';
 
@@ -264,8 +267,8 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.userObject = this.userService.getUser();
-    // console.log(this.userObject.Role.RoleName);
+     this.userObject = this.userService.getUser();
+     console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.userDetails = response;
