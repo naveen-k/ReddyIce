@@ -212,15 +212,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.user = {};
     }
     checkEmail(email) {
-        console.log(email);
         this.userService.isUserExist(email).subscribe((res) => {
             // console.log(res);
             if (res.Message === 'Email already exists') {
-
                 this.isEmailExist = true;
-            }
-            else {
-
+            } else {
                 this.isEmailExist = false;
             }
 
@@ -229,12 +225,16 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         });
     }
     rolChange(roleID) {
-        if (roleID == 1 || roleID == 2) {
-            if (this.branches[0].BranchID != '1') { this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' }); }
-
+        if (roleID === '1' || roleID === '2') {
+            if (this.branches[0].BranchID != '1') {
+                this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' });
+            }
             this.user.BranchID = '1';
+            this.loadBranches();
         } else {
-            if (this.branches[0].BranchID == '1' || this.branches[0].BranchID == '') { this.branches.shift(); };
+            if (this.branches[0].BranchID === '1' || this.branches[0].BranchID === '') {
+                this.branches.shift();
+            }
 
         }
 
