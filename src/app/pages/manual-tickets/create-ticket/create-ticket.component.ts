@@ -60,8 +60,10 @@ export class CreateTicketComponent implements OnInit {
     const user = this.userService.getUser();
 
     this.service.getBranches(user.UserId).subscribe((response) => {
-      this.allBranches = response;
-      this.searchBranch = response[0].BranchID;
+      let temp = response;
+      response = response.shift();
+      this.allBranches = temp;
+      this.searchBranch = this.allBranches[0].BranchID;
       this.onBranchChange();
     });
 
