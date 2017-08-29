@@ -7,8 +7,7 @@
         <div class="form-group" [ngClass]="[!isNewTicket ? 'col-md-4' : 'col-md-7']">
           <!-- <label for="exampleInputEmail1">Date</label> -->
           <div class="input-group">
-            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
-            [(ngModel)]="model.dp">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="model.dp">
             <button class="input-group-addon" (click)="d.toggle()" type="button">
               <i class="ion-calendar"></i>
               <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
@@ -31,13 +30,13 @@
       <div class="col-md-6">
         <div class="row">
           <div [ngClass]="[!isNewTicket ? 'col-md-3' : 'col-md-6']">
-              <label class="radioItem radio-inline custom-radio nowrap">
+            <label class="radioItem radio-inline custom-radio nowrap">
                 <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
                 <span>My Tickets</span>
               </label>
           </div>
           <div [ngClass]="[!isNewTicket ? 'col-md-3' : 'col-md-6']">
-              <label class="radioItem radio-inline custom-radio nowrap">
+            <label class="radioItem radio-inline custom-radio nowrap">
                 <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
                 <span [hidden] = "showAllTicketsRadioButton">All Tickets</span>
               </label>
@@ -119,9 +118,9 @@
     </ba-card>
   </div>
   <div *ngIf="isNewTicket && showViewTicketPanel" [ngClass]="{'col-md-7':isNewTicket}">
-      <ba-card cardTitle="View Ticket Details" baCardClass="with-scroll" class="smart-table-container">
-        <span (click)="createNewTicket($event)" class="ion-close-round addCustCloseIcon"></span>
-        <view-ticket-details></view-ticket-details>
-      </ba-card>
-    </div>
+    <ba-card cardTitle="View Ticket Details" baCardClass="with-scroll" class="smart-table-container">
+      <span (click)="createNewTicket($event)" class="ion-close-round addCustCloseIcon"></span>
+      <view-ticket-details></view-ticket-details>
+    </ba-card>
+  </div>
 </div>
