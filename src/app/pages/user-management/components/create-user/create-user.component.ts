@@ -2,7 +2,7 @@ import { UserService } from '../../../../shared/user.service';
 import { selector } from 'rxjs/operator/multicast';
 import { LocalDataSource } from 'ng2-smart-table';
 import { UserManagementService } from '../../user-management.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from '../../user-management.interface';
 import { any } from 'codelyzer/util/function';
 
@@ -11,11 +11,25 @@ import { any } from 'codelyzer/util/function';
     styleUrls: ['./create-user.component.scss'],
     selector: 'create-user',
 })
-export class CreateUserComponent implements OnInit {
+export class CreateUserComponent implements OnInit, AfterContentInit {
 
     private _roles: any[];
+    private _user: any = {};
 
-    @Input() user: any;
+    @Input()
+    get user(): any {
+        return this._user;
+    }
+
+    set user(val: any) {
+        if (!Object.keys(val).length) {
+            return;
+        }
+        val.RoleID = val.RoleID || this._user.RoleID;
+        this._user = val;
+        this.loadBranches();
+    }
+
     @Input() isNewUser: boolean;
     @Input()
     get roles(): any {
@@ -33,7 +47,11 @@ export class CreateUserComponent implements OnInit {
     set action(values) {
         if (values === '') { return; }
         this.actionName = values;
-        console.log(values);
+    }
+
+    @Input()
+    set mIOpen(val: boolean) {
+        if (!val) { this.clearInternalUserSearch(); }
     }
 
     @Input() branches: any;
@@ -62,6 +80,14 @@ export class CreateUserComponent implements OnInit {
 
 
     constructor(private umService: UserManagementService, private userService: UserService) { }
+
+
+    clearInternalUserSearch() {
+        this.riUserName = '';
+        this.searching = false;
+        this.showList = false;
+        this.riUserList = [];
+    }
 
     toInt(num: string) {
         return +num;
@@ -116,21 +142,14 @@ export class CreateUserComponent implements OnInit {
         }
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
-    OnCancelClick() {
 
-
-    }
     ngAfterContentInit() {
-       this.riUserName = '';
+        this.riUserName = '';
     }
 
     ngOnInit() {
-        this.loadBranches();
-       // this.rolChange(0);
+        // this.loadBranches();
         this.userObject = this.userService.getUser();
-       // console.log(this.userObject.Role.RoleName);
-       // console.log(this.user);
-        // this.userDetails = this.userService.getUser() || {};
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
@@ -138,16 +157,6 @@ export class CreateUserComponent implements OnInit {
             }
             this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
         }
-        // this.roles = this.roles.filter((role) => role.ShowExternal);
-        // this.roleList = this.roles.reduce((accumulator, child) => {
-        //   if (child.ShowExternal) {
-        //     return [
-        //       ...accumulator,
-        //       child,
-        //     ];
-        //   }
-        //   return accumulator;
-        // }, []);        
     }
 
     filterRoles() {
@@ -160,6 +169,9 @@ export class CreateUserComponent implements OnInit {
             }
             return accumulator;
         }, []);
+        if (this.roleList && this.roleList.length) {
+            this.user.RoleID = this.roleList[0].RoleID;
+        }
     }
 
     changeHandler() {
@@ -219,10 +231,9 @@ export class CreateUserComponent implements OnInit {
     rolChange(roleID) {
         if (roleID == 1 || roleID == 2) {
             if (this.branches[0].BranchID != '1') { this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' }); }
-            //else { }
+
             this.user.BranchID = '1';
-        }
-        else {
+        } else {
             if (this.branches[0].BranchID == '1' || this.branches[0].BranchID == '') { this.branches.shift(); };
 
         }
@@ -230,15 +241,15 @@ export class CreateUserComponent implements OnInit {
     }
 
     loadBranches() {
+        if (!this.user.BranchID) { return; }
         this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
             this.distributorsAndCopackers = res;
-            console.log(res);
         });
     }
     spaceRemover(value) {
-        this.user.LastName = value.replace(/^\s+|\s+$/g,'');
+        this.user.LastName = value.replace(/^\s+|\s+$/g, '');
     }
     spaceRemoverFn(value) {
-        this.user.FirstName = value.replace(/^\s+|\s+$/g,'');
+        this.user.FirstName = value.replace(/^\s+|\s+$/g, '');
     }
 }

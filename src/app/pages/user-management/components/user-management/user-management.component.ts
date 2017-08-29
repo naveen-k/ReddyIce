@@ -31,7 +31,14 @@ export class UserManagementComponent implements OnInit {
   isEditClicked: boolean = false;
   action: string = '';
   userObject: any = [];
-  isError:boolean = false;
+  // isError: boolean = false;
+  showSpinner: boolean = true;
+
+  usersList: any[];
+
+  // ngModel for usertype dropdown
+  userType: string = 'active';
+
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
@@ -132,12 +139,12 @@ export class UserManagementComponent implements OnInit {
         this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.isNewUser = false;
         this.action = 'edit';
-        //location.reload();
+        // location.reload();
 
       });
 
     } else {
-      //this.isEditClicked = true;
+      // this.isEditClicked = true;
       this.action = 'edit';
       this.newUser = Object.assign({}, user);
       this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
@@ -155,30 +162,6 @@ export class UserManagementComponent implements OnInit {
 
 
   onView(user) {
-    // if (this.formIsDirty) {
-    //   const activeModal = this.modalService.open(ModalComponent, {
-    //     size: 'sm',
-    //     backdrop: 'static',
-    //   });
-    //   activeModal.componentInstance.BUTTONS.OK = 'Discard';
-    //   activeModal.componentInstance.showCancel = true;
-    //   activeModal.componentInstance.modalHeader = 'Warning!';
-    //   activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
-    //   activeModal.componentInstance.closeModalHandler = (() => {
-    //     this.formIsDirty = false;
-
-    //     this.cardTitle = 'User Detail';
-    //     this.newUser = Object.assign({}, user);
-    //     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-    //     this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-    //     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-    //     this.isNewUser = false;
-    //     this.action = 'view';
-
-    //   });
-
-    // } else {
-
     this.cardTitle = 'User Detail';
     this.newUser = Object.assign({}, user);
     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
@@ -186,15 +169,10 @@ export class UserManagementComponent implements OnInit {
     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
     this.isNewUser = false;
     this.action = 'view';
-
-    // }
-
     if (!this.rightCardOpen) {
       this.rightCardOpen = !this.rightCardOpen;
       this.hideColumn = !this.hideColumn;
-
     }
-
   }
 
   onSaveUser(user) {
@@ -213,12 +191,9 @@ export class UserManagementComponent implements OnInit {
       (error) => {
         this.notification.error('Error', 'Failed to create user.');
       });
-
-
   }
 
   onUpdateUser(user) {
-
     delete user.Role;
     delete user.MenuOptions;
     delete user.Branch;
@@ -232,7 +207,8 @@ export class UserManagementComponent implements OnInit {
           indexPos = index;
         }
       });
-      users.splice(indexPos, 1, res);
+
+      users.splice(indexPos, 1, this.formatUser(res));
       this.userTableData = users;
 
       this.rightCardOpen = !this.rightCardOpen;
@@ -288,17 +264,36 @@ export class UserManagementComponent implements OnInit {
   }
 
   getUserList(id?: number) {
+    this.showSpinner = true;
     this.service.getUsers(id).subscribe((res) => {
       res.forEach((u) => {
-        u.tmp_branch = `${(u.Branch ? u.Branch.BranchID : 'NA')} (${(u.Branch ? u.Branch.BranchName : 'NA')})`;
-        u['tmp_role'] = `${(u.Role ? u.Role.RoleName : '')}`;
-        u['tmp_distributor'] = `${(u.Distributor ? u.Distributor.DistributorName : '')}`;
+        u = this.formatUser(u);
       });
-      this.userTableData = res;
-      this.isError = false;
-    }, (error)=>{
- this.isError = true;
+      this.usersList = res;
+      this.updateUserTableOnTypeChange();
+      this.showSpinner = false;
+    }, (error) => {
+      this.showSpinner = false;
     });
+  }
+
+  updateUserTableOnTypeChange() {
+    this.userTableData = this.usersList.filter((u) => {
+      if (this.userType === 'active') {
+        return u.IsActive;
+      }
+      if (this.userType === 'inActive') {
+        return !u.IsActive;
+      }
+      return true;
+    });
+  }
+
+  formatUser(user: any) {
+    user.tmp_branch = `${(user.Branch ? user.Branch.BranchID : 'NA')} (${(user.Branch ? user.Branch.BranchName : 'NA')})`;
+    user['tmp_role'] = `${(user.Role ? user.Role.RoleName : '')}`;
+    user['tmp_distributor'] = `${(user.Distributor ? user.Distributor.DistributorName : '')}`;
+    return user;
   }
 
   ngOnInit() {
@@ -327,5 +322,8 @@ export class UserManagementComponent implements OnInit {
     return item ? item.id : undefined;
   }
 
+  changeUserTypeHandler() {
+    this.updateUserTableOnTypeChange();
+  }
 
 }

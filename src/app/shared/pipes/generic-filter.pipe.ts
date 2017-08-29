@@ -4,9 +4,10 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'filter',
 })
 export class GenericFilter implements PipeTransform {
-    transform(value: any, searchString: any, columns: string[] ) {
+    transform(value: any, searchString: any, columns: string[], dataToFilter?: any ) {
         if (!value || !searchString) { return value; }
-        return value.filter((val) => {
+        const data = dataToFilter || value;
+        return data.filter((val) => {
             if (typeof val === 'object') {
                 const keys = columns || Object.keys(val);
                 let flag = false;
