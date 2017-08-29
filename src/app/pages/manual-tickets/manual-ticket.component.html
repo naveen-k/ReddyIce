@@ -1,10 +1,10 @@
 <div class="row">
-  <div [ngClass]="[!isNewTicket ? 'col-md-12' : 'col-md-6']">
+  <div [ngClass]="[!isNewTicket ? 'col-md-12' : 'col-md-5']">
     <ba-card cardTitle="Ticket List" baCardClass="medium-card" class="smart-table-container" (onClickAddIcon)="createNewTicket($event)"
       #customer>
       <!-- <ticket-table></ticket-table> -->
       <div class="row">
-        <div class="form-group col-md-4">
+        <div class="form-group" [ngClass]="[!isNewTicket ? 'col-md-4' : 'col-md-7']">
           <!-- <label for="exampleInputEmail1">Date</label> -->
           <div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
@@ -15,29 +15,35 @@
             </button>
           </div>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group" [ngClass]="[!isNewTicket ? 'col-md-4' : 'col-md-7']">
           <!-- <label for="exampleSelect1">Branch</label> -->
           <select class="form-control" id="exampleSelect1">
               <option *ngFor="let obj of allBranches" [value]="obj.value">{{obj.BranchID}}-{{obj.BranchName}}</option>
             <!-- <option>312</option> -->
           </select>
         </div>
-        <div class="col-md-4">
+        <div [ngClass]="[!isNewTicket ? 'col-md-4' : 'col-md-5']">
           <button (click)="createNewTicket(1)" class="btn btn-primary addCustBtn pull-right" [disabled]="isNewTicket">
               Create Ticket
           </button>
         </div>
       </div>
       <div class="col-md-6">
+        <div class="row">
+          <div [ngClass]="[!isNewTicket ? 'col-md-3' : 'col-md-6']">
+              <label class="radioItem radio-inline custom-radio nowrap">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                <span>My Tickets</span>
+              </label>
+          </div>
+          <div [ngClass]="[!isNewTicket ? 'col-md-3' : 'col-md-6']">
+              <label class="radioItem radio-inline custom-radio nowrap">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                <span [hidden] = "showAllTicketsRadioButton">All Tickets</span>
+              </label>
+          </div>
+        </div>
         <div class="radioList">
-          <label class="radioItem radio-inline custom-radio nowrap">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
-            <span>My Tickets</span>
-          </label>
-          <label class="radioItem radio-inline custom-radio nowrap">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-            <span [hidden] = "showAllTicketsRadioButton">All Tickets</span>
-          </label>
         </div>
       </div>
       <br>
@@ -106,13 +112,13 @@
       </div>
     </ba-card>
   </div>
-  <div *ngIf="isNewTicket && showCreateTicketPanel" [ngClass]="{'col-md-6':isNewTicket}">
+  <div *ngIf="isNewTicket && showCreateTicketPanel" [ngClass]="{'col-md-7':isNewTicket}">
     <ba-card cardTitle="{{cardTitle}}" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="createNewTicket($event)" class="ion-close-round addCustCloseIcon"></span>
       <create-new-ticket></create-new-ticket>
     </ba-card>
   </div>
-  <div *ngIf="isNewTicket && showViewTicketPanel" [ngClass]="{'col-md-6':isNewTicket}">
+  <div *ngIf="isNewTicket && showViewTicketPanel" [ngClass]="{'col-md-7':isNewTicket}">
       <ba-card cardTitle="View Ticket Details" baCardClass="with-scroll" class="smart-table-container">
         <span (click)="createNewTicket($event)" class="ion-close-round addCustCloseIcon"></span>
         <view-ticket-details></view-ticket-details>
