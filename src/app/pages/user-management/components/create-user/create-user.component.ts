@@ -169,7 +169,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
             return accumulator;
         }, []);
-        if (this.roleList && this.roleList.length) {
+        if (this.roleList && this.roleList.length === 1) {
             this.user.RoleID = this.roleList[0].RoleID;
         }
     }
