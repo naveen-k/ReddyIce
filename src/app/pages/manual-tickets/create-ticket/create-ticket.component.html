@@ -129,9 +129,9 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6">
-      <label for="exampleInputPassword1">Ticket No.</label>
+      <label>Ticket #</label>
       <input type="text" class="form-control" id="TicketNumber" placeholder="Ticket #" minlength="2" [(ngModel)]="ticketObj.TicketNumber"
-        name="TicketNumber" #TicketNumber="ngModel" required [disabled] = "tempDisableCreateTicketFields">
+        name="TicketNumber" #TicketNumber="ngModel" required [disabled] = "tempDisableCreateTicketFields" (blur)="checkTicketNumber(ticketObj.TicketNumber)">
       <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
@@ -139,7 +139,7 @@
       </div>
     </div>
     <div class="form-group col-md-6">
-      <label for="exampleInputPassword1">PO#</label>
+      <label>PO#</label>
       <input type="text" class="form-control" id="exampleInputPassword1" placeholder="PO #" minlength="2" [(ngModel)]="ticketObj.PONumber"
         name="PONumber" #PONumber="ngModel" required>
       <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">

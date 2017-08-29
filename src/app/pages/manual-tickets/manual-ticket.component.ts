@@ -19,6 +19,8 @@ export class ManualTicketComponent implements OnInit {
   user: any;
   isNewTicket: boolean = false;
   showAllTicketsRadioButton: boolean = false;
+  status: string = '';
+  model: any = {};
   constructor(
     protected service: ManualTicketService,
     protected userService: UserService,
@@ -27,6 +29,10 @@ export class ManualTicketComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    const now = new Date();
+    this.model.dp = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+
     this.user = this.userService.getUser();
     this.getBranches();
     this.getAllManualTickets();
@@ -41,6 +47,13 @@ export class ManualTicketComponent implements OnInit {
     const userId = localStorage.getItem('userId') || '';
     this.service.getTickets(userId).subscribe ((response) => {
       this.smartTableData = response;
+      if (response && response[0].TicketStatusID === 23) {
+        this.status = 'Draft';
+      } else if (response && response[0].TicketStatusID === 24) {
+        this.status = 'Submitted';
+      } else if (response && response[0].TicketStatusID === 25) {
+        this.status = 'Approved';
+      }
     });
   }
 

@@ -39,6 +39,12 @@ export class ManualTicketService extends SharedService {
     .map(res => res.json());
   }
 
+  checkTicketNumber(ticketNumber: any) {
+    return this.http.get(`api/manualticket/checkticketnumber?number=${ticketNumber}`)
+    .map(res => res.json());
+  }
+    
+
   dsdSmartTableData = [
     {
       product: 'Product1',

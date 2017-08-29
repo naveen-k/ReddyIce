@@ -35,6 +35,7 @@ export class CreateTicketComponent implements OnInit {
   tempObj: any;
   tempDisableCreateTicketFields: boolean = false;
   uploadPodButton: boolean = true;
+  ticketNumberExists: boolean = true;
   constructor(
     protected userService: UserService,
     protected service: ManualTicketService, 
@@ -96,9 +97,20 @@ export class CreateTicketComponent implements OnInit {
     console.log('onChange');
     const files = event.srcElement.files;
     console.log(files);
-    // this.uploadImgService.makeFileRequest('http://localhost:8182/upload', [], files).subscribe(() => {
-    //   console.log('sent');
-    // });
+    this.uploadImgService.makeFileRequest('http://frozen.reddyice.com/myiceboxservice_dev/api/manualticket/uploadImage', [], files).subscribe(() => {
+      console.log('sent');
+    });
+  }
+
+  checkTicketNumber(ticketNumber) {
+    console.log("checkTicketNumber : ", ticketNumber);
+    this.service.checkTicketNumber(ticketNumber).subscribe((response) => {
+        if (response.Message === 'Ticket Number available for use.') {
+          this.ticketNumberExists = false;
+        } else if (response.Message === 'Ticket Number already in use.') {
+          this.ticketNumberExists = true;
+        }
+    });
   }
 
   addPbsProduct() {
