@@ -269,6 +269,7 @@ export class UserManagementComponent implements OnInit {
       res.forEach((u) => {
         u = this.formatUser(u);
       });
+<<<<<<< HEAD
       this.usersList = res;
       this.updateUserTableOnTypeChange();
       this.showSpinner = false;
@@ -286,6 +287,14 @@ export class UserManagementComponent implements OnInit {
         return !u.IsActive;
       }
       return true;
+=======
+      this.userTableData = res;
+      this.isError = false;
+      this.isLoading = false;
+    }, (error) => {
+      this.isError = true;
+      this.isLoading = false;
+>>>>>>> 6f09939b9e8e33a928b9702327fa01ad29dad508
     });
   }
 
@@ -297,6 +306,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this.userObject = this.userService.getUser();
     // console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
