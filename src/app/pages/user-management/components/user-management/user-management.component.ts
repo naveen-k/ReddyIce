@@ -31,7 +31,8 @@ export class UserManagementComponent implements OnInit {
   isEditClicked: boolean = false;
   action: string = '';
   userObject: any = [];
-  isError:boolean = false;
+  isError: boolean = false;
+  isLoading: boolean = true;
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
@@ -296,12 +297,15 @@ export class UserManagementComponent implements OnInit {
       });
       this.userTableData = res;
       this.isError = false;
-    }, (error)=>{
- this.isError = true;
+      this.isLoading = false;
+    }, (error) => {
+      this.isError = true;
+      this.isLoading = false;
     });
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this.userObject = this.userService.getUser();
     // console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
