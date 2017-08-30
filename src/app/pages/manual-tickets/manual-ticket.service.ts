@@ -1,3 +1,4 @@
+import { ManaulTicket } from './manaul-ticket.interfaces';
 import { Http } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { SharedService } from '../../shared/shared.service';
@@ -12,9 +13,7 @@ export class ManualTicketService extends SharedService {
     super(http);
   }
 
-  getTickets(userId: string) {
-    // return this._http.get('../../shared/manualTicket.json')
-    // return this.tmpHttp.get('./assets/mock-json/manualTicket.json')
+  getTickets(userId: any): Observable<ManaulTicket[]> {
     return this.http.get(`api/manualticket/userid?userId=${userId}`)
     .map(res => res.json());
   }

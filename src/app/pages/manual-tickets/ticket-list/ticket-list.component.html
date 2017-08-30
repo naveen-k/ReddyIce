@@ -1,0 +1,94 @@
+<ba-card cardTitle="Ticket List" baCardClass="medium-card" class="smart-table-container" #customer>
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-2">
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="model.dp">
+                <button class="input-group-addon" (click)="d.toggle()" type="button">
+                    <i class="ion-calendar"></i>
+                    </button>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <select class="form-control" id="exampleSelect1">
+                    <option *ngFor="let obj of allBranches" [value]="obj.value">{{obj.BranchID}}-{{obj.BranchName}}</option>
+                </select>
+        </div>
+        <div class="col-sm-4">
+            <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right" [disabled]="isNewTicket">
+                    Create Ticket
+                </button>
+        </div>
+    </div>
+
+    <div class="row" style="padding-bottom: 10px">
+        <div class="col-sm-3">
+            <label class="radioItem radio-inline custom-radio nowrap">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                      <span>My Tickets</span>
+                    </label>
+        </div>
+        <div class="col-sm-3">
+            <label class="radioItem radio-inline custom-radio nowrap">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                      <span [hidden] = "showAllTicketsRadioButton">All Tickets</span>
+                    </label>
+        </div>
+    </div>
+    <div class="vertical-scroll">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th class="table-id">Actions</th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
+                          Ticket #
+                           <i *ngIf="(customer.sortField == 'TicketID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                      </span>
+                    </th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
+                          Customer #
+                          <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                      </span>
+                    </th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
+                          Amount
+                          <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                      </span>
+                    </th>
+                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;">
+                        <span style="cursor:pointer;">
+                          Status
+                          <i *ngIf="(customer.sortField == 'CardPaymentStatus')" [ngClass]="(customer.isAsc && customer.sortField == 'CardPaymentStatus' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                      </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of allTickets | sort:customer.sortField:customer.isAsc">
+                    <td>
+                        <input type="checkbox" name="manualTicketMultiSelect">
+                    </td>
+                    <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                        <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" (click)="createNewTicket(3)">
+                          <span class="tooltiptext">View</span>
+                        </i>
+                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="createNewTicket(2)">
+                          <span class="tooltiptext">Edit</span>
+                        </i>
+                        <i class="ion-trash-a custom-tooltip-ion">
+                          <span class="tooltiptext">Delete</span>
+                        </i>
+                    </td>
+                    <td>{{ item.TicketID }}</td>
+                    <td>{{ item.Customer.CustomerID }}</td>
+                    <td>{{ item.CashAmount }}</td>
+                    <td>{{ item.TicketStatusID|ticketStatus}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination [tableData]="smartTableData" [(currentPage)]="smartTableData"></pagination>
+    </div>
+</ba-card>
