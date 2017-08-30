@@ -1,10 +1,10 @@
 
   <form #customerForm="ngForm" class="user-form" *ngIf="actionName != 'view'">
-    <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid ||isEmailExist" (click)="onSubmit()">Save</button>
+    <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid ||isEmailExist||!isFormValid" (click)="onSubmit()">Save</button>
 
     <div class="row rowContainer margin-eater" [hidden]="!isNewUser">
       <div *ngIf="!isDistributorAdmin" class="col-md-5 padding-eater" style="margin-top: 7px;">
-        <ba-checkbox [(ngModel)]="user.IsRIInternal" (ngModelChange)="changeHandler();" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+        <ba-checkbox [(ngModel)]="user.IsRIInternal" (ngModelChange)="changeHandler();riChangeHandler(user.IsRIInternal)" [label]="'RI Internal User'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
       </div>
       <div class="col-md-2">
         <!--How can we allow user to submit a form without validations?  -->

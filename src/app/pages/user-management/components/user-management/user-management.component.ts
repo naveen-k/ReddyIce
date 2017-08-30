@@ -47,6 +47,7 @@ export class UserManagementComponent implements OnInit {
   ) { }
 
   showNewCustomer(newCustomer) {
+     this.formIsDirty = false;
      this.action = 'create';
     this.rightCardOpen = !this.rightCardOpen;
     this.isNewUser = true;
@@ -191,7 +192,8 @@ export class UserManagementComponent implements OnInit {
     },
       (error) => {
         console.log();
-        this.notification.error('Error', error.error_description);
+        error = JSON.parse(error._body);
+        this.notification.error('Error', error.Message);
       });
   }
 
@@ -219,8 +221,8 @@ export class UserManagementComponent implements OnInit {
       this.formIsDirty = false;
     },
       (error) => {
-        console.log(error);
-        this.notification.error('Error', `Failed to update user ${user.UserName}`);
+        error = JSON.parse(error._body);
+        this.notification.error('Error', error.Message);
       });
 
   }
@@ -240,7 +242,8 @@ export class UserManagementComponent implements OnInit {
         // this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
       },
         (error) => {
-          this.notification.error('Error', `Failed to deactivate user.`);
+          error = JSON.parse(error._body);
+           this.notification.error('Error', error.Message);
         });
     });
 

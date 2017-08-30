@@ -50,6 +50,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if(values == 'create'){
             this.user.IsActive = true;
         }
+        if(values == 'edit'){
+             this.isFormValid = false;
+        }
     }
 
     @Input()
@@ -78,6 +81,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     userObject: any = [];
     roleNameAllowed: boolean = true;
     isEmailExist: boolean = false;
+    isFormValid:boolean=true;
 
     searching: boolean = false;
 
@@ -115,6 +119,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.riUserList = Object.keys(res);
                 this.showList = true;
                 this.searching = false;
+                this.isAllFeildsChecked();
             }, (err) => {
                 this.searching = false;
                 this.showList = true;
@@ -134,6 +139,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.user.EmailID = user.mail[0] || '';
         this.riUserName = _user;
         this.selectedSearchUser = true;
+         this.isFormValid=true;
     }
 
     onSubmit() {
@@ -178,6 +184,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     changeHandler() {
+       
+        this.isAllFeildsChecked();
         if (this.user.IsRIInternal) {
             this.roleList = this.roles;
         } else if (!this.user.IsRIInternal) {
@@ -255,5 +263,25 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
     spaceRemoverFn(value) {
         this.user.FirstName = value.replace(/^\s+|\s+$/g, '');
+    }
+    riChangeHandler(status){
+        console.log(status);
+        if(status){
+            this.user.FirstName = '';  
+            this.user.LastName = ''; 
+            this.user.EmailID = '';  
+        }
+        this.isAllFeildsChecked();
+
+    }
+
+    isAllFeildsChecked(){
+        console.log(this.user.FirstName );
+        if(this.user.FirstName == ''|| this.user.LastName == ''|| this.user.EmailID == '') {
+            this.isFormValid = false;
+        }  
+        else{
+            this.isFormValid=true;
+        }
     }
 }
