@@ -47,6 +47,7 @@ export class UserManagementComponent implements OnInit {
   ) { }
 
   showNewCustomer(newCustomer) {
+     this.action = 'create';
     this.rightCardOpen = !this.rightCardOpen;
     this.isNewUser = true;
     this.hideColumn = !this.hideColumn;
@@ -189,7 +190,8 @@ export class UserManagementComponent implements OnInit {
       this.formIsDirty = false;
     },
       (error) => {
-        this.notification.error('Error', 'Failed to create user.');
+        console.log();
+        this.notification.error('Error', error.error_description);
       });
   }
 
