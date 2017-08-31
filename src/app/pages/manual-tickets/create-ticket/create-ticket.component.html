@@ -1,411 +1,317 @@
 <ba-card cardTitle="Create Ticket">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="pull-right">
-        <button class="btn btn-danger">Approve</button>
-        <button class="btn btn-danger buttonMargin">Upload POD</button>
-        <button class="btn btn-danger buttonMargin">Save</button>
-        <button class="btn btn-danger buttonMargin">Submit</button>
-      </div>
-    </div>
-  </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <button class="btn btn-danger">Approve</button>
+                <button class="btn btn-danger buttonMargin">Upload POD</button>
+                <button class="btn btn-danger buttonMargin">Save</button>
+                <button class="btn btn-danger buttonMargin">Submit</button>
+                <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button>
 
-  <div class="form-group row" style="margin-top: 20px;">
-    <label for="example-text-input" class="col-sm-2 col-form-label">Branch</label>
-    <div class="col-sm-4">
-      <select class="form-control" name="branch" [(ngModel)]="searchBranch" (ngModelChange)="onBranchChange()">
-                <option *ngFor="let branch of allBranches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" style="margin-top: 20px;">
+        <label for="example-text-input" class="col-sm-2 col-form-label">Branch</label>
+        <div class="col-sm-4">
+            <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler()">
+                <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
             </select>
-    </div>
-    <label for="example-text-input" class="col-sm-2 col-form-label">Ticket Type</label>
-    <div class="col-sm-4">
-      <label *ngFor="let ticket of ticketTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="ticketType" id="ticketTypeRadio1" [value]="ticket.type" [(ngModel)]="ticket.TicketTypeID">
-                <span>{{ticket.type}}</span>
+        </div>
+        <label for="example-text-input" class="col-sm-2 col-form-label">Ticket Type</label>
+        <div class="col-sm-4">
+            <label *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="ticketType" [value]="tType.id" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="ticketChangeHandler()">
+                <span>{{tType.Value}}</span>
             </label>
+        </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
-    <div class="col-sm-4 input-group" style="margin-bottom:0px;">
-      <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
-      <button class="input-group-addon" (click)="d.toggle()" type="button">
+    <div class="form-group row">
+        <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
+        <div class="col-sm-4 input-group" style="margin-bottom:0px;">
+            <input class="form-control" [(ngModel)]="ticket.Created" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
+            <button class="input-group-addon" (click)="d.toggle()" type="button">
                 <i class="ion-calendar"></i>
             </button>
+        </div>
+        <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
+        <div class="col-sm-4">
+            <label *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="type" [value]="sType.id" [(ngModel)]="ticket.SaleTypeID">
+                <span>{{sType.Value}}</span>
+            </label>
+        </div>
     </div>
-    <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
-    <div class="col-sm-4">
-      <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="type" id="typeRadio1" value="option1" checked>
-                <span>Sale</span>
+    <div class="form-group row">
+        <label for="example-text-input" class="col-sm-2 col-form-label">Customer Name</label>
+        <div class="col-sm-4">
+            <select class="form-control" name="customer" [(ngModel)]="ticket.CustomerID" (ngModelChange)="customerChangeHandler()">
+                <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
+            </select>
+        </div>
+        <label [hidden]="!modes.length" for="example-text-input" class="col-sm-2 col-form-label">Mode</label>
+        <div class="col-sm-4" [hidden]="!modes.length">
+            <label *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="mode" [value]="mType.id" [(ngModel)]="ticket.Mode">
+                <span>{{mType.Value}}</span>
             </label>
-      <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="type" id="typeRadio2" value="option2">
-                <span>Credit</span>
-            </label>
-
-      <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="type" id="typeRadio1" value="option1" (click)="showHideCols(1)">
-                <span>Meter Reading</span>
-            </label>
-      <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="type" id="typeRadio2" value="option2" checked (click)="showHideCols(2)">
-                <span>Inventory</span>
-            </label>
+        </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-sm-2 col-form-label">Customer Name</label>
-    <div class="col-sm-4">
-      <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+    <div class="form-group row">
+        <label for="example-text-input" class="col-sm-2 col-form-label">Driver</label>
+        <div class="col-sm-4">
+            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
                 <option *ngFor="let customer of branchBasedCustomers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
             </select>
-    </div>
-    <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
-    <div class="col-sm-4">
-      <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="pod" id="podRadio1" value="option1" (click)="ifPodReceived(1)">
+        </div>
+        <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
+        <div class="col-sm-4">
+            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="pod" id="podRadio1" value="received">
                 <span>Received</span>
             </label>
-      <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="pod" id="podRadio2" value="option2" checked (click)="ifPodReceived(2)">
+            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="pod" id="podRadio2" value="notReceived">
                 <span>Not-Received</span>
             </label>
+        </div>
     </div>
-  </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-sm-2 col-form-label">Driver</label>
-    <div class="col-sm-4">
-      <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
-                <option *ngFor="let customer of branchBasedCustomers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
-            </select>
+    <div class="form-group row">
+        <label for="example-text-input" class="col-sm-2 col-form-label">Cash Amount</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" [(ngModel)]="ticket.CashAmount" [disabled]="ticket.SaleTypeID == 23">
+        </div>
+        <label for="example-text-input" class="col-sm-2 col-form-label">Check#</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" [disabled]="ticket.SaleTypeID == 23">
+        </div>
+        <label for="example-text-input" class="col-sm-2 col-form-label">Check Amount</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" [(ngModel)]="ticket.CheckAmount" [disabled]="ticket.SaleTypeID == 23">
+        </div>
     </div>
+    <div class="form-group row">
+        <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" [(ngModel)]="ticket.TicketNumber" (blur)="ticketNumberChangeHandler()">
+        </div>
+        <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" [(ngModel)]="ticket.PONumber">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <!-- <button class="btn btn-danger">Add Machine</button> -->
+                <button class="btn btn-danger buttonMargin" (click)="addProductRow()">Add Product</button>
+            </div>
+        </div>
+    </div>
+    <br>
 
-  </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-sm-2 col-form-label">Cash Amount</label>
-    <div class="col-sm-2">
-      <input type="text" class="form-control">
-    </div>
-    <label for="example-text-input" class="col-sm-2 col-form-label">Check #</label>
-    <div class="col-sm-2">
-      <input type="text" class="form-control">
-    </div>
-    <label for="example-text-input" class="col-sm-2 col-form-label">Check Amount</label>
-    <div class="col-sm-2">
-      <input type="text" class="form-control">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control">
-    </div>
-    <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control">
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="pull-right">
-        <button class="btn btn-danger">Add Machine</button>
-        <button class="btn btn-danger buttonMargin">Add Product</button>
-      </div>
-    </div>
-  </div>
-  <br>
-
-  <!-- DSD Table begins -->
-  <label>DSD Table</label>
-  <div class="row">
-    <div class="col-sm-12">
-      <table class="table table-condensed">
-        <thead class="tableHeader">
-          <th>Product</th>
-          <th>Unit Price</th>
-          <th>Unit#</th>
-          <th>Total Amount</th>
-          <th>Action</th>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+    <!-- DSD Table begins -->
+    <div class="row" *ngIf="ticket.TicketTypeID == 20">
+        <div class="col-sm-12">
+            <table class="table table-condensed">
+                <thead class="tableHeader">
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Unit#</th>
+                    <th>Total Amount</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
+                        <td>
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                    {{pdetail.DisplayName}} </option>    
                             </select>
-            </td>
-            <td>
-              $12.33
-            </td>
-            <td>
-              <input type="text" class="form-control">
-            </td>
-            <td>
-              $12.22
-            </td>
-            <td>
-              <i class="ion-edit" (click)="editManualTickets()"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                        </td>
+                        <td> {{tdetail.productSelected?.Price}}</td>
+                        <td>
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);">
+                        </td>
+                        <td>{{tdetail.totalAmount}}</td>
+                        <td>
+                            <i class="ion-trash-a" (click)="deleteProductHandler(tdetail)"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td><b>{{ticket.tempTotalUnit}}</b></td>
+                        <td><b>{{ticket.TotalSale}}</b></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div class="row dummyMarginTop">
-    <div class="col-md-6">
-      <div class="row">
-        <div class="col-md-8">
-          <b>Total Sale</b>
-        </div>
-        <div class="col-md-4">
-          <b>$151.25</b>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-md-8">
-          <b>Tax</b>
-        </div>
-        <div class="col-md-4">
-          <b>$0.00</b>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 createNewTicket">
-      <div class="row">
-        <div class="col-md-4">
-          <b>Total Amount</b>
-        </div>
-        <div class="col-md-8">
-          <b>$156.25</b>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- DSD Table ends -->
 
-  <!-- PBM Tables begin -->
-  <!-- Meter Reading table -->
-  <label>PBM Meter Reading Table</label>
-  <div class="row">
-    <div class="col-sm-12">
-      <table class="table table-condensed">
-        <thead class="tableHeader">
-          <th>Machine</th>
-          <th>Unit Price</th>
-          <th>Previous Reading</th>
-          <th>Current Reading</th>
-          <th>Total Units</th>
-          <th>Action</th>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+    <!-- DSD Table ends -->
+
+    <!-- PBM Tables begin -->
+    <!-- Meter Reading table -->
+    <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 22">
+        <div class="col-sm-12">
+            <table class="table table-condensed">
+                <thead class="tableHeader">
+                    <th>Machine</th>
+                    <th>Unit Price</th>
+                    <th>Previous Reading</th>
+                    <th>Current Reading</th>
+                    <th>Total Units</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
                             </select>
-            </td>
-            <td>
-              $12.33
-            </td>
-            <td>
-              1236
-            </td>
-            <td>
-              1276
-            </td>
-            <td>
-              40
-            </td>
-            <td>
-              <i class="ion-edit" (click)="editManualTickets()"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                        </td>
+                        <td>
+                            $12.33
+                        </td>
+                        <td>
+                            1236
+                        </td>
+                        <td>
+                            1276
+                        </td>
+                        <td>
+                            40
+                        </td>
+                        <td>
+                            <i class="ion-edit" (click)="editManualTickets()"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div class="row dummyMarginTop">
-    <div class="col-md-6">
-      <div class="row">
-        <div class="col-md-8">
-          <b>Total Sale</b>
-        </div>
-        <div class="col-md-4">
-          <b>$151.25</b>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-md-4">
-          <b>Store Credit</b>
-        </div>
-        <div class="col-md-4">
-          <input type="text" class="form-control">
-        </div>
-        <div class="col-md-4">
-          <b>-$5.00</b>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-md-8">
-          <b>Tax</b>
-        </div>
-        <div class="col-md-4">
-          <b>$0.00</b>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 createNewTicket">
-      <div class="row">
-        <div class="col-md-4">
-          <b>Total Amount</b>
-        </div>
-        <div class="col-md-8">
-          <b>$156.25</b>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Inventory table -->
-  <label>PBM Inventory Table</label>
-  <div class="row">
-    <div class="col-sm-12">
-      <table class="table table-condensed">
-        <thead class="tableHeader">
-          <th>Machine</th>
-          <th>Unit Price</th>
-          <th>Delivered Bags</th>
-          <th>Current Inventory</th>
-          <th>Damaged Bags</th>
-          <th>Action</th>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+
+    <!-- Inventory table -->
+    <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 23">
+        <div class="col-sm-12">
+            <table class="table table-condensed">
+                <thead class="tableHeader">
+                    <th>Machine</th>
+                    <th>Unit Price</th>
+                    <th>Delivered Bags</th>
+                    <th>Current Inventory</th>
+                    <th>Damaged Bags</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
                             </select>
-            </td>
-            <td>
-              $12.33
-            </td>
-            <td>
-              1236
-            </td>
-            <td>
-              1276
-            </td>
-            <td>
-              40
-            </td>
-            <td>
-              <i class="ion-edit" (click)="editManualTickets()"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                        </td>
+                        <td>
+                            $12.33
+                        </td>
+                        <td>
+                            1236
+                        </td>
+                        <td>
+                            1276
+                        </td>
+                        <td>
+                            40
+                        </td>
+                        <td>
+                            <i class="ion-edit" (click)="editManualTickets()"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div class="row dummyMarginTop">
-    <div class="col-md-6">
-      <div class="row">
-        <div class="col-md-8">
-          <b>Total Sale</b>
-        </div>
-        <div class="col-md-4">
-          <b>$151.25</b>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-md-8">
-          <b>Tax</b>
-        </div>
-        <div class="col-md-4">
-          <b>$0.00</b>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 createNewTicket">
-      <div class="row">
-        <div class="col-md-4">
-          <b>Total Amount</b>
-        </div>
-        <div class="col-md-8">
-          <b>$156.25</b>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- PBM Table ends -->
 
-  <!-- PBS Table begins -->
-  <label>PBS Table</label>
-  <div class="row">
-    <div class="col-sm-12">
-      <table class="table table-condensed">
-        <thead class="tableHeader">
-          <th>Product</th>
-          <th>Unit Price</th>
-          <th>Current Inventory</th>
-          <th>Delivered Bags</th>
-          <th>Action</th>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+    <!-- PBM Table ends -->
+
+    <!-- PBS Table begins -->
+    <div class="row" *ngIf="ticket.TicketTypeID == 21">
+        <div class="col-sm-12">
+            <table class="table table-condensed">
+                <thead class="tableHeader">
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Current Inventory</th>
+                    <th>Delivered Bags</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
                             </select>
-            </td>
-            <td>
-              $12.33
-            </td>
-            <td>
-              1236
-            </td>
-            <td>
-              40
-            </td>
-            <td>
-              <i class="ion-edit" (click)="editManualTickets()"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                        </td>
+                        <td>
+                            $12.33
+                        </td>
+                        <td>
+                            1236
+                        </td>
+                        <td>
+                            40
+                        </td>
+                        <td>
+                            <i class="ion-delete" (click)="editManualTickets()"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div class="row dummyMarginTop">
-    <div class="col-md-6">
-      <div class="row">
-        <div class="col-md-8">
-          <b>Total Sale</b>
-        </div>
-        <div class="col-md-4">
-          <b>$151.25</b>
-        </div>
-      </div>
-      <br>
-      <div class="row">
-        <div class="col-md-8">
-          <b>Tax</b>
-        </div>
-        <div class="col-md-4">
-          <b>$0.00</b>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 createNewTicket">
-      <div class="row">
-        <div class="col-md-4">
-          <b>Total Amount</b>
-        </div>
-        <div class="col-md-8">
-          <b>$156.25</b>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- PBS Table ends -->
+    <!-- PBS Table ends -->
 
+
+    <div class="row dummyMarginTop">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-8">
+                    <b>Total Sale</b>
+                </div>
+                <div class="col-md-4">
+                    <b>{{ticket.TotalSale}}</b>
+                </div>
+            </div>
+            <br>
+            <!-- <div class="row">
+                <div class="col-md-4">
+                    <b>Store Credit</b>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <b>-$5.00</b>
+                </div>
+            </div>
+            <br> -->
+            <div class="row">
+                <div class="col-md-8">
+                    <b>Tax</b>
+                </div>
+                <div class="col-md-4">
+                    <b>{{customer?.Tax}}</b>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 createNewTicket">
+            <div class="row">
+                <div class="col-md-4">
+                    <b>Total Amount</b>
+                </div>
+                <div class="col-md-8">
+                    <b>{{ticket.TotalAmount}}</b>
+                </div>
+            </div>
+        </div>
+    </div>
 </ba-card>

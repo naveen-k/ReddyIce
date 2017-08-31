@@ -1,4 +1,3 @@
-import { ManaulTicket } from '../manaul-ticket.interfaces';
 import { User } from '../../user-management/user-management.interface';
 import { Branch } from '../../../shared/interfaces/interfaces';
 import { UserService } from '../../../shared/user.service';
@@ -17,7 +16,7 @@ export class TicketListComponent implements OnInit {
     // logged in user
     user: User;
 
-    allTickets: ManaulTicket[];
+    allTickets: any[];
 
     constructor(
         protected service: ManualTicketService,

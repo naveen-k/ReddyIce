@@ -1,17 +1,31 @@
-export interface ManaulTicket {
-    TicketID: string;
-    CustomerID: string;
-    HHCustomerID: string;
-    TripID: string;
-    TicketTypeID: string;
-    SaleTypeID: string;
-    DNSImageID: string;
-    DNSReasonID: string;
-    PODImageID: string;
-    ReceiverSignatureImageID: string;
-    CreditCardTransactionID: string;
+export interface TicketDetail {
+    TicketDetailID: number;
+    TicketID: number;
+    ProductID: number;
+    Quantity: number;
+    Rate: number;
+    IsTaxable: boolean;
+    TaxPercentage: boolean;
+    StartMeterReading: number;
+    EndMeterReading: number;
+    AssetId: number;
+    DeliveredBags: number;
+}
+
+export interface ManualTicket {
+    TicketID: number;
+    CustomerID: number;
+    HHCustomerID: number;
+    TripID: number;
+    TicketTypeID: number;
+    SaleTypeID: number;
+    DNSImageID: number;
+    DNSReasonID: number;
+    PODImageID: number;
+    ReceiverSignatureImageID: number;
+    CreditCardTransactionID: number;
     TicketNumber: string;
-    IsInvoice: string;
+    IsInvoice: boolean;
     DeliveryDate: string;
     PONumber: string;
     CashAmount: string;
@@ -19,7 +33,7 @@ export interface ManaulTicket {
     CheckNumber: string;
     CreditCardAmount: string;
     ReceiverName: string;
-    IsDexed: string;
+    IsDexed: boolean;
     PrintedCopies: string;
     Notes: string;
     TaxAmount: string;
@@ -27,33 +41,31 @@ export interface ManaulTicket {
     IsNoPayment: boolean;
     CardPaymentStatus: string;
     Created: string;
-    CreatedBy: number;
+    CreatedBy: string;
     Modified: string;
-    ModifiedBy: number;
+    ModifiedBy: string;
     TicketStatusID: number;
     OrderID: number;
     BranchID: number;
-    TicketDetail: TicketDetail;
-    HHCustomer: {
-        HHCustomerID: number;
-    };
-    PODImage: {
-        PODImageID: number;
-        Image: string;
-    };
-    Customer: Customer;
-}
-export interface Customer {
-    CustomerID: number;
-    CustomerName: string;
-}
-export interface TicketDetail {
-    TicketDetailID: number;
-    ProductID: number;
-    Quantity: number;
-    Rate: number;
-    StartMeterReading: number;
-    EndMeterReading: number;
-    TaxPercentage: number;
-    IsTaxable: boolean;
+    CashRecvPrevDelv: string;
+    IsClosed: boolean;
+    IsPrinted: boolean;
+    ClosedReason: string;
+    RevisitNote: string;
+    RevisitDate: number;
+    IsRevisitClosed: boolean;
+    IsReqRevisit: boolean;
+    ReasonPictureID: number;
+    SignImageID: number;
+    TktType: string;
+    IsReceivingPayment: boolean;
+    CurrentBalance: string;
+    CurrentBalanceDateTime: number;
+    CurrentBalanceDelDate: number;
+    RecordTypeId: number;
+    TotalAmount: number;
+    TotalSale: number;
+    IsSaleTicket: boolean;
+    TicketDetail: TicketDetail[];
+    Mode: number;
 }

@@ -1,5 +1,4 @@
 import { UserService } from '../../../shared/user.service';
-import { UploadImageService } from '../../../shared/uploadImage.service';
 import { Branch } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
 
@@ -9,7 +8,6 @@ import { Component, OnInit } from '@angular/core';
   selector: 'view-ticket-details',
   templateUrl: './view-ticket.component.html',
   styleUrls: ['./view-ticket.component.scss'],
-  providers: [UploadImageService],
 })
 export class ViewTicketComponent implements OnInit {
   smartTableData: any;
@@ -37,8 +35,7 @@ export class ViewTicketComponent implements OnInit {
   uploadPodButton: boolean = true;
   constructor(
     protected userService: UserService,
-    protected service: ManualTicketService, 
-    protected uploadImgService: UploadImageService) {
+    protected service: ManualTicketService) {
 
     // this.service.getProducts().subscribe ((response) => {
     //   this.products = response;

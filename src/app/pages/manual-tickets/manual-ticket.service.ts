@@ -1,4 +1,4 @@
-import { ManaulTicket } from './manaul-ticket.interfaces';
+import { Customer } from '../../shared/interfaces/interfaces';
 import { Http } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { SharedService } from '../../shared/shared.service';
@@ -13,13 +13,15 @@ export class ManualTicketService extends SharedService {
     super(http);
   }
 
-  getTickets(userId: any): Observable<ManaulTicket[]> {
+  getTickets(userId: any): Observable<any[]> {
     return this.http.get(`api/manualticket/userid?userId=${userId}`)
     .map(res => res.json());
   }
   
   getTicketTypes() {
-    return this.http.get(`api/manualticket/ticketType`)
+    // return this.http.get(`api/manualticket/ticketType`)
+    // .map(res => res.json());
+    return this.tmpHttp.get(`assets/mock-json/ticketType.json`)
     .map(res => res.json());
   }
   
@@ -28,9 +30,13 @@ export class ManualTicketService extends SharedService {
     .map(res => res.json());
   }
 
-  getBranchBasedCustomers(branchId: string) {
+  getBranchBasedCustomers(branchId: number): Observable<Customer[]> {
     return this.http.get(`api/customer?branchID=${branchId}`)
     .map(res => res.json());
+  }
+  
+  getCustomerDetail(customerId): Observable<Customer> {
+    return this.http.get(`api/customer?customerid=${customerId}`).map((res) => res.json());
   }
 
   getCustomerBasedProducts(customerId: string) {

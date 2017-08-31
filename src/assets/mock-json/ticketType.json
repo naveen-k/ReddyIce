@@ -1,0 +1,68 @@
+{
+    "CustomerType": [
+        {
+            "Value": "DSD",
+            "id": "20",
+            "Category": [
+                {
+                    "Value": "Sale",
+                    "id": "22"
+                },
+                {
+                    "Value": "Credit",
+                    "id": "23"
+                }
+            ],
+            "Mode": []
+        },
+        {
+            "Value": "PBS",
+            "id": "21",
+            "Category": [
+                {
+                    "Value": "Sale",
+                    "id": "22"
+                },
+                {
+                    "Value": "Credit",
+                    "id": "23"
+                }
+            ],
+            "Mode": []
+        },
+        {
+            "Value": "PBM",
+            "id": "22",
+            "Category": [
+                {
+                    "Value": "Sale",
+                    "id": "22"
+                },
+                {
+                    "Value": "Credit",
+                    "id": "23"
+                }
+            ],
+            "Mode": [
+                {
+                    "Value": "Meter Reading",
+                    "id": "22"
+                },
+                {
+                    "Value": "Inventory",
+                    "id": "23"
+                }
+            ]
+        }
+    ],
+    "ImageType": [
+        {
+            "Value": "PODImage",
+            "id": "40"
+        },
+        {
+            "Value": "SignatureImage",
+            "id": "41"
+        }
+    ]
+}

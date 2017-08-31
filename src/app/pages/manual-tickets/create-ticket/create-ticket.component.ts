@@ -1,194 +1,144 @@
-import { ManaulTicket } from '../manaul-ticket.interfaces';
+
+import { ManualTicket, TicketDetail } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
-import { UploadImageService } from '../../../shared/uploadImage.service';
-import { Branch } from '../../../shared/interfaces/interfaces';
+import { Branch, Customer } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
 
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'create-new-ticket',
   templateUrl: './create-ticket.component.html',
   styleUrls: ['./create-ticket.component.scss'],
-  providers: [UploadImageService],
 })
 export class CreateTicketComponent implements OnInit {
 
-  ticket: ManaulTicket;
+  ticket: ManualTicket = {} as ManualTicket;
 
-  ticketTypes: any[] = [];
+  ticketTypes: any;
+
+  ticketSubTypes: any[];
+
+  branches: any[];
+
+  // List of Cutomers
+  customers: Customer[];
+
+  // Selected Customer
+  customer: Customer;
+
+  modes: any[] = [];
 
   constructor(
     protected service: ManualTicketService,
+    protected user: UserService,
   ) { }
 
   ngOnInit() {
     this.loadTicketType();
+    this.loadBranches();
   }
 
   loadTicketType() {
     this.service.getTicketTypes().subscribe((response) => {
-      this.prepareAndSetTicketTypeData(response);
+      this.ticketTypes = response;
+
+      // Set first Ticket type selected
+      this.ticket.TicketTypeID = this.ticketTypes['CustomerType'][0]['id'];
+
+      this.ticketChangeHandler();
     });
   }
 
-  prepareAndSetTicketTypeData(values) {
-    const keys = Object.keys(values);
-    keys.forEach((key) => {
-      this.ticketTypes.push({
-        type: key,
-        data: values[key],
-      });
+  loadBranches() {
+    this.service.getBranches(this.user.getUser().UserId).subscribe((res) => {
+      // Discard 'All branches' and assign to branches object, if its coming in response;
+      this.branches = res.filter((b) => b.BranchID !== 1);
     });
   }
 
-  // smartTableData: any;
-  // dsdTableData: any;
-  // pbmTableData: any;
-  // pbsTableData: any;
-  // ticketObj: any = {};
-  // showDamagedCol: boolean = false;
-  // showHideTableCols: boolean = true;
-  // showHideDSDCols: boolean = false;
-  // toggleTextbox: boolean = false;
-  // allBranches: Branch;
 
-  // isDSDSelected: boolean = false;
-  // isPBMSelected: boolean = false;
-  // isPBSSelected: boolean = true;
-  // ticketTypes: any;
-  // products: any;
-  // branchBasedCustomers: any;
-  // customerBasedProducts: any;
-  // searchBranch: any;
-  // searchCustomer: any;
-  // tempObj: any;
-  // tempDisableCreateTicketFields: boolean = false;
-  // uploadPodButton: boolean = true;
-  // ticketNumberExists: boolean = true;
-  // constructor(
-  //   protected userService: UserService,
-  //   protected service: ManualTicketService, 
-  //   protected uploadImgService: UploadImageService) {
+  ticketChangeHandler() {
+    const selectedTicket = this.ticketTypes.CustomerType.filter((t) => t.id === this.ticket.TicketTypeID)[0];
 
-  //   // this.service.getProducts().subscribe ((response) => {
-  //   //   this.products = response;
-  //   // });
-  //   this.dsdTableData = service.dsdSmartTableData;
-  //   this.pbmTableData = service.pbmSmartTableData;
-  //   this.pbsTableData = service.pbsSmartTableData;
+    // Reset type 
+    this.ticketSubTypes = selectedTicket['Category'];
 
-  // }
+    this.modes = selectedTicket.Mode;
+    if (this.modes && this.modes.length) {
+      this.ticket.Mode = this.modes[0].id;
+    }
+  }
 
-  // ngOnInit() {
-  //   // console.log('this.service.disableCreateTicketFields : ', this.service.disableCreateTicketFields);
-  //   if (this.service.disableCreateTicketFields) {
-  //     this.tempDisableCreateTicketFields = true;
-  //   } else {
-  //     this.tempDisableCreateTicketFields = false;
-  //   }
-  //   const user = this.userService.getUser();
+  branchChangeHandler() {
 
-  //   this.service.getBranches(user.UserId).subscribe((response) => {
-  //     let temp = response;
-  //     response = response.shift();
-  //     this.allBranches = temp;
-  //     this.searchBranch = this.allBranches[0].BranchID;
-  //     this.onBranchChange();
-  //   });
+    this.loadCustomerOfBranch(this.ticket.BranchID);
+  }
 
+  loadCustomerOfBranch(branchId) {
+    this.service.getBranchBasedCustomers(branchId).subscribe((res) => {
+      this.customers = res;
+    });
+  }
 
-  //   this.service.getTicketTypes().subscribe((response) => {
-  //     this.ticketTypes = response;
-  //   });
-  // }
+  customerChangeHandler() {
+    const customer = this.customers.filter((c) => c.CustomerId === this.ticket.CustomerID);
+    this.loadCustomerDetail();
 
-  // onBranchChange() {
-  //   this.service.getBranchBasedCustomers(this.searchBranch).subscribe((response) => {
-  //     this.searchCustomer = response[0].CustomerId;
-  //     this.branchBasedCustomers = response;
-  //     this.onCustomerChange();
-  //   });
-  // }
+    // Reset ticket details
+    this.ticket.TicketDetail = [{} as TicketDetail];
+  }
 
-  // onCustomerChange() {
-  //   this.service.getCustomerBasedProducts(this.searchCustomer).subscribe((response) => {
-  //     this.customerBasedProducts = response;
-  //   });
-  // }
+  addProductRow() {
+    if (!this.ticket.TicketDetail) { return; }
+    this.ticket.TicketDetail.push({} as TicketDetail);
+  }
 
-  // ifPodReceived(arg) {
-  //   if (arg === 1) {
-  //     this.uploadPodButton = false;
-  //   } else {
-  //     this.uploadPodButton = true;
-  //   }
-  // }
+  loadCustomerDetail() {
+    this.service.getCustomerDetail(this.ticket.CustomerID).subscribe((res) => {
+      this.customer = res;
+    });
+  }
 
-  // onImageSelect(event) {
-  //   console.log('onChange');
-  //   const files = event.srcElement.files;
-  //   console.log(files);
-  //   this.uploadImgService.makeFileRequest('http://frozen.reddyice.com/myiceboxservice_dev/api/manualticket/uploadImage', [], files).subscribe(() => {
-  //     console.log('sent');
-  //   });
-  // }
+  ticketNumberChangeHandler() {
+    if (!this.ticket.TicketNumber) { return; }
+    this.service.checkTicketNumber(this.ticket.TicketNumber).subscribe((res) => {
+      // console.log(res);
+    });
+  }
 
-  // checkTicketNumber(ticketNumber) {
-  //   console.log("checkTicketNumber : ", ticketNumber);
-  //   this.service.checkTicketNumber(ticketNumber).subscribe((response) => {
-  //       if (response.Message === 'Ticket Number available for use.') {
-  //         this.ticketNumberExists = false;
-  //       } else if (response.Message === 'Ticket Number already in use.') {
-  //         this.ticketNumberExists = true;
-  //       }
-  //   });
-  // }
+  productChangeHandler(ticketDetail) {
+    // console.log(this.ticket.TicketDetail);
+    const product = this.ticket.TicketDetail.filter(t => t.ProductID === ticketDetail.ProductID);
+    if (product.length === 2) {
+      ticketDetail.ProductID = '';
+      alert('Product already selected');
+      return;
+    }
+    ticketDetail['productSelected'] = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+  }
 
-  // addPbsProduct() {
-  //   console.log("reached");
-  //   this.tempObj = {
-  //     product: 'Product1',
-  //     unit: '$125',
-  //     deliveredBag: '125',
-  //     currentInv: '12',
-  //   };
-  //   this.pbsTableData.push(this.tempObj);
-  // }
+  unitChangeHandler(tdetail) {
+    tdetail.totalAmount = tdetail.Quantity * tdetail.productSelected.Price;
+    this.calculateTotalAmountAndUnit();
+  }
 
-  // showHideDamagedColumn = function (arg) {
-  //   if (arg === 3) {
-  //     this.showDamagedCol = false;
-  //     this.showHideDSDCols = false;
-  //     this.isDSDSelected = false;
-  //     this.isPBMSelected = false;
-  //     this.isPBSSelected = true;
-  //   } else if (arg === 2) {
-  //     this.showDamagedCol = true;
-  //     this.showHideDSDCols = false;
-  //     this.isDSDSelected = false;
-  //     this.isPBMSelected = true;
-  //     this.isPBSSelected = false;
-  //   } else if (arg === 1) {
-  //     this.showDamagedCol = false;
-  //     this.showHideDSDCols = true;
-  //     this.isDSDSelected = true;
-  //     this.isPBMSelected = false;
-  //     this.isPBSSelected = false;
-  //   }
-  // };
+  calculateTotalAmountAndUnit() {
+    this.ticket['tempTotalUnit'] = 0;
+    this.ticket.TotalSale = 0;
 
-  // showHideCols = function (arg) {
-  //   if (arg === 1) {
-  //     this.showHideTableCols = false;
-  //   } else if (arg === 2) {
-  //     this.showHideTableCols = true;
-  //   }
-  // };
+    this.ticket.TicketDetail.forEach((t) => {
+      this.ticket['tempTotalUnit'] += Number(t.Quantity);
+      this.ticket.TotalSale += Number(t['totalAmount']);
+    });
 
-  // editManualTickets() {
-  //   this.toggleTextbox = !this.toggleTextbox;
-  // }
+    this.ticket.TotalAmount = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
+  }
 
-  // isChecked: boolean = false;*/
+  deleteProductHandler(tdetail) {
+    const index = this.ticket.TicketDetail.findIndex((t) => t.ProductID === tdetail.ProductID);
+    this.ticket.TicketDetail.splice(index, 1);
+    
+    // update total amount and total count
+    this.calculateTotalAmountAndUnit();
+  }
 }
