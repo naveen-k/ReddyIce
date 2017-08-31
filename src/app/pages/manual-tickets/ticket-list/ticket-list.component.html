@@ -71,11 +71,11 @@
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect">
                     </td>
-                    <td class="table-id" style="cursor: pointer">
-                        <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" (click)="createNewTicket(3)">
+                    <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                        <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                           <span class="tooltiptext">View</span>
                         </i>
-                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="createNewTicket(2)">
+                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                           <span class="tooltiptext">Edit</span>
                         </i>
                         <i class="ion-trash-a custom-tooltip-ion">

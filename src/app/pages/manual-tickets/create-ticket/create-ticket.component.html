@@ -82,9 +82,18 @@
         <div class="col-sm-2">
             <input type="text" class="form-control" [(ngModel)]="ticket.CashAmount" [disabled]="ticket.SaleTypeID == 23">
         </div>
-        <label for="example-text-input" class="col-sm-2 col-form-label">Check#</label>
-        <div class="col-sm-2">
-            <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" [disabled]="ticket.SaleTypeID == 23">
+        <label for="example-text-input" class="col-sm-1 col-form-label">Check#</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" id="CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
+                name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.SaleTypeID == 23">
+            <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
+            </div>
+            <div *ngIf="checkMinMaxLength" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div class="custom-tooltip bottom">Should not be more than 20 digits</div>
+            </div>
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">Check Amount</label>
         <div class="col-sm-2">
@@ -94,11 +103,41 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" [(ngModel)]="ticket.TicketNumber" (blur)="ticketNumberChangeHandler()">
+            <input type="text" class="form-control" [(ngModel)]="ticket.TicketNumber" id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()"
+                name="TicketNumber" #TicketNumber="ngModel" required>
+            <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
+            </div>
+            <div *ngIf="isTicketNumberExist" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div class="custom-tooltip bottom">Ticket Number already in use</div>
+            </div>
+            <div *ngIf="containsCharacters" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div class="custom-tooltip bottom">Ticket number cannot contain characters</div>
+            </div>
+            <div *ngIf="ticketMinMaxLength" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div class="custom-tooltip bottom">Ticket number should be 4-10 digits long only</div>
+            </div>
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" [(ngModel)]="ticket.PONumber">
+            <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" id="PONumber" placeholder="PO Number" (blur)="poNumberChangeHandler()"
+                name="PONumber" #PONumber="ngModel" required>
+            <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div *ngIf="PONumber.errors.required" class="custom-tooltip bottom">PO number is required</div>
+            </div>
+            <div *ngIf="poContainsCharacters" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div class="custom-tooltip bottom">PO number should be alphanumeric</div>
+            </div>
+            <div *ngIf="poMinMaxLength" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div class="custom-tooltip bottom">PO number should be 4-20 digits long only</div>
+            </div>
         </div>
     </div>
     <div class="row">

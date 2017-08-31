@@ -1,4 +1,4 @@
-
+import { NotificationsService } from 'angular2-notifications/dist';
 import { ManualTicket, TicketDetail } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
 import { Branch, Customer } from '../../../shared/interfaces/interfaces';
@@ -28,9 +28,19 @@ export class CreateTicketComponent implements OnInit {
 
   modes: any[] = [];
 
+  isTicketNumberExist: boolean = false;
+  containsCharacters: boolean = false;
+  ticketMinMaxLength: boolean = false;
+
+  poContainsCharacters: boolean = false;
+  poMinMaxLength: boolean = false;
+
+  checkMinMaxLength: boolean = false;
+
   constructor(
     protected service: ManualTicketService,
     protected user: UserService,
+    protected notification: NotificationsService,
   ) { }
 
   ngOnInit() {
@@ -101,9 +111,46 @@ export class CreateTicketComponent implements OnInit {
 
   ticketNumberChangeHandler() {
     if (!this.ticket.TicketNumber) { return; }
-    this.service.checkTicketNumber(this.ticket.TicketNumber).subscribe((res) => {
-      // console.log(res);
-    });
+    const ticketNumberLength = this.ticket.TicketNumber.length;
+    if (isNaN(Number(this.ticket.TicketNumber))) {
+      this.containsCharacters = true;
+      this.ticketMinMaxLength = false;
+    } else if (ticketNumberLength < 4 || ticketNumberLength > 10) {
+      this.ticketMinMaxLength = true;
+      this.containsCharacters = false;
+    } else {
+      this.service.checkTicketNumber(this.ticket.TicketNumber).subscribe((res) => {
+        this.ticketMinMaxLength = false;
+        this.containsCharacters = false;
+        if (res.Message === 'Ticket Number already in use.') {
+          this.isTicketNumberExist = true;
+        } else if (res.Message === 'Ticket Number available for use.') {
+          this.isTicketNumberExist = false;
+          this.notification.success('Success', 'Ticket Number available for use.');
+        }
+      });
+    }
+  }
+
+  poNumberChangeHandler() {
+    if (!this.ticket.PONumber) { return; }
+    const poNumberLength = this.ticket.PONumber.length;
+    if (poNumberLength < 4 || poNumberLength > 20) {
+      this.poMinMaxLength = true;
+      this.poContainsCharacters = false;
+    } else {
+      this.poMinMaxLength = false;
+    }
+  }
+
+  checkNumberChangeHandler() {
+    if (!this.ticket.CheckNumber) { return; }
+    const checkNumberLength = this.ticket.CheckNumber.length;
+    if (checkNumberLength > 20) {
+      this.checkMinMaxLength = true;
+    } else {
+      this.checkMinMaxLength = false;
+    }
   }
 
   productChangeHandler(ticketDetail) {

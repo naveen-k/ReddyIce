@@ -26,6 +26,40 @@ label {
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
+.showError {
+  color: #ed7878;
+  position: absolute;
+  right: 23px;
+  top: 12px;
+}
+
+.custom-tooltip {
+  background: #ed7878;
+  color: white;
+  padding: 5px;
+  display: inline;
+  position: absolute;
+  border-radius: 4px;
+  top: -19px;
+  right: 1%;
+}
+
+.showError:after {
+  content: '';
+  width: 0;
+  display: inline;
+  position: absolute;
+  right: -5px;
+  margin: -5px;
+  top: 3%;
+  border: 5px solid #ed7878;
+  border-right-color: transparent;
+  border-bottom-color: transparent; 
+  border-top-color: #ed7878;
+  border-left-color: transparent;
+  left: 56%;
+}
 /*
 .radioList {
   margin-top: 5px;
