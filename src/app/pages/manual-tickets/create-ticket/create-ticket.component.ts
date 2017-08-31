@@ -141,11 +141,18 @@ export class CreateTicketComponent implements OnInit {
   poNumberChangeHandler() {
     if (!this.ticket.PONumber) { return; }
     const poNumberLength = this.ticket.PONumber.length;
+    const letterNumber = /^[0-9a-zA-Z]+$/;
     if (poNumberLength < 4 || poNumberLength > 20) {
       this.poMinMaxLength = true;
       this.poContainsCharacters = false;
+    } else if ((this.ticket.PONumber.match(letterNumber)) && (poNumberLength > 4 || poNumberLength < 20)) {
+      this.poContainsCharacters = false;
+      this.poMinMaxLength = false;
     } else {
       this.poMinMaxLength = false;
+      if (!(this.ticket.PONumber.match(letterNumber))) {  
+        this.poContainsCharacters = true;
+      }
     }
   }
 
@@ -205,7 +212,7 @@ export class CreateTicketComponent implements OnInit {
 
   onCancelClick() {
     if (this.formIsDirty) {
-      const activeModal = this.modalService.open(ModalComponent , {
+      const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
       });
@@ -236,7 +243,7 @@ export class CreateTicketComponent implements OnInit {
   deleteProductHandler(tdetail) {
     const index = this.ticket.TicketDetail.findIndex((t) => t.ProductID === tdetail.ProductID);
     this.ticket.TicketDetail.splice(index, 1);
-    
+
     // update total amount and total count
     this.calculateTotalAmountAndUnit();
   }
