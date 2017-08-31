@@ -175,7 +175,7 @@
                                     {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
-                        <td> {{tdetail.productSelected?.Price}}</td>
+                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                         <td>
                             <input type="text" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);">
                         </td>
