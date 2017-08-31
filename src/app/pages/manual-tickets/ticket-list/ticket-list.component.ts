@@ -35,9 +35,17 @@ export class TicketListComponent implements OnInit {
     }
 
     getAllTickets() {
+        const searchObj = {
+            'CreatedDate': '2017-08-31',
+            'BranchId': '1362',
+            'IsForAll': 'true',
+        };
         this.service.getTickets(this.user.UserId).subscribe((response) => {
             this.allTickets = response;
         });
+        // return this.service.getTickets(searchObj).subscribe((response) => {
+        //     console.log('res', response);
+        // });
     }
 
     getBranches() {

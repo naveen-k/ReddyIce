@@ -1,5 +1,6 @@
+import { UserService } from '../../shared/user.service';
 import { Customer } from '../../shared/interfaces/interfaces';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { SharedService } from '../../shared/shared.service';
 import { Injectable } from '@angular/core';
@@ -9,7 +10,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ManualTicketService extends SharedService {
   result: any;
-  constructor(protected http: HttpService, private tmpHttp: Http ) {
+  constructor(protected http: HttpService, private tmpHttp: Http, protected userService: UserService ) {
     super(http);
   }
 
@@ -17,6 +18,14 @@ export class ManualTicketService extends SharedService {
     return this.http.get(`api/manualticket/userid?userId=${userId}`)
     .map(res => res.json());
   }
+  
+  // getTickets(searchObj): Observable<any[]> {
+  //   const headers = new Headers();
+  //   headers.append('Content-Type', 'application/json');
+  //   const options = new RequestOptions({ 'headers': headers });
+  //   return this.http.post(`api/manualticket/getalltickets`, searchObj, options)
+  //   .map(res => res.json());
+  // }
   
   getTicketTypes() {
     // return this.http.get(`api/manualticket/ticketType`)

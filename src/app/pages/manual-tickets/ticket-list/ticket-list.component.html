@@ -10,8 +10,9 @@
         </div>
         <div class="col-sm-4">
             <select class="form-control" id="exampleSelect1">
-                    <option *ngFor="let obj of allBranches" [value]="obj.value">{{obj.BranchID}}-{{obj.BranchName}}</option>
-                </select>
+                <option *ngFor="let obj of allBranches" [value]="obj.value">
+                {{obj.BranchID}}-{{obj.BranchName}}</option>
+            </select>
         </div>
         <div class="col-sm-4">
             <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right" >
