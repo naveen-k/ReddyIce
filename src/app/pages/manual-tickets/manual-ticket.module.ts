@@ -1,6 +1,6 @@
 import { TicketStatusPipe } from './pipes/ticket-status.pipe';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
-// import { ViewTicketComponent } from './view-ticket-details/view-ticket.component';
+import { ViewTicketComponent } from './view-ticket-details/view-ticket.component';
 import { ManualTicketService } from './manual-ticket.service';
 import { SharedModule } from '../../shared/shared.module';
 import { NgModule } from '@angular/core';
@@ -30,6 +30,7 @@ import { CreateTicketComponent } from './create-ticket/create-ticket.component';
     TicketListComponent,
     TicketStatusPipe,
     CreateTicketComponent,
+    ViewTicketComponent,
   ],
   providers: [
     ManualTicketService,

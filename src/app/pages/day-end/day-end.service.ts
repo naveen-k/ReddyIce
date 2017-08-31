@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
+import { SharedService } from '../../shared/shared.service';
+import { UserService } from '../../shared/user.service';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import { HttpService } from '../../shared/http.service';
+import { Observable } from 'rxjs/Rx';
+// import { User } from '../user-management.interface';
 
 @Injectable()
-export class DayEndService {
+export class DayEndService extends SharedService {
 
     dataTableData = [{
         'routeNumber': 1,

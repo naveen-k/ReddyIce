@@ -14,7 +14,7 @@
                 </select>
         </div>
         <div class="col-sm-4">
-            <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right" [disabled]="isNewTicket">
+            <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right" >
                     Create Ticket
                 </button>
         </div>
@@ -30,7 +30,7 @@
         <div class="col-sm-3">
             <label class="radioItem radio-inline custom-radio nowrap">
                       <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                      <span [hidden] = "showAllTicketsRadioButton">All Tickets</span>
+                      <span>All Tickets</span>
                     </label>
         </div>
     </div>
@@ -71,7 +71,7 @@
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect">
                     </td>
-                    <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                    <td class="table-id" style="cursor: pointer">
                         <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" (click)="createNewTicket(3)">
                           <span class="tooltiptext">View</span>
                         </i>
@@ -89,6 +89,6 @@
                 </tr>
             </tbody>
         </table>
-        <pagination [tableData]="smartTableData" [(currentPage)]="smartTableData"></pagination>
+        <pagination [tableData]="allTickets" [(currentPage)]="allTickets"></pagination>
     </div>
 </ba-card>

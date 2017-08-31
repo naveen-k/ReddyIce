@@ -61,8 +61,8 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Driver</label>
         <div class="col-sm-4">
-            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
-                <option *ngFor="let customer of branchBasedCustomers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
+            <select class="form-control" name="customer">
+                <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
             </select>
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
@@ -168,7 +168,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer">
                             </select>
                         </td>
                         <td>
@@ -207,7 +207,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer">
                             </select>
                         </td>
                         <td>
@@ -248,7 +248,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer" (ngModelChange)="onCustomerChange()">
+                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer">
                             </select>
                         </td>
                         <td>
