@@ -49,6 +49,15 @@ export class ManualTicketService extends SharedService {
     .map(res => res.json());
   }
     
+  fileUpload() {
+    const fileObj = {
+      'ImageTypeID': 1,
+      'Image': 'QEA=',
+      'Created': '2017-08-31',
+      'CreatedBy': 3,
+    };
+    return this.http.post('api/manualticket/uploadImage', fileObj).map((res) => res.json());
+  }
 
   dsdSmartTableData = [
     {

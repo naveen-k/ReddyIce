@@ -1,3 +1,5 @@
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationsService } from 'angular2-notifications/dist';
 import { ManualTicket, TicketDetail } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
@@ -37,10 +39,14 @@ export class CreateTicketComponent implements OnInit {
 
   checkMinMaxLength: boolean = false;
 
+  disablePodButton: boolean = true;
+  formIsDirty: boolean = true;
+
   constructor(
     protected service: ManualTicketService,
     protected user: UserService,
     protected notification: NotificationsService,
+    protected modalService: NgbModal,
   ) { }
 
   ngOnInit() {
@@ -179,6 +185,52 @@ export class CreateTicketComponent implements OnInit {
     });
 
     this.ticket.TotalAmount = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
+  }
+
+  disableCashCheck() {
+    if (this.ticket.SaleTypeID == 23) {
+      this.ticket.CashAmount = '';
+      this.ticket.CheckAmount = '';
+      this.ticket.CheckNumber = '';
+    }
+  }
+
+  isPodReceived(arg) {
+    if (arg === 2) {
+      this.disablePodButton = true;
+    } else {
+      this.disablePodButton = false;
+    }
+  }
+
+  onCancelClick() {
+    if (this.formIsDirty) {
+      const activeModal = this.modalService.open(ModalComponent , {
+        size: 'sm',
+        backdrop: 'static',
+      });
+      activeModal.componentInstance.BUTTONS.OK = 'Discard';
+      activeModal.componentInstance.showCancel = true;
+      activeModal.componentInstance.modalHeader = 'Warning!';
+      activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+      activeModal.componentInstance.closeModalHandler = (() => {
+        // location.reload();
+        console.log("entered if");
+      });
+
+    }
+  }
+
+  formChangedHandler() {
+    this.formIsDirty = true;
+  }
+
+  imageResponse: any;
+  onFileUpload(event) {
+    this.service.fileUpload().subscribe((response) => {
+      this.imageResponse = response;
+      console.log("imageResponse", this.imageResponse);
+    });
   }
 
   deleteProductHandler(tdetail) {
