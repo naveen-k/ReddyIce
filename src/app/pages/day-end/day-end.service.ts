@@ -8,6 +8,24 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class DayEndService extends SharedService {
+    constructor(
+        protected http: HttpService,
+        private userService: UserService,
+    ) {
+        super(http);
+    }
+    getFilteredTrips(data){
+       const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        const options = new RequestOptions({ 'headers': headers });
+        return this.http.post('api/trip', data, options).map((res => res.json()));
+    }
+    getTripsByDate(date?: any): Observable<any[]> {   
+        return this.http.get(`api/trip?date=${date}`).map((res) => res.json()).map((res) => {
+            console.log(res);
+            return res;
+        });
+    }
 
     dataTableData = [{
         'routeNumber': 1,
@@ -21,32 +39,32 @@ export class DayEndService extends SharedService {
         'branch': 'LA',
         'isDistributor': 'Y',
         'driver': 'Maira',
-        'trip':'1',
+        'trip': '1',
     },
     {
         'routeNumber': 2,
         'branch': 'Austria',
         'isDistributor': 'N',
         'driver': 'Sam',
-        'trip':'2',
+        'trip': '2',
     },
     {
         'routeNumber': 4,
         'branch': 'Japan',
         'isDistributor': 'Y',
         'driver': 'Raheem',
-        'trip':'1',
+        'trip': '1',
     },
     {
         'routeNumber': 3,
         'branch': 'Indonasia',
         'isDistributor': 'N',
         'driver': 'Ahmed',
-        'trip':'3',
+        'trip': '3',
     },
 
     ];
-  dataTableData2 = [{
+    dataTableData2 = [{
         'product': 'Cocktail',
         'load': '112',
         'return': '12',
@@ -64,7 +82,7 @@ export class DayEndService extends SharedService {
         'sale': '112',
         'over': '0.00',
     },
-     {
+    {
         'product': 'Ice Cubes',
         'load': '113',
         'return': '125',
@@ -73,7 +91,7 @@ export class DayEndService extends SharedService {
         'sale': '112',
         'over': '0.00',
     },
-     {
+    {
         'product': 'Ice Cubes',
         'load': '113',
         'return': '125',
@@ -82,7 +100,7 @@ export class DayEndService extends SharedService {
         'sale': '112',
         'over': '0.00',
     },
-     {
+    {
         'product': 'Ice Cubes',
         'load': '113',
         'return': '125',
@@ -91,7 +109,7 @@ export class DayEndService extends SharedService {
         'sale': '112',
         'over': '0.00',
     },
-     {
+    {
         'product': 'Ice Cubes',
         'load': '113',
         'return': '125',
@@ -100,7 +118,7 @@ export class DayEndService extends SharedService {
         'sale': '112',
         'over': '0.00',
     },
-     {
+    {
         'product': 'Ice Cubes',
         'load': '113',
         'return': '125',
@@ -110,7 +128,7 @@ export class DayEndService extends SharedService {
         'over': '0.00',
     },
     ];
-  dataTableData3 = [{
+    dataTableData3 = [{
         'custNumber': '121',
         'customer': 'Wallmart',
         'ticket': '2121211',
@@ -135,7 +153,7 @@ export class DayEndService extends SharedService {
         'buyBack': '10.00',
     },
     {
-       'custNumber': '123',
+        'custNumber': '123',
         'customer': 'Mc.Donald',
         'ticket': '2121213',
         'invoiceAmount': '25.0',
@@ -171,7 +189,7 @@ export class DayEndService extends SharedService {
         'buyBack': '6.00',
     },
     {
-       'custNumber': '126',
+        'custNumber': '126',
         'customer': 'India Bulls',
         'ticket': '2121216',
         'invoiceAmount': '22.0',
@@ -205,14 +223,14 @@ export class DayEndService extends SharedService {
             }, 2000);
         });
     }
-     getData2(): Promise<any> {
+    getData2(): Promise<any> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(this.dataTableData2);
             }, 2000);
         });
     }
-     getData3(): Promise<any> {
+    getData3(): Promise<any> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(this.dataTableData3);

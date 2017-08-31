@@ -5,28 +5,26 @@
             <div class="row bottom-margin">
                 <div class="form-group col-md-6">
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp"  ngbDatepicker #d="ngbDatepicker">
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <select class="form-control">
-                        <option value="volvo">301/301</option>
-                        <option value="saab">302/302</option>
-                        <option value="opel">303/303</option>
+                    <select class="form-control" [(ngModel)]='tripFilterDto.BranchId' (change)="selectionchangeHandler()">
+                        <option *ngFor="let branch of branches"[value] = 'branch.BranchID' >{{branch.BranchName}}</option>
                     </select>
                 </div>
             </div>
             <div class="row bottom-margin">
                 <div class="col-md-6">
                     <label class="radioItem radio-inline custom-radio nowrap ">
-                        <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <input type="radio"  [(ngModel)]='tripFilterDto.IsForAll' value="false" (change)="selectionchangeHandler()">
                         <span>My Trips</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap" style="margin-left:10px;">
-                        <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <input type="radio" [(ngModel)]='tripFilterDto.IsForAll' value="true" (change)="selectionchangeHandler()">
                         <span>All Trips</span>
                     </label>
                 </div>

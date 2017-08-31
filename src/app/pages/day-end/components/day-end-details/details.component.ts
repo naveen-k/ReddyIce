@@ -12,10 +12,12 @@ export class DetailsComponent {
     ticketDetails: any;
     Actual: any;
     Coins: any;
+   
     totalDeposit: any = "0.00";
     constructor(private service: DayEndService) {
         this.unitReconciliation = service.dataTableData2;
         this.ticketDetails = service.dataTableData3;
+        
     }
 
     toInt(num: string) {
