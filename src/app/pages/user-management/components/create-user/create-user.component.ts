@@ -28,6 +28,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         val.RoleID = val.RoleID || this._user.RoleID;
         this._user = val;
         this.loadBranches();
+        if (val.RoleID  === '1' || val.RoleID  === '2') {
+            this.user.BranchID = '1';
+        } 
     }
 
     @Input() isNewUser: boolean;

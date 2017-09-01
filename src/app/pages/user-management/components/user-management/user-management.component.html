@@ -92,9 +92,9 @@
               </td>
               <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }} {{ item.LastName || 'NA' }}</td>
               <td class="userCell">{{ item.UserName || 'NA' }}</td>
-              <td class="userCell">{{ item.tmp_role}}</td>
-              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.tmp_distributor}}</td>
-              <td *ngIf="!hideColumn" class="userCell">{{item.tmp_branch}}</td>
+              <td class="userCell">{{ item.Role?.RoleName}}</td>
+              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchName}}</td>
               <td><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
             </tr>
           </tbody>

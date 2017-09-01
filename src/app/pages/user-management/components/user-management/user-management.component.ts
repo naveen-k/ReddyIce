@@ -183,6 +183,7 @@ export class UserManagementComponent implements OnInit {
     this.service.createUser(user).subscribe((res) => {
       this.notification.success('Success', 'User created successfully');
       const savedUserlist = [...this.userTableData, res];
+      console.log(res);
       this.userTableData = savedUserlist;
 
       this.rightCardOpen = !this.rightCardOpen;

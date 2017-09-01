@@ -17,6 +17,7 @@ export class DayEndComponent {
     trips: any = [];
     // contains all Branches
     branches: any = "";
+    customer:any = {};
 
     // Note - IsForAll is to see all trips or Mytrips
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 

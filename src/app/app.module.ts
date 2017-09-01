@@ -60,5 +60,6 @@ export type StoreType = {
 
 export class AppModule {
 
-  constructor(public appState: AppState) {}
+  constructor(public appState: AppState) {
+}
 }
