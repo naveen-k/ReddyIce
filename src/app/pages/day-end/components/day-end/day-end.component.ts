@@ -8,43 +8,51 @@ import { Component } from '@angular/core';
     styleUrls: ['./day-end.component.scss'],
 })
 export class DayEndComponent {
-    
-    isNewCustomer: boolean = true;
     userDataTable: any;
     unitReconciliation: any;
     ticketDetails: any;
+
+    selectedDate:any = '';
+    // contains all trips
     trips: any = [];
-    date:any = "";
-    branches:any = "";
-    tripFilterDto:any = { BranchId: "1326", IsForAll: false, TripDate: ""};
-    // Note - IsForAll is to see all trips or Mytrips (checker can view all Trips Mytrips while Driver can view only Mytrips) 
-   
-    showNewCustomer(newCustomer) {
-        this.isNewCustomer = newCustomer;
-    }
+    // contains all Branches
+    branches: any = "";
+
+    // Note - IsForAll is to see all trips or Mytrips
+    // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
+    tripFilterDto: any = { BranchId: "", IsForAll: true, TripDate: ""};
+
+
 
     constructor(private service: DayEndService) {
         this.userDataTable = service.dataTableData;
         this.unitReconciliation = service.dataTableData2;
         this.ticketDetails = service.dataTableData3;
-         this.loadBranches();
-         this.loadFilteredTrips();
+       
+        this.loadBranches();
+        this.loadFilteredTrips();
 
     }
-     selectionchangeHandler(){
-           this.loadFilteredTrips();
-     }   
-     loadFilteredTrips(){
-       //  if(this.tripFilterDto.TripDate) { this.tripFilterDto.TripDate = this.service.formatDate(this.tripFilterDto.TripDate); }
-        console.log(this.tripFilterDto);
-         this.service.getFilteredTrips(this.tripFilterDto).subscribe((res) => {
-            console.log(res);
+   
+    selectionchangeHandler() {
+        this.loadFilteredTrips();
+    }
+   
+    loadFilteredTrips() {
+
+        //uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
+      
+        //  this.tripFilterDto.TripDate = this.service.formatDate(this.selectedDate);
+      
+      console.log(this.tripFilterDto);
+        this.service.getFilteredTrips(this.tripFilterDto).subscribe((res) => {
             this.trips = res;
         }, (error) => {
             console.log(error);
+            this.trips = [];
         });
-     }   
-     getTripByDate(date) {
+    }
+    getTripByDate(date) {
         date = this.service.formatDate(date);
         this.service.getTripsByDate(date).subscribe((res) => {
             this.trips = res;
@@ -53,13 +61,13 @@ export class DayEndComponent {
     }
 
     loadBranches() {
-      const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userId');
         this.service.getBranches(userId).subscribe((res) => {
             this.branches = res;
         }, (error) => {
         });
-         
+
     }
-   
+
 
 }

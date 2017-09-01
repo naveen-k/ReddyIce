@@ -5,7 +5,7 @@
             <div class="row bottom-margin">
                 <div class="form-group col-md-6">
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp"  ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (change)="selectionchangeHandler()"  ngbDatepicker #d="ngbDatepicker">
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
@@ -36,32 +36,32 @@
                         <tr>
                             <th>Actions</th>
                             <th>
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'routeNumber';customer.isAsc=!customer.isAsc;">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'RouteNumber';customer.isAsc=!customer.isAsc;">
                                     Route Number
-                                     <i *ngIf="(customer.sortField == 'routeNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'routeNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <i *ngIf="(customer.sortField == 'RouteNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'RouteNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
-                                    Branch
+                                    Branch ID
                                      <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'isDistributor';customer.isAsc=!customer.isAsc;">
-                                    Is Distributor
+                                    Is Closed
                                      <i *ngIf="(customer.sortField === 'isDistributor')" [ngClass]="(customer.isAsc && customer.sortField === 'isDistributor' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'driver';customer.isAsc=!customer.isAsc;">
-                                    Driver
+                                    Truck ID
                                      <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
-                                    Trip
+                                    Trip ID
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
@@ -69,20 +69,20 @@
                     </thead>
                     <tbody>
                         <!--Removed sorting functionality as it was causing rendering issues  -->
-                        <tr *ngFor="let item of userDataTable|sort:customer.sortField:customer.isAsc">
+                        <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" style="margin-right: 5px">
+                                <i class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ uId: item.UserID }" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
                                 <i class="ion-trash-a custom-tooltip-ion">
                                     <span class="tooltiptext">Delete</span>
                                 </i>
                             </td>
-                            <td>{{item.routeNumber}}</td>
-                            <td>{{item.branch }}</td>
-                            <td>{{item.isDistributor}}</td>
-                            <td>{{item.driver}}</td>
-                            <td>{{item.trip}}</td>
+                            <td>{{item.RouteNumber}}</td>
+                            <td>{{item.BranchID }}</td>
+                            <td>{{item.IsClosed}}</td>
+                            <td>{{item.TruckID}}</td>
+                            <td>{{item.TripID}}</td>
                         </tr>
                     </tbody>
                 </table>

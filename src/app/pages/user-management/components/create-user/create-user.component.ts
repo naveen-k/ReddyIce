@@ -241,23 +241,22 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' });
             }
             this.user.BranchID = '1';
-           // this.loadBranches();
+              this.loadBranches();
         } else {
-            if (this.branches[0].BranchID === 1 || this.branches[0].BranchID === '') {
-                this.branches.shift();
-               
+            if (this.branches[0].BranchID == '1') {
+                this.branches.shift();  
             }
-
+            this.distributorsAndCopackers = [];
         }
 
     }
 
     loadBranches() {
         if (!this.user.BranchID) { return; }
-        this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
+          this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
             this.distributorsAndCopackers = res;
         });
-    }
+    } 
     spaceRemover(value) {
         this.user.LastName = value.replace(/^\s+|\s+$/g, '');
     }
