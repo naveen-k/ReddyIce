@@ -18,6 +18,10 @@ const routes: Routes = [
         component: CreateTicketComponent,
       },
       {
+        path: 'ticket/:ticketId',
+        component: CreateTicketComponent,
+      },
+      {
         path: '',
         redirectTo: 'list',
         pathMatch: 'full',

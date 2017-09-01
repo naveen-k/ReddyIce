@@ -15,7 +15,7 @@
             </select>
         </div>
         <div class="col-sm-4">
-            <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right" >
+            <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right">
                     Create Ticket
                 </button>
         </div>
@@ -76,9 +76,11 @@
                         <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                           <span class="tooltiptext">View</span>
                         </i>
-                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
-                          <span class="tooltiptext">Edit</span>
-                        </i>
+                        <a [routerLink]="['../ticket/'+item.TicketID]">
+                            <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                            <span class="tooltiptext">Edit</span>
+                            </i>
+                        </a>
                         <i class="ion-trash-a custom-tooltip-ion">
                           <span class="tooltiptext">Delete</span>
                         </i>

@@ -5,7 +5,7 @@ export interface TicketDetail {
     Quantity: number;
     Rate: number;
     IsTaxable: boolean;
-    TaxPercentage: boolean;
+    TaxPercentage: number;
     StartMeterReading: number;
     EndMeterReading: number;
     AssetId: number;
@@ -14,6 +14,7 @@ export interface TicketDetail {
 
 export interface ManualTicket {
     TicketID: number;
+    Customer: any;
     CustomerID: number;
     HHCustomerID: number;
     TripID: number;
@@ -26,7 +27,7 @@ export interface ManualTicket {
     CreditCardTransactionID: number;
     TicketNumber: string;
     IsInvoice: boolean;
-    DeliveryDate: string;
+    DeliveryDate: any;
     PONumber: string;
     CashAmount: string;
     CheckAmount: string;
@@ -68,4 +69,5 @@ export interface ManualTicket {
     IsSaleTicket: boolean;
     TicketDetail: TicketDetail[];
     Mode: number;
+    UserId: number;
 }

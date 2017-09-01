@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationsService } from 'angular2-notifications/dist';
@@ -25,10 +26,16 @@ export class CreateTicketComponent implements OnInit {
   // List of Cutomers
   customers: Customer[];
 
+  // List of Drivers
+  drivers: any[];
+
   // Selected Customer
   customer: Customer;
 
   modes: any[] = [];
+
+  // Id of current ticket object
+  ticketId: number;
 
   isTicketNumberExist: boolean = false;
   containsCharacters: boolean = false;
@@ -47,21 +54,39 @@ export class CreateTicketComponent implements OnInit {
     protected user: UserService,
     protected notification: NotificationsService,
     protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
+    // get the ticket id from route
+    this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
+
     this.loadTicketType();
     this.loadBranches();
+
+    // if ticketId is not null, consider it as edit ticket mode and load ticket object
+    if (this.ticketId) {
+      this.loadTicket(this.ticketId);
+    }
+
   }
 
   loadTicketType() {
     this.service.getTicketTypes().subscribe((response) => {
       this.ticketTypes = response;
-
-      // Set first Ticket type selected
-      this.ticket.TicketTypeID = this.ticketTypes['CustomerType'][0]['id'];
-
-      this.ticketChangeHandler();
+      this.ticketTypes.CustomerType.forEach(element => {
+        if (element.ID === 22) {
+          element.Mode = [
+            { 'Value': 'Meter Reading', 'ID': 22 },
+            { 'Value': 'Inventory', 'ID': 23 },
+          ];
+        }
+      });
+      if (!this.ticketId) {
+        // Set first Ticket type selected
+        this.ticket.TicketTypeID = this.ticketTypes['CustomerType'][0]['ID'];
+        this.ticketChangeHandler();
+      }
     });
   }
 
@@ -74,20 +99,34 @@ export class CreateTicketComponent implements OnInit {
 
 
   ticketChangeHandler() {
-    const selectedTicket = this.ticketTypes.CustomerType.filter((t) => t.id === this.ticket.TicketTypeID)[0];
+    const selectedTicket = this.getSelectedTicketTypeObject();
 
-    // Reset type 
-    this.ticketSubTypes = selectedTicket['Category'];
+    this.resetSubTypesAndMode(selectedTicket);
+    this.initializeSubTicketAndMode(selectedTicket);
 
+  }
+
+  initializeSubTicketAndMode(selectedTicket) {
+    // Set first type selected
+    this.ticket.SaleTypeID = this.ticketSubTypes[0].ID;
     this.modes = selectedTicket.Mode;
     if (this.modes && this.modes.length) {
-      this.ticket.Mode = this.modes[0].id;
+      this.ticket.Mode = this.modes[0].ID;
     }
   }
 
-  branchChangeHandler() {
+  getSelectedTicketTypeObject(): any {
+    return this.ticketTypes.CustomerType.filter((t) => t.ID === this.ticket.TicketTypeID)[0];
+  }
 
+  resetSubTypesAndMode(selectedTicket) {
+    this.ticketSubTypes = selectedTicket['category'];
+    this.ticket.Mode = null;
+  }
+
+  branchChangeHandler() {
     this.loadCustomerOfBranch(this.ticket.BranchID);
+    this.loadDriversOfBranch(this.ticket.BranchID);
   }
 
   loadCustomerOfBranch(branchId) {
@@ -96,9 +135,15 @@ export class CreateTicketComponent implements OnInit {
     });
   }
 
+  loadDriversOfBranch(branchId) {
+    this.service.getDriverByBranch(branchId).subscribe(res => {
+      this.drivers = res;
+    });
+  }
+
   customerChangeHandler() {
     const customer = this.customers.filter((c) => c.CustomerId === this.ticket.CustomerID);
-    this.loadCustomerDetail();
+    this.loadCustomerDetail(this.ticket.CustomerID);
 
     // Reset ticket details
     this.ticket.TicketDetail = [{} as TicketDetail];
@@ -109,14 +154,27 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketDetail.push({} as TicketDetail);
   }
 
-  loadCustomerDetail() {
-    this.service.getCustomerDetail(this.ticket.CustomerID).subscribe((res) => {
+  loadCustomerDetail(customerId) {
+    this.service.getCustomerDetail(customerId).subscribe((res) => {
       this.customer = res;
+
+      // set first product selected
+      if (res.productdetail.length) {
+        this.ticket.TicketDetail.forEach(td => {
+          if (!td.ProductID) {
+            td.ProductID = res.productdetail[0].ProductID;
+          }
+          this.updateTicketDetailObject(td);
+          td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
+          this.calculateTotalAmountAndUnit();
+        });
+
+      }
     });
   }
 
   ticketNumberChangeHandler() {
-    if (!this.ticket.TicketNumber) { return; }
+    if (!this.ticket.TicketNumber || this.ticket.TicketID) { return; }
     const ticketNumberLength = this.ticket.TicketNumber.length;
     if (isNaN(Number(this.ticket.TicketNumber))) {
       this.containsCharacters = true;
@@ -132,7 +190,7 @@ export class CreateTicketComponent implements OnInit {
           this.isTicketNumberExist = true;
         } else if (res.Message === 'Ticket Number available for use.') {
           this.isTicketNumberExist = false;
-          this.notification.success('Success', 'Ticket Number available for use.');
+          // this.notification.success('Success', 'Ticket Number available for use.');
         }
       });
     }
@@ -150,7 +208,7 @@ export class CreateTicketComponent implements OnInit {
       this.poMinMaxLength = false;
     } else {
       this.poMinMaxLength = false;
-      if (!(this.ticket.PONumber.match(letterNumber))) {  
+      if (!(this.ticket.PONumber.match(letterNumber))) {
         this.poContainsCharacters = true;
       }
     }
@@ -174,12 +232,31 @@ export class CreateTicketComponent implements OnInit {
       alert('Product already selected');
       return;
     }
-    ticketDetail['productSelected'] = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+
+    this.updateTicketDetailObject(ticketDetail);
   }
 
+  updateTicketDetailObject(ticketDetail) {
+    ticketDetail['productSelected'] = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+    ticketDetail.Rate = ticketDetail['productSelected'].Price;
+    ticketDetail.TaxPercentage = this.customer.Tax;
+  }
+
+
   unitChangeHandler(tdetail) {
-    tdetail.totalAmount = tdetail.Quantity * tdetail.productSelected.Price;
+    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.Quantity, tdetail.productSelected.Price);
     this.calculateTotalAmountAndUnit();
+  }
+
+  bagsChangeHandler(tdetail) {
+    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.DeliveredBags, tdetail.productSelected.Price);
+    this.calculateTotalAmountAndUnit();
+  }
+
+  calculateProductTotalAmount(q, p) {
+    q = q || 0;
+    p = p || 0;
+    return +q * +p;
   }
 
   calculateTotalAmountAndUnit() {
@@ -187,20 +264,23 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TotalSale = 0;
 
     this.ticket.TicketDetail.forEach((t) => {
-      this.ticket['tempTotalUnit'] += Number(t.Quantity);
-      this.ticket.TotalSale += Number(t['totalAmount']);
+      this.ticket['tempTotalUnit'] += +t.Quantity || 0;
+      this.ticket.TotalSale += +t['totalAmount'] || 0;
     });
 
     this.ticket.TotalAmount = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
   }
 
-  disableCashCheck() {
-    if (this.ticket.SaleTypeID == 23) {
-      this.ticket.CashAmount = '';
-      this.ticket.CheckAmount = '';
-      this.ticket.CheckNumber = '';
-    }
+  typeChangeHandler() {
+    this.resetCashAndCheck();
   }
+
+  resetCashAndCheck() {
+    this.ticket.CashAmount = '';
+    this.ticket.CheckAmount = '';
+    this.ticket.CheckNumber = '';
+  }
+
 
   isPodReceived(arg) {
     if (arg === 2) {
@@ -222,7 +302,7 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
       activeModal.componentInstance.closeModalHandler = (() => {
         // location.reload();
-        console.log("entered if");
+        // console.log("entered if");
       });
 
     }
@@ -232,11 +312,11 @@ export class CreateTicketComponent implements OnInit {
     this.formIsDirty = true;
   }
 
-  imageResponse: any;
+  // imageResponse: any;
   onFileUpload(event) {
-    this.service.fileUpload().subscribe((response) => {
-      this.imageResponse = response;
-      console.log("imageResponse", this.imageResponse);
+    this.service.uploadFile(event.target).subscribe((response) => {
+      // this.imageResponse = response;
+      // console.log("imageResponse", this.imageResponse);
     });
   }
 
@@ -247,4 +327,50 @@ export class CreateTicketComponent implements OnInit {
     // update total amount and total count
     this.calculateTotalAmountAndUnit();
   }
+
+  loadTicket(ticketId) {
+    this.service.getTicketById(ticketId).subscribe(response => {
+      this.ticket = response[0];
+
+      this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
+      this.ticket.CustomerID = this.ticket.Customer.CustomerID;
+
+      this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
+
+      // load customers
+      this.loadCustomerOfBranch(this.ticket.BranchID);
+      this.loadDriversOfBranch(this.ticket.BranchID);
+      this.loadCustomerDetail(this.ticket.CustomerID);
+    });
+  }
+
+  saveTicket() {
+    const ticket = this.modifyTicketForSave(this.ticket);
+    this.service.saveTicket(ticket).subscribe(res => {
+      this.notification.success(res);
+    });
+  }
+
+  modifyTicketForSave(ticket: ManualTicket): ManualTicket {
+    const clonedObject = JSON.parse(JSON.stringify(ticket)); // { ...ticket }; 
+
+    // removing all the unwanted properties.
+    delete clonedObject['tempTotalUnit'];
+    clonedObject.TicketDetail.forEach(t => {
+      delete t['productSelected'];
+      delete t['totalAmount'];
+    });
+
+    // modify date obj to date string
+    clonedObject.DeliveryDate = `${clonedObject.DeliveryDate.month}-${clonedObject.DeliveryDate.day}-${clonedObject.DeliveryDate.year}`;
+
+    return clonedObject;
+  }
+
+  convertToDate(date: string): any {
+    date = date.split('T')[0];
+    const dates = date.split('-');
+    return new Date(+dates[2], +dates[0], +dates[1]);
+  }
+
 }

@@ -1,14 +1,13 @@
-<ba-card cardTitle="Create Ticket">
+<ba-card cardTitle="Ticket">
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right">
-                <button class="btn btn-danger">Approve</button>
-                <button class="btn btn-danger buttonMargin" [disabled]="disablePodButton"
-                    onclick="document.getElementById('file').click()">
+                <button class="btn btn-danger" [hidden]="ticket.TicketStatusID == 24">Approve</button>
+                <button class="btn btn-danger buttonMargin" [disabled]="disablePodButton" onclick="document.getElementById('file').click()">
                     Upload POD
                 </button>
-                <input id="file" type="file" (change)="onFileUpload($event)" style="display:none"/>
-                <button class="btn btn-danger buttonMargin">Save</button>
+                <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png" />
+                <button class="btn btn-danger buttonMargin" (click)="saveTicket()">Save</button>
                 <button class="btn btn-danger buttonMargin">Submit</button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
                 <button class="btn btn-default buttonMargin" (click)="onCancelClick()">Cancel</button>
@@ -26,7 +25,7 @@
         <label for="example-text-input" class="col-sm-2 col-form-label">Ticket Type</label>
         <div class="col-sm-4">
             <label *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="ticketType" [value]="tType.id" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="ticketChangeHandler()">
+                <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="ticketChangeHandler()">
                 <span>{{tType.Value}}</span>
             </label>
         </div>
@@ -34,7 +33,7 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
         <div class="col-sm-4 input-group" style="margin-bottom:0px;">
-            <input class="form-control" [(ngModel)]="ticket.Created" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
+            <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
             <button class="input-group-addon" (click)="d.toggle()" type="button">
                 <i class="ion-calendar"></i>
             </button>
@@ -42,7 +41,7 @@
         <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
         <div class="col-sm-4">
             <label *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="type" [value]="sType.id" [(ngModel)]="ticket.SaleTypeID" (ngModelChange)="disableCashCheck()">
+                <input type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.SaleTypeID" (ngModelChange)="typeChangeHandler()">
                 <span>{{sType.Value}}</span>
             </label>
         </div>
@@ -54,10 +53,10 @@
                 <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
             </select>
         </div>
-        <label [hidden]="!modes.length" for="example-text-input" class="col-sm-2 col-form-label">Mode</label>
-        <div class="col-sm-4" [hidden]="!modes.length">
+        <label [hidden]="!modes" for="example-text-input" class="col-sm-2 col-form-label">Mode</label>
+        <div class="col-sm-4" [hidden]="!modes">
             <label *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="mode" [value]="mType.id" [(ngModel)]="ticket.Mode">
+                <input type="radio" name="mode" [value]="mType.ID" [(ngModel)]="ticket.Mode">
                 <span>{{mType.Value}}</span>
             </label>
         </div>
@@ -65,8 +64,8 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Driver</label>
         <div class="col-sm-4">
-            <select class="form-control" name="customer">
-                <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
+            <select class="form-control" name="customer" [(ngModel)]="ticket.UserId">
+                <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
             </select>
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
@@ -84,8 +83,7 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Cash Amount</label>
         <div class="col-sm-2">
-            <input type="text" class="form-control" [(ngModel)]="ticket.CashAmount" 
-            placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23">
+            <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23">
         </div>
         <label for="example-text-input" class="col-sm-1 col-form-label">Check#</label>
         <div class="col-sm-3">
@@ -102,14 +100,13 @@
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">Check Amount</label>
         <div class="col-sm-2">
-            <input type="text" class="form-control" [(ngModel)]="ticket.CheckAmount" 
-            placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23">
+            <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23">
         </div>
     </div>
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" [(ngModel)]="ticket.TicketNumber" id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()"
+            <input type="number" class="form-control" [(ngModel)]="ticket.TicketNumber" id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()"
                 name="TicketNumber" #TicketNumber="ngModel" required>
             <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
                 <i class="ion-android-alert showError"></i>
@@ -177,17 +174,17 @@
                         </td>
                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);">
+                            <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);">
                         </td>
-                        <td>{{tdetail.totalAmount}}</td>
+                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                         <td>
-                            <i class="ion-trash-a" (click)="deleteProductHandler(tdetail)"></i>
+                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2"></td>
                         <td><b>{{ticket.tempTotalUnit}}</b></td>
-                        <td><b>{{ticket.TotalSale}}</b></td>
+                        <td><b>{{ticket.TotalSale | currency:'USD':true:'2.2-4'}}</b></td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -197,7 +194,6 @@
 
     <!-- DSD Table ends -->
 
-    <!-- PBM Tables begin -->
     <!-- Meter Reading table -->
     <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 22">
         <div class="col-sm-12">
@@ -211,25 +207,23 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                    {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
+                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
                         <td>
-                            $12.33
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);">
                         </td>
                         <td>
-                            1236
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);">
                         </td>
+                        <!-- <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td> -->
                         <td>
-                            1276
-                        </td>
-                        <td>
-                            40
-                        </td>
-                        <td>
-                            <i class="ion-edit" (click)="editManualTickets()"></i>
+                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                         </td>
                     </tr>
                 </tbody>
@@ -250,25 +244,25 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                    {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
+                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                         <td>
-                            $12.33
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);">
                         </td>
                         <td>
-                            1236
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);">
                         </td>
                         <td>
-                            1276
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);">
                         </td>
                         <td>
-                            40
-                        </td>
-                        <td>
-                            <i class="ion-edit" (click)="editManualTickets()"></i>
+                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                         </td>
                     </tr>
                 </tbody>
@@ -288,25 +282,28 @@
                     <th>Unit Price</th>
                     <th>Current Inventory</th>
                     <th>Delivered Bags</th>
+                    <th>Total Amount</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="customer" [(ngModel)]="searchCustomer">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                    {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
+                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                         <td>
-                            $12.33
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory">
                         </td>
                         <td>
-                            1236
+                            <input type="text" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);">
                         </td>
+                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                        <!-- <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td> -->
                         <td>
-                            40
-                        </td>
-                        <td>
-                            <i class="ion-delete" (click)="editManualTickets()"></i>
+                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                         </td>
                     </tr>
                 </tbody>
@@ -323,7 +320,7 @@
                     <b>Total Sale</b>
                 </div>
                 <div class="col-md-4">
-                    <b>{{ticket.TotalSale}}</b>
+                    <b>{{ticket.TotalSale | currency:'USD':true:'2.2-4'}}</b>
                 </div>
             </div>
             <br>
@@ -354,7 +351,7 @@
                     <b>Total Amount</b>
                 </div>
                 <div class="col-md-8">
-                    <b>{{ticket.TotalAmount}}</b>
+                    <b>{{ticket.TotalAmount | currency:'USD':true:'2.2'}}</b>
                 </div>
             </div>
         </div>
