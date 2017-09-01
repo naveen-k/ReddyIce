@@ -66,7 +66,7 @@ export class SharedService {
     }
 
     formatDate(date) {
-        if (!date.year) { return false };
+        // if (!date.year) { return false };
         let yy = date.year, mm = date.month, dd = date.day;
         if (mm < 10) { mm = '0' + mm }
         if (dd < 10) { dd = '0' + dd }

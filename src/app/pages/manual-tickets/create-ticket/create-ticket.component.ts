@@ -229,7 +229,17 @@ export class CreateTicketComponent implements OnInit {
     const product = this.ticket.TicketDetail.filter(t => t.ProductID === ticketDetail.ProductID);
     if (product.length === 2) {
       ticketDetail.ProductID = '';
-      alert('Product already selected');
+      // alert('Product already selected');
+      const activeModal = this.modalService.open(ModalComponent, {
+        size: 'sm',
+        backdrop: 'static',
+      });
+      activeModal.componentInstance.BUTTONS.OK = 'OK';
+      // activeModal.componentInstance.showCancel = true;
+      activeModal.componentInstance.modalHeader = 'Warning!';
+      activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
+      activeModal.componentInstance.closeModalHandler = (() => {
+      });
       return;
     }
 

@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col-sm-4 col-sm-offset-2">
             <div class="input-group">
-                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="model.dp">
+                <input class="form-control" [(ngModel)]="ticketDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSelectedDate(ticketDate);'
+                    ngbDatepicker #d="ngbDatepicker">
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
                     </button>
@@ -11,28 +12,34 @@
         <div class="col-sm-4">
             <select class="form-control" id="exampleSelect1">
                 <option *ngFor="let obj of allBranches" [value]="obj.value">
-                {{obj.BranchID}}-{{obj.BranchName}}</option>
+                    {{obj.BranchID}}-{{obj.BranchName}}
+                </option>
             </select>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-2">
+            <button class="btn btn-primary addCustBtn pull-right" (click)="approveCheckedTickets()">
+                Approve
+            </button>
+        </div>
+        <div class="col-sm-2">
             <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right">
-                    Create Ticket
-                </button>
+                Create Ticket
+            </button>
         </div>
     </div>
 
     <div class="row" style="padding-bottom: 10px">
         <div class="col-sm-3">
             <label class="radioItem radio-inline custom-radio nowrap">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
-                      <span>My Tickets</span>
-                    </label>
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                <span>My Tickets</span>
+            </label>
         </div>
         <div class="col-sm-3">
             <label class="radioItem radio-inline custom-radio nowrap">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                      <span>All Tickets</span>
-                    </label>
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                <span>All Tickets</span>
+            </label>
         </div>
     </div>
     <div class="vertical-scroll overflow">
@@ -70,7 +77,7 @@
             <tbody>
                 <tr *ngFor="let item of allTickets | sort:customer.sortField:customer.isAsc">
                     <td>
-                        <input type="checkbox" name="manualTicketMultiSelect">
+                        <input type="checkbox" name="manualTicketMultiSelect" (change)="onChecked($event, item)">
                     </td>
                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
                         <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
@@ -85,7 +92,7 @@
                           <span class="tooltiptext">Delete</span>
                         </i>
                     </td>
-                    <td>{{ item.TicketID }}</td>
+                    <td>{{ item.TicketNumber }}</td>
                     <td>{{ item.Customer.CustomerID }}</td>
                     <td>{{ item.CashAmount }}</td>
                     <td>{{ item.TicketStatusID|ticketStatus}}</td>

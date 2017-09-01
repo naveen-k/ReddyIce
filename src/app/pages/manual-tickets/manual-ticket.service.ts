@@ -15,15 +15,30 @@ export class ManualTicketService extends SharedService {
     super(http);
   }
 
-  getTickets(userId: any): Observable<any[]> {
-    return this.http.get(`api/manualticket/userid?userId=${userId}`)
-      .map(res => res.json());
+  // getTickets(userId: any): Observable<any[]> {
+  //   return this.http.get(`api/manualticket/userid?userId=${userId}`)
+  //     .map(res => res.json());
+  // }
+
+  getTickets(searchObj): Observable<any[]> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ 'headers': headers });
+    return this.http.post('api/manualticket/getalltickets', searchObj, options).map((res => res.json()));
   }
+
+  approveAllCheckedTickets(approveTicketsObj) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ 'headers': headers });
+    return this.http.post('api/manualticket/workflow', approveTicketsObj, options).map((res => res.json()));
+  }
+
   getTicketTypes() {
     return this.http.get(`api/manualticket/CustomerType`)
-    .map(res => res.json());
+      .map(res => res.json());
     // return this.tmpHttp.get(`assets/mock-json/ticketType.json`)
-      // .map(res => res.json());
+    // .map(res => res.json());
   }
 
   getProducts() {
