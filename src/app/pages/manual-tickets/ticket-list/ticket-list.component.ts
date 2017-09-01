@@ -10,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TicketListComponent implements OnInit {
     model: any = {};
+    showSpinner: boolean = true;
 
     // allbranches related to loggen in usr
     allBranches: Branch;
@@ -17,7 +18,7 @@ export class TicketListComponent implements OnInit {
     // logged in user
     user: User;
 
-    allTickets: any[];
+    allTickets: any = [];
 
     // array with all the checked ticket numbers
     ticketIdArray = [];
@@ -35,9 +36,9 @@ export class TicketListComponent implements OnInit {
 
     // dummy searchObject
     searchObj = {
-        CreatedDate: '2017-09-01',
-        BranchId: 1362,
-        IsForAll: true,
+        CreatedDate: '',
+        BranchId: 1,
+        IsForAll: false,
     };
 
     constructor(
@@ -58,18 +59,20 @@ export class TicketListComponent implements OnInit {
     }
 
     getAllTickets() {
-
         // this.service.getTickets(this.user.UserId).subscribe((response) => {
         //     this.allTickets = response;
         // });
+        this.showSpinner = true;
         return this.service.getTickets(this.searchObj).subscribe((response) => {
             if (response) {
+                this.showSpinner = false;
                 this.allTickets = response;
             }
         },
             (error) => {
                 if (error) {
-                    this.notificationService.error('Error', JSON.parse(error._body));
+                    this.showSpinner = false;
+                    this.allTickets = [];
                 }
             },
         );
@@ -84,6 +87,10 @@ export class TicketListComponent implements OnInit {
     getSelectedDate(selectedDate) {
         this.searchObj.CreatedDate = this.service.formatDate(selectedDate);
         this.getAllTickets();
+    }
+
+    getSelectedBranch(branch) {
+        console.log('reached', branch);
     }
 
     // called on checkbox selection to approve single/ multiple tickets
