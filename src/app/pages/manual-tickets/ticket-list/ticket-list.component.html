@@ -10,8 +10,13 @@
             </div>
         </div>
         <div class="col-sm-4">
-            <select class="form-control" id="exampleSelect1">
-                <option *ngFor="let obj of allBranches" [value]="obj.value">
+            <!-- <select class="form-control" id="exampleSelect1">
+                <option *ngFor="let obj of allBranches" [value]="obj.BranchID" (change)="getSelectedBranch($event.target.value)">
+                    {{obj.BranchID}}-{{obj.BranchName}}
+                </option>
+            </select> -->
+            <select class="form-control" id="exampleSelect1" [(ngModel)]="branch" (ngModelChange)="getSelectedBranch(branch)">
+                <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
                     {{obj.BranchID}}-{{obj.BranchName}}
                 </option>
             </select>

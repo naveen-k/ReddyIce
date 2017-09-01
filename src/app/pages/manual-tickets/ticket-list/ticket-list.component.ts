@@ -41,6 +41,8 @@ export class TicketListComponent implements OnInit {
         IsForAll: false,
     };
 
+    branch: any;
+
     constructor(
         protected service: ManualTicketService,
         protected userService: UserService,
@@ -81,6 +83,7 @@ export class TicketListComponent implements OnInit {
     getBranches() {
         this.service.getBranches(this.user.UserId).subscribe((response) => {
             this.allBranches = response;
+            this.branch = '1';
         });
     }
 
@@ -90,7 +93,8 @@ export class TicketListComponent implements OnInit {
     }
 
     getSelectedBranch(branch) {
-        console.log('reached', branch);
+        this.searchObj.BranchId = branch;
+        this.getAllTickets();
     }
 
     // called on checkbox selection to approve single/ multiple tickets
