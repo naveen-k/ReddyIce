@@ -40,6 +40,8 @@ export class CreateTicketComponent implements OnInit {
   // flag for viewonly
   isReadOnly: boolean = false;
 
+  isFormDirty: boolean = false;
+
   isTicketNumberExist: boolean = false;
   containsCharacters: boolean = false;
   ticketMinMaxLength: boolean = false;
@@ -157,6 +159,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadCustomerDetail(customerId) {
+    this.isFormDirty = true;
     this.service.getCustomerDetail(customerId).subscribe((res) => {
       this.customer = res;
 
@@ -405,6 +408,10 @@ export class CreateTicketComponent implements OnInit {
     delete clonedObject['tempTotalUnit'];
     delete clonedObject['Created'];
     delete clonedObject['Modified'];
+    if (!clonedObject || !clonedObject.TicketDetail) { 
+      this.notification.error('Something went wrong. Ticket could not be created.');
+      return;
+    }
     clonedObject.TicketDetail.forEach(t => {
       delete t['productSelected'];
       delete t['totalAmount'];

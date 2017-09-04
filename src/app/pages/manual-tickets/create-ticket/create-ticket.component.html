@@ -3,12 +3,19 @@
         <div class="col-sm-12">
             <div class="pull-right">
                 <button class="btn btn-danger" [hidden]="ticket.TicketStatusID == 24 || isReadOnly">Approve</button>
-                <button class="btn btn-danger buttonMargin" [disabled]="disablePodButton" onclick="document.getElementById('file').click()" [hidden]="isReadOnly">
+                <button class="btn btn-danger buttonMargin" [disabled]="disablePodButton" onclick="document.getElementById('file').click()"
+                    [hidden]="isReadOnly">
                     Upload POD
                 </button>
                 <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png" />
-                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly">Save</button>
-                <button class="btn btn-danger buttonMargin" [hidden]="isReadOnly">Submit</button>
+                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly"
+                [disabled]="!isFormDirty">
+                    Save
+                </button>
+                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly"
+                [disabled]="!isFormDirty">
+                    Submit
+                </button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
                 <button class="btn btn-default buttonMargin" (click)="onCancelClick()">Cancel</button>
             </div>
@@ -33,7 +40,8 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
         <div class="col-sm-4 input-group" style="margin-bottom:0px;">
-            <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [disabled]="isReadOnly">
+            <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
+                [disabled]="isReadOnly">
             <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
                 <i class="ion-calendar"></i>
             </button>
@@ -106,9 +114,9 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
         <div class="col-sm-4">
-            <input type="number" min="1" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber" id="TicketNumber" 
-            placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()"
-                name="TicketNumber" #TicketNumber="ngModel" required [disabled]="isReadOnly">
+            <input type="number" min="1" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber"
+                id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()" name="TicketNumber" #TicketNumber="ngModel"
+                required [disabled]="isReadOnly">
             <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
                 <i class="ion-android-alert showError"></i>
                 <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
@@ -168,7 +176,8 @@
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
@@ -210,17 +219,20 @@
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
                         <td>
-                            <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);" [disabled]="isReadOnly">
+                            <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                [disabled]="isReadOnly">
                         </td>
                         <td>
-                            <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);" [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
+                            <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
                         </td>
                         <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                         <td>
@@ -247,7 +259,8 @@
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
@@ -289,7 +302,8 @@
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
