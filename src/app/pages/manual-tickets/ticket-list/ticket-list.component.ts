@@ -36,9 +36,9 @@ export class TicketListComponent implements OnInit {
 
     // dummy searchObject
     searchObj = {
-        CreatedDate: '',
-        BranchId: 1,
-        IsForAll: false,
+        CreatedDate: '2017-08-01',
+        BranchId: 0,
+        IsForAll: true,
     };
 
     branch: any;
@@ -62,18 +62,40 @@ export class TicketListComponent implements OnInit {
     }
 
     getAllTickets() {
-        // this.service.getTickets(this.user.UserId).subscribe((response) => {
-        //     this.allTickets = response;
-        // });
         this.showSpinner = true;
         return this.service.getTickets(this.searchObj).subscribe((response) => {
             if (response) {
+                console.log("if response is successful", response);
                 this.showSpinner = false;
                 this.allTickets = response;
             }
         },
             (error) => {
                 if (error) {
+                    console.log("if response is unsuccessful", error);
+                    this.showSpinner = false;
+                    this.allTickets = [];
+                }
+            },
+        );
+    }
+
+    getSearchedTickets() {
+        return this.service.getAllTickets(this.searchObj.CreatedDate,
+            this.searchObj.BranchId, false, this.user.UserId).subscribe((response: any) => {
+            if (response) {
+                console.log("if response is successful", response);
+                this.showSpinner = false;
+                if (response === 'No Record Found') {
+                    this.allTickets = [];
+                } else {
+                    this.allTickets = response;
+                }
+            }
+        },
+            (error) => {
+                if (error) {
+                    console.log("if response is unsuccessful", error);
                     this.showSpinner = false;
                     this.allTickets = [];
                 }
@@ -90,12 +112,12 @@ export class TicketListComponent implements OnInit {
 
     getSelectedDate(selectedDate) {
         this.searchObj.CreatedDate = this.service.formatDate(selectedDate);
-        this.getAllTickets();
+        this.getSearchedTickets();
     }
 
     getSelectedBranch(branch) {
         this.searchObj.BranchId = branch;
-        this.getAllTickets();
+        this.getSearchedTickets();
     }
 
     // called on checkbox selection to approve single/ multiple tickets
