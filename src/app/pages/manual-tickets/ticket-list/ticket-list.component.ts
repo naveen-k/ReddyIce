@@ -1,4 +1,4 @@
-import { NotificationsService } from 'angular2-notifications/dist';
+// import { NotificationsService } from 'angular2-notifications/dist';
 import { User } from '../../user-management/user-management.interface';
 import { Branch } from '../../../shared/interfaces/interfaces';
 import { UserService } from '../../../shared/user.service';
@@ -47,7 +47,7 @@ export class TicketListComponent implements OnInit {
     constructor(
         protected service: ManualTicketService,
         protected userService: UserService,
-        protected notificationService: NotificationsService,
+    //    protected notificationService: NotificationsService,
     ) { }
 
     ngOnInit() {
@@ -84,7 +84,6 @@ export class TicketListComponent implements OnInit {
         return this.service.getAllTickets(this.searchObj.CreatedDate,
             this.searchObj.BranchId, this.searchObj.IsForAll, this.user.UserId).subscribe((response: any) => {
             if (response) {
-                console.log("if response is successful", response);
                 this.showSpinner = false;
                 if (response === 'No Record Found') {
                     this.allTickets = [];
@@ -95,7 +94,6 @@ export class TicketListComponent implements OnInit {
         },
             (error) => {
                 if (error) {
-                    console.log("if response is unsuccessful", error);
                     this.showSpinner = false;
                     this.allTickets = [];
                 }
@@ -157,12 +155,12 @@ export class TicketListComponent implements OnInit {
         this.service.approveAllCheckedTickets(this.ticketObject).subscribe(
             (response) => {
                 if (response) {
-                    this.notificationService.success('Success', JSON.parse(response._body).Message);
+                //    this.notificationService.success('Success', JSON.parse(response._body).Message);
                 }
             },
             (error) => {
                 if (error) {
-                    this.notificationService.error('Error', JSON.parse(error._body).Message);
+                //    this.notificationService.error('Error', JSON.parse(error._body).Message);
                 }
             },
         );

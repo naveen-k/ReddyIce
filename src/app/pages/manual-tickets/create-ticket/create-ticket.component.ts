@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NotificationsService } from 'angular2-notifications/dist';
+// import { NotificationsService } from 'angular2-notifications/dist';
 import { ManualTicket, TicketDetail } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
 import { Branch, Customer } from '../../../shared/interfaces/interfaces';
@@ -57,7 +57,7 @@ export class CreateTicketComponent implements OnInit {
   constructor(
     protected service: ManualTicketService,
     protected user: UserService,
-    protected notification: NotificationsService,
+    // protected notification: NotificationsService,
     protected modalService: NgbModal,
     protected activatedRoute: ActivatedRoute,
   ) { }
@@ -72,7 +72,8 @@ export class CreateTicketComponent implements OnInit {
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
     this.branches = this.branches.filter((b) => b.BranchID !== 1);
-
+    this.ticket.BranchID = 35;
+    this.branchChangeHandler();
     this.ticketTypes = activatedRouteObject['ticketTypes'];
     this.prepareTicketTypes();
 
@@ -391,13 +392,13 @@ export class CreateTicketComponent implements OnInit {
     if (this.ticketId) {
       // Update ticket
       this.service.updateTicket(ticket).subscribe(res => {
-        this.notification.success(res);
+      //  this.notification.success(res);
       });
       return;
     }
     // Save ticket
     this.service.saveTicket(ticket).subscribe(res => {
-      this.notification.success(res);
+    //  this.notification.success(res);
     });
   }
 
@@ -409,7 +410,7 @@ export class CreateTicketComponent implements OnInit {
     delete clonedObject['Created'];
     delete clonedObject['Modified'];
     if (!clonedObject || !clonedObject.TicketDetail) { 
-      this.notification.error('Something went wrong. Ticket could not be created.');
+    //  this.notification.error('Something went wrong. Ticket could not be created.');
       return;
     }
     clonedObject.TicketDetail.forEach(t => {
