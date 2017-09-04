@@ -8,23 +8,39 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class DayEndService extends SharedService {
+    currenttripData:any = {};
     constructor(
         protected http: HttpService,
         private userService: UserService,
     ) {
         super(http);
     }
-    getFilteredTrips(data){
-       const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        const options = new RequestOptions({ 'headers': headers });
-        return this.http.post('api/trip', data, options).map((res => res.json()));
+    getTrips(userId, TripDate, branchId, IsForAll){
+      
+        return this.http.get(`api/trip/all?TripDate=${TripDate}&branchId=${branchId}&userId=${userId}&IsForAll=${IsForAll}`)
+        .map((res) => res.json()).map((res) => {
+            return res;
+        });
+        
     }
+   getTripDetails(tripId){
+       return this.http.get(`api/ticketsfortrip?TripId=${tripId}`).map((res) => res.json()).map((res) => {
+            return res;
+        }); 
+
+   }
     getTripsByDate(date?: any): Observable<any[]> {   
         return this.http.get(`api/trip?date=${date}`).map((res) => res.json()).map((res) => {
             console.log(res);
             return res;
         });
+    }
+    // used for data flow between components
+    setTripData(data){
+        this.currenttripData = data;
+    }
+    gettripData(){
+        return this.currenttripData;
     }
 
     dataTableData = [{

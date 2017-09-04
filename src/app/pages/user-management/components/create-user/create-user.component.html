@@ -216,9 +216,9 @@
     <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row">
       <div class="col-md-5 padding-eater">
         <label for="distributor">Distributor</label>
-        <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+        <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterId" name="distributor"
           #distributor="ngModel" disabled>
-          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
+          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.DistributorName}}</option>
       </select>
       </div>
       <div class="col-md-2"></div>

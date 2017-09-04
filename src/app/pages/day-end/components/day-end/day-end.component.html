@@ -1,6 +1,6 @@
 <div class="row page-header">
     <div class="col-md-12 padding-eater">
-        <ba-card cardTitle="Day End List" baCardClass="with-scroll" class="smart-table-container" #customer>
+        <ba-card cardTitle="Day End List" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="row bottom-margin">
                 <div class="form-group col-md-6">
                     <div class="input-group">
@@ -11,19 +11,19 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <select class="form-control" [(ngModel)]='tripFilterDto.BranchId' (change)="selectionchangeHandler()">
-                        <option *ngFor="let branch of branches"[value] = 'branch.BranchID' >{{branch.BranchName}}</option>
+                    <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="selectionchangeHandler()">
+                         <option *ngFor="let branch of branches"[value] = 'branch?.BranchID' >{{branch?.BranchName}}</option> 
                     </select>
                 </div>
             </div>
             <div class="row bottom-margin">
                 <div class="col-md-6">
                     <label class="radioItem radio-inline custom-radio nowrap ">
-                        <input type="radio"  [(ngModel)]='tripFilterDto.IsForAll' value="false" (change)="selectionchangeHandler()">
+                        <input type="radio"  [(ngModel)]='tripFilterOption.isForAll' value="false" (change)="selectionchangeHandler()">
                         <span>My Trips</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap" style="margin-left:10px;">
-                        <input type="radio" [(ngModel)]='tripFilterDto.IsForAll' value="true" (change)="selectionchangeHandler()">
+                        <input type="radio" [(ngModel)]='tripFilterOption.isForAll' value="true" (change)="selectionchangeHandler()">
                         <span>All Trips</span>
                     </label>
                 </div>
@@ -68,25 +68,23 @@
                     </thead>
                     <tbody>
                         <!--Removed sorting functionality as it was causing rendering issues  -->
-                        <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
+                       <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ uId: item.UserID }" style="margin-right: 5px">
-                                    <span class="tooltiptext">Edit</span>
+                                <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ TripID: item.TripID }" style="margin-right: 5px">
+                                    <span class="tooltiptext">View</span>
                                 </i>
-                                <i class="ion-trash-a custom-tooltip-ion">
-                                    <span class="tooltiptext">Delete</span>
-                                </i>
+                               
                             </td>
                             <td>{{item.RouteNumber}}</td>
                             <td>{{item.BranchID }}</td>
-                            <td>{{item.IsClosed}}</td>
-                            <td>{{item.TruckID}}</td>
-                            <td>{{item.TripID}}</td>
+                            <td>{{item.IsDistributor?item.Distributor:"Feild Not Available"}}</td><!--is Distributor status not available-->
+                            <td>{{item.Driver?item.Driver:"Feild Not Available"}}</td><!--Driver name not available-->
+                            <td>{{item.TripCode}}</td>
                         </tr>
+
                     </tbody>
                 </table>
-                <div style='text-align:center'> <a> <img [hidden]='userDataTable.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-                <pagination [tableData]="userDataTable" [(currentPage)]="userDataTable"></pagination>
+                <div *ngIf="!trips.length" style='text-align:center'> No data found </div>
             </div>
         </ba-card>
     </div>

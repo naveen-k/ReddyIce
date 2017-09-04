@@ -10,12 +10,16 @@ import { UserService } from '../../../../shared/user.service';
     styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
+    subParams: any;
+    tripID: any;
+    tripData:any = {};
+   
+   
     unitReconciliation: any;
     ticketDetails: any;
     Actual: any;
     Coins: any;
-    subParams: any;
-    uid: any;
+   
     driverDetails: any = [];
 
     totalDeposit: any = "0.00";
@@ -26,12 +30,16 @@ export class DetailsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.subParams = this.route
+      this.tripData = this.service.gettripData();
+      console.log(this.tripData);
+ 
+       this.subParams = this.route
             .queryParams
             .subscribe(params => {
                 // Defaults to 0 if no query param provided.
-                this.uid = +params['uId'] || 0;
-                this.userService.getUserDetails(this.uid).subscribe((res) => {
+                this.tripID = params['TripID'];
+                console.log(this.tripID);
+                this.service.getTripDetails(this.tripID).subscribe((res) => {
                     console.log(res);
                     this.driverDetails = res;
                 }, (err) => {

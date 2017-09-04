@@ -6,34 +6,34 @@
                     <div class="row page-header">
                         <div class="col-md-4">
                             <span>Branch :</span>
-                            <label>301</label>
+                            <label>{{tripData.BranchID}}</label>
                         </div>
                         <div class="col-md-4">
                             <span>Route :</span>
-                            <label>801</label>
+                            <label>{{tripData.RouteNumber}}</label>
                         </div>
                         <div class="col-md-4">
                             <span>Driver :</span>
-                            <label>Deangelo Parks</label>
+                            <label>NA</label>
                         </div>
                         <div class="col-md-4">
                             <span>Trip :</span>
-                            <label>#1</label>
+                            <label>{{tripData.TripCode}}</label>
                         </div>
                         <div class="col-md-4">
                             <span>Truck :</span>
-                            <label>#12121</label>
+                            <label>{{tripData.TruckID}}</label>
                         </div>
                         <div class="col-md-4">
                             <div>
                                 <span>Status :</span>
-                                <label>Pending Checker Approval</label>
+                                <label>NA</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <ngb-tabset>
+            <ngb-tabset class='dayend-tabset'>
                 <ngb-tab title="Cash Reconciliation">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
@@ -211,15 +211,16 @@
                                         </thead>
                                         <tbody>
                                             <!--Removed sorting functionality as it was causing rendering issues-->
-                                            <tr *ngFor="let item of ticketDetails|sort:customer.sortField:customer.isAsc">
-                                                <td>{{item.custNumber}}</td>
-                                                <td>{{item.customer }}</td>
-                                                <td>{{item.ticket}}</td>
-                                                <td>{{item.invoiceAmount}}</td>
-                                                <td>{{item.cash}}</td>
-                                                <td>{{item.check}}</td>
-                                                <td>{{item.charge}}</td>
+                                           <tr *ngFor="let item of tripData.TripTicketList|sort:customer.sortField:customer.isAsc">
+                                                <td>{{item.CustomerID}}</td>
+                                                <td>{{item.customer?item.customer:"NA"}}</td><!-- Not Available -->
+                                                <td>{{item.TicketNumber}}</td>
+                                                <td>{{item.IsInvoice}}</td>
+                                                <td>{{item.CashAmount}}</td>
+                                                <td>{{item.CheckAmount}}</td>
+                                                <td>{{item.charge?item.charge:"NA"}}</td><!-- Not Available  -->
                                             </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
