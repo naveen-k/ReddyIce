@@ -72,8 +72,6 @@ export class CreateTicketComponent implements OnInit {
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
     this.branches = this.branches.filter((b) => b.BranchID !== 1);
-    this.ticket.BranchID = 35;
-    this.branchChangeHandler();
     this.ticketTypes = activatedRouteObject['ticketTypes'];
     this.prepareTicketTypes();
 
