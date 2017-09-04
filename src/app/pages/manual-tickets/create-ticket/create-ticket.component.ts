@@ -1,4 +1,4 @@
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { NotificationsService } from 'angular2-notifications/dist';
@@ -52,7 +52,6 @@ export class CreateTicketComponent implements OnInit {
   checkMinMaxLength: boolean = false;
 
   disablePodButton: boolean = true;
-  formIsDirty: boolean = false;
 
   constructor(
     protected service: ManualTicketService,
@@ -60,9 +59,11 @@ export class CreateTicketComponent implements OnInit {
     // protected notification: NotificationsService,
     protected modalService: NgbModal,
     protected activatedRoute: ActivatedRoute,
+    protected route: Router,
   ) { }
 
   ngOnInit() {
+   
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
     const activatedRouteObject = this.activatedRoute.snapshot.data;
@@ -133,6 +134,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadCustomerOfBranch(branchId) {
+    this.isFormDirty = true;
     this.service.getBranchBasedCustomers(branchId).subscribe((res) => {
       this.customers = res;
     });
@@ -332,7 +334,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   onCancelClick() {
-    if (this.formIsDirty) {
+    if (this.isFormDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
@@ -342,15 +344,10 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
       activeModal.componentInstance.closeModalHandler = (() => {
-        // location.reload();
-        // console.log("entered if");
+        this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
       });
 
     }
-  }
-
-  formChangedHandler() {
-    this.formIsDirty = true;
   }
 
   // imageResponse: any;
