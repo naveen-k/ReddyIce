@@ -38,7 +38,7 @@ export class TicketListComponent implements OnInit {
     searchObj = {
         CreatedDate: '2017-08-01',
         BranchId: 0,
-        IsForAll: true,
+        IsForAll: false,
     };
 
     branch: any;
@@ -82,7 +82,7 @@ export class TicketListComponent implements OnInit {
 
     getSearchedTickets() {
         return this.service.getAllTickets(this.searchObj.CreatedDate,
-            this.searchObj.BranchId, false, this.user.UserId).subscribe((response: any) => {
+            this.searchObj.BranchId, this.searchObj.IsForAll, this.user.UserId).subscribe((response: any) => {
             if (response) {
                 console.log("if response is successful", response);
                 this.showSpinner = false;
@@ -117,6 +117,11 @@ export class TicketListComponent implements OnInit {
 
     getSelectedBranch(branch) {
         this.searchObj.BranchId = branch;
+        this.getSearchedTickets();
+    }
+
+    getSelectedTicketType(type) {
+        this.searchObj.IsForAll = type;
         this.getSearchedTickets();
     }
 

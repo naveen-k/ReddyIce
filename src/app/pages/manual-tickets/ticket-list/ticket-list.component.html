@@ -36,13 +36,15 @@
     <div class="row" style="padding-bottom: 10px">
         <div class="col-sm-3">
             <label class="radioItem radio-inline custom-radio nowrap">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" 
+                (click)="getSelectedTicketType(false)" checked>
                 <span>My Tickets</span>
             </label>
         </div>
         <div class="col-sm-3">
             <label class="radioItem radio-inline custom-radio nowrap">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"
+                (click)="getSelectedTicketType(true)">
                 <span>All Tickets</span>
             </label>
         </div>
