@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right">
-                <button class="btn btn-danger" [hidden]="ticket.TicketStatusID == 24">Approve</button>
-                <button class="btn btn-danger buttonMargin" [disabled]="disablePodButton" onclick="document.getElementById('file').click()">
+                <button class="btn btn-danger" [hidden]="ticket.TicketStatusID == 24 || isReadOnly">Approve</button>
+                <button class="btn btn-danger buttonMargin" [disabled]="disablePodButton" onclick="document.getElementById('file').click()" [hidden]="isReadOnly">
                     Upload POD
                 </button>
                 <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png" />
-                <button class="btn btn-danger buttonMargin" (click)="saveTicket()">Save</button>
-                <button class="btn btn-danger buttonMargin">Submit</button>
+                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly">Save</button>
+                <button class="btn btn-danger buttonMargin" [hidden]="isReadOnly">Submit</button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
                 <button class="btn btn-default buttonMargin" (click)="onCancelClick()">Cancel</button>
             </div>
@@ -18,14 +18,14 @@
     <div class="form-group row" style="margin-top: 20px;">
         <label for="example-text-input" class="col-sm-2 col-form-label">Branch</label>
         <div class="col-sm-4">
-            <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler()">
+            <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler()" [disabled]="isReadOnly">
                 <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
             </select>
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">Ticket Type</label>
         <div class="col-sm-4">
             <label *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="ticketChangeHandler()">
+                <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="ticketChangeHandler()" [attr.disabled]="isReadOnly">
                 <span>{{tType.Value}}</span>
             </label>
         </div>
@@ -33,8 +33,8 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
         <div class="col-sm-4 input-group" style="margin-bottom:0px;">
-            <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
-            <button class="input-group-addon" (click)="d.toggle()" type="button">
+            <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [disabled]="isReadOnly">
+            <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
                 <i class="ion-calendar"></i>
             </button>
         </div>
@@ -49,7 +49,7 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Customer Name</label>
         <div class="col-sm-4">
-            <select class="form-control" name="customer" [(ngModel)]="ticket.CustomerID" (ngModelChange)="customerChangeHandler()">
+            <select class="form-control" name="customer" [(ngModel)]="ticket.CustomerID" (ngModelChange)="customerChangeHandler()" [disabled]="isReadOnly">
                 <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
             </select>
         </div>
@@ -64,7 +64,7 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Driver</label>
         <div class="col-sm-4">
-            <select class="form-control" name="customer" [(ngModel)]="ticket.UserId">
+            <select class="form-control" name="customer" [(ngModel)]="ticket.UserId" [disabled]="isReadOnly">
                 <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
             </select>
         </div>
@@ -83,12 +83,12 @@
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Cash Amount</label>
         <div class="col-sm-2">
-            <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23">
+            <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
         </div>
         <label for="example-text-input" class="col-sm-1 col-form-label">Check#</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" id="CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
-                name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.SaleTypeID == 23">
+            <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
+                name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
             <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
                 <i class="ion-android-alert showError"></i>
                 <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
@@ -100,14 +100,14 @@
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">Check Amount</label>
         <div class="col-sm-2">
-            <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23">
+            <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
         </div>
     </div>
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
         <div class="col-sm-4">
             <input type="number" class="form-control" [(ngModel)]="ticket.TicketNumber" id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()"
-                name="TicketNumber" #TicketNumber="ngModel" required>
+                name="TicketNumber" #TicketNumber="ngModel" required [disabled]="isReadOnly">
             <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
                 <i class="ion-android-alert showError"></i>
                 <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
@@ -127,8 +127,8 @@
         </div>
         <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" id="PONumber" placeholder="PO Number" (blur)="poNumberChangeHandler()"
-                name="PONumber" #PONumber="ngModel" required>
+            <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
+                name="PONumber" #PONumber="ngModel" required numberOnly>
             <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
                 <i class="ion-android-alert showError"></i>
                 <div *ngIf="PONumber.errors.required" class="custom-tooltip bottom">PO number is required</div>
@@ -147,7 +147,7 @@
         <div class="col-sm-12">
             <div class="pull-right">
                 <!-- <button class="btn btn-danger">Add Machine</button> -->
-                <button class="btn btn-danger buttonMargin" (click)="addProductRow()">Add Product</button>
+                <button class="btn btn-danger buttonMargin" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
             </div>
         </div>
     </div>
@@ -167,14 +167,14 @@
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                         <td>
-                            <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);">
+                            <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
                         </td>
                         <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                         <td>
@@ -203,25 +203,25 @@
                     <th>Unit Price</th>
                     <th>Previous Reading</th>
                     <th>Current Reading</th>
-                    <th>Total Units</th>
+                    <th>Total Amount</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);">
+                            <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);" [disabled]="isReadOnly">
                         </td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);">
+                            <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);" [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
                         </td>
-                        <!-- <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td> -->
+                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                         <td>
                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                         </td>
@@ -246,20 +246,20 @@
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);">
+                            <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
                         </td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);">
+                            <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
                         </td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);">
+                            <input type="number" class="form-control" [(ngModel)]="tdetail.DamagedBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
                         </td>
                         <td>
                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
@@ -288,17 +288,17 @@
                 <tbody>
                     <tr *ngFor="let tdetail of ticket?.TicketDetail">
                         <td>
-                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)">
+                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)" [disabled]="isReadOnly">
                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                     {{pdetail.DisplayName}} </option>    
                             </select>
                         </td>
                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.CurrentInventory">
+                            <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
                         </td>
                         <td>
-                            <input type="text" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);">
+                            <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
                         </td>
                         <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                         <!-- <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td> -->

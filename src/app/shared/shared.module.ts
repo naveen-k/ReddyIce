@@ -1,3 +1,5 @@
+import { NumberOnlyDirective } from './directives/number-only.directive';
+import { MinValueValidatorDirective } from './directives/min-value.directive';
 import { SharedService } from './shared.service';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from './components/modal/modal.component';
@@ -18,6 +20,8 @@ import { NgModule } from '@angular/core';
         GenericSort,
         ModalComponent,
         PaginationComponent,
+        MinValueValidatorDirective,
+        NumberOnlyDirective,
     ],
     exports: [
         GenericFilter,
@@ -26,6 +30,7 @@ import { NgModule } from '@angular/core';
         GenericSort,
         ModalComponent,
         PaginationComponent,
+        MinValueValidatorDirective,
     ],
     entryComponents: [
         ModalComponent,

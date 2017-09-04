@@ -85,12 +85,14 @@
                         <input type="checkbox" name="manualTicketMultiSelect" (change)="onChecked($event, item)">
                     </td>
                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
-                        <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
-                          <span class="tooltiptext">View</span>
-                        </i>
+                        <a [routerLink]="['../view/'+item.TicketID]">
+                            <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
+                                <span class="tooltiptext">View</span>
+                            </i>
+                        </a>
                         <a [routerLink]="['../ticket/'+item.TicketID]">
                             <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
-                            <span class="tooltiptext">Edit</span>
+                                <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
                         <!-- <i class="ion-trash-a custom-tooltip-ion">

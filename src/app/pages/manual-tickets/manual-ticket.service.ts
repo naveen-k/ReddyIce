@@ -15,30 +15,17 @@ export class ManualTicketService extends SharedService {
     super(http);
   }
 
-  // getTickets(userId: any): Observable<any[]> {
-  //   return this.http.get(`api/manualticket/userid?userId=${userId}`)
-  //     .map(res => res.json());
-  // }
-
   getTickets(searchObj): Observable<any[]> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ 'headers': headers });
-    return this.http.post('api/manualticket/getalltickets', searchObj, options).map((res => res.json()));
+    return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
   }
 
   approveAllCheckedTickets(approveTicketsObj) {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ 'headers': headers });
-    return this.http.post('api/manualticket/workflow', approveTicketsObj, options).map((res => res.json()));
+    return this.http.post('api/manualticket/workflow', approveTicketsObj).map((res => res.json()));
   }
 
   getTicketTypes() {
     return this.http.get(`api/manualticket/CustomerType`)
       .map(res => res.json());
-    // return this.tmpHttp.get(`assets/mock-json/ticketType.json`)
-    // .map(res => res.json());
   }
 
   getProducts() {
@@ -74,7 +61,12 @@ export class ManualTicketService extends SharedService {
     return this.http.post(`api/manualticket`, ticket).map((res) => res.json());
   }
 
-  fileUpload() {
+  updateTicket(ticket: ManualTicket): Observable<any> {
+    return this.http.put(`api/manualticket/updateticket?ticketid=${ticket.TicketID}`, ticket)
+    .map(res => res.json());
+  }
+
+  /* fileUpload() {
     const fileObj = {
       'ImageTypeID': 1,
       'Image': 'QEA=',
@@ -83,7 +75,7 @@ export class ManualTicketService extends SharedService {
     };
     return this.http.post('api/manualticket/uploadImage', fileObj).map((res) => res.json());
   }
-
+*/
   dsdSmartTableData = [
     {
       product: 'Product1',

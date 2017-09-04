@@ -1,3 +1,4 @@
+import { BranchResolver, TicketTypesResolver } from './manual-ticket.resolver';
 import { CreateTicketComponent } from './create-ticket';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
 import { Routes, RouterModule } from '@angular/router';
@@ -16,10 +17,29 @@ const routes: Routes = [
       {
         path: 'ticket',
         component: CreateTicketComponent,
+        resolve: {
+          branches: BranchResolver,
+          ticketTypes: TicketTypesResolver,
+        },
       },
       {
         path: 'ticket/:ticketId',
         component: CreateTicketComponent,
+        resolve: {
+          branches: BranchResolver,
+          ticketTypes: TicketTypesResolver,
+        },
+      },
+      {
+        path: 'view/:ticketId',
+        component: CreateTicketComponent,
+        data: {
+          viewMode: true,
+        },
+        resolve: {
+          branches: BranchResolver,
+          ticketTypes: TicketTypesResolver,
+        },
       },
       {
         path: '',

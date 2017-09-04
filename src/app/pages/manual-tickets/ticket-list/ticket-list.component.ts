@@ -42,7 +42,7 @@ export class TicketListComponent implements OnInit {
     };
 
     branch: any;
-    ticketDate : any = '';
+    ticketDate: any = '';
 
     constructor(
         protected service: ManualTicketService,

@@ -37,6 +37,9 @@ export class CreateTicketComponent implements OnInit {
   // Id of current ticket object
   ticketId: number;
 
+  // flag for viewonly
+  isReadOnly: boolean = false;
+
   isTicketNumberExist: boolean = false;
   containsCharacters: boolean = false;
   ticketMinMaxLength: boolean = false;
@@ -47,7 +50,7 @@ export class CreateTicketComponent implements OnInit {
   checkMinMaxLength: boolean = false;
 
   disablePodButton: boolean = true;
-  formIsDirty: boolean = true;
+  formIsDirty: boolean = false;
 
   constructor(
     protected service: ManualTicketService,
@@ -60,9 +63,16 @@ export class CreateTicketComponent implements OnInit {
   ngOnInit() {
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
+    const activatedRouteObject = this.activatedRoute.snapshot.data;
+    this.isReadOnly = activatedRouteObject['viewMode'];
 
-    this.loadTicketType();
-    this.loadBranches();
+    this.branches = activatedRouteObject['branches'];
+
+    // Discard 'All branches' and assign to branches object, if its coming in response;
+    this.branches = this.branches.filter((b) => b.BranchID !== 1);
+
+    this.ticketTypes = activatedRouteObject['ticketTypes'];
+    this.prepareTicketTypes();
 
     // if ticketId is not null, consider it as edit ticket mode and load ticket object
     if (this.ticketId) {
@@ -71,32 +81,24 @@ export class CreateTicketComponent implements OnInit {
 
   }
 
-  loadTicketType() {
-    this.service.getTicketTypes().subscribe((response) => {
-      this.ticketTypes = response;
-      this.ticketTypes.CustomerType.forEach(element => {
-        if (element.ID === 22) {
-          element.Mode = [
-            { 'Value': 'Meter Reading', 'ID': 22 },
-            { 'Value': 'Inventory', 'ID': 23 },
-          ];
-        }
-      });
-      if (!this.ticketId) {
-        // Set first Ticket type selected
-        this.ticket.TicketTypeID = this.ticketTypes['CustomerType'][0]['ID'];
-        this.ticketChangeHandler();
+  prepareTicketTypes() {
+    this.ticketTypes.CustomerType.forEach(element => {
+      if (element.ID === 22) {
+        element.Mode = [
+          { 'Value': 'Meter Reading', 'ID': 22 },
+          { 'Value': 'Inventory', 'ID': 23 },
+        ];
       }
+      element.category.forEach(el => {
+        el.ID = +el.ID;
+      });
     });
+    if (!this.ticketId) {
+      // Set first Ticket type selected
+      this.ticket.TicketTypeID = this.ticketTypes['CustomerType'][0]['ID'];
+      this.ticketChangeHandler();
+    }
   }
-
-  loadBranches() {
-    this.service.getBranches(this.user.getUser().UserId).subscribe((res) => {
-      // Discard 'All branches' and assign to branches object, if its coming in response;
-      this.branches = res.filter((b) => b.BranchID !== 1);
-    });
-  }
-
 
   ticketChangeHandler() {
     const selectedTicket = this.getSelectedTicketTypeObject();
@@ -165,7 +167,17 @@ export class CreateTicketComponent implements OnInit {
             td.ProductID = res.productdetail[0].ProductID;
           }
           this.updateTicketDetailObject(td);
-          td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
+
+          if (this.ticket.SaleTypeID === 21) {
+            // Ticket Type is DSD
+            td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
+          } else if (this.ticket.SaleTypeID === 22) {
+            // Ticket Type is PBS
+            td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
+          } else {
+            // Ticket Type is PBM
+            td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
+          }
           this.calculateTotalAmountAndUnit();
         });
 
@@ -373,6 +385,14 @@ export class CreateTicketComponent implements OnInit {
 
   saveTicket() {
     const ticket = this.modifyTicketForSave(this.ticket);
+    if (this.ticketId) {
+      // Update ticket
+      this.service.updateTicket(ticket).subscribe(res => {
+        this.notification.success(res);
+      });
+      return;
+    }
+    // Save ticket
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success(res);
     });
@@ -383,13 +403,17 @@ export class CreateTicketComponent implements OnInit {
 
     // removing all the unwanted properties.
     delete clonedObject['tempTotalUnit'];
+    delete clonedObject['Created'];
+    delete clonedObject['Modified'];
     clonedObject.TicketDetail.forEach(t => {
       delete t['productSelected'];
       delete t['totalAmount'];
     });
 
     // modify date obj to date string
-    clonedObject.DeliveryDate = `${clonedObject.DeliveryDate.month}-${clonedObject.DeliveryDate.day}-${clonedObject.DeliveryDate.year}`;
+    if (clonedObject.DeliveryDate) {
+      clonedObject.DeliveryDate = `${clonedObject.DeliveryDate.month}-${clonedObject.DeliveryDate.day}-${clonedObject.DeliveryDate.year}`;
+    }
 
     return clonedObject;
   }
@@ -397,7 +421,12 @@ export class CreateTicketComponent implements OnInit {
   convertToDate(date: string): any {
     date = date.split('T')[0];
     const dates = date.split('-');
-    return new Date(+dates[2], +dates[0], +dates[1]);
+    return { 'year': +dates[0], 'month': +dates[1], 'day': +dates[2] };
+  }
+
+  readingChangeHandler(tdetail) {
+    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.EndMeterReading - tdetail.StartMeterReading, tdetail.productSelected.Price);
+    this.calculateTotalAmountAndUnit();
   }
 
 }
