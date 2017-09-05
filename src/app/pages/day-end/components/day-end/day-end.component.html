@@ -48,13 +48,13 @@
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'isDistributor';customer.isAsc=!customer.isAsc;">
-                                    Is Closed
+                                    Is Distributor
                                      <i *ngIf="(customer.sortField === 'isDistributor')" [ngClass]="(customer.isAsc && customer.sortField === 'isDistributor' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'driver';customer.isAsc=!customer.isAsc;">
-                                    Truck ID
+                                    Driver
                                      <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
@@ -80,9 +80,9 @@
                             </td>
                             <td>{{item.RouteNumber}}</td>
                             <td>{{item.BranchID }}</td>
-                            <td>{{item.IsDistributor?item.Distributor:"Feild Not Available"}}</td><!--is Distributor status not available-->
-                            <td>{{item.Driver?item.Driver:"Feild Not Available"}}</td><!--Driver name not available-->
-                            <td>{{item.TripCode}}</td>
+                            <td>{{item.IsDistributor?item.Distributor:"NA"}}</td><!--is Distributor status not available-->
+                            <td>{{item.DriverName}}</td><!--Driver name not available-->
+                            <td>{{item.TripID}}</td>
                         </tr>
 
                     </tbody>

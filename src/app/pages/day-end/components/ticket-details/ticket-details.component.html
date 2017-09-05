@@ -4,20 +4,22 @@
             <div class="row page-header">
                 <div class="col-md-3">
                     <span>Driver :</span>
-                    <label>Deangelo Parks</label>
+                    <label>{{selectedtrip?.DriverName}}</label>
                 </div>
                 <div class="col-md-3">
                     <div>
                         <span>Status :</span>
-                        <label>Pending Checker Approval</label>
+                        <label>NA</label>
                     </div>
                 </div>
                 <div class="col-md-3 right-text-alignment">
                     <span>Date :</span>
-                    <label>17/08/2017</label>
+                    <label>{{selectedtrip?.Created.split('T')[0]}}</label>
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-danger pull-right" [routerLink]="['../detail']">Submit</button>
+                     <button class="btn btn-danger pull-right" (click)="submitTickets()" >Submit</button>
+                        
+                    <button class="btn btn-danger pull-left" [routerLink]="['../list']">Back</button>
                 </div>
             </div>
             <div class="row page-header">
@@ -94,15 +96,15 @@
                             </thead>
                             <tbody>
                                 <!--Removed sorting functionality as it was causing rendering issues  -->
-                                <tr *ngFor="let item of ticketDetails|sort:customer.sortField:customer.isAsc">
+                                <tr *ngFor="let item of ticketDetails?.TripDetails|sort:customer.sortField:customer.isAsc">
                                     <td>{{item.Customerid}}</td>
                                     <td>{{item.CustomerName }}</td>
                                     <td>{{item.ISRICustomer }}</td>
                                     <td>{{item.TicketNumber}}</td>
                                     <td>{{item.InVoiceAmount}}</td>
                                     <td>{{item.CashAmount}}</td>
-                                    <td>{{item.check?item.check:"NA"}}</td><!-- Not Available -->
-                                    <td>{{item.ChargeAmount}}</td>
+                                    <td>{{item.CheckAmount}}</td>
+                                    <td>{{item.ChargeAmount || 'NA'}}</td>
                                     <td>{{item.Drayage}}</td>
                                     <td>{{item.BuyBack}}</td>
                                 </tr>
@@ -111,7 +113,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin-top:88px;">
+            <div class="row" >
                 <div class="col-md-2"></div>
                 <div class="col-md-8" style="border:1px solid black;">
                     <div class="col-md-12 page-header">
@@ -120,25 +122,25 @@
                     <div class="row page-header">
                         <span class="col-md-4">
                             <span>Cash:  </span>
-                            <label><b>$50.00</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalCash}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>Charge:  </span>
-                            <label><b>$50.00</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalCharge}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>Total Sale:  </span>
-                            <label><b>$100.00</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalSale}}</b></label>
                         </span>
                     </div>
                     <div class="row page-header">
                         <span class="col-md-4">
                             <span>Darayage:  </span>
-                            <label><b>$6.00</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalDrayage}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>BuyBack:  </span>
-                            <label><b>$38.00</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalBuyback}}</b></label>
                         </span>
                         <span class="col-md-4">
                         </span>

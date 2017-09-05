@@ -216,6 +216,7 @@ export class UserManagementComponent implements OnInit {
       this.hideColumn = !this.hideColumn;
       this.isNewUser = false;
       this.formIsDirty = false;
+      
     },
       (error) => {
         console.log();

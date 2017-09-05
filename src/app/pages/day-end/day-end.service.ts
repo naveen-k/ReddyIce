@@ -23,17 +23,25 @@ export class DayEndService extends SharedService {
         });
         
     }
-   getTripDetails(tripId){
+   getTripDetails(tripId) {
        return this.http.get(`api/ticketsfortrip?TripId=${tripId}`).map((res) => res.json()).map((res) => {
             return res;
         }); 
 
    }
+    getTripDetailByDate(tripId, tripStartDate) {
+       return this.http.get(`api/trip/ticketsbytripanddate?TripId=${tripId}&TripStartDate=${tripStartDate}`).map((res) => res.json()).map((res) => {
+            return res;
+        });
+    }
     getTripsByDate(date?: any): Observable<any[]> {   
         return this.http.get(`api/trip?date=${date}`).map((res) => res.json()).map((res) => {
             console.log(res);
             return res;
         });
+    }
+    submitTickets(data){
+       return this.http.post('api/manualticket/workflow', data).map((res => res.json())); 
     }
     // used for data flow between components
     setTripData(data){
