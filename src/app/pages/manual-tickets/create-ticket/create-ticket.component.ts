@@ -468,7 +468,8 @@ export class CreateTicketComponent implements OnInit {
 
   customerSelected(selectedCustomer) {
     this.showList = false;
-    this.ticket.CustomerID = selectedCustomer;
+    this.ticket.CustomerID = selectedCustomer.CustomerId;
+    this.customerName = selectedCustomer.CustomerName;
     this.customerChangeHandler();
   }
 

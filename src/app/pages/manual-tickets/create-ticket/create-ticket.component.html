@@ -64,7 +64,7 @@
             placeholder="Search Customer Name" (ngModelChange)="searchUserHandler(customerName)">
             <div class="search-container" [hidden]="!showList">
                 <div [hidden]="!showList" class="search-item" *ngFor="let customer of shortlistedCustomers"
-                (click)="customerSelected(customer.CustomerId)">
+                (click)="customerSelected(customer)">
                     {{customer.CustomerName}}
                 </div>
             </div>
