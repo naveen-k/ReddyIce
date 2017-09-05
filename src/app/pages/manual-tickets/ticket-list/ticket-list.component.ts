@@ -1,4 +1,4 @@
-// import { NotificationsService } from 'angular2-notifications/dist';
+import { NotificationsService } from 'angular2-notifications';
 import { User } from '../../user-management/user-management.interface';
 import { Branch } from '../../../shared/interfaces/interfaces';
 import { UserService } from '../../../shared/user.service';
@@ -36,8 +36,8 @@ export class TicketListComponent implements OnInit {
 
     // dummy searchObject
     searchObj = {
-        CreatedDate: '2017-08-01',
-        BranchId: 0,
+        CreatedDate: '2017-09-05',
+        BranchId: 1,
         IsForAll: false,
     };
 
@@ -47,10 +47,14 @@ export class TicketListComponent implements OnInit {
     constructor(
         protected service: ManualTicketService,
         protected userService: UserService,
-    //    protected notificationService: NotificationsService,
+        protected notificationService: NotificationsService,
     ) { }
 
     ngOnInit() {
+        const now = new Date();
+        // by default setting today's date in model
+        this.ticketDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+
         // Get loggedIn user details
         this.user = this.userService.getUser();
 
@@ -58,27 +62,26 @@ export class TicketListComponent implements OnInit {
         this.getBranches();
 
         // load all tickets
-        this.getAllTickets();
+        // this.getAllTickets();
+        this.getSearchedTickets();
     }
 
-    getAllTickets() {
-        this.showSpinner = true;
-        return this.service.getTickets(this.searchObj).subscribe((response) => {
-            if (response) {
-                console.log("if response is successful", response);
-                this.showSpinner = false;
-                this.allTickets = response;
-            }
-        },
-            (error) => {
-                if (error) {
-                    console.log("if response is unsuccessful", error);
-                    this.showSpinner = false;
-                    this.allTickets = [];
-                }
-            },
-        );
-    }
+    // getAllTickets() {
+    //     this.showSpinner = true;
+    //     return this.service.getTickets(this.searchObj).subscribe((response) => {
+    //         if (response) {
+    //             this.showSpinner = false;
+    //             this.allTickets = response;
+    //         }
+    //     },
+    //         (error) => {
+    //             if (error) {
+    //                 this.showSpinner = false;
+    //                 this.allTickets = [];
+    //             }
+    //         },
+    //     );
+    // }
 
     getSearchedTickets() {
         return this.service.getAllTickets(this.searchObj.CreatedDate,
@@ -160,7 +163,7 @@ export class TicketListComponent implements OnInit {
             },
             (error) => {
                 if (error) {
-                //    this.notificationService.error('Error', JSON.parse(error._body).Message);
+                    this.notificationService.error('Error', JSON.parse(error._body).Message);
                 }
             },
         );
