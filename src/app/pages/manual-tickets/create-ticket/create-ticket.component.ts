@@ -54,6 +54,8 @@ export class CreateTicketComponent implements OnInit {
   disablePodButton: boolean = true;
 
   showList: boolean = false;
+  urlString = '../../list';
+  customerName: any;
 
   constructor(
     protected service: ManualTicketService,
@@ -336,7 +338,6 @@ export class CreateTicketComponent implements OnInit {
   }
 
   onCancelClick() {
-    const urlString = '../../list';
     if (this.isFormDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
@@ -347,15 +348,18 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
       activeModal.componentInstance.closeModalHandler = (() => {
-        this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
+        this.routeToTicketListing();
       });
     } else {
-      if (this.activatedRoute.snapshot.params.ticketId) {
-        this.route.navigate([urlString], { relativeTo: this.activatedRoute });
-      } else {
-        this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
-      }
-      
+      this.routeToTicketListing();
+    }
+  }
+
+  routeToTicketListing() {
+    if (this.activatedRoute.snapshot.params.ticketId) {
+      this.route.navigate([this.urlString], { relativeTo: this.activatedRoute });
+    } else {
+      this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
     }
   }
 
@@ -449,6 +453,7 @@ export class CreateTicketComponent implements OnInit {
     // show or hide customer list based on type-ahead string
     this.showList = (customerName.length > 0) ? true : false;
 
+    // populate list of customers based on type-ahead string
     for (const item of this.customers) {
       if (item.CustomerName.toLowerCase().includes(customerName)) {
         this.shortlistedCustomers.push(item);
