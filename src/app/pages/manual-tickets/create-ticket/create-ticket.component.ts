@@ -2,6 +2,7 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 // import { NotificationsService } from 'angular2-notifications/dist';
+import { NotificationsService } from 'angular2-notifications';
 import { ManualTicket, TicketDetail } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
 import { Branch, Customer } from '../../../shared/interfaces/interfaces';
@@ -60,7 +61,7 @@ export class CreateTicketComponent implements OnInit {
   constructor(
     protected service: ManualTicketService,
     protected user: UserService,
-    // protected notification: NotificationsService,
+    protected notification: NotificationsService,
     protected modalService: NgbModal,
     protected activatedRoute: ActivatedRoute,
     protected route: Router,
@@ -406,7 +407,12 @@ export class CreateTicketComponent implements OnInit {
     }
     // Save ticket
     this.service.saveTicket(ticket).subscribe(res => {
-      //  this.notification.success(res);
+      this.notification.success('Ticket created successfully!');
+    },
+    (error) => {
+        if (error) {
+          this.notification.error('Error while creating ticket!');
+        }
     });
   }
 
@@ -418,7 +424,6 @@ export class CreateTicketComponent implements OnInit {
     delete clonedObject['Created'];
     delete clonedObject['Modified'];
     if (!clonedObject || !clonedObject.TicketDetail) {
-      //  this.notification.error('Something went wrong. Ticket could not be created.');
       return;
     }
     clonedObject.TicketDetail.forEach(t => {
