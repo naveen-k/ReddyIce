@@ -8,12 +8,10 @@
                     Upload POD
                 </button>
                 <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png" />
-                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly"
-                [disabled]="!isFormDirty">
+                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly"
-                [disabled]="!isFormDirty">
+                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Submit
                 </button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
@@ -56,10 +54,20 @@
     </div>
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Customer Name</label>
-        <div class="col-sm-4">
+        <!-- <div class="col-sm-4">
             <select class="form-control" name="customer" [(ngModel)]="ticket.CustomerID" (ngModelChange)="customerChangeHandler()" [disabled]="isReadOnly">
                 <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
             </select>
+        </div> -->
+        <div class="col-sm-4">
+            <input type="text" autocomplete="off" class="form-control" [(ngModel)]="customerName" value="customerName"
+            placeholder="Search Customer Name" (ngModelChange)="searchUserHandler(customerName)">
+            <div class="search-container" [hidden]="!showList">
+                <div [hidden]="!showList" class="search-item" *ngFor="let customer of shortlistedCustomers"
+                (click)="customerSelected(customer.CustomerId)">
+                    {{customer.CustomerName}}
+                </div>
+            </div>
         </div>
         <label [hidden]="!modes" for="example-text-input" class="col-sm-2 col-form-label">Mode</label>
         <div class="col-sm-4" [hidden]="!modes">

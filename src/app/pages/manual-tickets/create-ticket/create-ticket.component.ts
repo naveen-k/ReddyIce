@@ -53,6 +53,8 @@ export class CreateTicketComponent implements OnInit {
 
   disablePodButton: boolean = true;
 
+  showList: boolean = false;
+
   constructor(
     protected service: ManualTicketService,
     protected user: UserService,
@@ -63,7 +65,7 @@ export class CreateTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-   
+
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
     const activatedRouteObject = this.activatedRoute.snapshot.data;
@@ -334,6 +336,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   onCancelClick() {
+    const urlString = '../../list';
     if (this.isFormDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
@@ -346,7 +349,13 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.closeModalHandler = (() => {
         this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
       });
-
+    } else {
+      if (this.activatedRoute.snapshot.params.ticketId) {
+        this.route.navigate([urlString], { relativeTo: this.activatedRoute });
+      } else {
+        this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
+      }
+      
     }
   }
 
@@ -387,13 +396,13 @@ export class CreateTicketComponent implements OnInit {
     if (this.ticketId) {
       // Update ticket
       this.service.updateTicket(ticket).subscribe(res => {
-      //  this.notification.success(res);
+        //  this.notification.success(res);
       });
       return;
     }
     // Save ticket
     this.service.saveTicket(ticket).subscribe(res => {
-    //  this.notification.success(res);
+      //  this.notification.success(res);
     });
   }
 
@@ -404,8 +413,8 @@ export class CreateTicketComponent implements OnInit {
     delete clonedObject['tempTotalUnit'];
     delete clonedObject['Created'];
     delete clonedObject['Modified'];
-    if (!clonedObject || !clonedObject.TicketDetail) { 
-    //  this.notification.error('Something went wrong. Ticket could not be created.');
+    if (!clonedObject || !clonedObject.TicketDetail) {
+      //  this.notification.error('Something went wrong. Ticket could not be created.');
       return;
     }
     clonedObject.TicketDetail.forEach(t => {
@@ -430,6 +439,28 @@ export class CreateTicketComponent implements OnInit {
   readingChangeHandler(tdetail) {
     tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.EndMeterReading - tdetail.StartMeterReading, tdetail.productSelected.Price);
     this.calculateTotalAmountAndUnit();
+  }
+
+  shortlistedCustomers = [];
+
+  searchUserHandler(customerName) {
+    this.shortlistedCustomers = [];
+
+    // show or hide customer list based on type-ahead string
+    this.showList = (customerName.length > 0) ? true : false;
+
+    for (const item of this.customers) {
+      if (item.CustomerName.toLowerCase().includes(customerName)) {
+        this.shortlistedCustomers.push(item);
+      }
+    }
+    customerName = '';
+  }
+
+  customerSelected(selectedCustomer) {
+    this.showList = false;
+    this.ticket.CustomerID = selectedCustomer;
+    this.customerChangeHandler();
   }
 
 }

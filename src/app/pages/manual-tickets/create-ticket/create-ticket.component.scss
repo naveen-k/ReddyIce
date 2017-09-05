@@ -60,6 +60,31 @@ label {
   border-left-color: transparent;
   left: 56%;
 }
+
+.search-container{
+  position: absolute;
+  max-height: 200px;
+  overflow-y: scroll;
+  width: calc(100%);
+  padding:0px;
+  border: 1px solid #ccc;
+  background: #fff;
+  z-index: 12;
+  .search-item{
+    padding: 6px 12px;
+    border-bottom: 1px solid #d6cccc;
+    cursor: pointer;
+    &:hover{
+      background: #5bc0de;
+      color:#fff;
+    }
+
+  }
+  
+  .search-item:last-child{
+    border-bottom: 0px solid #d6cccc;
+  }
+}
 /*
 .radioList {
   margin-top: 5px;
