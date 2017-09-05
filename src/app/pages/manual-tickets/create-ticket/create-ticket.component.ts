@@ -252,7 +252,6 @@ export class CreateTicketComponent implements OnInit {
         this.isTicketNumberExist = true;
       } else if (res.Message === 'Ticket Number available for use.') {
         this.isTicketNumberExist = false;
-        // this.notification.success('Success', 'Ticket Number available for use.');
       }
     });
   }
