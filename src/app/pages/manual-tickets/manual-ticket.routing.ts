@@ -13,6 +13,9 @@ const routes: Routes = [
       {
         path: 'list',
         component: TicketListComponent,
+        resolve: {
+          branches: BranchResolver,
+        },
       },
       {
         path: 'ticket',

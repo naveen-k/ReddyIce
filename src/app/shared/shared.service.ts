@@ -13,7 +13,7 @@ export class SharedService {
         // this.progress = Observable.create(observer => {
         //     this.progressObserver = observer
         // }).share();
-     }
+    }
 
     getBranches(userId): Observable<any> {
         // if (this._branches) { return Observable.of(this._branches); }
@@ -29,44 +29,15 @@ export class SharedService {
     }
 
     uploadFile(file): Observable<any> {
-        const formData: FormData = new FormData();
-        formData.append('file', file);
+        return this.http.post(`api/manualticket/uploadImage`, file).map(res => res.json());
+    }
 
-        return this.http.post(`api/manualticket/uploadImage`, formData).map(res => res.json());
-        // return Observable.create(observer => {
-        //     const formData: FormData = new FormData(),
-        //         xhr: XMLHttpRequest = new XMLHttpRequest();
-
-        //     // for (let i = 0; i < files.length; i++) {
-        //     //     formData.append("uploads[]", files[i], files[i].name);
-        //     // }
-        //     formData.append('file', file, file.name);
-
-        //     xhr.onreadystatechange = () => {
-        //         if (xhr.readyState === 4) {
-        //             if (xhr.status === 200) {
-        //                 observer.next(JSON.parse(xhr.response));
-        //                 observer.complete();
-        //             } else {
-        //                 observer.error(xhr.response);
-        //             }
-        //         }
-        //     };
-
-        //     xhr.upload.onprogress = (event) => {
-        //         // this.progress = Math.round(event.loaded / event.total * 100);
-
-        //         // this.progressObserver.next(this.progress);
-        //     };
-
-        //     xhr.open('POST', `api/manualticket/uploadImage`, true);
-        //     xhr.send(formData);
-        // });
-
+    updateFile(file): Observable<any> {
+        return this.http.put(`api/manualticket/updateImage?ImageID=${file.ImageID}`, file).map(res => res.json());
     }
 
     formatDate(date) {
-         if (!date.year) { return '' };
+        if (!date.year) { return '' };
         let yy = date.year, mm = date.month, dd = date.day;
         if (mm < 10) { mm = '0' + mm }
         if (dd < 10) { dd = '0' + dd }

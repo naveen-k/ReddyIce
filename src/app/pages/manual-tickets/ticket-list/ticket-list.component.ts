@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { NotificationsService } from 'angular2-notifications';
 import { User } from '../../user-management/user-management.interface';
 import { Branch } from '../../../shared/interfaces/interfaces';
@@ -9,83 +10,52 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./ticket-list.component.scss'],
 })
 export class TicketListComponent implements OnInit {
-    model: any = {};
+
     showSpinner: boolean = true;
 
     // allbranches related to loggen in usr
-    allBranches: Branch;
+    allBranches: Branch[];
 
     // logged in user
     user: User;
 
     allTickets: any = [];
 
-    // array with all the checked ticket numbers
-    ticketIdArray = [];
-
-    // array with all duplicate items removed
-    filteredArray = [];
-
-    // dummy ticketObject
-    ticketObject = {
-        TicketID: [
-            1, 2,
-        ],
-        status: 1,
-    };
-
-    // dummy searchObject
-    searchObj = {
-        CreatedDate: '2017-09-05',
-        BranchId: 1,
-        IsForAll: false,
-    };
-
-    branch: any;
-    ticketDate: any = '';
+    // model search
+    searchObj: any = {};
 
     constructor(
         protected service: ManualTicketService,
         protected userService: UserService,
         protected notificationService: NotificationsService,
+        protected activatedRoute: ActivatedRoute,
     ) { }
 
     ngOnInit() {
         const now = new Date();
         // by default setting today's date in model
-        this.ticketDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+        this.searchObj.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
         // Get loggedIn user details
         this.user = this.userService.getUser();
 
         // load all branches
-        this.getBranches();
+        this.allBranches = this.activatedRoute.snapshot.data['branches'];
 
-        // load all tickets
-        // this.getAllTickets();
+        // Remove 'All branch' object
+        this.allBranches.shift();
+
+        // Set first branch default selected
+        this.searchObj.BranchId = this.allBranches[0].BranchID;
+
         this.getSearchedTickets();
     }
 
-    // getAllTickets() {
-    //     this.showSpinner = true;
-    //     return this.service.getTickets(this.searchObj).subscribe((response) => {
-    //         if (response) {
-    //             this.showSpinner = false;
-    //             this.allTickets = response;
-    //         }
-    //     },
-    //         (error) => {
-    //             if (error) {
-    //                 this.showSpinner = false;
-    //                 this.allTickets = [];
-    //             }
-    //         },
-    //     );
-    // }
-
     getSearchedTickets() {
-        return this.service.getAllTickets(this.searchObj.CreatedDate,
-            this.searchObj.BranchId, this.searchObj.IsForAll, this.user.UserId).subscribe((response: any) => {
+        // Cloned search object
+        const searchObj = JSON.parse(JSON.stringify(this.searchObj));
+        const dt = `${searchObj.CreatedDate.month}-${searchObj.CreatedDate.day}-${searchObj.CreatedDate.year}`;
+        return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
             if (response) {
                 this.showSpinner = false;
                 if (response === 'No Record Found') {
@@ -104,61 +74,36 @@ export class TicketListComponent implements OnInit {
         );
     }
 
-    getBranches() {
-        this.service.getBranches(this.user.UserId).subscribe((response) => {
-            this.allBranches = response;
-            this.branch = '1';
-        });
-    }
-
-    getSelectedDate(selectedDate) {
-        this.searchObj.CreatedDate = this.service.formatDate(selectedDate);
-        this.getSearchedTickets();
-    }
-
-    getSelectedBranch(branch) {
-        this.searchObj.BranchId = branch;
-        this.getSearchedTickets();
-    }
-
-    getSelectedTicketType(type) {
-        this.searchObj.IsForAll = type;
-        this.getSearchedTickets();
-    }
-
-    // called on checkbox selection to approve single/ multiple tickets
-    onChecked(event, item) {
-        // perform action if checkbox is selected only
-        if (event.target.checked) {
-            this.ticketIdArray.push(item.TicketID);
-        }
-    }
-
     // approve all checked tickets
     approveCheckedTickets() {
-        this.filterTicketIdArray();         // remove duplicate items from the array
-    }
-
-    // remove duplicate items from the array before object creation
-    filterTicketIdArray() {
-        for (var i = 0; i < this.ticketIdArray.length; i++) {
-            if (this.filteredArray.indexOf(this.ticketIdArray[i]) === -1) {
-                this.filteredArray.push(this.ticketIdArray[i]);
+        const selectedIds = [];
+        this.allTickets.forEach(element => {
+            if (element.selected) {
+                selectedIds.push(element.TicketID);
             }
+        });
+
+        if (!selectedIds.length) {
+            // TODO
+            // Show message box 'Nothing to approve, please select some tickets'
+            return;
         }
-        this.createMultiTicketApprovalObject();
+
+        this.createMultiTicketApprovalObject(selectedIds);
     }
 
     // create object to approve single/multiple tickets
-    createMultiTicketApprovalObject() {
-        this.ticketObject.TicketID = this.filteredArray;
-        this.ticketObject.status = 25;
+    createMultiTicketApprovalObject(ticketIds) {
+        const ticketObject = {
+            TicketID: ticketIds,
+            status: 25,
+        };
 
         // call workflow service to approve all the checked ticket numbers
-        this.service.approveAllCheckedTickets(this.ticketObject).subscribe(
+        this.service.approveAllCheckedTickets(ticketObject).subscribe(
             (response) => {
                 if (response) {
-                //    this.notificationService.success('Success', JSON.parse(response._body).Message);
+                    this.notificationService.success('Approved');
                 }
             },
             (error) => {

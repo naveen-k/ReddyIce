@@ -11,7 +11,7 @@
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
+                <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Submit
                 </button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
@@ -54,12 +54,21 @@
     </div>
     <div class="form-group row">
         <label for="example-text-input" class="col-sm-2 col-form-label">Customer Name</label>
-        <!-- <div class="col-sm-4">
-            <select class="form-control" name="customer" [(ngModel)]="ticket.CustomerID" (ngModelChange)="customerChangeHandler()" [disabled]="isReadOnly">
-                <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
-            </select>
-        </div> -->
         <div class="col-sm-4">
+            <!-- <select class="form-control" name="customer" [(ngModel)]="ticket.CustomerID" (ngModelChange)="customerChangeHandler()" [disabled]="isReadOnly">
+                <option *ngFor="let customer of customers" [ngValue]="customer.CustomerId"> {{customer.CustomerName}} </option>
+            </select> -->
+            <ng-template #rt let-r="result" let-t="term">
+                {{ r.CustomerName}}
+            </ng-template>
+            <input id="typeahead-basic" type="text" class="form-control" 
+                [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" 
+                [resultTemplate]="rt" placeholder="Search Customer"
+                [inputFormatter]="inputFormatter"
+                (selectItem)="customerChangeHandler($event)"
+                [disabled]="isReadOnly"/>
+        </div>
+        <!-- <div class="col-sm-4">
             <input type="text" autocomplete="off" class="form-control" [(ngModel)]="customerName" value="customerName"
             placeholder="Search Customer Name" (ngModelChange)="searchUserHandler(customerName)">
             <div class="search-container" [hidden]="!showList">
@@ -68,7 +77,7 @@
                     {{customer.CustomerName}}
                 </div>
             </div>
-        </div>
+        </div> -->
         <label [hidden]="!modes" for="example-text-input" class="col-sm-2 col-form-label">Mode</label>
         <div class="col-sm-4" [hidden]="!modes">
             <label *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
@@ -182,7 +191,7 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
+                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
                         <td>
                             <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                 [disabled]="isReadOnly">
@@ -225,7 +234,7 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
+                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
                         <td>
                             <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                 [disabled]="isReadOnly">
@@ -265,7 +274,7 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
+                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
                         <td>
                             <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                 [disabled]="isReadOnly">
@@ -308,7 +317,7 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let tdetail of ticket?.TicketDetail">
+                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
                         <td>
                             <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                 [disabled]="isReadOnly">

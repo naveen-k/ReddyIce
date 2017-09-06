@@ -1,9 +1,13 @@
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-// import { NotificationsService } from 'angular2-notifications/dist';
 import { NotificationsService } from 'angular2-notifications';
-import { ManualTicket, TicketDetail } from '../manaul-ticket.interfaces';
+import { ManualTicket, TicketProduct } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
 import { Branch, Customer } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
@@ -54,9 +58,18 @@ export class CreateTicketComponent implements OnInit {
 
   disablePodButton: boolean = true;
 
-  showList: boolean = false;
+  // showList: boolean = false;
   urlString = '../../list';
-  customerName: any;
+  // customerName: any;
+
+  // Customer input formatter
+  inputFormatter = (res => `${res.CustomerName}`);
+
+  search = (text$: Observable<any>) => text$.debounceTime(200)
+    .distinctUntilChanged()
+    .map(term => term.length < 2 ? []
+      : this.customers.filter((v: any) => v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+
 
   constructor(
     protected service: ManualTicketService,
@@ -130,7 +143,12 @@ export class CreateTicketComponent implements OnInit {
 
   resetSubTypesAndMode(selectedTicket) {
     this.ticketSubTypes = selectedTicket['category'];
-    this.ticket.Mode = null;
+    if (this.ticket.TicketTypeID !== 22) {
+      this.ticket.Mode = null;
+      return;
+    }
+    this.modes = selectedTicket.Mode;
+    // debugger;
   }
 
   branchChangeHandler() {
@@ -151,17 +169,19 @@ export class CreateTicketComponent implements OnInit {
     });
   }
 
-  customerChangeHandler() {
-    const customer = this.customers.filter((c) => c.CustomerId === this.ticket.CustomerID);
+  customerChangeHandler(event) {
+    // debugger
+    // const customer = this.customers.filter((c) => c.CustomerId === this.ticket.CustomerID);
+    this.ticket.CustomerID = event.item.CustomerId;
     this.loadCustomerDetail(this.ticket.CustomerID);
 
     // Reset ticket details
-    this.ticket.TicketDetail = [{} as TicketDetail];
+    this.ticket.TicketProduct = [{} as TicketProduct];
   }
 
   addProductRow() {
-    if (!this.ticket.TicketDetail) { return; }
-    this.ticket.TicketDetail.push({} as TicketDetail);
+    if (!this.ticket.TicketProduct) { return; }
+    this.ticket.TicketProduct.push({} as TicketProduct);
   }
 
   loadCustomerDetail(customerId) {
@@ -171,25 +191,24 @@ export class CreateTicketComponent implements OnInit {
 
       // set first product selected
       if (res.productdetail.length) {
-        this.ticket.TicketDetail.forEach(td => {
+        this.ticket.TicketProduct.forEach(td => {
           if (!td.ProductID) {
             td.ProductID = res.productdetail[0].ProductID;
           }
           this.updateTicketDetailObject(td);
-
-          if (this.ticket.SaleTypeID === 21) {
+          if (this.ticket.TicketTypeID === 20) {
             // Ticket Type is DSD
             td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
-          } else if (this.ticket.SaleTypeID === 22) {
+          } else if (this.ticket.TicketTypeID === 21) {
             // Ticket Type is PBS
             td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
           } else {
             // Ticket Type is PBM
             td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
           }
-          this.calculateTotalAmountAndUnit();
-        });
 
+        });
+        this.calculateTotalAmountAndUnit();
       }
     });
   }
@@ -211,7 +230,7 @@ export class CreateTicketComponent implements OnInit {
 
   productChangeHandler(ticketDetail) {
     // console.log(this.ticket.TicketDetail);
-    const product = this.ticket.TicketDetail.filter(t => t.ProductID === ticketDetail.ProductID);
+    const product = this.ticket.TicketProduct.filter(t => t.ProductID === ticketDetail.ProductID);
     if (product.length === 2) {
       ticketDetail.ProductID = '';
       // alert('Product already selected');
@@ -310,7 +329,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket['tempTotalUnit'] = 0;
     this.ticket.TotalSale = 0;
 
-    this.ticket.TicketDetail.forEach((t) => {
+    this.ticket.TicketProduct.forEach((t) => {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       this.ticket.TotalSale += +t['totalAmount'] || 0;
     });
@@ -365,15 +384,39 @@ export class CreateTicketComponent implements OnInit {
 
   // imageResponse: any;
   onFileUpload(event) {
-    this.service.uploadFile(event.target).subscribe((response) => {
-      // this.imageResponse = response;
-      // console.log("imageResponse", this.imageResponse);
+    const file = {
+      ImageTypeID: 40,
+      ImageID: this.ticket.PODImageID,
+    };
+
+    const fileReader = new FileReader();
+    fileReader.addEventListener('load', () => {
+      file['Image'] = fileReader.result.split(',')[1];
+      this.uploadFile(file);
+    });
+
+    if (fileReader) {
+      fileReader.readAsDataURL(event.target.files[0]);
+    }
+
+  }
+
+  uploadFile(file) {
+    if (file.ImageID) {
+      this.service.updateFile(file).subscribe((response) => {
+        this.notification.success('File updated');
+      });
+      return;
+    }
+    this.service.uploadFile(file).subscribe((response) => {
+      this.ticket.PODImageID = response.ImageID;
+      this.saveTicket();
     });
   }
 
   deleteProductHandler(tdetail) {
-    const index = this.ticket.TicketDetail.findIndex((t) => t.ProductID === tdetail.ProductID);
-    this.ticket.TicketDetail.splice(index, 1);
+    const index = this.ticket.TicketProduct.findIndex((t) => t.ProductID === tdetail.ProductID);
+    this.ticket.TicketProduct.splice(index, 1);
 
     // update total amount and total count
     this.calculateTotalAmountAndUnit();
@@ -385,6 +428,7 @@ export class CreateTicketComponent implements OnInit {
 
       this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
       this.ticket.CustomerID = this.ticket.Customer.CustomerID;
+      this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
 
       this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
 
@@ -400,7 +444,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.ticketId) {
       // Update ticket
       this.service.updateTicket(ticket).subscribe(res => {
-        //  this.notification.success(res);
+        this.notification.success(res);
       });
       return;
     }
@@ -408,11 +452,16 @@ export class CreateTicketComponent implements OnInit {
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('Ticket created successfully!');
     },
-    (error) => {
+      (error) => {
         if (error) {
           this.notification.error('Error while creating ticket!');
         }
-    });
+      });
+  }
+
+  submitTicket() {
+    this.ticket.TicketStatusID = 24;
+    this.saveTicket();
   }
 
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
@@ -422,10 +471,10 @@ export class CreateTicketComponent implements OnInit {
     delete clonedObject['tempTotalUnit'];
     delete clonedObject['Created'];
     delete clonedObject['Modified'];
-    if (!clonedObject || !clonedObject.TicketDetail) {
+    if (!clonedObject || !clonedObject.TicketProduct) {
       return;
     }
-    clonedObject.TicketDetail.forEach(t => {
+    clonedObject.TicketProduct.forEach(t => {
       delete t['productSelected'];
       delete t['totalAmount'];
     });
@@ -447,29 +496,6 @@ export class CreateTicketComponent implements OnInit {
   readingChangeHandler(tdetail) {
     tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.EndMeterReading - tdetail.StartMeterReading, tdetail.productSelected.Price);
     this.calculateTotalAmountAndUnit();
-  }
-
-  shortlistedCustomers = [];
-
-  searchUserHandler(customerName) {
-    this.shortlistedCustomers = [];
-
-    // show or hide customer list based on type-ahead string
-    this.showList = (customerName.length > 0) ? true : false;
-
-    // populate list of customers based on type-ahead string
-    for (const item of this.customers) {
-      if (item.CustomerName.toLowerCase().includes(customerName)) {
-        this.shortlistedCustomers.push(item);
-      }
-    }
-    customerName = '';
-  }
-
-  customerSelected(selectedCustomer) {
-    this.showList = false;
-    this.ticket.CustomerID = selectedCustomer;
-    this.customerChangeHandler();
   }
 
 }

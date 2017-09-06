@@ -1,4 +1,4 @@
-export interface TicketDetail {
+export interface TicketProduct {
     TicketDetailID: number;
     TicketID: number;
     ProductID: number;
@@ -67,7 +67,8 @@ export interface ManualTicket {
     TotalAmount: number;
     TotalSale: number;
     IsSaleTicket: boolean;
-    TicketDetail: TicketDetail[];
+    TicketProduct: TicketProduct[];
     Mode: number;
     UserId: number;
+    PODImage: any;
 }

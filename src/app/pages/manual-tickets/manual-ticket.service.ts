@@ -19,9 +19,9 @@ export class ManualTicketService extends SharedService {
   //   return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
   // }
 
-  getAllTickets(createdDate, branchId, isForAll, userId): Observable<any[]> {
+  getAllTickets(createdDate, branchId, isForAll?, userId?): Observable<any[]> {
     // return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
-    return this.http.get(`api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}&IsForAll=${isForAll}&userID=${userId}`)
+    return this.http.get(`api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}`)
     .map(res => res.json());
   }
 
