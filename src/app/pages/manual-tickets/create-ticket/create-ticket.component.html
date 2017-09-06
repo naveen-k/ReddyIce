@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="row" style="margin-top:30px;">
+    <div class="row topMargin30">
         <div class="col-sm-1">
         </div>
         <div class="col-sm-5">
@@ -76,8 +76,8 @@
                 </div>
             </div>
             <div class="row padding">
-                <label [hidden]="modes" for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
-                <div class="col-sm-7" [hidden]="!modes">
+                <label [hidden]="!modes" for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
+                <div class="col-sm-8" [hidden]="!modes">
                     <label *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="mode" [value]="mType.ID" [(ngModel)]="ticket.Mode">
                     <span>{{mType.Value}}</span>
@@ -89,13 +89,13 @@
         </div>
     </div>
 
-    <div class="row" style="margin-top:30px;">
+    <div class="row topMargin30">
         <div class="col-sm-1">
         </div>
         <div class="col-sm-5">
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
-                <div class="col-sm-7">
+                <div class="col-sm-10">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="pod" id="podRadio1" value="received" (click)="isPodReceived(1)">
                     <span>Received</span>
@@ -180,11 +180,11 @@
         </div>
     </div>
 
-    <div class="row" style="margin-top:30px;">
+    <div class="row topMargin30">
         <div class="col-sm-1"></div>
         <div class="col-sm-8 border">
-            <div class="row padding">
-                <div class="col-sm-9 col-form-label">
+            <div class="row padding tablePanel">
+                <div class="col-sm-9 col-form-label" style="padding-left:20px;">
                     <b>List of Products</b>
                 </div>
                 <div class="col-sm-3">
@@ -359,23 +359,29 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2 border cashPanel">
-            <label for="example-text-input" class="col-form-label">Cash Amount</label>
-            <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
-            <label for="example-text-input" class="col-form-label">Check#</label>
-            <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
-                name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
-            <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
-                <i class="ion-android-alert showError"></i>
-                <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
+        <div class="col-sm-2 border cashPanel padding">
+            <div class="padding">
+                <label for="example-text-input" class="col-form-label">Cash Amount</label>
+                <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
             </div>
-            <div *ngIf="checkMinMaxLength" class="error-message">
-                <i class="ion-android-alert showError"></i>
-                <div class="custom-tooltip bottom">Should not be more than 20 digits</div>
+            <div class="padding">
+                <label for="example-text-input" class="col-form-label">Check#</label>
+                <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
+                    name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
+                <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
+                    <i class="ion-android-alert showError"></i>
+                    <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
+                </div>
+                <div *ngIf="checkMinMaxLength" class="error-message">
+                    <i class="ion-android-alert showError"></i>
+                    <div class="custom-tooltip bottom">Should not be more than 20 digits</div>
+                </div>
             </div>
-            <label for="example-text-input" class="col-form-label">Check Amount</label>
-            <div class="">
-                <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
+            <div class="padding">
+                <label for="example-text-input" class="col-form-label">Check Amount</label>
+                <div class="">
+                    <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
+                </div>
             </div>
         </div>
         <div class="col-sm-1"></div>
