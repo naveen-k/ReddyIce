@@ -216,12 +216,12 @@
                                             <!--Removed sorting functionality as it was causing rendering issues-->
                                            <tr *ngFor="let item of tripData.TripTicketList|sort:customer.sortField:customer.isAsc">
                                                 <td>{{item.CustomerID}}</td>
-                                                <td>{{item.customer?item.customer:"NA"}}</td><!-- Not Available -->
+                                                <td>{{item.CustomerName?item.customer:""}}</td><!-- Not Available -->
                                                 <td>{{item.TicketNumber}}</td>
-                                                <td>{{item.IsInvoice}}</td>
+                                                <td></td>
                                                 <td>{{item.CashAmount}}</td>
                                                 <td>{{item.CheckAmount}}</td>
-                                                <td>{{item.charge?item.charge:"NA"}}</td><!-- Not Available  -->
+                                                <td>{{item.charge?item.charge:""}}</td><!-- Not Available  -->
                                             </tr>
 
                                         </tbody>
