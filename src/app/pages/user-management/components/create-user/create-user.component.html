@@ -136,7 +136,7 @@
       <div class="col-md-5 padding-eater">
         <label for="distributor">Distributor</label>
         <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
-          #distributor="ngModel" (ngModelChange)="changeHandler()" required>
+          #distributor="ngModel" (ngModelChange)="changeHandler()" >
           <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorID">{{distributor.DistributorName}}</option>
       </select>
       </div>

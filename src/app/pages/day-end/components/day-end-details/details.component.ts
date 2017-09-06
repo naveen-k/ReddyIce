@@ -5,6 +5,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreateTicketComponent } from '../../../manual-tickets/create-ticket/create-ticket.component';
 
 @Component({
     templateUrl: './details.component.html',
@@ -39,12 +41,17 @@ export class DetailsComponent implements OnInit {
 
     driverDetails: any = [];
     constructor(private service: DayEndService, private route: ActivatedRoute,
-         private userService: UserService,private notification:NotificationsService) {
+         private userService: UserService,private notification:NotificationsService,
+        private modalService:NgbModal) {
         this.unitReconciliation1 = service.dataTableData2;
-        //this.ticketDetails = service.dataTableData3;
-
     }
-
+  openCreateTicketModal() {
+    const modalRef = this.modalService.open(CreateTicketComponent, {
+        size: 'lg'
+      
+      });
+    modalRef.componentInstance.name = 'World';
+  }
     ngOnInit() {
         this.tripData = this.service.gettripData();
         console.log(this.tripData);

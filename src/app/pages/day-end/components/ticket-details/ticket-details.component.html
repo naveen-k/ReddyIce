@@ -24,7 +24,7 @@
             </div>
             <div class="row page-header">
                 <div class="col-md-12">
-                    <label>Ticket Details</label>
+                    <h3>Ticket Details</h3>
                 </div>
                 <div class="col-md-12 page-header">
                     <!-- <ng2-smart-table [settings]="settings3" [source]="source3" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table> -->
@@ -110,6 +110,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                           <div *ngIf="ticketDetails?.TripDetails.length < 1" style='text-align:center'> No data found </div>
                     </div>
                 </div>
             </div>
