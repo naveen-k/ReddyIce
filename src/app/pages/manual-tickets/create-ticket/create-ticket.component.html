@@ -1,361 +1,380 @@
-<div class="row">
-    <div class="col-sm-1">
+<ba-card cardTitle="Ticket">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-right">
+                <button class="btn btn-danger" [hidden]="ticket.TicketStatusID == 24 || isReadOnly">Approve</button>
+                <button class="btn btn-danger buttonMargin" [disabled]="disablePodButton" onclick="document.getElementById('file').click()"
+                    [hidden]="isReadOnly">
+                    Upload POD
+                </button>
+                <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png" />
+                <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
+                    Save
+                </button>
+                <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
+                    Submit
+                </button>
+                <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
+                <button class="btn btn-default buttonMargin" (click)="onCancelClick()">Cancel</button>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-5">
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
-            <div class="col-sm-7 input-group">
-                <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
-                    [disabled]="isReadOnly">
-                <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
+    <div class="row" style="margin-top:30px;">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-5">
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
+                <div class="col-sm-7 input-group">
+                    <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
+                        [disabled]="isReadOnly">
+                    <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
                     <i class="ion-calendar"></i>
                 </button>
+                </div>
             </div>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-2 col-form-label">Branch</label>
-            <div class="col-sm-7">
-                <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler()" [disabled]="isReadOnly">
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-2 col-form-label">Branch</label>
+                <div class="col-sm-7">
+                    <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler()" [disabled]="isReadOnly">
                     <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
                 </select>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-5 border">
-        <div class="row padding">
-            <h5 class="frameHeading">Select Customer</h5>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-4 col-form-label">Ticket Type</label>
-            <div class="">
-                <label *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+        <div class="col-sm-5 border">
+            <div class="row padding">
+                <h5 class="frameHeading">Select Customer</h5>
+            </div>
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-4 col-form-label">Ticket Type</label>
+                <div class="">
+                    <label *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="ticketChangeHandler()" [attr.disabled]="isReadOnly">
                     <span>{{tType.Value}}</span>
                 </label>
+                </div>
             </div>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-4 col-form-label">Customer Name</label>
-            <div class="col-sm-7">
-                <ng-template #rt let-r="result" let-t="term">
-                    {{ r.CustomerName}}
-                </ng-template>
-                <input id="typeahead-basic" type="text" class="form-control" 
-                    [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" 
-                    [resultTemplate]="rt" placeholder="Search Customer"
-                    [inputFormatter]="inputFormatter"
-                    (selectItem)="customerChangeHandler($event)"
-                    [disabled]="isReadOnly"/>
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-4 col-form-label">Customer Name</label>
+                <div class="col-sm-7">
+                    <ng-template #rt let-r="result" let-t="term">
+                        {{ r.CustomerName}}
+                    </ng-template>
+                    <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" [resultTemplate]="rt"
+                        placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="customerChangeHandler($event)"
+                        [disabled]="isReadOnly" />
+                </div>
             </div>
-        </div>
-        <div class="row padding">
-            <label [hidden]="modes" for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
-            <div class="col-sm-7" [hidden]="!modes">
-                <label *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+            <div class="row padding">
+                <label [hidden]="modes" for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
+                <div class="col-sm-7" [hidden]="!modes">
+                    <label *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="mode" [value]="mType.ID" [(ngModel)]="ticket.Mode">
                     <span>{{mType.Value}}</span>
                 </label>
+                </div>
             </div>
         </div>
+        <div class="col-sm-1">
+        </div>
     </div>
-    <div class="col-sm-1">
-    </div>
-</div>
 
-<div class="row" style="margin-top:30px;">
-    <div class="col-sm-1">
-    </div>
-    <div class="col-sm-5">
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
-            <div class="col-sm-7">
-                <label *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+    <div class="row" style="margin-top:30px;">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-5">
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
+                <div class="col-sm-7">
+                    <label *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.SaleTypeID" (ngModelChange)="typeChangeHandler()">
                     <span>{{sType.Value}}</span>
                 </label>
+                </div>
             </div>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
-            <div class="col-sm-7">
-                <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
+                <div class="col-sm-7">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="pod" id="podRadio1" value="received" (click)="isPodReceived(1)">
                     <span>Received</span>
                 </label>
-                <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="pod" id="podRadio2" value="notReceived" checked (click)="isPodReceived(2)">
                     <span>Not-Received</span>
                 </label>
-            </div>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
-            <div class="col-sm-7">
-                <input type="number" min="1" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber"
-                    id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()" name="TicketNumber" #TicketNumber="ngModel"
-                    required [disabled]="isReadOnly">
-                <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
-                    <i class="ion-android-alert showError"></i>
-                    <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
-                </div>
-                <div *ngIf="isTicketNumberExist" class="error-message">
-                    <i class="ion-android-alert showError"></i>
-                    <div class="custom-tooltip bottom">Ticket Number already in use</div>
-                </div>
-                <div *ngIf="containsCharacters" class="error-message">
-                    <i class="ion-android-alert showError"></i>
-                    <div class="custom-tooltip bottom">Ticket number cannot contain characters</div>
-                </div>
-                <div *ngIf="ticketMinMaxLength" class="error-message">
-                    <i class="ion-android-alert showError"></i>
-                    <div class="custom-tooltip bottom">Ticket number should be 4-10 digits long only</div>
                 </div>
             </div>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
-            <div class="col-sm-7">
-                <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
-                    name="PONumber" #PONumber="ngModel" required numberOnly>
-                <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
-                    <i class="ion-android-alert showError"></i>
-                    <div *ngIf="PONumber.errors.required" class="custom-tooltip bottom">PO number is required</div>
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
+                <div class="col-sm-7">
+                    <input type="number" min="1" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber"
+                        id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()" name="TicketNumber"
+                        #TicketNumber="ngModel" required [disabled]="isReadOnly">
+                    <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
+                        <i class="ion-android-alert showError"></i>
+                        <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
+                    </div>
+                    <div *ngIf="isTicketNumberExist" class="error-message">
+                        <i class="ion-android-alert showError"></i>
+                        <div class="custom-tooltip bottom">Ticket Number already in use</div>
+                    </div>
+                    <div *ngIf="containsCharacters" class="error-message">
+                        <i class="ion-android-alert showError"></i>
+                        <div class="custom-tooltip bottom">Ticket number cannot contain characters</div>
+                    </div>
+                    <div *ngIf="ticketMinMaxLength" class="error-message">
+                        <i class="ion-android-alert showError"></i>
+                        <div class="custom-tooltip bottom">Ticket number should be 4-10 digits long only</div>
+                    </div>
                 </div>
-                <div *ngIf="poContainsCharacters" class="error-message">
-                    <i class="ion-android-alert showError"></i>
-                    <div class="custom-tooltip bottom">PO number should be alphanumeric</div>
-                </div>
-                <div *ngIf="poMinMaxLength" class="error-message">
-                    <i class="ion-android-alert showError"></i>
-                    <div class="custom-tooltip bottom">PO number should be 4-20 digits long only</div>
+            </div>
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
+                        name="PONumber" #PONumber="ngModel" required numberOnly>
+                    <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
+                        <i class="ion-android-alert showError"></i>
+                        <div *ngIf="PONumber.errors.required" class="custom-tooltip bottom">PO number is required</div>
+                    </div>
+                    <div *ngIf="poContainsCharacters" class="error-message">
+                        <i class="ion-android-alert showError"></i>
+                        <div class="custom-tooltip bottom">PO number should be alphanumeric</div>
+                    </div>
+                    <div *ngIf="poMinMaxLength" class="error-message">
+                        <i class="ion-android-alert showError"></i>
+                        <div class="custom-tooltip bottom">PO number should be 4-20 digits long only</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-5 border">
-        <div class="row padding">
-            <h5 class="frameHeading">Select Driver</h5>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-4 col-form-label">Type</label>
-            <div class="">
-                <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+        <div class="col-sm-5 border">
+            <div class="row padding">
+                <h5 class="frameHeading">Select Driver</h5>
+            </div>
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-4 col-form-label">Type</label>
+                <div class="">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="driverType" id="podRadio1" value="received">
                     <span>Internal</span>
                 </label>
-                <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="driverType" id="podRadio2" value="notReceived" checked>
                     <span>Distributor/ Co-packer</span>
                 </label>
+                </div>
             </div>
-        </div>
-        <div class="row padding">
-            <label for="example-text-input" class="col-sm-4 col-form-label">Driver</label>
-            <div class="col-sm-7">
-                <select class="form-control" name="customer" [(ngModel)]="ticket.UserId" [disabled]="isReadOnly">
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-4 col-form-label">Driver</label>
+                <div class="col-sm-7">
+                    <select class="form-control" name="customer" [(ngModel)]="ticket.UserId" [disabled]="isReadOnly">
                     <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
                 </select>
+                </div>
             </div>
         </div>
+        <div class="col-sm-1">
+        </div>
     </div>
-    <div class="col-sm-1">
-    </div>
-</div>
 
-<div class="row" style="margin-top:10px;">
-    <div class="col-sm-1"></div>
-    <div class="col-sm-8 col-form-label">
-        <b>List of Products</b>
+    <div class="row" style="margin-top:10px;">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-8 col-form-label">
+            <b>List of Products</b>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-danger buttonMargin" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
+        </div>
+        <div class="col-sm-1"></div>
     </div>
-    <div class="col-sm-2">
-        <button class="btn btn-danger buttonMargin" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
-    </div>
-    <div class="col-sm-1"></div>
-</div>
 
-<div class="row" style="margin-top:10px;">
-    <div class="col-sm-10">
-        <!-- DSD Table begins -->
-        <div class="row" *ngIf="ticket.TicketTypeID == 20">
-            <div class="col-sm-12">
-                <table class="table table-condensed">
-                    <thead class="tableHeader">
-                        <th>Product</th>
-                        <th>Unit Price</th>
-                        <th>Unit#</th>
-                        <th>Total Amount</th>
-                        <th>Action</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                            <td>
-                                <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                    [disabled]="isReadOnly">
+    <div class="row" style="margin-top:10px;">
+        <div class="col-sm-10">
+            <!-- DSD Table begins -->
+            <div class="row" *ngIf="ticket.TicketTypeID == 20">
+                <div class="col-sm-12">
+                    <table class="table table-condensed">
+                        <thead class="tableHeader">
+                            <th>Product</th>
+                            <th>Unit Price</th>
+                            <th>Unit#</th>
+                            <th>Total Amount</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                <td>
+                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                        [disabled]="isReadOnly">
                                             <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                 {{pdetail.DisplayName}} </option>    
                                         </select>
-                            </td>
-                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
-                            <td>
-                                <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                            </td>
-                            <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                            <td>
-                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"></td>
-                            <td><b>{{ticket.tempTotalUnit}}</b></td>
-                            <td><b>{{ticket.TotalSale | currency:'USD':true:'2.2-4'}}</b></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                <td>
+                                    <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                </td>
+                                <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                <td>
+                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                                <td><b>{{ticket.tempTotalUnit}}</b></td>
+                                <td><b>{{ticket.TotalSale | currency:'USD':true:'2.2-4'}}</b></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- DSD Table ends -->
+            <!-- DSD Table ends -->
 
-        <!-- Meter Reading table -->
-        <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 22">
-            <div class="col-sm-12">
-                <table class="table table-condensed">
-                    <thead class="tableHeader">
-                        <th>Machine</th>
-                        <th>Unit Price</th>
-                        <th>Previous Reading</th>
-                        <th>Current Reading</th>
-                        <th>Total Amount</th>
-                        <th>Action</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                            <td>
-                                <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                    [disabled]="isReadOnly">
+            <!-- Meter Reading table -->
+            <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 22">
+                <div class="col-sm-12">
+                    <table class="table table-condensed">
+                        <thead class="tableHeader">
+                            <th>Machine</th>
+                            <th>Unit Price</th>
+                            <th>Previous Reading</th>
+                            <th>Current Reading</th>
+                            <th>Total Amount</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                <td>
+                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                        [disabled]="isReadOnly">
                                             <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                 {{pdetail.DisplayName}} </option>    
                                         </select>
-                            </td>
-                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
-                            <td>
-                                <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
-                                    [disabled]="isReadOnly">
-                            </td>
-                            <td>
-                                <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);"
-                                    [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
-                            </td>
-                            <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                            <td>
-                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
+                                <td>
+                                    <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                        [disabled]="isReadOnly">
+                                </td>
+                                <td>
+                                    <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                        [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
+                                </td>
+                                <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                <td>
+                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <!-- Inventory table -->
-        <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 23">
-            <div class="col-sm-12">
-                <table class="table table-condensed">
-                    <thead class="tableHeader">
-                        <th>Machine</th>
-                        <th>Unit Price</th>
-                        <th>Delivered Bags</th>
-                        <th>Current Inventory</th>
-                        <th>Damaged Bags</th>
-                        <th>Action</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                            <td>
-                                <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                    [disabled]="isReadOnly">
+            <!-- Inventory table -->
+            <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 23">
+                <div class="col-sm-12">
+                    <table class="table table-condensed">
+                        <thead class="tableHeader">
+                            <th>Machine</th>
+                            <th>Unit Price</th>
+                            <th>Delivered Bags</th>
+                            <th>Current Inventory</th>
+                            <th>Damaged Bags</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                <td>
+                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                        [disabled]="isReadOnly">
                                             <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                 {{pdetail.DisplayName}} </option>    
                                         </select>
-                            </td>
-                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
-                            <td>
-                                <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" [(ngModel)]="tdetail.DamagedBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                            </td>
-                            <td>
-                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                <td>
+                                    <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" [(ngModel)]="tdetail.DamagedBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                </td>
+                                <td>
+                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
 
-        <!-- PBM Table ends -->
+            <!-- PBM Table ends -->
 
-        <!-- PBS Table begins -->
-        <div class="row" *ngIf="ticket.TicketTypeID == 21">
-            <div class="col-sm-12">
-                <table class="table table-condensed">
-                    <thead class="tableHeader">
-                        <th>Product</th>
-                        <th>Unit Price</th>
-                        <th>Current Inventory</th>
-                        <th>Delivered Bags</th>
-                        <th>Total Amount</th>
-                        <th>Action</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                            <td>
-                                <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                    [disabled]="isReadOnly">
+            <!-- PBS Table begins -->
+            <div class="row" *ngIf="ticket.TicketTypeID == 21">
+                <div class="col-sm-12">
+                    <table class="table table-condensed">
+                        <thead class="tableHeader">
+                            <th>Product</th>
+                            <th>Unit Price</th>
+                            <th>Current Inventory</th>
+                            <th>Delivered Bags</th>
+                            <th>Total Amount</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                <td>
+                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                        [disabled]="isReadOnly">
                                             <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                 {{pdetail.DisplayName}} </option>    
                                         </select>
-                            </td>
-                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
-                            <td>
-                                <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
-                            </td>
-                            <td>
-                                <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
-                            </td>
-                            <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                            <td>
-                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                <td>
+                                    <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                </td>
+                                <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                <td>
+                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- PBS Table ends -->
+        </div>
+        <div class="col-sm-2">
+            <label for="example-text-input" class="col-form-label">Cash Amount</label>
+            <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
+            <label for="example-text-input" class="col-form-label">Check#</label>
+            <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
+                name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
+            <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
+            </div>
+            <div *ngIf="checkMinMaxLength" class="error-message">
+                <i class="ion-android-alert showError"></i>
+                <div class="custom-tooltip bottom">Should not be more than 20 digits</div>
+            </div>
+            <label for="example-text-input" class="col-form-label">Check Amount</label>
+            <div class="">
+                <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
             </div>
         </div>
-        <!-- PBS Table ends -->
     </div>
-    <div class="col-sm-2">
-        <label for="example-text-input" class="col-form-label">Cash Amount</label>
-        <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
-        <label for="example-text-input" class="col-form-label">Check#</label>
-        <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
-            name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
-        <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
-            <i class="ion-android-alert showError"></i>
-            <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
-        </div>
-        <div *ngIf="checkMinMaxLength" class="error-message">
-            <i class="ion-android-alert showError"></i>
-            <div class="custom-tooltip bottom">Should not be more than 20 digits</div>
-        </div>
-        <label for="example-text-input" class="col-form-label">Check Amount</label>
-        <div class="">
-            <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
-        </div>
-    </div>
-</div>
+</ba-card>
