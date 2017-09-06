@@ -41,6 +41,15 @@
                 </select>
                 </div>
             </div>
+            <div class="row padding">
+                <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
+                <div class="col-sm-7">
+                    <label *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                    <input type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.SaleTypeID" (ngModelChange)="typeChangeHandler()">
+                    <span>{{sType.Value}}</span>
+                </label>
+                </div>
+            </div>
         </div>
         <div class="col-sm-5 border">
             <div class="row padding">
@@ -84,15 +93,6 @@
         <div class="col-sm-1">
         </div>
         <div class="col-sm-5">
-            <div class="row padding">
-                <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
-                <div class="col-sm-7">
-                    <label *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                    <input type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.SaleTypeID" (ngModelChange)="typeChangeHandler()">
-                    <span>{{sType.Value}}</span>
-                </label>
-                </div>
-            </div>
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
                 <div class="col-sm-7">
@@ -180,184 +180,186 @@
         </div>
     </div>
 
-    <div class="row" style="margin-top:10px;">
+    <div class="row" style="margin-top:30px;">
         <div class="col-sm-1"></div>
-        <div class="col-sm-8 col-form-label">
-            <b>List of Products</b>
+        <div class="col-sm-8 border">
+            <div class="row padding">
+                <div class="col-sm-9 col-form-label">
+                    <b>List of Products</b>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-danger buttonMargin" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
+                </div>
+            </div>
+            <div class="row padding">
+                <div class="col-sm-12 col-form-label">
+                    <!-- DSD Table begins -->
+                    <div class="row" *ngIf="ticket.TicketTypeID == 20">
+                        <div class="col-sm-12">
+                            <table class="table table-condensed">
+                                <thead class="tableHeader">
+                                    <th>Product</th>
+                                    <th>Unit Price</th>
+                                    <th>Unit#</th>
+                                    <th>Total Amount</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <td>
+                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                [disabled]="isReadOnly">
+                                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                                    {{pdetail.DisplayName}} </option>    
+                                            </select>
+                                        </td>
+                                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                        </td>
+                                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                        <td>
+                                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td><b>{{ticket.tempTotalUnit}}</b></td>
+                                        <td><b>{{ticket.TotalSale | currency:'USD':true:'2.2-4'}}</b></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- DSD Table ends -->
+
+                    <!-- Meter Reading table -->
+                    <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 22">
+                        <div class="col-sm-12">
+                            <table class="table table-condensed">
+                                <thead class="tableHeader">
+                                    <th>Machine</th>
+                                    <th>Unit Price</th>
+                                    <th>Previous Reading</th>
+                                    <th>Current Reading</th>
+                                    <th>Total Amount</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <td>
+                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                [disabled]="isReadOnly">
+                                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                                    {{pdetail.DisplayName}} </option>    
+                                            </select>
+                                        </td>
+                                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
+                                        <td>
+                                            <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                                [disabled]="isReadOnly">
+                                        </td>
+                                        <td>
+                                            <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                                [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
+                                        </td>
+                                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                        <td>
+                                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Inventory table -->
+                    <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 23">
+                        <div class="col-sm-12">
+                            <table class="table table-condensed">
+                                <thead class="tableHeader">
+                                    <th>Machine</th>
+                                    <th>Unit Price</th>
+                                    <th>Delivered Bags</th>
+                                    <th>Current Inventory</th>
+                                    <th>Damaged Bags</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <td>
+                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                [disabled]="isReadOnly">
+                                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                                    {{pdetail.DisplayName}} </option>    
+                                            </select>
+                                        </td>
+                                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="tdetail.DamagedBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <!-- PBM Table ends -->
+
+                    <!-- PBS Table begins -->
+                    <div class="row" *ngIf="ticket.TicketTypeID == 21">
+                        <div class="col-sm-12">
+                            <table class="table table-condensed">
+                                <thead class="tableHeader">
+                                    <th>Product</th>
+                                    <th>Unit Price</th>
+                                    <th>Current Inventory</th>
+                                    <th>Delivered Bags</th>
+                                    <th>Total Amount</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <td>
+                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                [disabled]="isReadOnly">
+                                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                                    {{pdetail.DisplayName}} </option>    
+                                            </select>
+                                        </td>
+                                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                        </td>
+                                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                        <td>
+                                            <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- PBS Table ends -->
+                </div>
+            </div>
         </div>
-        <div class="col-sm-2">
-            <button class="btn btn-danger buttonMargin" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
-        </div>
-        <div class="col-sm-1"></div>
-    </div>
-
-    <div class="row" style="margin-top:10px;">
-        <div class="col-sm-10">
-            <!-- DSD Table begins -->
-            <div class="row" *ngIf="ticket.TicketTypeID == 20">
-                <div class="col-sm-12">
-                    <table class="table table-condensed">
-                        <thead class="tableHeader">
-                            <th>Product</th>
-                            <th>Unit Price</th>
-                            <th>Unit#</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                                <td>
-                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                        [disabled]="isReadOnly">
-                                            <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
-                                                {{pdetail.DisplayName}} </option>    
-                                        </select>
-                                </td>
-                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
-                                <td>
-                                    <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                                </td>
-                                <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                                <td>
-                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"></td>
-                                <td><b>{{ticket.tempTotalUnit}}</b></td>
-                                <td><b>{{ticket.TotalSale | currency:'USD':true:'2.2-4'}}</b></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- DSD Table ends -->
-
-            <!-- Meter Reading table -->
-            <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 22">
-                <div class="col-sm-12">
-                    <table class="table table-condensed">
-                        <thead class="tableHeader">
-                            <th>Machine</th>
-                            <th>Unit Price</th>
-                            <th>Previous Reading</th>
-                            <th>Current Reading</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                                <td>
-                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                        [disabled]="isReadOnly">
-                                            <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
-                                                {{pdetail.DisplayName}} </option>    
-                                        </select>
-                                </td>
-                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
-                                <td>
-                                    <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
-                                        [disabled]="isReadOnly">
-                                </td>
-                                <td>
-                                    <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);"
-                                        [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
-                                </td>
-                                <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                                <td>
-                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Inventory table -->
-            <div class="row" *ngIf="ticket.TicketTypeID == 22 && ticket.Mode == 23">
-                <div class="col-sm-12">
-                    <table class="table table-condensed">
-                        <thead class="tableHeader">
-                            <th>Machine</th>
-                            <th>Unit Price</th>
-                            <th>Delivered Bags</th>
-                            <th>Current Inventory</th>
-                            <th>Damaged Bags</th>
-                            <th>Action</th>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                                <td>
-                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                        [disabled]="isReadOnly">
-                                            <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
-                                                {{pdetail.DisplayName}} </option>    
-                                        </select>
-                                </td>
-                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
-                                <td>
-                                    <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" [(ngModel)]="tdetail.DamagedBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
-                                </td>
-                                <td>
-                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-
-            <!-- PBM Table ends -->
-
-            <!-- PBS Table begins -->
-            <div class="row" *ngIf="ticket.TicketTypeID == 21">
-                <div class="col-sm-12">
-                    <table class="table table-condensed">
-                        <thead class="tableHeader">
-                            <th>Product</th>
-                            <th>Unit Price</th>
-                            <th>Current Inventory</th>
-                            <th>Delivered Bags</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                                <td>
-                                    <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
-                                        [disabled]="isReadOnly">
-                                            <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
-                                                {{pdetail.DisplayName}} </option>    
-                                        </select>
-                                </td>
-                                <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
-                                <td>
-                                    <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);" [disabled]="isReadOnly">
-                                </td>
-                                <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                                <td>
-                                    <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- PBS Table ends -->
-        </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2 border cashPanel">
             <label for="example-text-input" class="col-form-label">Cash Amount</label>
             <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
             <label for="example-text-input" class="col-form-label">Check#</label>
@@ -376,5 +378,6 @@
                 <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.SaleTypeID == 23 || isReadOnly">
             </div>
         </div>
+        <div class="col-sm-1"></div>
     </div>
 </ba-card>
