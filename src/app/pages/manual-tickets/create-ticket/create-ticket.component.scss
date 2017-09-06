@@ -85,6 +85,23 @@ label {
     border-bottom: 0px solid #d6cccc;
   }
 }
+
+.padding {
+  padding:10px;
+}
+
+.border {
+  border:1px solid #5bc0de;
+}
+
+.frameHeading {
+  position: absolute;
+  top: -9px;
+  background: white;
+  width: 135px;
+  padding: 0px 10px;
+  text-align: center;
+}
 /*
 .radioList {
   margin-top: 5px;

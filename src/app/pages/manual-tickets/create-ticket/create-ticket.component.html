@@ -2,9 +2,9 @@
     <div class="col-sm-1">
     </div>
     <div class="col-sm-5">
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
-            <div class="col-sm-7 input-group" style="margin-bottom:0px;">
+            <div class="col-sm-7 input-group">
                 <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
                     [disabled]="isReadOnly">
                 <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
@@ -12,7 +12,7 @@
                 </button>
             </div>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-2 col-form-label">Branch</label>
             <div class="col-sm-7">
                 <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler()" [disabled]="isReadOnly">
@@ -21,11 +21,11 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-5" style="border:1px solid #c2c2c2;">
-        <div class="row" style="padding:10px;">
-            <h5>Select Customer</h5>
+    <div class="col-sm-5 border">
+        <div class="row padding">
+            <h5 class="frameHeading">Select Customer</h5>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-4 col-form-label">Ticket Type</label>
             <div class="">
                 <label *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
@@ -34,18 +34,21 @@
                 </label>
             </div>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-4 col-form-label">Customer Name</label>
             <div class="col-sm-7">
                 <ng-template #rt let-r="result" let-t="term">
                     {{ r.CustomerName}}
                 </ng-template>
-                <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" [resultTemplate]="rt"
-                    placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="customerChangeHandler($event)"
-                    [disabled]="isReadOnly" />
+                <input id="typeahead-basic" type="text" class="form-control" 
+                    [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" 
+                    [resultTemplate]="rt" placeholder="Search Customer"
+                    [inputFormatter]="inputFormatter"
+                    (selectItem)="customerChangeHandler($event)"
+                    [disabled]="isReadOnly"/>
             </div>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label [hidden]="modes" for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
             <div class="col-sm-7" [hidden]="!modes">
                 <label *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
@@ -59,11 +62,11 @@
     </div>
 </div>
 
-<div class="row" style="margin-top:10px;">
+<div class="row" style="margin-top:30px;">
     <div class="col-sm-1">
     </div>
     <div class="col-sm-5">
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
             <div class="col-sm-7">
                 <label *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
@@ -72,7 +75,7 @@
                 </label>
             </div>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
             <div class="col-sm-7">
                 <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
@@ -85,7 +88,7 @@
                 </label>
             </div>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
             <div class="col-sm-7">
                 <input type="number" min="1" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber"
@@ -109,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
             <div class="col-sm-7">
                 <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
@@ -129,24 +132,24 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-5" style="border:1px solid #c2c2c2;">
-        <div class="row" style="padding:10px;">
-            <h5>Select Driver</h5>
+    <div class="col-sm-5 border">
+        <div class="row padding">
+            <h5 class="frameHeading">Select Driver</h5>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-4 col-form-label">Type</label>
             <div class="">
                 <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                    <input type="radio" name="pod" id="podRadio1" value="received">
+                    <input type="radio" name="driverType" id="podRadio1" value="received">
                     <span>Internal</span>
                 </label>
                 <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                    <input type="radio" name="pod" id="podRadio2" value="notReceived" checked>
+                    <input type="radio" name="driverType" id="podRadio2" value="notReceived" checked>
                     <span>Distributor/ Co-packer</span>
                 </label>
             </div>
         </div>
-        <div class="row" style="padding:10px;">
+        <div class="row padding">
             <label for="example-text-input" class="col-sm-4 col-form-label">Driver</label>
             <div class="col-sm-7">
                 <select class="form-control" name="customer" [(ngModel)]="ticket.UserId" [disabled]="isReadOnly">
