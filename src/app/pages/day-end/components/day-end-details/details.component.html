@@ -41,7 +41,7 @@
                     <ng-template ngbTabContent>
                         <div class="row page-header">
                             <div class="col-md-12">
-                                <button class="btn btn-danger pull-right">Approve</button>
+                                <button class="btn btn-danger pull-right" (click)="saveReconciliation()">Approve</button>
                             </div>
                             <div class="col-md-12 padding-eater">
                                 <label>Pallets:</label>
@@ -63,22 +63,22 @@
                                     <tbody>
                                         <tr>
                                             <td>Check</td>
-                                            <td>$10.90</td>
+                                            <td>{{ticketDetails?.Total.TotalCheck}}</td>
                                             <td style="max-width:70px"><input class="form-control" type="text" [value]="Actual" [(ngModel)]="Actual"
                                                     (ngModelChange)="doAddition()"></td>
                                             <td>Coins</td>
                                             <td style="max-width:70px"><input class="form-control" type="text" [value]="Coins" [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
                                             <td>Total Deposit</td>
-                                            <td>${{totalDeposit}}</td>
+                                            <td>$ {{total.totalDeposit}}</td>
                                         </tr>
                                         <tr>
                                             <td>Cash</td>
-                                            <td>$5.00</td>
-                                            <td style="max-width:70px"><input class="form-control" type="text" value="$5.00"></td>
+                                            <td>{{ticketDetails?.Total.TotalCash}}</td>
+                                            <td style="max-width:70px"><input class="form-control" type="text" [value]="Cash" [(ngModel)]="Cash" (ngModelChange)="doAddition()"></td>
                                             <td>Misc.</td>
-                                            <td style="max-width:70px"><input class="form-control" type="text" value="$0.00"></td>
+                                            <td style="max-width:70px"><input class="form-control" type="text" [value]="Misc" [(ngModel)]="Misc" (ngModelChange)="doAddition()"></td>
                                             <td>Over/Short</td>
-                                            <td>$0.00</td>
+                                            <td>$ {{total.overShort}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -140,13 +140,13 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
-                                                <td>{{item.product}}</td>
-                                                <td>{{item.load }}</td>
-                                                <td>{{item.return}}</td>
-                                                <td>{{item.truckDamage}}</td>
-                                                <td>{{item.customerDamage}}</td>
-                                                <td>{{item.sale}}</td>
-                                                <td>{{item.over}}</td>
+                                                <td>{{item.ProductName}}</td>
+                                                <td>{{item.Load }}</td>
+                                                <td>{{item.Returns}}</td>
+                                                <td>{{item.TruckDamage}}</td>
+                                                <td>{{item.CustomerDamage}}</td>
+                                                <td>{{item.Sale}}</td>
+                                                <td>{{item.OverShort}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

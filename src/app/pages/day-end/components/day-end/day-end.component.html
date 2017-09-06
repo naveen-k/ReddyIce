@@ -4,7 +4,8 @@
             <div class="row bottom-margin">
                 <div class="form-group col-md-6">
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (change)="selectionchangeHandler()"  ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (change)="selectionchangeHandler()"
+                            ngbDatepicker #d="ngbDatepicker" value="2017-08-27">
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
@@ -68,20 +69,24 @@
                     </thead>
                     <tbody>
                         <!--Removed sorting functionality as it was causing rendering issues  -->
-                       <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
+                        <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail']" [queryParams]="{ TripID: item.TripID }" style="margin-right: 5px">
+                                <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail']" [queryParams]="{ TripID: item.TripID }"
+                                    style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ TripID: item.TripID }" style="margin-right: 5px">
+                                <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ TripID: item.TripID }"
+                                    style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                               
+
                             </td>
                             <td>{{item.RouteNumber}}</td>
                             <td>{{item.BranchID }}</td>
-                            <td>{{item.IsDistributor?item.Distributor:"NA"}}</td><!--is Distributor status not available-->
-                            <td>{{item.DriverName}}</td><!--Driver name not available-->
+                            <td>{{item.IsDistributor?item.Distributor:"NA"}}</td>
+                            <!--is Distributor status not available-->
+                            <td>{{item.DriverName}}</td>
+                            <!--Driver name not available-->
                             <td>{{item.TripID}}</td>
                         </tr>
 

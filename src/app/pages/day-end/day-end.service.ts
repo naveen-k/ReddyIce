@@ -24,7 +24,7 @@ export class DayEndService extends SharedService {
         
     }
    getTripDetails(tripId) {
-       return this.http.get(`api/ticketsfortrip?TripId=${tripId}`).map((res) => res.json()).map((res) => {
+       return this.http.get(`api/trip/ticketsfortrip?TripId=${tripId}`).map((res) => res.json()).map((res) => {
             return res;
         }); 
 
@@ -40,9 +40,21 @@ export class DayEndService extends SharedService {
             return res;
         });
     }
+
+    getUnitsReconciliation(tripID): Observable<any[]> {
+        return this.http.get(`api/trip/unitsreconciliation?tripID=${tripID}`).map((res) => res.json()).map((res) => {
+            console.log(res);
+            return res;
+        });
+    }
     submitTickets(data){
        return this.http.post('api/manualticket/workflow', data).map((res => res.json())); 
     }
+    saveRecociliation(data): Observable<any> {
+
+        return this.http.put('api/trip/cashreconciliation', data).map((res => res.json()));
+    }
+
     // used for data flow between components
     setTripData(data){
         this.currenttripData = data;
