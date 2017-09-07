@@ -23,7 +23,7 @@ export class DayEndComponent implements OnInit {
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
     
     tripFilterOption: any = { uId: "0", 
-    tripDate: '2017-08-27',
+    tripDate: this.selectedDate,
      branchId: "0", isForAll: true};
 
     constructor(private service: DayEndService) {
@@ -36,14 +36,14 @@ export class DayEndComponent implements OnInit {
 
     }
     ngOnInit() {
-        this.tripFilterOption.tripDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
+        this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
     }
    
     selectionchangeHandler() {
            // uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
-        
-         // this.tripFilterOption.TripDate = this.service.formatDate(this.selectedDate);
-
+        console.log(this.selectedDate);
+         this.tripFilterOption.tripDate = this.service.formatDate(this.selectedDate);
+        console.log(this.tripFilterOption.tripDate);
         this.loadFilteredTrips();
     }
    

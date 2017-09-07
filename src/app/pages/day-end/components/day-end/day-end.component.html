@@ -5,8 +5,8 @@
                 <div class="form-group col-md-6">
                     <label><b> Filter By Date </b></label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (change)="selectionchangeHandler()"
-                            ngbDatepicker #d="ngbDatepicker">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (ngModelChange)="selectionchangeHandler()"
+                            ngbDatepicker #d="ngbDatepicker" >
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
@@ -22,11 +22,11 @@
             <div class="row bottom-margin">
                 <div class="col-md-6">
                     <label class="radioItem radio-inline custom-radio nowrap ">
-                        <input type="radio"  [(ngModel)]='tripFilterOption.isForAll' value="false" (change)="selectionchangeHandler()">
+                        <input type="radio"  [(ngModel)]='tripFilterOption.isForAll' [value]="false" (change)="selectionchangeHandler()">
                         <span>My Trips</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap" style="margin-left:10px;">
-                        <input type="radio" [(ngModel)]='tripFilterOption.isForAll' value="true" (change)="selectionchangeHandler()">
+                        <input type="radio" [(ngModel)]='tripFilterOption.isForAll' [value]="true" (change)="selectionchangeHandler()">
                         <span>All Trips</span>
                     </label>
                 </div>
