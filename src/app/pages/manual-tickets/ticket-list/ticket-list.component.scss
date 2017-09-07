@@ -14,3 +14,7 @@
 .tab-content{
     border: 1px solid #ef8989;
 }
+
+.ngb-dp-day.disabled .text-muted.outside {
+    cursor: not-allowed;
+}

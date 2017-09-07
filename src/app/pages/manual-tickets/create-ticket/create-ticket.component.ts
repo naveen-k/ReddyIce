@@ -82,6 +82,7 @@ export class CreateTicketComponent implements OnInit {
       }).slice(0, 10);
     })
 
+    maxDate: {};
 
   constructor(
     protected service: ManualTicketService,
@@ -93,6 +94,9 @@ export class CreateTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    const now = new Date();
+    this.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+
     // Initialize user object with current logged In user;
     this.user = this.userService.getUser();
 
