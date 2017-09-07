@@ -69,7 +69,5 @@ export class UserManagementService extends SharedService {
         return this.http.post('api/user/searchriuser', searchObj).map((res) => res.json());
     }
 
-    getDistributorsByBranch(branchId: string): Observable<any[]> {
-        return this.http.get(`api/DistributorBranches?BranchId=${branchId}`).map((res) => res.json());
-    }
+    
 }

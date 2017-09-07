@@ -71,4 +71,7 @@ export interface ManualTicket {
     Mode: number;
     UserId: number;
     PODImage: any;
+    CustomerType?: number;
+    isUserTypeDistributor?: boolean;
+    DistributorCopackerID: number;
 }

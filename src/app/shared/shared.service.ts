@@ -24,8 +24,8 @@ export class SharedService {
         });
     }
 
-    getDriverByBranch(branchId): Observable<any[]> {
-        return this.http.get(`api/user?driverlistbybranch=${branchId}`).map(res => res.json());
+    getDriverByBranch(branchId, isInternal): Observable<any[]> {
+        return this.http.get(`api/user?driverlistbybranch=${branchId}&isInternal=${isInternal}`).map(res => res.json());
     }
 
     uploadFile(file): Observable<any> {
@@ -34,6 +34,10 @@ export class SharedService {
 
     updateFile(file): Observable<any> {
         return this.http.put(`api/manualticket/updateImage?ImageID=${file.ImageID}`, file).map(res => res.json());
+    }
+
+    getDistributorsByBranch(branchId: string): Observable<any[]> {
+        return this.http.get(`api/DistributorBranches?BranchId=${branchId}`).map((res) => res.json());
     }
 
     formatDate(date) {

@@ -1,18 +1,47 @@
 <ba-card cardTitle="Ticket List" baCardClass="medium-card" class="smart-table-container" #customer>
     <div class="row">
-        <div class="col-sm-4 col-sm-offset-2">
+        <div class="col-sm-2">
+            <label>Select Date</label>
             <div class="input-group">
-                <input class="form-control" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" 
-                name="dp" (ngModelChange)='getSearchedTickets();' ngbDatepicker #d="ngbDatepicker">
+                <input class="form-control" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets();'
+                    ngbDatepicker #d="ngbDatepicker">
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
                     </button>
             </div>
         </div>
-        <div class="col-sm-4">
-            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="getSearchedTickets()">
+        <div class="col-sm-2">
+            <label>Select Branch</label>
+            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
                 <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
                     {{obj.BranchID}}-{{obj.BranchName}}
+                </option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <label>Select Type</label>
+            <label class="radio-button">
+                <input [disabled]="user.IsDistributor" type="radio" name="type" [value]="'Internal'" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+                <span>Internal</span>
+            </label>
+            <label class="radio-button">
+                <input [disabled]="user.IsDistributor" type="radio" name="type" [value]="'External'" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+                <span>Dist./CoPacker</span>
+            </label>
+        </div>
+        <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
+            <label>Driver</label>
+            <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler()">
+                <option *ngFor="let obj of drivers" [value]="obj.UserId">
+                    {{obj.FirstName}} {{obj.LastName}}
+                </option>
+            </select>
+        </div>
+        <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
+            <label>Distributor/CoPacker</label>
+            <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.DistributorID" (ngModelChange)="userChangeHandler()">
+                <option *ngFor="let obj of distributors" [value]="obj.DistributorID">
+                    {{obj.DistributorName}}
                 </option>
             </select>
         </div>
@@ -20,6 +49,7 @@
             <button class="btn btn-primary addCustBtn pull-right" (click)="approveCheckedTickets()">
                 Approve
             </button>
+            
         </div>
         <div class="col-sm-2">
             <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right">

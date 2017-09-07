@@ -11,18 +11,16 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ManualTicketService extends SharedService {
   result: any;
+  _searchObject: any = {};
+
   constructor(protected http: HttpService, private tmpHttp: Http, protected userService: UserService) {
     super(http);
   }
 
-  // getTickets(searchObj): Observable<any[]> {
-  //   return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
-  // }
-
-  getAllTickets(createdDate, branchId, isForAll?, userId?): Observable<any[]> {
+  getAllTickets(createdDate, branchId, userId?): Observable<any[]> {
     // return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
-    return this.http.get(`api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}`)
-    .map(res => res.json());
+    return this.http.get(`api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}&userID=${userId}`)
+      .map(res => res.json());
   }
 
   approveAllCheckedTickets(approveTicketsObj) {
@@ -69,7 +67,11 @@ export class ManualTicketService extends SharedService {
 
   updateTicket(ticket: ManualTicket): Observable<any> {
     return this.http.put(`api/manualticket/updateticket?ticketid=${ticket.TicketID}`, ticket)
-    .map(res => res.json());
+      .map(res => res.json());
+  }
+
+  getSearchedObject(): any {
+    return this._searchObject;
   }
 
   /* fileUpload() {

@@ -9,12 +9,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DayEndComponent } from './components/day-end/day-end.component';
 import { NgModule } from '@angular/core';
 import { DayEndService } from './day-end.service';
-import { CreateTicketComponent } from '../manual-tickets/create-ticket/create-ticket.component';
-import { ManualTicketService } from '../manual-tickets/manual-ticket.service';
 import { ManualTicketModule } from '../manual-tickets/manual-ticket.module';
-
-
-
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
@@ -45,20 +40,16 @@ const routes: Routes = [
         DayEndComponent,
          DetailsComponent, 
          TicketDetailsComponent,
-         CreateTicketComponent,
         ],
-        entryComponents: [CreateTicketComponent],
     imports: [
-
         RouterModule.forChild(routes),
         FormsModule,
         CommonModule,
         NgaModule,
         NgbModule,
         SharedModule,
-       
     ],
-    providers: [DayEndService, ManualTicketService],
+    providers: [DayEndService],
 })
 export class DayEndModule {
 

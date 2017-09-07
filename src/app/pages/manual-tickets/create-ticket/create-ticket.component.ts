@@ -29,10 +29,13 @@ export class CreateTicketComponent implements OnInit {
   branches: any[];
 
   // List of Cutomers
-  customers: Customer[];
+  customers: Customer[] = [];
 
   // List of Drivers
   drivers: any[];
+
+  // List of distributors
+  distributors: any[];
 
   // Selected Customer
   customer: Customer;
@@ -58,22 +61,31 @@ export class CreateTicketComponent implements OnInit {
 
   disablePodButton: boolean = true;
 
-  // showList: boolean = false;
   urlString = '../../list';
-  // customerName: any;
+
+  // Current User Object
+  user: any = {};
 
   // Customer input formatter
-  inputFormatter = (res => `${res.CustomerName}`);
+  inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
 
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
-    .map(term => term.length < 2 ? []
-      : this.customers.filter((v: any) => v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    .map(term => {
+      return this.customers.filter((v: any) => {
+        let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
+        if (flag) {
+          flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
+            || v.CustomerId.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+        }
+        return flag;
+      }).slice(0, 10);
+    })
 
 
   constructor(
     protected service: ManualTicketService,
-    protected user: UserService,
+    protected userService: UserService,
     protected notification: NotificationsService,
     protected modalService: NgbModal,
     protected activatedRoute: ActivatedRoute,
@@ -81,6 +93,14 @@ export class CreateTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Initialize user object with current logged In user;
+    this.user = this.userService.getUser();
+
+    // Initialize properties from searched Object of List ticket page
+    const searchObject = this.service.getSearchedObject();
+    this.ticket.DeliveryDate = searchObject.CreatedDate;
+    this.ticket.BranchID = searchObject.BranchId;
+    this.ticket.isUserTypeDistributor = searchObject.userType ? searchObject.userType !== 'Internal' : null;
 
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
@@ -94,6 +114,18 @@ export class CreateTicketComponent implements OnInit {
     this.ticketTypes = activatedRouteObject['ticketTypes'];
     this.prepareTicketTypes();
 
+    // load customers, if BranchID is available
+    if (this.ticket.BranchID) {
+      this.loadCustomerOfBranch(this.ticket.BranchID);
+    }
+
+    // load driver or distributor
+    if (this.ticket.BranchID && this.ticket.isUserTypeDistributor) {
+      this.loadDisributors(this.ticket.BranchID);
+    } else if (this.ticket.BranchID) {
+      this.loadDriversOfBranch(this.ticket.BranchID);
+    }
+
     // if ticketId is not null, consider it as edit ticket mode and load ticket object
     if (this.ticketId) {
       this.loadTicket(this.ticketId);
@@ -105,8 +137,8 @@ export class CreateTicketComponent implements OnInit {
     this.ticketTypes.CustomerType.forEach(element => {
       if (element.ID === 22) {
         element.Mode = [
-          { 'Value': 'Meter Reading', 'ID': 22 },
-          { 'Value': 'Inventory', 'ID': 23 },
+          { 'Value': 'Meter Reading', 'ID': true },
+          { 'Value': 'Inventory', 'ID': false },
         ];
       }
       element.category.forEach(el => {
@@ -115,30 +147,39 @@ export class CreateTicketComponent implements OnInit {
     });
     if (!this.ticketId) {
       // Set first Ticket type selected
-      this.ticket.TicketTypeID = this.ticketTypes['CustomerType'][0]['ID'];
-      this.ticketChangeHandler();
+      this.ticket.CustomerType = this.ticketTypes['CustomerType'][0]['ID'];
+      this.customerTypeChangeHandler();
     }
   }
 
-  ticketChangeHandler() {
+  customerTypeChangeHandler() {
     const selectedTicket = this.getSelectedTicketTypeObject();
+
+    // Reset Selected Customer
+    this.ticket.Customer = '';
 
     this.resetSubTypesAndMode(selectedTicket);
     this.initializeSubTicketAndMode(selectedTicket);
 
+    // Set IsSaleTicket for 'DSD', 'PBS'
+    if (this.ticket.CustomerType === 20) {
+      this.ticket.IsSaleTicket = true;
+    } else if (this.ticket.CustomerType === 21) {
+      this.ticket.IsSaleTicket = false;
+    }
   }
 
   initializeSubTicketAndMode(selectedTicket) {
     // Set first type selected
-    this.ticket.SaleTypeID = this.ticketSubTypes[0].ID;
+    this.ticket.TicketTypeID = this.ticketSubTypes[0].ID;
     this.modes = selectedTicket.Mode;
     if (this.modes && this.modes.length) {
-      this.ticket.Mode = this.modes[0].ID;
+      this.ticket.IsSaleTicket = this.modes[0].ID;
     }
   }
 
   getSelectedTicketTypeObject(): any {
-    return this.ticketTypes.CustomerType.filter((t) => t.ID === this.ticket.TicketTypeID)[0];
+    return this.ticketTypes.CustomerType.filter((t) => t.ID === this.ticket.CustomerType)[0];
   }
 
   resetSubTypesAndMode(selectedTicket) {
@@ -148,7 +189,6 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     this.modes = selectedTicket.Mode;
-    // debugger;
   }
 
   branchChangeHandler() {
@@ -157,20 +197,32 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadCustomerOfBranch(branchId) {
-    this.isFormDirty = true;
+    // this.isFormDirty = true;
     this.service.getBranchBasedCustomers(branchId).subscribe((res) => {
       this.customers = res;
+
+      // 
+      if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
+        const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
+        this.ticket.CustomerType = customer.CustomerTypeID;
+        this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
+      }
     });
   }
 
   loadDriversOfBranch(branchId) {
-    this.service.getDriverByBranch(branchId).subscribe(res => {
+    this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
       this.drivers = res;
     });
   }
 
+  loadDisributors(branchId) {
+    this.service.getDistributorsByBranch(branchId).subscribe(res => {
+      this.distributors = res;
+    });
+  }
+
   customerChangeHandler(event) {
-    // debugger
     // const customer = this.customers.filter((c) => c.CustomerId === this.ticket.CustomerID);
     this.ticket.CustomerID = event.item.CustomerId;
     this.loadCustomerDetail(this.ticket.CustomerID);
@@ -185,7 +237,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadCustomerDetail(customerId) {
-    this.isFormDirty = true;
+    // this.isFormDirty = true;
     this.service.getCustomerDetail(customerId).subscribe((res) => {
       this.customer = res;
 
@@ -196,10 +248,10 @@ export class CreateTicketComponent implements OnInit {
             td.ProductID = res.productdetail[0].ProductID;
           }
           this.updateTicketDetailObject(td);
-          if (this.ticket.TicketTypeID === 20) {
+          if (this.ticket.CustomerType === 20) {
             // Ticket Type is DSD
             td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
-          } else if (this.ticket.TicketTypeID === 21) {
+          } else if (this.ticket.CustomerType === 21) {
             // Ticket Type is PBS
             td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
           } else {
@@ -430,11 +482,19 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.CustomerID = this.ticket.Customer.CustomerID;
       this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
 
-      this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
+      this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
+      // this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
 
       // load customers
       this.loadCustomerOfBranch(this.ticket.BranchID);
-      this.loadDriversOfBranch(this.ticket.BranchID);
+
+      // load driver or distributor
+      if (this.ticket.isUserTypeDistributor) {
+        this.loadDisributors(this.ticket.BranchID);
+      } else {
+        this.loadDriversOfBranch(this.ticket.BranchID);
+      }
+
       this.loadCustomerDetail(this.ticket.CustomerID);
     });
   }
@@ -461,6 +521,11 @@ export class CreateTicketComponent implements OnInit {
 
   submitTicket() {
     this.ticket.TicketStatusID = 24;
+    this.saveTicket();
+  }
+
+  approveTicket() {
+    this.ticket.TicketStatusID = 25;
     this.saveTicket();
   }
 
@@ -496,6 +561,14 @@ export class CreateTicketComponent implements OnInit {
   readingChangeHandler(tdetail) {
     tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.EndMeterReading - tdetail.StartMeterReading, tdetail.productSelected.Price);
     this.calculateTotalAmountAndUnit();
+  }
+
+  userTypeChangeHandler() {
+    if (this.ticket.isUserTypeDistributor) {
+      this.loadDisributors(this.ticket.BranchID);
+    } else {
+      this.loadDriversOfBranch(this.ticket.BranchID);
+    }
   }
 
 }

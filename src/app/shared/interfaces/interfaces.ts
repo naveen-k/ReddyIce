@@ -52,6 +52,7 @@ export interface Customer {
     DistributorMasterID: string;
     productdetail: ProductDetail[];
     Tax: number;
+    CustomerTypeID: number;
 }
 
 export interface ProductDetail {
