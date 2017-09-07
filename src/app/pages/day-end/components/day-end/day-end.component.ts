@@ -1,13 +1,13 @@
 import { any } from 'codelyzer/util/function';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DayEndService } from '../../day-end.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     templateUrl: './day-end.component.html',
     styleUrls: ['./day-end.component.scss'],
 })
-export class DayEndComponent {
+export class DayEndComponent implements OnInit {
     userDataTable: any;
     unitReconciliation: any;
     ticketDetails: any;
@@ -21,7 +21,10 @@ export class DayEndComponent {
 
     // Note - IsForAll is to see all trips or Mytrips
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
-    tripFilterOption: any = { uId: "0", tripDate: '2017-08-27', branchId: "0", isForAll: true};
+    
+    tripFilterOption: any = { uId: "0", 
+    tripDate: '2017-08-27',
+     branchId: "0", isForAll: true};
 
     constructor(private service: DayEndService) {
         this.userDataTable = service.dataTableData;
@@ -31,6 +34,9 @@ export class DayEndComponent {
         this.loadBranches();
         this.loadFilteredTrips();
 
+    }
+    ngOnInit() {
+        this.tripFilterOption.tripDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
     }
    
     selectionchangeHandler() {

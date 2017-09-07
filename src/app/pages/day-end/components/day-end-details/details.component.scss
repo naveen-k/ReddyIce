@@ -1,7 +1,7 @@
 @import '../../../../theme/sass/smartTable';
 
 .page-header {
-    margin: 20px 0;
+    margin: 10px 0;
 };
 .bottom-margin{
     margin-bottom: 20px;
@@ -16,4 +16,11 @@
 .overflow{
     overflow-y: scroll;
 }
-    
+.add-margin-bottom{
+    margin-bottom: 20px;
+}
+.bold-head{
+    div span{
+        font-weight: bold;
+    }
+}    

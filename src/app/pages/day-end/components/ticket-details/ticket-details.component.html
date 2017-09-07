@@ -3,20 +3,20 @@
         <ba-card cardTitle="Ticket Details" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="row page-header">
                 <div class="col-md-3">
-                    <span>Driver :</span>
+                   <b> <span>Driver :</span></b>
                     <label>{{selectedtrip?.DriverName}}</label>
                 </div>
                 <div class="col-md-3">
                     <div>
-                        <span>Status :</span>
+                       <b> <span>Status :</span></b>
                         <label>NA</label>
                     </div>
                 </div>
-                <div class="col-md-3 right-text-alignment">
-                    <span>Date :</span>
+                <div class="col-md-3">
+                   <b> <span>Date :</span></b>
                     <label>{{selectedtrip?.Created.split('T')[0]}}</label>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 button-container">
                      <button class="btn btn-danger pull-right" (click)="submitTickets()" >Submit</button>
                         
                     <button class="btn btn-danger pull-left" [routerLink]="['../list']">Back</button>
@@ -30,7 +30,7 @@
                     <!-- <ng2-smart-table [settings]="settings3" [source]="source3" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table> -->
                     <div class="vertical-scroll">
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="tableHeader">
                                 <tr>
                                     <th>
                                         <span style="cursor:pointer;" (click)="customer.sortField = 'Customerid';customer.isAsc=!customer.isAsc;">
@@ -108,9 +108,10 @@
                                     <td>{{item.Drayage}}</td>
                                     <td>{{item.BuyBack}}</td>
                                 </tr>
+                                <tr  *ngIf="ticketDetails?.TripDetails.length < 1" class="text-center"> <td colspan="10">No data found</td></tr>
                             </tbody>
                         </table>
-                           <div *ngIf="ticketDetails?.TripDetails.length < 1" style='text-align:center'> No data found </div>
+                          
                     </div>
                 </div>
             </div>

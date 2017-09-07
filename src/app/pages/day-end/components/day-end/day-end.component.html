@@ -3,17 +3,19 @@
         <ba-card cardTitle="Day End List" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="row bottom-margin">
                 <div class="form-group col-md-6">
+                    <label><b> Filter By Date </b></label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (change)="selectionchangeHandler()"
-                            ngbDatepicker #d="ngbDatepicker" value="2017-08-27">
+                            ngbDatepicker #d="ngbDatepicker">
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <label > <b>Filter By Branch </b></label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="selectionchangeHandler()">
-                         <option *ngFor="let branch of branches"[value] = 'branch?.BranchID' >{{branch?.BranchName}}</option> 
+                         <option *ngFor="let branch of branches" [value] = 'branch?.BranchID' >{{branch?.BranchName}}</option> 
                     </select>
                 </div>
             </div>
@@ -32,7 +34,7 @@
             <!-- <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" class="page-header"></ng2-smart-table> -->
             <div class="vertical-scroll">
                 <table class="table table-striped">
-                    <thead>
+                    <thead class="tableHeader">
                         <tr>
                             <th>Actions</th>
                             <th>
@@ -89,10 +91,10 @@
                             <!--Driver name not available-->
                             <td>{{item.TripID}}</td>
                         </tr>
-
+                        <tr *ngIf="!trips.length"> <th class="text-center" colspan="6"> No data found </th></tr>
                     </tbody>
                 </table>
-                <div *ngIf="!trips.length" style='text-align:center'> No data found </div>
+               
             </div>
         </ba-card>
     </div>

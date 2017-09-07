@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { CreateTicketComponent } from '../../../manual-tickets/create-ticket/create-ticket.component';
+//import { CreateTicketComponent } from '../../../manual-tickets/create-ticket/create-ticket.component';
 
 @Component({
     templateUrl: './details.component.html',
@@ -46,11 +46,7 @@ export class DetailsComponent implements OnInit {
         this.unitReconciliation1 = service.dataTableData2;
     }
   openCreateTicketModal() {
-    const modalRef = this.modalService.open(CreateTicketComponent, {
-        size: 'lg'
-      
-      });
-    modalRef.componentInstance.name = 'World';
+   
   }
     ngOnInit() {
         this.tripData = this.service.gettripData();

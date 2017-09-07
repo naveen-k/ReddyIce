@@ -41,6 +41,15 @@ visibility: visible;
     border-left: 1px solid #ef8989;
     border-right: 1px solid #ef8989;
     }
+.tab-content{
+border: 1px solid #ef8989;
+    border-top: 0;
+}
+.nav-item a:hover{
+    color:#000;
+    background-color: #f59d9d !important;
+
+}
 
 }
 .dayend-card {
@@ -49,7 +58,10 @@ visibility: visible;
     }
 
 }
-
+.tableHeader {
+  background: #5bc0de;
+  color: black;
+}
 
 
 
