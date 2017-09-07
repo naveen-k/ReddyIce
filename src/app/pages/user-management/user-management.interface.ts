@@ -18,5 +18,6 @@ export interface User {
   Branch: Branch;
   Role: any;
   Distributor: any;
+  IsDistributor: boolean;
 }
 
