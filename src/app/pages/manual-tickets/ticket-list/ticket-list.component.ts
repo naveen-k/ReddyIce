@@ -17,7 +17,7 @@ export class TicketListComponent implements OnInit {
     allBranches: Branch[];
 
     // logged in user
-    user: User;
+    user: User = {} as User;
 
     allTickets: any = [];
 
