@@ -30,14 +30,14 @@ export class DayEndComponent implements OnInit {
         this.userDataTable = service.dataTableData;
         this.unitReconciliation = service.dataTableData2;
         this.ticketDetails = service.dataTableData3;
-       
+         this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
+ 
         this.loadBranches();
-        this.loadFilteredTrips();
+        this.selectionchangeHandler();
 
     }
     ngOnInit() {
-        this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
-    }
+         }
    
     selectionchangeHandler() {
            // uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
