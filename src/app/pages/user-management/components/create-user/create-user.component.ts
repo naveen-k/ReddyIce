@@ -162,7 +162,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     ngOnInit() {
-        // this.loadBranches();
+        this.umService.getDistributorsByBranch('1').subscribe((res) => {
+            this.distributorsAndCopackers = res;
+        console.log(res);
+        });
         this.userObject = this.userService.getUser();
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
@@ -240,7 +243,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         });
     }
-    rolChange(roleID) {
+    roleChange(roleID) {
         if (roleID === '1' || roleID === '2') {
             if (this.branches[0].BranchID != '1') {
                 this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' });
@@ -251,7 +254,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             if (this.branches[0].BranchID == '1') {
                 this.branches.shift();  
             }
-            this.distributorsAndCopackers = [];
+           // this.distributorsAndCopackers = [];
         }
 
     }
@@ -274,6 +277,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.FirstName = '';  
             this.user.LastName = ''; 
             this.user.EmailID = '';  
+        }
+        else {
+            this.umService.getDistributorsByBranch('1').subscribe((res) => {
+            this.distributorsAndCopackers = res;
+        });  
         }
         this.isAllFeildsChecked();
 
