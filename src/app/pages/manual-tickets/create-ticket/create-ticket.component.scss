@@ -165,6 +165,16 @@ label {
 .textAlignRight {
   text-align: right;
 }
+
+.prodListElement {
+  height: 2rem;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+select.form-control:not([size]):not([multiple]) {
+  height: 2rem;
+}
 /*
 .radioList {
   margin-top: 5px;

@@ -144,10 +144,22 @@
                     <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'2.2-4' }}</td>
                     <!-- <td>{{ item.TicketStatusID|ticketStatus}}</td> -->
                     <td>
-                        <i class="ion-pricetag custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 23">
+                        <!-- <i class="ion-pricetag custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 23">
                             <span class="tooltiptext">Draft</span>
                         </i>
                         <i class="ion-android-done-all custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 25">
+                            <span class="tooltiptext">Approved</span>
+                        </i> -->
+                        <i class="custom-tooltip-ion">
+                            <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TicketStatusID == 23" width="15">
+                            <span class="tooltiptext">Draft</span>
+                        </i>
+                        <i class="custom-tooltip-ion">
+                            <img src="assets/reddyIce/submitTicket.png" *ngIf="item.TicketStatusID == 24" width="15">
+                            <span class="tooltiptext">Submitted</span>
+                        </i>
+                        <i class="custom-tooltip-ion">
+                            <img src="assets/reddyIce/approveTicket.png" *ngIf="item.TicketStatusID == 25" width="15">
                             <span class="tooltiptext">Approved</span>
                         </i>
                     </td>

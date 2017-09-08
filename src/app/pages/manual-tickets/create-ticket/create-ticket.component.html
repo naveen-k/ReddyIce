@@ -14,7 +14,7 @@
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
-                <button class="btn btn-danger buttonMargin" [disabled]="!isFormDirty" [disabled]="!isFormDirty">
+                <button class="btn btn-danger buttonMargin" [disabled]="!isFormDirty" [disabled]="ticket.TicketStatusID !== 23">
                     Delete
                 </button>
                 <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
@@ -233,8 +233,8 @@
                 <div class="col-sm-9 col-form-label card-title">
                     <span>List of Products</span>
                 </div>
-                <div class="col-sm-3 addProdBtn">
-                    <button class="btn btn-danger buttonMargin" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
+                <div class="col-sm-3">
+                    <button class="btn btn-danger pull-right" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
                 </div>
             </div>
             <div class="row padding">
@@ -261,7 +261,7 @@
                                         </td>
                                         <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                         <td class="textAlignRight">
-                                            <input type="number" class="form-control textAlignRight" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
+                                            <input type="number" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
