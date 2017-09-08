@@ -411,22 +411,31 @@
                 <label for="example-text-input" class="col-form-label">Cash Amount</label>
                 <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
             </div>
-            <div class="padding">
+            <div id="checkNumber" class="padding">
                 <label for="example-text-input" class="col-form-label">Check#</label>
                 <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
                     name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
-                <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
+                <!-- <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
                     <i class="ion-android-alert showError"></i>
                     <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>
+                </div> -->
+                <div *ngIf="ticket.CheckAmount && !ticket.CheckNumber && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
+                    <i class="ion-android-alert showError"></i>
+                    <div *ngIf="ticket.CheckAmount && !ticket.CheckNumber" class="custom-tooltip bottom">Check number is required as Check Amount exists</div>
                 </div>
                 <div *ngIf="checkMinMaxLength" class="error-message">
                     <i class="ion-android-alert showError"></i>
                     <div class="custom-tooltip bottom">Should not be more than 20 digits</div>
                 </div>
             </div>
-            <div class="padding">
+            <div id="checkAmount" class="padding">
                 <label for="example-text-input" class="col-form-label">Check Amount</label>
-                <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
+                <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
+                name="CheckAmount" #CheckAmount="ngModel" required>
+                <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount && (CheckAmount.dirty || CheckAmount.touched)" class="error-message">
+                    <i class="ion-android-alert showError"></i>
+                    <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount" class="custom-tooltip bottom">Check Amount is required as Check Number exists</div>
+                </div>
             </div>
         </div>
     </div>

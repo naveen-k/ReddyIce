@@ -49,6 +49,22 @@ label {
   right: 1%;
 }
 
+#checkNumber .showError {
+  top: 121px;
+}
+
+#checkNumber .custom-tooltip {
+  top: 74px;
+}
+
+#checkAmount .showError {
+  top: 195px;
+}
+
+#checkAmount .custom-tooltip {
+  top: 148px;
+}
+
 .showError:after {
   content: '';
   width: 0;
