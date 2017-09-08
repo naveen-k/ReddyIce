@@ -10,7 +10,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <label>Select Branch</label>
             <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
                 <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
@@ -37,7 +37,7 @@
                 </option>
             </select>
         </div>
-        <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
+        <div class="col-sm-3" [hidden]="searchObj.userType=='Internal'">
             <label>Distributor/CoPacker</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.DistributorID" (ngModelChange)="userChangeHandler()">
                 <option *ngFor="let obj of distributors" [value]="obj.DistributorID">
@@ -45,13 +45,7 @@
                 </option>
             </select>
         </div>
-        <div class="col-sm-2">
-            <button class="btn btn-primary addCustBtn pull-right" (click)="approveCheckedTickets()">
-                Approve
-            </button>
-
-        </div>
-        <div class="col-sm-2">
+        <div class="col-sm-2 createTicketBtn">
             <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right">
                 Create Ticket
             </button>
@@ -79,27 +73,31 @@
         <table class="table table-striped table-condensed">
             <thead>
                 <tr>
-                    <th>Select</th>
-                    <th class="table-id">Actions</th>
-                    <th>
+                    <th style="width:112px;">
+                        <button class="btn btn-primary" (click)="approveCheckedTickets()">
+                            Approve
+                        </button>
+                    </th>
+                    <th class="table-id thVerticalAlign" style="width:72px;">Actions</th>
+                    <th class="thVerticalAlign">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
                           Ticket #
                            <i *ngIf="(customer.sortField == 'TicketID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th>
+                    <th class="thVerticalAlign">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
-                          Customer #
+                          Customer
                           <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th>
+                    <th class="thVerticalAlign textAlignRight">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
                           Amount
                           <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;">
+                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;" class="thVerticalAlign">
                         <span style="cursor:pointer;">
                           Status
                           <i *ngIf="(customer.sortField == 'CardPaymentStatus')" [ngClass]="(customer.isAsc && customer.sortField == 'CardPaymentStatus' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -128,9 +126,17 @@
                         </i> -->
                     </td>
                     <td>{{ item.TicketNumber }}</td>
-                    <td>{{ item.Customer.CustomerID }}</td>
-                    <td>{{ item.CashAmount }}</td>
-                    <td>{{ item.TicketStatusID|ticketStatus}}</td>
+                    <td>{{ item.Customer.CustomerID }} - {{ item.Customer.CustomerName }}</td>
+                    <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'2.2-4' }}</td>
+                    <!-- <td>{{ item.TicketStatusID|ticketStatus}}</td> -->
+                    <td>
+                        <i class="ion-pricetag custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 23">
+                            <span class="tooltiptext">Draft</span>
+                        </i>
+                        <i class="ion-android-done-all custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 25">
+                            <span class="tooltiptext">Approved</span>
+                        </i>
+                    </td>
                 </tr>
             </tbody>
         </table>

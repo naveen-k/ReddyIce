@@ -1,4 +1,4 @@
-<ba-card cardTitle="Ticket">
+<ba-card cardTitle="Manual Ticket">
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right">
@@ -20,11 +20,9 @@
         </div>
     </div>
     <div class="row topMargin30">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <div class="row padding">
-                <label for="example-text-input" class="col-sm-2 col-form-label">Date</label>
+                <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date</label>
                 <div class="col-sm-7 input-group">
                     <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
                         [disabled]="isReadOnly" (ngModelChange)="isFormDirty=true" [maxDate]="maxDate">
@@ -34,7 +32,7 @@
                 </div>
             </div>
             <div class="row padding">
-                <label for="example-text-input" class="col-sm-2 col-form-label">Branch</label>
+                <label for="example-text-input" class="col-sm-3 col-form-label">Branch</label>
                 <div class="col-sm-7">
                     <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
                         [disabled]="isReadOnly">
@@ -43,7 +41,7 @@
                 </div>
             </div>
             <div class="row padding" [hidden]="ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket)">
-                <label for="example-text-input" class="col-sm-2 col-form-label">Type</label>
+                <label for="example-text-input" class="col-sm-3 col-form-label">Type</label>
                 <div class="col-sm-7">
                     <label [hidden]="isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="typeChangeHandler();isFormDirty=true;">
@@ -57,7 +55,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-5 border">
+        <div class="col-sm-6 border frameMargin">
             <div class="row padding">
                 <h5 class="frameHeading">Select Customer</h5>
             </div>
@@ -100,17 +98,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-1">
-        </div>
     </div>
 
     <div class="row topMargin30">
-        <div class="col-sm-1">
-        </div>
-        <div class="col-sm-5">
+        <div class="col-sm-6">
             <div class="row padding">
-                <label for="example-text-input" class="col-sm-2 col-form-label">POD</label>
-                <div [hidden]="isReadOnly" class="col-sm-10">
+                <label for="example-text-input" class="col-sm-3 col-form-label">POD</label>
+                <div [hidden]="isReadOnly" class="col-sm-7">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="pod" id="podRadio1" [value]="true" [(ngModel)]="tempModels.podReceived">
                         <span>Received</span>
@@ -133,7 +127,7 @@
                 </div>
             </div>
             <div class="row padding">
-                <label for="example-text-input" class="col-sm-2 col-form-label">Ticket#</label>
+                <label for="example-text-input" class="col-sm-3 col-form-label">Ticket#</label>
                 <div class="col-sm-7">
                     <input type="number" min="1" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber"
                         id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()" name="TicketNumber"
@@ -157,7 +151,7 @@
                 </div>
             </div>
             <div class="row padding">
-                <label for="example-text-input" class="col-sm-2 col-form-label">PO#</label>
+                <label for="example-text-input" class="col-sm-3 col-form-label">PO#</label>
                 <div class="col-sm-7">
                     <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
                         name="PONumber" #PONumber="ngModel" required numberOnly (ngModelChange)="isFormDirty=true;">
@@ -176,9 +170,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-5 border">
+        <div class="col-sm-6 border frameMargin">
             <div class="row padding">
-                <h5 class="frameHeading">Select Driver/Distributors</h5>
+                <h5 class="frameHeading">Select Driver</h5>
             </div>
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-4 col-form-label">Type</label>
@@ -225,13 +219,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-1">
-        </div>
     </div>
 
     <div class="row topMargin30">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-8 border">
+        <div class="col-sm-9 border listOfProdMargin">
             <div class="row padding tablePanel">
                 <div class="col-sm-9 col-form-label" style="padding-left:20px;">
                     <b>List of Products</b>
@@ -248,9 +239,9 @@
                             <table class="table table-condensed">
                                 <thead class="tableHeader">
                                     <th>Product</th>
-                                    <th>Unit Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total Amount</th>
+                                    <th class="textAlignRight">Unit Price</th>
+                                    <th class="textAlignRight">Quantity</th>
+                                    <th class="textAlignRight">Amount</th>
                                     <th [hidden]="isReadOnly">Action</th>
                                 </thead>
                                 <tbody>
@@ -262,11 +253,11 @@
                                                     {{pdetail.DisplayName}} </option>    
                                             </select>
                                         </td>
-                                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
-                                        <td>
-                                            <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                        <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                        <td class="textAlignRight">
+                                            <input type="number" class="form-control textAlignRight" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
                                         </td>
-                                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                        <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td [hidden]="isReadOnly">
                                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                                         </td>
@@ -293,7 +284,7 @@
                                     <th>Unit Price</th>
                                     <th>Previous Reading</th>
                                     <th>Current Reading</th>
-                                    <th>Total Amount</th>
+                                    <th>Amount</th>
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
@@ -314,7 +305,7 @@
                                             <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
                                         </td>
-                                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                        <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
                                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                                         </td>
@@ -345,7 +336,7 @@
                                                     {{pdetail.DisplayName}} </option>    
                                             </select>
                                         </td>
-                                        <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                        <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
                                             <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
                                         </td>
@@ -376,7 +367,7 @@
                                     <th>Unit Price</th>
                                     <th>Current Inventory</th>
                                     <th>Delivered Bags</th>
-                                    <th>Total Amount</th>
+                                    <th>Amount</th>
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
@@ -395,7 +386,7 @@
                                         <td>
                                             <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
                                         </td>
-                                        <td>{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                        <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
                                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                                         </td>
@@ -408,7 +399,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2 border cashPanel padding">
+        <div class="col-sm-2 border cashPanel padding cashPanelMargin">
             <div class="padding">
                 <label for="example-text-input" class="col-form-label">Cash Amount</label>
                 <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
@@ -433,7 +424,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-1"></div>
     </div>
     <div class="row dummyMarginTop">
         <div class="col-sm-1"></div>

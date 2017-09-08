@@ -4,7 +4,7 @@ label {
 }
 
 .buttonMargin {
-  margin-left:25px;
+  margin-left:2px;
 }
 
 .radioButtonMargin {
@@ -103,6 +103,10 @@ label {
   text-align: center;
 }
 
+.frameMargin {
+  margin-left: -15px;
+}
+
 .cashPanel {
   margin-left: 5px;
 }
@@ -114,6 +118,26 @@ label {
 
 .topMargin30 {
   margin-top:30px;
+}
+
+.input-group {
+  margin-bottom: 0;
+}
+
+.listOfProdMargin {
+  margin-left: 40px; 
+}
+
+.cashPanelMargin {
+  margin-left: 36px;
+}
+
+.ionTrash {
+  font-size: 20px;
+}
+
+.textAlignRight {
+  text-align: right;
 }
 /*
 .radioList {
