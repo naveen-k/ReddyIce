@@ -109,7 +109,7 @@
                           <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;" class="thVerticalAlign">
+                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter">
                         <span style="cursor:pointer;">
                           Status
                           <i *ngIf="(customer.sortField == 'CardPaymentStatus')" [ngClass]="(customer.isAsc && customer.sortField == 'CardPaymentStatus' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -143,7 +143,7 @@
                     <td [hidden]="searchObj.userType=='Internal'">NA</td>
                     <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'2.2-4' }}</td>
                     <!-- <td>{{ item.TicketStatusID|ticketStatus}}</td> -->
-                    <td>
+                    <td class="textAlignCenter">
                         <!-- <i class="ion-pricetag custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 23">
                             <span class="tooltiptext">Draft</span>
                         </i>

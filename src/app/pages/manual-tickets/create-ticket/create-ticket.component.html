@@ -1,7 +1,7 @@
 <ba-card cardTitle="Manual Ticket">
     <div class="row">
         <div class="col-sm-12">
-            <div class="pull-right">
+            <div class="pull-right head-button-container">
                 <button class="btn btn-danger" (click)="approveTicket()" 
                     [hidden] = "ticket.TicketStatusID == 24 || ticket.TicketStatusID == 23 || isReadOnly || !ticketId">
                     Approve

@@ -175,6 +175,12 @@ label {
 #prodDD select.form-control:not([size]):not([multiple]) {
   height: 2rem;
 }
+
+.head-button-container {
+  position: absolute;
+  right: 15px;
+  top: -52px;
+}
 /*
 .radioList {
   margin-top: 5px;
