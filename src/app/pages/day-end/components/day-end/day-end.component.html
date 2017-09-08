@@ -1,9 +1,9 @@
 <div class="row page-header">
     <div class="col-md-12 padding-eater">
-        <ba-card cardTitle="Day End List" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
-            <div class="row bottom-margin">
-                <div class="form-group col-md-6">
-                    <label><b> Filter By Date </b></label>
+        <ba-card cardTitle="Trips" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
+            <div class="row">
+                <div class="col-md-6">
+                    <label><b> Date </b></label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (ngModelChange)="selectionchangeHandler()"
                             ngbDatepicker #d="ngbDatepicker" >
@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label > <b>Filter By Branch </b></label>
+                    <label > <b>Branch </b></label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="selectionchangeHandler()">
                          <option *ngFor="let branch of branches" [value] = 'branch?.BranchID' >{{branch?.BranchID}}-{{branch?.BranchName}}</option> 
                     </select>

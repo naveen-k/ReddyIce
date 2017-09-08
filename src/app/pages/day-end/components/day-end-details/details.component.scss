@@ -17,10 +17,36 @@
     overflow-y: scroll;
 }
 .add-margin-bottom{
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 .bold-head{
     div span{
         font-weight: bold;
     }
-}    
+}
+.head-button-container{
+   position: absolute;
+    right: 20px;
+    top: 7px;
+    
+}
+.add-margin-right{
+    margin-right: 20px;
+}
+.small-input{
+  
+    padding: 5px !important;
+    margin-top: 3px;
+   
+}
+.dollar-input:before{
+    content: '\0024';
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    left: -20px;
+    
+}   
+input::before {
+    content: "\0024";
+} 

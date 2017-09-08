@@ -1,42 +1,43 @@
 <div class="row page-header">
     <div class=" col-md-12">
         <ba-card cardTitle="Details" baCardClass="with-scroll" class="smart-table-container" #customer>
-            <div class="row page-header add-margin-bottom">
+            <div class="head-button-container">
+                <button class="btn btn-danger pull-right" (click)="saveReconciliation()">Approve</button>
+                <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../list']">Back</button>
+            </div>
+            <div class="row add-margin-bottom">
 
                 <div class=" col-md-12">
                     <div class="row page-header bold-head">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <span>Branch :</span>
                             <label>{{tripData.BranchID}}</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <span>Route :</span>
                             <label>{{tripData.RouteNumber}}</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <span>Driver :</span>
                             <label>{{tripData.DriverName}}</label>
                         </div>
-                        <div class="col-md-3 pull-right">
-                            <button class="btn btn-danger pull-right" [routerLink]="['../list']">Back</button>
-                        </div>
                     </div>
                     <div class="row page-header bold-head">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <span>Trip :</span>
                             <label>{{tripData.TripID}}</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <span>Truck :</span>
                             <label>{{tripData.TruckID}}</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div>
                                 <span>Status :</span>
                                 <label>NA</label>
                             </div>
                         </div>
-                        <div class="col-md-3"></div>
+
                     </div>
                 </div>
             </div>
@@ -44,9 +45,7 @@
                 <ngb-tab title="Cash Reconciliation">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
-                            <div class="col-md-12">
-                                <button class="btn btn-danger pull-right" (click)="saveReconciliation()">Approve</button>
-                            </div>
+
                             <div class="col-md-12 padding-eater">
                                 <label>Pallets:</label>
                                 <label>5</label>
@@ -95,7 +94,7 @@
                         <div class="row page-header">
                             <div class="col-md-12 page-header">
                                 <div class="overflow">
-                                    <table class="table table-striped">
+                                    <table class="table table-bordered">
                                         <thead class="tableHeader">
                                             <tr>
                                                 <th>
@@ -104,25 +103,25 @@
                                      <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                                                 </th>
-                                                <th>
+                                                <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'load';customer.isAsc=!customer.isAsc;">
                                   Load
                                      <i *ngIf="(customer.sortField == 'load')" [ngClass]="(customer.isAsc && customer.sortField == 'load' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                                                 </th>
-                                                <th>
+                                                <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'return';customer.isAsc=!customer.isAsc;">
                                     Return
                                      <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                                                 </th>
-                                                <th>
+                                                <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'truckDamage';customer.isAsc=!customer.isAsc;">
                                     Truck Damage
                                      <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                                                 </th>
-                                                <th>
+                                                <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'customerDamage';customer.isAsc=!customer.isAsc;">
                                     Customer Damage
                                      <i *ngIf="(customer.sortField === 'customerDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'customerDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -144,13 +143,17 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
-                                                <td>{{item.ProductName}}</td>
-                                                <td>{{item.Load }}</td>
-                                                <td>{{item.Returns}}</td>
-                                                <td>{{item.TruckDamage}}</td>
-                                                <td>{{item.CustomerDamage}}</td>
-                                                <td>{{item.Sale}}</td>
-                                                <td>{{item.OverShort}}</td>
+                                                <td width="23%">{{item.ProductName}}</td>
+                                                <td width="6%">{{item.Load }}</td>
+                                                <td width="10%"><input class="form-control small-input" type="number"></td>
+                                                <td width="6%">{{item.Returns}}</td>
+                                                <td width="10%"><input class="form-control small-input dollar-input" type="number"></td>
+                                                <td width="6%">{{item.TruckDamage}}</td>
+                                                <td width="10%"><input class="form-control small-input" type="number"></td>
+                                                <td width="6%">{{item.CustomerDamage}}</td>
+                                                <td width="10%"><input class="form-control small-input" type="number"></td>
+                                                <td width="8%">{{item.Sale}}</td>
+                                                <td width="8%">{{item.OverShort}}</td>
                                             </tr>
                                             <tr *ngIf="!unitReconciliation.length">
                                                 <th class="text-center" colspan="7"> No data found </th>
@@ -172,7 +175,7 @@
                             </div>
                             <div class="col-md-12 page-header">
                                 <div class="overflow">
-                                    <table class="table table-striped">
+                                    <table class="table table-striped ">
                                         <thead class="tableHeader">
                                             <tr>
                                                 <th>
