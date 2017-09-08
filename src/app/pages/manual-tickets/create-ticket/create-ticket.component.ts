@@ -22,6 +22,9 @@ export class CreateTicketComponent implements OnInit {
 
   ticket: ManualTicket = {} as ManualTicket;
 
+  // hold temp models
+  tempModels: any = {};
+
   ticketTypes: any;
 
   ticketSubTypes: any[];
@@ -59,7 +62,7 @@ export class CreateTicketComponent implements OnInit {
 
   checkMinMaxLength: boolean = false;
 
-  disablePodButton: boolean = true;
+  // disablePodButton: boolean = true;
 
   urlString = '../../list';
 
@@ -82,7 +85,7 @@ export class CreateTicketComponent implements OnInit {
       }).slice(0, 10);
     })
 
-    maxDate: {};
+  maxDate: {};
 
   constructor(
     protected service: ManualTicketService,
@@ -105,6 +108,8 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.DeliveryDate = searchObject.CreatedDate;
     this.ticket.BranchID = searchObject.BranchId;
     this.ticket.isUserTypeDistributor = searchObject.userType ? searchObject.userType !== 'Internal' : null;
+    this.ticket.UserID = +searchObject.UserId;
+    this.ticket.DistributorCopackerID = +searchObject.DistributorID;
 
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
@@ -171,6 +176,8 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.ticket.CustomerType === 21) {
       this.ticket.IsSaleTicket = false;
     }
+
+    this.resetCashAndCheck();
   }
 
   initializeSubTicketAndMode(selectedTicket) {
@@ -196,8 +203,19 @@ export class CreateTicketComponent implements OnInit {
   }
 
   branchChangeHandler() {
+    // this.confirmationModal('', () => {
+
+    // });
+    this.ticket.Customer = '';
+    this.ticket.DistributorCopackerID = null;
+    this.ticket.UserID = null;
+    this.ticket.TicketProduct = [];
     this.loadCustomerOfBranch(this.ticket.BranchID);
-    this.loadDriversOfBranch(this.ticket.BranchID);
+    if (this.ticket.isUserTypeDistributor) {
+      this.loadDisributors(this.ticket.BranchID);
+    } else {
+      this.loadDriversOfBranch(this.ticket.BranchID);
+    }
   }
 
   loadCustomerOfBranch(branchId) {
@@ -247,27 +265,43 @@ export class CreateTicketComponent implements OnInit {
 
       // set first product selected
       if (res.productdetail.length) {
-        this.ticket.TicketProduct.forEach(td => {
-          if (!td.ProductID) {
-            td.ProductID = res.productdetail[0].ProductID;
+        const callPrepareTicket = () => {
+          if (!this.ticket.CustomerType) {
+            setTimeout(callPrepareTicket, 100);
+            return;
           }
-          this.updateTicketDetailObject(td);
-          if (this.ticket.CustomerType === 20) {
-            // Ticket Type is DSD
-            td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
-          } else if (this.ticket.CustomerType === 21) {
-            // Ticket Type is PBS
-            td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
-          } else {
-            // Ticket Type is PBM
-            td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
-          }
-
-        });
-        this.calculateTotalAmountAndUnit();
+          this.prepareTicketProduct(res.productdetail);
+        };
+        setTimeout(callPrepareTicket, 100);
       }
     });
   }
+
+  prepareTicketProduct(productdetail) {
+    this.ticket.TicketProduct.forEach(td => {
+      if (!td.ProductID) {
+        td.ProductID = productdetail[0].ProductID;
+      }
+      this.updateTicketDetailObject(td);
+      if (this.ticket.CustomerType === 20) {
+        // Ticket Type is DSD
+        td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
+      } else if (this.ticket.CustomerType === 21) {
+        // Ticket Type is PBS
+        td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
+      } else {
+        // Ticket Type is PBM
+        if (this.ticket.IsSaleTicket) {
+          td['totalAmount'] = this.calculateProductTotalAmount(td.EndMeterReading - td.StartMeterReading, td['productSelected']['Price']);
+        } else {
+          td['totalAmount'] = this.calculateProductTotalAmount(td.DeliveredBags, td['productSelected']['Price']);
+        }
+      }
+
+    });
+    this.calculateTotalAmountAndUnit();
+  }
+
 
   ticketNumberChangeHandler() {
     if (!this.ticket.TicketNumber || this.ticket.TicketID) { return; }
@@ -304,6 +338,20 @@ export class CreateTicketComponent implements OnInit {
     }
 
     this.updateTicketDetailObject(ticketDetail);
+  }
+
+  confirmationModal(content: string, closeModalHandler) {
+    const activeModal = this.modalService.open(ModalComponent, {
+      size: 'sm',
+      backdrop: 'static',
+    });
+    activeModal.componentInstance.BUTTONS.OK = 'OK';
+    // activeModal.componentInstance.showCancel = true;
+    activeModal.componentInstance.modalHeader = 'Warning!';
+    activeModal.componentInstance.modalContent = content;
+    activeModal.componentInstance.closeModalHandler = (() => {
+      closeModalHandler();
+    });
   }
 
   ticketNumberValidation() {
@@ -403,15 +451,6 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.CheckNumber = '';
   }
 
-
-  isPodReceived(arg) {
-    if (arg === 2) {
-      this.disablePodButton = true;
-    } else {
-      this.disablePodButton = false;
-    }
-  }
-
   onCancelClick() {
     if (this.isFormDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
@@ -485,9 +524,10 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
       this.ticket.CustomerID = this.ticket.Customer.CustomerID;
       this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
-
       this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
-      // this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
+
+      // Initialize to check/uncheck POD Received
+      this.tempModels.podReceived = !!this.ticket.PODImageID;
 
       // load customers
       this.loadCustomerOfBranch(this.ticket.BranchID);
@@ -515,6 +555,7 @@ export class CreateTicketComponent implements OnInit {
     // Save ticket
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('Ticket created successfully!');
+      this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     },
       (error) => {
         if (error) {
@@ -540,6 +581,13 @@ export class CreateTicketComponent implements OnInit {
     delete clonedObject['tempTotalUnit'];
     delete clonedObject['Created'];
     delete clonedObject['Modified'];
+
+    if (clonedObject.isUserTypeDistributor) {
+      delete clonedObject.UserID;
+    } else {
+      delete clonedObject.DistributorCopackerID;
+    }
+
     if (!clonedObject || !clonedObject.TicketProduct) {
       return;
     }

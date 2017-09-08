@@ -69,7 +69,7 @@ export interface ManualTicket {
     IsSaleTicket: boolean;
     TicketProduct: TicketProduct[];
     Mode: number;
-    UserId: number;
+    UserID: number;
     PODImage: any;
     CustomerType?: number;
     isUserTypeDistributor?: boolean;
