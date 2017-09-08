@@ -15,7 +15,7 @@
                 <div class="col-md-6">
                     <label > <b>Filter By Branch </b></label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="selectionchangeHandler()">
-                         <option *ngFor="let branch of branches" [value] = 'branch?.BranchID' >{{branch?.BranchName}}</option> 
+                         <option *ngFor="let branch of branches" [value] = 'branch?.BranchID' >{{branch?.BranchID}}-{{branch?.BranchName}}</option> 
                     </select>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
-                                    Trip ID
+                                    Trip Code
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
@@ -89,7 +89,7 @@
                             <!--is Distributor status not available-->
                             <td>{{item.DriverName}}</td>
                             <!--Driver name not available-->
-                            <td>{{item.TripID}}</td>
+                            <td>{{item.TripCode}}</td>
                         </tr>
                         <tr *ngIf="!trips.length"> <th class="text-center" colspan="6"> No data found </th></tr>
                     </tbody>

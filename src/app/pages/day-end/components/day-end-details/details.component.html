@@ -67,22 +67,22 @@
                                     <tbody>
                                         <tr>
                                             <td>Check</td>
-                                            <td>{{ticketDetails?.Total.TotalCheck}}</td>
+                                            <td>{{ticketDetails?.Total.TotalCheck| currency:'USD':true:'2.2-4'}}</td>
                                             <td style="max-width:70px"><input class="form-control" type="text" [value]="Actual" [(ngModel)]="Actual"
                                                     (ngModelChange)="doAddition()"></td>
                                             <td>Coins</td>
                                             <td style="max-width:70px"><input class="form-control" type="text" [value]="Coins" [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
                                             <td>Total Deposit</td>
-                                            <td>$ {{total.totalDeposit}}</td>
+                                            <td>{{total.totalDeposit| currency:'USD':true:'2.2-4'}}</td>
                                         </tr>
                                         <tr>
                                             <td>Cash</td>
-                                            <td>{{ticketDetails?.Total.TotalCash}}</td>
+                                            <td>{{ticketDetails?.Total.TotalCash| currency:'USD':true:'2.2-4'}}</td>
                                             <td style="max-width:70px"><input class="form-control" type="text" [value]="Cash" [(ngModel)]="Cash" (ngModelChange)="doAddition()"></td>
                                             <td>Misc.</td>
                                             <td style="max-width:70px"><input class="form-control" type="text" [value]="Misc" [(ngModel)]="Misc" (ngModelChange)="doAddition()"></td>
                                             <td>Over/Short</td>
-                                            <td>$ {{total.overShort}}</td>
+                                            <td>{{total.overShort| currency:'USD':true:'2.2-4'}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -195,6 +195,12 @@
                                                 </th>
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
+                                                Ticket Type
+                                                 <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                            </span>
+                                                </th>
+                                                <th>
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
                                                 Invoice Amount
                                                  <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
@@ -226,14 +232,15 @@
                                                 <td>{{item.CustomerName?item.customer:""}}</td>
                                                 <!-- Not Available -->
                                                 <td>{{item.TicketNumber}}</td>
+                                                <td></td>
                                                 <td> </td>
-                                                <td>{{item.CashAmount}}</td>
-                                                <td>{{item.CheckAmount}}</td>
+                                                <td>{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
+                                                <td>{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
                                                 <td>{{item.charge?item.charge:""}}</td>
                                                 <!-- Not Available  -->
                                             </tr>
                                             <tr *ngIf="!tripData?.TripTicketList?.length">
-                                                <th class="text-center" colspan="7"> No data found </th>
+                                                <th class="text-center" colspan="8"> No data found </th>
                                             </tr>
 
                                         </tbody>

@@ -101,12 +101,12 @@
                                     <td>{{item.CustomerName }}</td>
                                     <td>{{item.ISRICustomer }}</td>
                                     <td>{{item.TicketNumber}}</td>
-                                    <td>{{item.InVoiceAmount}}</td>
-                                    <td>{{item.CashAmount}}</td>
-                                    <td>{{item.CheckAmount}}</td>
-                                    <td>{{item.ChargeAmount || 'NA'}}</td>
-                                    <td>{{item.Drayage}}</td>
-                                    <td>{{item.BuyBack}}</td>
+                                    <td>{{item.InVoiceAmount| currency:'USD':true:'2.2-4'}}</td>
+                                    <td>{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
+                                    <td>{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
+                                    <td>{{item.ChargeAmount || 'NA' | currency:'USD':true:'2.2-4'}}</td>
+                                    <td>{{item.Drayage| currency:'USD':true:'2.2-4'}}</td>
+                                    <td>{{item.BuyBack| currency:'USD':true:'2.2-4'}}</td>
                                 </tr>
                                 <tr  *ngIf="ticketDetails?.TripDetails.length < 1" class="text-center"> <td colspan="10">No data found</td></tr>
                             </tbody>
@@ -124,25 +124,25 @@
                     <div class="row page-header">
                         <span class="col-md-4">
                             <span>Cash:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalCash}}</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalCash| currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>Charge:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalCharge}}</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalCharge| currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>Total Sale:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalSale}}</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalSale| currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                     </div>
                     <div class="row page-header">
                         <span class="col-md-4">
                             <span>Darayage:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalDrayage}}</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalDrayage| currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>BuyBack:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalBuyback}}</b></label>
+                            <label><b>{{ticketDetails?.Total.TotalBuyback| currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                         <span class="col-md-4">
                         </span>

@@ -67,7 +67,7 @@
                     <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
-              <th  class="allign">
+              <th class="text-in-center">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'riinternal';customer.isAsc=!customer.isAsc;">
                     RI Internal
                   </span>
@@ -95,7 +95,7 @@
               <td class="userCell">{{ item.Role?.RoleName}}</td>
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
               <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchName}}</td>
-              <td><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
+              <td class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
             </tr>
                 <tr  [hidden]='!showSpinner' class="text-center"> <td colspan="10"><a> <img src="assets/reddyIce/spinner.gif " width='25px'></a></td></tr>
                  <tr  *ngIf="!paginationData.length && !showSpinner" class="text-center"> <td colspan="10">No data found</td></tr>
