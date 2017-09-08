@@ -14,7 +14,7 @@
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
-                <button class="btn btn-danger buttonMargin" [disabled]="!isFormDirty" [disabled]="ticket.TicketStatusID !== 23">
+                <button class="btn btn-danger buttonMargin" [disabled]="ticket.TicketStatusID !== 23">
                     Delete
                 </button>
                 <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
@@ -252,8 +252,8 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                                        <td>
-                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                        <td id="prodDD">
+                                            <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
                                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                     {{pdetail.DisplayName}} </option>    
