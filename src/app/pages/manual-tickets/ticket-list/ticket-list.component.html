@@ -29,7 +29,7 @@
                 <span>Dist./CoPacker</span>
             </label>
         </div>
-        <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
+        <div class="col-sm-3" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler()">
                 <option *ngFor="let obj of drivers" [value]="obj.UserId">
@@ -86,10 +86,22 @@
                       </span>
                     </th>
                     <th class="thVerticalAlign">
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
+                            Ticket Type
+                            <i *ngIf="(customer.sortField == 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        </span>
+                    </th>
+                    <th class="thVerticalAlign">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
                           Customer
                           <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
+                    </th>
+                    <th class="thVerticalAlign" [hidden]="searchObj.userType=='Internal'">
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
+                            Drivers
+                            <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
@@ -121,12 +133,14 @@
                                 <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
-                        <!-- <i class="ion-trash-a custom-tooltip-ion">
-                          <span class="tooltiptext">Delete</span>
+                        <!-- <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID!==23">
+                            <span class="tooltiptext">Delete</span>
                         </i> -->
                     </td>
                     <td>{{ item.TicketNumber }}</td>
+                    <td>{{ item.TicketTypeID|ticketType }}</td>
                     <td>{{ item.Customer.CustomerID }} - {{ item.Customer.CustomerName }}</td>
+                    <td [hidden]="searchObj.userType=='Internal'">NA</td>
                     <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'2.2-4' }}</td>
                     <!-- <td>{{ item.TicketStatusID|ticketStatus}}</td> -->
                     <td>

@@ -4,13 +4,23 @@ label {
 }
 
 .buttonMargin {
-  margin-left:2px;
+  margin-left:10px;
 }
 
 .radioButtonMargin {
   margin-left:10px;
   margin-top: 6px;
 }
+
+.mttableHeader {
+  /* background: #5bc0de; */
+  color: black;
+}
+
+.addProdBtn {
+  padding-left: 60px;
+}
+
 .createNewTicket {
   border: 1px solid;
   padding: 15px;
@@ -37,6 +47,22 @@ label {
   border-radius: 4px;
   top: -19px;
   right: 1%;
+}
+
+#checkNumber .showError {
+  top: 121px;
+}
+
+#checkNumber .custom-tooltip {
+  top: 74px;
+}
+
+#checkAmount .showError {
+  top: 195px;
+}
+
+#checkAmount .custom-tooltip {
+  top: 148px;
 }
 
 .showError:after {
@@ -81,7 +107,7 @@ label {
 }
 
 .padding {
-  padding:10px;
+  padding:5px;
 }
 
 .border {
@@ -107,7 +133,13 @@ label {
 
 .tablePanel {
   margin-top:10px;
-  padding-bottom:0px;
+  padding-bottom: 0px;
+  background: #5bc0de;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding-top: 10px; 
 }
 
 .topMargin30 {
