@@ -2,7 +2,10 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right">
-                <button class="btn btn-danger" (click)="approveTicket()" [hidden]="ticket.TicketStatusID == 24 || isReadOnly">Approve</button>
+                <button class="btn btn-danger" (click)="approveTicket()" 
+                    [hidden] = "ticket.TicketStatusID == 24 || ticket.TicketStatusID == 23 || isReadOnly || !ticketId">
+                    Approve
+                </button>
                 <button class="btn btn-danger buttonMargin" [disabled]="!tempModels.podReceived" onclick="document.getElementById('file').click()"
                     [hidden]="isReadOnly">
                     Upload POD
@@ -10,6 +13,9 @@
                 <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png" />
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
+                </button>
+                <button class="btn btn-danger buttonMargin" [disabled]="!isFormDirty" [disabled]="!isFormDirty">
+                    Delete
                 </button>
                 <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Submit
@@ -104,7 +110,7 @@
         <div class="col-sm-6">
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-3 col-form-label">POD</label>
-                <div [hidden]="isReadOnly" class="col-sm-7">
+                <div [hidden]="isReadOnly" class="col-sm-9">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="pod" id="podRadio1" [value]="true" [(ngModel)]="tempModels.podReceived">
                         <span>Received</span>
@@ -224,10 +230,10 @@
     <div class="row topMargin30">
         <div class="col-sm-9 border listOfProdMargin">
             <div class="row padding tablePanel">
-                <div class="col-sm-9 col-form-label" style="padding-left:20px;">
-                    <b>List of Products</b>
+                <div class="col-sm-9 col-form-label card-title">
+                    <span>List of Products</span>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3 addProdBtn">
                     <button class="btn btn-danger buttonMargin" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
                 </div>
             </div>
@@ -237,7 +243,7 @@
                     <div class="row" *ngIf="ticket.CustomerType == 20">
                         <div class="col-sm-12">
                             <table class="table table-condensed">
-                                <thead class="tableHeader">
+                                <thead class="mttableHeader">
                                     <th>Product</th>
                                     <th class="textAlignRight">Unit Price</th>
                                     <th class="textAlignRight">Quantity</th>
@@ -255,7 +261,8 @@
                                         </td>
                                         <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                         <td class="textAlignRight">
-                                            <input type="number" class="form-control textAlignRight" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                            <input type="number" class="form-control textAlignRight" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
+                                                [disabled]="isReadOnly">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td [hidden]="isReadOnly">
@@ -279,7 +286,7 @@
                     <div class="row" *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket">
                         <div class="col-sm-12">
                             <table class="table table-condensed">
-                                <thead class="tableHeader">
+                                <thead class="mttableHeader">
                                     <th>Machine</th>
                                     <th>Unit Price</th>
                                     <th>Previous Reading</th>
@@ -319,7 +326,7 @@
                     <div class="row" *ngIf="ticket.CustomerType == 22 && !ticket.IsSaleTicket">
                         <div class="col-sm-12">
                             <table class="table table-condensed">
-                                <thead class="tableHeader">
+                                <thead class="mttableHeader">
                                     <th>Machine</th>
                                     <th>Unit Price</th>
                                     <th>Delivered Bags</th>
@@ -362,7 +369,7 @@
                     <div class="row" *ngIf="ticket.CustomerType == 21">
                         <div class="col-sm-12">
                             <table class="table table-condensed">
-                                <thead class="tableHeader">
+                                <thead class="mttableHeader">
                                     <th>Product</th>
                                     <th>Unit Price</th>
                                     <th>Current Inventory</th>
@@ -419,9 +426,7 @@
             </div>
             <div class="padding">
                 <label for="example-text-input" class="col-form-label">Check Amount</label>
-                <div class="">
-                    <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
-                </div>
+                <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
             </div>
         </div>
     </div>
