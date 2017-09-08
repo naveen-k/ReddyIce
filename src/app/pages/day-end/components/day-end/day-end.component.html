@@ -19,7 +19,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row bottom-margin">
+            <div class="row bottom-margin" *ngIf='logedInUser.Role.RoleID == 1 || logedInUser.Role.RoleID == 2'>
                 <div class="col-md-6">
                     <label class="radioItem radio-inline custom-radio nowrap ">
                         <input type="radio"  [(ngModel)]='tripFilterOption.isForAll' [value]="false" (change)="selectionchangeHandler()">
@@ -74,18 +74,18 @@
                         <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
                                 <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail']" [queryParams]="{ TripID: item.TripID }"
-                                    style="margin-right: 5px" [hidden]="item.TripTicketList.HHCustomerID==null">
+                                    style="margin-right: 5px" [hidden]="logedInUser.IsRIInternal">
                                     <span class="tooltiptext">View</span>
                                 </i>
                                 <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ TripID: item.TripID }"
-                                    style="margin-right: 5px" [hidden]="item.TripTicketList.HHCustomerID==!null">
+                                    style="margin-right: 5px" [hidden]="!logedInUser.IsRIInternal">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
 
                             </td>
                             <td>{{item.RouteNumber}}</td>
-                            <td>{{item.BranchID}}</td>
-                            <td>{{item.IsDistributor?item.Distributor:"NA"}}</td>
+                            <td>{{item.BranchID}}-{{item.BranchName}}</td>
+                            <td>{{item.isDistributor ? "Yes":"No"}}</td>
                             <!--is Distributor status not available-->
                             <td>{{item.DriverName}}</td>
                             <!--Driver name not available-->

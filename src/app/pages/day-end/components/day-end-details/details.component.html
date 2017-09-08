@@ -46,10 +46,10 @@
                     <ng-template ngbTabContent>
                         <div class="row page-header">
 
-                            <div class="col-md-12 padding-eater">
+                            <!-- <div class="col-md-12 padding-eater">
                                 <label>Pallets:</label>
                                 <label>5</label>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row page-header">
                             <div class="col-md-12">
@@ -60,7 +60,7 @@
                                         <th class="text-center"><b>Actual</b></th>
                                         <th class="text-center"><b>Sales</b></th>
                                         <th></th>
-                                       
+
                                         <th></th>
                                         <th></th>
                                     </thead>
@@ -68,56 +68,56 @@
                                         <tr>
                                             <td>Check</td>
                                             <td>{{ticketDetails?.Total.TotalCheck| currency:'USD':true:'2.2-4'}}</td>
-                                            <td width="14%"><input class="form-control" type="text" [value]="Actual" [(ngModel)]="Actual"
+                                            <td width="14%"><input class="form-control small-input" type="text" [value]="Actual" [(ngModel)]="Actual"
                                                     (ngModelChange)="doAddition()"></td>
-                                             <td>Cash</td>
-                                             <td  >{{ 0 | currency:'USD':true:'2.2-4'}}</td>    
-                                             <td>Total Deposit</td>
+                                            <td>Cash</td>
+                                            <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
+                                            <td><b>Total Deposit</b></td>
                                             <td>{{total.totalDeposit| currency:'USD':true:'2.2-4'}}</td>
                                         </tr>
                                         <tr>
                                             <td>Cash</td>
                                             <td>{{ticketDetails?.Total.TotalCash| currency:'USD':true:'2.2-4'}}</td>
-                                            <td  ><input class="form-control" type="text" [value]="Cash" [(ngModel)]="Cash" (ngModelChange)="doAddition()"></td>
+                                            <td><input class="form-control small-input" type="text" [value]="Cash" [(ngModel)]="Cash" (ngModelChange)="doAddition()"></td>
                                             <td>Charge</td>
-                                             <td  >{{ 0 | currency:'USD':true:'2.2-4'}}</td>
-                                      
-                                             <td>Over/Short</td>
+                                            <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
+
+                                            <td><b>Over/Short</b></td>
                                             <td>{{total.overShort| currency:'USD':true:'2.2-4'}}</td>
                                         </tr>
-                                         <tr>
-                                             <td>Coins</td>
-                                             <td  > - </td>
-                                             <td><input class="form-control" type="text" [value]="Coins" [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
-                                            
-                                             <td>Total sales</td>
-                                             <td  >{{ 0 | currency:'USD':true:'2.2-4'}}</td>
-                                      
+                                        <tr>
+                                            <td>Coins</td>
+                                            <td> - </td>
+                                            <td><input class="form-control small-input" type="text" [value]="Coins" [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
+
+                                            <td><b>Total sales</b></td>
+                                            <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
+
                                             <td></td>
-                                            <td  ></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
-                                         <tr>
+                                        <tr>
                                             <td>Misc.</td>
-                                           
-                                            <td  > - </td>
-                                             <td  ><input class="form-control" type="text" [value]="Misc" [(ngModel)]="Misc" (ngModelChange)="doAddition()"></td>
+
+                                            <td> - </td>
+                                            <td><input class="form-control small-input" type="text" [value]="Misc" [(ngModel)]="Misc" (ngModelChange)="doAddition()"></td>
                                             <td></td>
-                                             <td ></td>
-                                      
                                             <td></td>
-                                            <td ></td>
+
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
-                                         <tr>
+                                        <tr>
                                             <td>Credit Card</td>
                                             <td>{{0 | currency:'USD':true:'2.2-4'}}</td>
-                                            <td ><input disabled class="form-control" type="text" [value]="0" ></td>
-                                             <td></td>
-                                             <td></td>
-                                      
+                                            <td><input disabled class="form-control small-input" type="text" [value]="0"></td>
+                                            <td></td>
+                                            <td></td>
+
 
                                             <td></td>
                                             <td></td>
@@ -169,6 +169,12 @@
                                                 </th>
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'sale';customer.isAsc=!customer.isAsc;">
+                                    Manual Tickets
+                                     <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                                                </th>
+                                                 <th>
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'sale';customer.isAsc=!customer.isAsc;">
                                     Sale
                                      <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
@@ -182,18 +188,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
-                                                <td width="23%">{{item.ProductName}}</td>
-                                                <td width="6%">{{item.Load }}</td>
-                                                <td width="10%"><input class="form-control small-input" type="number"></td>
+                                            <tr *ngFor="let item of unitReconciliationItemDTO|sort:customer.sortField:customer.isAsc">
+                                                <td width="22%">{{item.ProductName}}</td>
+                                                <td width="6%">{{item.Load}}</td>
+                                                <td width="9%"><input [(ngModel)]='item.Load1Quantity' class="form-control small-input" type="number"></td>
                                                 <td width="6%">{{item.Returns}}</td>
-                                                <td width="10%"><input class="form-control small-input dollar-input" type="number"></td>
+                                                <td width="9%"><input [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input" type="number"></td>
                                                 <td width="6%">{{item.TruckDamage}}</td>
-                                                <td width="10%"><input class="form-control small-input" type="number"></td>
+                                                <td width="9%"><input [(ngModel)]='item.DamageQuantity' class="form-control small-input" type="number"></td>
                                                 <td width="6%">{{item.CustomerDamage}}</td>
-                                                <td width="10%"><input class="form-control small-input" type="number"></td>
-                                                <td width="8%">{{item.Sale}}</td>
-                                                <td width="8%">{{item.OverShort}}</td>
+                                                <td width="9%"><input [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input" type="number"></td>
+                                                <td width="7%">{{item.ManualTicket}}</td>
+                                                <td width="7%">{{item.Sale}}</td>
+                                                <td width="7%">{{item.OverShort}}</td>
                                             </tr>
                                             <tr *ngIf="!unitReconciliation.length">
                                                 <th class="text-center" colspan="7"> No data found </th>
@@ -224,7 +231,7 @@
                                                  <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
                                                 </th>
-                                               
+
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
                                                 Ticket Number
@@ -266,7 +273,7 @@
                                         <tbody>
                                             <!--Removed sorting functionality as it was causing rendering issues-->
                                             <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
-                                                <td>{{item.CustomerID}}-{{item.CustomerName?item.customer:""}}</td>
+                                                <td>{{item.CustomerID}}-{{item.CustomerName}}</td>
                                                 <!-- Not Available -->
                                                 <td>{{item.TicketNumber}}</td>
                                                 <td></td>

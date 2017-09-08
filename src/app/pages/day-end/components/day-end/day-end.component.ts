@@ -2,6 +2,7 @@ import { any } from 'codelyzer/util/function';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DayEndService } from '../../day-end.service';
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../../../shared/user.service';
 
 @Component({
     templateUrl: './day-end.component.html',
@@ -18,6 +19,8 @@ export class DayEndComponent implements OnInit {
     // contains all Branches
     branches: any = "";
     customer:any = {};
+    logedInUser:any = {};
+
 
     // Note - IsForAll is to see all trips or Mytrips
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
@@ -26,7 +29,7 @@ export class DayEndComponent implements OnInit {
     tripDate: this.selectedDate,
      branchId: "0", isForAll: true};
 
-    constructor(private service: DayEndService) {
+    constructor(private service: DayEndService, private userService:UserService) {
         this.userDataTable = service.dataTableData;
         this.unitReconciliation = service.dataTableData2;
         this.ticketDetails = service.dataTableData3;
@@ -34,6 +37,9 @@ export class DayEndComponent implements OnInit {
  
         this.loadBranches();
         this.selectionchangeHandler();
+        this.logedInUser = this.userService.getUser();
+        console.log(this.logedInUser);
+        
 
     }
     ngOnInit() {

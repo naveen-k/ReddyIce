@@ -29,6 +29,7 @@ export class DetailsComponent implements OnInit {
     Misc: any;
     tripDate: any = '2017-08-31';
     unitReconciliation: any = [];
+    unitReconciliationItemDTO:any = [];
     reconciliationDTO:any={
         TripID: 0,
         ActualCash: 0.0,
@@ -38,12 +39,30 @@ export class DetailsComponent implements OnInit {
         Misc: 0.0,
         TtripStatusID: 1.0
       };
+     unitReconciliationItem:any = {
+        ProductName: 'sample string 1',
+        Load: 0,
+        ManualLoad: 0,
+        Returns: 0,
+        TruckDamage: 0,
+        CustomerDamage: 0,
+        CustomerDamageDRV: 2,
+        Sale: 0,
+        OverShort: 0,
+        Load1Quantity: 1,
+        DamageQuantity: 3,
+        ReturnQuantity: 0,
+        LoadReturnDamageID: 0,
+        TripID: 11,
+        ProductID: 12,
+        ManualTicket: 0,
+      };
 
     driverDetails: any = [];
     constructor(private service: DayEndService, private route: ActivatedRoute,
          private userService: UserService,private notification:NotificationsService,
         private modalService:NgbModal) {
-        this.unitReconciliation1 = service.dataTableData2;
+       
     }
   openCreateTicketModal() {
    
@@ -91,9 +110,30 @@ export class DetailsComponent implements OnInit {
         this.service.getUnitsReconciliation(this.tripID).subscribe((res) => {
             console.log(res);
             this.unitReconciliation = res;
+            this.mapUnitReconData(res);
         }, (err) => {
             console.log(err);
         });
+    }
+    mapUnitReconData(res){
+        if(!res.length){ return; }
+        for(let i = 0; i < res.length; i++){
+          
+           this.unitReconciliationItem.ProductName = res[i].ProductName;
+           this.unitReconciliationItem.Load = res[i].Load;
+           this.unitReconciliationItem.CustomerDamage = res[i].CustomerDamage;
+           this.unitReconciliationItem.Sale = res[i].Sale;
+           this.unitReconciliationItem.OverShort = res[i].OverShort;
+           this.unitReconciliationItem.LoadReturnDamageID = res[i].LoadReturnDamageID;
+           this.unitReconciliationItem.LoadReturnDamageID = res[i].LoadReturnDamageID;
+           this.unitReconciliationItem.TripID = res[i].TripID;
+           this.unitReconciliationItem.ProductID = res[i].ProductID;
+           this.unitReconciliationItem.ManualTicket = res[i].ManualTicket;
+           this.unitReconciliationItemDTO.push(this.unitReconciliationItem);
+           console.log(this.unitReconciliationItemDTO);
+
+        }
+
     }
     saveReconciliation(){
        
