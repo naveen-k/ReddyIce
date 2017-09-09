@@ -94,9 +94,8 @@
                       </span>
                     </th>
                     <th class="thVerticalAlign table-text-align" [hidden]="searchObj.userType!='Internal'">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer">
                             Driver
-                            <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                         </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
