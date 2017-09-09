@@ -6,7 +6,7 @@
                     Approve
                 </button>
                 <button class="btn btn-danger" (click)="editTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
-                    Edit
+                    Back to Draft
                 </button>
                 <button class="btn btn-danger buttonMargin" [disabled]="!tempModels.podReceived" onclick="document.getElementById('file').click()"
                     [hidden]="isReadOnly">
@@ -23,7 +23,7 @@
                     Submit
                 </button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
-                <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back to Draft</button>
+                <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back</button>
             </div>
         </div>
     </div>
