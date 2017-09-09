@@ -17,17 +17,17 @@ export class DayEndComponent implements OnInit {
     // contains all trips
     trips: any = [];
     // contains all Branches
-    branches: any = "";
+    branches: any = [];
     customer:any = {};
     logedInUser:any = {};
-    userBranch:any=[];
+    userBranch:any='0';
 
     // Note - IsForAll is to see all trips or Mytrips
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
     
     tripFilterOption: any = { uId: "0", 
     tripDate: this.selectedDate,
-     branchId: "0", isForAll: true};
+     branchId: '0', isForAll: true};
 
     constructor(private service: DayEndService, private userService:UserService) {
         this.userDataTable = service.dataTableData;
@@ -38,8 +38,8 @@ export class DayEndComponent implements OnInit {
         this.loadBranches();
         this.selectionchangeHandler();
         this.logedInUser = this.userService.getUser();
-        console.log(this.logedInUser);
-        this.userBranch=this.logedInUser.Branch.BranchName;
+        this.userBranch=this.logedInUser.Branch.BranchID;
+        this.tripFilterOption.branchId = this.userBranch;
         
 
     }
@@ -48,10 +48,10 @@ export class DayEndComponent implements OnInit {
    
     selectionchangeHandler() {
            // uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
-        console.log(this.selectedDate);
          this.tripFilterOption.tripDate = this.service.formatDate(this.selectedDate);
-        console.log(this.tripFilterOption.tripDate);
+         this.tripFilterOption.branchId = this.userBranch;
         this.loadFilteredTrips();
+        
     }
    
     loadFilteredTrips() {

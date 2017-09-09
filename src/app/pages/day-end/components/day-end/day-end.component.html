@@ -15,7 +15,7 @@
                 <div class="col-md-6">
                     <label><b>Select Branch</b></label>
                     <select class="form-control" [(ngModel)]='userBranch' (change)="selectionchangeHandler()">
-                         <option *ngFor="let branch of branches" [value] = 'userBranch' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchID}} - {{branch.BranchName}}</span>
+                         <option *ngFor="let branch of branches" [value] = 'branch.BranchID' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchID}} - {{branch.BranchName}}</span>
                             <span *ngIf="branch.BranchID == '1'">
                              {{branch.BranchName}}
                           </span></option> 
@@ -76,11 +76,11 @@
                         <!--Removed sorting functionality as it was causing rendering issues  -->
                         <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail']" [queryParams]="{ TripID: item.TripID }"
+                                <i *ngIf="!logedInUser.IsRIInternal" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail']" [queryParams]="{ TripID: item.TripID }"
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ TripID: item.TripID }"
+                                <i *ngIf="logedInUser.IsRIInternal"  (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ TripID: item.TripID }"
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
