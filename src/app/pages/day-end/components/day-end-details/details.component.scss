@@ -50,3 +50,12 @@
 input::before {
     content: "\0024";
 } 
+
+.table-text-align{
+    text-align: left !important;
+    padding-left: 7px;
+}
+
+.row-text-align{
+    text-align: left !important;
+}
