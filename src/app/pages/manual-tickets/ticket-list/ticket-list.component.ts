@@ -53,7 +53,7 @@ export class TicketListComponent implements OnInit {
         this.allBranches = this.activatedRoute.snapshot.data['branches'];
 
         // Remove 'All branch' object
-        if (this.allBranches[0].BranchID === 1) {
+        if (this.allBranches.length && this.allBranches[0].BranchID === 1) {
             this.allBranches.shift();
         }
 
