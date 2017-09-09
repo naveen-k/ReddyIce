@@ -74,39 +74,39 @@
                             Approve
                         </button>
                     </th>
-                    <th class="table-id thVerticalAlign table-text-align" style="width:72px;">Actions</th>
+                    <th class="table-id thVerticalAlign actionAlignCenter" style="width:72px;">Actions</th>
                     <th class="thVerticalAlign table-text-align">
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
                           Ticket #
                            <i *ngIf="(customer.sortField == 'TicketID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
                             Ticket Type
                             <i *ngIf="(customer.sortField == 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                         </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
                           Customer
                           <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th class="thVerticalAlign" [hidden]="searchObj.userType!='Internal'">
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
+                    <th class="thVerticalAlign table-text-align" [hidden]="searchObj.userType!='Internal'">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
                             Driver
                             <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                         </span>
                     </th>
-                    <th class="thVerticalAlign textAlignRight">
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
+                    <th class="thVerticalAlign textAlignRight amtPadding">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
                           Amount
                           <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter">
-                        <span style="cursor:pointer;">
+                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
+                        <span class="cursorPointer">
                           Status
                           <i *ngIf="(customer.sortField == 'CardPaymentStatus')" [ngClass]="(customer.isAsc && customer.sortField == 'CardPaymentStatus' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>

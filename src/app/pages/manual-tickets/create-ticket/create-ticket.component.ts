@@ -235,6 +235,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadDriversOfBranch(branchId) {
+
     this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
       this.drivers = res;
     });

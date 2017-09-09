@@ -37,7 +37,23 @@
     min-height: 340px;
 }
 
-.table-text-align{
+.table-text-align {
     text-align: left !important;
-    padding-left: 6px;
+    padding-left: 7px;
+}
+
+.actionAlignCenter {
+    padding-left: 9px;
+}
+
+.cursorPointer {
+    cursor:pointer;
+}
+
+.statusPadding {
+    padding-right: 28px !important;
+}
+
+.amtPadding {
+    padding-right: 8px;
 }
