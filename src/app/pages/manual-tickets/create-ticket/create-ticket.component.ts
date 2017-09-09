@@ -513,6 +513,21 @@ export class CreateTicketComponent implements OnInit {
     this.calculateTotalSale();
   }
 
+  deleteTicket() {
+    this.service.deleteDraftTicket(this.ticket.TicketID).subscribe(
+      (response) => {
+          if (response) {
+              this.notification.success('Ticket deleted successfully');
+          }
+      },
+      (error) => {
+          if (error) {
+              this.notification.error(error._body);
+          }
+      },
+  );
+  }
+
   loadTicket(ticketId) {
     this.service.getTicketById(ticketId).subscribe(response => {
       this.ticket = response[0];

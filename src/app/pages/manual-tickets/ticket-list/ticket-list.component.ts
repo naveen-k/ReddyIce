@@ -173,7 +173,6 @@ export class TicketListComponent implements OnInit {
 
     // delete ticket in the draft state
     deleteTicket(ticketNumber) {
-        // call workflow service to approve all the checked ticket numbers
         this.service.deleteDraftTicket(ticketNumber).subscribe(
             (response) => {
                 if (response) {
@@ -182,7 +181,7 @@ export class TicketListComponent implements OnInit {
             },
             (error) => {
                 if (error) {
-                    this.notificationService.error('Error');
+                    this.notificationService.error(error._body);
                 }
             },
         );
