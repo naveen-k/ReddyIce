@@ -23,7 +23,9 @@ export class CreateTicketComponent implements OnInit {
   ticket: ManualTicket = {} as ManualTicket;
 
   // hold temp models
-  tempModels: any = {};
+  tempModels: any = {
+    podReceived: false,
+  };
 
   ticketTypes: any;
 
@@ -106,7 +108,7 @@ export class CreateTicketComponent implements OnInit {
     // Initialize properties from searched Object of List ticket page
     const searchObject = this.service.getSearchedObject();
     this.ticket.DeliveryDate = searchObject.CreatedDate;
-    this.ticket.BranchID = searchObject.BranchId;
+    this.ticket.BranchID = +searchObject.BranchId;
     this.ticket.isUserTypeDistributor = searchObject.userType ? searchObject.userType !== 'Internal' : null;
     this.ticket.UserID = +searchObject.UserId;
     this.ticket.DistributorCopackerID = +searchObject.DistributorID;
@@ -299,7 +301,7 @@ export class CreateTicketComponent implements OnInit {
       }
 
     });
-    this.calculateTotalAmountAndUnit();
+    this.calculateTotalSale();
   }
 
 
@@ -406,49 +408,14 @@ export class CreateTicketComponent implements OnInit {
     }
   }
 
-  updateTicketDetailObject(ticketDetail) {
-    ticketDetail['productSelected'] = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
-    ticketDetail.Rate = ticketDetail['productSelected'].Price;
-    ticketDetail.TaxPercentage = this.customer.Tax;
-  }
-
-
-  unitChangeHandler(tdetail) {
-    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.Quantity, tdetail.productSelected.Price);
-    this.calculateTotalAmountAndUnit();
-  }
-
-  bagsChangeHandler(tdetail) {
-    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.DeliveredBags, tdetail.productSelected.Price);
-    this.calculateTotalAmountAndUnit();
-  }
-
-  calculateProductTotalAmount(q, p) {
-    q = q || 0;
-    p = p || 0;
-    return +q * +p;
-  }
-
-  calculateTotalAmountAndUnit() {
-    this.ticket['tempTotalUnit'] = 0;
-    this.ticket.TotalSale = 0;
-
-    this.ticket.TicketProduct.forEach((t) => {
-      this.ticket['tempTotalUnit'] += +t.Quantity || 0;
-      this.ticket.TotalSale += +t['totalAmount'] || 0;
-    });
-
-    this.ticket.TotalAmount = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
-  }
-
   typeChangeHandler() {
     this.resetCashAndCheck();
   }
 
   resetCashAndCheck() {
-    this.ticket.CashAmount = '';
-    this.ticket.CheckAmount = '';
-    this.ticket.CheckNumber = '';
+    this.ticket.CashAmount = null;
+    this.ticket.CheckAmount = null;
+    this.ticket.CheckNumber = null;
   }
 
   onCancelClick() {
@@ -514,7 +481,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketProduct.splice(index, 1);
 
     // update total amount and total count
-    this.calculateTotalAmountAndUnit();
+    this.calculateTotalSale();
   }
 
   loadTicket(ticketId) {
@@ -549,6 +516,7 @@ export class CreateTicketComponent implements OnInit {
       // Update ticket
       this.service.updateTicket(ticket).subscribe(res => {
         this.notification.success(res);
+        this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
       });
       return;
     }
@@ -574,6 +542,11 @@ export class CreateTicketComponent implements OnInit {
     this.saveTicket();
   }
 
+  editTicket() {
+    this.ticket.TicketStatusID = 23;
+    this.saveTicket();
+  }
+
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
     const clonedObject = JSON.parse(JSON.stringify(ticket)); // { ...ticket }; 
 
@@ -591,10 +564,17 @@ export class CreateTicketComponent implements OnInit {
     if (!clonedObject || !clonedObject.TicketProduct) {
       return;
     }
+
+    // Filter out all the blank Ticket Product Object 
+    clonedObject.TicketProduct = clonedObject.TicketProduct.filter((t) => Object.keys(t).length);
+
     clonedObject.TicketProduct.forEach(t => {
       delete t['productSelected'];
       delete t['totalAmount'];
     });
+
+    // Calculate Total Amount
+    this.calculateCashCheckAndTotalAmount(clonedObject);
 
     // modify date obj to date string
     if (clonedObject.DeliveryDate) {
@@ -602,6 +582,14 @@ export class CreateTicketComponent implements OnInit {
     }
 
     return clonedObject;
+  }
+
+  calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
+    if (!ticket.IsSaleTicket) {
+      this.resetCashAndCheck();
+      ticket.TicketTypeID = null;
+    }
+    ticket.TotalAmount = (ticket.CheckAmount || 0) + (ticket.CashAmount + 0);
   }
 
   convertToDate(date: string): any {
@@ -612,7 +600,7 @@ export class CreateTicketComponent implements OnInit {
 
   readingChangeHandler(tdetail) {
     tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.EndMeterReading - tdetail.StartMeterReading, tdetail.productSelected.Price);
-    this.calculateTotalAmountAndUnit();
+    this.calculateTotalSale();
   }
 
   userTypeChangeHandler() {
@@ -622,5 +610,45 @@ export class CreateTicketComponent implements OnInit {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
   }
+
+  /**
+   * 
+   * Calculation 
+   */
+  updateTicketDetailObject(ticketDetail) {
+    ticketDetail['productSelected'] = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+    ticketDetail.Rate = ticketDetail['productSelected'].Price;
+    ticketDetail.TaxPercentage = this.customer.Tax;
+  }
+
+
+  unitChangeHandler(tdetail) {
+    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.Quantity, tdetail.productSelected.Price);
+    this.calculateTotalSale();
+  }
+
+  bagsChangeHandler(tdetail) {
+    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.DeliveredBags, tdetail.productSelected.Price);
+    this.calculateTotalSale();
+  }
+
+  calculateProductTotalAmount(q, p) {
+    q = q || 0;
+    p = p || 0;
+    return +q * +p;
+  }
+
+  calculateTotalSale() {
+    this.ticket['tempTotalUnit'] = 0;
+    this.ticket.TotalSale = 0;
+
+    this.ticket.TicketProduct.forEach((t) => {
+      this.ticket['tempTotalUnit'] += +t.Quantity || 0;
+      this.ticket.TotalSale += +t['totalAmount'] || 0;
+    });
+    this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
+    this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
+  }
+
 
 }

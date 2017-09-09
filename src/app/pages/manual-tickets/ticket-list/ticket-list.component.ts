@@ -1,3 +1,4 @@
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { NotificationsService } from 'angular2-notifications';
 import { User } from '../../user-management/user-management.interface';
@@ -28,6 +29,10 @@ export class TicketListComponent implements OnInit {
 
     distributors: any[];
 
+    todaysDate: any;
+
+    // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
+
     constructor(
         protected service: ManualTicketService,
         protected userService: UserService,
@@ -39,9 +44,7 @@ export class TicketListComponent implements OnInit {
         this.searchObj = this.service.getSearchedObject();
 
         const now = new Date();
-        // by default setting today's date in model
-        this.searchObj.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-        this.searchObj.userType = 'External';
+        this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
         // Get loggedIn user details
         this.user = this.userService.getUser();
@@ -55,18 +58,18 @@ export class TicketListComponent implements OnInit {
         }
 
         // Set first branch default selected
-        if (this.allBranches.length) {
-            this.searchObj.BranchId = this.allBranches[0].BranchID;
-
-            // default userType is 'External' so load distributors
-            this.getDistributors(this.searchObj.BranchId);
+        if (this.searchObj.BranchId) {
+            this.branchChangeHandler();
         }
 
     }
 
     getDrivers() {
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
+            res = res || [];
+            res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
             this.drivers = res;
+            this.searchObj.UserId = 1;
             this.getSearchedTickets();
         });
     }
@@ -79,7 +82,11 @@ export class TicketListComponent implements OnInit {
     }
 
     branchChangeHandler() {
-        this.getDrivers();
+        if (this.searchObj.userType === 'Internal') {
+            this.getDrivers();
+        } else {
+            this.getDistributors(this.searchObj.BranchId);
+        }
     }
 
     getSearchedTickets() {
@@ -150,6 +157,9 @@ export class TicketListComponent implements OnInit {
     }
 
     typeChangeHandler() {
+        if (!this.searchObj.BranchId) {
+            return;
+        }
         if (this.searchObj.userType === 'External') {
             this.getDistributors(this.searchObj.BranchId);
         } else {

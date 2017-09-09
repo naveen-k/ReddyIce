@@ -29,8 +29,8 @@ export interface ManualTicket {
     IsInvoice: boolean;
     DeliveryDate: any;
     PONumber: string;
-    CashAmount: string;
-    CheckAmount: string;
+    CashAmount: number;
+    CheckAmount: number;
     CheckNumber: string;
     CreditCardAmount: string;
     ReceiverName: string;

@@ -15,6 +15,12 @@ export class ManualTicketService extends SharedService {
 
   constructor(protected http: HttpService, private tmpHttp: Http, protected userService: UserService) {
     super(http);
+
+    const now = new Date();
+    this._searchObject = {
+      CreatedDate: { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() },
+      userType: 'External',
+    };
   }
 
   getAllTickets(createdDate, branchId, userId?): Observable<any[]> {

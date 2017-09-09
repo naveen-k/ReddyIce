@@ -5,11 +5,11 @@ import { Pipe } from '@angular/core';
 })
 export class TicketTypePipe implements PipeTransform {
     transform(value: number) {
-        if (value === 20) {
-            return 'Manual';
-        } else if (value === 22) {
-            return 'Handheld';
+        if (value === 22) {
+            return 'Sale';
+        } else if (value === 23) {
+            return 'Credit';
         }
-        return value;
+        return 'Consignment';
     }
 }

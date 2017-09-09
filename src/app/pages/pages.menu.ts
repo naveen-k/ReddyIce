@@ -15,6 +15,30 @@ export const PAGES_MENU = [
         },
       },
       {
+        path: 'day-end',
+        data: {
+          menu: {
+            title: 'Day End',
+            icon: 'ion-happy',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
+      {
+        path: 'manual-ticket',
+        data: {
+          menu: {
+            title: 'Manual Ticket',
+            icon: 'ion-compose',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
+      {
         path: 'customer-management',
         data: {
           menu: {
@@ -50,30 +74,7 @@ export const PAGES_MENU = [
           },
         },
       },
-      {
-        path: 'day-end',
-        data: {
-          menu: {
-            title: 'Day End',
-            icon: 'ion-happy',
-            selected: false,
-            expanded: false,
-            order: 0,
-          },
-        },
-      },
-      {
-        path: 'manual-ticket',
-        data: {
-          menu: {
-            title: 'Manual Ticket',
-            icon: 'ion-compose',
-            selected: false,
-            expanded: false,
-            order: 0,
-          },
-        },
-      },
+
       {
         path: 'tracker',
         data: {

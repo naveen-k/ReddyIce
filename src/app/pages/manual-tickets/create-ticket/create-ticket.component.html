@@ -2,26 +2,28 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
-                <button class="btn btn-danger" (click)="approveTicket()" 
-                    [hidden] = "ticket.TicketStatusID == 24 || ticket.TicketStatusID == 23 || isReadOnly || !ticketId">
+                <button class="btn btn-danger" (click)="approveTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
                     Approve
+                </button>
+                <button class="btn btn-danger" (click)="editTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
+                    Edit
                 </button>
                 <button class="btn btn-danger buttonMargin" [disabled]="!tempModels.podReceived" onclick="document.getElementById('file').click()"
                     [hidden]="isReadOnly">
                     Upload POD
                 </button>
-                <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png" />
+                <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png,image/jpeg" />
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
                 <button class="btn btn-danger buttonMargin" [disabled]="ticket.TicketStatusID !== 23">
                     Delete
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
+                <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="ticket.TicketStatusID != 23">
                     Submit
                 </button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
-                <button class="btn btn-default buttonMargin" (click)="onCancelClick()">Back</button>
+                <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back to Draft</button>
             </div>
         </div>
     </div>
@@ -41,7 +43,7 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">Branch</label>
                 <div class="col-sm-7">
                     <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
-                        [disabled]="isReadOnly">
+                        [disabled]="ticket.TicketID">
                         <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
                     </select>
                 </div>
@@ -68,12 +70,12 @@
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-4 col-form-label">Customer Type</label>
 
-                <label [hidden]="isReadOnly" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <label [hidden]="isReadOnly || ticket.TicketID" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.CustomerType" (ngModelChange)="customerTypeChangeHandler();isFormDirty=true;">
                     <span>{{tType.Value}}</span>
                 </label>
                 <!--Hack for displaying disabled in case of read only mode-->
-                <label [hidden]="!isReadOnly" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <label [hidden]="!ticket.TicketID" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                     <input type="radio" name="ticketType1" [value]="tType.ID" [(ngModel)]="ticket.CustomerType" [disabled]="true">
                     <span>{{tType.Value}}</span>
                 </label>
@@ -86,8 +88,9 @@
                     </ng-template>
                     <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" [resultTemplate]="rt"
                         placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="customerChangeHandler($event);isFormDirty=true;"
-                        [disabled]="isReadOnly" />
+                        [disabled]="ticket.TicketID" />
                 </div>
+                <label [hidden]="!customer" class="col-sm-1" style="padding:8px 0 0 0; text-align: left; margin-left: -10px;">{{customer?.PaymentType===19?'Charge':'Cash'}}</label>
             </div>
             <div class="row padding" [hidden]="!modes || !modes.length">
                 <label for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
@@ -121,7 +124,7 @@
                     </label>
                 </div>
                 <!--Hack for displaying disabled in case of read only mode-->
-                <div [hidden]="!isReadOnly" class="col-sm-10">
+                <div [hidden]="!isReadOnly" class="col-sm-9">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="pod1" [value]="true" [(ngModel)]="tempModels.podReceived" [disabled]="true">
                         <span>Received</span>
@@ -245,7 +248,7 @@
                             <table class="table table-condensed">
                                 <thead class="mttableHeader">
                                     <th>Product</th>
-                                    <th class="textAlignRight">Unit Price</th>
+                                    <th class="textAlignRight">Price</th>
                                     <th class="textAlignRight">Quantity</th>
                                     <th class="textAlignRight">Amount</th>
                                     <th [hidden]="isReadOnly">Action</th>
@@ -259,20 +262,26 @@
                                                     {{pdetail.DisplayName}} </option>    
                                             </select>
                                         </td>
-                                        <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                        <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
                                         <td class="textAlignRight">
                                             <input type="number" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
-                                        <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                        <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
                                         <td [hidden]="isReadOnly">
                                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                                         </td>
                                     </tr>
                                     <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
                                         <td colspan="2"></td>
-                                        <td><b>{{ticket.tempTotalUnit}}</b></td>
-                                        <td><b>{{ticket.TotalSale | currency:'USD':true:'2.2-4'}}</b></td>
+                                        <td class="textAlignRight"><b>Total Tax</b></td>
+                                        <td class="textAlignRight"><b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b></td>
+                                        <td [hidden]="isReadOnly"></td>
+                                    </tr>
+                                    <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                        <td colspan="2"></td>
+                                        <td class="textAlignRight"><b>Total Amount</b></td>
+                                        <td class="textAlignRight"><b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b></td>
                                         <td [hidden]="isReadOnly"></td>
                                     </tr>
                                 </tbody>
@@ -288,7 +297,7 @@
                             <table class="table table-condensed">
                                 <thead class="mttableHeader">
                                     <th>Machine</th>
-                                    <th>Unit Price</th>
+                                    <th>Price</th>
                                     <th>Previous Reading</th>
                                     <th>Current Reading</th>
                                     <th>Amount</th>
@@ -297,7 +306,7 @@
                                 <tbody>
                                     <tr *ngFor="let tdetail of ticket?.TicketProduct">
                                         <td>
-                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                            <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
                                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                     {{pdetail.DisplayName}} </option>    
@@ -305,17 +314,29 @@
                                         </td>
                                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
                                         <td>
-                                            <input type="text" minValue class="form-control" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                            <input type="text" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control" [(ngModel)]="tdetail.EndMeterReading" (blur)="readingChangeHandler(tdetail);"
-                                                [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
+                                            <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading"
+                                                (blur)="readingChangeHandler(tdetail);" [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
                                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                                         </td>
+                                    </tr>
+                                    <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                        <td colspan="2"></td>
+                                        <td class="textAlignRight"><b>Total Tax</b></td>
+                                        <td class="textAlignRight"><b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b></td>
+                                        <td [hidden]="isReadOnly"></td>
+                                    </tr>
+                                    <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                        <td colspan="2"></td>
+                                        <td class="textAlignRight"><b>Total Amount</b></td>
+                                        <td class="textAlignRight"><b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b></td>
+                                        <td [hidden]="isReadOnly"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -328,16 +349,17 @@
                             <table class="table table-condensed">
                                 <thead class="mttableHeader">
                                     <th>Machine</th>
-                                    <th>Unit Price</th>
+                                    <th>Price</th>
                                     <th>Delivered Bags</th>
                                     <th>Current Inventory</th>
                                     <th>Damaged Bags</th>
+                                    <th>Amount</th>
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let tdetail of ticket?.TicketProduct">
                                         <td>
-                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                            <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
                                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                     {{pdetail.DisplayName}} </option>    
@@ -345,17 +367,31 @@
                                         </td>
                                         <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
-                                            <input type="number" class="form-control" [(ngModel)]="tdetail.DeliveredBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);"
+                                                [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory" [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" [(ngModel)]="tdetail.DamagedBags" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags" [disabled]="isReadOnly">
                                         </td>
+                                        <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
                                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                                         </td>
+                                    </tr>
+                                    <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                        <td colspan="4"></td>
+                                        <td class="textAlignRight"><b>Total Tax</b></td>
+                                        <td class="textAlignRight"><b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b></td>
+                                        <td [hidden]="isReadOnly"></td>
+                                    </tr>
+                                    <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                        <td colspan="4"></td>
+                                        <td class="textAlignRight"><b>Total Amount</b></td>
+                                        <td class="textAlignRight"><b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b></td>
+                                        <td [hidden]="isReadOnly"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -371,7 +407,7 @@
                             <table class="table table-condensed">
                                 <thead class="mttableHeader">
                                     <th>Product</th>
-                                    <th>Unit Price</th>
+                                    <th>Price</th>
                                     <th>Current Inventory</th>
                                     <th>Delivered Bags</th>
                                     <th>Amount</th>
@@ -380,7 +416,7 @@
                                 <tbody>
                                     <tr *ngFor="let tdetail of ticket?.TicketProduct">
                                         <td>
-                                            <select class="form-control" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                            <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
                                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
                                                     {{pdetail.DisplayName}} </option>    
@@ -388,15 +424,29 @@
                                         </td>
                                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
-                                            <input type="number" class="form-control" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);"
+                                                [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);" [disabled]="isReadOnly">
+                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
+                                                [disabled]="isReadOnly">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
                                             <a href="javascript:void();" (click)="deleteProductHandler(tdetail)"><i class="ion-trash-a"></i></a>
                                         </td>
+                                    </tr>
+                                    <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                        <td colspan="2"></td>
+                                        <td class="textAlignRight"><b>Total Tax</b></td>
+                                        <td class="textAlignRight"><b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b></td>
+                                        <td [hidden]="isReadOnly"></td>
+                                    </tr>
+                                    <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                        <td colspan="2"></td>
+                                        <td class="textAlignRight"><b>Total Amount</b></td>
+                                        <td class="textAlignRight"><b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b></td>
+                                        <td [hidden]="isReadOnly"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -431,7 +481,7 @@
             <div id="checkAmount" class="padding">
                 <label for="example-text-input" class="col-form-label">Check Amount</label>
                 <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
-                name="CheckAmount" #CheckAmount="ngModel" required>
+                    name="CheckAmount" #CheckAmount="ngModel" required>
                 <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount && (CheckAmount.dirty || CheckAmount.touched)" class="error-message">
                     <i class="ion-android-alert showError"></i>
                     <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount" class="custom-tooltip bottom">Check Amount is required as Check Number exists</div>
@@ -439,7 +489,7 @@
             </div>
         </div>
     </div>
-    <div class="row dummyMarginTop">
+    <!-- <div class="row dummyMarginTop">
         <div class="col-sm-1"></div>
         <div class="col-md-5">
             <div class="row">
@@ -451,18 +501,7 @@
                 </div>
             </div>
             <br>
-            <!-- <div class="row">
-                    <div class="col-md-4">
-                        <b>Store Credit</b>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <b>-$5.00</b>
-                    </div>
-                </div>
-                <br> -->
+            
             <div class="row">
                 <div class="col-md-8">
                     <b>Tax</b>
@@ -483,5 +522,5 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-1"></div>
+    <div class="col-sm-1"></div> -->
 </ba-card>

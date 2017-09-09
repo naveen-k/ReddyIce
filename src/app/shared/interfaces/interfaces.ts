@@ -53,6 +53,7 @@ export interface Customer {
     productdetail: ProductDetail[];
     Tax: number;
     CustomerTypeID: number;
+    PaymentType: number;
 }
 
 export interface ProductDetail {
