@@ -63,6 +63,9 @@ export class CreateTicketComponent implements OnInit {
   poMinMaxLength: boolean = false;
 
   checkMinMaxLength: boolean = false;
+  checkContainsCharacters: boolean = false;
+
+  custType: boolean = false;
 
   // disablePodButton: boolean = true;
 
@@ -277,6 +280,7 @@ export class CreateTicketComponent implements OnInit {
         };
         setTimeout(callPrepareTicket, 100);
       }
+      this.custType = this.customer.PaymentType === 19 ? true : false;
     });
   }
 
@@ -402,10 +406,34 @@ export class CreateTicketComponent implements OnInit {
 
   checkNumberValidation() {
     const checkNumberLength = this.ticket.CheckNumber.length;
-    if (checkNumberLength > 20) {
+    const letterNumber = /^[0-9a-zA-Z]+$/;              // pattern to check for string to be alphanumeric
+    if (checkNumberLength > 20 || checkNumberLength < 5) {
       this.checkMinMaxLength = true;
+      this.checkContainsCharacters = false;
+      this.custType = false;
+    } else if ((this.ticket.CheckNumber.match(letterNumber)) &&
+      (checkNumberLength > 5 || checkNumberLength < 20)) {      // check for string to be alphanumeric
+      this.checkContainsCharacters = false;
+      this.checkMinMaxLength = false;
+      this.custType = false;
     } else {
       this.checkMinMaxLength = false;
+      this.custType = false;
+      if (!(this.ticket.CheckNumber.match(letterNumber))) {
+        this.checkContainsCharacters = true;
+      }
+    }
+  }
+
+  checkAmountChangeHandler() {
+    if (this.ticket.CheckAmount) {
+      this.custType = false;
+    }
+  }
+
+  cashAmountChangeHandler() {
+    if (this.ticket.CashAmount) {
+      this.custType = false;
     }
   }
 
@@ -522,15 +550,18 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     // Save ticket
-    this.service.saveTicket(ticket).subscribe(res => {
-      this.notification.success('Ticket created successfully!');
-      this.route.navigate(['../'], { relativeTo: this.activatedRoute });
-    },
-      (error) => {
-        if (error) {
-          this.notification.error('Error while creating ticket!');
-        }
-      });
+    if (!this.custType) {
+      this.service.saveTicket(ticket).subscribe(res => {
+        this.notification.success('Ticket created successfully!');
+        this.route.navigate(['../'], { relativeTo: this.activatedRoute });
+      }, (error) => {
+          if (error) {
+            this.notification.error('Error while creating ticket!');
+          }
+        });
+    } else {
+      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Charge type');
+    }
   }
 
   submitTicket() {

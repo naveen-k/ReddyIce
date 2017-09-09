@@ -105,10 +105,10 @@
                           <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th (click)="customer.sortField = 'CardPaymentStatus';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
+                    <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
                         <span class="cursorPointer">
                           Status
-                          <i *ngIf="(customer.sortField == 'CardPaymentStatus')" [ngClass]="(customer.isAsc && customer.sortField == 'CardPaymentStatus' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                          <i *ngIf="(customer.sortField == 'TicketStatusID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketStatusID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                 </tr>
