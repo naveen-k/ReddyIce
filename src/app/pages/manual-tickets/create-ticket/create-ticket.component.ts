@@ -280,7 +280,7 @@ export class CreateTicketComponent implements OnInit {
         };
         setTimeout(callPrepareTicket, 100);
       }
-      this.custType = this.customer.PaymentType === 19 ? true : false;
+      this.custType = this.customer.PaymentType === 19 ? false : true;
     });
   }
 
