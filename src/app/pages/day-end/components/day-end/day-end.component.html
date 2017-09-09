@@ -86,8 +86,8 @@
                                 </i>
 
                             </td>
-                            <td *ngIf="item.RouteNumber==0">Unplanned</td>
-                            <td *ngIf="!item.RouteNumber==0">{{item.RouteNumber}}</td>
+                            <td *ngIf="!item.RouteNumber">Unplanned</td>
+                            <td *ngIf="item.RouteNumber">{{item.RouteNumber}}</td>
                             <td>{{item.BranchID}}-{{item.BranchName}}</td>
                             <!-- <td>{{item.isDistributor ? "Yes":"No"}}</td> -->
                             <!--is Distributor status not available-->
