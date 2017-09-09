@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LoginService {
-   // API_ENDPOINT = 'http://frozen.reddyice.com/myiceboxservice_dev/';
-   API_ENDPOINT = 'http://frozen.reddyice.com/IceboxTripEndService/';
+   API_ENDPOINT = 'http://frozen.reddyice.com/myiceboxservice_dev/';
+   //API_ENDPOINT = 'http://frozen.reddyice.com/IceboxTripEndService/';
     constructor(private http: Http, private userService: UserService) { }
     userInfo: any;
     login(data: any): Observable<any> {

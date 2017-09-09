@@ -68,7 +68,7 @@
                                         <tr>
                                             <td>Check</td>
                                             <td>{{ticketDetails?.Total.TotalCheck| currency:'USD':true:'2.2-4'}}</td>
-                                            <td width="14%"><input class="form-control small-input" type="text" [value]="Actual" [(ngModel)]="Actual"
+                                            <td width="14%"><input class="form-control small-input" type="number" [value]="Actual" [(ngModel)]="Actual"
                                                     (ngModelChange)="doAddition()"></td>
                                             <td>Cash</td>
                                             <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
@@ -78,7 +78,8 @@
                                         <tr>
                                             <td>Cash</td>
                                             <td>{{ticketDetails?.Total.TotalCash| currency:'USD':true:'2.2-4'}}</td>
-                                            <td><input class="form-control small-input" type="text" [value]="Cash" [(ngModel)]="Cash" (ngModelChange)="doAddition()"></td>
+                                            <td><input class="form-control small-input" type="number" [value]="Cash" [(ngModel)]="Cash"
+                                                    (ngModelChange)="doAddition()"></td>
                                             <td>Charge</td>
                                             <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
 
@@ -88,7 +89,8 @@
                                         <tr>
                                             <td>Coins</td>
                                             <td> - </td>
-                                            <td><input class="form-control small-input" type="text" [value]="Coins" [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
+                                            <td><input class="form-control small-input" type="number" [value]="Coins" [(ngModel)]="Coins"
+                                                    (ngModelChange)="doAddition()"></td>
 
                                             <td><b>Total sales</b></td>
                                             <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
@@ -102,7 +104,8 @@
                                             <td>Misc.</td>
 
                                             <td> - </td>
-                                            <td><input class="form-control small-input" type="text" [value]="Misc" [(ngModel)]="Misc" (ngModelChange)="doAddition()"></td>
+                                            <td><input class="form-control small-input" type="number" [value]="Misc" [(ngModel)]="Misc"
+                                                    (ngModelChange)="doAddition()"></td>
                                             <td></td>
                                             <td></td>
 
@@ -114,7 +117,7 @@
                                         <tr>
                                             <td>Credit Card</td>
                                             <td>{{0 | currency:'USD':true:'2.2-4'}}</td>
-                                            <td><input disabled class="form-control small-input" type="text" [value]="0"></td>
+                                            <td><input disabled class="form-control small-input" type="number" [value]="0"></td>
                                             <td></td>
                                             <td></td>
 
@@ -173,7 +176,7 @@
                                      <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                                                 </th>
-                                                 <th>
+                                                <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'sale';customer.isAsc=!customer.isAsc;">
                                     Sale
                                      <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -191,13 +194,17 @@
                                             <tr *ngFor="let item of unitReconciliationItemDTO|sort:customer.sortField:customer.isAsc">
                                                 <td width="25%">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load}}</td>
-                                                <td width="9%"><input [(ngModel)]='item.Load1Quantity' class="form-control small-input" type="number"></td>
+                                                <td width="9%"><input [(ngModel)]='item.Load1Quantity' class="form-control small-input"
+                                                        type="number"></td>
                                                 <td width="6%">{{item.Returns}}</td>
-                                                <td width="9%"><input [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input" type="number"></td>
+                                                <td width="9%"><input [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
+                                                        type="number"></td>
                                                 <td width="5%">{{item.TruckDamage}}</td>
-                                                <td width="9%"><input [(ngModel)]='item.DamageQuantity' class="form-control small-input" type="number"></td>
+                                                <td width="9%"><input [(ngModel)]='item.DamageQuantity' class="form-control small-input"
+                                                        type="number"></td>
                                                 <td width="6%">{{item.CustomerDamage}}</td>
-                                                <td width="9%"><input [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input" type="number"></td>
+                                                <td width="9%"><input [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
+                                                        type="number"></td>
                                                 <td width="5%">{{item.ManualTicket}}</td>
                                                 <td width="7%">{{item.Sale}}</td>
                                                 <td width="7%">{{item.OverShort}}</td>
@@ -223,8 +230,9 @@
                             <div class="col-md-12 page-header">
                                 <div class="overflow">
                                     <table class="table table-striped">
-                                        <thead class="tableHeader">
+                                        <thead>
                                             <tr>
+                                                <th>Actions</th>
                                                 <th class="table-text-align">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'custNumber';customer.isAsc=!customer.isAsc;">
                                               Customer 
@@ -243,6 +251,12 @@
                                                 Ticket Type
                                                  <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
+                                                </th>
+                                                <th class="table-text-align">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
+                                                    Total Amount
+                                                     <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                </span>
                                                 </th>
                                                 <th class="table-text-align">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
@@ -273,18 +287,29 @@
                                         <tbody>
                                             <!--Removed sorting functionality as it was causing rendering issues-->
                                             <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
+                                                <td class="table-id" style="cursor: pointer">
+                                                    <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.IsPaperTicket">
+                                                                <span class="tooltiptext">View</span>
+                                                            </i>
+                                                    <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket">
+                                                                <span class="tooltiptext">Edit</span>
+                                                            </i>
+
+                                                </td>
                                                 <td class="row-text-align">{{item.CustomerID}}-{{item.CustomerName}}</td>
                                                 <!-- Not Available -->
                                                 <td class="row-text-align">{{item.TicketNumber}}</td>
-                                                <td class="row-text-align"></td>
-                                                <td class="row-text-align"> </td>
+                                                <td class="row-text-align" *ngIf="item.IsPaperTicket">Manual</td>
+                                                <td class="row-text-align" *ngIf="!item.IsPaperTicket">HH</td>
+                                                <td class="row-text-align">{{item.TotalAmount| currency:'USD':true:'2.2-4'}} </td>
+                                                <td class="row-text-align">{{item.TotalSale| currency:'USD':true:'2.2-4'}} </td>
                                                 <td class="row-text-align">{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
                                                 <td class="row-text-align">{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
                                                 <td class="row-text-align">{{item.charge?item.charge:""}}</td>
                                                 <!-- Not Available  -->
                                             </tr>
                                             <tr *ngIf="!tripData?.TripTicketList?.length">
-                                                <th class="text-center" colspan="8"> No data found </th>
+                                                <th class="text-center" colspan="9"> No data found </th>
                                             </tr>
 
                                         </tbody>

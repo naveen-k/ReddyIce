@@ -20,7 +20,7 @@ export class DayEndComponent implements OnInit {
     branches: any = "";
     customer:any = {};
     logedInUser:any = {};
-
+    userBranch:any=[];
 
     // Note - IsForAll is to see all trips or Mytrips
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
@@ -39,6 +39,7 @@ export class DayEndComponent implements OnInit {
         this.selectionchangeHandler();
         this.logedInUser = this.userService.getUser();
         console.log(this.logedInUser);
+        this.userBranch=this.logedInUser.Branch.BranchName;
         
 
     }
