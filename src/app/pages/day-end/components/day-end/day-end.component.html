@@ -15,7 +15,10 @@
                 <div class="col-md-6">
                     <label><b>Select Branch</b></label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="selectionchangeHandler()">
-                         <option *ngFor="let branch of branches" [value] = 'branch?.BranchID' >{{branch?.BranchID}}-{{branch?.BranchName}}</option> 
+                         <option *ngFor="let branch of branches" [value] = 'branch?.BranchID' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchID}} - {{branch.BranchName}}</span>
+                            <span *ngIf="branch.BranchID == '1'">
+                             {{branch.BranchName}}
+                          </span></option> 
                     </select>
                 </div>
             </div>
@@ -83,7 +86,8 @@
                                 </i>
 
                             </td>
-                            <td>{{item.RouteNumber}}</td>
+                            <td *ngIf="item.RouteNumber==0">Unplanned</td>
+                            <td *ngIf="!item.RouteNumber==0">{{item.RouteNumber}}</td>
                             <td>{{item.BranchID}}-{{item.BranchName}}</td>
                             <!-- <td>{{item.isDistributor ? "Yes":"No"}}</td> -->
                             <!--is Distributor status not available-->
