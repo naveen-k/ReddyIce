@@ -458,7 +458,7 @@
         </div>
         <div class="col-sm-2 border cashPanel padding cashPanelMargin">
             <div class="padding">
-                <label for="example-text-input" class="col-form-label">Cash Amount</label>
+                <label for="example-text-input" class="col-form-label">Cash Amount($)</label>
                 <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
             </div>
             <div id="checkNumber" class="padding">
@@ -479,7 +479,7 @@
                 </div>
             </div>
             <div id="checkAmount" class="padding">
-                <label for="example-text-input" class="col-form-label">Check Amount</label>
+                <label for="example-text-input" class="col-form-label">Check Amount($)</label>
                 <input type="number" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
                     name="CheckAmount" #CheckAmount="ngModel" required>
                 <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount && (CheckAmount.dirty || CheckAmount.touched)" class="error-message">

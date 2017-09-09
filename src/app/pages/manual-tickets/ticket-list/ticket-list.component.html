@@ -1,6 +1,6 @@
 <ba-card cardTitle="Manual Ticket List" baCardClass="with-scroll" class="smart-table-container" #customer>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <label>Select Date</label>
             <div class="input-group">
                 <input class="form-control" [(ngModel)]="searchObj.CreatedDate" placeholder="mm-dd-yyyy" name="dp" (ngModelChange)='getSearchedTickets();'
@@ -18,7 +18,7 @@
                 </option>
             </select>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <label>Select Driver</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                 <option [value]="'Internal'">RI Driver</option>
@@ -93,7 +93,7 @@
                           <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
-                    <th class="thVerticalAlign" [hidden]="searchObj.userType=='Internal'">
+                    <th class="thVerticalAlign" [hidden]="searchObj.userType!='Internal'">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
                             Driver
                             <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -129,14 +129,14 @@
                                 <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
-                        <!-- <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID!==23">
+                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID!==23" (click)="deleteTicket(item.TicketID)">
                             <span class="tooltiptext">Delete</span>
-                        </i> -->
+                        </i>
                     </td>
                     <td>{{ item.TicketNumber }}</td>
                     <td>{{ item.TicketTypeID|ticketType }}</td>
                     <td>{{ item.Customer.CustomerID }} - {{ item.Customer.CustomerName }}</td>
-                    <td [hidden]="searchObj.userType=='Internal'">NA</td>
+                    <td [hidden]="searchObj.userType!='Internal'">NA</td>
                     <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'2.2-4' }}</td>
                     <!-- <td>{{ item.TicketStatusID|ticketStatus}}</td> -->
                     <td class="textAlignCenter">

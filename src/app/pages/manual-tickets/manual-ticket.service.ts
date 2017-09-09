@@ -76,6 +76,11 @@ export class ManualTicketService extends SharedService {
       .map(res => res.json());
   }
 
+  deleteDraftTicket(ticketId: any) {
+    return this.http.delete(`api/manualticket?ticketid=${ticketId}`)
+    .map(res => res.json());
+  }
+
   getSearchedObject(): any {
     return this._searchObject;
   }
