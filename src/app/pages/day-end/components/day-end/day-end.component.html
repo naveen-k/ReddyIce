@@ -14,8 +14,8 @@
                 </div>
                 <div class="col-md-6">
                     <label><b>Select Branch</b></label>
-                    <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="selectionchangeHandler()">
-                         <option *ngFor="let branch of branches" [value] = 'branch?.BranchID' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchID}} - {{branch.BranchName}}</span>
+                    <select class="form-control" [(ngModel)]='userBranch' (change)="selectionchangeHandler()">
+                         <option *ngFor="let branch of branches" [value] = 'userBranch' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchID}} - {{branch.BranchName}}</span>
                             <span *ngIf="branch.BranchID == '1'">
                              {{branch.BranchName}}
                           </span></option> 

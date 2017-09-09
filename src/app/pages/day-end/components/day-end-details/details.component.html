@@ -288,10 +288,10 @@
                                             <!--Removed sorting functionality as it was causing rendering issues-->
                                             <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
                                                 <td class="table-id" style="cursor: pointer">
-                                                    <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.HHCustomerID==null">
+                                                    <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.IsPaperTicket">
                                                                 <span class="tooltiptext">View</span>
                                                             </i>
-                                                    <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.HHCustomerID==null">
+                                                    <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket">
                                                                 <span class="tooltiptext">Edit</span>
                                                             </i>
 
@@ -299,8 +299,8 @@
                                                 <td class="row-text-align">{{item.CustomerID}}-{{item.CustomerName}}</td>
                                                 <!-- Not Available -->
                                                 <td class="row-text-align">{{item.TicketNumber}}</td>
-                                                <td class="row-text-align" *ngIf="item.HHCustomerID==null">Manual</td>
-                                                <td class="row-text-align" *ngIf="!item.HHCustomerID==null">HH</td>
+                                                <td class="row-text-align" *ngIf="item.IsPaperTicket">Manual</td>
+                                                <td class="row-text-align" *ngIf="!item.IsPaperTicket">HH</td>
                                                 <td class="row-text-align">{{item.TotalAmount| currency:'USD':true:'2.2-4'}} </td>
                                                 <td class="row-text-align">{{item.TotalSale| currency:'USD':true:'2.2-4'}} </td>
                                                 <td class="row-text-align">{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
