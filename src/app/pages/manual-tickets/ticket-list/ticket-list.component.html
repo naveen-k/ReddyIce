@@ -115,7 +115,7 @@
                         </i>
                     </td>
                     <td>{{ item.TicketNumber }}</td>
-                    <td>{{ item.TicketTypeID|ticketType }}</td>
+                    <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td>
                     <td>{{ item.Customer.CustomerID }} - {{ item.Customer.CustomerName }}</td>
                     <td [hidden]="searchObj.userType!='Internal'">NA</td>
                     <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'1.2' }}</td>

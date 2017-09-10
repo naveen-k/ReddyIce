@@ -20,6 +20,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateTicketComponent implements OnInit {
 
+  pageTitle:string = "Manual Ticket";
+
   ticket: ManualTicket = {} as ManualTicket;
 
   // hold temp models
@@ -516,16 +518,16 @@ export class CreateTicketComponent implements OnInit {
   deleteTicket() {
     this.service.deleteDraftTicket(this.ticket.TicketID).subscribe(
       (response) => {
-          if (response) {
-              this.notification.success('Ticket deleted successfully');
-          }
+        if (response) {
+          this.notification.success('Ticket deleted successfully');
+        }
       },
       (error) => {
-          if (error) {
-              this.notification.error(error._body);
-          }
+        if (error) {
+          this.notification.error(error._body);
+        }
       },
-  );
+    );
   }
 
   loadTicket(ticketId) {
@@ -555,25 +557,28 @@ export class CreateTicketComponent implements OnInit {
   }
 
   saveTicket() {
+    if (!this.validateTicket(this.ticket)) {
+      return;
+    }
     const ticket = this.modifyTicketForSave(this.ticket);
     if (this.ticketId) {
       // Update ticket
       this.service.updateTicket(ticket).subscribe(res => {
         this.notification.success(res);
-        this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
+        // this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
       });
       return;
     }
     // Save ticket
-    if (!this.custType) {
+    if (!this.custType || this.ticket.CustomerType != 20) {
       this.service.saveTicket(ticket).subscribe(res => {
         this.notification.success('Ticket created successfully!');
         this.route.navigate(['../'], { relativeTo: this.activatedRoute });
       }, (error) => {
-          if (error) {
-            this.notification.error('Error while creating ticket!');
-          }
-        });
+        if (error) {
+          this.notification.error('Error while creating ticket!');
+        }
+      });
     } else {
       this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Charge type');
     }
@@ -697,5 +702,21 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
   }
 
+  validateTicket(ticket): boolean {
+    if (!ticket.TicketNumber) {
+      this.notification.error('Ticket Number is mandatory!!!');
+      return false;
+    } else if (!this.ticket.Customer) {
+      this.notification.error('Customer is mandatory!!!');
+      return false;
+    } else if (!this.ticket.PONumber) {
+      this.notification.error('PO number is mandatory!!!');
+      return false;
+    } else if (!this.ticket.UserID) {
+      this.notification.error('Driver is mandatory!!!');
+      return false;
+    }
+    return true;
+  }
 
 }

@@ -1,4 +1,4 @@
-<ba-card cardTitle="Manual Ticket">
+<ba-card cardTitle="{{pageTitle}}">
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
@@ -115,11 +115,11 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">POD</label>
                 <div [hidden]="isReadOnly" class="col-sm-9">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="pod" id="podRadio1" [value]="true" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true">
+                        <input type="radio" name="pod" id="podRadio1" [value]="true" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true" [disabled]="!ticket.TicketID">
                         <span>Received</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="pod" id="podRadio2" [value]="false" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true">
+                        <input type="radio" name="pod" id="podRadio2" [value]="false" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true" [disabled]="!ticket.TicketID">
                         <span>Not-Received</span>
                     </label>
                 </div>
