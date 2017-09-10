@@ -323,7 +323,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   formatUser(user: any) {
-    user.tmp_branch = `${(user.Branch ? user.Branch.BranchID : 'NA')} (${(user.Branch ? user.Branch.BranchName : 'NA')})`;
+    user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BranchName : 'NA')}`;
     user['tmp_role'] = `${(user.Role ? user.Role.RoleName : '')}`;
     user['tmp_distributor'] = `${(user.Distributor ? user.Distributor.DistributorName : '')}`;
     return user;

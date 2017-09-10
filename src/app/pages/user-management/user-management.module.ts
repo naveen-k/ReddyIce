@@ -1,3 +1,4 @@
+import { DistributorFilter } from './pipes/distributor-filter.pipe';
 import { SharedModule } from '../../shared/shared.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CommonModule } from '@angular/common';
@@ -20,7 +21,7 @@ const routes: Routes = [
 
 
 @NgModule({
-    declarations: [UserManagementComponent, CreateUserComponent],
+    declarations: [UserManagementComponent, CreateUserComponent, DistributorFilter],
     imports: [
         SharedModule, 
         Ng2SmartTableModule, 

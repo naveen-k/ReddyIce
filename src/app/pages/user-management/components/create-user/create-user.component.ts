@@ -28,9 +28,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         val.RoleID = val.RoleID || this._user.RoleID;
         this._user = val;
         this.loadBranches();
-        if (val.RoleID  === '1' || val.RoleID  === '2') {
+        this._user.IsSeasonal = this.isDistributorSeasonal();
+        if (val.RoleID === '1' || val.RoleID === '2') {
             this.user.BranchID = '1';
-        } 
+        }
     }
 
     @Input() isNewUser: boolean;
@@ -50,11 +51,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     set action(values) {
         if (values === '') { return; }
         this.actionName = values;
-        if(values == 'create'){
+        if (values == 'create') {
             this.user.IsActive = true;
         }
-        if(values == 'edit'){
-             this.isFormValid = false;
+        if (values == 'edit') {
+            this.isFormValid = false;
         }
     }
 
@@ -81,10 +82,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     selectedSearchUser: boolean = false;
     timeOut: any;
     roleList: any = [];
-    userObject: any = [];
+    userObject: any = {};
     roleNameAllowed: boolean = true;
     isEmailExist: boolean = false;
-    isFormValid:boolean=true;
+    isFormValid: boolean = true;
 
     searching: boolean = false;
 
@@ -123,7 +124,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.showList = true;
                 this.searching = false;
                 this.isAllFeildsChecked();
-               
+
             }, (err) => {
                 this.searching = false;
                 this.showList = true;
@@ -144,7 +145,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.user.EmailID = user.mail ? user.mail[0] : '';
         this.riUserName = _user;
         this.selectedSearchUser = true;
-         this.isFormValid = true;
+        this.isFormValid = true;
     }
 
     onSubmit() {
@@ -162,9 +163,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     ngOnInit() {
-        this.umService.getDistributorsByBranch('1').subscribe((res) => {
+        this.umService.getDistributerAndCopacker().subscribe((res) => {
             this.distributorsAndCopackers = res;
-        console.log(res);
+            console.log(res);
         });
         this.userObject = this.userService.getUser();
         if (this.isNewUser) {
@@ -191,8 +192,16 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
     }
 
+    isDistributorSeasonal() {
+        if (!this.user.DistributorMasterID) { return false };
+        const tmp = this.distributorsAndCopackers.filter((dis) => {
+            return dis.DistributorCopackerID === +this.user.DistributorMasterID
+        });
+        return tmp[0].IsSeasonal;
+    }
+
     changeHandler() {
-       
+        this.user.IsSeasonal = this.isDistributorSeasonal();
         this.isAllFeildsChecked();
         if (this.user.IsRIInternal) {
             this.roleList = this.roles;
@@ -249,51 +258,55 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' });
             }
             this.user.BranchID = '1';
-              this.loadBranches();
+            this.loadBranches();
         } else {
             if (this.branches[0].BranchID == '1') {
-                this.branches.shift();  
+                this.branches.shift();
             }
-           // this.distributorsAndCopackers = [];
+            // this.distributorsAndCopackers = [];
         }
 
     }
 
     loadBranches() {
         if (!this.user.BranchID) { return; }
-          this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
+
+        this.umService.getDistributerAndCopacker().subscribe((res) => {
             this.distributorsAndCopackers = res;
         });
-    } 
+        // this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
+        //     this.distributorsAndCopackers = res;
+        // });
+    }
     spaceRemover(value) {
         this.user.LastName = value.replace(/^\s+|\s+$/g, '');
     }
     spaceRemoverFn(value) {
         this.user.FirstName = value.replace(/^\s+|\s+$/g, '');
     }
-    riChangeHandler(status){
+    riChangeHandler(status) {
         console.log(status);
-        if(status){
-            this.user.FirstName = '';  
-            this.user.LastName = ''; 
-            this.user.EmailID = '';  
+        if (status) {
+            this.user.FirstName = '';
+            this.user.LastName = '';
+            this.user.EmailID = '';
         }
         else {
-            this.umService.getDistributorsByBranch('1').subscribe((res) => {
-            this.distributorsAndCopackers = res;
-        });  
+            this.umService.getDistributerAndCopacker().subscribe((res) => {
+                this.distributorsAndCopackers = res;
+            });
         }
         this.isAllFeildsChecked();
 
     }
 
-    isAllFeildsChecked(){
-        console.log(this.user.FirstName );
-        if(this.user.FirstName == ''|| this.user.LastName == ''|| this.user.EmailID == '') {
+    isAllFeildsChecked() {
+        console.log(this.user.FirstName);
+        if (this.user.FirstName == '' || this.user.LastName == '' || this.user.EmailID == '') {
             this.isFormValid = false;
-        }  
-        else{
-            this.isFormValid=true;
+        }
+        else {
+            this.isFormValid = true;
         }
     }
 }

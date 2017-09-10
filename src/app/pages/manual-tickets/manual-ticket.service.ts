@@ -19,13 +19,13 @@ export class ManualTicketService extends SharedService {
     const now = new Date();
     this._searchObject = {
       CreatedDate: { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() },
-      userType: 'External',
+      userType: this.userService.getUser().IsDistributor ? 'External' : 'Internal',
     };
   }
 
-  getAllTickets(createdDate, branchId, userId?): Observable<any[]> {
+  getAllTickets(createdDate, branchId): Observable<any[]> {
     // return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
-    return this.http.get(`api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}&userID=${userId}`)
+    return this.http.get(`api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}`)
       .map(res => res.json());
   }
 
@@ -78,7 +78,7 @@ export class ManualTicketService extends SharedService {
 
   deleteDraftTicket(ticketId: any) {
     return this.http.delete(`api/manualticket?ticketid=${ticketId}`)
-    .map(res => res.json());
+      .map(res => res.json());
   }
 
   getSearchedObject(): any {

@@ -113,7 +113,14 @@
   </div>
   <div class="checkbox active-user page-header rowContainer">
     <div class="row">
-      <div class="col-md-5" *ngIf="user.IsRIInternal">
+      <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-5">
+        <label for="distributor">Distributor</label>
+        <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+          #distributor="ngModel" (ngModelChange)="changeHandler()">
+          <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
+      </select>
+      </div>
+      <div class="col-md-5" *ngIf="user.IsRIInternal || user.IsSeasonal" [hidden]="userObject.IsDistributor">
         <label for="exampleSelect1">Branch</label>
         <select class="form-control userMgmtSelect" [disabled]="user.RoleID == '1'|| user.RoleID == '2'" id="branchSelection" [(ngModel)]="user.BranchID"
           name="branch" #branch="ngModel" (ngModelChange)="changeHandler(); loadBranches();">
@@ -122,13 +129,6 @@
                {{_branch.BranchName}}
             </span></option>
         </select>
-      </div>
-      <div *ngIf="!user.IsRIInternal" class="col-md-5">
-        <label for="distributor">Distributor</label>
-        <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
-          #distributor="ngModel" (ngModelChange)="changeHandler()">
-          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorID">{{distributor.DistributorName}}</option>
-      </select>
       </div>
       <div class="col-md-2"></div>
       <div class="col-md-5 padding-eater">
@@ -215,12 +215,12 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row">
+  <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row" [hidden]="userObject.IsDistributor">
     <div class="col-md-5 padding-eater">
       <label for="distributor">Distributor</label>
       <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterId" name="distributor"
         #distributor="ngModel" disabled>
-          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.DistributorName}}</option>
+          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
       </select>
     </div>
     <div class="col-md-2"></div>

@@ -31,6 +31,8 @@ export class TicketListComponent implements OnInit {
 
     todaysDate: any;
 
+    disableApprove: boolean = true;
+
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
 
     constructor(
@@ -67,9 +69,11 @@ export class TicketListComponent implements OnInit {
     getDrivers() {
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
-            res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
+            if (this.user.Role && this.user.Role.RoleID <= 2) {
+                res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
+                this.searchObj.UserId = 1;
+            }
             this.drivers = res;
-            this.searchObj.UserId = 1;
             this.getSearchedTickets();
         });
     }
@@ -97,7 +101,7 @@ export class TicketListComponent implements OnInit {
         this.showSpinner = true;
 
         // TODO- to check with nikhil/naveen, what to send incase of distributor selected
-        return this.service.getAllTickets(dt, searchObj.BranchId, 878).subscribe((response: any) => {
+        return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
             if (response) {
                 this.showSpinner = false;
                 if (response === 'No Record Found') {
@@ -134,6 +138,10 @@ export class TicketListComponent implements OnInit {
         this.createMultiTicketApprovalObject(selectedIds);
     }
 
+    ticketSelectionHandler() {
+        this.disableApprove = !this.allTickets.filter(element => element.selected).length;
+    }
+
     // create object to approve single/multiple tickets
     createMultiTicketApprovalObject(ticketIds) {
         const ticketObject = {
@@ -168,7 +176,7 @@ export class TicketListComponent implements OnInit {
     }
 
     userChangeHandler() {
-        this.getSearchedTickets();
+        // this.getSearchedTickets();
     }
 
     // delete ticket in the draft state

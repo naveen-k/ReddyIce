@@ -19,10 +19,10 @@
             </select>
         </div>
         <div class="col-sm-3">
-            <label>Select Driver</label>
+            <label>Select Driver Type</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                 <option [value]="'Internal'">RI Driver</option>
-                <option [value]="'External'">Dist./CoPacker</option>
+                <option [value]="'External'">Distributor/CoPacker</option>
             </select>
         </div>
         <div class="col-sm-3" [hidden]="searchObj.userType!='Internal'">
@@ -47,30 +47,12 @@
             </button>
         </div>
     </div>
-
-    <!-- filter not needed for now, hence removing -->
-    <!-- <div class="row" style="padding-bottom: 10px">
-        <div class="col-sm-3">
-            <label class="radioItem radio-inline custom-radio nowrap">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" 
-                (click)="getSelectedTicketType(false)" checked>
-                <span>My Tickets</span>
-            </label>
-        </div>
-        <div class="col-sm-3">
-            <label class="radioItem radio-inline custom-radio nowrap">
-                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"
-                (click)="getSelectedTicketType(true)">
-                <span>All Tickets</span>
-            </label>
-        </div>
-    </div> -->
     <div class="table-container">
         <table class="table table-striped table-condensed">
             <thead>
                 <tr>
                     <th style="width:112px;">
-                        <button [disabled]="!allTickets.length" class="btn btn-primary" (click)="approveCheckedTickets()">
+                        <button [disabled]="!allTickets.length || disableApprove" class="btn btn-primary" (click)="approveCheckedTickets()">
                             Approve
                         </button>
                     </th>
@@ -88,9 +70,9 @@
                         </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerID';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'Customer.CustomerName';customer.isAsc=!customer.isAsc;">
                           Customer
-                          <i *ngIf="(customer.sortField == 'CustomerID')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                          <i *ngIf="(customer.sortField == 'Customer.CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'Customer.CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th class="thVerticalAlign table-text-align" [hidden]="searchObj.userType!='Internal'">
@@ -113,9 +95,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of allTickets | sort:customer.sortField:customer.isAsc">
+                <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc">
                     <td>
-                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
+                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()" [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
                     </td>
                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
                         <a [routerLink]="['../view/'+item.TicketID]">
@@ -136,15 +118,8 @@
                     <td>{{ item.TicketTypeID|ticketType }}</td>
                     <td>{{ item.Customer.CustomerID }} - {{ item.Customer.CustomerName }}</td>
                     <td [hidden]="searchObj.userType!='Internal'">NA</td>
-                    <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'2.2-4' }}</td>
-                    <!-- <td>{{ item.TicketStatusID|ticketStatus}}</td> -->
+                    <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignCenter">
-                        <!-- <i class="ion-pricetag custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 23">
-                            <span class="tooltiptext">Draft</span>
-                        </i>
-                        <i class="ion-android-done-all custom-tooltip-ion" style="margin-right: 5px" [hidden]="item.TicketStatusID !== 25">
-                            <span class="tooltiptext">Approved</span>
-                        </i> -->
                         <i class="custom-tooltip-ion">
                             <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TicketStatusID == 23" width="15">
                             <span class="tooltiptext">Draft</span>

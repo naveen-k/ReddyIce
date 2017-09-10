@@ -62,9 +62,9 @@
                 </span>
               </th>
               <th *ngIf="!hideColumn" class="allign">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_branch';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'Branch.BranchName';customer.isAsc=!customer.isAsc;">
                     Branch
-                    <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'Branch.BranchName')" [ngClass]="(customer.isAsc && customer.sortField === 'Branch.BranchName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th class="text-in-center">
@@ -94,7 +94,7 @@
               <td class="userCell">{{ item.UserName || 'NA' }}</td>
               <td class="userCell">{{ item.Role?.RoleName}}</td>
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
-              <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchName}}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchCode}} - {{item.Branch?.BranchName}}</td>
               <td class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
             </tr>
                 <tr  [hidden]='!showSpinner' class="text-center"> <td colspan="10"><a> <img src="assets/reddyIce/spinner.gif " width='25px'></a></td></tr>
