@@ -76,10 +76,10 @@ export class CreateTicketComponent implements OnInit {
   // Current User Object
   user: any = {};
 
+  showList: boolean = false;
+
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
-
-  subParams: any;
 
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
@@ -168,6 +168,18 @@ export class CreateTicketComponent implements OnInit {
       return 0;
     });
   }
+
+  // shortlistedBranches: any = [];
+  // searchBranchHandler(searchedBranch) {
+  //   console.log('searchedBranch', searchedBranch);
+  //   this.showList = true;
+  //   // populate list of customers based on type ahead
+  //   for (let i = 0; i < this.branches.length; i++) {
+  //     if (this.branches[i].BranchName.toLowerCase().includes(searchedBranch)) {
+  //       this.shortlistedBranches.push(this.branches[i]);
+  //     }
+  //   }
+  // }
 
   prepareTicketTypes() {
     this.ticketTypes.CustomerType.forEach(element => {

@@ -1,5 +1,6 @@
 <ba-card cardTitle="{{pageTitle}}" id="newTicket">
-    <img src="assets/reddyIce/draftTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 23" width="15" class="newTicketTitleStatusIcon">
+    <img src="assets/reddyIce/draftTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 23"
+        width="15" class="newTicketTitleStatusIcon">
     <img src="assets/reddyIce/submitTicket.png" *ngIf="ticket.TicketStatusID == 24" width="18" class="newTicketTitleStatusIcon">
     <img src="assets/reddyIce/approveTicket.png" *ngIf="ticket.TicketStatusID == 25" width="15" class="newTicketTitleStatusIcon">
     <div class="row">
@@ -47,10 +48,18 @@
                 <div class="col-sm-7">
                     <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
                         [disabled]="ticket.TicketID">
-                        <!-- <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option> -->
-                        <option *ngFor="let branch of branches"> {{branch.BranchID}} - {{branch.BranchName}} </option>
+                        <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
                     </select>
                 </div>
+                <!-- <div class="col-sm-6">
+                    <input type="text" autocomplete="off" class="form-control" [(ngModel)]="branchName" value="ticket.BranchID" placeholder="Search Branch"
+                        (ngModelChange)="searchBranchHandler(branchName)">
+                    <div class="search-container" [hidden]="!showList">
+                        <div [hidden]="!showList" class="search-item" *ngFor="let branch of branches" (click)="customerSelected(customer)">
+                            {{branch.BranchID}} - {{branch.BranchName}}
+                        </div>
+                    </div>
+                </div> -->
             </div>
             <div class="row padding" [hidden]="ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket)">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type</label>
@@ -264,11 +273,8 @@
                                         <td id="prodDD">
                                             <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
-                                                <!-- <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
-                                                    {{pdetail.DisplayName}} </option>     -->
-                                                <option *ngFor="let pdetail of customer?.productdetail"> 
-                                                    {{pdetail.DisplayName}}
-                                                </option>
+                                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                                    {{pdetail.DisplayName}} </option>
                                             </select>
                                         </td>
                                         <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
