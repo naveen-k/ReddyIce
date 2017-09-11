@@ -20,6 +20,7 @@ export class TicketDetailsComponent implements OnInit {
      //  this.ticketDetails = service.dataTableData3;
        this.selectedtrip = this.service.gettripData();
        this.tripId = this.selectedtrip.TripID;
+       this.tripDate = this.selectedtrip.Created.split('T')[0];
        this.service.getTripDetailByDate(this.tripId, this.tripDate).subscribe((res) => {
          this.ticketDetails = res;
          console.log(res);

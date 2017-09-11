@@ -14,7 +14,7 @@
                 <div class="col-md-4">
                     <div>
                        <b> <span>Status :</span></b>
-                        <label>NA</label>
+                        <label>{{selectedtrip?.TripStatusID}}</label>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -35,16 +35,11 @@
                                 <tr>
                                     <th>
                                         <span style="cursor:pointer;" (click)="customer.sortField = 'Customerid';customer.isAsc=!customer.isAsc;">
-                                  Customer Number
+                                  Customer 
                                      <i *ngIf="(customer.sortField == 'Customerid')" [ngClass]="(customer.isAsc && customer.sortField == 'Customerid' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                                     </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerName';customer.isAsc=!customer.isAsc;">
-                                  Customer
-                                     <i *ngIf="(customer.sortField == 'CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
-                                    </th>
+                                  
                                     <th>
                                         <span style="cursor:pointer;" (click)="customer.sortField = 'ISRICustomer';customer.isAsc=!customer.isAsc;">
                                   RI Customer?
@@ -98,14 +93,14 @@
                             <tbody>
                                 <!--Removed sorting functionality as it was causing rendering issues  -->
                                 <tr *ngFor="let item of ticketDetails?.TripDetails|sort:customer.sortField:customer.isAsc">
-                                    <td>{{item.Customerid}}</td>
-                                    <td>{{item.CustomerName }}</td>
+
+                                    <td>{{item.Customerid}} {{item.CustomerName }}</td>
                                     <td>{{item.IsRICustomer }}</td>
                                     <td>{{item.TicketNumber}}</td>
-                                    <td>{{item.InVoiceAmount| currency:'USD':true:'2.2-4'}}</td>
+                                    <td>{{item.TotalSale| currency:'USD':true:'2.2-4'}}</td>
                                     <td>{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
                                     <td>{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
-                                    <td>{{item.ChargeAmount || 'NA' | currency:'USD':true:'2.2-4'}}</td>
+                                    <td>{{item.ChargeAmount || '0' | currency:'USD':true:'2.2-4'}}</td>
                                     <td>{{item.Drayage| currency:'USD':true:'2.2-4'}}</td>
                                     <td>{{item.BuyBack| currency:'USD':true:'2.2-4'}}</td>
                                 </tr>
