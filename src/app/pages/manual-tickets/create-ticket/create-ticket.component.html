@@ -91,7 +91,7 @@
             </div>
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-4 col-form-label">Customer Name</label>
-                <div class="col-sm-7">
+                <div class="col-sm-6">
                     <ng-template #rt let-r="result" let-t="term">
                         {{ r.CustomerId}} - {{ r.CustomerName}}
                     </ng-template>
@@ -99,7 +99,9 @@
                         placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="customerChangeHandler($event);isFormDirty=true;"
                         [disabled]="ticket.TicketID" />
                 </div>
-                <label [hidden]="!customer || !ticket.Customer" class="col-sm-1" style="padding:8px 0 0 0; text-align: left; margin-left: -10px;">{{customer?.PaymentType===19?'Charge':'Cash'}}</label>
+                <label [hidden]="!customer || !ticket.Customer || ticket.CustomerType == 21 || ticket.CustomerType == 22" class="col-sm-2 paymentType">
+                    {{customer?.PaymentType===19?'Charge':'Cash'}}
+                </label>
             </div>
             <div class="row padding" [hidden]="!modes || !modes.length">
                 <label for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
@@ -173,10 +175,10 @@
                 <div class="col-sm-7">
                     <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
                         name="PONumber" #PONumber="ngModel" required numberOnly (ngModelChange)="isFormDirty=true;">
-                    <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
+                    <!-- <div *ngIf="PONumber.invalid && (PONumber.dirty || PONumber.touched)" class="error-message">
                         <i class="ion-android-alert showError"></i>
                         <div *ngIf="PONumber.errors.required" class="custom-tooltip bottom">PO number is required</div>
-                    </div>
+                    </div> -->
                     <div *ngIf="poContainsCharacters" class="error-message">
                         <i class="ion-android-alert showError"></i>
                         <div class="custom-tooltip bottom">PO number should be alphanumeric</div>
@@ -203,7 +205,7 @@
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input [disabled]="user.IsDistributor" type="radio" name="driverType" [value]="true" 
                             [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
-                        <span>Dist./CoPacker</span>
+                        <span>Distributor/CoPacker</span>
                     </label>
                 </div>
                 <!--Hack for displaying disabled in case of read only mode-->
@@ -216,7 +218,7 @@
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input [disabled]="true" type="radio" name="driverType1" [value]="true" 
                             [(ngModel)]="ticket.isUserTypeDistributor">
-                        <span>Dist./CoPacker</span>
+                        <span>Distributor/CoPacker</span>
                     </label>
                 </div>
             </div>
@@ -229,7 +231,7 @@
                 </div>
             </div>
             <div class="row padding" [hidden]="!ticket.isUserTypeDistributor">
-                <label for="example-text-input" class="col-sm-4 col-form-label">Dist./CoPacker</label>
+                <label for="example-text-input" class="col-sm-4 col-form-label">Distributor/CoPacker</label>
                 <div class="col-sm-7">
                     <select class="form-control" name="customer" [(ngModel)]="ticket.DistributorCopackerID" [disabled]="isReadOnly" (ngModelChange)="isFormDirty=true">
                     <option *ngFor="let ds of distributors" [ngValue]="ds.DistributorID"> {{ds.DistributorName}} </option>

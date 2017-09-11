@@ -26,8 +26,14 @@ label {
   padding: 15px;
 }
 
-#newTicket .card-header.clearfix {
-  padding-left: 33px !important;
+.paymentType {
+  padding:8px 0 0 0;
+  text-align: center;
+  margin-left: -10px;
+  background: #ffffcc;
+  border-radius: 15px;
+  padding:7px;
+  border-color: darken(#bada55, 15%);
 }
 
 .newTicketTitleStatusIcon {
