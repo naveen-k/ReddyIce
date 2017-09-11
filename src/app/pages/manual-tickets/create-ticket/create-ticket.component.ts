@@ -656,6 +656,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   userTypeChangeHandler() {
+    this.ticket.UserID = this.ticket.DistributorCopackerID = null;
     if (this.ticket.isUserTypeDistributor) {
       this.loadDisributors(this.ticket.BranchID);
     } else {
@@ -712,10 +713,10 @@ export class CreateTicketComponent implements OnInit {
     } else if (!this.ticket.PONumber) {
       this.notification.error('PO number is mandatory!!!');
       return false;
-    } else if (!this.ticket.UserID) {
+    } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
       this.notification.error('Driver is mandatory!!!');
       return false;
-    }
+    } else 
     return true;
   }
 

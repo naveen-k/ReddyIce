@@ -7,14 +7,18 @@ import { Pipe } from '@angular/core';
 })
 export class TicketFilter implements PipeTransform {
     transform(array: ManualTicket[], filterField: string, value: number): ManualTicket[] {
-        // console.log(array, filterField, value);
         if (!array || !value) {
             return [];
         }
         value = +value;
         return array.filter((ticket: ManualTicket) => {
-            return filterField === 'Internal' ? ticket.UserID === +value
-                : ticket.DistributorCopackerID === value;
+            if (filterField === 'Internal') {
+                if (value === 1) {
+                    return ticket.UserID > 0;
+                }
+                return ticket.UserID === value;
+            }
+            return ticket.DistributorCopackerID === value;
         })
     }
 }
