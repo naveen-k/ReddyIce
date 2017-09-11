@@ -37,9 +37,6 @@ input:focus + .error-message {
   padding-top: 2px;
 }
 
-.userMgmtSelect {
-  width: 207px;
-}
 // .user-form .first-form-row, .user-form .last-form-row{
 //   margin-top: 20px
 // }
@@ -48,7 +45,7 @@ input:focus + .error-message {
 .showError {
   color: #ed7878;
   position: absolute;
-  right: 9px;
+  right: 18px;
   top: 33px;
 }
 
@@ -60,7 +57,10 @@ input:focus + .error-message {
   position: absolute;
   border-radius: 4px;
   top: 3px;
-  right: -50px;
+  right: -40px;
+  min-width: 143px;
+  text-align: center;
+  z-index: 100;
 }
 
 .custom-tooltip:after {

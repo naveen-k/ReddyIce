@@ -22,7 +22,7 @@
 
   </div>
   <div class="row page-header rowContainer first-form-row">
-    <div class="col-md-5 padding-eater first-column">
+    <div class="col-md-6  page-header">
       <label for="fname" class="control-label">First Name</label>
       <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
         minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (change)="changeHandler()"
@@ -33,8 +33,8 @@
         <div *ngIf="FirstName.errors.minlength" class="custom-tooltip bottom">Minimum 2 characters</div>
       </div>
     </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5 padding-eater second-column">
+
+    <div class="col-md-6  page-header">
       <label for="lname" class="control-label">Last Name</label>
       <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
         name="LastName" #LastName="ngModel" required minlength="2" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
@@ -48,9 +48,9 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="row page-header rowContainer">
-    <div *ngIf="!isNewUser" class="col-md-5 padding-eater first-column">
+
+
+    <div *ngIf="!isNewUser" class="col-md-6 page-header">
       <label for="username" class="control-label">Username</label>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
         #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="true"
@@ -65,8 +65,8 @@
         </div>
       </div>
     </div>
-    <div *ngIf="!isNewUser" class="col-md-2"></div>
-    <div [ngClass]="{'col-md-12':isNewUser}" class="col-md-5 padding-eater second-column">
+
+    <div [ngClass]="{'col-md-12':isNewUser}" class="col-md-6 page-header">
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
         required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)"
@@ -90,64 +90,62 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="row page-header rowContainer">
-    <div class="col-md-5 padding-eater first-column">
+
+
+    <div class="col-md-6 page-header">
       <label for="inputEmail3" class="control-label">Phone</label>
       <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
         pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (change)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
-          Phone number is invalid.
+          Invalid phone number.
         </div>
       </div>
     </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5 padding-eater">
+
+    <div class="col-md-6 page-header">
       <label for="exampleSelect1">Role</label>
       <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);">
-        <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
-      </select>
+                  <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
+                </select>
     </div>
-  </div>
-  <div class="checkbox active-user page-header rowContainer">
-    <div class="row">
-      <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-5">
-        <label for="distributor">Distributor</label>
-        <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
-          #distributor="ngModel" (ngModelChange)="changeHandler()">
-          <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
-      </select>
-      </div>
-      <div class="col-md-5" *ngIf="user.IsRIInternal || user.IsSeasonal" [hidden]="userObject.IsDistributor">
-        <label for="exampleSelect1">Branch</label>
-        <select class="form-control userMgmtSelect" [disabled]="user.RoleID == '1'|| user.RoleID == '2'" id="branchSelection" [(ngModel)]="user.BranchID"
-          name="branch" #branch="ngModel" (ngModelChange)="changeHandler(); loadBranches();">
-            <option *ngFor="let _branch of branches" [value]="_branch.BranchID"><span *ngIf="_branch.BranchID != '1'"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
-              <span *ngIf="_branch.BranchID == '1'">
-               {{_branch.BranchName}}
-            </span></option>
-        </select>
-      </div>
-      <div class="col-md-2"></div>
-      <div class="col-md-5 padding-eater">
-        <br/><br/>
-        <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-        <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
-          [disabled]="isNewUser"></ba-checkbox>
 
-      </div>
+
+    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">
+      <label for="distributor">Distributor</label>
+      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+        #distributor="ngModel" (ngModelChange)="changeHandler()">
+                    <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
+                  </select>
     </div>
-  </div>
-  <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row">
-    <div class="col-md-5 padding-eater">
-      <br/><br/>
+    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || user.IsSeasonal" [hidden]="userObject.IsDistributor">
+      <label for="exampleSelect1">Branch</label>
+      <select class="form-control userMgmtSelect" [disabled]="user.RoleID == '1'|| user.RoleID == '2'" id="branchSelection" [(ngModel)]="user.BranchID"
+        name="branch" #branch="ngModel" (ngModelChange)="changeHandler(); loadBranches();">
+                    <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
+                      <span *ngIf="_branch.BranchID != '1'"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
+                      <span *ngIf="_branch.BranchID == '1'">
+                 {{_branch.BranchName}}
+              </span>
+                    </option>
+                  </select>
+    </div>
+    <div class="col-md-6 page-header">
+      <br/>
+      <br/>
+      <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+      <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
+        [disabled]="isNewUser"></ba-checkbox>
+    </div>
+    <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="col-md-6 page-header">
+      <br/>
+      <br/>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
         disabled="true"></ba-checkbox>
     </div>
-    <div class="col-md-2"></div>
+
 
   </div>
 </form>
