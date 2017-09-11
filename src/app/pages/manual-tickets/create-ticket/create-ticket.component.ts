@@ -760,6 +760,9 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.isTicketNumberExist) {
       this.notification.error('Ticket Number already in use!!!');
       return false;
+    } else if (!(!this.custType || this.ticket.CustomerType !== 20)) {
+      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
+      return false;
     } else {
       return true;
     }
