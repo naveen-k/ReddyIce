@@ -384,7 +384,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   ticketNumberValidation() {
-    const ticketNumberLength = this.ticket.TicketNumber.length;
+    const ticketNumberLength = this.ticket.TicketNumber.toString().length;
     if (isNaN(Number(this.ticket.TicketNumber))) {              // check for no alphabets in the ticket number
       this.containsCharacters = true;
       this.ticketMinMaxLength = false;
@@ -747,6 +747,21 @@ export class CreateTicketComponent implements OnInit {
       return false;
     } else if (this.poMinMaxLength) {
       this.notification.error('PO number should be 4-20 digits long only!!!');
+      return false;
+    } else if (this.ticketMinMaxLength) {
+      this.notification.error('Ticket number should be 4-10 digits long only!!!');
+      return false;
+    } else if (this.ticket.CheckNumber && !this.ticket.CheckAmount) {
+      this.notification.error('Check Amount is required as Check Number exists!!!');
+      return false;
+    } else if (this.ticket.CheckAmount && !this.ticket.CheckNumber) {
+      this.notification.error('Check number is required as Check Amount exists!!!');
+      return false;
+    } else if (this.isTicketNumberExist) {
+      this.notification.error('Ticket Number already in use!!!');
+      return false;
+    } else if (!(!this.custType || this.ticket.CustomerType !== 20)) {
+      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
       return false;
     } else {
       return true;
