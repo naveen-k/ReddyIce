@@ -26,7 +26,7 @@
                     <ul class="top-dropdown-menu profile-dropdown dropdown-menu" uib-dropdown-menu="" style='min-width:185px;' >
                         <li><i class="dropdown-arr"></i></li>
                         <li><a class="signout" [routerLink]="['../login']"><i class="fa fa-power-off"></i>Sign out</a></li>
-                         <li><a class="signout" [routerLink]="['../resetpassword']"><i class="ion-edit"></i>Reset password </a></li>
+                         <li *ngIf="!userDetails?.IsRIInternal"><a class="signout" [routerLink]="['../resetpassword']"><i class="ion-edit"></i>Reset password </a></li>
    
                     </ul>
                 </div>

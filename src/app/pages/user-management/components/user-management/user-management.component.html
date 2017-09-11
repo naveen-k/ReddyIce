@@ -36,13 +36,13 @@
           <thead class="a tableHeader">
             <tr>
               <th width="100px;" class="allign">Action</th>
-              <th *ngIf="!hideColumn" class="allign">
+              <th  class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'FirstName';customer.isAsc=!customer.isAsc;">
                     Name
                     <i *ngIf="(customer.sortField === 'FirstName')" [ngClass]="(customer.isAsc && customer.sortField === 'FirstName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
-              <th class="allign">
+              <th *ngIf="!hideColumn" class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;">
                     Username
                     <i *ngIf="(customer.sortField === 'UserName')" [ngClass]="(customer.isAsc && customer.sortField === 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -62,9 +62,9 @@
                 </span>
               </th>
               <th *ngIf="!hideColumn" class="allign">
-                <span style="cursor:pointer;" (click)="customer.sortField = 'Branch.BranchName';customer.isAsc=!customer.isAsc;">
+                <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_branch';customer.isAsc=!customer.isAsc;">
                     Branch
-                    <i *ngIf="(customer.sortField === 'Branch.BranchName')" [ngClass]="(customer.isAsc && customer.sortField === 'Branch.BranchName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                    <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th class="text-in-center">

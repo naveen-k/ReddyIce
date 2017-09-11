@@ -273,6 +273,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         this.umService.getDistributerAndCopacker().subscribe((res) => {
             this.distributorsAndCopackers = res;
+            console.log(res);
         });
         // this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
         //     this.distributorsAndCopackers = res;
@@ -302,7 +303,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     isAllFeildsChecked() {
         console.log(this.user.FirstName);
-        if (this.user.FirstName == '' || this.user.LastName == '' || this.user.EmailID == '') {
+        if (this.user.FirstName == '' || this.user.LastName == '' || this.user.EmailID == ''
+            ||this.user.RoleID == undefined) {
             this.isFormValid = false;
         }
         else {
