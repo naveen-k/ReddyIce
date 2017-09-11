@@ -1,4 +1,13 @@
-<ba-card cardTitle="{{pageTitle}}">
+<ba-card cardTitle="{{pageTitle}}" id="newTicket">
+    <img src="assets/reddyIce/draftTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId" width="15" class="newTicketTitleStatusIcon">
+    <i class="custom-tooltip-ion">
+            <img src="assets/reddyIce/submitTicket.png" *ngIf="ticket.TicketStatusID == 24" width="18">
+        <span class="tooltiptext">Submitted</span>
+    </i>
+    <i class="custom-tooltip-ion">
+            <img src="assets/reddyIce/approveTicket.png" *ngIf="ticket.TicketStatusID == 25" width="15">
+        <span class="tooltiptext">Approved</span>
+    </i>
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
@@ -90,7 +99,7 @@
                         placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="customerChangeHandler($event);isFormDirty=true;"
                         [disabled]="ticket.TicketID" />
                 </div>
-                <label [hidden]="!customer" class="col-sm-1" style="padding:8px 0 0 0; text-align: left; margin-left: -10px;">{{customer?.PaymentType===19?'Charge':'Cash'}}</label>
+                <label [hidden]="!customer || !ticket.Customer" class="col-sm-1" style="padding:8px 0 0 0; text-align: left; margin-left: -10px;">{{customer?.PaymentType===19?'Charge':'Cash'}}</label>
             </div>
             <div class="row padding" [hidden]="!modes || !modes.length">
                 <label for="example-text-input" class="col-sm-4 col-form-label">Mode</label>
@@ -189,7 +198,7 @@
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input [disabled]="user.IsDistributor" type="radio" name="driverType" [value]="false" 
                         [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
-                        <span>Internal</span>
+                        <span>RI Driver</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input [disabled]="user.IsDistributor" type="radio" name="driverType" [value]="true" 
@@ -237,7 +246,7 @@
                     <span>List of Products</span>
                 </div>
                 <div class="col-sm-3">
-                    <button class="btn btn-danger pull-right" (click)="addProductRow()" [hidden]="isReadOnly">Add Product</button>
+                    <button class="btn btn-danger pull-right" (click)="addProductRow()" [hidden]="isReadOnly" [disabled]="!(branches && ticket.Customer && ticket.UserID)">Add Product</button>
                 </div>
             </div>
             <div class="row padding">
@@ -258,8 +267,11 @@
                                         <td id="prodDD">
                                             <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
-                                                <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
-                                                    {{pdetail.DisplayName}} </option>    
+                                                <!-- <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
+                                                    {{pdetail.DisplayName}} </option>     -->
+                                                <option *ngFor="let pdetail of customer?.productdetail"> 
+                                                    {{pdetail.DisplayName}}
+                                                </option>
                                             </select>
                                         </td>
                                         <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
@@ -460,12 +472,13 @@
             <div class="padding">
                 <label for="example-text-input" class="col-form-label">Cash Amount($)</label>
                 <input type="number" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" (blur)="cashAmountChangeHandler()"
-                [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly" (ngModelChange)="isFormDirty=true;">
+                    [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
+                    (ngModelChange)="isFormDirty=true;">
             </div>
             <div id="checkNumber" class="padding">
                 <label for="example-text-input" class="col-form-label">Check#</label>
-                <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()" (ngModelChange)="isFormDirty=true;"
-                    name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
+                <input type="text" class="form-control" [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
+                    (ngModelChange)="isFormDirty=true;" name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
                 <!-- <div *ngIf="CheckNumber.invalid && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
                     <i class="ion-android-alert showError"></i>
                     <div *ngIf="CheckNumber.errors.required" class="custom-tooltip bottom">Check number is required</div>

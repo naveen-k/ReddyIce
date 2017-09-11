@@ -57,6 +57,7 @@ export class TicketListComponent implements OnInit {
         // Remove 'All branch' object
         if (this.allBranches.length && this.allBranches[0].BranchID === 1) {
             this.allBranches.shift();
+            this.sortBranches();
         }
 
         // Set first branch default selected
@@ -64,6 +65,23 @@ export class TicketListComponent implements OnInit {
             this.branchChangeHandler();
         }
 
+    }
+
+    sortBranches() {
+        // sort by name
+        this.allBranches.sort(function (a, b) {
+            var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            // names must be equal
+            return 0;
+        });
     }
 
     getDrivers() {

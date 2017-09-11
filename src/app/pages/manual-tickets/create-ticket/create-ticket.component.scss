@@ -26,6 +26,16 @@ label {
   padding: 15px;
 }
 
+#newTicket .card-header.clearfix {
+  padding-left: 33px !important;
+}
+
+.newTicketTitleStatusIcon {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+}
+
 .dummyMarginTop {
   margin-top: 15px;
   margin-bottom: 15px;

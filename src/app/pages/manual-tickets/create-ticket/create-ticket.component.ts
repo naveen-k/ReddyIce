@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateTicketComponent implements OnInit {
 
-  pageTitle:string = "Manual Ticket";
+  pageTitle: string = "New Manual Ticket";
 
   ticket: ManualTicket = {} as ManualTicket;
 
@@ -127,6 +127,7 @@ export class CreateTicketComponent implements OnInit {
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
     this.branches = this.branches.filter((b) => b.BranchID !== 1);
+    this.sortBranches();
     this.ticketTypes = activatedRouteObject['ticketTypes'];
     this.prepareTicketTypes();
 
@@ -147,6 +148,23 @@ export class CreateTicketComponent implements OnInit {
       this.loadTicket(this.ticketId);
     }
 
+  }
+
+  sortBranches() {
+    // sort by name
+    this.branches.sort(function (a, b) {
+      var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
+      var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    });
   }
 
   prepareTicketTypes() {
@@ -716,8 +734,8 @@ export class CreateTicketComponent implements OnInit {
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
       this.notification.error('Driver is mandatory!!!');
       return false;
-    } else 
-    return true;
+    } else
+      return true;
   }
 
 }
