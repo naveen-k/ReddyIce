@@ -60,6 +60,14 @@ export class TicketListComponent implements OnInit {
             this.sortBranches();
         }
 
+        if (this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
+            this.searchObj.BranchId = this.user.Branch.BranchID;
+        }
+
+        if(this.user.Distributor && this.user.Distributor.DistributorMasterId && !this.searchObj.DistributorID){
+            this.searchObj.DistributorID = this.user.Distributor.DistributorMasterId;
+        }
+
         // Set first branch default selected
         if (this.searchObj.BranchId) {
             this.branchChangeHandler();

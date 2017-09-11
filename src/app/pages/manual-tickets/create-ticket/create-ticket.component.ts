@@ -193,6 +193,7 @@ export class CreateTicketComponent implements OnInit {
 
     // Reset Selected Customer
     this.ticket.Customer = '';
+    this.ticket.TicketProduct = [];
 
     this.resetSubTypesAndMode(selectedTicket);
     this.initializeSubTicketAndMode(selectedTicket);
@@ -247,6 +248,7 @@ export class CreateTicketComponent implements OnInit {
 
   loadCustomerOfBranch(branchId) {
     // this.isFormDirty = true;
+    this.customers = [];
     this.service.getBranchBasedCustomers(branchId).subscribe((res) => {
       this.customers = res;
 
@@ -585,6 +587,7 @@ export class CreateTicketComponent implements OnInit {
       // Update ticket
       this.service.updateTicket(ticket).subscribe(res => {
         this.notification.success(res);
+        this.isFormDirty = false;
         // this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
       });
       return;

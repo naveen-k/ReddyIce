@@ -1,3 +1,5 @@
+import { UserService } from '../../shared/user.service';
+import { ManualTicketService } from './manual-ticket.service';
 
 import { Component } from '@angular/core';
 
@@ -6,5 +8,12 @@ import { Component } from '@angular/core';
 })
 
 export class ManualTicketComponent {
-  
+  constructor(manualTicketService: ManualTicketService, userService: UserService) {
+    const now = new Date();
+    let searchObject = manualTicketService.getSearchedObject();
+    searchObject.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+    searchObject.userType = userService.getUser().IsDistributor ? 'External' : 'Internal';
+    searchObject.BranchId = null;
+    searchObject.DistributorID = null;
+  }
 }

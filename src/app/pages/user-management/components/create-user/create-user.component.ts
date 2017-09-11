@@ -1,3 +1,4 @@
+import { NotificationsService } from 'angular2-notifications/dist';
 import { UserService } from '../../../../shared/user.service';
 import { selector } from 'rxjs/operator/multicast';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -90,7 +91,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     searching: boolean = false;
 
 
-    constructor(private umService: UserManagementService, private userService: UserService) { }
+    constructor(private umService: UserManagementService, private userService: UserService, private notification: NotificationsService) { }
 
 
     clearInternalUserSearch() {
@@ -149,6 +150,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     onSubmit() {
+        if (!this.validateUser(this.user)) { return };
         // If user is RI internal user then distributor ID should be set to empty
         if (this.userDetails.IsDistributor) {
             this.user.DistributorMasterID = this.userDetails.Distributor.DistributorMasterId;
@@ -156,6 +158,19 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.DistributorMasterID = '';
         }
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
+    }
+
+    validateUser(user) {
+        if (!user.IsRIInternal) {
+            if (!user.DistributorMasterID) {
+                this.notification.error('Distributor is mandatory!!!');
+                return false;
+            } else if (user.IsSeasonal && !user.BranchID) {
+                this.notification.error('Branch is mandatory!!!');
+                return false;
+            }
+        }  
+        return true;
     }
 
     ngAfterContentInit() {
@@ -275,9 +290,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.distributorsAndCopackers = res;
             console.log(res);
         });
-        // this.umService.getDistributorsByBranch(this.user.BranchID).subscribe((res) => {
-        //     this.distributorsAndCopackers = res;
-        // });
     }
     spaceRemover(value) {
         this.user.LastName = value.replace(/^\s+|\s+$/g, '');
@@ -304,7 +316,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     isAllFeildsChecked() {
         console.log(this.user.FirstName);
         if (this.user.FirstName == '' || this.user.LastName == '' || this.user.EmailID == ''
-            ||this.user.RoleID == undefined) {
+            || this.user.RoleID == undefined) {
             this.isFormValid = false;
         }
         else {

@@ -1,3 +1,4 @@
+import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { NumberOnlyDirective } from './directives/number-only.directive';
 import { MinValueValidatorDirective } from './directives/min-value.directive';
 import { SharedService } from './shared.service';
@@ -22,6 +23,7 @@ import { NgModule } from '@angular/core';
         PaginationComponent,
         MinValueValidatorDirective,
         NumberOnlyDirective,
+        TicketTypePipe,
     ],
     exports: [
         GenericFilter,
@@ -31,6 +33,7 @@ import { NgModule } from '@angular/core';
         ModalComponent,
         PaginationComponent,
         MinValueValidatorDirective,
+        TicketTypePipe,
     ],
     entryComponents: [
         ModalComponent,

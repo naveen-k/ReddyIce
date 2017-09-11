@@ -9,35 +9,42 @@
 
                 <div class=" col-md-12">
                     <div class="row page-header bold-head">
-                        <div class="col-md-4">
-                            <span>Branch :</span>
-                            <label>{{tripData.BranchID}}</label>
+                        <div class="col-md-3">
+                            <span>Branch:</span>
+                            <label>{{tripData.BranchID}} - {{tripData.BranchName}}</label>
                         </div>
-                        <div class="col-md-4">
-                            <span>Route :</span>
+                        <div class="col-md-3">
+                            <span>Route:</span>
                             <label>{{tripData.RouteNumber}}</label>
                         </div>
-                        <div class="col-md-4">
-                            <span>Driver :</span>
+                        <div class="col-md-3">
+                            <span>Driver:</span>
                             <label>{{tripData.DriverName}}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <span>Trip Start Date:</span>
+                            <label>{{tripData.TripStartDate|date}}</label>
                         </div>
                     </div>
                     <div class="row page-header bold-head">
-                        <div class="col-md-4">
-                            <span>Trip :</span>
+                        <div class="col-md-3">
+                            <span>Trip Code:</span>
                             <label>{{tripData.TripCode}}</label>
                         </div>
-                        <div class="col-md-4">
-                            <span>Truck :</span>
+                        <div class="col-md-3">
+                            <span>Truck:</span>
                             <label>{{tripData.TruckID}}</label>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div>
-                                <span>Status :</span>
+                                <span>Status:</span>
                                 <label>{{tripStatus(tripData.TripStatusID)}}</label>
                             </div>
                         </div>
-
+                        <div class="col-md-3">
+                            <span>Trip End Date:</span>
+                            <label>{{tripData.TripEndDate|date}}</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,8 +52,103 @@
                 <ngb-tab title="Cash Reconciliation">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
+                            <div class="col-sm-12">
+                                <table class="table">
+                                    <thead>
+                                        <th></th>
+                                        <th>Total Sale</th>
+                                        <th>Cash</th>
+                                        <th>Check</th>
+                                        <th>Credit Card</th>
+                                        <th>Charge</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Manual Tickets</td>
+                                            <td>Manual Tickets</td>
+                                            <td>Manual Tickets</td>
+                                            <td>Manual Tickets</td>
+                                            <td>Manual Tickets</td>
+                                            <td>Manual Tickets</td>
+                                        </tr>
+                                        <tr>
+                                            <td>HH Tickets</td>
+                                            <td>HH Tickets</td>
+                                            <td>HH Tickets</td>
+                                            <td>HH Tickets</td>
+                                            <td>HH Tickets</td>
+                                            <td>HH Tickets</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row cash-recon-container">
+                                <div class="col-sm-4 border frameMargin">
+                                    <div class="row padding">
+                                        <h5 class="frameHeading">Payment</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <label>Cash:</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span>$123</span>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Check:</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span>$123</span>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Credit Card:</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span>$123</span>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <hr style="margin: 2px 0">
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Total Payment:</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span><b>$123</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 border frameMargin">
+                                    <div class="row padding">
+                                        <h5 class="frameHeading">Sales</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <label>Cash:</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span>$123</span>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Charge:</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span>$123</span>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <hr style="margin: 2px 0">
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Total Payment:</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span><b>$123</b></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-md-12">
-                                <table class="cash-reconciliation-table text-center">
+                                <!-- <table class="cash-reconciliation-table text-center">
                                     <thead>
                                         <th></th>
                                         <th class="text-center"><b>Payment</b></th>
@@ -61,8 +163,8 @@
                                         <tr>
                                             <td>Check</td>
                                             <td>{{ticketDetails?.Total.TotalCheck| currency:'USD':true:'2.2-4'}}</td>
-                                            <td width="14%"><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Actual" [(ngModel)]="Actual"
-                                                    (ngModelChange)="doAddition()"></td>
+                                            <td width="14%"><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Actual"
+                                                    [(ngModel)]="Actual" (ngModelChange)="doAddition()"></td>
                                             <td>Cash</td>
                                             <td>{{ ticketDetails?.Total.TotalCash | currency:'USD':true:'2.2-4'}}</td>
                                             <td><b>Total Deposit</b></td>
@@ -71,8 +173,8 @@
                                         <tr>
                                             <td>Cash</td>
                                             <td>{{ticketDetails?.Total.TotalCash| currency:'USD':true:'2.2-4'}}</td>
-                                            <td><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Cash" [(ngModel)]="Cash"
-                                                    (ngModelChange)="doAddition()"></td>
+                                            <td><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Cash"
+                                                    [(ngModel)]="Cash" (ngModelChange)="doAddition()"></td>
                                             <td>Charge</td>
                                             <td>{{ticketDetails?.Total.TotalCharge | currency:'USD':true:'2.2-4'}}</td>
 
@@ -82,8 +184,8 @@
                                         <tr>
                                             <td>Coins</td>
                                             <td> - </td>
-                                            <td><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Coins" [(ngModel)]="Coins"
-                                                    (ngModelChange)="doAddition()"></td>
+                                            <td><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Coins"
+                                                    [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
 
                                             <td><b>Total sales</b></td>
                                             <td>{{ ticketDetails?.Total.TotalSale| currency:'USD':true:'2.2-4'}}</td>
@@ -97,8 +199,8 @@
                                             <td>Misc.</td>
 
                                             <td> - </td>
-                                            <td><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Misc" [(ngModel)]="Misc"
-                                                    (ngModelChange)="doAddition()"></td>
+                                            <td><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Misc"
+                                                    [(ngModel)]="Misc" (ngModelChange)="doAddition()"></td>
                                             <td></td>
                                             <td></td>
 
@@ -120,7 +222,7 @@
                                         </tr>
 
                                     </tbody>
-                                </table>
+                                </table> -->
                             </div>
                         </div>
                     </ng-template>
@@ -226,12 +328,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Actions</th>
-                                                <th class="table-text-align">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'custNumber';customer.isAsc=!customer.isAsc;">
-                                              Customer 
-                                                 <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
-                                                </th>
+
 
                                                 <th class="table-text-align">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
@@ -246,35 +343,24 @@
                                             </span>
                                                 </th>
                                                 <th class="table-text-align">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
-                                                    Total Amount
-                                                     <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'custNumber';customer.isAsc=!customer.isAsc;">
+                                                        Customer 
+                                                     <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                                 </span>
                                                 </th>
                                                 <th class="table-text-align">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
-                                                Invoice Amount
-                                                 <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
+                                                        Total Invoice
+                                                        <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                    </span>
                                                 </th>
                                                 <th class="table-text-align">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'cash';customer.isAsc=!customer.isAsc;">
-                                                Cash
-                                                 <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
+                                                        Total Amount
+                                                        <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                    </span>
                                                 </th>
-                                                <th class="table-text-align">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CheckAmount';customer.isAsc=!customer.isAsc;">
-                                                Check
-                                                 <i *ngIf="(customer.sortField === 'CheckAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'CheckAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
-                                                </th>
-                                                <th class="table-text-align">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'charge';customer.isAsc=!customer.isAsc;">
-                                                Charge
-                                                 <i *ngIf="(customer.sortField === 'charge')" [ngClass]="(customer.isAsc && customer.sortField === 'charge' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
-                                                </th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -289,17 +375,12 @@
                                                             </i>
 
                                                 </td>
-                                                <td class="row-text-align">{{item.CustomerID}}-{{item.CustomerName}}</td>
-                                                <!-- Not Available -->
-                                                <td class="row-text-align">{{item.TicketNumber}}</td>
-                                                <td class="row-text-align" *ngIf="item.IsPaperTicket">Manual</td>
-                                                <td class="row-text-align" *ngIf="!item.IsPaperTicket">HH</td>
-                                                <td class="row-text-align">{{item.TotalAmount| currency:'USD':true:'2.2-4'}} </td>
-                                                <td class="row-text-align">{{item.TotalSale| currency:'USD':true:'2.2-4'}} </td>
-                                                <td class="row-text-align">{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
-                                                <td class="row-text-align">{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
-                                                <td class="row-text-align">{{item.charge?item.charge:"0" | currency:'USD':true:'2.2-4'}}</td>
-                                                <!-- Not Available  -->
+                                                <td>{{ item.TicketNumber }}</td>
+                                                <td>{{ item.IsSaleTicket }}</td>
+                                                <td>{{ item.CustomerID }} - {{ item.CustomerName }}</td>
+                                                <td class="textAlignRight">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                                                <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
+                                                <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
                                             </tr>
                                             <tr *ngIf="!tripData?.TripTicketList?.length">
                                                 <th class="text-center" colspan="9"> No data found </th>

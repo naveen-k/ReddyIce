@@ -12,7 +12,8 @@
         </div>
         <div class="col-sm-3">
             <label>Select Branch</label>
-            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
+            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()"
+                [disabled]="user.Branch.BranchID!==1">
                 <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
                     {{obj.BranchID}}-{{obj.BranchName}}
                 </option>
@@ -82,9 +83,15 @@
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
                         <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
-                          Amount
+                          Total Invoice
                           <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
+                    </th>
+                    <th class="thVerticalAlign textAlignRight amtPadding">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
+                             Total Amount
+                              <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                          </span>
                     </th>
                     <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
                         <span class="cursorPointer">
@@ -97,7 +104,8 @@
             <tbody>
                 <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc">
                     <td>
-                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()" [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
+                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
+                            [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
                     </td>
                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
                         <a [routerLink]="['../view/'+item.TicketID]">
@@ -118,7 +126,9 @@
                     <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td>
                     <td>{{ item.Customer.CustomerID }} - {{ item.Customer.CustomerName }}</td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
-                    <td class="textAlignRight">{{ item.CashAmount | currency:'USD':true:'1.2' }}</td>
+                    <td class="textAlignRight">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                    <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
+                    <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignCenter">
                         <i class="custom-tooltip-ion">
                             <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TicketStatusID == 23" width="15">

@@ -1,4 +1,4 @@
-import { UserService } from '../../shared/user.service';
+
 import { ManualTicket } from './manaul-ticket.interfaces';
 import { Customer } from '../../shared/interfaces/interfaces';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
@@ -13,14 +13,8 @@ export class ManualTicketService extends SharedService {
   result: any;
   _searchObject: any = {};
 
-  constructor(protected http: HttpService, private tmpHttp: Http, protected userService: UserService) {
+  constructor(protected http: HttpService, private tmpHttp: Http) {
     super(http);
-
-    const now = new Date();
-    this._searchObject = {
-      CreatedDate: { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() },
-      userType: this.userService.getUser().IsDistributor ? 'External' : 'Internal',
-    };
   }
 
   getAllTickets(createdDate, branchId): Observable<any[]> {

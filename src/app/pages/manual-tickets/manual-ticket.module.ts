@@ -1,5 +1,4 @@
 import { TicketFilter } from './pipes/filter-ticket.pipe';
-import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { BranchResolver, TicketTypesResolver } from './manual-ticket.resolver';
 import { TicketStatusPipe } from './pipes/ticket-status.pipe';
 import { TicketListComponent } from './ticket-list/ticket-list.component';
@@ -31,7 +30,6 @@ import { CreateTicketComponent } from './create-ticket/create-ticket.component';
     ManualTicketComponent,
     TicketListComponent,
     TicketStatusPipe,
-    TicketTypePipe,
     CreateTicketComponent,
     TicketFilter,
   ],
@@ -40,5 +38,8 @@ import { CreateTicketComponent } from './create-ticket/create-ticket.component';
     BranchResolver,
     TicketTypesResolver,
   ],
+  exports: [
+    CreateTicketComponent,
+  ]
 })
 export class ManualTicketModule { }
