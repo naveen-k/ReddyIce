@@ -2,7 +2,7 @@
     <div class=" col-md-12">
         <ba-card cardTitle="Details" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" (click)="saveReconciliation()">Approve</button>
+                <button class="btn btn-danger pull-right" (click)="saveReconciliation()">{{logedInUser?.Role.RoleID == 1 || logedInUser?.Role.RoleID == 2 ? 'Submit':'Approve'}}</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../list']">Back</button>
             </div>
             <div class="row add-margin-bottom">
@@ -25,7 +25,7 @@
                     <div class="row page-header bold-head">
                         <div class="col-md-4">
                             <span>Trip :</span>
-                            <label>{{tripData.TripID}}</label>
+                            <label>{{tripData.TripCode}}</label>
                         </div>
                         <div class="col-md-4">
                             <span>Truck :</span>
@@ -34,7 +34,7 @@
                         <div class="col-md-4">
                             <div>
                                 <span>Status :</span>
-                                <label>NA</label>
+                                <label>{{tripStatus(tripData.TripStatusID)}}</label>
                             </div>
                         </div>
 
@@ -203,7 +203,7 @@
                                                 <td width="7%">{{item.OverShort}}</td>
                                             </tr>
                                             <tr *ngIf="!unitReconciliation.length">
-                                                <th class="text-center" colspan="7"> No data found </th>
+                                                <th class="text-center" colspan="12"> No data found </th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -281,10 +281,10 @@
                                             <!--Removed sorting functionality as it was causing rendering issues-->
                                             <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
                                                 <td class="table-id" style="cursor: pointer">
-                                                    <i (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.IsPaperTicket">
+                                                    <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.IsPaperTicket">
                                                                 <span class="tooltiptext">View</span>
                                                             </i>
-                                                    <i (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket">
+                                                    <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket">
                                                                 <span class="tooltiptext">Edit</span>
                                                             </i>
 
@@ -298,7 +298,7 @@
                                                 <td class="row-text-align">{{item.TotalSale| currency:'USD':true:'2.2-4'}} </td>
                                                 <td class="row-text-align">{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
                                                 <td class="row-text-align">{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
-                                                <td class="row-text-align">{{item.charge?item.charge:""}}</td>
+                                                <td class="row-text-align">{{item.charge?item.charge:"0" | currency:'USD':true:'2.2-4'}}</td>
                                                 <!-- Not Available  -->
                                             </tr>
                                             <tr *ngIf="!tripData?.TripTicketList?.length">

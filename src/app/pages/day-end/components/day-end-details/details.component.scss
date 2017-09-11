@@ -36,7 +36,7 @@
 .small-input{
   
     padding: 5px !important;
-    margin: 2px 0px;
+    margin-top: 3px;
    
 }
 .dollar-input:before{
@@ -47,15 +47,3 @@
     left: -20px;
     
 }   
-input::before {
-    content: "\0024";
-} 
-
-.table-text-align{
-    text-align: left !important;
-    padding-left: 7px;
-}
-
-.row-text-align{
-    text-align: left !important;
-}

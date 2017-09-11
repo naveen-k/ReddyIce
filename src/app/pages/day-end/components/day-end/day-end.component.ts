@@ -28,20 +28,20 @@ export class DayEndComponent implements OnInit {
     tripFilterOption: any = {
         uId: "0",
         tripDate: this.selectedDate,
-        branchId: '0', isForAll: true
+        branchId: '0', isForAll: false
     };
 
     constructor(private service: DayEndService, private userService: UserService) {}
 
     ngOnInit() {
-        this.userDataTable = this.service.dataTableData;
-        this.unitReconciliation = this.service.dataTableData2;
-        this.ticketDetails = this.service.dataTableData3;
+       
         this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
-
         this.loadBranches();
         this.logedInUser = this.userService.getUser();
         this.userBranch = this.logedInUser.Branch.BranchID;
+        if(this.logedInUser.Role.RoleID == 1 || this.logedInUser.Role.RoleID == 2){
+          this.tripFilterOption.isForAll = true;  
+        }
         this.tripFilterOption.branchId = this.userBranch;
         this.selectionchangeHandler();
         

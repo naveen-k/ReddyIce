@@ -20,8 +20,6 @@ export class DetailsComponent implements OnInit {
         overShort: 0.0,
         totalDeposit: 0.0
     }
-
-    unitReconciliation1: any;
     ticketDetails: any;
     Actual: any;
     Coins: any;
@@ -29,7 +27,8 @@ export class DetailsComponent implements OnInit {
     Misc: any;
     tripDate: any = '2017-08-31';
     unitReconciliation: any = [];
-    unitReconciliationItemDTO: any = [];
+    logedInUser:any = {};
+    loadReturnDto:any = [];
     reconciliationDTO: any = {
         TripID: 0,
         ActualCash: 0.0,
@@ -39,33 +38,33 @@ export class DetailsComponent implements OnInit {
         Misc: 0.0,
         TtripStatusID: 1.0
     };
-    unitReconciliationItem: any = {
-        ProductName: 'sample string 1',
-        Load: 0,
-        ManualLoad: 0,
-        Returns: 0,
-        TruckDamage: 0,
-        CustomerDamage: 0,
-        CustomerDamageDRV: 2,
-        Sale: 0,
-        OverShort: 0,
-        Load1Quantity: 1,
-        DamageQuantity: 3,
-        ReturnQuantity: 0,
-        LoadReturnDamageID: 0,
-        TripID: 11,
-        ProductID: 12,
-        ManualTicket: 0,
-    };
+
 
     driverDetails: any = [];
     constructor(private service: DayEndService, private route: ActivatedRoute,
         private userService: UserService, private notification: NotificationsService,
         private modalService: NgbModal) {
-
+             this.logedInUser = this.userService.getUser();
     }
     openCreateTicketModal() {
 
+    }
+    tripStatus(statusCode) {
+        let statusText = '';
+        switch (statusCode) {
+            case 23:
+                statusText = "Draft";
+                break;
+            case 24:
+                statusText = "Submitted";
+                break;
+            case 25:
+                statusText = "Approved";
+                break;
+            default:
+                statusText = statusCode;
+        }
+            return statusText;
     }
     ngOnInit() {
         this.tripData = this.service.gettripData();
@@ -86,7 +85,8 @@ export class DetailsComponent implements OnInit {
                 });
             });
 
-
+        this.tripDate = this.tripData.Created.split('T')[0];
+        this.reconciliationDTO.TtripStatusID = this.tripData.TtripStatusID;
         this.service.getTripDetailByDate(this.tripID, this.tripDate).subscribe((res) => {
             this.ticketDetails = res;
             console.log(res);
@@ -109,13 +109,15 @@ export class DetailsComponent implements OnInit {
     getLoadReturn() {
         this.service.getUnitsReconciliation(this.tripID).subscribe((res) => {
             console.log(res);
-            this.unitReconciliation = res;
-            this.unitReconciliation.forEach(element => {
-                element['Load1Quantity'] = element['Load1Quantity'] || element['Load'];
-                element['ReturnQuantity'] = element['ReturnQuantity'] || element['Returns'];
-                element['DamageQuantity'] = element['DamageQuantity'] || element['TruckDamage'];
-                element['CustomerDamageDRV'] = element['CustomerDamageDRV'] || element['CustomerDamage'];
-            });
+            if (Array.isArray(res)) {
+                this.unitReconciliation = res;
+                this.unitReconciliation.forEach(element => {
+                    element['Load1Quantity'] = element['Load1Quantity'] || element['Load'];
+                    element['ReturnQuantity'] = element['ReturnQuantity'] || element['Returns'];
+                    element['DamageQuantity'] = element['DamageQuantity'] || element['TruckDamage'];
+                    element['CustomerDamageDRV'] = element['CustomerDamageDRV'] || element['CustomerDamage'];
+                });
+            }
             // this.mapUnitReconData(res);
         }, (err) => {
             console.log(err);
@@ -123,10 +125,10 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconChange(item) {
-         item.OverShort = item.Load1Quantity - (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale);
-        
+        item.OverShort = item.Load1Quantity - (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale);
+
     }
-    
+
     saveReconciliation() {
 
         this.reconciliationDTO.TripID = this.tripID;
@@ -141,6 +143,15 @@ export class DetailsComponent implements OnInit {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
+     
+        this.service.saveUnitReconciliation(this.unitReconciliation).subscribe((res) => {
+            this.notification.success("Success", res);
+        }, (err) => {
+            err = JSON.parse(err._body);
+            this.notification.error("Error", err.Message);
+        });
+         console.log(this.unitReconciliation);
+         
     }
 }
 
