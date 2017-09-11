@@ -51,15 +51,6 @@
                         <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
                     </select>
                 </div>
-                <!-- <div class="col-sm-6">
-                    <input type="text" autocomplete="off" class="form-control" [(ngModel)]="branchName" value="ticket.BranchID" placeholder="Search Branch"
-                        (ngModelChange)="searchBranchHandler(branchName)">
-                    <div class="search-container" [hidden]="!showList">
-                        <div [hidden]="!showList" class="search-item" *ngFor="let branch of branches" (click)="customerSelected(customer)">
-                            {{branch.BranchID}} - {{branch.BranchName}}
-                        </div>
-                    </div>
-                </div> -->
             </div>
             <div class="row padding" [hidden]="ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket)">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type</label>

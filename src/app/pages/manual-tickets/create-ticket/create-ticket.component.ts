@@ -169,18 +169,6 @@ export class CreateTicketComponent implements OnInit {
     });
   }
 
-  // shortlistedBranches: any = [];
-  // searchBranchHandler(searchedBranch) {
-  //   console.log('searchedBranch', searchedBranch);
-  //   this.showList = true;
-  //   // populate list of customers based on type ahead
-  //   for (let i = 0; i < this.branches.length; i++) {
-  //     if (this.branches[i].BranchName.toLowerCase().includes(searchedBranch)) {
-  //       this.shortlistedBranches.push(this.branches[i]);
-  //     }
-  //   }
-  // }
-
   prepareTicketTypes() {
     this.ticketTypes.CustomerType.forEach(element => {
       if (element.ID === 22) {
@@ -612,7 +600,7 @@ export class CreateTicketComponent implements OnInit {
         }
       });
     } else {
-      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Charge type');
+      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type');
     }
   }
 
@@ -742,15 +730,27 @@ export class CreateTicketComponent implements OnInit {
     } else if (!this.ticket.Customer) {
       this.notification.error('Customer is mandatory!!!');
       return false;
-    } // else if (!this.ticket.PONumber) {
-      // this.notification.error('PO number is mandatory!!!');
-      // return false;
-      // } 
-    else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
+    } else if (!this.ticket.PONumber) {
+      this.notification.error('PO number is mandatory!!!');
+      return false;
+    } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
       this.notification.error('Driver is mandatory!!!');
       return false;
-    } else
+    } else if (this.checkMinMaxLength) {
+      this.notification.error('Check Number should be 5 to 20 digits long!!!');
+      return false;
+    } else if (this.checkContainsCharacters) {
+      this.notification.error('Check number should be alphanumeric, cannot contain special characters!!!');
+      return false;
+    } else if (this.poContainsCharacters) {
+      this.notification.error('PO number should be alphanumeric, cannot contain special characters!!!');
+      return false;
+    } else if (this.poMinMaxLength) {
+      this.notification.error('PO number should be 4-20 digits long only!!!');
+      return false;
+    } else {
       return true;
+    }
   }
 
 }
