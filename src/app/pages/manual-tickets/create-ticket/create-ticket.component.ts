@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateTicketComponent implements OnInit {
 
-  pageTitle:string = "Manual Ticket";
+  pageTitle: string = "New Manual Ticket";
 
   ticket: ManualTicket = {} as ManualTicket;
 
@@ -76,6 +76,8 @@ export class CreateTicketComponent implements OnInit {
   // Current User Object
   user: any = {};
 
+  showList: boolean = false;
+
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
 
@@ -127,6 +129,7 @@ export class CreateTicketComponent implements OnInit {
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
     this.branches = this.branches.filter((b) => b.BranchID !== 1);
+    this.sortBranches();
     this.ticketTypes = activatedRouteObject['ticketTypes'];
     this.prepareTicketTypes();
 
@@ -147,6 +150,23 @@ export class CreateTicketComponent implements OnInit {
       this.loadTicket(this.ticketId);
     }
 
+  }
+
+  sortBranches() {
+    // sort by name
+    this.branches.sort(function (a, b) {
+      var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
+      var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    });
   }
 
   prepareTicketTypes() {
@@ -580,7 +600,7 @@ export class CreateTicketComponent implements OnInit {
         }
       });
     } else {
-      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Charge type');
+      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type');
     }
   }
 
@@ -716,8 +736,21 @@ export class CreateTicketComponent implements OnInit {
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
       this.notification.error('Driver is mandatory!!!');
       return false;
-    } else 
-    return true;
+    } else if (this.checkMinMaxLength) {
+      this.notification.error('Check Number should be 5 to 20 digits long!!!');
+      return false;
+    } else if (this.checkContainsCharacters) {
+      this.notification.error('Check number should be alphanumeric, cannot contain special characters!!!');
+      return false;
+    } else if (this.poContainsCharacters) {
+      this.notification.error('PO number should be alphanumeric, cannot contain special characters!!!');
+      return false;
+    } else if (this.poMinMaxLength) {
+      this.notification.error('PO number should be 4-20 digits long only!!!');
+      return false;
+    } else {
+      return true;
+    }
   }
 
 }
