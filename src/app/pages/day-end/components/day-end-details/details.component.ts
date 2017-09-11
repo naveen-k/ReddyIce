@@ -123,7 +123,7 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconChange(item) {
-        // TODO
+         item.OverShort = item.Load1Quantity - (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale);
         
     }
     
