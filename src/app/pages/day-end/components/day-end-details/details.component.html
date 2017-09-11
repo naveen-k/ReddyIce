@@ -45,13 +45,6 @@
                 <ngb-tab title="Cash Reconciliation">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
-
-                            <!-- <div class="col-md-12 padding-eater">
-                                <label>Pallets:</label>
-                                <label>5</label>
-                            </div> -->
-                        </div>
-                        <div class="row page-header">
                             <div class="col-md-12">
                                 <table class="cash-reconciliation-table text-center">
                                     <thead>
@@ -142,27 +135,27 @@
                                             <tr>
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'product';customer.isAsc=!customer.isAsc;">
-                                  Product
-                                     <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
+                                                        Product
+                                                        <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                    </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'load';customer.isAsc=!customer.isAsc;">
-                                  Load
-                                     <i *ngIf="(customer.sortField == 'load')" [ngClass]="(customer.isAsc && customer.sortField == 'load' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
+                                                        Load
+                                                        <i *ngIf="(customer.sortField == 'load')" [ngClass]="(customer.isAsc && customer.sortField == 'load' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                    </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'return';customer.isAsc=!customer.isAsc;">
-                                    Return
-                                     <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
+                                                            Return
+                                                            <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                    </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'truckDamage';customer.isAsc=!customer.isAsc;">
-                                    Truck Damage
-                                     <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
+                                                        Truck Damage
+                                                        <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                    </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'customerDamage';customer.isAsc=!customer.isAsc;">
@@ -191,20 +184,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let item of unitReconciliationItemDTO|sort:customer.sortField:customer.isAsc">
+                                            <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
                                                 <td width="25%">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load}}</td>
                                                 <td width="9%"><input [(ngModel)]='item.Load1Quantity' class="form-control small-input"
-                                                        type="number"></td>
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="6%">{{item.Returns}}</td>
                                                 <td width="9%"><input [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
-                                                        type="number"></td>
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="5%">{{item.TruckDamage}}</td>
                                                 <td width="9%"><input [(ngModel)]='item.DamageQuantity' class="form-control small-input"
-                                                        type="number"></td>
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="6%">{{item.CustomerDamage}}</td>
                                                 <td width="9%"><input [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
-                                                        type="number"></td>
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="5%">{{item.ManualTicket}}</td>
                                                 <td width="7%">{{item.Sale}}</td>
                                                 <td width="7%">{{item.OverShort}}</td>

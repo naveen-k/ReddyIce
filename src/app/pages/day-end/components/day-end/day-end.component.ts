@@ -13,61 +13,62 @@ export class DayEndComponent implements OnInit {
     unitReconciliation: any;
     ticketDetails: any;
 
-    selectedDate:any = '2017-08-27';
+    selectedDate: any = '2017-08-27';
     // contains all trips
     trips: any = [];
     // contains all Branches
     branches: any = [];
-    customer:any = {};
-    logedInUser:any = {};
-    userBranch:any='0';
+    customer: any = {};
+    logedInUser: any = {};
+    userBranch: any = '0';
 
     // Note - IsForAll is to see all trips or Mytrips
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
-    
-    tripFilterOption: any = { uId: "0", 
-    tripDate: this.selectedDate,
-     branchId: '0', isForAll: true};
 
-    constructor(private service: DayEndService, private userService:UserService) {
-        this.userDataTable = service.dataTableData;
-        this.unitReconciliation = service.dataTableData2;
-        this.ticketDetails = service.dataTableData3;
-         this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
- 
-        this.loadBranches();
-        this.selectionchangeHandler();
-        this.logedInUser = this.userService.getUser();
-        this.userBranch=this.logedInUser.Branch.BranchID;
-        this.tripFilterOption.branchId = this.userBranch;
-        
+    tripFilterOption: any = {
+        uId: "0",
+        tripDate: this.selectedDate,
+        branchId: '0', isForAll: true
+    };
 
-    }
+    constructor(private service: DayEndService, private userService: UserService) {}
+
     ngOnInit() {
-         }
-   
-    selectionchangeHandler() {
-           // uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
-         this.tripFilterOption.tripDate = this.service.formatDate(this.selectedDate);
-         this.tripFilterOption.branchId = this.userBranch;
-        this.loadFilteredTrips();
+        this.userDataTable = this.service.dataTableData;
+        this.unitReconciliation = this.service.dataTableData2;
+        this.ticketDetails = this.service.dataTableData3;
+        this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
+
+        this.loadBranches();
+        this.logedInUser = this.userService.getUser();
+        this.userBranch = this.logedInUser.Branch.BranchID;
+        this.tripFilterOption.branchId = this.userBranch;
+        this.selectionchangeHandler();
         
     }
-   
+
+    selectionchangeHandler() {
+        // uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
+        this.tripFilterOption.tripDate = this.service.formatDate(this.selectedDate);
+        this.tripFilterOption.branchId = this.userBranch;
+        this.loadFilteredTrips();
+
+    }
+
     loadFilteredTrips() {
         this.service.getTrips(this.tripFilterOption.uId, this.tripFilterOption.tripDate,
-             this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => { 
-                 if(typeof res == 'object') {
-                   this.trips = res.Trips;
-                 }
-                else {
-                   this.trips = []; 
+            this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
+                if (typeof res == 'object') {
+                    this.trips = res.Trips;
                 }
-           
-        }, (error) => {
-            console.log(error);
-            this.trips = [];
-        });
+                else {
+                    this.trips = [];
+                }
+
+            }, (error) => {
+                console.log(error);
+                this.trips = [];
+            });
     }
     getTripByDate(date) {
         date = this.service.formatDate(date);
@@ -86,7 +87,7 @@ export class DayEndComponent implements OnInit {
         });
 
     }
-    cuurenttripData(data){
+    cuurenttripData(data) {
         this.service.setTripData(data);
     }
 

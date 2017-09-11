@@ -16,9 +16,9 @@ export class DetailsComponent implements OnInit {
     subParams: any;
     tripID: any;
     tripData: any = {};
-    total:any={
-        overShort:0.0,
-        totalDeposit:0.0
+    total: any = {
+        overShort: 0.0,
+        totalDeposit: 0.0
     }
 
     unitReconciliation1: any;
@@ -29,8 +29,8 @@ export class DetailsComponent implements OnInit {
     Misc: any;
     tripDate: any = '2017-08-31';
     unitReconciliation: any = [];
-    unitReconciliationItemDTO:any = [];
-    reconciliationDTO:any={
+    unitReconciliationItemDTO: any = [];
+    reconciliationDTO: any = {
         TripID: 0,
         ActualCash: 0.0,
         ActualCheck: 0.0,
@@ -38,8 +38,8 @@ export class DetailsComponent implements OnInit {
         Tolls: 0.0,
         Misc: 0.0,
         TtripStatusID: 1.0
-      };
-     unitReconciliationItem:any = {
+    };
+    unitReconciliationItem: any = {
         ProductName: 'sample string 1',
         Load: 0,
         ManualLoad: 0,
@@ -56,17 +56,17 @@ export class DetailsComponent implements OnInit {
         TripID: 11,
         ProductID: 12,
         ManualTicket: 0,
-      };
+    };
 
     driverDetails: any = [];
     constructor(private service: DayEndService, private route: ActivatedRoute,
-         private userService: UserService,private notification:NotificationsService,
-        private modalService:NgbModal) {
-       
+        private userService: UserService, private notification: NotificationsService,
+        private modalService: NgbModal) {
+
     }
-  openCreateTicketModal() {
-   
-  }
+    openCreateTicketModal() {
+
+    }
     ngOnInit() {
         this.tripData = this.service.gettripData();
         console.log(this.tripData);
@@ -101,8 +101,8 @@ export class DetailsComponent implements OnInit {
     doAddition() {
         this.total.totalDeposit = parseFloat(this.Actual ? this.Actual : 0) + parseFloat(this.Coins ? this.Coins : 0)
             + parseFloat(this.Cash ? this.Cash : 0) + parseFloat(this.Misc ? this.Misc : 0);
-          this.total.overShort = parseFloat(this.total.totalDeposit) - parseFloat(this.ticketDetails.Total.TotalCheck)
-           + parseFloat(this.ticketDetails.Total.TotalCash);
+        this.total.overShort = parseFloat(this.total.totalDeposit) - parseFloat(this.ticketDetails.Total.TotalCheck)
+            + parseFloat(this.ticketDetails.Total.TotalCash);
         return this.total;
         //return this.totalDeposit;
     }
@@ -110,44 +110,36 @@ export class DetailsComponent implements OnInit {
         this.service.getUnitsReconciliation(this.tripID).subscribe((res) => {
             console.log(res);
             this.unitReconciliation = res;
-            this.mapUnitReconData(res);
+            this.unitReconciliation.forEach(element => {
+                element['Load1Quantity'] = element['Load1Quantity'] || element['Load'];
+                element['ReturnQuantity'] = element['ReturnQuantity'] || element['Returns'];
+                element['DamageQuantity'] = element['DamageQuantity'] || element['TruckDamage'];
+                element['CustomerDamageDRV'] = element['CustomerDamageDRV'] || element['CustomerDamage'];
+            });
+            // this.mapUnitReconData(res);
         }, (err) => {
             console.log(err);
         });
     }
-    mapUnitReconData(res){
-        if(!res.length){ return; }
-        for(let i = 0; i < res.length; i++){
-          
-           this.unitReconciliationItem.ProductName = res[i].ProductName;
-           this.unitReconciliationItem.Load = res[i].Load;
-           this.unitReconciliationItem.CustomerDamage = res[i].CustomerDamage;
-           this.unitReconciliationItem.Sale = res[i].Sale;
-           this.unitReconciliationItem.OverShort = res[i].OverShort;
-           this.unitReconciliationItem.LoadReturnDamageID = res[i].LoadReturnDamageID;
-           this.unitReconciliationItem.LoadReturnDamageID = res[i].LoadReturnDamageID;
-           this.unitReconciliationItem.TripID = res[i].TripID;
-           this.unitReconciliationItem.ProductID = res[i].ProductID;
-           this.unitReconciliationItem.ManualTicket = res[i].ManualTicket;
-           this.unitReconciliationItemDTO.push(this.unitReconciliationItem);
-           console.log(this.unitReconciliationItemDTO);
 
-        }
-
+    unitReconChange(item) {
+        // TODO
+        
     }
-    saveReconciliation(){
-       
-        this.reconciliationDTO.TripID=this.tripID;
-        this.reconciliationDTO.ActualCash=this.Cash;
-        this.reconciliationDTO.ActualCheck=this.Actual;
-        this.reconciliationDTO.ActualCoin=this.Coins;
-        this.reconciliationDTO.Misc=this.Misc;
+    
+    saveReconciliation() {
+
+        this.reconciliationDTO.TripID = this.tripID;
+        this.reconciliationDTO.ActualCash = this.Cash;
+        this.reconciliationDTO.ActualCheck = this.Actual;
+        this.reconciliationDTO.ActualCoin = this.Coins;
+        this.reconciliationDTO.Misc = this.Misc;
         console.log(this.reconciliationDTO);
-        this.service.saveRecociliation(this.reconciliationDTO).subscribe((res)=>{
-            this.notification.success("Success",res);
-        },(err)=> {
-            err=JSON.parse(err._body);
-            this.notification.error("Error",err.Message);
+        this.service.saveRecociliation(this.reconciliationDTO).subscribe((res) => {
+            this.notification.success("Success", res);
+        }, (err) => {
+            err = JSON.parse(err._body);
+            this.notification.error("Error", err.Message);
         });
     }
 }
