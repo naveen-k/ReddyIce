@@ -79,6 +79,8 @@ export class CreateTicketComponent implements OnInit {
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
 
+  subParams: any;
+
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
@@ -728,10 +730,11 @@ export class CreateTicketComponent implements OnInit {
     } else if (!this.ticket.Customer) {
       this.notification.error('Customer is mandatory!!!');
       return false;
-    } else if (!this.ticket.PONumber) {
-      this.notification.error('PO number is mandatory!!!');
-      return false;
-    } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
+    } // else if (!this.ticket.PONumber) {
+      // this.notification.error('PO number is mandatory!!!');
+      // return false;
+      // } 
+    else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
       this.notification.error('Driver is mandatory!!!');
       return false;
     } else
