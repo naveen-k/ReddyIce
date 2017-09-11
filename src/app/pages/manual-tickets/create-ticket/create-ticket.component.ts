@@ -101,7 +101,7 @@ export class CreateTicketComponent implements OnInit {
     protected userService: UserService,
     protected notification: NotificationsService,
     protected modalService: NgbModal,
-    protected activatedRoute: ActivatedRoute,
+    public activatedRoute: ActivatedRoute,
     protected route: Router,
   ) { }
 

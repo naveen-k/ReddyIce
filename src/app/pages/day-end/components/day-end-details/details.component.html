@@ -64,7 +64,7 @@
                                             <td width="14%"><input class="form-control small-input" type="number" [value]="Actual" [(ngModel)]="Actual"
                                                     (ngModelChange)="doAddition()"></td>
                                             <td>Cash</td>
-                                            <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{ ticketDetails?.Total.TotalCash | currency:'USD':true:'2.2-4'}}</td>
                                             <td><b>Total Deposit</b></td>
                                             <td>{{total.totalDeposit| currency:'USD':true:'2.2-4'}}</td>
                                         </tr>
@@ -74,7 +74,7 @@
                                             <td><input class="form-control small-input" type="number" [value]="Cash" [(ngModel)]="Cash"
                                                     (ngModelChange)="doAddition()"></td>
                                             <td>Charge</td>
-                                            <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{ticketDetails?.Total.TotalCharge | currency:'USD':true:'2.2-4'}}</td>
 
                                             <td><b>Over/Short</b></td>
                                             <td>{{total.overShort| currency:'USD':true:'2.2-4'}}</td>
@@ -86,7 +86,7 @@
                                                     (ngModelChange)="doAddition()"></td>
 
                                             <td><b>Total sales</b></td>
-                                            <td>{{ 0 | currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{ ticketDetails?.Total.TotalSale| currency:'USD':true:'2.2-4'}}</td>
 
                                             <td></td>
                                             <td></td>
