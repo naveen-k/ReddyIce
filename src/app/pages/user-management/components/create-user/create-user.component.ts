@@ -150,6 +150,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     onSubmit() {
+        if(this.userObject.IsDistributor){
+            this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
+        }
         if (!this.validateUser(this.user)) { return };
         // If user is RI internal user then distributor ID should be set to empty
         if (this.userDetails.IsDistributor) {
