@@ -150,7 +150,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     onSubmit() {
-        if(this.userObject.IsDistributor){
+        if (this.userObject.IsDistributor) {
             this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
         }
         if (!this.validateUser(this.user)) { return };

@@ -12,8 +12,7 @@
         </div>
         <div class="col-sm-3">
             <label>Select Branch</label>
-            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()"
-                [disabled]="user.Branch?.BranchID!==1">
+            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
                 <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
                     {{obj.BranchID}}-{{obj.BranchName}}
                 </option>

@@ -31,20 +31,20 @@ export class DayEndComponent implements OnInit {
         branchId: '0', isForAll: false
     };
 
-    constructor(private service: DayEndService, private userService: UserService) {}
+    constructor(private service: DayEndService, private userService: UserService) { }
 
     ngOnInit() {
-       
+
         this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
         this.loadBranches();
         this.logedInUser = this.userService.getUser();
-        this.userBranch = this.logedInUser.Branch.BranchID;
-        if(this.logedInUser.Role.RoleID == 1 || this.logedInUser.Role.RoleID == 2){
-          this.tripFilterOption.isForAll = true;  
+        this.userBranch = this.logedInUser.Branch ? this.logedInUser.Branch.BranchID : null;
+        if (this.logedInUser.Role.RoleID == 1 || this.logedInUser.Role.RoleID == 2) {
+            this.tripFilterOption.isForAll = true;
         }
         this.tripFilterOption.branchId = this.userBranch;
         this.selectionchangeHandler();
-        
+
     }
 
     selectionchangeHandler() {
