@@ -82,7 +82,7 @@ export class DayEndComponent implements OnInit {
         const userId = localStorage.getItem('userId');
         this.service.getBranches(userId).subscribe((res) => {
             this.branches = res;
-            console.log(res);
+            // console.log(res);
         }, (error) => {
         });
 

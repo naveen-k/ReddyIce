@@ -80,8 +80,7 @@
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i *ngIf="logedInUser.IsRIInternal"  (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail']" [queryParams]="{ TripID: item.TripID }"
-                                    style="margin-right: 5px">
+                                <i *ngIf="logedInUser.IsRIInternal"  (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
 

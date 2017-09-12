@@ -1,3 +1,4 @@
+import { DayEndComponent } from './components/day-end-list/day-end.component';
 import { DayEndContainerComponent } from './components/day-end-container/day-end-container.component';
 import { DetailsComponent } from './components/day-end-details/details.component';
 import { TicketDetailsComponent } from './components/ticket-details/ticket-details.component';
@@ -6,7 +7,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { NgaModule } from '../../theme/nga.module';
 import { Routes, RouterModule } from '@angular/router';
-import { DayEndComponent } from './components/day-end/day-end.component';
 import { NgModule } from '@angular/core';
 import { DayEndService } from './day-end.service';
 import { ManualTicketModule } from '../manual-tickets/manual-ticket.module';
@@ -21,7 +21,7 @@ const routes: Routes = [
             component: DayEndComponent,
         },
         {
-            path: 'detail',
+            path: 'detail/:tripId',
             component: DetailsComponent,
         },
         {
@@ -33,7 +33,6 @@ const routes: Routes = [
         }],
     },
 ];
-
 
 @NgModule({
     declarations: [DayEndContainerComponent,

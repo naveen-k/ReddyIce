@@ -1,56 +1,36 @@
-import { any } from 'codelyzer/util/function';
-import { LocalDataSource } from 'ng2-smart-table';
+import { User } from '../../../user-management/user-management.interface';
 import { DayEndService } from '../../day-end.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-//import { CreateTicketComponent } from '../../../manual-tickets/create-ticket/create-ticket.component';
 
 @Component({
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss'],
 })
 export class DetailsComponent implements OnInit {
-    subParams: any;
-    tripID: any;
+    logedInUser: User;
+    tripId: number;
     tripData: any = {};
-    total: any = {
-        overShort: 0.0,
-        totalActualPayment: 0.0
-    }
     ticketDetails: any;
-    actualCash: any = 0;
-    actualCoin: any = 0;
-    actualCheck: any = 0;
-    actualMisc: any = 0;
-    actualTolls: any = 0;
-    disabled:boolean = false;
-    tripDate: any = '2017-08-31';
+    disabled: boolean = false;
     unitReconciliation: any = [];
-    logedInUser:any = {};
-    loadReturnDto:any = [];
-    reconciliationDTO: any = {
-        TripID: 0,
-        ActualCash: 0.0,
-        ActualCheck: 0.0,
-        ActulaCoin: 0.0,
-        Tolls: 0.0,
-        Misc: 0.0,
-        TripStatusID: 1.0
-    };
-
-
     driverDetails: any = [];
-    constructor(private service: DayEndService, private route: ActivatedRoute,
-        private userService: UserService, private notification: NotificationsService,
-        private modalService: NgbModal) {
-             this.logedInUser = this.userService.getUser();
-    }
-    openCreateTicketModal() {
 
+    constructor(
+        private service: DayEndService,
+        private route: ActivatedRoute,
+        private userService: UserService,
+        private notification: NotificationsService,
+        private modalService: NgbModal,
+    ) { }
+
+    openCreateTicketModal() {
+        // TODO open create ticket modal
     }
+
     tripStatus(statusCode) {
         let statusText = '';
         switch (statusCode) {
@@ -66,52 +46,41 @@ export class DetailsComponent implements OnInit {
             default:
                 statusText = statusCode;
         }
-            return statusText;
+        return statusText;
     }
     ngOnInit() {
-        this.tripData = this.service.gettripData();
-        console.log(this.tripData);
+        this.logedInUser = this.userService.getUser();
+        this.tripId = +this.route.snapshot.params['tripId'];
 
-        this.subParams = this.route
-            .queryParams
-            .subscribe(params => {
-                // Defaults to 0 if no query param provided.
-                this.tripID = params['TripID'];
-                console.log(this.tripID);
-                this.getLoadReturn();
-                this.service.getTripDetails(this.tripID).subscribe((res) => {
-                    console.log(res);
-                    this.driverDetails = res;
-                }, (err) => {
-                    console.log(err);
-                });
-            });
+        this.tripData = this.service.getTripData();
 
-        this.tripDate = this.tripData.Created.split('T')[0];
-        this.reconciliationDTO.TripStatusID = this.tripData.TripStatusID;
-        if(this.tripData.TripStatusID == 24 || this.tripData.TripStatusID == 25) { this.disabled = false; };
-       console.log(this.disabled);
-        this.service.getTripDetailByDate(this.tripID, this.tripDate).subscribe((res) => {
+        this.loadTripData();
+
+        this.loadTripDetailByDate();
+
+        this.loadUnitReconciliation();
+    }
+
+    loadTripData() {
+        this.service.getTripDetails(this.tripId).subscribe((res) => {
+            this.driverDetails = res = res || [];
+        })
+    }
+
+    loadTripDetailByDate() {
+        this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.ticketDetails = res;
-            console.log(res);
         }, (err) => {
 
-        });
+        })
     }
 
     sortByWordLength = (a: any) => {
         return a.location.length;
     }
-    doAddition() {
-        this.total.totalActualPayment = parseFloat(this.actualCash ? this.actualCash : 0 ) + parseFloat(this.actualCoin ? this.actualCoin : 0)
-            + parseFloat(this.actualTolls ? this.actualTolls : 0) + parseFloat(this.actualCheck ? this.actualCheck : 0) +
-             parseFloat(this.actualMisc ? this.actualMisc : 0);
-          this.total.overShort =  parseFloat(this.total.totalActualPayment) - parseFloat(this.ticketDetails.Total.Sale);
-        return this.total;
-        //return this.totalDeposit;
-    }
-    getLoadReturn() {
-        this.service.getUnitsReconciliation(this.tripID).subscribe((res) => {
+
+    loadUnitReconciliation() {
+        this.service.getUnitsReconciliation(this.tripId).subscribe((res) => {
             console.log(res);
             if (Array.isArray(res)) {
                 this.unitReconciliation = res;
@@ -123,7 +92,6 @@ export class DetailsComponent implements OnInit {
                     this.unitReconChange(element);
                 });
             }
-            // this.mapUnitReconData(res);
         }, (err) => {
             console.log(err);
         });
@@ -131,33 +99,33 @@ export class DetailsComponent implements OnInit {
 
     unitReconChange(item) {
         item.OverShort = (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale) - item.Load1Quantity;
-
     }
 
     saveReconciliation() {
+        const total = this.ticketDetails.Total;
+        const cashRecon = {
+            TripID: this.tripId,
+            ActualCash: total.actualdepositcash,
+            ActualCheck: total.actualdepositcheck,
+            ActualCoin: total.actualdepositcoin,
+            Misc: total.actualdepositmisc,
+        };
 
-        this.reconciliationDTO.TripID = this.tripID;
-        this.reconciliationDTO.ActualCash = this.actualCash;
-        this.reconciliationDTO.ActualCheck = this.actualCheck;
-        this.reconciliationDTO.ActualCoin = this.actualCoin;
-        this.reconciliationDTO.Misc = this.actualMisc;
-         this.reconciliationDTO.Tolls = this.actualTolls;
-        console.log(this.reconciliationDTO);
-        this.service.saveRecociliation(this.reconciliationDTO).subscribe((res) => {
-          //  this.notification.success("Success", res);
+        this.service.saveRecociliation(cashRecon).subscribe((res) => {
+            //  this.notification.success("Success", res);
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
-     
+
         this.service.saveUnitReconciliation(this.unitReconciliation).subscribe((res) => {
             this.notification.success("Success", res);
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
-         console.log(this.unitReconciliation);
-         
+        // console.log(this.unitReconciliation);
+
     }
 }
 
