@@ -2,7 +2,7 @@
     <div class=" col-md-12">
         <ba-card cardTitle="Details" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" (click)="saveReconciliation()">{{logedInUser?.Role.RoleID == 1 || logedInUser?.Role.RoleID == 2 ? 'Submit':'Approve'}}</button>
+                <button class="btn btn-danger pull-right" [disabled] = 'tripData.TripStatusID == 24 || tripData.TripStatusID == 25'  (click)="saveReconciliation()">{{logedInUser?.Role.RoleID == 1 || logedInUser?.Role.RoleID == 2 ? 'Submit':'Approve'}}</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../list']">Back</button>
             </div>
             <div class="row add-margin-bottom">
@@ -66,19 +66,19 @@
                                     <tbody>
                                         <tr>
                                             <td>Manual Tickets</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualSale}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCash}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCheck}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCreditCard}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCharge}}</td>
                                         </tr>
                                         <tr>
                                             <td>HH Tickets</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
-                                            <td class="text-align-right">$34.44</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHSale}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCash}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCheck}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCreditCard}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCharge}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -95,19 +95,19 @@
                                                 <label>Cash:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span>{{ ticketDetails?.Total.TotalCash | currency:'USD':true:'1.2'}}</span>
+                                                <span>{{ ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</span>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Check:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span>{{ticketDetails?.Total.TotalCheck| currency:'USD':true:'1.2'}}</span>
+                                                <span>{{  ticketDetails?.Total.TotalHHCheck +  ticketDetails?.Total.TotalManualCheck | currency:'USD':true:'1.2'}}</span>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Credit Card:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span>$123</span>
+                                                <span>{{  ticketDetails?.Total.TotalHHCreditCard +  ticketDetails?.Total.TotalManualCreditCard | currency:'USD':true:'1.2'}}</span>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">
@@ -116,7 +116,10 @@
                                                 <label>Total Payment:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{total.totalDeposit| currency:'USD':true:'1.2'}}</b></span>
+                                                <span><b>{{ ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash
+                                                        +  ticketDetails?.Total.TotalHHCheck +  ticketDetails?.Total.TotalManualCheck
+                                                        +  ticketDetails?.Total.TotalHHCreditCard +  ticketDetails?.Total.TotalManualCreditCard
+                                                        | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                         </div>
                                     </div>
@@ -131,13 +134,13 @@
                                                 <label>Cash:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span>$123</span>
+                                                <span> {{  ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</span>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Charge:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span>$123</span>
+                                                <span>{{  ticketDetails?.Total.TotalHHCharge +  ticketDetails?.Total.TotalManualCharge | currency:'USD':true:'1.2'}}</span>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">
@@ -146,7 +149,9 @@
                                                 <label>Total Payment:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>$123</b></span>
+                                                <span><b>{{  ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash
+                                                    +  ticketDetails?.Total.TotalHHCharge +  ticketDetails?.Total.TotalManualCharge
+                                                     | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                         </div>
                                     </div>
@@ -161,34 +166,34 @@
                                                 <label>Cash:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number">
+                                                <input type="number" [(ngModel)]='actualCash' [value]='ticketDetails?.Total.actualdepositcash' (ngModelChange)="doAddition()">
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Check:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" >
+                                                <input type="number"  [(ngModel)]='actualCheck' [value]='ticketDetails?.Total.actualdepositcheck' (ngModelChange)="doAddition()">
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Coins:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number">
+                                                <input type="number"  [(ngModel)]='actualCoin' [value]='ticketDetails?.Total.ActulaCoin' (ngModelChange)="doAddition()">
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
                                             </div>
                                             <div class="col-sm-8">
-                                                <label>Credit Card:</label>
+                                                <label>Tolls:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" disabled>
+                                                <input type="number"  [(ngModel)]='actualTolls' [value]='ticketDetails?.Total.Tolls' (ngModelChange)="doAddition()">
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Misc:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number">
+                                                <input type="number"  [(ngModel)]='actualMisc' [value]='ticketDetails?.Total.Misc' (ngModelChange)="doAddition()">
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">
@@ -197,13 +202,13 @@
                                                 <label>Total Payment:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>$123</b></span>
+                                                <span><b>{{ticketDetails?.Total.Sale | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Over/Short:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>$123</b></span>
+                                                <span><b>{{total.overShort | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                         </div>
                                     </div>
@@ -225,21 +230,21 @@
                                     <tbody>
                                         <tr>
                                             <td>Check</td>
-                                            <td>{{ticketDetails?.Total.TotalCheck| currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{ ticketDetails??.Total.TotalCheck| currency:'USD':true:'2.2-4'}}</td>
                                             <td width="14%"><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Actual"
                                                     [(ngModel)]="Actual" (ngModelChange)="doAddition()"></td>
                                             <td>Cash</td>
-                                            <td>{{ ticketDetails?.Total.TotalCash | currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{  ticketDetails??.Total.TotalCash | currency:'USD':true:'2.2-4'}}</td>
                                             <td><b>Total Deposit</b></td>
                                             <td>{{total.totalDeposit| currency:'USD':true:'2.2-4'}}</td>
                                         </tr>
                                         <tr>
                                             <td>Cash</td>
-                                            <td>{{ticketDetails?.Total.TotalCash| currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{ ticketDetails??.Total.TotalCash| currency:'USD':true:'2.2-4'}}</td>
                                             <td><input [disabled]="disabled" class="form-control small-input" type="number" [value]="Cash"
                                                     [(ngModel)]="Cash" (ngModelChange)="doAddition()"></td>
                                             <td>Charge</td>
-                                            <td>{{ticketDetails?.Total.TotalCharge | currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{ ticketDetails??.Total.TotalCharge | currency:'USD':true:'2.2-4'}}</td>
 
                                             <td><b>Over/Short</b></td>
                                             <td>{{total.overShort| currency:'USD':true:'2.2-4'}}</td>
@@ -251,7 +256,7 @@
                                                     [(ngModel)]="Coins" (ngModelChange)="doAddition()"></td>
 
                                             <td><b>Total sales</b></td>
-                                            <td>{{ ticketDetails?.Total.TotalSale| currency:'USD':true:'2.2-4'}}</td>
+                                            <td>{{  ticketDetails??.Total.TotalSale| currency:'USD':true:'2.2-4'}}</td>
 
                                             <td></td>
                                             <td></td>

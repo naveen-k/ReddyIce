@@ -18,13 +18,14 @@ export class DetailsComponent implements OnInit {
     tripData: any = {};
     total: any = {
         overShort: 0.0,
-        totalDeposit: 0.0
+        totalActualPayment: 0.0
     }
     ticketDetails: any;
-    Actual: any;
-    Coins: any;
-    Cash: any;
-    Misc: any;
+    actualCash: any;
+    actualCoin: any;
+    actualCheck: any;
+    actualMisc: any;
+    actualTolls: any;
     disabled:boolean = false;
     tripDate: any = '2017-08-31';
     unitReconciliation: any = [];
@@ -88,7 +89,7 @@ export class DetailsComponent implements OnInit {
 
         this.tripDate = this.tripData.Created.split('T')[0];
         this.reconciliationDTO.TripStatusID = this.tripData.TripStatusID;
-        if(this.tripData.TripStatusID == 24 || this.tripData.TripStatusID == 25) { this.disabled = true; };
+        if(this.tripData.TripStatusID == 24 || this.tripData.TripStatusID == 25) { this.disabled = false; };
        console.log(this.disabled);
         this.service.getTripDetailByDate(this.tripID, this.tripDate).subscribe((res) => {
             this.ticketDetails = res;
@@ -102,10 +103,10 @@ export class DetailsComponent implements OnInit {
         return a.location.length;
     }
     doAddition() {
-        this.total.totalDeposit = parseFloat(this.Actual ? this.Actual : 0) + parseFloat(this.Coins ? this.Coins : 0)
-            + parseFloat(this.Cash ? this.Cash : 0) + parseFloat(this.Misc ? this.Misc : 0);
-        this.total.overShort = parseFloat(this.total.totalDeposit) - parseFloat(this.ticketDetails.Total.TotalCheck)
-            + parseFloat(this.ticketDetails.Total.TotalCash);
+        this.total.totalActualPayment = parseFloat(this.actualCash ? this.actualCash : 0 ) + parseFloat(this.actualCoin ? this.actualCoin : 0)
+            + parseFloat(this.actualTolls ? this.actualTolls : 0) + parseFloat(this.actualCheck ? this.actualCheck : 0) +
+             parseFloat(this.actualMisc ? this.actualMisc : 0);
+          this.total.overShort =  parseFloat(this.total.totalActualPayment) - parseFloat(this.ticketDetails.Total.Sale);
         return this.total;
         //return this.totalDeposit;
     }
@@ -129,20 +130,21 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconChange(item) {
-        item.OverShort = item.Load1Quantity - (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale);
+        item.OverShort = (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale) - item.Load1Quantity;
 
     }
 
     saveReconciliation() {
 
         this.reconciliationDTO.TripID = this.tripID;
-        this.reconciliationDTO.ActualCash = this.Cash;
-        this.reconciliationDTO.ActualCheck = this.Actual;
-        this.reconciliationDTO.ActualCoin = this.Coins;
-        this.reconciliationDTO.Misc = this.Misc;
+        this.reconciliationDTO.ActualCash = this.actualCash;
+        this.reconciliationDTO.ActualCheck = this.actualCheck;
+        this.reconciliationDTO.ActualCoin = this.actualCoin;
+        this.reconciliationDTO.Misc = this.actualMisc;
+         this.reconciliationDTO.Tolls = this.actualTolls;
         console.log(this.reconciliationDTO);
         this.service.saveRecociliation(this.reconciliationDTO).subscribe((res) => {
-            this.notification.success("Success", res);
+          //  this.notification.success("Success", res);
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
