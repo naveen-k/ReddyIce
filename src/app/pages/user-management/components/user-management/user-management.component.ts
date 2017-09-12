@@ -267,6 +267,8 @@ export class UserManagementComponent implements OnInit {
     activeModal.componentInstance.closeModalHandler = (() => {
       this.service.deleteUser(user.UserId).subscribe((res) => {
         this.notification.success('Success', `User ${user.UserName} deactivated successfully`);
+        this.usersList = this.usersList.filter(u => u.UserId !== user.UserId);
+        this.updateUserTableOnTypeChange();
         // this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
       },
         (error) => {

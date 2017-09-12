@@ -86,12 +86,12 @@
                    <span class="tooltiptext">Edit</span>
                 </i>
                 <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"
-                  [hidden]="item.IsRIInternal || !item.IsActive">
+                  [hidden]="!item.IsActive">
                    <span class="tooltiptext">Deactivate</span>
                 </i>
               </td>
-              <td *ngIf="!hideColumn" class="userCell">{{ item.FirstName || 'NA' }} {{ item.LastName || 'NA' }}</td>
-              <td class="userCell">{{ item.UserName || 'NA' }}</td>
+              <td class="userCell">{{ item.FirstName || 'NA' }} {{ item.LastName || 'NA' }}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{ item.UserName || 'NA' }}</td>
               <td class="userCell">{{ item.Role?.RoleName}}</td>
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
               <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchCode}} - {{item.Branch?.BranchName}}</td>

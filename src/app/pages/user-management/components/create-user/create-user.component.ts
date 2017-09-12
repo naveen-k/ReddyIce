@@ -157,6 +157,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         } else if (this.user.IsRIInternal) {
             this.user.DistributorMasterID = '';
         }
+        if(!this.user.IsRIInternal && !this.user.IsSeasonal){
+            this.user.BranchID = null;
+        }
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
 
@@ -169,7 +172,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.notification.error('Branch is mandatory!!!');
                 return false;
             }
-        }  
+        } else {
+            if (!user.BranchID) {
+                this.notification.error('Branch is mandatory!!!');
+                return false;
+            }
+        }
         return true;
     }
 
@@ -268,7 +276,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         });
     }
     roleChange(roleID) {
-        if (roleID === '1' || roleID === '2') {
+        this.user.BranchID = null;
+        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {
             if (this.branches[0].BranchID != '1') {
                 this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' });
             }
