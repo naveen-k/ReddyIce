@@ -77,6 +77,9 @@ export class CreateTicketComponent implements OnInit {
   user: any = {};
 
   showList: boolean = false;
+  pbsCount: number = 0;
+  dsdCount: number = 0;
+  inventoryCount: number = 0;
 
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
@@ -546,7 +549,7 @@ export class CreateTicketComponent implements OnInit {
       },
       (error) => {
         if (error) {
-          this.notification.error(error._body);
+          this.notification.error('Something went wrong');
         }
       },
     );
@@ -726,6 +729,34 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
   }
 
+  pbsQuantityCheck() {
+    for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
+      if (!this.ticket.TicketProduct[i].Quantity) {
+        this.pbsCount += 1;
+      }
+    }
+    return this.pbsCount;
+  }
+
+  dsdQuantityCheck() {
+    for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
+      if (!this.ticket.TicketProduct[i].Quantity) {
+        this.dsdCount += 1;
+      }
+    }
+    return this.dsdCount;
+  }
+
+  // TODO: CurrentInventory, DamagedBags not showing available for TicketProduct
+  inventoryCheck() {
+    for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
+      if (!this.ticket.TicketProduct[i].DeliveredBags ) {
+        this.inventoryCount += 1;
+      }
+    }
+    return this.inventoryCount;
+  }
+
   validateTicket(ticket): boolean {
     if (!ticket.TicketNumber) {
       this.notification.error('Ticket Number is mandatory!!!');
@@ -766,6 +797,30 @@ export class CreateTicketComponent implements OnInit {
     } else if (!(!this.custType || this.ticket.CustomerType !== 20)) {
       this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
       return false;
+    } else if (this.ticket.CustomerType === 21 && this.ticket.TicketProduct) {
+      if (this.pbsQuantityCheck() > 0) {
+        this.pbsCount = 0;
+        this.notification.error('Delivered Bags for the products in the product list cannot be blank for PBS Customer type!!!');
+        return false;
+      } else {
+        return true;
+      }
+    } else if (this.ticket.CustomerType === 20 && this.ticket.TicketProduct) {
+      if (this.dsdQuantityCheck() > 0) {
+        this.dsdCount = 0;
+        this.notification.error('Quantity for the products in the product list cannot be blank for DSD Customer type!!!');
+        return false;
+      } else {
+        return true;
+      }
+    } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct) {
+      if (this.inventoryCheck() > 0) {
+        this.inventoryCount = 0;
+        this.notification.error('All fields are mandatory for the products in the product list cannot be blank for DSD Customer type!!!');
+        return false;
+      } else {
+        return true;
+      }
     } else {
       return true;
     }
