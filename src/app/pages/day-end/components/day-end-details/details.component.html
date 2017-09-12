@@ -1,6 +1,6 @@
 <div class="row">
     <div class=" col-md-12">
-        <ba-card cardTitle="Details" baCardClass="with-scroll" class="smart-table-container" #customer>
+        <ba-card cardTitle="Trip Detail" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" [disabled] = 'tripData.TripStatusID == 24 || tripData.TripStatusID == 25'  (click)="saveReconciliation()">{{logedInUser?.Role.RoleID == 1 || logedInUser?.Role.RoleID == 2 ? 'Submit':'Approve'}}</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../list']">Back</button>
@@ -134,7 +134,7 @@
                                                 <label>Cash:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span> {{  ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</span>
+                                                <span> {{  ticketDetails?.Total.TotalManualSale +  ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</span>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Charge:</label>
@@ -146,12 +146,10 @@
                                                 <hr style="margin: 2px 0">
                                             </div>
                                             <div class="col-sm-8">
-                                                <label>Total Payment:</label>
+                                                <label>Total Sale:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash
-                                                    +  ticketDetails?.Total.TotalHHCharge +  ticketDetails?.Total.TotalManualCharge
-                                                     | currency:'USD':true:'1.2'}}</b></span>
+                                                <span><b>{{ticketDetails?.Total.TotalManualSale +  ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +206,9 @@
                                                 <label>Over/Short:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash + ticketDetails?.Total.TotalHHCharge +  ticketDetails?.Total.TotalManualCharge - actualCash - actualCheck -  actualCoin - actualMisc | currency:'USD':true:'1.2'}}</b></span>
+                                                <span><b>{{ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash
+                                                        +  ticketDetails?.Total.TotalHHCheck +  ticketDetails?.Total.TotalManualCheck
+                                                        +  ticketDetails?.Total.TotalHHCreditCard +  ticketDetails?.Total.TotalManualCreditCard - actualCash - actualCheck -  actualCoin - actualMisc | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                         </div>
                                     </div>
