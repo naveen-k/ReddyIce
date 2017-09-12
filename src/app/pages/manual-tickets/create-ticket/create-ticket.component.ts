@@ -816,7 +816,7 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct) {
       if (this.inventoryCheck() > 0) {
         this.inventoryCount = 0;
-        this.notification.error('All fields are mandatory for the products in the product list cannot be blank for DSD Customer type!!!');
+        this.notification.error('All fields are mandatory for the products in the product list cannot be blank for PBM Inventory Customer type!!!');
         return false;
       } else {
         return true;
