@@ -21,11 +21,11 @@ export class DetailsComponent implements OnInit {
         totalActualPayment: 0.0
     }
     ticketDetails: any;
-    actualCash: any;
-    actualCoin: any;
-    actualCheck: any;
-    actualMisc: any;
-    actualTolls: any;
+    actualCash: any = 0;
+    actualCoin: any = 0;
+    actualCheck: any = 0;
+    actualMisc: any = 0;
+    actualTolls: any = 0;
     disabled:boolean = false;
     tripDate: any = '2017-08-31';
     unitReconciliation: any = [];

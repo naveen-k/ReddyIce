@@ -149,7 +149,7 @@
                                                 <label>Total Payment:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{  ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash
+                                                <span><b>{{ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash
                                                     +  ticketDetails?.Total.TotalHHCharge +  ticketDetails?.Total.TotalManualCharge
                                                      | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
@@ -184,10 +184,10 @@
                                                 <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
                                             </div>
                                             <div class="col-sm-8">
-                                                <label>Tolls:</label>
+                                                <label>Credit Card:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number"  [(ngModel)]='actualTolls' [value]='ticketDetails?.Total.Tolls' (ngModelChange)="doAddition()">
+                                                <input type="number"  [(ngModel)]='actualTolls' [value]='0' (ngModelChange)="doAddition()" disabled>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Misc:</label>
@@ -199,16 +199,16 @@
                                                 <hr style="margin: 2px 0">
                                             </div>
                                             <div class="col-sm-8">
-                                                <label>Total Payment:</label>
+                                                <label>Total Deposit:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{ticketDetails?.Total.Sale | currency:'USD':true:'1.2'}}</b></span>
+                                                <span><b>{{actualCash + actualCheck + actualCoin + actualMisc| currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Over/Short:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{total.overShort | currency:'USD':true:'1.2'}}</b></span>
+                                                <span><b>{{ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash + ticketDetails?.Total.TotalHHCharge +  ticketDetails?.Total.TotalManualCharge - actualCash - actualCheck -  actualCoin - actualMisc | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                         </div>
                                     </div>
