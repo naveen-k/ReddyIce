@@ -321,11 +321,11 @@
                                         </td>
                                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
                                         <td>
-                                            <input type="text" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                            <input type="number" min="1" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="text" [minValue]="tdetail.StartMeterReading" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading"
+                                            <input type="number" min="1" [minValue]="tdetail.StartMeterReading" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading"
                                                 (blur)="readingChangeHandler(tdetail);" [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>

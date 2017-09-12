@@ -80,6 +80,8 @@ export class CreateTicketComponent implements OnInit {
   pbsCount: number = 0;
   dsdCount: number = 0;
   inventoryCount: number = 0;
+  mreadingCount: number = 0;
+  readingCheck: boolean = false;
 
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
@@ -750,11 +752,25 @@ export class CreateTicketComponent implements OnInit {
   // TODO: CurrentInventory, DamagedBags not showing available for TicketProduct
   inventoryCheck() {
     for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
-      if (!this.ticket.TicketProduct[i].DeliveredBags ) {
+      if (!this.ticket.TicketProduct[i].DeliveredBags || !this.ticket.TicketProduct[i]['CurrentInventory'] 
+      || !this.ticket.TicketProduct[i]['DamagedBags']) {
         this.inventoryCount += 1;
       }
     }
     return this.inventoryCount;
+  }
+
+  mreadingCheck() {
+    for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
+      if (!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) {
+        this.mreadingCount += 1;
+      } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
+        this.readingCheck = true;
+      } else {
+        this.readingCheck = false;
+      }
+    }
+    return this.mreadingCount;
   }
 
   validateTicket(ticket): boolean {
@@ -813,13 +829,26 @@ export class CreateTicketComponent implements OnInit {
       } else {
         return true;
       }
-    } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct) {
+    } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && !this.ticket.IsSaleTicket) {
       if (this.inventoryCheck() > 0) {
         this.inventoryCount = 0;
-        this.notification.error('All fields are mandatory for the products in the product list cannot be blank for PBM Inventory Customer type!!!');
+        this.notification.error('All fields are mandatory for the products in the product list for PBM Inventory Customer type!!!');
         return false;
       } else {
         return true;
+      }
+    } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && this.ticket.IsSaleTicket) {
+      if (this.mreadingCheck() > 0) {
+        this.mreadingCount = 0;
+        this.notification.error('All fields are mandatory for the products in the product list for PBM Meter Reading Customer type!!!');
+        return false;
+      } else {
+        if (this.readingCheck) {
+          this.notification.error('Previous Reading cannot be greater than Current Reading!!!');
+          return false;
+        } else {
+          return true;
+        }
       }
     } else {
       return true;
