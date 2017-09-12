@@ -211,6 +211,7 @@ export class TicketListComponent implements OnInit {
             (response) => {
                 if (response) {
                     this.notificationService.success('Ticket deleted successfully');
+                    this.getSearchedTickets();
                 }
             },
             (error) => {

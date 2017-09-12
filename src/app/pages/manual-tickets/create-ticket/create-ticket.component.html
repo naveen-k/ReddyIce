@@ -243,7 +243,8 @@
                     <span>List of Products</span>
                 </div>
                 <div class="col-sm-3">
-                    <button class="btn btn-danger pull-right" (click)="addProductRow()" [hidden]="isReadOnly" [disabled]="!(branches && ticket.Customer && ticket.UserID)">Add Product</button>
+                    <!-- <button class="btn btn-danger pull-right" (click)="addProductRow()" [hidden]="isReadOnly" [disabled]="!(branches && ticket.Customer && ticket.UserID)">Add Product</button> -->
+                    <button class="btn btn-danger pull-right" (click)="addProductRow()" [hidden]="isReadOnly" [disabled]="!(branches && ticket.Customer)">Add Product</button>
                 </div>
             </div>
             <div class="row padding">
