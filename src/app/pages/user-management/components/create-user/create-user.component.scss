@@ -1,7 +1,7 @@
 @import '../../../../theme/sass/smartTable';
 
 .page-header {
-    margin: 20px 0;
+    margin: 8px 0;
 };
 .margin-left{
     margin-left: 1px;
@@ -135,4 +135,7 @@ input:focus + .error-message {
 }
   .margin-eater{
     margin: 0px;
+  }
+  .vertical-center{
+    margin-top:15px;
   }

@@ -132,16 +132,14 @@
                   </select>
     </div>
     <div class="col-md-6 page-header">
-      <br/>
-      <br/>
+      <label class="vertical-center"></label>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
       <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
         [disabled]="isNewUser"></ba-checkbox>
     </div>
     <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="col-md-6 page-header">
-      <br/>
-      <br/>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+       <label class="vertical-center"></label>
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
         disabled="true"></ba-checkbox>
     </div>
