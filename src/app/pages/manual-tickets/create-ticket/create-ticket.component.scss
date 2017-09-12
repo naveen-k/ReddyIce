@@ -192,8 +192,10 @@ label {
   margin-bottom: 4px;
 }
 
-#prodDD select.form-control:not([size]):not([multiple]) {
-  height: 2rem;
+#prodDSD, #prodMR, #prodI, #prodPBS {
+  select.form-control:not([size]):not([multiple]) {
+    height: 2rem;
+  }
 }
 
 .head-button-container {

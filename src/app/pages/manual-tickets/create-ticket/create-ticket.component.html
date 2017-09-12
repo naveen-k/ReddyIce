@@ -261,7 +261,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                                        <td id="prodDD">
+                                        <td id="prodDSD">
                                             <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
                                                 <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID"> 
@@ -270,7 +270,7 @@
                                         </td>
                                         <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
                                         <td class="textAlignRight">
-                                            <input type="number" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
+                                            <input type="number" min="1" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
@@ -310,7 +310,7 @@
                                     <th class="textAlignCenter">Action</th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                    <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct">
                                         <td>
                                             <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
@@ -363,7 +363,7 @@
                                     <th class="textAlignCenter">Action</th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                    <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct">
                                         <td>
                                             <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
@@ -373,14 +373,14 @@
                                         </td>
                                         <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
-                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);"
+                                            <input type="number" min="1" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags" (blur)="bagsChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory" [disabled]="isReadOnly">
+                                            <input type="number" min="1" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory" [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags" [disabled]="isReadOnly">
+                                            <input type="number" min="1" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags" [disabled]="isReadOnly">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td class="textAlignCenter">
@@ -420,7 +420,7 @@
                                     <th class="textAlignCenter">Action</th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                    <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct">
                                         <td>
                                             <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                 [disabled]="isReadOnly">
@@ -430,11 +430,11 @@
                                         </td>
                                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                         <td>
-                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);"
+                                            <input type="number" min="1" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory" (blur)="unitChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
+                                            <input type="number" min="1" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity" (blur)="unitChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
