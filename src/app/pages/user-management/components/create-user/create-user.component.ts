@@ -1,4 +1,4 @@
-import { NotificationsService } from 'angular2-notifications/dist';
+import { NotificationsService } from 'angular2-notifications';
 import { UserService } from '../../../../shared/user.service';
 import { selector } from 'rxjs/operator/multicast';
 import { LocalDataSource } from 'ng2-smart-table';
