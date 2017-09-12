@@ -36,11 +36,11 @@ const routes: Routes = [
 
 
 @NgModule({
-    declarations: [DayEndContainerComponent, 
+    declarations: [DayEndContainerComponent,
         DayEndComponent,
-         DetailsComponent, 
-         TicketDetailsComponent,
-        ],
+        DetailsComponent,
+        TicketDetailsComponent,
+    ],
     imports: [
         RouterModule.forChild(routes),
         FormsModule,
