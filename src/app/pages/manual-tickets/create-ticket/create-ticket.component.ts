@@ -598,18 +598,18 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     // Save ticket
-    if (!this.custType || this.ticket.CustomerType != 20) {
-      this.service.saveTicket(ticket).subscribe(res => {
-        this.notification.success('Ticket created successfully!');
-        this.route.navigate(['../'], { relativeTo: this.activatedRoute });
-      }, (error) => {
-        if (error) {
-          this.notification.error('Error while creating ticket!');
-        }
-      });
-    } else {
-      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type');
-    }
+    // if (!this.custType || this.ticket.CustomerType != 20) {
+    this.service.saveTicket(ticket).subscribe(res => {
+      this.notification.success('Ticket created successfully!');
+      this.route.navigate(['../'], { relativeTo: this.activatedRoute });
+    }, (error) => {
+      if (error) {
+        this.notification.error('Error while creating ticket!');
+      }
+    });
+    // } else {
+    //   this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type');
+    // }
   }
 
   submitTicket() {
@@ -752,8 +752,8 @@ export class CreateTicketComponent implements OnInit {
   // TODO: CurrentInventory, DamagedBags not showing available for TicketProduct
   inventoryCheck() {
     for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
-      if (!this.ticket.TicketProduct[i].DeliveredBags || !this.ticket.TicketProduct[i]['CurrentInventory'] 
-      || !this.ticket.TicketProduct[i]['DamagedBags']) {
+      if (!this.ticket.TicketProduct[i].DeliveredBags || !this.ticket.TicketProduct[i]['CurrentInventory']
+        || !this.ticket.TicketProduct[i]['DamagedBags']) {
         this.inventoryCount += 1;
       }
     }
@@ -810,45 +810,39 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.isTicketNumberExist) {
       this.notification.error('Ticket Number already in use!!!');
       return false;
-    } else if (!(!this.custType || this.ticket.CustomerType !== 20)) {
-      this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
+    } else if (this.ticket.CustomerType === 21 && this.ticket.TicketProduct && this.pbsQuantityCheck() > 0) {
+      this.pbsCount = 0;
+      this.notification.error('Delivered Bags for the products in the product list cannot be blank for PBS Customer type!!!');
       return false;
-    } else if (this.ticket.CustomerType === 21 && this.ticket.TicketProduct) {
-      if (this.pbsQuantityCheck() > 0) {
-        this.pbsCount = 0;
-        this.notification.error('Delivered Bags for the products in the product list cannot be blank for PBS Customer type!!!');
-        return false;
-      } else {
+    } else if (this.ticket.CustomerType === 20 && this.ticket.TicketProduct && this.dsdQuantityCheck() > 0) {
+      this.dsdCount = 0;
+      this.notification.error('Quantity for the products in the product list cannot be blank for DSD Customer type!!!');
+      return false;
+    } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && !this.ticket.IsSaleTicket && this.inventoryCheck() > 0) {
+      this.inventoryCount = 0;
+      this.notification.error('All fields are mandatory for the products in the product list for PBM Inventory Customer type!!!');
+      return false;
+    } else if (this.ticket.CustomerType === 20 && this.customer.PaymentType !== 19) {
+      if (this.ticket.CashAmount || this.ticket.CashAmount === 0) {
         return true;
-      }
-    } else if (this.ticket.CustomerType === 20 && this.ticket.TicketProduct) {
-      if (this.dsdQuantityCheck() > 0) {
-        this.dsdCount = 0;
-        this.notification.error('Quantity for the products in the product list cannot be blank for DSD Customer type!!!');
-        return false;
       } else {
-        return true;
-      }
-    } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && !this.ticket.IsSaleTicket) {
-      if (this.inventoryCheck() > 0) {
-        this.inventoryCount = 0;
-        this.notification.error('All fields are mandatory for the products in the product list for PBM Inventory Customer type!!!');
-        return false;
-      } else {
-        return true;
+        if (this.ticket.CheckAmount || this.ticket.CheckAmount === 0) {
+          return true;
+        } else {
+          this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
+          return false;
+        }
       }
     } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && this.ticket.IsSaleTicket) {
       if (this.mreadingCheck() > 0) {
         this.mreadingCount = 0;
         this.notification.error('All fields are mandatory for the products in the product list for PBM Meter Reading Customer type!!!');
         return false;
+      } else if (this.readingCheck) {
+        this.notification.error('Previous Reading cannot be greater than Current Reading!!!');
+        return false;
       } else {
-        if (this.readingCheck) {
-          this.notification.error('Previous Reading cannot be greater than Current Reading!!!');
-          return false;
-        } else {
-          return true;
-        }
+        return true;
       }
     } else {
       return true;
