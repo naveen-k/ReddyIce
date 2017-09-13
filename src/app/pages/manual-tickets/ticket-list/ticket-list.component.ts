@@ -180,6 +180,7 @@ export class TicketListComponent implements OnInit {
             (response) => {
                 if (response) {
                     this.notificationService.success('Approved');
+                    this.getSearchedTickets();  // in order to refresh the list after ticket status change
                 }
             },
             (error) => {

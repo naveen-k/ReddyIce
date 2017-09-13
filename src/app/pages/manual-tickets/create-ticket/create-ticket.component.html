@@ -48,7 +48,10 @@
                 <div class="col-sm-7">
                     <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
                         [disabled]="ticket.TicketID">
-                        <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> {{branch.BranchID}} - {{branch.BranchName}} </option>
+                        <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> 
+                            <!-- {{branch.BranchID}} - {{branch.BranchName}}  -->
+                            {{branch.BranchCode}} - {{branch.BranchName}}
+                        </option>
                     </select>
                 </div>
             </div>
