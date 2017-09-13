@@ -1,5 +1,5 @@
 import { CustomerManagementService } from '../../customer-management.service';
-
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 

@@ -132,6 +132,7 @@ export class UserManagementComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
       activeModal.componentInstance.closeModalHandler = (() => {
+        debugger
         this.formIsDirty = false;
 
         this.cardTitle = 'Edit Detail';
@@ -141,11 +142,11 @@ export class UserManagementComponent implements OnInit {
         this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.isNewUser = false;
         this.action = 'edit';
-        // location.reload();
 
       });
 
     } else {
+      debugger
       // this.isEditClicked = true;
       this.action = 'edit';
       this.newUser = Object.assign({}, user);
@@ -158,6 +159,7 @@ export class UserManagementComponent implements OnInit {
     if (!this.rightCardOpen) {
       this.rightCardOpen = !this.rightCardOpen;
       this.hideColumn = !this.hideColumn;
+      
     }
 
   }
@@ -183,7 +185,7 @@ export class UserManagementComponent implements OnInit {
         this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.isNewUser = false;
         this.action = 'edit';
-        // location.reload();
+        //router.navigate
 
       });
 

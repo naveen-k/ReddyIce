@@ -1,12 +1,5 @@
-<div class="row page-header">
-    <div class="col-md-8 padding-eater">
-        <h4>Distributor : Dist-001</h4>
-    </div>
-</div>
 <div class="row">
-    <!-- <div [ngClass]="{'col-md-12':!isNewCustomer && !setPrice, 'col-md-6':isNewCustomer}"> -->
     <div [ngClass]="[!isNewCustomer && !setPrice ? 'col-md-12' : 'col-md-6']">
-        <!-- <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" showAddIcon="true" (onClickAddIcon)="showNewCustomer($event)"> -->
         <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="row">
                 <div [ngClass]="[isNewCustomer || setPrice ? 'col-md-4' : 'col-md-6']">
@@ -24,7 +17,6 @@
                 </div>
             </div>
             <br>
-            <!-- <ng2-smart-table [settings]="settings1" [source]="source1" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
             <div class="vertical-scroll">
                 <table class="table table-striped">
                     <thead>
@@ -81,7 +73,7 @@
                     </tbody>
                 </table>
                 <div style='text-align:center'> <a> <img [hidden]='smartTableData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-                
+
             </div>
         </ba-card>
     </div>
@@ -130,163 +122,168 @@
                 </div>
             </div>
             <br/>
-            <accordion>
-                <accordion-group heading="Customer Details" isGroupOpen="true">
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label>Customer Name</label>
-                            <input type="text" class="form-control" id="customerName" placeholder="Customer Name" minlength="2" [(ngModel)]="customerObj.customerName"
-                                name="customerName" #customerName="ngModel" required>
-                            <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)" class="error-message">
-                                <i class="ion-android-alert showError"></i>
-                                <div id="" *ngIf="customerName.errors.required" class="custom-tooltip bottom">Customer name is required</div>
-                                <!-- <div *ngIf="customerName.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
+            <ngb-tabset class='dayend-tabset'>
+                <ngb-tab title="Customer Details">
+                    <ng-template ngbTabContent>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Branch</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Cloudtail</option>
+                                    <option>Icebox</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Company</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Cloudtail</option>
+                                    <option>Icebox</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Customer Name</label>
+                                <input type="text" class="form-control" id="customerName" placeholder="Customer Name" minlength="2" [(ngModel)]="customerObj.customerName"
+                                    name="customerName" #customerName="ngModel" required>
+                                <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)" class="error-message">
+                                    <i class="ion-android-alert showError"></i>
+                                    <div id="" *ngIf="customerName.errors.required" class="custom-tooltip bottom">Customer name is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Payment Type</label>
+                                <select class="form-control" id="exampleSelect1">
+                                    <option>Cloudtail</option>
+                                    <option>Icebox</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Address 1</label>
+                                <input type="text" class="form-control" id="address1" placeholder="Address Line 1" required maxlength="128" minlength="2" [(ngModel)]="customerObj.address1"
+                                    name="address1" #address1="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Address 2</label>
+                                <input type="text" class="form-control" id="address2" placeholder="Address Line 2" required maxlength="128" minlength="2" [(ngModel)]="customerObj.address2"
+                                    name="address2" #address="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Country</label>
+                                <input type="text" class="form-control" id="Country" placeholder="Country" required maxlength="128" minlength="2" [(ngModel)]="customerObj.country"
+                                    name="Country" #country="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>State</label>
+                                <input type="text" class="form-control" id="state" placeholder="State" required maxlength="128" minlength="2" [(ngModel)]="customerObj.state"
+                                    name="state" #state="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>City</label>
+                                <input type="text" class="form-control" id="city" placeholder="City" minlength="2" [(ngModel)]="customerObj.city" name="city"
+                                    #city="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Zip</label>
+                                <input type="number" class="form-control" id="zip" placeholder="Zip" minlength="2" [(ngModel)]="customerObj.zip" name="zip"
+                                    #zip="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">Phone</label>
+                                <input [(ngModel)]="selectedUser.phone" type="number" class="form-control" id="phone" placeholder="Phone" minlength="2" [(ngModel)]="customerObj.phone"
+                                    name="phone" #phone="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email" minlength="2" [(ngModel)]="customerObj.email"
+                                    name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" required>
+                                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
+                                    <i class="ion-android-alert showError"></i>
+                                    <div id="" *ngIf="email.errors.required" class="custom-tooltip bottom">Email is required</div>
+                                    <div *ngIf="email.errors.pattern" class="custom-tooltip bottom">Please enter valid email</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">Primary Contact</label>
+                                <input [(ngModel)]="selectedUser.primary" type="number" class="form-control" id="phone" placeholder="Primary Contact" minlength="2" [(ngModel)]="customerObj.primary"
+                                    name="primary" #primary="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">Secondry Contact</label>
+                                <input [(ngModel)]="selectedUser.secondry" type="number" class="form-control" id="phone" placeholder="Secondry Contact" minlength="2" [(ngModel)]="customerObj.secondry"
+                                    name="secondry" #secondry="ngModel" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">Extension</label>
+                                <input [(ngModel)]="selectedUser.phone" type="number" class="form-control" id="phone" placeholder="Extension" minlength="2" [(ngModel)]="customerObj.extension"
+                                    name="extension" #extension="ngModel" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="vertical-center"></label>
+                                <ba-checkbox [ngModel]="" [label]="'PO Required?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="vertical-center"></label>
+                                <ba-checkbox [ngModel]="" [label]="'Print UPC?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="vertical-center"></label>
+                                <ba-checkbox [ngModel]="" [label]="'DEX Allowed?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="vertical-center"></label>
+                                <ba-checkbox [ngModel]="" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
                             </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="exampleSelect1">Type</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>Cloudtail</option>
-                                <option>Icebox</option>
-                            </select>
-                        </div>
-                    </div>
-                    <!-- <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="exampleInputEmail1">Customer Number</label>
-                            <input [(ngModel)]="selectedUser.customerNumber" type="text" class="form-control" id="exampleInputEmail1" placeholder="Customer Number">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="exampleSelect1">Location</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>301</option>
-                                <option>302</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="exampleSelect1">Branch</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>301</option>
-                                <option>302</option>
-                            </select>
-                        </div>
-                    </div> -->
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label>Address</label>
-                            <input type="text" class="form-control" id="address" placeholder="Address" required maxlength="128" minlength="2" [(ngModel)]="customerObj.address"
-                                name="address" #address="ngModel" required>
-                            <div *ngIf="address.invalid && (address.dirty || address.touched)" class="error-message">
-                                <i class="ion-android-alert showError"></i>
-                                <div id="" *ngIf="address.errors.required" class="custom-tooltip bottom">Address is required</div>
-                                <!-- <div *ngIf="address.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Map Products">
+                    <ng-template ngbTabContent>
+                        <div class="row">
+                            <div class="form-group col-md-5">
+                                <b>All Products</b>
+                                <div class="vertical-scroll">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Products</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of products">
+                                                <td>{{ item.name }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2 ioiIconsLR">
+                                <p><span class="ion-arrow-left-a"></span></p>
+                                <p><span class="ion-arrow-right-a"></span></p>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <b>Mapped Products</b>
+                                <div class="vertical-scroll">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Products</th>
+                                                <th>Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of mappedProds">
+                                                <td>{{ item.name }}</td>
+                                                <td>
+                                                    <input type="number" class="form-control" #zip="ngModel" [(ngModel)]="item.price">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <label>City</label>
-                            <input type="text" class="form-control" id="city" placeholder="City" minlength="2" [(ngModel)]="customerObj.city" name="city"
-                                #city="ngModel" required>
-                            <div *ngIf="city.invalid && (city.dirty || city.touched)" class="error-message">
-                                <i class="ion-android-alert showError"></i>
-                                <div id="" *ngIf="city.errors.required" class="custom-tooltip bottom">City is required</div>
-                                <!-- <div *ngIf="city.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label>State</label>
-                            <input type="text" class="form-control" id="state" placeholder="State" minlength="2" [(ngModel)]="customerObj.state" name="state"
-                                #state="ngModel" required>
-                            <div *ngIf="state.invalid && (state.dirty || state.touched)" class="error-message">
-                                <i class="ion-android-alert showError"></i>
-                                <div id="" *ngIf="state.errors.required" class="custom-tooltip bottom">State is required</div>
-                                <!-- <div *ngIf="state.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
-                            </div>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="exampleInputEmail1">Zip</label>
-                            <input [(ngModel)]="selectedUser.zip" type="text" class="form-control" id="zip" placeholder="Zip" minlength="2" [(ngModel)]="customerObj.zip"
-                                name="zip" #zip="ngModel" required>
-                            <div *ngIf="zip.invalid && (zip.dirty || zip.touched)" class="error-message">
-                                <i class="ion-android-alert showError"></i>
-                                <div id="" *ngIf="zip.errors.required" class="custom-tooltip bottom">Zip is required</div>
-                                <!-- <div *ngIf="zip.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6">
-                            <label for="exampleInputEmail1">Phone</label>
-                            <input [(ngModel)]="selectedUser.phone" type="text" class="form-control" id="phone" placeholder="Phone" minlength="2" [(ngModel)]="customerObj.phone"
-                                name="phone" #phone="ngModel" required>
-                            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="error-message">
-                                <i class="ion-android-alert showError"></i>
-                                <div id="" *ngIf="phone.errors.required" class="custom-tooltip bottom">Phone is required</div>
-                                <!-- <div *ngIf="phone.errors.minlength" class="custom-tooltip bottom">Minimum 3 numbers</div> -->
-                            </div>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="exampleInputEmail1">Email</label>
-                            <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email" minlength="2" [(ngModel)]="customerObj.email"
-                                name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" required>
-                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
-                                <i class="ion-android-alert showError"></i>
-                                <div id="" *ngIf="email.errors.required" class="custom-tooltip bottom">Email is required</div>
-                                <div *ngIf="email.errors.pattern" class="custom-tooltip bottom">Please enter valid email</div>
-                            </div>
-                        </div>
-                    </div>
-                </accordion-group>
-                <accordion-group heading="Map Products" isGroupOpen="false">
-                    <div class="row">
-                        <div class="form-group col-md-5">
-                            <b>All Products</b>
-                            <!-- <ng2-smart-table [settings]="settings2" [source]="source2"></ng2-smart-table> -->
-                            <div class="vertical-scroll">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Products</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of products">
-                                            <td>{{ item.name }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-2 ioiIconsLR">
-                            <p><span class="ion-arrow-left-a"></span></p>
-                            <p><span class="ion-arrow-right-a"></span></p>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <b>Mapped Products</b>
-                            <!-- <ng2-smart-table [settings]="settings3" [source]="source3"></ng2-smart-table> -->
-                            <div class="vertical-scroll">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Products</th>
-                                            <th>Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of mappedProds">
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.price }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </accordion-group>
-            </accordion>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
         </ba-card>
     </div>
 </div>
