@@ -324,11 +324,11 @@
                                         </td>
                                         <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
                                         <td>
-                                            <input type="number" min="1" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
+                                            <input type="number" min="0" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading" (blur)="readingChangeHandler(tdetail);"
                                                 [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" min="1" [minValue]="tdetail.StartMeterReading" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading"
+                                            <input type="number" min="0" [minValue]="tdetail.StartMeterReading" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading"
                                                 (blur)="readingChangeHandler(tdetail);" [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
@@ -384,7 +384,7 @@
                                             <input type="number" min="1" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory" [disabled]="isReadOnly">
                                         </td>
                                         <td>
-                                            <input type="number" min="1" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags" [disabled]="isReadOnly">
+                                            <input type="number" min="0" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags" [disabled]="isReadOnly">
                                         </td>
                                         <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                         <td class="textAlignCenter">
@@ -469,7 +469,7 @@
         <div class="col-sm-2 border cashPanel padding cashPanelMargin">
             <div class="padding">
                 <label for="example-text-input" class="col-form-label">Cash Amount($)</label>
-                <input type="number" min="1" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" (blur)="cashAmountChangeHandler()"
+                <input type="number" min="0" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" (blur)="cashAmountChangeHandler()"
                     [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
                     (ngModelChange)="isFormDirty=true;">
             </div>
@@ -491,12 +491,12 @@
                 </div>
                 <div *ngIf="checkContainsCharacters" class="error-message">
                     <i class="ion-android-alert showError"></i>
-                    <div class="custom-tooltip bottom">Check number should be alphanumeric</div>
+                    <div class="custom-tooltip bottom">Check number should be alphanumeric, cannot contain special characters</div>
                 </div>
             </div>
             <div id="checkAmount" class="padding">
                 <label for="example-text-input" class="col-form-label">Check Amount($)</label>
-                <input type="number" min="1" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
+                <input type="number" min="0" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 23 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
                     name="CheckAmount" #CheckAmount="ngModel" required (blur)="checkAmountChangeHandler()" (ngModelChange)="isFormDirty=true;">
                 <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount && (CheckAmount.dirty || CheckAmount.touched)" class="error-message">
                     <i class="ion-android-alert showError"></i>

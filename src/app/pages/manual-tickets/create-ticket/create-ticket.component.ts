@@ -547,6 +547,7 @@ export class CreateTicketComponent implements OnInit {
       (response) => {
         if (response) {
           this.notification.success('Ticket deleted successfully');
+          this.routeToTicketListing();
         }
       },
       (error) => {
@@ -762,7 +763,8 @@ export class CreateTicketComponent implements OnInit {
 
   mreadingCheck() {
     for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
-      if (!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) {
+      if ((!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) &&
+        (this.ticket.TicketProduct[i].StartMeterReading !== 0 && this.ticket.TicketProduct[i]['EndMeterReading'] !== 0)) {
         this.mreadingCount += 1;
       } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
         this.readingCheck = true;

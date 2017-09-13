@@ -33,6 +33,8 @@ export class TicketListComponent implements OnInit {
 
     disableApprove: boolean = true;
 
+    searchString: any;
+
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
 
     constructor(
