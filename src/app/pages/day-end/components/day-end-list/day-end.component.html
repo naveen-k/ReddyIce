@@ -6,7 +6,7 @@
                     <label><b> Select Date </b></label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (ngModelChange)="selectionchangeHandler()"
-                            ngbDatepicker #d="ngbDatepicker" >
+                            ngbDatepicker #d="ngbDatepicker">
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
@@ -15,7 +15,7 @@
                 <div class="col-md-6">
                     <label><b>Select Branch</b></label>
                     <select class="form-control" [(ngModel)]='userBranch' (change)="selectionchangeHandler()">
-                         <option *ngFor="let branch of branches" [value] = 'branch.BranchID' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchID}} - {{branch.BranchName}}</span>
+                         <option *ngFor="let branch of branches" [value] = 'branch.BranchID' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchCode}} - {{branch.BranchName}}</span>
                             <span *ngIf="branch.BranchID == '1'">
                              {{branch.BranchName}}
                           </span></option> 
@@ -39,34 +39,40 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th class="table-text-align">Actions</th>
-                            <th class="table-text-align">
+                            <th>Actions</th>
+                            <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'RouteNumber';customer.isAsc=!customer.isAsc;">
                                     Route Number
                                      <i *ngIf="(customer.sortField == 'RouteNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'RouteNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <th class="table-text-align">
+                            <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                                     Branch
                                      <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <!-- <th>
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'isDistributor';customer.isAsc=!customer.isAsc;">
-                                    Is Distributor
-                                     <i *ngIf="(customer.sortField === 'isDistributor')" [ngClass]="(customer.isAsc && customer.sortField === 'isDistributor' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
-                            </th> -->
-                            <th class="table-text-align">
+                            <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'driver';customer.isAsc=!customer.isAsc;">
                                     Driver
                                      <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <th class="table-text-align">
+                            <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
                                     Trip Code
+                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                            </th>
+                            <th class="text-right">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
+                                    Total Amount
+                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                            </th>
+                            <th class="text-right">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
+                                    Total Sale
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
@@ -76,28 +82,29 @@
                         <!--Removed sorting functionality as it was causing rendering issues  -->
                         <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i *ngIf="!logedInUser.IsRIInternal" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail']" [queryParams]="{ TripID: item.TripID }"
-                                    style="margin-right: 5px">
+                                <i *ngIf="!logedInUser.IsRIInternal" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail']"
+                                    [queryParams]="{ TripID: item.TripID }" style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i *ngIf="logedInUser.IsRIInternal"  (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]" style="margin-right: 5px">
+                                <i *ngIf="logedInUser.IsRIInternal" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
+                                    style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-
                             </td>
                             <td *ngIf="!item.RouteNumber">Unplanned</td>
                             <td *ngIf="item.RouteNumber">{{item.RouteNumber}}</td>
-                            <td>{{item.BranchID}}-{{item.BranchName}}</td>
-                            <!-- <td>{{item.isDistributor ? "Yes":"No"}}</td> -->
-                            <!--is Distributor status not available-->
+                            <td>{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
-                            <!--Driver name not available-->
                             <td>{{item.TripCode}}</td>
+                            <td class="text-right">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
+                            <td class="text-right">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
                         </tr>
-                        <tr *ngIf="!trips.length"> <th class="text-center" colspan="6"> No data found </th></tr>
+                        <tr *ngIf="!trips.length">
+                            <th class="text-center" colspan="8"> No data found </th>
+                        </tr>
                     </tbody>
                 </table>
-               
+
             </div>
         </ba-card>
     </div>

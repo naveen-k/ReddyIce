@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TripProduct } from '../../dayend.interfaces';
 
 @Component({
     templateUrl: './details.component.html',
@@ -18,6 +19,7 @@ export class DetailsComponent implements OnInit {
     disabled: boolean = false;
     unitReconciliation: any = [];
     driverDetails: any = [];
+    productList: any = [];
 
     constructor(
         private service: DayEndService,
@@ -57,6 +59,8 @@ export class DetailsComponent implements OnInit {
         this.loadTripData();
 
         this.loadTripDetailByDate();
+        
+        this.loadProduct();
 
         this.loadUnitReconciliation();
     }
@@ -64,7 +68,7 @@ export class DetailsComponent implements OnInit {
     loadTripData() {
         this.service.getTripDetails(this.tripId).subscribe((res) => {
             this.driverDetails = res = res || [];
-        })
+        });
     }
 
     loadTripDetailByDate() {
@@ -72,13 +76,23 @@ export class DetailsComponent implements OnInit {
             this.ticketDetails = res;
         }, (err) => {
 
-        })
+        });
     }
 
     sortByWordLength = (a: any) => {
         return a.location.length;
     }
+    loadProduct() {
+        this.service.getProductList().subscribe((res) => {
+            this.productList = res;
+            console.log(res);
+        }, (err) => {
 
+        });
+    }
+    productChangeHandler(item) {
+     // item.ProductName = 
+    }
     loadUnitReconciliation() {
         this.service.getUnitsReconciliation(this.tripId).subscribe((res) => {
             console.log(res);
@@ -127,5 +141,9 @@ export class DetailsComponent implements OnInit {
         // console.log(this.unitReconciliation);
 
     }
+     addProductRow() {
+    if (!this.unitReconciliation) { return; }
+    this.unitReconciliation.push({} as TripProduct);
+  }
 }
 

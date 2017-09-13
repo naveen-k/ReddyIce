@@ -67,6 +67,11 @@ export class DayEndService extends SharedService {
     getTripData() {
         return this.currenttripData;
     }
+     getProductList(): Observable<any[]> {
+        return this.http.get(`api/product`).map((res) => res.json()).map((res) => {
+            return res;
+        });
+    }
 
 
 }
