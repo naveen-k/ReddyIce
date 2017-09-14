@@ -20,7 +20,9 @@ export class DetailsComponent implements OnInit {
     unitReconciliation: any = [];
     driverDetails: any = [];
     productList: any = [];
-
+    isNewlyAdded:boolean = false;
+    newlyAddedProduct:any = [];
+    selectedProduct:object;
     constructor(
         private service: DayEndService,
         private route: ActivatedRoute,
@@ -82,17 +84,7 @@ export class DetailsComponent implements OnInit {
     sortByWordLength = (a: any) => {
         return a.location.length;
     }
-    loadProduct() {
-        this.service.getProductList().subscribe((res) => {
-            this.productList = res;
-            console.log(res);
-        }, (err) => {
-
-        });
-    }
-    productChangeHandler(item) {
-     // item.ProductName = 
-    }
+   
     loadUnitReconciliation() {
         this.service.getUnitsReconciliation(this.tripId).subscribe((res) => {
             console.log(res);
@@ -141,9 +133,25 @@ export class DetailsComponent implements OnInit {
         // console.log(this.unitReconciliation);
 
     }
-     addProductRow() {
-    if (!this.unitReconciliation) { return; }
-    this.unitReconciliation.push({} as TripProduct);
-  }
+    addProductRow() {
+      this.isNewlyAdded = true;
+       if (!this.newlyAddedProduct) { return; }
+    this.newlyAddedProduct.push({} as TripProduct);
+   }
+    loadProduct() {
+        this.service.getProductList().subscribe((res) => {
+            this.productList = res;
+            console.log(res);
+        }, (err) => {
+
+        });
+    }
+    productChangeHandler(item:any, arrayIndex:any):void {
+      //  this.newlyAddedProduct[arrayIndex].ProductName = item.ProductName;
+        this.newlyAddedProduct[arrayIndex].ProducID = item.ProductID;
+        console.log(this.newlyAddedProduct);
+       
+     // item.ProductName = 
+    }
 }
 

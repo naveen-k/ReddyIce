@@ -15,5 +15,6 @@ export interface TripProduct {
     Sale: number;
     TripID: number;
     TruckDamage: number;
+    
 }
 

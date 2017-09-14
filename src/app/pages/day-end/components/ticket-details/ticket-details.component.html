@@ -92,7 +92,7 @@
                             </thead>
                             <tbody>
                                 <!--Removed sorting functionality as it was causing rendering issues  -->
-                                <tr *ngFor="let item of ticketDetails?.TripDetails|sort:customer.sortField:customer.isAsc">
+                                <tr *ngFor="let item of TripData?.Tripdetail[0].TripTicketList | sort:customer.sortField:customer.isAsc">
 
                                     <td>{{item.Customerid}} {{item.CustomerName }}</td>
                                     <td>{{item.IsRICustomer }}</td>
@@ -104,7 +104,7 @@
                                     <td>{{item.Drayage| currency:'USD':true:'2.2-4'}}</td>
                                     <td>{{item.BuyBack| currency:'USD':true:'2.2-4'}}</td>
                                 </tr>
-                                <tr  *ngIf="ticketDetails?.TripDetails.length < 1" class="text-center"> <td colspan="10">No data found</td></tr>
+                                <tr  *ngIf="TripData?.Tripdetail[0]?.TripTicketList.length < 1" class="text-center"> <td colspan="10">No data found</td></tr>
                             </tbody>
                         </table>
                           
@@ -120,25 +120,25 @@
                     <div class="row page-header">
                         <span class="col-md-4">
                             <span>Cash:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalCash| currency:'USD':true:'2.2-4'}}</b></label>
+                            <label><b>{{TripData?.Total.TotalHHCash + TripData?.Total.TotalManualCash | currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>Charge:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalCharge| currency:'USD':true:'2.2-4'}}</b></label>
+                            <label><b>{{TripData?.Total.TotalHHCharge + TripData?.Total.TotalManualCharge| currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>Total Sale:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalSale| currency:'USD':true:'2.2-4'}}</b></label>
+                            <label><b>{{TripData?.Total.TotalHHSale   + TripData?.Total.TotalManualSale | currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                     </div>
                     <div class="row page-header">
                         <span class="col-md-4">
                             <span>Darayage:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalDrayage| currency:'USD':true:'2.2-4'}}</b></label>
+                            <label><b>{{TripData?.Total.TotalManualDrayage + TripData?.Total.TotalHHDrayage | currency:'USD':true:'2.2-4'}}</b></label>
                         </span>
                         <span class="col-md-4">
                             <span>BuyBack:  </span>
-                            <label><b>{{ticketDetails?.Total.TotalBuyback| currency:'USD':true:'2.2-4'}}</b></label>
+                            <label><b>-NA-</b></label>
                         </span>
                         <span class="col-md-4">
                         </span>

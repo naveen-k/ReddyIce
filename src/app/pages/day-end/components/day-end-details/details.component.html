@@ -300,13 +300,34 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
+                                                <td width="25%">{{item.ProductName}}</td> 
+                                                <td width="6%">{{item.Load?item.Load:0}}</td>
+                                                <td width="9%"><input [disabled]="disabled" [(ngModel)]='item.Load1Quantity' class="form-control small-input"
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
+                                                <td width="6%">{{item.Returns? item.Returns:0}}</td>
+                                                <td width="9%"><input [disabled]="disabled" [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
+                                                <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
+                                                <td width="9%"><input [disabled]="disabled" [(ngModel)]='item.DamageQuantity' class="form-control small-input"
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
+                                                <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
+                                                <td width="9%"><input [disabled]="disabled" [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
+                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
+                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
+                                                <td width="7%">{{item.Sale?item.Sale:0}}</td>
+                                                <td width="7%">{{item.OverShort?item.OverShort:0}}</td>
+                                            </tr>
+                                            </tbody>
+                                             <tbody *ngIf="isNewlyAdded" class="add-border">
+                                            <tr  *ngFor="let item of newlyAddedProduct; let i = index">
                                                 <td width="25%">
-                                                    <select class="form-control small-select" [(ngModel)]='item.ProductName' (ngModelChange)="productChangeHandler(item)">
-                                                          <option *ngFor="let product of productList" [value] = 'product.ProductName' >
+                                                    
+                                                     <select  class="form-control small-select" [(ngModel)]='item.ProductName' (ngModelChange)="productChangeHandler($event, i)">
+                                                          <option *ngFor="let product of productList;" [ngValue] = 'product'>
                                                           {{product.ProductName}}
                                                         </option> 
-                                                          </select>
-                                                </td>
+                                                          </select> 
+                                                </td>     
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
                                                 <td width="9%"><input [disabled]="disabled" [(ngModel)]='item.Load1Quantity' class="form-control small-input"
                                                         type="number" (ngModelChange)="unitReconChange(item)"></td>

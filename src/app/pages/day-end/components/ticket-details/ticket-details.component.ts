@@ -10,20 +10,21 @@ import { Component, OnInit } from '@angular/core';
 export class TicketDetailsComponent implements OnInit {
    
     selectedtrip:any = {};
-    ticketDetails: any;
+    TripData: any;
     tripId:string='';
     tripDate:any = '2017-08-31';
     tickDto:any = {TicketID:[], status: 1};
 
     constructor(private service: DayEndService) {
        
-     //  this.ticketDetails = service.dataTableData3;
+     
        this.selectedtrip = this.service.getTripData();
        this.tripId = this.selectedtrip.TripID;
-       this.tripDate = this.selectedtrip.Created.split('T')[0];
+      // this.tripDate = this.selectedtrip.Created.split('T')[0];
        this.service.getTripDetailByDate(this.tripId, this.tripDate).subscribe((res) => {
-         this.ticketDetails = res;
-         console.log(res);
+         this.TripData = res;
+         this.selectedtrip =  res.Tripdetail[0];
+         console.log(this.TripData);
        }, (err) => {
 
        });
@@ -34,9 +35,10 @@ export class TicketDetailsComponent implements OnInit {
      }
     submitTickets(){
         this.tickDto.TicketID = [];
-        if(this.ticketDetails.TripDetails.length > 0){
-            for(var i = 0; i < this.ticketDetails.TripDetails.length; i++){
-             this.tickDto.TicketID.push(this.ticketDetails.TripDetails[i].TicketNumber);
+        const limit = this.TripData.Tripdetail[0].TripTicketList.length;
+        if(limit > 0){
+            for(let i = 0; i < limit; i++){
+             this.tickDto.TicketID.push(this.TripData.Tripdetail[0].TripTicketList[i].TicketNumber);
             }
          console.log(this.tickDto);
          this.service.submitTickets(this.tickDto).subscribe((res)=>{},(err)=>{}); 
