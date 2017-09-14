@@ -29,7 +29,7 @@ export class DetailsComponent implements OnInit {
         private modalService: NgbModal,
     ) { }
 
-    openCreateTicketModal() {
+    openCreateTicketModal(ticket) {
         // TODO open create ticket modal
     }
 

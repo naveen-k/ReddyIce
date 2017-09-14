@@ -206,10 +206,10 @@
                                             </div>
                                             <div class="col-sm-4 text-align-right">
                                                 <span><b>{{
-                                                    ticketDetails?.Total.actualdepositcheck || 0 + 
-                                                    ticketDetails?.Total.actualdepositcash || 0 +  
-                                                    ticketDetails?.Total.actualdepositmisc || 0 + 
-                                                    ticketDetails?.Total.actualdepositcoin || 0 
+                                                    (ticketDetails?.Total.actualdepositcheck || 0) + 
+                                                    (ticketDetails?.Total.actualdepositcash || 0 )+  
+                                                    (ticketDetails?.Total.actualdepositmisc || 0 + 
+                                                    ticketDetails?.Total.actualdepositcoin || 0) 
                                                     |currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                             <div class="col-sm-8">
@@ -239,11 +239,11 @@
                 <ngb-tab title="Units Reconciliation">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
-                            <div  class="col-md-12">
-                                     <button class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
-                                </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
+                            </div>
                             <div class="col-md-12 page-header">
-                                
+
                                 <div class="overflow">
                                     <table class="table table-bordered">
                                         <thead>
@@ -339,7 +339,7 @@
                             <div class="col-md-6 padding-eater">
                             </div>
                             <div class="col-md-6 pull-right">
-                                <button class="btn btn-danger pull-right">Create Ticket</button>
+                                <button class="btn btn-danger pull-right" [routerLink]="['../../../manual-ticket/trip-ticket',tripData.TripCode]">Create Ticket</button>
                             </div>
                             <div class="col-md-12 page-header">
                                 <div class="overflow">
@@ -415,3 +415,18 @@
         </ba-card>
     </div>
 </div>
+
+<!-- <ng-template #ticketComponent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Modal title</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <manual-ticket></manual-ticket>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-light" (click)="c('Close click')">Close</button>
+    </div>
+</ng-template> -->

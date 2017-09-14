@@ -5,7 +5,7 @@
                 <div class="col-md-6">
                     <label><b> Select Date </b></label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='selectedDate' (ngModelChange)="selectionchangeHandler()"
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="selectionchangeHandler()"
                             ngbDatepicker #d="ngbDatepicker">
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
@@ -14,12 +14,15 @@
                 </div>
                 <div class="col-md-6">
                     <label><b>Select Branch</b></label>
-                    <select class="form-control" [(ngModel)]='userBranch' (change)="selectionchangeHandler()">
+                    <select class="form-control" [(ngModel)]='filter.userBranch' (change)="selectionchangeHandler()">
                          <option *ngFor="let branch of branches" [value] = 'branch.BranchID' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchCode}} - {{branch.BranchName}}</span>
                             <span *ngIf="branch.BranchID == '1'">
                              {{branch.BranchName}}
                           </span></option> 
                     </select>
+                    <!-- <ng-select [allowClear]="true" [items]="branches"
+                         placeholder="No city selected">
+                    </ng-select> -->
                 </div>
             </div>
             <div class="row bottom-margin" *ngIf='logedInUser.Role.RoleID == 1 || logedInUser.Role.RoleID == 2'>

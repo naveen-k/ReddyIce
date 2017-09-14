@@ -9,6 +9,8 @@ import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class DayEndService extends SharedService {
     currenttripData: any = {};
+    private _filter: any = {};
+
     constructor(
         protected http: HttpService,
         private userService: UserService,
@@ -30,9 +32,6 @@ export class DayEndService extends SharedService {
 
     }
     getTripDetailByDate(tripId, startDate?) {
-        // return this.http.get(`api/trip/ticketsbytripanddate?TripId=${tripId}&TripStartDate=${startDate}`).map((res) => res.json()).map((res) => {
-        //     return res;
-        // });
         return this.http.get(`api/trip/ticketsbytripanddate?TripId=${tripId}`).map((res) => res.json()).map((res) => {
             return res;
         });
@@ -50,13 +49,16 @@ export class DayEndService extends SharedService {
             return res;
         });
     }
+    
     submitTickets(data) {
         return this.http.post('api/manualticket/workflow', data).map((res => res.json()));
     }
+
     saveRecociliation(data): Observable<any> {
 
         return this.http.put('api/trip/cashreconciliation', data).map((res => res.json()));
     }
+
     saveUnitReconciliation(data): Observable<any> {
         return this.http.put('api/trip/unitsreconciliation', data).map((res => res.json()));
     }
@@ -64,14 +66,19 @@ export class DayEndService extends SharedService {
     setTripData(data) {
         this.currenttripData = data;
     }
+
     getTripData() {
         return this.currenttripData;
     }
-     getProductList(): Observable<any[]> {
+
+    getProductList(): Observable<any[]> {
         return this.http.get(`api/product`).map((res) => res.json()).map((res) => {
             return res;
         });
     }
 
+    getFilter() {
+        return this._filter;
+    }
 
 }

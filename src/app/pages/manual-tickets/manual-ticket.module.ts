@@ -37,9 +37,6 @@ import { CreateTicketComponent } from './create-ticket/create-ticket.component';
     ManualTicketService,
     BranchResolver,
     TicketTypesResolver,
-  ],
-  exports: [
-    CreateTicketComponent,
   ]
 })
 export class ManualTicketModule { }

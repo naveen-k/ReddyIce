@@ -132,7 +132,7 @@ export class UserManagementComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
       activeModal.componentInstance.closeModalHandler = (() => {
-        debugger
+        // debugger
         this.formIsDirty = false;
 
         this.cardTitle = 'Edit Detail';
@@ -146,7 +146,6 @@ export class UserManagementComponent implements OnInit {
       });
 
     } else {
-      debugger
       // this.isEditClicked = true;
       this.action = 'edit';
       this.newUser = Object.assign({}, user);

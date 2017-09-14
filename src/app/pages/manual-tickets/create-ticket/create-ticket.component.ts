@@ -51,9 +51,10 @@ export class CreateTicketComponent implements OnInit {
 
   // Id of current ticket object
   ticketId: number;
-
-  // flag for viewonly
-  isReadOnly: boolean = false;
+  
+  isReadOnly: boolean = false;  // flag for viewonly
+  
+  tripMode: boolean = false;    // flag for tripMode, redirected from
 
   isFormDirty: boolean = false;
 
@@ -129,7 +130,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
     const activatedRouteObject = this.activatedRoute.snapshot.data;
     this.isReadOnly = activatedRouteObject['viewMode'];
-
+    this.tripMode = activatedRouteObject['tripMode'];
     this.branches = activatedRouteObject['branches'];
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
@@ -495,6 +496,10 @@ export class CreateTicketComponent implements OnInit {
   }
 
   routeToTicketListing() {
+    if(this.tripMode){
+      // this.route.navigate([''])
+      return;
+    }
     if (this.activatedRoute.snapshot.params.ticketId) {
       this.route.navigate([this.urlString], { relativeTo: this.activatedRoute });
     } else {

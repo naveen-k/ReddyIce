@@ -1,5 +1,4 @@
-import { PipeTransform } from '@angular/core/src/change_detection/pipe_transform';
-import { Pipe } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
     name: 'ticketType'
 })

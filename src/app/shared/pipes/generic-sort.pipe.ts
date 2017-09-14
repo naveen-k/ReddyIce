@@ -1,9 +1,8 @@
-import { Injectable, Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'sort', pure: true,
+    name: 'sort'
 })
-
 export class GenericSort implements PipeTransform {
     transform(array: any, sortField: string, isAsc: boolean): any {
         if (!array || !sortField) { return array; }
@@ -30,6 +29,7 @@ export class GenericSort implements PipeTransform {
                 }
             }
         });
+        console.log('generic sort', array);
         return array;
     }
 

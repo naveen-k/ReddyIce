@@ -34,6 +34,17 @@ const routes: Routes = [
         },
       },
       {
+        path: 'trip-ticket/:tripId',
+        component: CreateTicketComponent,
+        data:{
+          tripMode: true,
+        },
+        resolve: {
+          branches: BranchResolver,
+          ticketTypes: TicketTypesResolver,
+        },
+      },
+      {
         path: 'view/:ticketId',
         component: CreateTicketComponent,
         data: {

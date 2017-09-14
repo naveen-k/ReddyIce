@@ -108,7 +108,7 @@
             </thead>
             <tbody>
                 <!-- <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc"> -->
-                <tr *ngFor="let item of allTickets | sort:customer.sortField:customer.isAsc | filter:searchString:['TicketNumber', 'UserName', 'Customer.CustomerName', 'Customer.CustomerID', 'CashAmount', 'TotalSale']:allTickets">
+                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID )  | sort:customer.sortField:customer.isAsc | filter:searchString:['TicketNumber', 'UserName', 'Customer.CustomerName', 'Customer.CustomerID', 'CashAmount', 'TotalSale']:allTickets">
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">

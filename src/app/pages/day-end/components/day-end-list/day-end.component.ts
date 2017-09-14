@@ -13,11 +13,13 @@ export class DayEndComponent implements OnInit {
     unitReconciliation: any;
     ticketDetails: any;
 
+    filter: any = {};
+
     selectedDate: any = '2017-08-27';
     // contains all trips
     trips: any = [];
     // contains all Branches
-    branches: any = [];
+    branches: Array<any> = [];
     customer: any = {};
     logedInUser: any = {};
     userBranch: any = '0';
@@ -34,23 +36,23 @@ export class DayEndComponent implements OnInit {
     constructor(private service: DayEndService, private userService: UserService) { }
 
     ngOnInit() {
-
-        this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
+        this.filter = this.service.getFilter();
+        // this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
         this.loadBranches();
         this.logedInUser = this.userService.getUser();
-        this.userBranch = this.logedInUser.Branch ? this.logedInUser.Branch.BranchID : null;
+        // this.userBranch = this.logedInUser.Branch ? this.logedInUser.Branch.BranchID : null;
         if (this.logedInUser.Role.RoleID == 1 || this.logedInUser.Role.RoleID == 2) {
             this.tripFilterOption.isForAll = true;
         }
-        this.tripFilterOption.branchId = this.userBranch;
+        this.tripFilterOption.branchId = this.filter.userBranch;
         this.selectionchangeHandler();
 
     }
 
     selectionchangeHandler() {
         // uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
-        this.tripFilterOption.tripDate = this.service.formatDate(this.selectedDate);
-        this.tripFilterOption.branchId = this.userBranch;
+        this.tripFilterOption.tripDate = this.service.formatDate(this.filter.selectedDate);
+        this.tripFilterOption.branchId = this.filter.userBranch;
         this.loadFilteredTrips();
 
     }
@@ -87,6 +89,7 @@ export class DayEndComponent implements OnInit {
         });
 
     }
+
     cuurenttripData(data) {
         this.service.setTripData(data);
     }
