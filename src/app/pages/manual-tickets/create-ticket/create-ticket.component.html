@@ -37,7 +37,7 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date</label>
                 <div class="col-sm-7 input-group">
                     <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
-                        [disabled]="isReadOnly" (ngModelChange)="isFormDirty=true" [maxDate]="maxDate">
+                        disabled (ngModelChange)="isFormDirty=true" [maxDate]="maxDate">
                     <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
                         <i class="ion-calendar"></i>
                     </button>

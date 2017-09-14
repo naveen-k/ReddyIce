@@ -4,7 +4,7 @@
             <label>Select Date</label>
             <div class="input-group">
                 <input class="form-control" [(ngModel)]="searchObj.CreatedDate" placeholder="mm-dd-yyyy" name="dp" (ngModelChange)='getSearchedTickets();'
-                    [maxDate]="todaysDate" ngbDatepicker #d="ngbDatepicker">
+                    [maxDate]="todaysDate" ngbDatepicker #d="ngbDatepicker" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>

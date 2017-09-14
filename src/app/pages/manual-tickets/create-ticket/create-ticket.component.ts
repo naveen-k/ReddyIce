@@ -375,6 +375,7 @@ export class CreateTicketComponent implements OnInit {
     }
 
     this.updateTicketDetailObject(ticketDetail);
+    this.unitChangeHandler(ticketDetail);     // called this method to update the amount on product change itself
   }
 
   confirmationModal(content: string, closeModalHandler) {
