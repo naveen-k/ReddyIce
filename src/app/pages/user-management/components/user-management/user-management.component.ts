@@ -61,7 +61,7 @@ export class UserManagementComponent implements OnInit {
       BranchID: '',
       Phone: '',
       role: '',
-      IsActive: this.action === 'edit' ? true : false,
+      IsActive: this.action === 'create' ? true : false,
       IsSeasonal: true,
       // IsRIInternal: false,
     };
@@ -86,6 +86,7 @@ export class UserManagementComponent implements OnInit {
         this.isNewUser = false;
         this.hideColumn = !this.hideColumn;
         this.formIsDirty = false;
+        
       });
 
     } else {
@@ -122,30 +123,32 @@ export class UserManagementComponent implements OnInit {
 
   onEditClicked(user) {
 
-    if (this.formIsDirty) {
-      const activeModal = this.modalService.open(ModalComponent, {
-        size: 'sm',
-        backdrop: 'static',
-      });
-      activeModal.componentInstance.BUTTONS.OK = 'Discard';
-      activeModal.componentInstance.showCancel = true;
-      activeModal.componentInstance.modalHeader = 'Warning!';
-      activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
-      activeModal.componentInstance.closeModalHandler = (() => {
-        // debugger
-        this.formIsDirty = false;
+    // if (this.formIsDirty) {
+    //   const activeModal = this.modalService.open(ModalComponent, {
+    //     size: 'sm',
+    //     backdrop: 'static',
+    //   });
+    //   activeModal.componentInstance.BUTTONS.OK = 'Discard';
+    //   activeModal.componentInstance.showCancel = true;
+    //   activeModal.componentInstance.modalHeader = 'Warning!';
+    //   activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+    //   activeModal.componentInstance.closeModalHandler = (() => {
+    //      debugger
+    //     this.formIsDirty = false;
 
-        this.cardTitle = 'Edit Detail';
-        this.newUser = Object.assign({}, user);
-        this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-        this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-        this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-        this.isNewUser = false;
-        this.action = 'edit';
+    //     this.cardTitle = 'Edit Detail';
+    //     this.newUser = Object.assign({}, user);
+    //     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+    //     this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+    //     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+    //     this.isNewUser = false;
+    //     this.action = 'edit';
+    //     const userId = localStorage.getItem('userId');
+    //     this.getUserList(parseInt(userId));
 
-      });
+    //   });
 
-    } else {
+    // } 
       // this.isEditClicked = true;
       this.action = 'edit';
       this.newUser = Object.assign({}, user);
@@ -154,7 +157,6 @@ export class UserManagementComponent implements OnInit {
       this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
       this.cardTitle = 'Edit User';
       this.isNewUser = false;
-    }
     if (!this.rightCardOpen) {
       this.rightCardOpen = !this.rightCardOpen;
       this.hideColumn = !this.hideColumn;
@@ -217,6 +219,9 @@ export class UserManagementComponent implements OnInit {
       this.hideColumn = !this.hideColumn;
       this.isNewUser = false;
       this.formIsDirty = false;
+      const userId = localStorage.getItem('userId');
+      this.getUserList(parseInt(userId));
+
       
     },
       (error) => {
@@ -248,6 +253,10 @@ export class UserManagementComponent implements OnInit {
       this.hideColumn = !this.hideColumn;
       this.isNewUser = false;
       this.formIsDirty = false;
+      const userId = localStorage.getItem('userId');
+      this.getUserList(parseInt(userId));
+
+      
     },
       (error) => {
         error = JSON.parse(error._body);
@@ -270,6 +279,10 @@ export class UserManagementComponent implements OnInit {
         this.notification.success('Success', `User ${user.UserName} deactivated successfully`);
         this.usersList = this.usersList.filter(u => u.UserId !== user.UserId);
         this.updateUserTableOnTypeChange();
+        const userId = localStorage.getItem('userId');
+        this.getUserList(parseInt(userId));
+  
+        
         // this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
       },
         (error) => {

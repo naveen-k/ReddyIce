@@ -36,6 +36,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     @Input() isNewUser: boolean;
+    @Input() formIsDirty: boolean;
     @Input()
     get roles(): any {
         return this._roles;

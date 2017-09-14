@@ -111,7 +111,7 @@
       <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
       <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)"
         (onUpdateUser)="onUpdateUser($event)" (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches"
-        [isDistributorAdmin]="isDistributorAdmin" [userDetails]="userDetails" [action]='action' [mIOpen]="rightCardOpen">
+        [isDistributorAdmin]="isDistributorAdmin" [userDetails]="userDetails" [action]='action' [mIOpen]="rightCardOpen" [formIsDirty]="formIsDirty">
       </create-user>
 
     </ba-card>
