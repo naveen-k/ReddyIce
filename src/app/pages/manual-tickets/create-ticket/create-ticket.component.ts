@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
@@ -49,11 +50,12 @@ export class CreateTicketComponent implements OnInit {
 
   modes: any[] = [];
 
-  // Id of current ticket object
-  ticketId: number;
-  
+
+  ticketId: number; // Id of current ticket object
+  tripId: number;   // tripId, redirected from day end page
+
   isReadOnly: boolean = false;  // flag for viewonly
-  
+
   tripMode: boolean = false;    // flag for tripMode, redirected from
 
   isFormDirty: boolean = false;
@@ -109,6 +111,7 @@ export class CreateTicketComponent implements OnInit {
     protected modalService: NgbModal,
     public activatedRoute: ActivatedRoute,
     protected route: Router,
+    protected location: Location,
   ) { }
 
   ngOnInit() {
@@ -128,10 +131,15 @@ export class CreateTicketComponent implements OnInit {
 
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
+
     const activatedRouteObject = this.activatedRoute.snapshot.data;
     this.isReadOnly = activatedRouteObject['viewMode'];
     this.tripMode = activatedRouteObject['tripMode'];
     this.branches = activatedRouteObject['branches'];
+
+    if (this.tripMode) {
+      this.initializeTripMode();
+    }
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
     this.branches = this.branches.filter((b) => b.BranchID !== 1);
@@ -156,6 +164,19 @@ export class CreateTicketComponent implements OnInit {
       this.loadTicket(this.ticketId);
     }
 
+  }
+
+  initializeTripMode() {
+    this.tripId = this.activatedRoute.snapshot.params['tripId'];
+    const queryParams = this.activatedRoute.snapshot.queryParams;
+
+    this.ticket.BranchID = +queryParams.branchId; // Set branchId
+    this.ticket.isUserTypeDistributor = !!(+queryParams.isDistributor); // Set User type
+    if (this.ticket.isUserTypeDistributor) {
+      this.ticket.DistributorCopackerID = +queryParams.driverid;
+    } else {
+      this.ticket.UserID = +queryParams.driverid;
+    }
   }
 
   sortBranches() {
@@ -287,6 +308,10 @@ export class CreateTicketComponent implements OnInit {
 
     // Reset ticket details
     this.ticket.TicketProduct = [{} as TicketProduct];
+  }
+
+  customerFocusOut() {
+
   }
 
   addProductRow() {
@@ -497,8 +522,9 @@ export class CreateTicketComponent implements OnInit {
   }
 
   routeToTicketListing() {
-    if(this.tripMode){
+    if (this.tripMode) {
       // this.route.navigate([''])
+      this.location.back();
       return;
     }
     if (this.activatedRoute.snapshot.params.ticketId) {
@@ -608,6 +634,10 @@ export class CreateTicketComponent implements OnInit {
     // if (!this.custType || this.ticket.CustomerType != 20) {
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('Ticket created successfully!');
+      if (this.tripMode) {
+        this.location.back();
+        return;
+      }
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     }, (error) => {
       if (error) {
@@ -635,7 +665,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
-    const clonedObject = JSON.parse(JSON.stringify(ticket)); // { ...ticket }; 
+    const clonedObject: ManualTicket = JSON.parse(JSON.stringify(ticket));
 
     // removing all the unwanted properties.
     delete clonedObject['tempTotalUnit'];
@@ -668,6 +698,10 @@ export class CreateTicketComponent implements OnInit {
       clonedObject.DeliveryDate = `${clonedObject.DeliveryDate.month}-${clonedObject.DeliveryDate.day}-${clonedObject.DeliveryDate.year}`;
     }
 
+    if (this.tripMode) {
+      clonedObject.TripID = this.tripId;
+    }
+
     return clonedObject;
   }
 
@@ -697,6 +731,9 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
+
+    const selectedTicket = this.getSelectedTicketTypeObject();
+    selectedTicket.userType = this.ticket.isUserTypeDistributor ? 'Internal' : 'External'
   }
 
   /**

@@ -47,7 +47,7 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">Branch</label>
                 <div class="col-sm-7">
                     <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
-                        [disabled]="ticket.TicketID">
+                        [disabled]="ticket.TicketID || tripMode">
                         <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> 
                             <!-- {{branch.BranchID}} - {{branch.BranchName}}  -->
                             {{branch.BranchCode}} - {{branch.BranchName}}
@@ -95,7 +95,7 @@
                     </ng-template>
                     <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" [resultTemplate]="rt"
                         placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="customerChangeHandler($event);isFormDirty=true;"
-                        [disabled]="ticket.TicketID" />
+                        [disabled]="ticket.TicketID" [editable]="false" />
                 </div>
                 <label [hidden]="!customer || !ticket.Customer || ticket.CustomerType == 21 || ticket.CustomerType == 22" class="col-sm-2 paymentType">
                     {{customer?.PaymentType===19?'Charge':'Cash'}}
@@ -194,7 +194,7 @@
             </div>
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-4 col-form-label">Type</label>
-                <div [hidden]="isReadOnly">
+                <div [hidden]="isReadOnly || tripMode">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input [disabled]="user.IsDistributor" type="radio" name="driverType" [value]="false" 
                         [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
@@ -207,7 +207,7 @@
                     </label>
                 </div>
                 <!--Hack for displaying disabled in case of read only mode-->
-                <div [hidden]="!isReadOnly">
+                <div [hidden]="!isReadOnly && !tripMode">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input [disabled]="true" type="radio" name="driverType1" [value]="false" 
                         [(ngModel)]="ticket.isUserTypeDistributor">

@@ -17,12 +17,12 @@ export class DetailsComponent implements OnInit {
     tripData: any = {};
     ticketDetails: any;
     disabled: boolean = false;
-    unitReconciliation: any = [];
+    unitReconciliation: any[] = [];
     driverDetails: any = [];
     productList: any = [];
-    isNewlyAdded:boolean = false;
-    newlyAddedProduct:any = [];
-    selectedProduct:object;
+    isNewlyAdded: boolean = false;
+    newlyAddedProduct: any = [];
+    selectedProduct: object;
     constructor(
         private service: DayEndService,
         private route: ActivatedRoute,
@@ -30,10 +30,6 @@ export class DetailsComponent implements OnInit {
         private notification: NotificationsService,
         private modalService: NgbModal,
     ) { }
-
-    openCreateTicketModal(ticket) {
-        // TODO open create ticket modal
-    }
 
     tripStatus(statusCode) {
         let statusText = '';
@@ -56,13 +52,11 @@ export class DetailsComponent implements OnInit {
         this.logedInUser = this.userService.getUser();
         this.tripId = +this.route.snapshot.params['tripId'];
 
-        this.tripData = this.service.getTripData();
-
         this.loadTripData();
 
         this.loadTripDetailByDate();
-        
-        this.loadProduct();
+
+
 
         this.loadUnitReconciliation();
     }
@@ -76,6 +70,7 @@ export class DetailsComponent implements OnInit {
     loadTripDetailByDate() {
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.ticketDetails = res;
+            this.tripData = res.Tripdetail[0];
         }, (err) => {
 
         });
@@ -84,10 +79,9 @@ export class DetailsComponent implements OnInit {
     sortByWordLength = (a: any) => {
         return a.location.length;
     }
-   
+
     loadUnitReconciliation() {
         this.service.getUnitsReconciliation(this.tripId).subscribe((res) => {
-            console.log(res);
             if (Array.isArray(res)) {
                 this.unitReconciliation = res;
                 this.unitReconciliation.forEach(element => {
@@ -98,6 +92,7 @@ export class DetailsComponent implements OnInit {
                     this.unitReconChange(element);
                 });
             }
+            this.loadProduct();
         }, (err) => {
             console.log(err);
         });
@@ -130,28 +125,28 @@ export class DetailsComponent implements OnInit {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
-        // console.log(this.unitReconciliation);
-
     }
     addProductRow() {
-      this.isNewlyAdded = true;
-       if (!this.newlyAddedProduct) { return; }
-    this.newlyAddedProduct.push({} as TripProduct);
-   }
+        this.isNewlyAdded = true;
+        if (!this.newlyAddedProduct) { return; }
+        this.newlyAddedProduct.push({} as TripProduct);
+    }
     loadProduct() {
         this.service.getProductList().subscribe((res) => {
-            this.productList = res;
-            console.log(res);
+            // Filterout already listed products
+            this.productList = res.filter((product) => {
+                return this.unitReconciliation.findIndex(pr => pr.ProductID === product.ProductID) < 0;
+            });
         }, (err) => {
 
         });
     }
-    productChangeHandler(item:any, arrayIndex:any):void {
-      //  this.newlyAddedProduct[arrayIndex].ProductName = item.ProductName;
+    productChangeHandler(item: any, arrayIndex: any): void {
+        //  this.newlyAddedProduct[arrayIndex].ProductName = item.ProductName;
         this.newlyAddedProduct[arrayIndex].ProducID = item.ProductID;
         console.log(this.newlyAddedProduct);
-       
-     // item.ProductName = 
+
+        // item.ProductName = 
     }
 }
 
