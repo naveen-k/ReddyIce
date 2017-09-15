@@ -23,6 +23,8 @@ export class DetailsComponent implements OnInit {
     isNewlyAdded: boolean = false;
     newlyAddedProduct: any = [];
     selectedProduct: object;
+
+
     constructor(
         private service: DayEndService,
         private route: ActivatedRoute,
@@ -103,6 +105,9 @@ export class DetailsComponent implements OnInit {
     }
 
     saveReconciliation() {
+
+        console.log(this.newlyAddedProduct);
+        // return false;
         const total = this.ticketDetails.Total;
         const cashRecon = {
             TripID: this.tripId,
@@ -119,7 +124,7 @@ export class DetailsComponent implements OnInit {
             this.notification.error("Error", err.Message);
         });
 
-        this.service.saveUnitReconciliation(this.unitReconciliation).subscribe((res) => {
+        this.service.saveUnitReconciliation(this.unitReconciliation.concat(this.newlyAddedProduct)).subscribe((res) => {
             this.notification.success("Success", res);
         }, (err) => {
             err = JSON.parse(err._body);
@@ -141,12 +146,30 @@ export class DetailsComponent implements OnInit {
 
         });
     }
-    productChangeHandler(item: any, arrayIndex: any): void {
-        //  this.newlyAddedProduct[arrayIndex].ProductName = item.ProductName;
-        this.newlyAddedProduct[arrayIndex].ProducID = item.ProductID;
-        console.log(this.newlyAddedProduct);
+    // intializing other manadatory field = 0 which are not taken as input. 
+    resetField(index) {
+        this.newlyAddedProduct[index].CustomerDamage = 0;
+        this.newlyAddedProduct[index].DamageQuantity = 0;
+        this.newlyAddedProduct[index].Load = 0;
+        this.newlyAddedProduct[index].LoadReturnDamageID = 0;
+        this.newlyAddedProduct[index].ManualLoad = 0;
+        this.newlyAddedProduct[index].ManualTicket = 0;
+        this.newlyAddedProduct[index].OverShort = 0;
+        this.newlyAddedProduct[index].Returns = 0,
+        this.newlyAddedProduct[index].Sale = 0;
+        this.newlyAddedProduct[index].TruckDamage = 0;
+        this.newlyAddedProduct[index].TripID = this.tripId;
+       // TripID: this.tripId
 
-        // item.ProductName = 
+    }
+    productChangeHandler(productName: any, arrayIndex: any): void {
+        const productIndex = this.productList.map((o) => o.ProductName).indexOf(productName);
+        this.newlyAddedProduct[arrayIndex].ProducID = this.productList[productIndex].ProductID;
+        this.resetField(arrayIndex); 
+      }
+    // remove newly added product from Array
+    removeProduct(index){
+             this.newlyAddedProduct.splice(index, 1);
     }
 }
 

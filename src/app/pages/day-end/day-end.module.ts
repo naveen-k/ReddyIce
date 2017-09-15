@@ -25,7 +25,7 @@ const routes: Routes = [
             component: DetailsComponent,
         },
         {
-            path: 'ticket-detail',
+            path: 'ticket-detail/:tripId',
             component: TicketDetailsComponent,
         },
         {
