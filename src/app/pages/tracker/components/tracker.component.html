@@ -2,50 +2,119 @@
     <div class='col-md-12'>
         <ba-card cardTitle="Tracker" baCardClass="medium-card" class="smart-table-container">
             <div class="row">
-                <div class="col-md-3 textAlign">
-                    <div class="block" style="background:brown;"></div>
-                    <span class="blockContent">Planned Service</span>
+                <div class="col-sm-3">
+                    <label>Select Date</label>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="searchObj.CreatedDate" [maxDate]="todaysDate"
+                            ngbDatepicker #d="ngbDatepicker" disabled>
+                        <button class="input-group-addon" (click)="d.toggle()" type="button">
+                            <i class="ion-calendar"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-md-3 textAlign">
-                    <div class="block" style="background:blue;"></div>
-                    <span class="blockContent">Unplanned Service</span>
+                <div class="col-sm-3">
+                    <label>Select Branch</label>
+                    <select class="form-control" id="exampleSelect1">
+                        <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
+                            {{obj.BranchCode}}-{{obj.BranchName}}
+                        </option>
+                    </select>
                 </div>
-                <div class="col-md-3 textAlign">
-                    <div class="block" style="background:red;"></div>
-                    <span class="blockContent">Skipped Stops</span>
+                <div class="col-sm-3">
+                    <label>Select Route</label>
+                    <select class="form-control">
+                        <option *ngFor="" [value]="obj.DistributorID">
+                            
+                        </option>
+                    </select>
                 </div>
-                <div class="col-md-3 textAlign">
-                    <div class="block" style="background:yellow;"></div>
-                    <span class="blockContent">Did Not Service</span>
+                <div class="col-sm-3">
+                    <label>Select Trip</label>
+                    <select class="form-control">
+                        <option *ngFor="" [value]="obj.DistributorID">
+                            
+                        </option>
+                    </select>
                 </div>
             </div>
-            <br>
-            <br>
-            <div class="row">
+            <div class="row marginTop">
                 <div class="col-md-4">
-                    <div class="form-group col-md-12">
-                        <label for="exampleInputEmail1">Date</label>
-                        <div class="input-group">
-                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
-                            <button class="input-group-addon" (click)="d.toggle()" type="button">
-                            <i class="ion-calendar"></i>
-                            <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
-                            </button>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="block" style="background:brown;"></div>
+                            <span class="blockContent">Planned Service</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="block" style="background:blue;"></div>
+                            <span class="blockContent">Unplanned Service</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="block" style="background:red;"></div>
+                            <span class="blockContent">Skipped Stops</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="block" style="background:yellow;"></div>
+                            <span class="blockContent">Did Not Service</span>
                         </div>
                     </div>
-                    <div class="form-group col-md-12">
-                        <label for="exampleSelect1">Route</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>801</option>
-                            <option>802</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label for="exampleSelect1">Trip</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>1</option>
-                            <option>2</option>
-                        </select>
+                </div>
+                <div class="col-md-8 center">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="type" checked>
+                        <span>Planned Seq</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="type">
+                        <span>Actual Delivery Seq</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="type">
+                        <span>Planned & Actual Seq</span>
+                    </label>
+                </div>
+            </div>
+            <div class="row marginTop">
+                <div class="col-md-4">
+                    <div class="table-container">
+                        <table class="table table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:112px;">
+                                        <span class="cursorPointer" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
+                                            Planned
+                                        </span>
+                                    </th>
+                                    <th class="thVerticalAlign table-text-align">
+                                        <span class="cursorPointer" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
+                                            Actual
+                                        </span>
+                                    </th>
+                                    <th class="thVerticalAlign table-text-align">
+                                        <span class="cursorPointer" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
+                                            Date-Time
+                                        </span>
+                                    </th>
+                                    <th class="thVerticalAlign table-text-align">
+                                        <span class="cursorPointer" (click)="customer.sortField = 'Customer.CustomerName';customer.isAsc=!customer.isAsc;">
+                                            Customer
+                                        </span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc"> -->
+                                <tr *ngFor="let item of allTracks">
+                                    <td>{{item.planned}}</td>
+                                    <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                                        {{item.actual}}
+                                    </td>
+                                    <td>{{item.dateTime}}</td>
+                                    <td>{{item.customer}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+                        <div *ngIf="!allTracks.length && !showSpinner" style='text-align:center'> No data found </div> -->
                     </div>
                 </div>
                 <!-- <div class="col-md-8" style="overflow-y: hidden;height: 255px;">

@@ -1,3 +1,4 @@
+import { TrackerService } from './tracker.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TrackerComponent } from './components/tracker.component';
 import { SharedModule } from '../../shared/shared.module';
@@ -30,7 +31,9 @@ const routes: Routes = [
         NgaModule,
         NgbModule,
     ],
-    providers: [],
+    providers: [
+        TrackerService,
+    ],
 })
 export class TrackerModule {
 

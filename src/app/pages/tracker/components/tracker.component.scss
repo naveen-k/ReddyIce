@@ -11,19 +11,32 @@
 }
 
 .block {
-    width:25px;
-    height:25px;
+    width:10px;
+    height:10px;
     display:inline-block;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-radius: 2px;
 }
 
 .blockContent {
-    margin-left:5px;
-    vertical-align:super;
+    margin-left:0px;
+    vertical-align:bottom;
+    font-size: 10px;
 }
 
 .google-maps {
   width: 100%;
   height: calc(100vh - 283px);
+}
+
+.marginTop {
+    margin-top: 10px;
+}
+
+.radioButtonMargin {
+    margin-left:10px;
+    margin-top: 6px;
+}
+
+.center {
+    text-align: center;
 }
