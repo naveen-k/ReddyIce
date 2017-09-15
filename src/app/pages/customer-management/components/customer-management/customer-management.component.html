@@ -6,18 +6,27 @@
                     <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
                 </div>
                 <div class="col-md-4">
-                    <button (click)="showPrice()" class="btn btn-primary addCustBtn pull-right">
+                    <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../setprice']">
                         Set Generic Price
                     </button>
                 </div>
                 <div [ngClass]="[isNewCustomer || setPrice ? 'col-md-4' : 'col-md-2']">
-                    <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn pull-right">
+                    <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../customercreate']">
                         Add Customer
                     </button>
                 </div>
             </div>
             <br>
-            <div class="vertical-scroll">
+            <div class="row" >
+                <div class="col-md-2">
+                    <select class="form-control" >
+                      <option value="active">Active</option>
+                      <option value="inActive">InActive</option>
+                      <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="vertical-scroll page-header">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -35,6 +44,12 @@
                                 </span>
                             </th>
                             <th>
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'customerName';customer.isAsc=!customer.isAsc;">
+                                       Chain
+                                        <i *ngIf="(customer.sortField == 'customerName')" [ngClass]="(customer.isAsc && customer.sortField == 'customerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                    </span>
+                            </th>
+                            <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'isRICustomer';customer.isAsc=!customer.isAsc;">
                                     RI Customer
                                     <i *ngIf="(customer.sortField == 'isRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'isRICustomer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
@@ -42,33 +57,37 @@
                             </th>
                             <th *ngIf="!isNewCustomer && !setPrice">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'email';customer.isAsc=!customer.isAsc;">
-                                    Email
+                                    PaymentType
                                     <i *ngIf="(customer.sortField == 'email')" [ngClass]="(customer.isAsc && customer.sortField == 'email' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th *ngIf="!isNewCustomer && !setPrice">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'contact';customer.isAsc=!customer.isAsc;">
-                                    Contact
+                                   IsDex
                                     <i *ngIf="(customer.sortField == 'contact')" [ngClass]="(customer.isAsc && customer.sortField == 'contact' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of smartTableData | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
+                        <tr *ngFor="let customerr of customers | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
                                 <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                                <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.isRICustomer === 'N'">
+                                <i class="ion-trash-a custom-tooltip-ion">
                                     <span class="tooltiptext">Delete</span>
                                 </i>
                             </td>
-                            <td>{{ item.customerNumber }}</td>
-                            <td>{{ item.customerName }}</td>
-                            <td>{{ item.isRICustomer }}</td>
-                            <td *ngIf="!isNewCustomer && !setPrice"><a class="email-link">{{ item.email }}</a></td>
-                            <td *ngIf="!isNewCustomer && !setPrice">{{ item.contact }}</td>
+                            <td>{{ customerr.CustomerId }}</td>
+                            <td>{{ customerr.CustomerName }}</td>
+                            <td>{{ customerr?.Chain }}</td>
+                            <td>{{ customerr.IsRICustomer?'Yes':'No' }}</td>
+                            <td *ngIf="!isNewCustomer && !setPrice"><a class="email-link">{{ customerr?.PaymentType}}</a></td>
+                            <td *ngIf="!isNewCustomer && !setPrice">{{ customerr?.Dex}}</td>
+                        </tr>
+                        <tr *ngIf="!customers.length">
+                            <th class="text-center" colspan="7"> No data found </th>
                         </tr>
                     </tbody>
                 </table>
@@ -111,7 +130,7 @@
             </div>
         </ba-card>
     </div>
-    <div *ngIf="isNewCustomer" [ngClass]="{'col-md-6':isNewCustomer}">
+    <!-- <div *ngIf="isNewCustomer" [ngClass]="{'col-md-6':isNewCustomer}">
         <ba-card cardTitle="Add New Customer" baCardClass="with-scroll" class="smart-table-container">
             <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
             <div class="row">
@@ -158,13 +177,13 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Address 1</label>
-                                <input type="text" class="form-control" id="address1" placeholder="Address Line 1" required maxlength="128" minlength="2" [(ngModel)]="customerObj.address1"
-                                    name="address1" #address1="ngModel" required>
+                                <input type="text" class="form-control" id="address1" placeholder="Address Line 1" required maxlength="128" minlength="2"
+                                    [(ngModel)]="customerObj.address1" name="address1" #address1="ngModel" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Address 2</label>
-                                <input type="text" class="form-control" id="address2" placeholder="Address Line 2" required maxlength="128" minlength="2" [(ngModel)]="customerObj.address2"
-                                    name="address2" #address="ngModel" required>
+                                <input type="text" class="form-control" id="address2" placeholder="Address Line 2" required maxlength="128" minlength="2"
+                                    [(ngModel)]="customerObj.address2" name="address2" #address="ngModel" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Country</label>
@@ -203,18 +222,18 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="exampleInputEmail1">Primary Contact</label>
-                                <input [(ngModel)]="selectedUser.primary" type="number" class="form-control" id="phone" placeholder="Primary Contact" minlength="2" [(ngModel)]="customerObj.primary"
-                                    name="primary" #primary="ngModel" required>
+                                <input [(ngModel)]="selectedUser.primary" type="number" class="form-control" id="phone" placeholder="Primary Contact" minlength="2"
+                                    [(ngModel)]="customerObj.primary" name="primary" #primary="ngModel" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="exampleInputEmail1">Secondry Contact</label>
-                                <input [(ngModel)]="selectedUser.secondry" type="number" class="form-control" id="phone" placeholder="Secondry Contact" minlength="2" [(ngModel)]="customerObj.secondry"
-                                    name="secondry" #secondry="ngModel" required>
+                                <input [(ngModel)]="selectedUser.secondry" type="number" class="form-control" id="phone" placeholder="Secondry Contact" minlength="2"
+                                    [(ngModel)]="customerObj.secondry" name="secondry" #secondry="ngModel" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="exampleInputEmail1">Extension</label>
-                                <input [(ngModel)]="selectedUser.phone" type="number" class="form-control" id="phone" placeholder="Extension" minlength="2" [(ngModel)]="customerObj.extension"
-                                    name="extension" #extension="ngModel" required>
+                                <input [(ngModel)]="selectedUser.phone" type="number" class="form-control" id="phone" placeholder="Extension" minlength="2"
+                                    [(ngModel)]="customerObj.extension" name="extension" #extension="ngModel" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="vertical-center"></label>
@@ -286,4 +305,5 @@
             </ngb-tabset>
         </ba-card>
     </div>
-</div>
+</div> 
+ -->

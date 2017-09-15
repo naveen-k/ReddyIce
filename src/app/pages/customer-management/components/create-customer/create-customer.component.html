@@ -1,0 +1,167 @@
+<ba-card cardTitle="Create Customer" baCardClass="with-scroll" class="smart-table-container" #customer>
+        <div>
+            <button class="btn btn-danger pull-right">Save</button>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 page-header">
+                <div class="row">
+                    <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
+                    <div class="col-sm-7 padding-eater">
+                        <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Number" />
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <label for="example-text-input" class="col-sm-5 col-form-label">Customer Name</label>
+                    <div class="col-sm-7 padding-eater">
+                        <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Name" />
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <label for="example-text-input" class="col-sm-5 col-form-label">Customer Type</label>
+                    <div class="col-sm-7 padding-eater">
+                        <select class="form-control" name="custType">
+                            <option> </option>
+                            <option>Type 1</option>
+                            <option>Type 2</option>
+                            <option>Type 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <label for="example-text-input" class="col-sm-5 col-form-label">Payment Type</label>
+                    <div class="col-sm-7 padding-eater">
+                        <select class="form-control" name="custType">
+                            <option> </option>
+                            <option>Type 1</option>
+                            <option>Type 2</option>
+                            <option>Type 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <div class="col-sm-6 box-top-margin">
+                        <input type="checkbox" class="checkbox-size" />
+                        <label for="example-text-input" class="col-sm-5 col-form-label">DEX</label>
+                    </div>
+                    <div class="col-sm-6 box-top-margin">
+                        <input type="checkbox" class="checkbox-size" />
+                        <label for="example-text-input" class="col-sm-5 col-form-label">Checkbox</label>
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
+                    <div class="col-sm-7 padding-eater">
+                        <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 page-header">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <label for="example-text-input" class="col-sm-1 col-form-label">Address</label>
+                        <div class="col-sm-11">
+                            <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Number" />
+                        </div>
+                    </div>
+                    <div class="row box-top-margin">
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <label for="example-text-input" class="col-sm-3 col-form-label">State</label>
+                                <div class="col-sm-9">
+                                    <input id="typeahead-basic" type="text" class="form-control" placeholder="State" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <label for="example-text-input" class="col-sm-3 col-form-label">City</label>
+                                <div class="col-sm-9">
+                                    <input id="typeahead-basic" type="text" class="form-control" placeholder="City" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <label for="example-text-input" class="col-sm-3 col-form-label">Zip</label>
+                                <div class="col-sm-9">
+                                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Zip" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row box-top-margin">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label for="example-text-input" class="col-sm-2 col-form-label">Primary</label>
+                                <div class="col-sm-10">
+                                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Primary Contact" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label for="example-text-input" class="col-sm-2 col-form-label">Phone</label>
+                                <div class="col-sm-10">
+                                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Phone" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row box-top-margin">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <label for="example-text-input" class="col-sm-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Email" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row model-top-margin">
+                        <div class="form-group col-md-5">
+                            <b>All Products</b>
+                            <div class="vertical-scroll">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Products</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of products">
+                                            <td>{{ item.name }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2 ioiIconsLR">
+                            <p><span class="ion-arrow-left-a"></span></p>
+                            <p><span class="ion-arrow-right-a"></span></p>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <b>Mapped Products</b>
+                            <div class="vertical-scroll">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Products</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of mappedProds">
+                                            <td>{{ item.name }}</td>
+                                            <td>
+                                                <input type="number" class="form-control" #zip="ngModel" [(ngModel)]="item.price">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ba-card>

@@ -1,13 +1,45 @@
 import { CustomerManagementService } from '../../customer-management.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { UserService } from '../../../../shared/user.service';
 
 @Component({
     templateUrl: './customer-management.component.html',
     styleUrls: ['./customer-management.component.scss'],
 })
-export class CustomerManagementComponent {
+export class CustomerManagementComponent implements OnInit {
+
+    customers: any = [];
+    constructor(protected service: CustomerManagementService) {
+        // this.service.getData().then((data) => {
+        //     this.source1.load(data);
+        // });
+        // this.service.getProducts().then((data) => {
+        //     this.source2.load(data);
+        // });
+        // this.service.mappedProducts().then((data) => {
+        //     this.source3.load(data);
+        // });
+        this.smartTableData = service.smartTableData;
+        this.products = service.products;
+        this.mappedProds = service.mappedProds;
+    }
+
+    ngOnInit() {
+        this.getAllCustomers();
+    }
+  
+
+    getAllCustomers() {
+        this.service.getAllCustomers().subscribe((res) => {
+            this.customers = res;
+            console.log(this.customers);
+        }, (err) => {
+            console.log(err);
+        });
+    }
+
     selectedUser = {};
     settings1 = {
         mode: 'external',
@@ -17,7 +49,7 @@ export class CustomerManagementComponent {
         actions: {
             delete: false,
         },
-        hideSubHeader : true,
+        hideSubHeader: true,
         edit: {
             editButtonContent: '<i class="ion-edit"></i>',
             saveButtonContent: '<i class="ion-checkmark"></i>',
@@ -31,27 +63,27 @@ export class CustomerManagementComponent {
             customerNumber: {
                 title: 'Customer#',
                 type: 'number',
-            //    show: true,
+                //    show: true,
             },
             customerName: {
                 title: 'Name',
                 type: 'string',
-            //    show: true,
+                //    show: true,
             },
-            isRICustomer: {
+            isRiCustomer: {
                 title: 'IsReddyIce?',
                 type: 'string',
-            //    show: true,
+                //    show: true,
             },
             email: {
                 title: 'Email',
                 type: 'string',
-            //    show: true,
+                //    show: true,
             },
             contact: {
                 title: 'Contact Number',
                 type: 'number',
-            //    show: true,
+                //    show: true,
             },
         },
     };
@@ -108,22 +140,8 @@ export class CustomerManagementComponent {
     isNewCustomer: boolean = false;
     setPrice: boolean = false;
     customerObj: any = {};
-    
-    constructor(protected service: CustomerManagementService) {
-        // this.service.getData().then((data) => {
-        //     this.source1.load(data);
-        // });
-        // this.service.getProducts().then((data) => {
-        //     this.source2.load(data);
-        // });
-        // this.service.mappedProducts().then((data) => {
-        //     this.source3.load(data);
-        // });
-        this.smartTableData = service.smartTableData;
-        this.products = service.products;
-        this.mappedProds = service.mappedProds;
-    }
 
+   
     showNewCustomer(newCustomer) {
         this.isNewCustomer = !this.isNewCustomer;
         this.setPrice = false;
@@ -133,7 +151,7 @@ export class CustomerManagementComponent {
         this.isNewCustomer = false;
     }
 
-    onEditCliked(event) {        
-        this.selectedUser = event.data;        
+    onEditCliked(event) {
+        this.selectedUser = event.data;
     }
 }

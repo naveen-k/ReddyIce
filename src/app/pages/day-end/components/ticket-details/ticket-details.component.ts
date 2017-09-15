@@ -2,6 +2,7 @@ import { any } from 'codelyzer/util/function';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DayEndService } from '../../day-end.service';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     templateUrl: './ticket-details.component.html',
@@ -11,17 +12,13 @@ export class TicketDetailsComponent implements OnInit {
 
     selectedtrip: any = {};
     TripData: any;
-    tripId: string = '';
-    tripDate: any = '2017-08-31';
+    tripId: number;
     tickDto: any = { TicketID: [], status: 1 };
 
-    constructor(private service: DayEndService) {
+    constructor(private service: DayEndService, private route:ActivatedRoute) {
 
-
-        this.selectedtrip = this.service.getTripData();
-        this.tripId = this.selectedtrip.TripID;
-        // this.tripDate = this.selectedtrip.Created.split('T')[0];
-        this.service.getTripDetailByDate(this.tripId, this.tripDate).subscribe((res) => {
+        this.tripId = +this.route.snapshot.params['tripId'];
+        this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.TripData = res;
             this.selectedtrip = res.Tripdetail[0];
             console.log(this.TripData);

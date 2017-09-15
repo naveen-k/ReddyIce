@@ -5,7 +5,9 @@ import { Pages } from '../../../pages/pages.component';
     template: `
         <nav aria-label="Page navigation example" [hidden]="_tableData.length<=options.itemPerPage">
         <div class="row"> 
-        <div class='' style="padding: 10px;"> Records {{options.start}} - {{options.end}} of {{_tableData.length}}</div>
+        <div class='' style="padding: 10px;"> 
+            Records {{options.start}} - {{options.end}} of {{_tableData.length}}
+        </div>
           <ul class="pagination justify-content-end ">
             <li class="page-item" [ngClass]="{'disabled':currentPageIndex==1}">
               <a class="page-link" (click)="pageChangeHandler(currentPageIndex-1)" href="javascript:void(0);">
