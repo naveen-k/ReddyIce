@@ -878,8 +878,6 @@ export class CreateTicketComponent implements OnInit {
           return false;
         }
       }
-    } else if (this.ticket.CustomerType === 20) {
-      this.cashAmountChangeHandler();
     } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && this.ticket.IsSaleTicket) {
       if (this.mreadingCheck() > 0) {
         this.mreadingCount = 0;
