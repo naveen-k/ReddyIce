@@ -122,34 +122,6 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
-
-    // if (this.formIsDirty) {
-    //   const activeModal = this.modalService.open(ModalComponent, {
-    //     size: 'sm',
-    //     backdrop: 'static',
-    //   });
-    //   activeModal.componentInstance.BUTTONS.OK = 'Discard';
-    //   activeModal.componentInstance.showCancel = true;
-    //   activeModal.componentInstance.modalHeader = 'Warning!';
-    //   activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
-    //   activeModal.componentInstance.closeModalHandler = (() => {
-    //      debugger
-    //     this.formIsDirty = false;
-
-    //     this.cardTitle = 'Edit Detail';
-    //     this.newUser = Object.assign({}, user);
-    //     this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-    //     this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-    //     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-    //     this.isNewUser = false;
-    //     this.action = 'edit';
-    //     const userId = localStorage.getItem('userId');
-    //     this.getUserList(parseInt(userId));
-
-    //   });
-
-    // } 
-      // this.isEditClicked = true;
       this.action = 'edit';
       this.newUser = Object.assign({}, user);
       this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';

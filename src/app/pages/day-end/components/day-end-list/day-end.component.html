@@ -25,7 +25,8 @@
                     </ng-select> -->
                 </div>
             </div>
-            <div class="row bottom-margin" *ngIf='logedInUser.Role.RoleID == 1 || logedInUser.Role.RoleID == 2'>
+            <!--Removed Tripe Filter-->
+            <!-- <div class="row bottom-margin" *ngIf='logedInUser.Role.RoleID == 1 || logedInUser.Role.RoleID == 2'>
                  <div class="col-md-6">
                     <label class="radioItem radio-inline custom-radio nowrap ">
                         <input type="radio"  [(ngModel)]='tripFilterOption.isForAll' [value]="false" (change)="selectionchangeHandler()">
@@ -36,7 +37,7 @@
                         <span>All Trips</span>
                     </label>
                 </div> 
-            </div>
+            </div> -->
             <!-- <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" class="page-header"></ng2-smart-table> -->
             <div class="vertical-scroll">
                 <table class="table table-striped">

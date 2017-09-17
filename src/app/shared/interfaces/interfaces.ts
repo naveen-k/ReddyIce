@@ -68,3 +68,9 @@ export interface ProductDetail {
     SKU: number;
     UPC: string;
 }
+
+export interface Select {
+    id: number;
+    label: string;
+    data?: any;
+}

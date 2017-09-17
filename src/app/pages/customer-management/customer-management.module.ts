@@ -9,32 +9,32 @@ import { Routes, RouterModule } from '@angular/router';
 import { CustomerManagementComponent } from './components/customer-management/customer-management.component';
 import { NgModule } from '@angular/core';
 import { CustomerContainerComponent } from './components/customer-management-container/customer-management-container.component';
-import {SetPriceComponent} from './components/set-generic-price/setprice.component';
+import { SetPriceComponent } from './components/set-generic-price/setprice.component';
 const routes: Routes = [
     {
         path: '',
         component: CustomerContainerComponent,
         children: [{
-            path: 'customermain',
+            path: 'list',
             component: CustomerManagementComponent,
         },
         {
-            path: 'customercreate',
+            path: 'create',
             component: CreateCustomerComponent,
         },
         {
-            path: 'setprice',
+            path: 'set-price',
             component: SetPriceComponent,
         },
         {
-            path: '', redirectTo: 'customermain', pathMatch: 'full',
+            path: '', redirectTo: 'list', pathMatch: 'full',
         }],
     },
 ];
 
 
 @NgModule({
-    declarations: [CustomerManagementComponent, CreateCustomerComponent, CustomerContainerComponent,SetPriceComponent],
+    declarations: [CustomerManagementComponent, CreateCustomerComponent, CustomerContainerComponent, SetPriceComponent],
     imports: [SharedModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule, NgbModule],
     providers: [CustomerManagementService],
 })

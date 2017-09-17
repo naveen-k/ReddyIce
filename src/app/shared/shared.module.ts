@@ -1,3 +1,4 @@
+import { Select2Component } from './components/select2/select2.component';
 import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { NumberOnlyDirective } from './directives/number-only.directive';
 import { MinValueValidatorDirective } from './directives/min-value.directive';
@@ -24,6 +25,7 @@ import { NgModule } from '@angular/core';
         MinValueValidatorDirective,
         NumberOnlyDirective,
         TicketTypePipe,
+        Select2Component,
     ],
     exports: [
         GenericFilter,
@@ -34,6 +36,7 @@ import { NgModule } from '@angular/core';
         PaginationComponent,
         MinValueValidatorDirective,
         TicketTypePipe,
+        Select2Component,
     ],
     entryComponents: [
         ModalComponent,

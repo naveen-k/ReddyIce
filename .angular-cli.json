@@ -27,6 +27,7 @@
         "../node_modules/chartist/dist/chartist.css",
         "../node_modules/fullcalendar/dist/fullcalendar.css",        
         "../node_modules/ng2-slim-loading-bar/style.css",
+        "../node_modules/select2/dist/css/select2.min.css",
         "app/theme/theme.scss",
         "styles.scss"
       ],
@@ -36,6 +37,7 @@
         "../node_modules/jquery-slimscroll/jquery.slimscroll.js",
         "../node_modules/tether/dist/js/tether.js",
         "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/select2/dist/js/select2.min.js",
         "./assets/js/user.js"
       ],
       "environmentSource": "environments/environment.ts",
@@ -61,11 +63,6 @@
       "project": "e2e/tsconfig.e2e.json"
     }
   ],
-  "test": {
-    "karma": {
-      "config": "./karma.conf.js"
-    }
-  },
   "defaults": {
     "styleExt": "scss",
     "component": {

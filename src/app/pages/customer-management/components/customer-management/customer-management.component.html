@@ -1,309 +1,127 @@
-<div class="row">
-    <div [ngClass]="[!isNewCustomer && !setPrice ? 'col-md-12' : 'col-md-6']">
-        <ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
-            <div class="row">
-                <div [ngClass]="[isNewCustomer || setPrice ? 'col-md-4' : 'col-md-6']">
-                    <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../setprice']">
-                        Set Generic Price
-                    </button>
-                </div>
-                <div [ngClass]="[isNewCustomer || setPrice ? 'col-md-4' : 'col-md-2']">
-                    <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../customercreate']">
-                        Add Customer
-                    </button>
-                </div>
-            </div>
-            <br>
-            <div class="row" >
-                <div class="col-md-2">
-                    <select class="form-control" >
-                      <option value="active">Active</option>
-                      <option value="inActive">InActive</option>
-                      <option value="all">All</option>
-                    </select>
-                </div>
-            </div>
-            <div class="vertical-scroll page-header">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th class="table-id">Actions</th>
-                            <th>
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'customerNumber';customer.isAsc=!customer.isAsc;">
+<ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
+    <div class="row">
+        <div class="col-sm-3">
+            <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
+        </div>
+        <div class="col-sm-3">
+            <select class="form-control">
+                <option value="active">Active</option>
+                <option value="inActive">InActive</option>
+                <option value="all">All</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../set-price']">
+                Set Generic Price
+            </button>
+        </div>
+        <div class="col-sm-3">
+            <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../create']">
+                Add Customer
+            </button>
+        </div>
+    </div>
+    <div class="vertical-scroll page-header">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="table-id">Actions</th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'customerNumber';customer.isAsc=!customer.isAsc;">
                                     Customer Number
                                     <i *ngIf="(customer.sortField == 'customerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'customerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
-                            </th>
-                            <th>
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'customerName';customer.isAsc=!customer.isAsc;">
+                    </th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'customerName';customer.isAsc=!customer.isAsc;">
                                     Customer Name
                                     <i *ngIf="(customer.sortField == 'customerName')" [ngClass]="(customer.isAsc && customer.sortField == 'customerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
-                            </th>
-                            <th>
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'customerName';customer.isAsc=!customer.isAsc;">
+                    </th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'customerName';customer.isAsc=!customer.isAsc;">
                                        Chain
                                         <i *ngIf="(customer.sortField == 'customerName')" [ngClass]="(customer.isAsc && customer.sortField == 'customerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                     </span>
-                            </th>
-                            <th>
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'isRICustomer';customer.isAsc=!customer.isAsc;">
+                    </th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'isRICustomer';customer.isAsc=!customer.isAsc;">
                                     RI Customer
                                     <i *ngIf="(customer.sortField == 'isRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'isRICustomer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
-                            </th>
-                            <th *ngIf="!isNewCustomer && !setPrice">
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'email';customer.isAsc=!customer.isAsc;">
+                    </th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'email';customer.isAsc=!customer.isAsc;">
                                     PaymentType
                                     <i *ngIf="(customer.sortField == 'email')" [ngClass]="(customer.isAsc && customer.sortField == 'email' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
-                            </th>
-                            <th *ngIf="!isNewCustomer && !setPrice">
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'contact';customer.isAsc=!customer.isAsc;">
+                    </th>
+                    <th>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'contact';customer.isAsc=!customer.isAsc;">
                                    IsDex
                                     <i *ngIf="(customer.sortField == 'contact')" [ngClass]="(customer.isAsc && customer.sortField == 'contact' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let customerr of customers | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
-                            <td class="table-id" style="cursor: pointer">
-                                <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cust of customers | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
+                    <td class="table-id" style="cursor: pointer">
+                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                                <i class="ion-trash-a custom-tooltip-ion">
+                        <i class="ion-trash-a custom-tooltip-ion">
                                     <span class="tooltiptext">Delete</span>
                                 </i>
-                            </td>
-                            <td>{{ customerr.CustomerId }}</td>
-                            <td>{{ customerr.CustomerName }}</td>
-                            <td>{{ customerr?.Chain }}</td>
-                            <td>{{ customerr.IsRICustomer?'Yes':'No' }}</td>
-                            <td *ngIf="!isNewCustomer && !setPrice"><a class="email-link">{{ customerr?.PaymentType}}</a></td>
-                            <td *ngIf="!isNewCustomer && !setPrice">{{ customerr?.Dex}}</td>
-                        </tr>
-                        <tr *ngIf="!customers.length">
-                            <th class="text-center" colspan="7"> No data found </th>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style='text-align:center'> <a> <img [hidden]='smartTableData.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+                    </td>
+                    <td>{{ cust.CustomerId }}</td>
+                    <td>{{ cust.CustomerName }}</td>
+                    <td>{{ cust?.Chain }}</td>
+                    <td>{{ cust.IsRICustomer?'Yes':'No' }}</td>
+                    <td><a class="email-link">{{ cust?.PaymentType}}</a></td>
+                    <td>{{ cust?.Dex}}</td>
+                </tr>
+                <tr *ngIf="!customers.length">
+                    <th class="text-center" colspan="7"> No data found </th>
+                </tr>
+            </tbody>
+        </table>
+        <!--<div style='text-align:center'> <a> <img [hidden]='customers.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>-->
 
-            </div>
-        </ba-card>
     </div>
-    <div *ngIf="setPrice" [ngClass]="{'col-md-6':setPrice}">
-        <ba-card cardTitle="Set Generic Price" baCardClass="with-scroll" class="smart-table-container">
-            <span (click)="showPrice($event)" class="ion-close-round addCustCloseIcon"></span>
-            <div class="row">
-                <div class="col-md-10">
-                    <h4 style="padding-top: 8px;">Product Generic Price</h4>
-                </div>
-                <div>
-                    <button class="btn btn-danger">Save</button>
-                </div>
+</ba-card>
+<!-- 
+<div *ngIf="setPrice" [ngClass]="{'col-md-6':setPrice}">
+    <ba-card cardTitle="Set Generic Price" baCardClass="with-scroll" class="smart-table-container">
+        <span (click)="showPrice($event)" class="ion-close-round addCustCloseIcon"></span>
+        <div class="row">
+            <div class="col-md-10">
+                <h4 style="padding-top: 8px;">Product Generic Price</h4>
             </div>
-            <br/>
-            <div class="vertical-scroll">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>S.No.</th>
-                            <th>Product</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of smartTableData">
-                            <td>{{ item.customerNumber }}</td>
-                            <td>{{ item.customerName }}</td>
-                            <td>
-                                <input type="text" class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div>
+                <button class="btn btn-danger">Save</button>
             </div>
-        </ba-card>
-    </div>
-    <!-- <div *ngIf="isNewCustomer" [ngClass]="{'col-md-6':isNewCustomer}">
-        <ba-card cardTitle="Add New Customer" baCardClass="with-scroll" class="smart-table-container">
-            <span (click)="showNewCustomer($event)" class="ion-close-round addCustCloseIcon"></span>
-            <div class="row">
-                <div class="col-md-10">
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-danger">Save</button>
-                </div>
-            </div>
-            <br/>
-            <ngb-tabset class='dayend-tabset'>
-                <ngb-tab title="Customer Details">
-                    <ng-template ngbTabContent>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label>Branch</label>
-                                <select class="form-control" id="exampleSelect1">
-                                    <option>Cloudtail</option>
-                                    <option>Icebox</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Company</label>
-                                <select class="form-control" id="exampleSelect1">
-                                    <option>Cloudtail</option>
-                                    <option>Icebox</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Customer Name</label>
-                                <input type="text" class="form-control" id="customerName" placeholder="Customer Name" minlength="2" [(ngModel)]="customerObj.customerName"
-                                    name="customerName" #customerName="ngModel" required>
-                                <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)" class="error-message">
-                                    <i class="ion-android-alert showError"></i>
-                                    <div id="" *ngIf="customerName.errors.required" class="custom-tooltip bottom">Customer name is required</div>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Payment Type</label>
-                                <select class="form-control" id="exampleSelect1">
-                                    <option>Cloudtail</option>
-                                    <option>Icebox</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Address 1</label>
-                                <input type="text" class="form-control" id="address1" placeholder="Address Line 1" required maxlength="128" minlength="2"
-                                    [(ngModel)]="customerObj.address1" name="address1" #address1="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Address 2</label>
-                                <input type="text" class="form-control" id="address2" placeholder="Address Line 2" required maxlength="128" minlength="2"
-                                    [(ngModel)]="customerObj.address2" name="address2" #address="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Country</label>
-                                <input type="text" class="form-control" id="Country" placeholder="Country" required maxlength="128" minlength="2" [(ngModel)]="customerObj.country"
-                                    name="Country" #country="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>State</label>
-                                <input type="text" class="form-control" id="state" placeholder="State" required maxlength="128" minlength="2" [(ngModel)]="customerObj.state"
-                                    name="state" #state="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>City</label>
-                                <input type="text" class="form-control" id="city" placeholder="City" minlength="2" [(ngModel)]="customerObj.city" name="city"
-                                    #city="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Zip</label>
-                                <input type="number" class="form-control" id="zip" placeholder="Zip" minlength="2" [(ngModel)]="customerObj.zip" name="zip"
-                                    #zip="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Phone</label>
-                                <input [(ngModel)]="selectedUser.phone" type="number" class="form-control" id="phone" placeholder="Phone" minlength="2" [(ngModel)]="customerObj.phone"
-                                    name="phone" #phone="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Email</label>
-                                <input [(ngModel)]="selectedUser.email" type="email" class="form-control" id="email" placeholder="Email" minlength="2" [(ngModel)]="customerObj.email"
-                                    name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email="ngModel" required>
-                                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error-message">
-                                    <i class="ion-android-alert showError"></i>
-                                    <div id="" *ngIf="email.errors.required" class="custom-tooltip bottom">Email is required</div>
-                                    <div *ngIf="email.errors.pattern" class="custom-tooltip bottom">Please enter valid email</div>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Primary Contact</label>
-                                <input [(ngModel)]="selectedUser.primary" type="number" class="form-control" id="phone" placeholder="Primary Contact" minlength="2"
-                                    [(ngModel)]="customerObj.primary" name="primary" #primary="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Secondry Contact</label>
-                                <input [(ngModel)]="selectedUser.secondry" type="number" class="form-control" id="phone" placeholder="Secondry Contact" minlength="2"
-                                    [(ngModel)]="customerObj.secondry" name="secondry" #secondry="ngModel" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="exampleInputEmail1">Extension</label>
-                                <input [(ngModel)]="selectedUser.phone" type="number" class="form-control" id="phone" placeholder="Extension" minlength="2"
-                                    [(ngModel)]="customerObj.extension" name="extension" #extension="ngModel" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="vertical-center"></label>
-                                <ba-checkbox [ngModel]="" [label]="'PO Required?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="vertical-center"></label>
-                                <ba-checkbox [ngModel]="" [label]="'Print UPC?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="vertical-center"></label>
-                                <ba-checkbox [ngModel]="" [label]="'DEX Allowed?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="vertical-center"></label>
-                                <ba-checkbox [ngModel]="" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
-                            </div>
-                        </div>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Map Products">
-                    <ng-template ngbTabContent>
-                        <div class="row">
-                            <div class="form-group col-md-5">
-                                <b>All Products</b>
-                                <div class="vertical-scroll">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Products</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of products">
-                                                <td>{{ item.name }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-2 ioiIconsLR">
-                                <p><span class="ion-arrow-left-a"></span></p>
-                                <p><span class="ion-arrow-right-a"></span></p>
-                            </div>
-                            <div class="form-group col-md-5">
-                                <b>Mapped Products</b>
-                                <div class="vertical-scroll">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Products</th>
-                                                <th>Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let item of mappedProds">
-                                                <td>{{ item.name }}</td>
-                                                <td>
-                                                    <input type="number" class="form-control" #zip="ngModel" [(ngModel)]="item.price">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
-        </ba-card>
-    </div>
-</div> 
- -->
+        </div>
+        <br/>
+        <div class="vertical-scroll">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of smartTableData">
+                        <td>{{ item.customerNumber }}</td>
+                        <td>{{ item.customerName }}</td>
+                        <td>
+                            <input type="text" class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ba-card>
+</div> -->

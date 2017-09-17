@@ -28,35 +28,22 @@ export class UserManagementService extends SharedService {
     }
 
     createUser(data): Observable<User> {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        const options = new RequestOptions({ 'headers': headers });
-        return this.http.post('api/user', data, options).map((res => res.json()));
+        return this.http.post('api/user', data).map((res => res.json()));
     }
 
     updateUser(data, id): Observable<User> {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        const options = new RequestOptions({ 'headers': headers });
-        return this.http.put(`api/user?id=${id}`, data, options).map((res => res.json()));
+        return this.http.put(`api/user?id=${id}`, data).map((res => res.json()));
     }
 
     deleteUser(id): Observable<Response> {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        const options = new RequestOptions({ 'headers': headers });
-        //  return this.http.delete(`api/user?id=${id}`).map((res => res.json()));\
         return this.http.put(`api/user/deactivateuser?id=${id}`, {}).map((res => res.json()));
-
     }
 
     getRoles(): Observable<any> {
-        // change `tempHttp` to `http` once actual api is ready
         return this.http.get('api/roles').map((res) => res.json());
     }
 
     getDistributerAndCopacker(): Observable<any> {
-        // change `tempHttp` to `http` once actual api is ready
         return this.http.get('api/Distributor').map((res) => res.json());
     }
 

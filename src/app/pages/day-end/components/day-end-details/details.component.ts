@@ -131,6 +131,11 @@ export class DetailsComponent implements OnInit {
             this.notification.error("Error", err.Message);
         });
     }
+    
+    submitApproveReconciliation(){
+        this.saveReconciliation();
+    }
+
     addProductRow() {
         this.isNewlyAdded = true;
         if (!this.newlyAddedProduct) { return; }

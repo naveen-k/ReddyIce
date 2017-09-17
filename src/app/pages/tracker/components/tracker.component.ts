@@ -7,8 +7,8 @@ import { Component, HostListener, OnInit, ElementRef } from '@angular/core';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
-    templateUrl: 'tracker.component.html',
-    styleUrls: ['./tracker.component.scss'],
+  templateUrl: 'tracker.component.html',
+  styleUrls: ['./tracker.component.scss'],
 })
 export class TrackerComponent {
 
@@ -57,21 +57,21 @@ export class TrackerComponent {
   sortBranches() {
     // sort by name
     this.allBranches.sort(function (a, b) {
-        var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
-        var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        // names must be equal
-        return 0;
+      var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
+      var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      // names must be equal
+      return 0;
     });
-}
+  }
 
   ngAfterViewInit() {
-    let el = this._elementRef.nativeElement.querySelector('.google-maps');    
+    let el = this._elementRef.nativeElement.querySelector('.google-maps');
     // TODO: do not load this each time as we already have the library after first attempt
     GoogleMapsLoader.load((google) => {
       new google.maps.Map(el, {
@@ -82,6 +82,6 @@ export class TrackerComponent {
     });
   }
 
-  createNewTicket(event) {}
+  createNewTicket(event) { }
 
 }
