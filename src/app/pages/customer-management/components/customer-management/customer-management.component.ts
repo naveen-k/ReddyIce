@@ -1,6 +1,6 @@
 import { CustomerManagementService } from '../../customer-management.service';
 import { Component, OnInit } from '@angular/core';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
     templateUrl: './customer-management.component.html',
     styleUrls: ['./customer-management.component.scss'],
@@ -8,13 +8,17 @@ import { Component, OnInit } from '@angular/core';
 export class CustomerManagementComponent implements OnInit {
 
     customers: any[] = [];
+    singleCustomer: any = [];
 
-    constructor(protected service: CustomerManagementService) {}
+    constructor(
+        protected service: CustomerManagementService,
+        private route: ActivatedRoute,
+    ) { }
 
     ngOnInit() {
         this.getAllCustomers();
     }
-  
+
 
     getAllCustomers() {
         this.service.getAllCustomers().subscribe((res) => {
@@ -23,5 +27,16 @@ export class CustomerManagementComponent implements OnInit {
         }, (err) => {
             console.log(err);
         });
+    }
+
+    deleteCustomer(ID) {
+     //   debugger
+        const data = [{'CustomerType': '2', 'CustomerId': ID }];
+        this.service.deleteCustomer(data).subscribe((res) => {
+           console.log("Deleted");
+         }, (err) => {
+            console.log("Error");
+          });
+
     }
 }

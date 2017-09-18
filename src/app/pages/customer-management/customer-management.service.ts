@@ -29,7 +29,10 @@ export class CustomerManagementService extends SharedService {
         return res;
       });
   }
-
+  deleteCustomer(data) {
+    debugger
+    return this.http.delete('api/deleteexternalcustomer', data).map((res => res.json()));
+}
 
   smartTableData = [
     {

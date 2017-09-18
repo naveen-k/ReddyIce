@@ -65,13 +65,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let cust of customers | filter:customer.searchString | sort:customer.sortField:customer.isAsc">
+                <tr *ngFor="let cust of customers| filter:customer.searchString | sort:customer.sortField:customer.isAsc">
                     <td class="table-id" style="cursor: pointer">
                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="cust.IsRICustomer">
-                                    <span class="tooltiptext">Delete</span>
+                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
+                                    <span class="tooltiptext" >Delete</span>
                                 </i>
                     </td>
                     <td>{{ cust.CustomerId }}</td>
