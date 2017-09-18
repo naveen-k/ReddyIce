@@ -1,19 +1,27 @@
 <ba-card cardTitle="Create Customer" baCardClass="with-scroll" class="smart-table-container" #customer>
-    <div>
-        <button class="btn btn-danger pull-right">Save</button>
+    <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-2">
+            <button class="btn btn-danger pull-right" [routerLink]="['../']">Back</button>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-danger pull-right">Save</button>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-4 page-header">
             <div class="row">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
                 <div class="col-sm-7 padding-eater">
-                    <input id="typeahead-basic" type="text" [ngModel]="customer.CustomerNumber" class="form-control" placeholder="Customer Number" />
+                    <input id="typeahead-basic" type="text" [ngModel]="customer.CustomerNumber" class="form-control" placeholder="Customer Number"
+                    />
                 </div>
             </div>
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Name</label>
                 <div class="col-sm-7 padding-eater">
-                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Name" [ngModel]="customer.CustomerName"/>
+                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Name" [ngModel]="customer.CustomerName"
+                    />
                 </div>
             </div>
             <div class="row box-top-margin">
@@ -51,7 +59,7 @@
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
                 <div class="col-sm-7 padding-eater">
-                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Name" />
+                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Tax Percentage" />
                 </div>
             </div>
         </div>
@@ -92,7 +100,7 @@
                 <div class="row box-top-margin">
                     <div class="col-sm-6">
                         <div class="row">
-                            <label for="example-text-input" class="col-sm-2 col-form-label">Primary</label>
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Primary Contact</label>
                             <div class="col-sm-10">
                                 <input id="typeahead-basic" type="text" class="form-control" placeholder="Primary Contact" />
                             </div>

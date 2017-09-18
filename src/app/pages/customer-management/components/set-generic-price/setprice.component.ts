@@ -10,65 +10,33 @@ import { LocalDataSource } from 'ng2-smart-table';
 })
 
 export class SetPriceComponent implements OnInit {
-
-    constructor(protected service: CustomerManagementService) {
-        this.mappedProds = service.mappedProds;
-        this.products = service.products;
-    }
-
-    ngOnInit() { }
-
-    settings2 = {
-        add: {
-            addButtonContent: '',
-        },
-        edit: {
-            editButtonContent: '<i class="ion-edit"></i>',
-            saveButtonContent: '<i class="ion-checkmark"></i>',
-            cancelButtonContent: '<i class="ion-close"></i>',
-        },
-        delete: {
-            deleteButtonContent: '<i class="ion-trash-a"></i>',
-            confirmDelete: true,
-        },
-        columns: {
-            name: {
-                title: 'Products',
-                type: 'string',
-            },
-        },
-    };
-
-    settings3 = {
-        add: {
-            addButtonContent: '',
-        },
-        edit: {
-            editButtonContent: '<i class="ion-edit"></i>',
-            saveButtonContent: '<i class="ion-checkmark"></i>',
-            cancelButtonContent: '<i class="ion-close"></i>',
-        },
-        delete: {
-            deleteButtonContent: '<i class="ion-trash-a"></i>',
-            confirmDelete: true,
-        },
-        columns: {
-            name: {
-                title: 'Products',
-                type: 'string',
-            },
-        },
-    };
-    source2: LocalDataSource = new LocalDataSource();
-    source3: LocalDataSource = new LocalDataSource();
     smartTableData: any;
     products: any;
     mappedProds: any;
     isNewCustomer: boolean = false;
     setPrice: boolean = false;
     customerObj: any = {};
+    externalProducts: any = [];
 
-   
+    constructor(protected service: CustomerManagementService) {
+        this.mappedProds = service.mappedProds;
+        this.products = service.products;
+    }
+
+    ngOnInit() {
+        this.getExternalProducts();
+
+    }
+
+    getExternalProducts() {
+        this.service.getExternalProducts().subscribe((res) => {
+            this.externalProducts = res;
+            console.log(this.externalProducts);
+        }, (err) => {
+            console.log(err);
+        });
+    }
+
     showNewCustomer(newCustomer) {
         this.isNewCustomer = !this.isNewCustomer;
         this.setPrice = false;

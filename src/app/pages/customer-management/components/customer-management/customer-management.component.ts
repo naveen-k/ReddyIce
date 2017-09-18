@@ -18,7 +18,7 @@ export class CustomerManagementComponent implements OnInit {
 
     getAllCustomers() {
         this.service.getAllCustomers().subscribe((res) => {
-            // this.customers = res;
+            this.customers = res;
             // console.log(this.customers);
         }, (err) => {
             console.log(err);

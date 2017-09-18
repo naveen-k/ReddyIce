@@ -4,9 +4,7 @@
     margin: 20px 0;
 };
 
-select.form-control:not([size]):not([multiple]) {
-    height: calc(2.25rem + -1px);
-}
+
 
 .ioiIconsLR {
     padding-left: 48px;
@@ -28,10 +26,6 @@ select.form-control:not([size]):not([multiple]) {
     position: absolute;
     right: 165px;
     top: 4px;
-}
-
-.pull-right {
-    float: right;
 }
 
 .showError {
@@ -91,3 +85,4 @@ select.form-control:not([size]):not([multiple]) {
   .model-top-margin{
     margin-top:78px;
   }
+ 

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { SharedService } from '../../shared/shared.service';
 import { UserService } from '../../shared/user.service';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
@@ -6,22 +6,29 @@ import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
 
 @Injectable()
-export class CustomerManagementService extends SharedService{
+export class CustomerManagementService extends SharedService {
 
   constructor(
-   protected http: HttpService,
+    protected http: HttpService,
     private userService: UserService,
-  ){
-      super(http);
-    }
+  ) {
+    super(http);
+  }
 
-    getAllCustomers() {
-      return this.http.get(`api/customer/getexternalcustomer`)
+  getAllCustomers() {
+    return this.http.get(`api/customer/getexternalcustomer`)
       .map((res) => res.json()).map((res) => {
-          return res;
+        return res;
       });
 
-    }
+  }
+
+  getExternalProducts() {
+    return this.http.get(`api/customer/getexternalproductlist`)
+      .map((res) => res.json()).map((res) => {
+        return res;
+      });
+  }
 
 
   smartTableData = [

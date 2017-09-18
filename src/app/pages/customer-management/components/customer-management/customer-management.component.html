@@ -58,9 +58,9 @@
                     </th>
                     <th>
                         <span style="cursor:pointer;" (click)="customer.sortField = 'contact';customer.isAsc=!customer.isAsc;">
-                                   IsDex
-                                    <i *ngIf="(customer.sortField == 'contact')" [ngClass]="(customer.isAsc && customer.sortField == 'contact' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
-                                </span>
+                            IsDex
+                            <i *ngIf="(customer.sortField == 'contact')" [ngClass]="(customer.isAsc && customer.sortField == 'contact' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                 </tr>
             </thead>
@@ -70,7 +70,7 @@
                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                        <i class="ion-trash-a custom-tooltip-ion">
+                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Delete</span>
                                 </i>
                     </td>
