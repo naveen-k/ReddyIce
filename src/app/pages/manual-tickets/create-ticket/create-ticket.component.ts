@@ -867,6 +867,12 @@ export class CreateTicketComponent implements OnInit {
       this.inventoryCount = 0;
       this.notification.error('All fields are mandatory for the products in the product list for PBM Inventory Customer type!!!');
       return false;
+    } else if (this.ticket.CashAmount && this.ticket.CashAmount.toString().includes('-')) {
+      this.notification.error('Cash Amount cannot contain -');
+      return false;
+    } else if (this.ticket.CheckAmount && this.ticket.CheckAmount.toString().includes('-')) {
+      this.notification.error('Check Amount cannot contain -');
+      return false;
     } else if (this.ticket.CustomerType === 20 && this.customer.PaymentType !== 19) {
       if (this.ticket.CashAmount || this.ticket.CashAmount === 0) {
         return true;
