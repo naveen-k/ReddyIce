@@ -10,6 +10,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { Pages } from './pages.component';
 
+
+
 @NgModule({
   imports: [CommonModule, AppTranslationModule, NgbModule, NgaModule, routing, SharedModule],
   declarations: [Pages, DASHBOARD_PIPE]
