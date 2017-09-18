@@ -874,12 +874,14 @@ export class CreateTicketComponent implements OnInit {
         if (this.ticket.CheckAmount || this.ticket.CheckAmount === 0) {
           return true;
         } else {
-          this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
-          return false;
+          if (this.ticket.TicketTypeID === 22) {
+            this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
+            return false;
+          } else {
+            return true;
+          }
         }
       }
-    } else if (this.ticket.CustomerType === 20) {
-      this.cashAmountChangeHandler();
     } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && this.ticket.IsSaleTicket) {
       if (this.mreadingCheck() > 0) {
         this.mreadingCount = 0;

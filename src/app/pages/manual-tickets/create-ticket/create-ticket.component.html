@@ -147,7 +147,7 @@
             <div class="row padding">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Ticket#</label>
                 <div class="col-sm-7">
-                    <input type="number" min="1" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber"
+                    <input type="number" min="1" oninput="validity.valid||(value='');" onKeyPress="if(this.value.length==10) return false;" class="form-control" [(ngModel)]="ticket.TicketNumber"
                         id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()" name="TicketNumber"
                         (ngModelChange)="isFormDirty=true;" #TicketNumber="ngModel" required [disabled]="isReadOnly">
                     <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
