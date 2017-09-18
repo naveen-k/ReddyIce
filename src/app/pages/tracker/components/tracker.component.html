@@ -5,7 +5,7 @@
                 <div class="col-sm-3">
                     <label>Select Date</label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="searchObj.CreatedDate" [maxDate]="todaysDate"
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tripFilterOption.tripDate" [maxDate]="todaysDate"
                             ngbDatepicker #d="ngbDatepicker" disabled>
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
@@ -16,23 +16,23 @@
                     <label>Select Branch</label>
                     <select class="form-control" id="exampleSelect1">
                         <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
-                            {{obj.BranchCode}}-{{obj.BranchName}}
+                            {{obj.BranchCode}} - {{obj.BranchName}}
                         </option>
                     </select>
                 </div>
                 <div class="col-sm-3">
                     <label>Select Route</label>
                     <select class="form-control">
-                        <option *ngFor="" [value]="obj.DistributorID">
-                            
+                        <option *ngFor="let route of trips">
+                            {{route.RouteNumber}}
                         </option>
                     </select>
                 </div>
                 <div class="col-sm-3">
                     <label>Select Trip</label>
                     <select class="form-control">
-                        <option *ngFor="" [value]="obj.DistributorID">
-                            
+                        <option *ngFor="let trip of trips">
+                            {{trip.BranchCode}} - {{trip.BranchName}}
                         </option>
                     </select>
                 </div>
@@ -120,7 +120,7 @@
                 <!-- <div class="col-md-8" style="overflow-y: hidden;height: 255px;">
                     <img src="../../../assets/img/Tracker-Map.PNG">
                 </div> -->
-                <div class="col-md-8" style="overflow-y: hidden;height: 255px;">
+                <div class="col-md-8" style="overflow-y: hidden;height: 334px;">
                     <ba-card cardTitle="Google Maps">
                         <div class="google-maps"></div>
                     </ba-card>

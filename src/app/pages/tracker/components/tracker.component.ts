@@ -13,10 +13,18 @@ import { NotificationsService } from 'angular2-notifications';
 export class TrackerComponent {
 
   todaysDate: any;
-  searchObj: any = {};
   allBranches: any;
   allTracks: any = {};
+  allTrips: any = {};
   showSpinner: boolean = false;
+  trips: any = [];
+  selectedDate: any = '2017-08-27';
+  tripFilterOption: any = {
+    uId: "0",
+    tripDate: this.selectedDate,
+    branchId: '1', isForAll: true
+  };
+  userId = localStorage.getItem('userId');
 
   constructor(
     private _elementRef: ElementRef,
@@ -26,7 +34,7 @@ export class TrackerComponent {
 
   ngOnInit() {
     const now = new Date();
-    this.searchObj['CreatedDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+    this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     this.loadBranches();
@@ -38,11 +46,12 @@ export class TrackerComponent {
         'customer': 'ABC',
       },
     ];
+    this.loadTrips();
   }
 
   loadBranches() {
-    const userId = localStorage.getItem('userId');
-    this.service.getBranches(userId).subscribe((res) => {
+    
+    this.service.getBranches(this.userId).subscribe((res) => {
       this.allBranches = res;
 
       // Remove 'All branch' object
@@ -70,18 +79,98 @@ export class TrackerComponent {
     });
   }
 
+  loadTrips() {
+    this.service.getTrips(this.userId, this.selectedDate,
+      this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
+        if (typeof res == 'object') {
+            this.trips = res.Trips;
+        }
+        else {
+            this.trips = [];
+        }
+
+    }, (error) => {
+        console.log(error);
+        this.trips = [];
+    });
+  }
+
   ngAfterViewInit() {
     let el = this._elementRef.nativeElement.querySelector('.google-maps');
     // TODO: do not load this each time as we already have the library after first attempt
     GoogleMapsLoader.load((google) => {
-      new google.maps.Map(el, {
-        center: new google.maps.LatLng(44.5403, -78.5463),
-        zoom: 8,
+      var map = new google.maps.Map(el, {
+        center: new google.maps.LatLng(32.7767, -96.7970),
+        zoom: 10,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       });
+      var marker1 = new google.maps.Marker({
+        position: new google.maps.LatLng(32.7767, -96.7970),
+        map: map
+      });
+      var marker2 = new google.maps.Marker({
+        position: new google.maps.LatLng(32.8767, -96.8970),
+        map: map
+      });
+      // var transitLayer = new google.maps.TransitLayer();
+      // transitLayer.setMap(map);
+      ////////////////  
+      this.directionsDisplay = new google.maps.DirectionsRenderer();
+      this.directionsDisplay.setMap(map);
+      this.directionsService = new google.maps.DirectionsService();
+      var start = new google.maps.LatLng(32.7767, -96.7970);
+      var end = new google.maps.LatLng(32.8767, -96.8970);
+      var bounds = new google.maps.LatLngBounds();
+      bounds.extend(start);
+      bounds.extend(end);
+      map.fitBounds(bounds);
+      this.request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+      let mapObject = this;
+      new google.maps.DirectionsService().route(this.request, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          mapObject.directionsDisplay.setDirections(response);
+          mapObject.directionsDisplay.setMap(map);
+        } else {
+          alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+        }
+      });
+
+      ////////////////
     });
+    this.calcRoute();
   }
 
-  createNewTicket(event) { }
+  // trying to draw route
+  directionsDisplay;
+  directionsService;
+  request = {};
 
+  calcRoute() {
+    GoogleMapsLoader.load((google) => {
+      // this.directionsService = new google.maps.DirectionsService();
+      // var start = new google.maps.LatLng(32.7767, -96.7970);
+      // var end = new google.maps.LatLng(32.8767, -96.8970);
+      // var bounds = new google.maps.LatLngBounds();
+      // bounds.extend(start);
+      // bounds.extend(end);
+      // this.mapDraw.fitBounds(bounds);
+      // this.request = {
+      //   origin: start,
+      //   destination: end,
+      //   travelMode: google.maps.TravelMode.DRIVING
+      // };
+      // this.directionsService.route(this.request, function (response, status) {
+      //   if (status == google.maps.DirectionsStatus.OK) {
+      //       this.directionsDisplay.setDirections(response);
+      //       this.directionsDisplay.setMap(this.mapDraw);
+      //   } else {
+      //       alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+      //   }
+      // });
+    });
+  }
 }
