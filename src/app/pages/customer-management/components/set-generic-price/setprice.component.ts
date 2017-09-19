@@ -36,7 +36,10 @@ export class SetPriceComponent implements OnInit {
             console.log(err);
         });
     }
-
+   setGenericPrice(){
+       console.log(this.externalProducts);
+       
+   }
     showNewCustomer(newCustomer) {
         this.isNewCustomer = !this.isNewCustomer;
         this.setPrice = false;
