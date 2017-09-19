@@ -17,7 +17,7 @@
       </div> -->
       <div class="row" style="min-height:51px;">
         <div class="col-sm-4 col-md-4">
-          <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
+          <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString"  placeholder="Search">
         </div>
         <div class="col-sm-2" [hidden]="rightCardOpen">
           <select class="form-control" [(ngModel)]="userType" (ngModelChange)="changeUserTypeHandler();">

@@ -29,10 +29,16 @@ export class CustomerManagementService extends SharedService {
         return res;
       });
   }
+  setGenericPrice(data) {
+    return this.http.post(`api/setgenricpriceforexternalcustomer`, data)
+      .map((res) => res.json()).map((res) => {
+        return res;
+      });
+  }
   deleteCustomer(data) {
-    debugger
+
     return this.http.delete('api/deleteexternalcustomer', data).map((res => res.json()));
-}
+  }
 
   smartTableData = [
     {

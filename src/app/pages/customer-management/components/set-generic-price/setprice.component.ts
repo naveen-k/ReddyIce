@@ -3,6 +3,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../shared/user.service';
 import { LocalDataSource } from 'ng2-smart-table';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 
 @Component({
     templateUrl: './setprice.component.html',
@@ -18,7 +19,8 @@ export class SetPriceComponent implements OnInit {
     customerObj: any = {};
     externalProducts: any = [];
 
-    constructor(protected service: CustomerManagementService) {
+    constructor(protected service: CustomerManagementService, private router: Router, public activatedRoute: ActivatedRoute,
+        protected route: Router) {
         this.mappedProds = service.mappedProds;
         this.products = service.products;
     }
@@ -36,14 +38,24 @@ export class SetPriceComponent implements OnInit {
             console.log(err);
         });
     }
-   setGenericPrice(){
-       console.log(this.externalProducts);
-       
-   }
+
+    setGenericPrice() {
+        this.service.setGenericPrice(this.externalProducts).subscribe((res) => {
+            console.log("Data Sent");
+            this.service.getAllCustomers();
+            this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
+        }, (err) => {
+            console.log("Error Sending Data");
+        });
+    }
+
+
     showNewCustomer(newCustomer) {
         this.isNewCustomer = !this.isNewCustomer;
         this.setPrice = false;
     }
+
+    
     showPrice() {
         this.setPrice = !this.setPrice;
         this.isNewCustomer = false;
