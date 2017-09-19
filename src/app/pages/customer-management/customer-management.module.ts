@@ -10,6 +10,7 @@ import { CustomerManagementComponent } from './components/customer-management/cu
 import { NgModule } from '@angular/core';
 import { CustomerContainerComponent } from './components/customer-management-container/customer-management-container.component';
 import { SetPriceComponent } from './components/set-generic-price/setprice.component';
+
 const routes: Routes = [
     {
         path: '',

@@ -3,7 +3,7 @@
         <ba-card cardTitle="Ticket Details" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" (click)="submitTickets()">Approve</button>
-                <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../list']">Back</button>
+                <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row page-header">
                 <div class=" col-md-12">
@@ -142,7 +142,7 @@
                                 <td>Drayage</td>
                                 <td>BuyBack</td>
                             </tr>
-                            <tr *ngIf="tripData.TripTicketList.length < 1" class="text-center">
+                            <tr *ngIf="tripData.TripTicketList?.length < 1" class="text-center">
                                 <td colspan="10">No data found</td>
                             </tr>
                         </tbody>

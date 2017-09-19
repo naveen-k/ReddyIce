@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12">
-        <ba-card cardTitle="Trip List" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
+        <ba-card cardTitle="{{logedInUser.IsRIInternal?'Trip List':'Trip List for ' + logedInUser.FirstName}}" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="row">
                 <div class="col-md-6">
                     <label><b> Select Date </b></label>
@@ -12,7 +12,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6"  *ngIf="logedInUser.IsRIInternal">
                     <label><b>Select Branch</b></label>
                     <select class="form-control" [(ngModel)]='filter.userBranch' (change)="selectionchangeHandler()">
                          <option *ngFor="let branch of branches" [value] = 'branch.BranchID' ><span *ngIf="branch.BranchID != '1'"> {{branch.BranchCode}} - {{branch.BranchName}}</span>
@@ -44,13 +44,13 @@
                     <thead>
                         <tr>
                             <th>Actions</th>
-                            <th>
+                            <th *ngIf="logedInUser.IsRIInternal">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'RouteNumber';customer.isAsc=!customer.isAsc;">
                                     Route Number
                                      <i *ngIf="(customer.sortField == 'RouteNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'RouteNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <th>
+                            <th *ngIf="logedInUser.IsRIInternal">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                                     Branch
                                      <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -104,9 +104,9 @@
                                     <span class="tooltiptext">Edit</span>
                                 </i>
                             </td>
-                            <td *ngIf="!item.RouteNumber">Unplanned</td>
-                            <td *ngIf="item.RouteNumber">{{item.RouteNumber}}</td>
-                            <td>{{item.BranchCode}}-{{item.BranchName}}</td>
+                           
+                            <td *ngIf="logedInUser.IsRIInternal">{{item.RouteNumber?item.RouteNumber :'Unplanned'}}</td>
+                            <td  *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
                             <td>{{item.TripCode}}</td>
                             <td class="text-right">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>

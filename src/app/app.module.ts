@@ -18,7 +18,8 @@ import { AppState, InternalStateType } from './app.service';
 import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
-import { DualListBoxModule } from 'ng2-dual-list-box';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
+
 
 
 // Application wide providers
@@ -40,6 +41,7 @@ export type StoreType = {
   bootstrap: [AppComponent],
   declarations: [
     AppComponent,
+  
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -49,12 +51,13 @@ export type StoreType = {
     ReactiveFormsModule,
     NgaModule.forRoot(),
     NgbModule.forRoot(),
-    DualListBoxModule.forRoot(),
+    AngularDualListBoxModule,
     PagesModule,
     routing,
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot(),
   ],
+  
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS,
   ],
