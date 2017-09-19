@@ -6,7 +6,7 @@
                     <label>Select Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tripFilterOption.tripDate" [maxDate]="todaysDate"
-                            ngbDatepicker #d="ngbDatepicker" disabled>
+                        (ngModelChange)="dateChangeHandler()" ngbDatepicker #d="ngbDatepicker" disabled>
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label>Select Branch</label>
-                    <select class="form-control" id="exampleSelect1">
+                    <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="branchChangeHandler()">
                         <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
                             {{obj.BranchCode}} - {{obj.BranchName}}
                         </option>
@@ -103,13 +103,13 @@
                             </thead>
                             <tbody>
                                 <!-- <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc"> -->
-                                <tr *ngFor="let item of allTracks">
-                                    <td>{{item.planned}}</td>
+                                <tr *ngFor="let item of trips">
+                                    <td>{{item.PlannedOrderNumber}}</td>
                                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
-                                        {{item.actual}}
+                                        {{item.ActualOrderNumber}}
                                     </td>
-                                    <td>{{item.dateTime}}</td>
-                                    <td>{{item.customer}}</td>
+                                    <td>{{item.TripStartDate}}</td>
+                                    <td>{{item.TripTicketList[0].CustomerName}}</td>
                                 </tr>
                             </tbody>
                         </table>

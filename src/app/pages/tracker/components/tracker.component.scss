@@ -40,3 +40,7 @@
 .center {
     text-align: center;
 }
+
+.input-group .form-control {
+    z-index: 0 !important;
+}
