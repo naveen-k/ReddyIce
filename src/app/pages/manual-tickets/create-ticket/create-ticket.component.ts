@@ -102,7 +102,7 @@ export class CreateTicketComponent implements OnInit {
       }).slice(0, 10);
     })
 
-  maxDate: {};
+  date = { maxDate: {}, minDate: {} };
 
   constructor(
     protected service: ManualTicketService,
@@ -116,7 +116,7 @@ export class CreateTicketComponent implements OnInit {
 
   ngOnInit() {
     const now = new Date();
-    this.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+    this.date.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     // Initialize user object with current logged In user;
     this.user = this.userService.getUser();
@@ -170,12 +170,20 @@ export class CreateTicketComponent implements OnInit {
     this.tripId = this.activatedRoute.snapshot.params['tripId'];
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
+    const sdate = new Date(queryParams.sdate);
+    const edate = new Date(queryParams.edate);
+
+    this.date.minDate = { year: sdate.getFullYear(), month: sdate.getMonth() + 1, day: sdate.getDate() };
+    this.date.maxDate = { year: edate.getFullYear(), month: edate.getMonth() + 1, day: edate.getDate() }
+
+    this.ticket.DeliveryDate = this.date.minDate;
+
     this.ticket.BranchID = +queryParams.branchId; // Set branchId
     this.ticket.isUserTypeDistributor = !!(+queryParams.isDistributor); // Set User type
     if (this.ticket.isUserTypeDistributor) {
-      this.ticket.DistributorCopackerID = +queryParams.driverid;
+      this.ticket.DistributorCopackerID = +queryParams.driverId;
     } else {
-      this.ticket.UserID = +queryParams.driverid;
+      this.ticket.UserID = +queryParams.driverId;
     }
   }
 
@@ -701,6 +709,8 @@ export class CreateTicketComponent implements OnInit {
     if (this.tripMode) {
       clonedObject.TripID = this.tripId;
     }
+
+    clonedObject.IsPaperTicket = true;
 
     return clonedObject;
   }

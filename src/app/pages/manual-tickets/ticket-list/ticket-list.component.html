@@ -1,6 +1,6 @@
 <ba-card cardTitle="Manual Ticket List" baCardClass="with-scroll" class="smart-table-container" #customer>
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <label>Select Date</label>
             <div class="input-group">
                 <input class="form-control" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets();'
@@ -19,14 +19,14 @@
                 </option>
             </select>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <label>Select Driver Type</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                 <option [value]="'Internal'">RI Driver</option>
-                <option [value]="'External'">Distributor/CoPacker</option>
+                <option [value]="'External'">Dist./CoPacker</option>
             </select>
         </div>
-        <div class="col-sm-3" [hidden]="searchObj.userType!='Internal'">
+        <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler()">
                 <option *ngFor="let obj of drivers" [value]="obj.UserId">
@@ -34,23 +34,22 @@
                 </option>
             </select>
         </div>
-        <div class="col-sm-3" [hidden]="searchObj.userType=='Internal'">
-            <label>Distributor/CoPacker</label>
+        <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
+            <label>Dist./CoPacker</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.DistributorID" (ngModelChange)="userChangeHandler()">
                 <option *ngFor="let obj of distributors" [value]="obj.DistributorID">
                     {{obj.DistributorName}}
                 </option>
             </select>
         </div>
+        <div class="col-sm-3">
+            <label>Search</label>
+            <input type="text" class="form-control" id="input01" [(ngModel)]="searchString" placeholder="Search">
+        </div>
         <div class="col-sm-2 createTicketBtn">
             <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right">
                 Create Ticket
             </button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4 col-md-4">
-            <input type="text" class="form-control" id="input01" [(ngModel)]="searchString" placeholder="Search">
         </div>
     </div>
     <div class="table-container">

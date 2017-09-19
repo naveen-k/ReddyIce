@@ -10,37 +10,54 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class TicketDetailsComponent implements OnInit {
 
-    selectedtrip: any = {};
-    TripData: any;
+    // selectedtrip: any = {};
+    // TripData: any;
     tripId: number;
-    tickDto: any = { TicketID: [], status: 1 };
+    // tickDto: any = { TicketID: [], status: 1 };
 
-    constructor(private service: DayEndService, private route:ActivatedRoute) {
+    tripData: any = {};
 
+    constructor(private service: DayEndService, private route: ActivatedRoute) {}
+    ngOnInit() {
         this.tripId = +this.route.snapshot.params['tripId'];
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
-            this.TripData = res;
-            this.selectedtrip = res.Tripdetail[0];
-            console.log(this.TripData);
+            this.tripData = res.Tripdetail[0];
+            this.tripData.TripTicketList.forEach(ticket => {
+                ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
+            });
+            console.log(this.tripData);
         }, (err) => {
 
         });
-
     }
-    ngOnInit() {
 
-    }
-    submitTickets() {
-        this.tickDto.TicketID = [];
-        const limit = this.TripData.Tripdetail[0].TripTicketList.length;
-        if (limit > 0) {
-            for (let i = 0; i < limit; i++) {
-                this.tickDto.TicketID.push(this.TripData.Tripdetail[0].TripTicketList[i].TicketNumber);
-            }
-            console.log(this.tickDto);
-            this.service.submitTickets(this.tickDto).subscribe((res) => { }, (err) => { });
+    tripStatus(statusCode) {
+        let statusText = '';
+        switch (statusCode) {
+            case 23:
+                statusText = "Draft";
+                break;
+            case 24:
+                statusText = "Submitted";
+                break;
+            case 25:
+                statusText = "Approved";
+                break;
+            default:
+                statusText = statusCode;
         }
-
-
+        return statusText;
+    }
+    
+    submitTickets() {
+        // this.tickDto.TicketID = [];
+        // const limit = this.TripData.Tripdetail[0].TripTicketList.length;
+        // if (limit > 0) {
+        //     for (let i = 0; i < limit; i++) {
+        //         this.tickDto.TicketID.push(this.TripData.Tripdetail[0].TripTicketList[i].TicketNumber);
+        //     }
+        //     console.log(this.tickDto);
+        //     this.service.submitTickets(this.tickDto).subscribe((res) => { }, (err) => { });
+        // }
     }
 }

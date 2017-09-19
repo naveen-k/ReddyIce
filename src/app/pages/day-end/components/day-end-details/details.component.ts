@@ -24,6 +24,25 @@ export class DetailsComponent implements OnInit {
     newlyAddedProduct: any = [];
     selectedProduct: object;
 
+    totalUnit: any = {
+        TotalLoad: 0,
+        TotalLoadActual: 0,
+        TotalReturn: 0,
+        TotalReturnActual: 0,
+        TotalTruckDamage: 0,
+        TotalTruckDamageActual: 0,
+        TotalCustomerDamage: 0,
+        TotalCustomerDamageActual: 0,
+        TotalManualTickets: 0,
+        TotalSale: 0,
+        TotalOverShort: 0
+    };
+
+    ticketTotal: any = {
+        invoiceTotal: 0,
+        receivedTotal: 0
+    };
+
 
     constructor(
         private service: DayEndService,
@@ -50,6 +69,7 @@ export class DetailsComponent implements OnInit {
         }
         return statusText;
     }
+
     ngOnInit() {
         this.logedInUser = this.userService.getUser();
         this.tripId = +this.route.snapshot.params['tripId'];
@@ -73,6 +93,10 @@ export class DetailsComponent implements OnInit {
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.ticketDetails = res;
             this.tripData = res.Tripdetail[0];
+            this.tripData.TripTicketList.forEach(ticket => {
+                ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
+            });
+            this.calculateTotalTicketAmount();
         }, (err) => {
 
         });
@@ -95,6 +119,7 @@ export class DetailsComponent implements OnInit {
                 });
             }
             this.loadProduct();
+            this.calculateTotalUnitReconcilation();
         }, (err) => {
             console.log(err);
         });
@@ -102,6 +127,7 @@ export class DetailsComponent implements OnInit {
 
     unitReconChange(item) {
         item.OverShort = (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale) - item.Load1Quantity;
+        this.calculateTotalUnitReconcilation();
     }
 
     saveReconciliation() {
@@ -131,8 +157,8 @@ export class DetailsComponent implements OnInit {
             this.notification.error("Error", err.Message);
         });
     }
-    
-    submitApproveReconciliation(){
+
+    submitApproveReconciliation() {
         this.saveReconciliation();
     }
 
@@ -141,6 +167,7 @@ export class DetailsComponent implements OnInit {
         if (!this.newlyAddedProduct) { return; }
         this.newlyAddedProduct.push({} as TripProduct);
     }
+
     loadProduct() {
         this.service.getProductList().subscribe((res) => {
             // Filterout already listed products
@@ -151,6 +178,7 @@ export class DetailsComponent implements OnInit {
 
         });
     }
+
     // intializing other manadatory field = 0 which are not taken as input. 
     resetField(index) {
         this.newlyAddedProduct[index].CustomerDamage = 0;
@@ -161,20 +189,48 @@ export class DetailsComponent implements OnInit {
         this.newlyAddedProduct[index].ManualTicket = 0;
         this.newlyAddedProduct[index].OverShort = 0;
         this.newlyAddedProduct[index].Returns = 0,
-        this.newlyAddedProduct[index].Sale = 0;
+            this.newlyAddedProduct[index].Sale = 0;
         this.newlyAddedProduct[index].TruckDamage = 0;
         this.newlyAddedProduct[index].TripID = this.tripId;
-       // TripID: this.tripId
-
     }
+
     productChangeHandler(productName: any, arrayIndex: any): void {
         const productIndex = this.productList.map((o) => o.ProductName).indexOf(productName);
         this.newlyAddedProduct[arrayIndex].ProducID = this.productList[productIndex].ProductID;
-        this.resetField(arrayIndex); 
-      }
+        this.resetField(arrayIndex);
+    }
+
     // remove newly added product from Array
-    removeProduct(index){
-             this.newlyAddedProduct.splice(index, 1);
+    removeProduct(index) {
+        this.newlyAddedProduct.splice(index, 1);
+    }
+
+    // Calclation total unit reconciliation 
+    calculateTotalUnitReconcilation() {
+        const u = this.totalUnit;
+        u.TotalLoad = u.TotalLoadActual = u.TotalReturn = u.TotalReturnActual = u.TotalTruckDamage = u.TotalTruckDamageActual = u.TotalCustomerDamage = u.TotalCustomerDamageActual = u.TotalManualTickets = u.TotalSale = u.TotalOverShort = 0;
+        this.unitReconciliation.concat(this.newlyAddedProduct).forEach(u => {
+            this.totalUnit.TotalLoad += +u.Load;
+            this.totalUnit.TotalLoadActual += +u.Load1Quantity || 0;
+            this.totalUnit.TotalReturn += +u.Returns;
+            this.totalUnit.TotalReturnActual += +u.ReturnQuantity || 0;
+            this.totalUnit.TotalTruckDamage += +u.TruckDamage;
+            this.totalUnit.TotalTruckDamageActual += +u.DamageQuantity || 0;
+            this.totalUnit.TotalCustomerDamage += +u.CustomerDamage;
+            this.totalUnit.TotalCustomerDamageActual += +u.CustomerDamageDRV || 0;
+            this.totalUnit.TotalManualTickets += +u.ManualTicket;
+            this.totalUnit.TotalSale += +u.Sale;
+            this.totalUnit.TotalOverShort += +u.OverShort;
+        });
+    }
+
+    //
+    calculateTotalTicketAmount() {
+        this.ticketTotal.invoiceTotal = this.ticketTotal.receivedTotal = 0;
+        this.tripData.TripTicketList.forEach(t => {
+            this.ticketTotal.invoiceTotal += t.TotalSale;
+            this.ticketTotal.receivedTotal += (!t.CheckAmount && !t.CashAmount) ? t.TotalSale : t.CheckAmount + t.CashAmount;
+        });
     }
 }
 

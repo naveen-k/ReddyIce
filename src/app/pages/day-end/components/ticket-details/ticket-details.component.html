@@ -5,146 +5,149 @@
                 <button class="btn btn-danger pull-right" (click)="submitTickets()">Approve</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../list']">Back</button>
             </div>
-            
             <div class="row page-header">
-                <div class="col-md-4">
-                   <b> <span>Driver :</span></b>
-                    <label>{{selectedtrip?.DriverName}}</label>
-                </div>
-                <div class="col-md-4">
-                    <div>
-                       <b> <span>Status :</span></b>
-                        <label>{{selectedtrip?.TripStatusID}}</label>
+                <div class=" col-md-12">
+                    <div class="row page-header bold-head">
+                        <div class="col-md-3">
+                            <span>Branch:</span>
+                            <label>{{tripData.BranchID}} - {{tripData.BranchName}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <span>Route:</span>
+                            <label>{{tripData.IsUnplanned?'Unplanned':tripData.RouteNumber}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <span>Driver:</span>
+                            <label>{{tripData.DriverName}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <span>HH Day End:</span>
+                            <label>{{tripData.IsClosed?'Yes':'No'}}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <span>Trip Start Date:</span>
+                            <label>{{tripData.TripStartDate|date}}</label>
+                        </div>
+                    </div>
+                    <div class="row page-header bold-head">
+                        <div class="col-md-3">
+                            <span>Trip Code:</span>
+                            <label>{{tripData.TripCode}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <span>Truck:</span>
+                            <label>{{tripData.TruckID}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <div>
+                                <span>Status:</span>
+                                <label>{{tripStatus(tripData.TripStatusID)}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <span>ERP Processed:</span>
+                            <label>{{tripData.IsProcessed?'Yes':'No'}}</label>
+                        </div>
+                        <div class="col-md-3">
+                            <span>Trip End Date:</span>
+                            <label>{{tripData.TripEndDate|date}}</label>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                   <b> <span>Date :</span></b>
-                    <label>{{selectedtrip.Created | date}}</label>
-                </div>
-                
             </div>
             <div class="row page-header">
-                <div class="col-md-12">
+                <div class="col-sm-12">
                     <h3>Ticket Details</h3>
                 </div>
-                <div class="col-md-12 page-header">
-                    <!-- <ng2-smart-table [settings]="settings3" [source]="source3" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table> -->
-                    <div class="vertical-scroll">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'Customerid';customer.isAsc=!customer.isAsc;">
-                                  Customer 
-                                     <i *ngIf="(customer.sortField == 'Customerid')" [ngClass]="(customer.isAsc && customer.sortField == 'Customerid' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
-                                    </th>
-                                  
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'ISRICustomer';customer.isAsc=!customer.isAsc;">
+                <div class="col-sm-12 page-header">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'Customerid';customer.isAsc=!customer.isAsc;">
+                                        Customer 
+                                            <i *ngIf="(customer.sortField == 'Customerid')" [ngClass]="(customer.isAsc && customer.sortField == 'Customerid' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                        </span>
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'ISRICustomer';customer.isAsc=!customer.isAsc;">
                                   RI Customer?
                                      <i *ngIf="(customer.sortField == 'ISRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'ISRICustomer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
                                     Ticket Number
                                      <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'InVoiceAmount';customer.isAsc=!customer.isAsc;">
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'InVoiceAmount';customer.isAsc=!customer.isAsc;">
                                     Invoice Amount
                                      <i *ngIf="(customer.sortField === 'InVoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'InVoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
                                     Cash
                                      <i *ngIf="(customer.sortField === 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'check';customer.isAsc=!customer.isAsc;">
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'check';customer.isAsc=!customer.isAsc;">
                                     Check
                                      <i *ngIf="(customer.sortField === 'check')" [ngClass]="(customer.isAsc && customer.sortField === 'check' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'ChargeAmount';customer.isAsc=!customer.isAsc;">
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'ChargeAmount';customer.isAsc=!customer.isAsc;">
                                     Charge
                                      <i *ngIf="(customer.sortField === 'ChargeAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'ChargeAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;">
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;">
                                     Drayage
                                      <i *ngIf="(customer.sortField === 'Drayage')" [ngClass]="(customer.isAsc && customer.sortField === 'Drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                    <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;">
+                                </th>
+                                <th>
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;">
                                     Buy Back
                                      <i *ngIf="(customer.sortField === 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField === 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!--Removed sorting functionality as it was causing rendering issues  -->
-                                <tr *ngFor="let item of TripData?.Tripdetail[0].TripTicketList | sort:customer.sortField:customer.isAsc">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Removed sorting functionality as it was causing rendering issues  -->
+                            <tr *ngFor="let item of tripData?.TripTicketList | sort:customer.sortField:customer.isAsc">
 
-                                    <td>{{item.Customerid}} {{item.CustomerName }}</td>
-                                    <td>{{item.IsRICustomer }}</td>
-                                    <td>{{item.TicketNumber}}</td>
-                                    <td>{{item.TotalSale| currency:'USD':true:'2.2-4'}}</td>
-                                    <td>{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
-                                    <td>{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
-                                    <td>{{item.ChargeAmount || '0' | currency:'USD':true:'2.2-4'}}</td>
-                                    <td>{{item.Drayage| currency:'USD':true:'2.2-4'}}</td>
-                                    <td>{{item.BuyBack| currency:'USD':true:'2.2-4'}}</td>
-                                </tr>
-                                <tr  *ngIf="TripData?.Tripdetail[0]?.TripTicketList.length < 1" class="text-center"> <td colspan="10">No data found</td></tr>
-                            </tbody>
-                        </table>
-                          
-                    </div>
+                                <td>{{item.Customerid}} {{item.CustomerName }}</td>
+                                <td>{{item.IsRICustomer }}</td>
+                                <td>{{item.TicketNumber}}</td>
+                                <td>{{item.TotalSale| currency:'USD':true:'2.2-4'}}</td>
+                                <td>{{item.CashAmount| currency:'USD':true:'2.2-4'}}</td>
+                                <td>{{item.CheckAmount| currency:'USD':true:'2.2-4'}}</td>
+                                <td>{{item.ChargeAmount || '0' | currency:'USD':true:'2.2-4'}}</td>
+                                <td>{{item.Drayage| currency:'USD':true:'2.2-4'}}</td>
+                                <td>{{item.BuyBack| currency:'USD':true:'2.2-4'}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Total</td>
+                                <td>TotalSale</td>
+                                <td>CashAmount</td>
+                                <td>CheckAmount</td>
+                                <td>ChargeAmount</td>
+                                <td>Drayage</td>
+                                <td>BuyBack</td>
+                            </tr>
+                            <tr *ngIf="tripData.TripTicketList.length < 1" class="text-center">
+                                <td colspan="10">No data found</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div class="row" >
-                <div class="col-md-2"></div>
-                <div class="col-md-8" style="border:1px solid black;">
-                    <div class="col-md-12 page-header">
-                        <span><b><u>Total</u></b></span>
-                    </div>
-                    <div class="row page-header">
-                        <span class="col-md-4">
-                            <span>Cash:  </span>
-                            <label><b>{{TripData?.Total.TotalHHCash + TripData?.Total.TotalManualCash | currency:'USD':true:'2.2-4'}}</b></label>
-                        </span>
-                        <span class="col-md-4">
-                            <span>Charge:  </span>
-                            <label><b>{{TripData?.Total.TotalHHCharge + TripData?.Total.TotalManualCharge| currency:'USD':true:'2.2-4'}}</b></label>
-                        </span>
-                        <span class="col-md-4">
-                            <span>Total Sale:  </span>
-                            <label><b>{{TripData?.Total.TotalHHSale   + TripData?.Total.TotalManualSale | currency:'USD':true:'2.2-4'}}</b></label>
-                        </span>
-                    </div>
-                    <div class="row page-header">
-                        <span class="col-md-4">
-                            <span>Darayage:  </span>
-                            <label><b>{{TripData?.Total.TotalManualDrayage + TripData?.Total.TotalHHDrayage | currency:'USD':true:'2.2-4'}}</b></label>
-                        </span>
-                        <span class="col-md-4">
-                            <span>BuyBack:  </span>
-                            <label><b>-NA-</b></label>
-                        </span>
-                        <span class="col-md-4">
-                        </span>
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
             </div>
         </ba-card>
     </div>

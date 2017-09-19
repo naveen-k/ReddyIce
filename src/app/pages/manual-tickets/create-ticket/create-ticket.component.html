@@ -20,10 +20,10 @@
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
-                <button class="btn btn-danger buttonMargin" [disabled]="ticket.TicketStatusID !== 23" (click)="deleteTicket()">
+                <button class="btn btn-danger buttonMargin" [hidden]="tripMode" [disabled]="ticket.TicketStatusID !== 23" (click)="deleteTicket()">
                     Delete
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly" [disabled]="ticket.TicketStatusID != 23">
+                <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly || tripMode" [disabled]="ticket.TicketStatusID != 23">
                     Submit
                 </button>
                 <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
@@ -37,7 +37,7 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date</label>
                 <div class="col-sm-7 input-group">
                     <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
-                        disabled (ngModelChange)="isFormDirty=true" [maxDate]="maxDate">
+                        disabled (ngModelChange)="isFormDirty=true" [maxDate]="date.maxDate" [minDate]="date.minDate">
                     <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
                         <i class="ion-calendar"></i>
                     </button>

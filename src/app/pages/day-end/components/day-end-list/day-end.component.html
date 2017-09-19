@@ -70,7 +70,7 @@
                             </th>
                             <th class="text-right">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
-                                    Total Amount
+                                    Total Received Amt
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
@@ -79,6 +79,15 @@
                                     Total Sale
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
+                            </th>
+                            <th>
+                                HH Day End
+                            </th>
+                            <th>
+                                Number of Tickets
+                            </th>
+                            <th>
+                                Status
                             </th>
                         </tr>
                     </thead>
@@ -102,9 +111,27 @@
                             <td>{{item.TripCode}}</td>
                             <td class="text-right">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
                             <td class="text-right">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
+                            <td class="textAlignCenter">
+                                <input type="checkbox" name="tripHHMultiSelect" [(ngModel)]="item.IsClosed" disabled>
+                            </td>
+                            <td></td>
+                            <td class="textAlignCenter">
+                                <i class="custom-tooltip-ion">
+                                    <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TripStatusID == 23" width="15">
+                                    <span class="tooltiptext">Draft</span>
+                                </i>
+                                <i class="custom-tooltip-ion">
+                                    <img src="assets/reddyIce/submitTicket.png" *ngIf="item.TripStatusID == 24" width="18">
+                                    <span class="tooltiptext">Submitted</span>
+                                </i>
+                                <i class="custom-tooltip-ion">
+                                    <img src="assets/reddyIce/approveTicket.png" *ngIf="item.TripStatusID == 25" width="15">
+                                    <span class="tooltiptext">Approved</span>
+                                </i>
+                            </td>
                         </tr>
                         <tr *ngIf="!trips.length">
-                            <th class="text-center" colspan="8"> No data found </th>
+                            <th class="text-center" colspan="10"> No data found </th>
                         </tr>
                     </tbody>
                 </table>
