@@ -161,7 +161,12 @@ export class CreateTicketComponent implements OnInit {
 
     // if ticketId is not null, consider it as edit ticket mode and load ticket object
     if (this.ticketId) {
+      this.pageTitle = 'Edit Ticket Details';
       this.loadTicket(this.ticketId);
+    }
+
+    if (this.isReadOnly) {
+      this.pageTitle = 'View Ticket Details';
     }
 
   }

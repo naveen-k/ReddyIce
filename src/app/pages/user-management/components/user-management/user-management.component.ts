@@ -158,7 +158,7 @@ export class UserManagementComponent implements OnInit {
         this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.isNewUser = false;
         this.action = 'edit';
-        //router.navigate
+        
 
       });
 

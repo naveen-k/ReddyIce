@@ -24,7 +24,13 @@ export class TrackerComponent {
     tripDate: this.selectedDate,
     branchId: '1', isForAll: true
   };
+  // selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
   userId = localStorage.getItem('userId');
+
+  // variables for drawing route
+  directionsDisplay;
+  directionsService;
+  request = {};
 
   constructor(
     private _elementRef: ElementRef,
@@ -50,7 +56,6 @@ export class TrackerComponent {
   }
 
   loadBranches() {
-    
     this.service.getBranches(this.userId).subscribe((res) => {
       this.allBranches = res;
 
@@ -84,15 +89,25 @@ export class TrackerComponent {
       this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
         if (typeof res == 'object') {
             this.trips = res.Trips;
-        }
-        else {
+            console.log('res.Trips', res.length);
+            console.log('this.trips', this.trips.length);
+        } else {
             this.trips = [];
         }
-
     }, (error) => {
         console.log(error);
         this.trips = [];
     });
+  }
+
+  dateChangeHandler() {
+    this.selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
+    this.loadTrips();
+  }
+
+  branchChangeHandler() {
+    console.log('tripFilterOption.branchId', this.tripFilterOption.branchId);
+    this.loadTrips();
   }
 
   ngAfterViewInit() {
@@ -104,6 +119,8 @@ export class TrackerComponent {
         zoom: 10,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       });
+
+      // Each marker signifies a pushpin point on the map
       var marker1 = new google.maps.Marker({
         position: new google.maps.LatLng(32.7767, -96.7970),
         map: map
@@ -112,9 +129,11 @@ export class TrackerComponent {
         position: new google.maps.LatLng(32.8767, -96.8970),
         map: map
       });
+
       // var transitLayer = new google.maps.TransitLayer();
       // transitLayer.setMap(map);
-      ////////////////  
+
+      // section for drawing the route on the Google Map 
       this.directionsDisplay = new google.maps.DirectionsRenderer();
       this.directionsDisplay.setMap(map);
       this.directionsService = new google.maps.DirectionsService();
@@ -134,43 +153,17 @@ export class TrackerComponent {
         if (status == google.maps.DirectionsStatus.OK) {
           mapObject.directionsDisplay.setDirections(response);
           mapObject.directionsDisplay.setMap(map);
+          mapObject.directionsDisplay.setOptions({
+            polylineOptions: {
+              strokeColor: 'red'
+            }
+          });
         } else {
           alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
         }
       });
 
       ////////////////
-    });
-    this.calcRoute();
-  }
-
-  // trying to draw route
-  directionsDisplay;
-  directionsService;
-  request = {};
-
-  calcRoute() {
-    GoogleMapsLoader.load((google) => {
-      // this.directionsService = new google.maps.DirectionsService();
-      // var start = new google.maps.LatLng(32.7767, -96.7970);
-      // var end = new google.maps.LatLng(32.8767, -96.8970);
-      // var bounds = new google.maps.LatLngBounds();
-      // bounds.extend(start);
-      // bounds.extend(end);
-      // this.mapDraw.fitBounds(bounds);
-      // this.request = {
-      //   origin: start,
-      //   destination: end,
-      //   travelMode: google.maps.TravelMode.DRIVING
-      // };
-      // this.directionsService.route(this.request, function (response, status) {
-      //   if (status == google.maps.DirectionsStatus.OK) {
-      //       this.directionsDisplay.setDirections(response);
-      //       this.directionsDisplay.setMap(this.mapDraw);
-      //   } else {
-      //       alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
-      //   }
-      // });
     });
   }
 }

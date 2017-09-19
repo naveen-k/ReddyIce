@@ -4,14 +4,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TicketTypePipe implements PipeTransform {
     transform(value: number, customer: any) {
-        if (customer.CustomerType === 20) {
-            if (value) {
-                return 'Sale';
+        if (customer.Customer.CustomerType === 20) {
+            if (customer.TicketTypeID === 22) {
+                return 'DSD - Sale';
             } else {
-                return 'Credit';
+                return 'DSD - Credit';
             }
-        } else if (customer.CustomerType === 22) {
-            if (value) {
+        } else if (customer.Customer.CustomerType === 22) {
+            if (customer.TicketTypeID === 22) {
                 return 'PBM - Sale';
             } else {
                 return 'PBM - Consignment';
