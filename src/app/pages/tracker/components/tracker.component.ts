@@ -30,6 +30,9 @@ export class TrackerComponent {
   // variables for drawing route
   directionsDisplay;
   directionsService;
+
+  directionsDisplay2;
+  directionsService2;
   request = {};
 
   constructor(
@@ -164,6 +167,40 @@ export class TrackerComponent {
       });
 
       ////////////////
+      
+      /// hard coding Green route for today's demo 
+      this.directionsDisplay2 = new google.maps.DirectionsRenderer();
+      this.directionsDisplay2.setMap(map);
+      this.directionsService = new google.maps.DirectionsService();
+      var start = new google.maps.LatLng(32.8767, -96.8970);
+      var end = new google.maps.LatLng(32.7, -96.90);
+      var bounds = new google.maps.LatLngBounds();
+      bounds.extend(start);
+      bounds.extend(end);
+      map.fitBounds(bounds);
+      this.request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+      let mapObject2 = this;
+      new google.maps.DirectionsService().route(this.request, function (response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          mapObject2.directionsDisplay2.setDirections(response);
+          mapObject2.directionsDisplay2.setMap(map);
+          mapObject2.directionsDisplay2.setOptions({
+            polylineOptions: {
+              strokeColor: 'green'
+            }
+          });
+        } else {
+          alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+        }
+      });
+
+      ////////////////
+
+      ///
     });
   }
 }
