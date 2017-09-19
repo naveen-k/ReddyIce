@@ -104,9 +104,9 @@
                             <tbody>
                                 <!-- <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc"> -->
                                 <tr *ngFor="let item of trips">
-                                    <td>{{item.PlannedOrderNumber}}</td>
+                                    <td>{{item.TripTicketList[0].PlannedSequence}}</td>
                                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
-                                        {{item.ActualOrderNumber}}
+                                        {{item.TripTicketList[0].ActualSequence}}
                                     </td>
                                     <td>{{item.TripStartDate}}</td>
                                     <td>{{item.TripTicketList[0].CustomerName}}</td>
