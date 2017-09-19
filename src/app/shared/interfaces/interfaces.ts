@@ -74,3 +74,10 @@ export interface Select {
     label: string;
     data?: any;
 }
+
+export interface DualListItem {
+    label: string;
+    id: number;
+    data: any;
+    selected?: boolean;
+}

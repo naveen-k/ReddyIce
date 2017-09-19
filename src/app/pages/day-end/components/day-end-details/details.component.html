@@ -75,8 +75,9 @@
                             <div class="col-md-12 page-header">
                                 <div class="overflow">
                                     <table class="table table-striped">
-                                        <thead>
+                                        <thead class="tableHeader">
                                             <tr>
+                                                <th></th>
                                                 <th>Actions</th>
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
@@ -114,6 +115,14 @@
                                         <tbody>
 
                                             <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
+                                                <td>
+                                                    <i class="ion-iphone" style="margin: 0 5px" *ngIf="!item.IsPaperTicket">
+                                                       
+                                                    </i>
+                                                    <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket">
+                                                        <span class="tooltiptext">Edit</span>
+                                                    </i>
+                                                </td>
                                                 <td class="table-id" style="cursor: pointer">
                                                     <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.IsPaperTicket">
                                                         <span class="tooltiptext">View</span>
@@ -123,15 +132,7 @@
                                                     </i>
                                                 </td>
                                                 <td>{{item.TicketNumber }}</td>
-                                                <!-- <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td> -->
-                                                <td>
-                                                    <i class="ion-iphone" style="margin: 0 5px" *ngIf="!item.IsPaperTicket">
-                                                       
-                                                    </i>
-                                                    <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket">
-                                                        <span class="tooltiptext">Edit</span>
-                                                    </i>
-                                                </td>
+                                                <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
                                                 <td>{{item.CustomerID }} - {{ item.CustomerName }}</td>
                                                 <td class="text-align-right">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                                                 <td class="text-align-right" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
@@ -141,7 +142,7 @@
                                                 <th class="text-center" colspan="9"> No data found </th>
                                             </tr>
                                             <tr>
-                                                <td class="text-align-right" colspan="4"><b>Total</b></td>
+                                                <td class="text-align-right" colspan="5"><b>Total</b></td>
                                                 <td class="text-align-right">{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</td>
                                                 <td class="text-align-right">{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</td>
                                             </tr>
@@ -156,14 +157,16 @@
                 <ngb-tab title="Units Reconciliation">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
-                            <div class="col-sm-2">
+                            <div class="col-sm-1">
                                 <label>Pallets</label>
                             </div>
                             <div class="col-sm-2">
-                                {{tripData.PalletLoadQuantity}}
+                                <span>Issued</span>
+                                {{tripData.PalletLoadQuantity||0}}
                             </div>
-                            <div class="col-sm-2">
-                                <input [(ngModel)]='tripData.PalletReturnQuantity' type="number">
+                            <div class="col-sm-3">
+                                <span>Returned</span>
+                                <input [(ngModel)]='tripData.PalletReturnQuantity' width="50px" type="number">
                             </div>
                             <div class="col-sm-6">
                                 <button class="btn btn-danger pull-right" (click)=addProductRow() [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>Add Product</button>

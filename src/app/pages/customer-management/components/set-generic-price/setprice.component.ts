@@ -21,13 +21,12 @@ export class SetPriceComponent implements OnInit {
 
     constructor(protected service: CustomerManagementService, private router: Router, public activatedRoute: ActivatedRoute,
         protected route: Router) {
-        this.mappedProds = service.mappedProds;
-        this.products = service.products;
+        // this.mappedProds = service.mappedProds;
+        // this.products = service.products;
     }
 
     ngOnInit() {
         this.getExternalProducts();
-
     }
 
     getExternalProducts() {

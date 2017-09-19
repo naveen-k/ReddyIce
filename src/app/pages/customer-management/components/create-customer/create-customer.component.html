@@ -5,7 +5,7 @@
             <button class="btn btn-danger pull-right" [routerLink]="['../']">Back</button>
         </div>
         <div class="col-sm-1">
-            <button class="btn btn-danger pull-right">Save</button>
+            <button class="btn btn-danger pull-right" (click)="save()">Save</button>
         </div>
     </div>
     <div class="row">
@@ -126,51 +126,37 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- <dual-list [source]="source" [(destination)]="confirmed"></dual-list> -->
-                </div>
-                <div class="row model-top-margin">
-                    <div class="form-group col-md-5">
-                        <b>All Products</b>
-                        <div class="vertical-scroll">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Products</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let item of products">
-                                        <td>{{ item.name }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-sm-12">
+                        <table class="table">
+                            <thead class="tableHeader">
+                                <th colspan="2">Product List</th>
+                                <th style="width:100px"><button class="btn btn-danger">Add Product</button></th>
+                            </thead>
+                            <thead>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let mprod of customer?.MappedProducts">
+                                    <td>
+                                        <select class="form-control prodListElement" name="product">
+                                            <option *ngFor="let prod of products" [ngValue]="prod.ExternalProductID"> 
+                                                {{prod.DisplayName}} </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="number" [(ngModel)]="prod.Price">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="form-group col-md-2 ioiIconsLR">
-                        <p><span class="ion-arrow-left-a"></span></p>
-                        <p><span class="ion-arrow-right-a"></span></p>
-                    </div>
-                    <div class="form-group col-md-5">
-                        <b>Mapped Products</b>
-                        <div class="vertical-scroll">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Products</th>
-                                        <th>Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <input type="number" class="form-control">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <!-- <ng-template #rowTemplate let-ctx="item">
+                        <span>{{ctx.label}} </span> <input type="number" [(ngModel)]="ctx.data.Price" style="width: 70px;">
+                    </ng-template>
+                    <dual-list [mappedRowTemplate]="rowTemplate" [items]="products" [(selectedItems)]="selectedProducts"></dual-list> -->
                 </div>
             </div>
         </div>

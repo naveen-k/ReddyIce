@@ -18,7 +18,7 @@ import { AppState, InternalStateType } from './app.service';
 import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
-import { AngularDualListBoxModule } from 'angular-dual-listbox';
+// import { AngularDualListBoxModule } from 'angular-dual-listbox';
 
 
 
@@ -51,7 +51,6 @@ export type StoreType = {
     ReactiveFormsModule,
     NgaModule.forRoot(),
     NgbModule.forRoot(),
-    AngularDualListBoxModule,
     PagesModule,
     routing,
     BrowserAnimationsModule,

@@ -52,7 +52,6 @@ select.form-control:not([size]):not([multiple]) {
 
 .showError:after {
   content: '';
-  width: 0;
   display: inline;
   position: absolute;
   right: -5px;

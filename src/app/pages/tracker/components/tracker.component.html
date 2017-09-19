@@ -108,7 +108,7 @@
                                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
                                         {{item.TripTicketList[0].ActualSequence}}
                                     </td>
-                                    <td>{{item.TripStartDate}}</td>
+                                    <td>{{item.TripStartDate | date}}</td>
                                     <td>{{item.TripTicketList[0].CustomerName}}</td>
                                 </tr>
                             </tbody>

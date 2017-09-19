@@ -1,3 +1,5 @@
+import { ListComponent } from './components/dual-list/list.component';
+import { DualListComponent } from './components/dual-list/dual-list.component';
 import { Select2Component } from './components/select2/select2.component';
 import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { NumberOnlyDirective } from './directives/number-only.directive';
@@ -26,6 +28,8 @@ import { NgModule } from '@angular/core';
         NumberOnlyDirective,
         TicketTypePipe,
         Select2Component,
+        DualListComponent,
+        ListComponent,
     ],
     exports: [
         GenericFilter,
@@ -37,6 +41,8 @@ import { NgModule } from '@angular/core';
         MinValueValidatorDirective,
         TicketTypePipe,
         Select2Component,
+        DualListComponent,
+        ListComponent,
     ],
     entryComponents: [
         ModalComponent,
