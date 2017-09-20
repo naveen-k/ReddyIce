@@ -50,11 +50,15 @@ export interface Customer {
     DUNSNumber: number;
     DistributorType: string;
     DistributorMasterID: string;
-    MappedProducts?:mProducts[];
     productdetail:ProductDetail[];
     Tax: number;
     CustomerTypeID: number;
     PaymentType: number;
+    MappedProducts?:mProducts[];
+    CustomerType:number;
+    IsTaxassble:boolean;
+    Address:string;
+    EmailID:string;
 }
 export interface mProducts {
     ExternalCustomerProductID:number;

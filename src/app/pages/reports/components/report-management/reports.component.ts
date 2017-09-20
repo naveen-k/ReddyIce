@@ -19,6 +19,11 @@ export class ReportsComponent {
     user: any;
     tripcode: any;
     viewReport:boolean=false;
+    value:any;
+    value1:any;
+    value2:any;
+
+
 
     constructor(private sanitizer: DomSanitizer) {
 
