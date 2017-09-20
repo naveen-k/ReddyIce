@@ -17,9 +17,9 @@ export class DayEndService extends SharedService {
     ) {
         super(http);
     }
-    getTrips(userId, TripDate, branchId, IsForAll) {
+    getTrips(TripDate, branchId) {
 
-        return this.http.get(`api/trip/all?TripDate=${TripDate}&branchId=${branchId}&userId=${userId}&IsForAll=${IsForAll}`)
+        return this.http.get(`api/trip/all?TripDate=${TripDate}&branchId=${branchId}`)
             .map((res) => res.json()).map((res) => {
                 return res;
             });

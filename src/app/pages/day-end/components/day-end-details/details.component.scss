@@ -105,3 +105,13 @@ table.cash-table {
 .textAlignCenter {
     text-align: center;
 }
+
+.pallets {
+    td {
+        padding: 5px 10px 5px 5px;
+        border: 1px solid #dddddd;
+        span{
+            font-weight: 400;
+        }
+    }
+}

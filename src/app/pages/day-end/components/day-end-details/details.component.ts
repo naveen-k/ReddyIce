@@ -130,7 +130,7 @@ export class DetailsComponent implements OnInit {
         this.calculateTotalUnitReconcilation();
     }
 
-    saveReconciliation() {
+    saveReconciliation(statusId) {
 
         console.log(this.newlyAddedProduct);
         // return false;
@@ -139,8 +139,9 @@ export class DetailsComponent implements OnInit {
             TripID: this.tripId,
             ActualCash: total.actualdepositcash,
             ActualCheck: total.actualdepositcheck,
-            ActualCoin: total.actualdepositcoin,
-            Misc: total.actualdepositmisc,
+            ActualCoin: total.ActualCoin,
+            Misc: total.Misc,
+            TripStatusID: statusId,
         };
 
         this.service.saveRecociliation(cashRecon).subscribe((res) => {
@@ -159,7 +160,7 @@ export class DetailsComponent implements OnInit {
     }
 
     submitApproveReconciliation() {
-        this.saveReconciliation();
+        this.saveReconciliation(24);
     }
 
     addProductRow() {

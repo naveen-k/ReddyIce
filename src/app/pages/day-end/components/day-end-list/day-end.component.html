@@ -85,7 +85,7 @@
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i *ngIf="logedInUser.IsRIInternal && logedInUser.Role.RoleID == 1 || logedInUser.Role.RoleID == 2" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
+                                <i *ngIf="logedInUser.IsRIInternal && logedInUser.Role.RoleID == 1" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>

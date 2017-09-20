@@ -58,8 +58,7 @@ export class DayEndComponent implements OnInit {
     }
 
     loadFilteredTrips() {
-        this.service.getTrips(this.tripFilterOption.uId, this.tripFilterOption.tripDate,
-            this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
+        this.service.getTrips(this.tripFilterOption.tripDate, this.tripFilterOption.branchId || 1).subscribe((res) => {
                 if (typeof res == 'object') {
                     this.trips = res.Trips;
                 }

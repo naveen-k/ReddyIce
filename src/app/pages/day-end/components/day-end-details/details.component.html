@@ -6,9 +6,10 @@
             <img src="assets/reddyIce/submitTicket.png" *ngIf="tripData.TripStatusID == 24" width="18" class="newTicketTitleStatusIcon">
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25' (click)="submitApproveReconciliation()">{{logedInUser?.Role.RoleID == 1 || logedInUser?.Role.RoleID == 2 ? 'Submit':'Approve'}}</button>
+                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 23' (click)="saveReconciliation(25)">Approve</button>
+                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
                 <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                    (click)="saveReconciliation()">Save</button>
+                    (click)="saveReconciliation(23)">Save</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row add-margin-bottom">
@@ -157,17 +158,25 @@
                 <ngb-tab title="Units Reconciliation">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
-                            <div class="col-sm-1">
-                                <label>Pallets</label>
+                            <div class="col-sm-6">
+                                <table class="pallets">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <span>Pallets </span>
+                                            </td>
+                                            <td>
+                                                <span>Issued: </span> {{tripData.PalletLoadQuantity||0}}
+                                            </td>
+                                            <td>
+                                                <span>Returned: </span> <input [(ngModel)]='tripData.PalletReturnQuantity' style="width:70px" type="number">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
                             </div>
-                            <div class="col-sm-2">
-                                <span>Issued</span>
-                                {{tripData.PalletLoadQuantity||0}}
-                            </div>
-                            <div class="col-sm-3">
-                                <span>Returned</span>
-                                <input [(ngModel)]='tripData.PalletReturnQuantity' width="50px" type="number">
-                            </div>
+                            
                             <div class="col-sm-6">
                                 <button class="btn btn-danger pull-right" (click)=addProductRow() [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>Add Product</button>
                             </div>
@@ -437,7 +446,7 @@
                                                 <label>Coins($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.actualdepositcoin' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.ActualCoin' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
@@ -453,7 +462,7 @@
                                                 <label>Misc($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.actualdepositmisc' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.Misc' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">
