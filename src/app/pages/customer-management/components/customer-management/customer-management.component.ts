@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CustomerManagementComponent implements OnInit {
 
     customers: any[] = [];
-    singleCustomer: any = [];
+    selectedCustomer: any = [];
 
     constructor(
         protected service: CustomerManagementService,
@@ -30,13 +30,15 @@ export class CustomerManagementComponent implements OnInit {
     }
 
     deleteCustomer(ID) {
-     //   debugger
-        const data = [{'CustomerType': '2', 'CustomerId': ID }];
+        //   debugger
+        const data = [{ 'CustomerType': '2', 'CustomerId': ID }];
         this.service.deleteCustomer(data).subscribe((res) => {
-           console.log("Deleted");
-         }, (err) => {
+            console.log("Deleted");
+        }, (err) => {
             console.log("Error");
-          });
+        });
 
     }
+
+
 }

@@ -21,13 +21,13 @@ export class CreateCustomerComponent implements OnInit {
 
     keepSorted = true;
 
+
     constructor(protected service: CustomerManagementService) { }
 
     ngOnInit() {
         this.service.getExternalProducts().subscribe((response) => {
             this.products = response;
-            console.log(response);
-        })
+        });
     }
     addProduct() {
         this.addedProduct.push({} as mProducts);

@@ -16,7 +16,7 @@
             </button>
         </div>
         <div class="col-sm-3">
-            <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../create']">
+            <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../create', 1]">
                 Add Customer
             </button>
         </div>
@@ -67,11 +67,14 @@
             <tbody>
                 <tr *ngFor="let cust of customers| filter:customer.searchString | sort:customer.sortField:customer.isAsc">
                     <td class="table-id" style="cursor: pointer">
-                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
+                        <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
                                     <span class="tooltiptext" >Delete</span>
+                                </i>
+                        <i class="ion-eye custom-tooltip-ion" [routerLink]="['../create', cust.CustomerId]">
+                                    <span class="tooltiptext" >View</span>
                                 </i>
                     </td>
                     <td>{{ cust.CustomerId }}</td>
