@@ -197,7 +197,7 @@ export class DetailsComponent implements OnInit {
 
     productChangeHandler(productName: any, arrayIndex: any): void {
         const productIndex = this.productList.map((o) => o.ProductName).indexOf(productName);
-        this.newlyAddedProduct[arrayIndex].ProducID = this.productList[productIndex].ProductID;
+        this.newlyAddedProduct[arrayIndex].ProductID = this.productList[productIndex].ProductID;
         this.resetField(arrayIndex);
     }
 

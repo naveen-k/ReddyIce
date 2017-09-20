@@ -81,7 +81,7 @@
                         <!--Removed sorting functionality as it was causing rendering issues  -->
                         <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i *ngIf="!logedInUser.IsRIInternal" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
+                                <i *ngIf="!logedInUser.IsRIInternal || logedInUser.Role.RoleID==3" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
@@ -100,7 +100,7 @@
                             <td class="textAlignCenter">
                                 <input type="checkbox" name="tripHHMultiSelect" [(ngModel)]="item.IsClosed" disabled>
                             </td>
-                            <td></td>
+                            <td>{{item.TripTicketList.length}}</td>
                             <td class="textAlignCenter">
                                 <i class="custom-tooltip-ion">
                                     <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TripStatusID == 23" width="15">

@@ -52,7 +52,7 @@ export class DayEndComponent implements OnInit {
     selectionchangeHandler() {
         // uncomment bellow line once fixed(it is commented out as the APi is not supporting Date filter)
         this.tripFilterOption.tripDate = this.service.formatDate(this.filter.selectedDate);
-       // this.tripFilterOption.branchId = this.filter.branch ? this.filter.branch.id : null;
+        this.tripFilterOption.branchId = this.filter.userBranch ? this.filter.userBranch : null;
         this.loadFilteredTrips();
 
     }
