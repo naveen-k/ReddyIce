@@ -1,4 +1,4 @@
-<ba-card cardTitle="Create Customer" baCardClass="with-scroll" class="smart-table-container" #customer>
+<ba-card cardTitle="Create Customer" baCardClass="with-scroll" class="smart-table-container">
     <div class="row">
         <div class="col-sm-9"></div>
         <div class="col-sm-2">
@@ -13,25 +13,25 @@
             <div class="row">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
                 <div class="col-sm-7 padding-eater">
-                    <input id="typeahead-basic" type="text" [ngModel]="customer.CustomerNumber" class="form-control" placeholder="Customer Number"
+                    <input id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber" class="form-control" placeholder="Customer Number"
                     />
                 </div>
             </div>
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Name</label>
                 <div class="col-sm-7 padding-eater">
-                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Name" [ngModel]="customer.CustomerName"
+                    <input id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" class="form-control" placeholder="Customer Name" 
                     />
                 </div>
             </div>
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Type</label>
                 <div class="col-sm-7 padding-eater">
-                    <select class="form-control" name="custType">
-                            <option> </option>
-                            <option>Type 1</option>
-                            <option>Type 2</option>
-                            <option>Type 3</option>
+                    <select class="form-control" [(ngModel)]='customer.CustomerType' name="custType">
+                            <option [value]='20' >DSD</option>
+                            <option [value]='21' >PBS</option>
+                            <option [value]='22' >PBM</option>
+                           
                         </select>
                 </div>
             </div>
@@ -47,28 +47,27 @@
                 </div>
             </div>
             <div class="row box-top-margin">
-                <div class="col-sm-6 box-top-margin">
-                    <input type="checkbox" class="checkbox-size" />
-                    <label for="example-text-input" class="col-sm-5 col-form-label">DEX</label>
+                    <label for="example-text-input" class="col-sm-5 col-form-label">IsTaxassble?</label>
+                    <div class="col-sm-7 padding-eater">
+                            <input type="checkbox" [(ngModel)]='customer.IsTaxassble' class="checkbox-size" />
+                            
+                        </div>
                 </div>
-                <div class="col-sm-6 box-top-margin">
-                    <input type="checkbox" class="checkbox-size" />
-                    <label for="example-text-input" class="col-sm-5 col-form-label">Checkbox</label>
-                </div>
+                <div class="row box-top-margin">
+                
+                    <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
+                    <div class="col-sm-7 padding-eater">
+                        <input [(ngModel)]='customer.TaxPercentage' id="typeahead-basic" type="number" class="form-control" placeholder="Tax Percentage" />
+                    </div>               
             </div>
-            <div class="row box-top-margin">
-                <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
-                <div class="col-sm-7 padding-eater">
-                    <input id="typeahead-basic" type="text" class="form-control" placeholder="Tax Percentage" />
-                </div>
-            </div>
+           
         </div>
         <div class="col-md-8 page-header">
             <div class="col-sm-12">
                 <div class="row">
                     <label for="example-text-input" class="col-sm-1 col-form-label">Address</label>
                     <div class="col-sm-11">
-                        <input id="typeahead-basic" type="text" class="form-control" placeholder="Customer Number" />
+                        <input [(ngModel)]='customer.Address' id="typeahead-basic" type="text" class="form-control" placeholder="Address" />
                     </div>
                 </div>
                 <div class="row box-top-margin">
@@ -76,7 +75,7 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">State</label>
                             <div class="col-sm-9">
-                                <input id="typeahead-basic" type="text" class="form-control" placeholder="State" />
+                                <input [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State" />
                             </div>
                         </div>
                     </div>
@@ -84,7 +83,7 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">City</label>
                             <div class="col-sm-9">
-                                <input id="typeahead-basic" type="text" class="form-control" placeholder="City" />
+                                <input [(ngModel)]='customer.City' id="typeahead-basic" type="text" class="form-control" placeholder="City" />
                             </div>
                         </div>
                     </div>
@@ -92,45 +91,54 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">Zip</label>
                             <div class="col-sm-9">
-                                <input id="typeahead-basic" type="text" class="form-control" placeholder="Zip" />
+                                <input [(ngModel)]='customer.ZipCode' id="typeahead-basic" type="text" class="form-control" placeholder="Zip" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row box-top-margin">
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <label for="example-text-input" class="col-sm-2 col-form-label">Primary Contact</label>
-                            <div class="col-sm-10">
-                                <input id="typeahead-basic" type="text" class="form-control" placeholder="Primary Contact" />
+                        <div class="col-sm-6">
+                                <div class="row">
+                                    <label for="example-text-input" class="col-sm-2 col-form-label">Country</label>
+                                    <div class="col-sm-10">
+                                        <input [(ngModel)]='customer.Country' id="typeahead-basic" type="text" class="form-control" placeholder="Country" />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                   
                     <div class="col-sm-6">
                         <div class="row">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Phone</label>
                             <div class="col-sm-10">
-                                <input id="typeahead-basic" type="text" class="form-control" placeholder="Phone" />
+                                <input [(ngModel)]='customer.Phone' id="typeahead-basic" type="number" class="form-control" placeholder="Phone" />
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row box-top-margin">
+                        <div class="col-sm-6">
+                                <div class="row">
+                                    <label for="example-text-input" class="col-sm-2 col-form-label">Primary Contact</label>
+                                    <div class="col-sm-10">
+                                        <input id="typeahead-basic" type="text" class="form-control" placeholder="Primary Contact" />
+                                    </div>
+                                </div>
+                            </div>
                     <div class="col-sm-6">
                         <div class="row">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Email</label>
                             <div class="col-sm-10">
-                                <input id="typeahead-basic" type="text" class="form-control" placeholder="Email" />
+                                <input [(ngModel)]='customer.EmailID'  id="typeahead-basic" type="email" class="form-control" placeholder="Email" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row box-top-margin">
                     <div class="col-sm-12">
                         <table class="table">
                             <thead class="tableHeader">
                                 <th colspan="2">Product List</th>
-                                <th style="width:100px"><button class="btn btn-danger">Add Product</button></th>
+                                <th style="width:100px"><button (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
                             </thead>
                             <thead>
                                 <th>Product</th>
@@ -138,15 +146,17 @@
                                 <th></th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let mprod of customer?.MappedProducts">
+                                <tr *ngFor="let mprod of addedProduct">
                                     <td>
-                                        <select class="form-control prodListElement" name="product">
-                                            <option *ngFor="let prod of products" [ngValue]="prod.ExternalProductID"> 
-                                                {{prod.DisplayName}} </option>
+                                        <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" >
+                                            <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
+                                                {{prod.DisplayName}}
+                                                
+                                            </option>
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="number" [(ngModel)]="prod.Price">
+                                        <input class="form-control" type="number" [(ngModel)]="mprod.Price">   
                                     </td>
                                     <td></td>
                                 </tr>

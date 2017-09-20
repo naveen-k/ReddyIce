@@ -34,4 +34,7 @@ export class CustomerManagementService extends SharedService {
   deleteCustomer(data) {
     return this.http.delete('api/deleteexternalcustomer', data).map((res => res.json()));
   }
+  createCustomer(data) {
+    return this.http.post('api/createexternalcustomer', data).map((res => res.json()));
+  }
 }
