@@ -70,7 +70,7 @@
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
         required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)"
-        (change)="changeHandler()" maxlength="20">
+        (change)="changeHandler()" maxlength="50">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">
@@ -94,7 +94,7 @@
 
     <div class="col-md-6 page-header">
       <label for="inputEmail3" class="control-label">Phone</label>
-      <input type="text" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
+      <input type="number" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
         pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (change)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -106,7 +106,7 @@
 
     <div class="col-md-6 page-header">
       <label for="exampleSelect1">Role</label>
-      <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);">
+      <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);" >
                   <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
                 </select>
     </div>
@@ -196,10 +196,12 @@
         <label for="exampleSelect1">Branch</label>
         <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
           disabled>
-            <option *ngFor="let _branch of branches" [value]="_branch.BranchID"><span *ngIf="_branch.BranchID != ''"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
-              <span *ngIf="_branch.BranchID == ''">
-               {{_branch.BranchName}}
-            </span></option>
+            <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
+              <span *ngIf="_branch.BranchID != '1'"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
+              <span *ngIf="_branch.BranchID == '1'">
+         {{_branch.BranchName}}
+      </span>
+          </option>
         </select>
       </div>
       <div class="col-md-2"></div>
@@ -214,7 +216,7 @@
   <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row" [hidden]="userObject.IsDistributor">
     <div class="col-md-5 padding-eater">
       <label for="distributor">Distributor</label>
-      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterId" name="distributor"
+      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
         #distributor="ngModel" disabled>
           <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
       </select>

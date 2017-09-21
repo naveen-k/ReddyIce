@@ -17,7 +17,7 @@
       </div> -->
       <div class="row" style="min-height:51px;">
         <div class="col-sm-4 col-md-4">
-          <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString"  placeholder="Search">
+          <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
         </div>
         <div class="col-sm-2" [hidden]="rightCardOpen">
           <select class="form-control" [(ngModel)]="userType" (ngModelChange)="changeUserTypeHandler();">
@@ -36,7 +36,7 @@
           <thead class="a tableHeader">
             <tr>
               <th width="100px;" class="allign">Action</th>
-              <th  class="allign">
+              <th class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'FirstName';customer.isAsc=!customer.isAsc;">
                     Name
                     <i *ngIf="(customer.sortField === 'FirstName')" [ngClass]="(customer.isAsc && customer.sortField === 'FirstName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
@@ -94,14 +94,18 @@
               <td *ngIf="!hideColumn" class="userCell">{{ item.UserName || 'NA' }}</td>
               <td class="userCell">{{ item.Role?.RoleName}}</td>
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
-              <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchCode}} - {{item.Branch?.BranchName}}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchCode}}  {{item.Branch?.BranchName}}</td>
               <td class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
             </tr>
-                <tr  [hidden]='!showSpinner' class="text-center"> <td colspan="10"><a> <img src="assets/reddyIce/spinner.gif " width='25px'></a></td></tr>
-                 <tr  *ngIf="!paginationData.length && !showSpinner" class="text-center"> <td colspan="10">No data found</td></tr>
+            <tr [hidden]='!showSpinner' class="text-center">
+              <td colspan="10"><a> <img src="assets/reddyIce/spinner.gif " width='25px'></a></td>
+            </tr>
+            <tr *ngIf="!paginationData.length && !showSpinner" class="text-center">
+              <td colspan="10">No data found</td>
+            </tr>
           </tbody>
         </table>
-       
+
       </div>
     </ba-card>
   </div>

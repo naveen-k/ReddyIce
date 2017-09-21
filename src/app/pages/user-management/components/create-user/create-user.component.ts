@@ -161,7 +161,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         } else if (this.user.IsRIInternal) {
             this.user.DistributorMasterID = '';
         }
-        if(!this.user.IsRIInternal && !this.user.IsSeasonal){
+        if (!this.user.IsRIInternal && !this.user.IsSeasonal) {
             this.user.BranchID = null;
         }
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
