@@ -166,7 +166,7 @@
                                                 <span>Pallets </span>
                                             </td>
                                             <td>
-                                                <span>Issued: </span> {{tripData.PalletLoadQuantity||0}}
+                                                <span>Issued: </span> <input [(ngModel)]='tripData.PalletLoadQuantity' style="width:70px" type="number">
                                             </td>
                                             <td>
                                                 <span>Returned: </span> <input [(ngModel)]='tripData.PalletReturnQuantity' style="width:70px" type="number">
