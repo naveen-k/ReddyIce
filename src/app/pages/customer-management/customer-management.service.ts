@@ -22,6 +22,13 @@ export class CustomerManagementService extends SharedService {
       });
 
   }
+  getCustomer(customerid) {
+    return this.http.get(`api/customer/getcustomerdetailbyid?customerid=${customerid}`)
+    .map((res) => res.json()).map((res) => {
+      return res;
+    });
+    
+  }
 
   getExternalProducts() {
     return this.http.get(`api/customer/getexternalproductlist`)

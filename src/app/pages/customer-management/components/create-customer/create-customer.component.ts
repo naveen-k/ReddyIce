@@ -1,6 +1,7 @@
 import { Customer, DualListItem, mProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     templateUrl: './create-customer.component.html',
@@ -19,10 +20,27 @@ export class CreateCustomerComponent implements OnInit {
 
     keepSorted = true;
 
+    action:string = 'create';
 
-    constructor(protected service: CustomerManagementService) { }
+    customerId:string;
+
+
+    constructor(protected service: CustomerManagementService,
+     protected route: ActivatedRoute, 
+    ) {
+        this.customerId = this.route.snapshot.params['CustomerId'].split('-')[0];
+        this.action = this.route.snapshot.params['CustomerId'].split('-')[1];
+       
+     }
 
     ngOnInit() {
+        if(this.action === 'view'){
+            this.service.getCustomer(this.customerId).subscribe((response) => {
+                this.customer = response.CustomerDetails;
+                this.addedProduct = response.ProductDetail;
+                console.log(response);
+            });
+        }
         this.service.getExternalProducts().subscribe((response) => {
             this.products = response;
         });

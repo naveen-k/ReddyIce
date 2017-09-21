@@ -53,7 +53,7 @@ export class DetailsComponent implements OnInit {
     ) { }
 
     tripStatus(statusCode) {
-        let statusText = '';
+        let statusText = 'Draft';
         switch (statusCode) {
             case 23:
                 statusText = "Draft";
