@@ -137,7 +137,6 @@ export class TrackerComponent {
         this.trips = [];
     });
   }
-
   // Filter TicketDetails based on the Trip selected
   fetchTicketDetailsByTrip(tripID) {
     for (var i = 0; i < this.trips.length; i++) {
@@ -147,13 +146,20 @@ export class TrackerComponent {
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
+    this.locations = [];
+    for (var j = 0; j < this.selectedTrip.length; j++) {
+      if (j < 8) {
+        this.locations.push([parseFloat(this.selectedTrip[j].PlannedLatitude),parseFloat(this.selectedTrip[j].PlannedLongitude)]);
+      }
+    }
+    console.log('naya array',this.locations);
   }
 
   // Fetch selected Date
   dateChangeHandler() {
     this.selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
-    this.ngAfterViewInit();
     this.loadTrips();
+    this.ngAfterViewInit();
   }
 
   // Fetch selected Branch
@@ -186,16 +192,49 @@ export class TrackerComponent {
     this.ngAfterViewInit();
   }
 
+  locations = [
+    [
+      32.736259, -96.864586
+    ],
+    [
+      32.7498, -96.8720
+    ],
+    [
+      32.7905, -96.8104
+    ],
+    [
+      32.8481, -96.8512
+    ],
+    [
+      32.811211, -97.057602
+    ],
+    [
+      32.897480, -97.040443
+    ],
+    [
+      32.7605, -97.0037
+    ],
+    [
+      32.738773, -97.003098
+    ],
+    [
+      32.768799, -97.309341
+    ],
+    [
+      33.155373, -96.818733
+    ]
+  ];
+
   ngAfterViewInit() {
     let el = this._elementRef.nativeElement.querySelector('.google-maps');
     // TODO: do not load this each time as we already have the library after first attempt
     GoogleMapsLoader.load((google) => {
-      var map = new google.maps.Map(el, {
-        center: new google.maps.LatLng(32.736259, -96.864586),
-        zoom: 9,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-      });
-
+      // var map = new google.maps.Map(el, {
+      //   center: new google.maps.LatLng(32.736259, -96.864586),
+      //   zoom: 9,
+      //   mapTypeId: google.maps.MapTypeId.ROADMAP,
+      // });
+      var infowindow = new google.maps.InfoWindow();
       var pinColor = "a52a2a";
       var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
           new google.maps.Size(21, 34),
@@ -204,55 +243,113 @@ export class TrackerComponent {
 
       // If Planned Sequence Radio button is selected
       if (this.planned) {
-        for (var i = 0; i < this.selectedTripp.length; i++) {
-            // console.log(this.selectedTripp[i].PlannedLatitude);
-            // console.log(this.selectedTripp[i].PlannedLongitude);
-            this.marker[i] = new google.maps.Marker({
-              position: new google.maps.LatLng(this.selectedTripp[i].PlannedLatitude, this.selectedTripp[i].PlannedLongitude),
+        // for (var i = 0; i < this.selectedTripp.length; i++) {
+        //     // console.log(this.selectedTripp[i].PlannedLatitude);
+        //     // console.log(this.selectedTripp[i].PlannedLongitude);
+        //     this.marker = new google.maps.Marker({
+        //       position: new google.maps.LatLng(this.selectedTripp[i].PlannedLatitude, this.selectedTripp[i].PlannedLongitude),
+        //       map: map,
+        //       icon: pinImage
+        //     });
+
+        //     // section for drawing the route on map begins
+        //     this.directionsDisplay = new google.maps.DirectionsRenderer();
+        //     this.directionsDisplay.setMap(map);
+        //     this.directionsService = new google.maps.DirectionsService();
+        //     var start = new google.maps.LatLng(this.selectedTripp[i].PlannedLatitude, this.selectedTripp[i].PlannedLongitude);
+        //     var end = new google.maps.LatLng(this.selectedTripp[i+1].PlannedLatitude, this.selectedTripp[i+1].PlannedLongitude);
+        //     var bounds = new google.maps.LatLngBounds();
+        //     bounds.extend(start);
+        //     bounds.extend(end);
+        //     map.fitBounds(bounds);
+        //     this.request = {
+        //       origin: start,
+        //       destination: end,
+        //       travelMode: google.maps.TravelMode.DRIVING
+        //     };
+
+        //     google.maps.event.addListener(this.marker, 'click', ((marker, i)=> {
+        //       return ()=> {
+        //         infowindow.setContent(this.selectedTrip[i].CustomerName);
+        //         infowindow.open(map, marker);
+        //       }
+        //     })(this.marker, i));
+        //     let mapObject = this;
+        //     new google.maps.DirectionsService().route(this.request, function (response, status) {
+        //       if (status == google.maps.DirectionsStatus.OK) {
+        //         mapObject.directionsDisplay.setDirections(response);
+        //         mapObject.directionsDisplay.setMap(map);
+        //         mapObject.directionsDisplay.setOptions({
+        //           polylineOptions: {
+        //             strokeColor: 'red'
+        //           }
+        //         });
+        //       } else {
+        //         alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+        //       }
+        //     });
+        //     // section for drawing the route on map ends
+        // }
+
+        /////////////////////////////
+
+        this.directionsDisplay = new google.maps.DirectionsRenderer(); //
+        
+        
+          var map = new google.maps.Map(el, { //
+            zoom: 10,
+            center: new google.maps.LatLng(32.8481, -96.8512),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+          });
+          this.directionsDisplay.setMap(map);  //
+          this.directionsDisplay.setOptions( { suppressMarkers: true } );
+          //var infowindow = new google.maps.InfoWindow();  //
+        
+          var request = {
+            travelMode: google.maps.TravelMode.DRIVING  //
+          };
+          for (var i = 0; i < this.locations.length; i++) {
+            this.marker = new google.maps.Marker({
+              position: new google.maps.LatLng(this.locations[i][0], this.locations[i][1]),
               map: map,
               icon: pinImage
             });
-
-            // section for drawing the route on map begins
-            this.directionsDisplay = new google.maps.DirectionsRenderer();
-            this.directionsDisplay.setMap(map);
-            this.directionsService = new google.maps.DirectionsService();
-            var start = new google.maps.LatLng(this.selectedTripp[i].PlannedLatitude, this.selectedTripp[i].PlannedLongitude);
-            var end = new google.maps.LatLng(this.selectedTripp[i+1].PlannedLatitude, this.selectedTripp[i+1].PlannedLongitude);
-            var bounds = new google.maps.LatLngBounds();
-            bounds.extend(start);
-            bounds.extend(end);
-            map.fitBounds(bounds);
-            this.request = {
-              origin: start,
-              destination: end,
-              travelMode: google.maps.TravelMode.DRIVING
-            };
-            let mapObject = this;
-            new google.maps.DirectionsService().route(this.request, function (response, status) {
-              if (status == google.maps.DirectionsStatus.OK) {
-                mapObject.directionsDisplay.setDirections(response);
-                mapObject.directionsDisplay.setMap(map);
-                mapObject.directionsDisplay.setOptions({
-                  polylineOptions: {
-                    strokeColor: 'red'
-                  }
-                });
-              } else {
-                alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+        
+            google.maps.event.addListener(this.marker, 'click', ((marker, i)=> {
+              return ()=> {
+                infowindow.setContent(this.selectedTrip[i].CustomerName);
+                infowindow.open(map, marker);
               }
-            });
-            // section for drawing the route on map ends
-        }
-      } else if (this.actual) {
-        for (var i = 0; i < this.selectedTrip.length; i++) {
-          console.log(this.selectedTrip[i].ActualLatitude);
-          console.log(this.selectedTrip[i].ActualLongitude);
-          this.marker[i] = new google.maps.Marker({
-            position: new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude),
-            map: map
+            })(this.marker, i));
+        
+            if (i == 0) request['origin'] = this.marker.getPosition();
+            else if (i == this.locations.length - 1) request['destination'] = this.marker.getPosition();
+            else {
+              if (!request['waypoints']) request['waypoints'] = [];
+              request['waypoints'].push({
+                location: this.marker.getPosition(),
+                stopover: true
+              });
+            }
+        
+          }
+          let mapObj = this;
+          new google.maps.DirectionsService().route(request, function(result, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+              mapObj.directionsDisplay.setDirections(result);
+            }
           });
-        }
+
+        /////////////////////////////
+      } else if (this.actual) {
+        // for (var i = 0; i < this.selectedTrip.length; i++) {
+        //   console.log(this.selectedTrip[i].ActualLatitude);
+        //   console.log(this.selectedTrip[i].ActualLongitude);
+        //   this.marker[i] = new google.maps.Marker({
+        //     position: new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude),
+        //     map: map
+        //   });
+        // }
       } else {
       }
     });
