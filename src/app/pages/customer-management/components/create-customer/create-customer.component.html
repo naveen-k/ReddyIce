@@ -138,14 +138,25 @@
                             <table class="table">
                                 <thead class="tableHeader">
                                     <th colspan="2">Product List</th>
-                                    <th style="width:100px"><button (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
+                                    <th style="width:100px"><button [disabled]="action =='view'" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
                                 </thead>
                                 <thead>
                                     <th>Product</th>
                                     <th>Price</th>
                                     <th></th>
                                 </thead>
-                                <tbody *ngIf="action == '!view'">
+                                <tbody *ngIf="action == 'view'|| action == 'edit' ">
+                                        <tr *ngFor="let mprod of addedProduct">
+                                                <td>
+                                                   {{mprod.DisplayName}}
+                                                </td>
+                                                <td>
+                                                    <input disabled class="form-control" type="number" [(ngModel)]="mprod.ProductPrice">   
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                 </tbody>
+                                <tbody *ngIf="action == 'create'">
                                     <tr *ngFor="let mprod of addedProduct">
                                         <td>
                                             <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" >
@@ -161,17 +172,23 @@
                                         <td></td>
                                     </tr>
                                 </tbody>
-                                <tbody *ngIf="action == 'view'">
-                                    <tr *ngFor="let mprod of addedProduct">
+                                <tbody *ngIf="action == 'edit' ">
+                                        <tr *ngFor="let mprod of newlyAddedproduct">
                                             <td>
-                                               {{mprod.DisplayName}}
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" >
+                                                    <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
+                                                        {{prod.DisplayName}}
+                                                        
+                                                    </option>
+                                                </select>
                                             </td>
                                             <td>
-                                                <input disabled class="form-control" type="number" [(ngModel)]="mprod.ProductPrice">   
+                                                <input class="form-control" type="number" [(ngModel)]="mprod.Price">   
                                             </td>
                                             <td></td>
                                         </tr>
-                                </tbody>
+                                 </tbody>
+                               
                             </table>
                         </div>
                         <!-- <ng-template #rowTemplate let-ctx="item">

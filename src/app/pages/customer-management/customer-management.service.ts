@@ -44,4 +44,7 @@ export class CustomerManagementService extends SharedService {
   createCustomer(data) {
     return this.http.post('api/createexternalcustomer', data).map((res => res.json()));
   }
+  updateCustomer(custId, data){ 
+    return this.http.put(`api/editexternalcustomer?id=${custId}`, data).map((res => res.json()));
+  }
 }
