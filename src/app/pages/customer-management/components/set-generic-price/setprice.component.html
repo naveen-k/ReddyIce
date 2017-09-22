@@ -4,10 +4,17 @@
             <h4 style="padding-top: 8px;">Product Generic Price</h4>
         </div>
         <div class="col-md-2">
-                <button class="btn btn-danger pull-right" [routerLink]="['../']">Back</button>
-            </div>
+            <button class="btn btn-danger pull-right" [routerLink]="['../']">Back</button>
+        </div>
         <div class="col-md-1">
             <button (click)='setGenericPrice()' class="btn btn-danger pull-right">Save</button>
+        </div>
+    </div>
+    <div class="row page-header">
+        <div class="col-md-11">
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-danger pull-right" (click)="addClicked()">Add New Product</button>
         </div>
     </div>
     <br/>
@@ -25,7 +32,7 @@
                     <td>{{ index+1 }}</td>
                     <td>{{ product.ProductName }}</td>
                     <td>
-                       <input type="number" [(ngModel)]='product.Price' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
+                        <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
                     </td>
                 </tr>
             </tbody>

@@ -1,3 +1,4 @@
+import { mProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
@@ -17,7 +18,8 @@ export class SetPriceComponent implements OnInit {
     isNewCustomer: boolean = false;
     setPrice: boolean = false;
     customerObj: any = {};
-    externalProducts: any = [];
+    externalProducts: mProducts[] = [];
+    newProductList: any = [];
 
     constructor(protected service: CustomerManagementService, private router: Router, public activatedRoute: ActivatedRoute,
         protected route: Router) {
@@ -54,10 +56,13 @@ export class SetPriceComponent implements OnInit {
         this.setPrice = false;
     }
 
-    
+
     showPrice() {
         this.setPrice = !this.setPrice;
         this.isNewCustomer = false;
     }
 
+    addClicked() {
+        this.externalProducts.push({} as mProducts);
+    }
 }

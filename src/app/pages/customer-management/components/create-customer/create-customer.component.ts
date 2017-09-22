@@ -47,8 +47,8 @@ export class CreateCustomerComponent implements OnInit {
         });
     }
     addProduct() {
-      
-        if (this.action == 'create') {
+
+        if (this.action === 'create') {
             this.addedProduct.push({} as mProducts);
         }
         else {
@@ -59,11 +59,13 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     save() {
-       
-        if(this.action == 'edit') { 
-            this.addedProduct = this.addedProduct.concat(this.newlyAddedproduct); 
+        debugger
+
+        if (this.action == 'edit') {
+            debugger
+            this.addedProduct = this.addedProduct.concat(this.newlyAddedproduct);
             this.customer.MappedProducts = this.addedProduct;
-      
+
             console.log(this.customer);
             this.service.updateCustomer(this.customerId, this.customer).subscribe((res) => {
                 console.log(res);
@@ -72,15 +74,16 @@ export class CreateCustomerComponent implements OnInit {
             });
 
         }
-        else{
-        this.customer.MappedProducts = this.addedProduct;
-        console.log(this.customer);
-        this.service.createCustomer(this.customer).subscribe((res) => {
-            console.log(res);
-        }, (err) => {
-            console.log(err);
-        });
-    }
+        else {
+            debugger
+            this.customer.MappedProducts = this.addedProduct;
+            console.log(this.customer);
+            this.service.createCustomer(this.customer).subscribe((res) => {
+                console.log(res);
+            }, (err) => {
+                console.log(err);
+            });
+        }
     }
 
 }

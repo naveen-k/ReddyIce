@@ -40,5 +40,15 @@ export class CustomerManagementComponent implements OnInit {
 
     }
 
-
+    // updateUserTableOnTypeChange() {
+    //     this.customers = this.usersList.filter((u) => {
+    //       if (this.userType === 'active') {
+    //         return u.IsActive;
+    //       }
+    //       if (this.userType === 'inActive') {
+    //         return !u.IsActive;
+    //       }
+    //       return true;
+    //     });
+    //   }
 }

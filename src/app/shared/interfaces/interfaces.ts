@@ -29,7 +29,7 @@ export interface Customer {
     CustomerKey: string;
     ChainCode: string;
     ChainZone: string;
-    PrimayContact: string;
+    PrimaryContact: string;
     SecondaryContact: string;
     TicketMessage: string;
     IsTaxable: boolean;
