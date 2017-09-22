@@ -21,10 +21,10 @@
                     </select>
                 </div>
                 <div class="col-sm-3">
-                    <label>Select Route</label>
+                    <label>Select Driver</label>
                     <select class="form-control">
                         <option *ngFor="let route of trips">
-                            {{route.RouteNumber}}
+                            {{route.DriverName}}
                         </option>
                     </select>
                 </div>
@@ -79,23 +79,23 @@
                         <table class="table table-striped table-condensed">
                             <thead>
                                 <tr>
-                                    <th style="width:112px;">
-                                        <span class="cursorPointer">
+                                    <th style="width:75px;">
+                                        <span>
                                             Planned
                                         </span>
                                     </th>
-                                    <th class="thVerticalAlign table-text-align">
-                                        <span class="cursorPointer">
+                                    <th style="width:75px;text-align: center;">
+                                        <span>
                                             Actual
                                         </span>
                                     </th>
-                                    <th class="thVerticalAlign table-text-align">
+                                    <!-- <th class="thVerticalAlign table-text-align">
                                         <span class="cursorPointer">
                                             Date-Time
                                         </span>
-                                    </th>
-                                    <th class="thVerticalAlign table-text-align">
-                                        <span class="cursorPointer">
+                                    </th> -->
+                                    <th>
+                                        <span>
                                             Customer
                                         </span>
                                     </th>
@@ -128,10 +128,10 @@
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr>
                                         <td>{{subitem.PlannedSequence}}</td>
-                                        <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                                        <td style="text-align:center;" *ngIf="!isNewTicket">
                                             {{subitem.ActualSequence}}
                                         </td>
-                                        <td>{{tripStartDate | date}}</td>
+                                        <!-- <td>{{tripStartDate | date}}</td> -->
                                         <td>{{subitem.CustomerName}}</td>
                                     </tr>
                                 </ng-template>
@@ -145,7 +145,7 @@
                     <img src="../../../assets/img/Tracker-Map.PNG">
                 </div> -->
                 <div class="col-md-8" style="overflow-y: hidden;height: 350px;">
-                    <ba-card cardTitle="Google Maps">
+                    <ba-card cardTitle="Route Map">
                         <div class="google-maps"></div>
                     </ba-card>
                 </div>
