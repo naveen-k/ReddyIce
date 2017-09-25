@@ -1,203 +1,209 @@
 <ba-card cardTitle="Create Customer" baCardClass="with-scroll" class="smart-table-container">
-        <div class="row">
-            <div class="col-sm-9"></div>
-            <div class="col-sm-2">
-                <button class="btn btn-danger pull-right" [routerLink]="['../../']">Back</button>
-            </div>
-            <div class="col-sm-1">
-                <button [disabled]="action=='view'" class="btn btn-danger pull-right" (click)="save()">Save</button>
-            </div>
+    <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-2 head-button-container-for-back">
+            <button [hidden]="mode==1" class="btn btn-danger pull-right" [routerLink]="['../../list']">Back</button>
+            <button [hidden]="mode!=1" class="btn btn-danger pull-right" [routerLink]="['../list']">Back</button>
         </div>
-        <div class="row" >
-            <div class="col-sm-4 page-header">
-                <div class="row">
-                    <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
-                    <div class="col-sm-7 padding-eater">
-                        <input [disabled]="action =='view'" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber" class="form-control" placeholder="Customer Number"
-                        />
-                    </div>
+        <div class="col-sm-1 head-button-container-for-save">
+            <button [disabled]="mode ==3" class="btn btn-danger pull-right" (click)="save()">Save</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 page-header">
+            <div class="row">
+                <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
+                <div class="col-sm-7 padding-eater">
+                    <input [disabled]="mode ==3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber" class="form-control"
+                        placeholder="Customer Number" />
                 </div>
-                <div class="row box-top-margin">
-                    <label for="example-text-input" class="col-sm-5 col-form-label">Customer Name</label>
-                    <div class="col-sm-7 padding-eater">
-                        <input [disabled]="action =='view'" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" class="form-control" placeholder="Customer Name" 
-                        />
-                    </div>
+            </div>
+            <div class="row box-top-margin">
+                <label for="example-text-input" class="col-sm-5 col-form-label">Customer Name</label>
+                <div class="col-sm-7 padding-eater">
+                    <input [disabled]="mode == 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" class="form-control"
+                        placeholder="Customer Name" />
                 </div>
-                <div class="row box-top-margin">
-                    <label for="example-text-input" class="col-sm-5 col-form-label">Customer Type</label>
-                    <div class="col-sm-7 padding-eater">
-                        <select [disabled]="action =='view'" class="form-control" [(ngModel)]='customer.CustomerType' name="custType">
+            </div>
+            <div class="row box-top-margin">
+                <label for="example-text-input" class="col-sm-5 col-form-label">Customer Type</label>
+                <div class="col-sm-7 padding-eater">
+                    <select [disabled]="mode ==3" class="form-control" [(ngModel)]='customer.CustType' name="custType">
                                 <option [value]='20' >DSD</option>
                                 <option [value]='21' >PBS</option>
                                 <option [value]='22' >PBM</option>
                                
                             </select>
-                    </div>
                 </div>
-                <div class="row box-top-margin">
-                    <label for="example-text-input" class="col-sm-5 col-form-label">Payment Type</label>
-                    <div class="col-sm-7 padding-eater">
-                        <select [disabled]="action =='view'" [(ngModel)]="customer.PaymentType" class="form-control" name="custType">
-                                <option value="cash">Cash</option>
-                                <option value="check">Check</option>
-                                <option value="card">Card</option>
-                            </select>
-                    </div>
-                </div>
-                <div class="row box-top-margin">
-                        <label for="example-text-input" class="col-sm-5 col-form-label">IsTaxassble?</label>
-                        <div class="col-sm-7 padding-eater">
-                                <input [disabled]="action =='view'" type="checkbox" [(ngModel)]='customer.IsTaxassble' class="checkbox-size" />
-                                
-                            </div>
-                    </div>
-                   <div class="row box-top-margin">
-                    
-                        <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
-                        <div class="col-sm-7 padding-eater">
-                            <input [disabled]="action =='view'" [(ngModel)]='customer.TaxPercentage' id="typeahead-basic" type="number" class="form-control" placeholder="Tax Percentage" />
-                        </div>               
-                </div>
-               
             </div>
-            <div class="col-md-8 page-header">
-                <div class="col-sm-12">
-                    <div class="row">
-                        <label for="example-text-input" class="col-sm-1 col-form-label">Address</label>
-                        <div class="col-sm-11">
-                            <input [disabled]="action =='view'" [(ngModel)]='customer.Address' id="typeahead-basic" type="text" class="form-control" placeholder="Address" />
-                        </div>
+            <div class="row box-top-margin">
+                <label for="example-text-input" class="col-sm-5 col-form-label">Payment Type</label>
+                <div class="col-sm-7 padding-eater">
+                    <select [disabled]="mode ==3" [(ngModel)]="customer.PaymentType" class="form-control" name="custType">
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row box-top-margin">
+                <label for="example-text-input" class="col-sm-5 col-form-label">IsTaxassble?</label>
+                <div class="col-sm-7 padding-eater">
+                    <input [disabled]="mode ==3" type="checkbox" [(ngModel)]='customer.IsTaxassble' class="checkbox-size" />
+
+                </div>
+            </div>
+            <div class="row box-top-margin">
+
+                <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
+                <div class="col-sm-7 padding-eater">
+                    <input [disabled]="mode ==3" [(ngModel)]='customer.TaxPercentage' id="typeahead-basic" type="number" class="form-control"
+                        placeholder="Tax Percentage" />
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-8 page-header">
+            <div class="col-sm-12">
+                <div class="row">
+                    <label for="example-text-input" class="col-sm-1 col-form-label">Address</label>
+                    <div class="col-sm-11">
+                        <input [disabled]="mode ==3" [(ngModel)]='customer.Address' id="typeahead-basic" type="text" class="form-control"
+                            placeholder="Address" />
                     </div>
-                    <div class="row box-top-margin">
-                        <div class="col-sm-4">
-                            <div class="row">
-                                <label for="example-text-input" class="col-sm-3 col-form-label">State</label>
-                                <div class="col-sm-9">
-                                    <input [disabled]="action =='view'" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="row">
-                                <label for="example-text-input" class="col-sm-3 col-form-label">City</label>
-                                <div class="col-sm-9">
-                                    <input [disabled]="action =='view'" [(ngModel)]='customer.City' id="typeahead-basic" type="text" class="form-control" placeholder="City" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="row">
-                                <label for="example-text-input" class="col-sm-3 col-form-label">Zip</label>
-                                <div class="col-sm-9">
-                                    <input [disabled]="action =='view'" [(ngModel)]='customer.ZipCode' id="typeahead-basic" type="text" class="form-control" placeholder="Zip" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row box-top-margin">
-                            <div class="col-sm-6">
-                                    <div class="row">
-                                        <label for="example-text-input" class="col-sm-2 col-form-label">Country</label>
-                                        <div class="col-sm-10">
-                                            <input [disabled]="action =='view'" [(ngModel)]='customer.Country' id="typeahead-basic" type="text" class="form-control" placeholder="Country" />
-                                        </div>
-                                    </div>
-                                </div>
-                       
-                        <div class="col-sm-6">
-                            <div class="row">
-                                <label for="example-text-input" class="col-sm-2 col-form-label">Phone</label>
-                                <div class="col-sm-10">
-                                    <input [disabled]="action =='view'" [(ngModel)]='customer.Phone' id="typeahead-basic" type="number" class="form-control" placeholder="Phone" />
-                                </div>
+                </div>
+                <div class="row box-top-margin">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <label for="example-text-input" class="col-sm-3 col-form-label">State</label>
+                            <div class="col-sm-9">
+                                <input [disabled]="mode ==3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
+                                />
                             </div>
                         </div>
                     </div>
-                    <div class="row box-top-margin">
-                            <div class="col-sm-6">
-                                    <div class="row">
-                                        <label for="example-text-input" class="col-sm-2 col-form-label">Primary Contact</label>
-                                        <div class="col-sm-10">
-                                            <input [disabled]="action =='view'" [(ngModel)]="customer.PrimaryContact" id="typeahead-basic" type="text" class="form-control" placeholder="Primary Contact" />
-                                        </div>
-                                    </div>
-                                </div>
-                        <div class="col-sm-6">
-                            <div class="row">
-                                <label for="example-text-input" class="col-sm-2 col-form-label">Email</label>
-                                <div class="col-sm-10">
-                                    <input [disabled]="action =='view'" [(ngModel)]='customer.EmailID'  id="typeahead-basic" type="email" class="form-control" placeholder="Email" />
-                                </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <label for="example-text-input" class="col-sm-3 col-form-label">City</label>
+                            <div class="col-sm-9">
+                                <input [disabled]="mode ==3" [(ngModel)]='customer.City' id="typeahead-basic" type="text" class="form-control" placeholder="City"
+                                />
                             </div>
                         </div>
                     </div>
-                    <div class="row box-top-margin">
-                        <div class="col-sm-12">
-                            <table class="table">
-                                <thead class="tableHeader">
-                                    <th colspan="2">Product List</th>
-                                    <th style="width:100px"><button [disabled]="action =='view'" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
-                                </thead>
-                                <thead>
-                                    <th>Product</th>
-                                    <th>Price</th>
-                                    <th></th>
-                                </thead>
-                                <tbody *ngIf="action == 'view'|| action == 'edit' ">
-                                        <tr *ngFor="let mprod of addedProduct">
-                                                <td>
-                                                   {{mprod.DisplayName}}
-                                                </td>
-                                                <td>
-                                                    <input [disabled]="action=='view'" class="form-control" type="number" [(ngModel)]="mprod.Price">   
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                 </tbody>
-                                <tbody *ngIf="action == 'create'">
-                                    <tr *ngFor="let mprod of addedProduct">
-                                        <td>
-                                            <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" >
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <label for="example-text-input" class="col-sm-3 col-form-label">Zip</label>
+                            <div class="col-sm-9">
+                                <input [disabled]="mode ==3" [(ngModel)]='customer.ZipCode' id="typeahead-basic" type="text" class="form-control"
+                                    placeholder="Zip" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Country</label>
+                            <div class="col-sm-10">
+                                <input [disabled]="mode ==3" [(ngModel)]='customer.Country' id="typeahead-basic" type="text" class="form-control"
+                                    placeholder="Country" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Phone</label>
+                            <div class="col-sm-10">
+                                <input [disabled]="mode ==3" [(ngModel)]='customer.Phone' id="typeahead-basic" type="number" class="form-control"
+                                    placeholder="Phone" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Primary Contact</label>
+                            <div class="col-sm-10">
+                                <input [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" id="typeahead-basic" type="text" class="form-control"
+                                    placeholder="Primary Contact" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-10">
+                                <input [disabled]="mode === 3" [(ngModel)]='customer.EmailID' id="typeahead-basic" type="email" class="form-control"
+                                    placeholder="Email" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row box-top-margin">
+                    <div class="col-sm-12">
+                        <table class="table">
+                            <thead class="tableHeader">
+                                <th colspan="2">Product List</th>
+                                <th style="width:100px"><button [disabled]="mode =='3'" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
+                            </thead>
+                            <thead>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th></th>
+                            </thead>
+                            <tbody *ngIf="mode === 3|| mode === 2 ">
+                                <tr *ngFor="let mprod of addedProduct">
+                                    <td class="text-align-left">
+                                        {{mprod.DisplayName}}
+                                    </td>
+                                    <td class="td-width">
+                                        <input [disabled]="mode===3" class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="mode == 1">
+                                <tr *ngFor="let mprod of addedProduct">
+                                    <td class="text-align-left">
+                                        <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID">
                                                 <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
-                                                    {{prod.DisplayName}}
-                                                    
+                                                    {{prod.DisplayName}}  
                                                 </option>
                                             </select>
-                                        </td>
-                                        <td>
-                                            <input class="form-control" type="number" [(ngModel)]="mprod.Price">   
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                                <tbody *ngIf="action == 'edit' ">
-                                        <tr *ngFor="let mprod of newlyAddedproduct">
-                                            <td>
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" >
+                                    </td>
+                                    <td class="td-width">
+                                        <input class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="mode == 2 ">
+                                <tr *ngFor="let mprod of newlyAddedproduct">
+                                    <td class="text-align-left">
+                                        <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID">
                                                     <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
                                                         {{prod.DisplayName}}
                                                         
                                                     </option>
                                                 </select>
-                                            </td>
-                                            <td>
-                                                <input class="form-control" type="number" [(ngModel)]="mprod.Price">   
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                 </tbody>
-                               
-                            </table>
-                        </div>
-                        <!-- <ng-template #rowTemplate let-ctx="item">
+                                    </td>
+                                    <td class="td-width">
+                                        <input class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <!-- <ng-template #rowTemplate let-ctx="item">
                             <span>{{ctx.label}} </span> <input type="number" [(ngModel)]="ctx.data.Price" style="width: 70px;">
                         </ng-template>
                         <dual-list [mappedRowTemplate]="rowTemplate" [items]="products" [(selectedItems)]="selectedProducts"></dual-list> -->
-                    </div>
                 </div>
             </div>
         </div>
-    </ba-card>
-    
-    
+    </div>
+</ba-card>

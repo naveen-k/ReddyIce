@@ -91,3 +91,13 @@ select.form-control:not([size]):not([multiple]) {
   .model-top-margin{
     margin-top:78px;
   }
+  .head-button-container {
+    position: absolute;
+    right: 2px;
+    top: 6px;
+  }
+  .head-button-container-for-add-customer{
+    position: absolute;
+    right: 157px;
+    top: 6px; 
+  }

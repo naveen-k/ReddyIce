@@ -24,10 +24,10 @@ export class CustomerManagementService extends SharedService {
   }
   getCustomer(customerid) {
     return this.http.get(`api/customer/getcustomerdetailbyid?customerid=${customerid}`)
-    .map((res) => res.json()).map((res) => {
-      return res;
-    });
-    
+      .map((res) => res.json()).map((res) => {
+        return res;
+      });
+
   }
 
   getExternalProducts() {
@@ -44,7 +44,11 @@ export class CustomerManagementService extends SharedService {
   createCustomer(data) {
     return this.http.post('api/createexternalcustomer', data).map((res => res.json()));
   }
-  updateCustomer(custId, data) { 
+  updateCustomer(custId, data) {
     return this.http.put(`api/editexternalcustomer?id=${custId}`, data).map((res => res.json()));
+  }
+
+  isProductExist(productname) {
+    return this.http.get(`api/customer/IsProductExistByName?productname=${productname}`).map((res => res.json()));
   }
 }

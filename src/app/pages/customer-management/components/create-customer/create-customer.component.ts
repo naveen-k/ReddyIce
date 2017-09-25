@@ -1,4 +1,4 @@
-import { Customer, DualListItem, mProducts } from '../../../../shared/interfaces/interfaces';
+import { Customer, DualListItem, MProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,30 +16,31 @@ export class CreateCustomerComponent implements OnInit {
 
     selectedProducts: DualListItem[] = [];
 
-    addedProduct: mProducts[] = [];
-    newlyAddedproduct: mProducts[] = [];
+    addedProduct: MProducts[] = [];
+    newlyAddedproduct: MProducts[] = [];
 
     keepSorted = true;
 
-    action: string = 'create';
+    // action: string = 'create';
 
     customerId: string;
+    
+    mode: number; // 1-Create Mode, 2-Edit Mode, 3-View Mode 
 
 
     constructor(protected service: CustomerManagementService,
         protected route: ActivatedRoute,
     ) {
-        this.customerId = this.route.snapshot.params['CustomerId'].split('-')[0];
-        this.action = this.route.snapshot.params['CustomerId'].split('-')[1];
-
+        this.customerId = this.route.snapshot.params['customerId'];
+        this.mode = +this.route.snapshot.data['mode'];
     }
 
     ngOnInit() {
-        if (this.action === 'view' || this.action === 'edit') {
+        if (this.mode === 2 || this.mode === 3) {
             this.service.getCustomer(this.customerId).subscribe((response) => {
                 this.customer = response.CustomerDetails;
                 this.addedProduct = response.ProductDetail;
-                console.log(response);
+                // console.log(this.addedProduct);
             });
         }
         this.service.getExternalProducts().subscribe((response) => {
@@ -47,41 +48,26 @@ export class CreateCustomerComponent implements OnInit {
         });
     }
     addProduct() {
-
-        if (this.action === 'create') {
-            this.addedProduct.push({} as mProducts);
+        if (this.mode === 1) {
+            this.addedProduct.push({} as MProducts);
+        } else {
+            this.newlyAddedproduct.push({} as MProducts);
         }
-        else {
-            this.newlyAddedproduct.push({} as mProducts);
-        }
-
-
     }
 
     save() {
-        debugger
-
-        if (this.action == 'edit') {
-            debugger
+        if (this.mode === 2) {
             this.addedProduct = this.addedProduct.concat(this.newlyAddedproduct);
             this.customer.MappedProducts = this.addedProduct;
-
-            console.log(this.customer);
             this.service.updateCustomer(this.customerId, this.customer).subscribe((res) => {
-                console.log(res);
             }, (err) => {
-                console.log(err);
+
             });
 
-        }
-        else {
-            debugger
+        } else {
             this.customer.MappedProducts = this.addedProduct;
-            console.log(this.customer);
             this.service.createCustomer(this.customer).subscribe((res) => {
-                console.log(res);
             }, (err) => {
-                console.log(err);
             });
         }
     }

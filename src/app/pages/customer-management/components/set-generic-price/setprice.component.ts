@@ -1,4 +1,4 @@
-import { mProducts } from '../../../../shared/interfaces/interfaces';
+import { MProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
@@ -12,20 +12,15 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 })
 
 export class SetPriceComponent implements OnInit {
-    smartTableData: any;
-    products: any;
-    mappedProds: any;
-    isNewCustomer: boolean = false;
-    setPrice: boolean = false;
-    customerObj: any = {};
-    externalProducts: mProducts[] = [];
+    externalProducts: any = [];
     newProductList: any = [];
+    isProductAlreadyExist: boolean = false;
 
-    constructor(protected service: CustomerManagementService, private router: Router, public activatedRoute: ActivatedRoute,
-        protected route: Router) {
-        // this.mappedProds = service.mappedProds;
-        // this.products = service.products;
-    }
+    constructor(
+        protected service: CustomerManagementService,
+        public activatedRoute: ActivatedRoute,
+        protected route: Router,
+    ) { }
 
     ngOnInit() {
         this.getExternalProducts();
@@ -34,35 +29,29 @@ export class SetPriceComponent implements OnInit {
     getExternalProducts() {
         this.service.getExternalProducts().subscribe((res) => {
             this.externalProducts = res;
-            console.log(this.externalProducts);
         }, (err) => {
-            console.log(err);
         });
     }
 
     setGenericPrice() {
-        this.service.setGenericPrice(this.externalProducts).subscribe((res) => {
-            console.log("Data Sent");
+        const priceProduct = { 'SetGenricPrice': this.externalProducts, 'AddNewExternalProduct': this.newProductList }
+        this.service.setGenericPrice(priceProduct).subscribe((res) => {
             this.service.getAllCustomers();
             this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
         }, (err) => {
-            console.log("Error Sending Data");
         });
     }
 
-
-    showNewCustomer(newCustomer) {
-        this.isNewCustomer = !this.isNewCustomer;
-        this.setPrice = false;
+    addProduct() {
+        this.newProductList.push({isActive:true} as MProducts);
     }
 
+    isProductExist(name) {
+        this.service.isProductExist(name).subscribe((res) => {
 
-    showPrice() {
-        this.setPrice = !this.setPrice;
-        this.isNewCustomer = false;
-    }
+        },
+            (err) => {
 
-    addClicked() {
-        this.externalProducts.push({} as mProducts);
+            });
     }
 }

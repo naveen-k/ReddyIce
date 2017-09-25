@@ -85,4 +85,23 @@
   .model-top-margin{
     margin-top:78px;
   }
- 
+
+  .head-button-container {
+    position: absolute;
+    right: -1px;
+    top: 6px;
+  }
+  .head-button-container-for-save{
+    position: absolute;
+    right: 74px;
+    top: 6px;;
+  }
+  .head-button-container-for-add{
+     position: absolute;
+     right: 150px;
+     top: 6px;
+   }
+
+   .td-width{
+    width:20%;
+   }
