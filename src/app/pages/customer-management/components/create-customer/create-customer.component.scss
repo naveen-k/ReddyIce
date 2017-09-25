@@ -75,6 +75,16 @@ select.form-control:not([size]):not([multiple]) {
   right: 15px;
   top: -52px;
 }
+.head-button-container-for-back {
+    position: absolute;
+    right: -1px;
+    top: 6px;
+  }
+  .head-button-container-for-save{
+    position: absolute;
+    right: 74px;
+    top: 6px;;
+  }
 
 .box-top-margin{
     margin-top:15px;
@@ -92,4 +102,10 @@ select.form-control:not([size]):not([multiple]) {
 }
 .table-margin{
   margin-top: 30px;
+}
+.td-width{
+    width:20%;
+ }
+.text-align-left{
+    text-align: left !important;
 }

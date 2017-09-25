@@ -20,8 +20,25 @@ const routes: Routes = [
             component: CustomerManagementComponent,
         },
         {
-            path: 'create/:CustomerId',
+            path: 'create',
             component: CreateCustomerComponent,
+            data: {
+                mode: 1,
+            },
+        },
+        {
+            path: 'edit/:customerId',
+            component: CreateCustomerComponent,
+            data: {
+                mode: 2,
+            },
+        },
+        {
+            path: 'view/:customerId',
+            component: CreateCustomerComponent,
+            data: {
+                mode: 3,
+            },
         },
         {
             path: 'set-price',

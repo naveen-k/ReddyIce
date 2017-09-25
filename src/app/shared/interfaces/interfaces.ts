@@ -50,28 +50,28 @@ export interface Customer {
     DUNSNumber: number;
     DistributorType: string;
     DistributorMasterID: string;
-    productdetail:ProductDetail[];
+    productdetail: ProductDetail[];
     Tax: number;
     CustomerTypeID: number;
     PaymentType: number;
-    MappedProducts?:mProducts[];
-    CustomerType:number;
-    IsTaxassble:boolean;
-    Address:string;
-    EmailID:string;
+    MappedProducts?: MProducts[];
+    CustomerType: number;
+    IsTaxassble: boolean;
+    Address: string;
+    EmailID: string;
 }
-export interface mProducts {
-    ExternalCustomerProductID:number;
-    ExternalCustomerID:number;
-    ProductID:number;
-    Price:number;
-    BranchID:number;
-    Active:boolean;
-    Created:any;
-    CreatedBy:number;
-    Modified:any;
-    ModifiedBy:any;
-    ExternalProductID:number;
+export interface MProducts {
+    ExternalCustomerProductID: number;
+    ExternalCustomerID: number;
+    ProductID: number;
+    Price: number;
+    BranchID: number;
+    isActive: boolean;
+    Created: any;
+    CreatedBy: number;
+    Modified: any;
+    ModifiedBy: any;
+    ExternalProductID: number;
 }
 
 export interface ProductDetail {

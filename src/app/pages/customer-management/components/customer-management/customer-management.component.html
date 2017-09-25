@@ -10,13 +10,13 @@
                 <option value="all">All</option>
             </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 head-button-container">
             <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../set-price']">
                 Set Generic Price
             </button>
         </div>
-        <div class="col-sm-3">
-            <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../create','-create']">
+        <div class="col-sm-3 head-button-container-for-add-customer">
+            <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../create']">
                 Add Customer
             </button>
         </div>
@@ -67,13 +67,13 @@
             <tbody>
                 <tr *ngFor="let cust of customers| filter:customer.searchString | sort:customer.sortField:customer.isAsc">
                     <td class="table-id" style="cursor: pointer">
-                        <i class="ion-edit custom-tooltip-ion"[routerLink]="['../create', cust.CustomerId+'-edit']" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
+                        <i class="ion-edit custom-tooltip-ion"[routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
                         <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
                                     <span class="tooltiptext" >Delete</span>
                                 </i>
-                        <i class="ion-eye custom-tooltip-ion" [routerLink]="['../create', cust.CustomerId+'-view']">
+                        <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId]">
                                     <span class="tooltiptext" >View</span>
                                 </i>
                     </td>
@@ -93,38 +93,3 @@
 
     </div>
 </ba-card>
-<!-- 
-<div *ngIf="setPrice" [ngClass]="{'col-md-6':setPrice}">
-    <ba-card cardTitle="Set Generic Price" baCardClass="with-scroll" class="smart-table-container">
-        <span (click)="showPrice($event)" class="ion-close-round addCustCloseIcon"></span>
-        <div class="row">
-            <div class="col-md-10">
-                <h4 style="padding-top: 8px;">Product Generic Price</h4>
-            </div>
-            <div>
-                <button class="btn btn-danger">Save</button>
-            </div>
-        </div>
-        <br/>
-        <div class="vertical-scroll">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>S.No.</th>
-                        <th>Product</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of smartTableData">
-                        <td>{{ item.customerNumber }}</td>
-                        <td>{{ item.customerName }}</td>
-                        <td>
-                            <input type="text" class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </ba-card>
-</div> -->
