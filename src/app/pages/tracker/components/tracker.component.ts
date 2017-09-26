@@ -1,3 +1,4 @@
+import { UserService } from '../../../shared/user.service';
 import { TrackerService } from '../tracker.service';
 import * as GoogleMapsLoader from 'google-maps';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -23,7 +24,7 @@ export class TrackerComponent {
     tripDate: this.selectedDate,
     branchId: '1',
     isForAll: true,
-    TripID: 17003,
+    TripCode: 1,
   };
 
   planned: boolean = true;
@@ -31,36 +32,7 @@ export class TrackerComponent {
   both: boolean = false;
 
   selectedTrip: any;
-  selectedTripp: any = [
-    {
-      "PlannedLatitude": 32.736259,
-      "PlannedLongitude": -96.864586
-    },
-    {
-      "PlannedLatitude": 32.7498,
-      "PlannedLongitude": -96.8720
-    },
-    {
-      "PlannedLatitude": 32.7905,
-      "PlannedLongitude": -96.8104
-    },
-    {
-      "PlannedLatitude": 32.8481,
-      "PlannedLongitude": -96.8512
-    },
-    {
-      "PlannedLatitude": 32.811211,
-      "PlannedLongitude": -97.057602
-    },
-    {
-      "PlannedLatitude": 32.897480,
-      "PlannedLongitude": -97.040443
-    },
-    {
-      "PlannedLatitude": 32.7605,
-      "PlannedLongitude": -97.0037
-    }
-  ];
+  
   tripStartDate: any;
 
   marker: any = [];
@@ -68,16 +40,18 @@ export class TrackerComponent {
   userId = localStorage.getItem('userId');
 
   // variables for drawing route
-  directionsDisplay;
-  directionsService;
+  map:any;
+  infowindow:any;
+  bounds:any;
+  pinColor:any;
+  pinImage:any;
 
-  directionsDisplay2;
-  directionsService2;
-  request = {};
+  isDistributor: any;
 
   constructor(
     private _elementRef: ElementRef,
     private service: TrackerService,
+    private userService: UserService,
   ) {
   }
 
@@ -85,6 +59,10 @@ export class TrackerComponent {
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+
+    // get the user type: isDistributor or internal
+    this.isDistributor = this.userService.getUser().IsDistributor;
+    console.log("this.isDistributor", this.isDistributor);
 
     this.loadBranches();
     this.loadTrips();
@@ -126,8 +104,8 @@ export class TrackerComponent {
         if (typeof res == 'object') {
           this.trips = res.Trips;
           console.log('this.trips', this.trips.length);
-          this.tripFilterOption.TripID = this.trips[0].TripID;
-          this.fetchTicketDetailsByTrip(this.tripFilterOption.TripID);
+          this.tripFilterOption.TripCode = this.trips[0].TripCode;
+          this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
           this.drawMapPath();
         } else {
           this.trips = [];
@@ -140,14 +118,15 @@ export class TrackerComponent {
 
   locationsActual = [];
   // Filter TicketDetails based on the Trip selected
-  fetchTicketDetailsByTrip(tripID) {
+  fetchTicketDetailsByTrip(TripCode) {
     for (var i = 0; i < this.trips.length; i++) {
-      if (parseInt(tripID) === this.trips[i].TripID) {
+      if (parseInt(TripCode) === this.trips[i].TripCode) {
         this.selectedTrip = this.trips[i].TripTicketList;
         this.tripStartDate = this.trips[i].TripStartDate
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
+    this.drawMapPath();
     // this.locations = [];
     // this.locationsActual = [];
     for (var j = 0; j < this.selectedTrip.length; j++) {
@@ -174,8 +153,8 @@ export class TrackerComponent {
 
   // Fetch selected Trip
   tripChangeHandler() {
-    console.log('tripId', this.tripFilterOption.TripID);
-    this.fetchTicketDetailsByTrip(this.tripFilterOption.TripID);
+    console.log('TripCode', this.tripFilterOption.TripCode);
+    this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
   }
 
   // Filter Markers in the Google Map based on Sequence Radio Button selection
@@ -195,11 +174,7 @@ export class TrackerComponent {
     }
     this.drawMapPath();
   }
-  map:any;
-  infowindow:any;
-  bounds:any;
-  pinColor:any;
-  pinImage:any;
+  
   drawMapPath() {
     let el = this._elementRef.nativeElement.querySelector('.google-maps');
     // TODO: do not load this each time as we already have the library after first attempt
@@ -212,7 +187,8 @@ export class TrackerComponent {
       this.infowindow = new google.maps.InfoWindow();
       this.bounds = new google.maps.LatLngBounds();
       this.pinColor = "A52A2A";
-      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
+      this.pinImage = new google.maps.MarkerImage(
+        "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34));
@@ -279,67 +255,13 @@ export class TrackerComponent {
         // }
         // this.map.fitBounds(this.bounds);
       } else {
-        // for (var i = 0; i < this.selectedTrip.length; i++) {
-
-        //   // changing color of the marker icon based on condition
-        //   if (this.selectedTrip[i].TicketNumber) {
-        //     pinColor = 'A52A2A';    // brown color for Planned service
-        //   } else {
-        //     pinColor = '0000ff';    // blue color for Unplanned service
-        //   }
-        //   // TODO: set color for Skipped stops and Did Not Service
-
-        //   // customising the marker icon here
-        //   pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-        //     new google.maps.Size(21, 34),
-        //     new google.maps.Point(0, 0),
-        //     new google.maps.Point(10, 34));
-
-        //   // start point of straight line
-        //   var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
-
-        //   // adding check here to avoid 'undefined' condition
-        //   if (this.selectedTrip[i + 1]) {
-        //     // end point fo straight line
-        //     var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
-        //   }
-
-        //   // this will draw straight line between multiple points
-        //   var polyline = new google.maps.Polyline({
-        //     path: [startPt, endPt],
-        //     strokeColor: 'brown',
-        //     strokeWeight: 2,
-        //     strokeOpacity: 1
-        //   });
-
-        //   polyline.setMap(map);
-        //   bounds.extend(startPt);
-        //   bounds.extend(endPt);
-
-        //   // adding pushpin marker logic here
-        //   var marker = new google.maps.Marker({
-        //     position: new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude),
-        //     map: map,
-        //     icon: pinImage
-        //   });
-
-        //   // snippet for showing info window on marker click
-        //   google.maps.event.addListener(marker, 'click', ((marker, i) => {
-        //     return () => {
-        //       infowindow.setContent('Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>' +
-        //         'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>' +
-        //         'Total Amount : ' + this.selectedTrip[i].TotalAmount);
-        //       infowindow.open(map, marker);
-        //     }
-        //   })(marker, i));
-        // }
-        // map.fitBounds(bounds);
+        
       }
     });
   }
 
   drawPolyline(google, sequence) {
-    for (var i = 0; i < this.selectedTrip.length - 1; i++) {
+    for (var i = 0; i < this.selectedTrip.length; i++) {
 
       // changing color of the marker icon based on condition
       if (this.selectedTrip[i].TktType === 'R') {
@@ -351,7 +273,7 @@ export class TrackerComponent {
       }
 
       // customising the marker icon here
-      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
+      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (i+1).toString() + "|" + this.pinColor + "|000",
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34));
@@ -366,9 +288,15 @@ export class TrackerComponent {
 
       // end point fo straight line
       if (sequence === 1) {
-        var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+        // adding check here to avoid 'undefined' condition
+        if (this.selectedTrip[i + 1]) {
+          var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+        }
       } else if (sequence === 2) {
-        var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+        // adding check here to avoid 'undefined' condition
+        if (this.selectedTrip[i + 1]) {
+          var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+        }
       }
       // this will draw straight line between multiple points
       var polyline = new google.maps.Polyline({
@@ -395,7 +323,9 @@ export class TrackerComponent {
       var marker = new google.maps.Marker({
         position: new google.maps.LatLng(positionLatitude, positionLongitude),
         map: this.map,
-        icon: this.pinImage
+        icon: this.pinImage,
+        title: (i+1).toString(),
+        // label: (i+1).toString()
       });
 
       // snippet for showing info window on marker click
