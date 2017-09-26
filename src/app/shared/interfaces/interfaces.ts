@@ -1,3 +1,4 @@
+import { Chain } from '@angular/compiler';
 export interface Branch {
     BranchCode: number;
     BranchID: number;
@@ -59,6 +60,8 @@ export interface Customer {
     IsTaxassble: boolean;
     Address: string;
     EmailID: string;
+    IsDex: boolean;
+    Chain:string;
 }
 export interface MProducts {
     ExternalCustomerProductID: number;

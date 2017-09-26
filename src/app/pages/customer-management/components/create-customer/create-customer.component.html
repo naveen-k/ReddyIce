@@ -96,14 +96,8 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">State</label>
                             <div class="col-sm-9">
-                                <!-- <input [disabled]="mode ===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State" -->
-                                <!-- /> -->
-                                <select [disabled]="mode ===3" class="form-control" [(ngModel)]='customer.State'>
-                                        <option [value]='State1' >State 1</option>
-                                        <option [value]='State2' >State 2</option>
-                                        <option [value]='State3' >State 3</option>
-                                       
-                                    </select>
+                                <input [disabled]="mode ===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
+                                /> 
                             </div>
                         </div>
                     </div>
