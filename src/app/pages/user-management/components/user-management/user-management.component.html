@@ -1,6 +1,6 @@
 <div class="row user-details">
   <div class="col-md-6" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
-    <ba-card cardTitle="User List" baCardClass="with-scroll" class="smart-table-container" #customer>
+    <ba-card cardTitle="User List {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
       <div class="row">
         <div class="col-md-12 add-new-user">
 
@@ -32,7 +32,7 @@
       </div>
       <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
       <div class="vertical-scroll">
-        <table class="table table-striped table-condensed">
+        <table *ngIf="idDataLoaded" class="table table-striped table-condensed">
           <thead class="a tableHeader">
             <tr>
               <th width="100px;" class="allign">Action</th>
@@ -61,15 +61,27 @@
                     <i *ngIf="(customer.sortField === 'tmp_distributor')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_distributor' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
-              <th *ngIf="!hideColumn" class="allign">
+              <th *ngIf="!hideColumn && !isDistributorExist" class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_branch';customer.isAsc=!customer.isAsc;">
                     Branch
                     <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
-              <th class="text-in-center">
+              <th *ngIf="!isDistributorExist" class="text-in-center">
                 <span>
                     RI Internal
+                </span>
+              </th>
+              <th *ngIf="isDistributorExist" class="allign">
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'EmailID';customer.isAsc=!customer.isAsc;">
+                      Email
+                      <i *ngIf="(customer.sortField === 'EmailID')" [ngClass]="(customer.isAsc && customer.sortField === 'EmailID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                  </span>
+              </th>
+              <th *ngIf="isDistributorExist" class="text-in-center">
+                  <span style="cursor:pointer;" (click)="customer.sortField = 'Phone';customer.isAsc=!customer.isAsc;">
+                      Phone #
+                      <i *ngIf="(customer.sortField === 'Phone')" [ngClass]="(customer.isAsc && customer.sortField === 'Phone' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                   </span>
               </th>
             </tr>
@@ -77,7 +89,7 @@
           <tbody>
 
             <!--Removed sorting functionality as it was causing rendering issues  -->
-            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString:['FirstName', 'LastName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor']:userTableData">
+            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString:['FirstName', 'LastName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone']:userTableData">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
                    <span class="tooltiptext">View</span>
@@ -94,8 +106,10 @@
               <td *ngIf="!hideColumn" class="userCell">{{ item.UserName || 'NA' }}</td>
               <td class="userCell">{{ item.Role?.RoleName}}</td>
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
-              <td *ngIf="!hideColumn" class="userCell">{{item.Branch?.BranchCode}}  {{item.Branch?.BranchName}}</td>
-              <td class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
+              <td *ngIf="!hideColumn && !isDistributorExist" class="userCell">{{item.Branch?.BranchCode}}  {{item.Branch?.BranchName}}</td>
+              <td *ngIf="!isDistributorExist" class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
+              <td *ngIf="isDistributorExist" class="userCell">{{item.EmailID}}</td>
+              <td *ngIf="isDistributorExist" class="userCell text-in-center">{{item.Phone}}</td>
             </tr>
             <tr [hidden]='!showSpinner' class="text-center">
               <td colspan="10"><a> <img src="assets/reddyIce/spinner.gif " width='25px'></a></td>

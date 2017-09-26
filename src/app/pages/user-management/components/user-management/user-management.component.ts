@@ -38,7 +38,8 @@ export class UserManagementComponent implements OnInit {
 
   // ngModel for usertype dropdown
   userType: string = 'active';
-
+  userSubTitle: string = '';
+  idDataLoaded:boolean = false;
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
@@ -322,6 +323,7 @@ export class UserManagementComponent implements OnInit {
     // console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
+      this.idDataLoaded = true;
       this.userDetails = response;
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
@@ -334,6 +336,7 @@ export class UserManagementComponent implements OnInit {
         this.getBranches();
         this.isDistributorAdmin = true;
         this.getUserList(parseInt(userId, 10));
+        this.userSubTitle = (this.isDistributorExist)?' '+response.Distributor.DistributorName:'';
       }
     });
 

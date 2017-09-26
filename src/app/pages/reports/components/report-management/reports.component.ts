@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 
@@ -15,29 +15,35 @@ export class ReportsComponent {
     url: any;
     date: any;
     driverID: any = '10-Jasons634';
-    location: any;
-    user: any;
-    tripcode: any;
+    location: any = "578";
+    user: any = "10";
+    tripcode: any = "1";
     viewReport:boolean=false;
-    value:any;
-    value1:any;
-    value2:any;
-
-
+    value:any = "578";
+    value1:any = "10";
+    value2:any = "1";
+    sHeight:any = 340;
 
     constructor(private sanitizer: DomSanitizer) {
-
+       /* window.onload = (e) =>
+        {
+            ngZone.run(() => {
+                
+                this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
+            });
+        };
+        window.onresize = (e) =>
+        {
+            ngZone.run(() => {
+               
+                this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
+            });
+        };*/
     }
-
+    
     change(value) {
         if (value) {
-            if (value == 'Delivery Status') {
-                this.displayName = 'DR';
-            } else if (value == 'End of Day Report') {
-                this.displayName = 'ED';
-            } else {
-                return false;
-            }
+            this.displayName = value;
         }
     }
 
@@ -53,7 +59,7 @@ export class ReportsComponent {
 
     updateLink() {
         this.viewReport=true;
-        console.log(this.displayName);
+        console.log(this.displayName, "this.location ",this.location);
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
             ('http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx?Rtype='
             + this.displayName + '&DeliveryDate='+this.formatDate(this.date)+'&BranchCode=311&RouteNumber=801&DriverID='
