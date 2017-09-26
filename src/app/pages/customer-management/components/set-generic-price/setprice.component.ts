@@ -43,7 +43,7 @@ export class SetPriceComponent implements OnInit {
     }
 
     addProduct() {
-        this.newProductList.push({isActive:true} as MProducts);
+        this.newProductList.push({ isActive: true } as MProducts);
     }
 
     isProductExist(name) {

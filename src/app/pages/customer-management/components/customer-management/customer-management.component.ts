@@ -30,12 +30,12 @@ export class CustomerManagementComponent implements OnInit {
     }
 
     deleteCustomer(customerId) {
-        const data = [{ 'CustomerType': '2', 'CustomerId': customerId }];
+        const data = [{ 'CustomerType': 1 , 'CustomerId': customerId }];
         this.service.deleteCustomer(data).subscribe((res) => {
             // TODO notification success
         }, (err) => {
             // TODO notification error
         });
-
+        this.getAllCustomers();
     }
 }

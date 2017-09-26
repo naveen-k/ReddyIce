@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SharedService } from '../../shared/shared.service';
 import { UserService } from '../../shared/user.service';
-import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
 
@@ -39,7 +39,10 @@ export class CustomerManagementService extends SharedService {
       .map((res) => res.json());
   }
   deleteCustomer(data) {
-    return this.http.delete('api/deleteexternalcustomer', data).map((res => res.json()));
+    const options = new RequestOptions({
+      body: data,
+    });
+    return this.http.delete('api/deleteexternalcustomer', options).map((res => res.json()));
   }
   createCustomer(data) {
     return this.http.post('api/createexternalcustomer', data).map((res => res.json()));

@@ -18,18 +18,25 @@
         </div>
     </div>
     <br/>
-    <div class="vertical-scroll">
+    <div>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>S.No.</th>
+                    <th>Actions</th>
                     <th>Product</th>
-                    <th>Price</th>
+                    <th>Price $</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let product of externalProducts ; let index=index">
-                    <td>{{ index+1 }}</td>
+                    <td>
+                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                            <span class="tooltiptext">Edit</span>
+                        </i>
+                        <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px">
+                            <span class="tooltiptext">Deactivate</span>
+                        </i>
+                    </td>
                     <td>{{ product.ProductName }}</td>
                     <td class="td-width">
                         <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
@@ -38,7 +45,8 @@
                 <tr *ngFor="let product of newProductList ; let index=index">
                     <td>{{ externalProducts.length+index+1 }}</td>
                     <td>
-                        <input type="text" [(ngModel)]='product.ProductName' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;" (ngModelChange)="isProductExist(product.ProductName)">
+                        <input type="text" [(ngModel)]='product.ProductName' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;"
+                            (ngModelChange)="isProductExist(product.ProductName)">
                     </td>
                     <td>
                         <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">

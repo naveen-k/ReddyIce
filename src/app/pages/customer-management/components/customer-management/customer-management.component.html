@@ -1,4 +1,4 @@
-<ba-card cardTitle="Customer List" baCardClass="with-scroll" class="smart-table-container" #customer>
+<ba-card cardTitle="Customer List" #customer>
     <div class="row">
         <div class="col-sm-3">
             <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
@@ -12,7 +12,7 @@
         </div>
         <div class="col-md-3 head-button-container">
             <button class="btn btn-primary addCustBtn pull-right" [routerLink]="['../set-price']">
-                Set Generic Price
+                Set Product & Price
             </button>
         </div>
         <div class="col-sm-3 head-button-container-for-add-customer">
@@ -21,7 +21,7 @@
             </button>
         </div>
     </div>
-    <div class="vertical-scroll page-header">
+    <div class="page-header">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -56,12 +56,6 @@
                                     <i *ngIf="(customer.sortField == 'email')" [ngClass]="(customer.isAsc && customer.sortField == 'email' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                     </th>
-                    <th>
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'contact';customer.isAsc=!customer.isAsc;">
-                            IsDex
-                            <i *ngIf="(customer.sortField == 'contact')" [ngClass]="(customer.isAsc && customer.sortField == 'contact' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
-                        </span>
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -81,8 +75,7 @@
                     <td>{{ cust.CustomerName }}</td>
                     <td>{{ cust?.Chain }}</td>
                     <td>{{ cust.IsRICustomer?'Yes':'No' }}</td>
-                    <td><a class="email-link">{{ cust?.PaymentType}}</a></td>
-                    <td>{{ cust?.Dex}}</td>
+                    <td><a class="email-link">{{ cust.PaymentType}}</a></td>
                 </tr>
                 <tr *ngIf="!customers.length">
                     <th class="text-center" colspan="7"> No data found </th>
