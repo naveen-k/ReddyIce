@@ -78,7 +78,7 @@
                                      <i *ngIf="(customer.sortField == 'ISRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'ISRICustomer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                                 </th>
-                                <th>
+                                <th class="right">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
                                     Ticket Number
                                      <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -128,13 +128,13 @@
 
                                 <td>{{item.Customerid}} {{item.CustomerName }}</td>
                                 <td>{{item.IsRICustomer }}</td>
-                                <td>{{item.TicketNumber}}</td>
-                                <td>{{item.TotalSale| currency:'USD':true:'1.2'}}</td>
-                                <td>{{item.CashAmount| currency:'USD':true:'1.2'}}</td>
-                                <td>{{item.CheckAmount| currency:'USD':true:'1.2'}}</td>
-                                <td>{{item.ChargeAmount || '0' | currency:'USD':true:'1.2'}}</td>
-                                <td>{{item.Drayage| currency:'USD':true:'1.2'}}</td>
-                                <td>{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd">{{item.TicketNumber}}</td>
+                                <td class="textRightPadd">{{item.TotalSale| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd">{{item.CashAmount| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd">{{item.CheckAmount| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd">{{item.ChargeAmount || '0' | currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd">{{item.Drayage| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd">{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
                             </tr>
                             <tr>
                                 <td colspan="3">Total</td>
