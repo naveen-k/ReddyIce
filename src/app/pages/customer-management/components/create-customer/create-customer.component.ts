@@ -72,6 +72,7 @@ export class CreateCustomerComponent implements OnInit {
         } else {
             this.customer.MappedProducts = this.addedProduct;
             this.service.createCustomer(this.customer).subscribe((res) => {
+                this.router.navigate(['../list'], { relativeTo: this.route });
             }, (err) => {
             });
         }
