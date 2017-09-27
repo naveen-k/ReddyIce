@@ -69,7 +69,7 @@
                             <th>
                                 HH Day End
                             </th>
-                            <th>
+                            <th class="text-right">
                                 # of Tickets
                             </th>
                             <th>
@@ -103,12 +103,12 @@
                             <td  *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
                             <td>{{item.TripCode}}</td>
-                            <td class="text-right">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
-                            <td class="text-right">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
+                            <td class="textRightPadding">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
+                            <td class="textRightPadding">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
                             <td class="textAlignCenter">
                                 <input type="checkbox" name="tripHHMultiSelect" [(ngModel)]="item.IsClosed" disabled>
                             </td>
-                            <td>{{item.TripTicketList.length}}</td>
+                            <td class="textRightPadding">{{item.TripTicketList.length}}</td>
                             <td class="textAlignCenter">
                                 <i class="custom-tooltip-ion">
                                     <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TripStatusID == 23" width="15">
