@@ -104,9 +104,11 @@ export class TrackerComponent {
         if (typeof res == 'object') {
           this.trips = res.Trips;
           console.log('this.trips', this.trips.length);
-          this.tripFilterOption.TripCode = this.trips[0].TripCode;
-          this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
-          this.drawMapPath();
+          if (this.trips[0]) {
+            this.tripFilterOption.TripCode = this.trips[0].TripCode;
+            this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
+            this.drawMapPath();
+          }
         } else {
           this.trips = [];
         }
@@ -255,7 +257,7 @@ export class TrackerComponent {
         // }
         // this.map.fitBounds(this.bounds);
       } else {
-        
+        this.drawPolyline(google, 1);
       }
     });
   }
