@@ -62,6 +62,8 @@ export interface Customer {
     EmailID: string;
     IsDex: boolean;
     Chain:string;
+    EditedProducts?: MProducts[];
+    NewAddedProducts?: MProducts[];
 }
 export interface MProducts {
     ExternalCustomerProductID: number;

@@ -14,7 +14,7 @@
             <div class="row">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
                 <div class="col-sm-7 padding-eater">
-                    <input [disabled]="mode ===3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber" class="form-control"
+                    <input [disabled]="mode ===3" id="typeahead-basic" type="number" [(ngModel)]="customer.CustomerNumber" class="form-control"
                         placeholder="Customer Number" />
                 </div>
             </div>
@@ -114,7 +114,7 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">Zip</label>
                             <div class="col-sm-9">
-                                <input [disabled]="mode ===3" [(ngModel)]='customer.ZipCode' id="typeahead-basic" type="text" class="form-control" placeholder="Zip"
+                                <input [disabled]="mode ===3" [(ngModel)]='customer.ZipCode' id="typeahead-basic" type="number" class="form-control" placeholder="Zip"
                                 />
                             </div>
                         </div>
@@ -166,15 +166,15 @@
                                 <th></th>
                             </thead> -->
                             <tbody *ngIf="mode === 3|| mode === 2 ">
-                                <tr *ngFor="let mprod of addedProduct">
+                                <tr *ngFor="let mprod of addedProduct; let j=index">
                                     <td class="text-align-left">
                                         {{mprod.DisplayName}}
                                     </td>
                                     <td class="td-width">
-                                        <input [disabled]="mode===3" class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control" type="number" [(ngModel)]="mprod.Price">
                                     </td>
                                     <td>
-                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3">
+                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
                                         <i class="ion-trash-a custom-tooltip-ion" (click)="deactivateMappedProduct(mprod)" style="margin-right: 5px" [hidden]="mode===3">
@@ -184,19 +184,19 @@
                                 </tr>
                             </tbody>
                             <tbody *ngIf="mode === 1">
-                                <tr *ngFor="let mprod of addedProduct">
+                                <tr *ngFor="let mprod of addedProduct; let k=index">
                                     <td class="text-align-left">
-                                        <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" (ngModelChange)="productChangeHandler(mprod)">
+                                        <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" (ngModelChange)="productChangeHandler(mprod)">
                                                 <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
                                                     {{prod.DisplayName}}  
                                                 </option>
                                             </select>
                                     </td>
                                     <td class="td-width">
-                                        <input class="form-control" type="number" [(ngModel)]="mprod.ProductPrice">
+                                        <input [disabled]="!addProductCheck[k]" class="form-control" type="number" [(ngModel)]="mprod.Price">
                                     </td>
                                     <td>
-                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,k)">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
                                         <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod)">
@@ -206,19 +206,19 @@
                                 </tr>
                             </tbody>
                             <tbody *ngIf="mode === 2 ">
-                                <tr *ngFor="let mprod of newlyAddedproduct">
+                                <tr *ngFor="let mprod of newlyAddedproduct; let i=index">
                                     <td class="text-align-left">
-                                        <select class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" (ngModelChange)="productChangeHandler(mprod)">
+                                        <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" (ngModelChange)="productChangeHandler(mprod)">
                                             <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
                                                 {{prod.DisplayName}}
                                             </option>
                                         </select>
                                     </td>
                                     <td class="td-width">
-                                        <input class="form-control" type="number" [(ngModel)]="mprod.ProductPrice">
+                                        <input [disabled]="!addNewProductCheck[i]" class="form-control" type="number" [(ngModel)]="mprod.Price">
                                     </td>
                                     <td>
-                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
                                         <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod)">
