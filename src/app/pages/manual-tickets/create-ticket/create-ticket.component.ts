@@ -531,11 +531,6 @@ export class CreateTicketComponent implements OnInit {
   }
 
   typeChangeHandler() {
-    if (this.ticket.TicketTypeID === 22) {
-      this.ticket.IsSaleTicket = true;
-    } else if (this.ticket.TicketTypeID === 23) {
-      this.ticket.IsSaleTicket = false;
-    }
     this.resetCashAndCheck();
   }
 
@@ -755,7 +750,17 @@ export class CreateTicketComponent implements OnInit {
 
     clonedObject.IsPaperTicket = true;
 
+    this.setSaleTicketType(clonedObject);
+
     return clonedObject;
+  }
+
+  setSaleTicketType(ticket) {
+    if (ticket.TicketTypeID === 22) {
+      ticket.IsSaleTicket = true;
+    } else if (ticket.TicketTypeID === 23) {
+      ticket.IsSaleTicket = false;
+    }
   }
 
   calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
