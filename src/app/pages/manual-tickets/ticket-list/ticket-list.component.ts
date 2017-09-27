@@ -66,22 +66,25 @@ export class TicketListComponent implements OnInit {
             this.searchObj.BranchId = this.user.Branch.BranchID;
         }
 
-        if(this.user.Distributor && this.user.Distributor.DistributorMasterId && !this.searchObj.DistributorID){
+        if (this.user.Distributor && this.user.Distributor.DistributorMasterId && !this.searchObj.DistributorID) {
             this.searchObj.DistributorID = this.user.Distributor.DistributorMasterId;
         }
 
         // Set first branch default selected
-        if (this.searchObj.BranchId) {
+        if (this.searchObj.BranchId || this.user.IsDistributor) {
             this.branchChangeHandler();
         }
 
+        if (this.user.IsDistributor) {
+            this.getSearchedTickets();
+        }
     }
 
     sortBranches() {
         // sort by name
         this.allBranches.sort(function (a, b) {
-            var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
-            var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+            const nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
             if (nameA < nameB) {
                 return -1;
             }
@@ -107,7 +110,7 @@ export class TicketListComponent implements OnInit {
     }
 
     getDistributors(branchId) {
-        this.service.getDistributorsByBranch(branchId.toString()).subscribe(res => {
+        this.service.getDistributorsByBranch(branchId ? branchId.toString() : null).subscribe(res => {
             this.distributors = res;
             this.getSearchedTickets();
         });

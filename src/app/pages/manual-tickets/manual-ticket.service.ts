@@ -19,7 +19,11 @@ export class ManualTicketService extends SharedService {
 
   getAllTickets(createdDate, branchId): Observable<any[]> {
     // return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
-    return this.http.get(`api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}`)
+    let url = `api/manualticket/getalltickets?CreatedDate=${createdDate}`;
+    if (branchId) {
+      url = `api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}`;
+    }
+    return this.http.get(url)
       .map(res => res.json());
   }
 
@@ -39,6 +43,11 @@ export class ManualTicketService extends SharedService {
 
   getBranchBasedCustomers(branchId: number): Observable<Customer[]> {
     return this.http.get(`api/customer?branchID=${branchId}`)
+      .map(res => res.json());
+  }
+
+  getTypeBasedCustomers(custType: number): Observable<Customer[]> {
+    return this.http.get(`api/customer?custType=${custType}`)
       .map(res => res.json());
   }
 

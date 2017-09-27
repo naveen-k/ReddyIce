@@ -1,3 +1,4 @@
+import { User } from '../../user-management/user-management.interface';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
@@ -77,7 +78,7 @@ export class CreateTicketComponent implements OnInit {
   urlString = '../../list';
 
   // Current User Object
-  user: any = {};
+  user: User = <User>{};
 
   showList: boolean = false;
   pbsCount: number = 0;
@@ -93,6 +94,7 @@ export class CreateTicketComponent implements OnInit {
     .distinctUntilChanged()
     .map(term => {
       return this.customers.filter((v: any) => {
+        if (!v.CustomerTypeID) { return false; }
         let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
         if (flag) {
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
@@ -126,7 +128,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.DeliveryDate = searchObject.CreatedDate;
     this.ticket.BranchID = +searchObject.BranchId;
     this.ticket.isUserTypeDistributor = searchObject.userType ? searchObject.userType !== 'Internal' : null;
-    this.ticket.UserID = +searchObject.UserId;
+    this.ticket.UserID = searchObject.UserId ? +searchObject.UserId : 0;
     this.ticket.DistributorCopackerID = +searchObject.DistributorID;
 
     // get the ticket id from route
@@ -147,9 +149,17 @@ export class CreateTicketComponent implements OnInit {
     this.ticketTypes = activatedRouteObject['ticketTypes'];
     this.prepareTicketTypes();
 
+    if (this.user.IsDistributor) {
+      this.loadCustomers();
+      this.loadDisributors();
+
+      // Set distributor 
+      this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
+    }
+
     // load customers, if BranchID is available
     if (this.ticket.BranchID) {
-      this.loadCustomerOfBranch(this.ticket.BranchID);
+      this.loadCustomers();
     }
 
     // load driver or distributor
@@ -278,7 +288,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.DistributorCopackerID = null;
     this.ticket.UserID = null;
     this.ticket.TicketProduct = [];
-    this.loadCustomerOfBranch(this.ticket.BranchID);
+    this.loadCustomers();
     if (this.ticket.isUserTypeDistributor) {
       this.loadDisributors(this.ticket.BranchID);
     } else {
@@ -286,19 +296,33 @@ export class CreateTicketComponent implements OnInit {
     }
   }
 
-  loadCustomerOfBranch(branchId) {
-    // this.isFormDirty = true;
-    this.customers = [];
+  loadCustomerOfBranch(branchId, callback) {
     this.service.getBranchBasedCustomers(branchId).subscribe((res) => {
-      this.customers = res;
+      callback(res);
+    });
+  }
 
-      // 
+  loadCustomersByType(custType, callback) {
+    this.service.getTypeBasedCustomers(custType).subscribe((res) => {
+      callback(res);
+    });
+  }
+
+  loadCustomers() {
+    this.customers = [];
+    const callback = (res) => {
+      this.customers = res;
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
         this.ticket.CustomerType = customer.CustomerTypeID;
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
-    });
+    };
+    if (this.user.IsDistributor && this.ticket.CustomerType) {
+      this.loadCustomersByType(this.ticket.CustomerType, callback);
+    } else {
+      this.loadCustomerOfBranch(this.ticket.BranchID, callback);
+    }
   }
 
   loadDriversOfBranch(branchId) {
@@ -308,7 +332,7 @@ export class CreateTicketComponent implements OnInit {
     });
   }
 
-  loadDisributors(branchId) {
+  loadDisributors(branchId?: any) {
     this.service.getDistributorsByBranch(branchId).subscribe(res => {
       this.distributors = res;
     });
@@ -615,8 +639,7 @@ export class CreateTicketComponent implements OnInit {
       // Initialize to check/uncheck POD Received
       this.tempModels.podReceived = !!this.ticket.PODImageID;
 
-      // load customers
-      this.loadCustomerOfBranch(this.ticket.BranchID);
+      this.loadCustomers();
 
       // load driver or distributor
       if (this.ticket.isUserTypeDistributor) {
@@ -626,6 +649,11 @@ export class CreateTicketComponent implements OnInit {
       }
 
       this.loadCustomerDetail(this.ticket.CustomerID);
+
+      // load customers if current logged-in user is distributor
+      if (this.user.IsDistributor) {
+        this.loadCustomers();
+      }
     });
   }
 
@@ -639,7 +667,9 @@ export class CreateTicketComponent implements OnInit {
       this.service.updateTicket(ticket).subscribe(res => {
         this.notification.success(res);
         this.isFormDirty = false;
-        // this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
+        if (this.ticket.TicketStatusID === 24) {
+          this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
+        }
       });
       return;
     }

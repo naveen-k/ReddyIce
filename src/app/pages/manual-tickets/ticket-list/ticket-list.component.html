@@ -10,7 +10,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" *ngIf="!user.IsDistributor">
             <label>Select Branch</label>
             <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
                 <option *ngFor="let obj of allBranches" [value]="obj.BranchID">

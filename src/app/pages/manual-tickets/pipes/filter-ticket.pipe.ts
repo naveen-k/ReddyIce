@@ -6,7 +6,7 @@ import { Pipe } from '@angular/core';
 })
 export class TicketFilter implements PipeTransform {
     transform(array: ManualTicket[], filterField: string, value: number): ManualTicket[] {
-        if (!array || !value) {
+        if (!array || !value || !Array.isArray(array)) {
             return [];
         }
         value = +value;
@@ -18,6 +18,6 @@ export class TicketFilter implements PipeTransform {
                 return ticket.UserID === value;
             }
             return ticket.DistributorCopackerID === value;
-        })
+        });
     }
 }

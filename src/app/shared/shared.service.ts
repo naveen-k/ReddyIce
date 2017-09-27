@@ -37,7 +37,11 @@ export class SharedService {
     }
 
     getDistributorsByBranch(branchId: string): Observable<any[]> {
-        return this.http.get(`api/DistributorBranches?BranchId=${branchId}`).map((res) => res.json());
+        let url = `api/DistributorBranches`;
+        if (branchId) {
+            url = `api/DistributorBranches?BranchId=${branchId}`;
+        }
+        return this.http.get(url).map((res) => res.json());
     }
 
     formatDate(date) {
