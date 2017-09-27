@@ -6,7 +6,7 @@
             <button [hidden]="mode!=1" class="btn btn-danger pull-right" [routerLink]="['../list']">Back</button>
         </div>
         <div class="col-sm-1 head-button-container-for-save">
-            <button [disabled]="mode ===3" class="btn btn-danger pull-right" (click)="save()">Save</button>
+            <button [hidden]="mode ===3" class="btn btn-danger pull-right" (click)="save()">Save</button>
         </div>
     </div>
     <div class="row">
@@ -96,8 +96,11 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">State</label>
                             <div class="col-sm-9">
-                                <input [disabled]="mode ===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
-                                /> 
+                                <!-- <input [disabled]="mode ===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
+                                />  -->
+                                <select [disabled]="mode ===3" [(ngModel)]="customer.State" class="form-control">
+                                        <option *ngFor="let state of allStates" [value]="state.StateId">{{state.StateName}}</option>
+                                    </select>
                             </div>
                         </div>
                     </div>
@@ -154,11 +157,11 @@
                 </div>
                 <div class="row box-top-margin">
                     <div class="col-sm-12">
-                        <table class="table">
+                        <table class="table table-striped">
                             <thead class="tableHeader">
                                 <th>Product</th>
-                                <th>Price $</th>
-                                <th style="width:100px"><button [disabled]="mode ===3" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
+                                <th>Price ($)</th>
+                                <th style="width:100px" class="remove-padding"><button [hidden]="mode ===3" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
                             </thead>
                             <!-- <thead>
                                 <th>Product</th>

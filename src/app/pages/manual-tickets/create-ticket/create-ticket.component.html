@@ -6,6 +6,8 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
+                <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
+                <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back</button>
                 <button class="btn btn-danger" (click)="approveTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
                     Approve
                 </button>
@@ -20,14 +22,12 @@
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
-                <button class="btn btn-danger buttonMargin" [hidden]="tripMode" [disabled]="ticket.TicketStatusID !== 23" (click)="deleteTicket()">
+                <button class="btn btn-danger buttonMargin" [hidden]="tripMode || ticket.TicketStatusID !== 23" [disabled]="ticket.TicketStatusID !== 23" (click)="deleteTicket()">
                     Delete
                 </button>
                 <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly || tripMode" [disabled]="ticket.TicketStatusID != 23">
                     Submit
                 </button>
-                <!-- <button class="btn btn-default buttonMargin" [routerLink]="['../list']">Cancel</button> -->
-                <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back</button>
             </div>
         </div>
     </div>

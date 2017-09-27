@@ -26,6 +26,7 @@ export class CreateCustomerComponent implements OnInit {
     // action: string = 'create';
 
     customerId: string;
+    allStates: any = [];
 
     mode: number; // 1-Create Mode, 2-Edit Mode, 3-View Mode 
     addProductCheck: any =[];
@@ -55,6 +56,9 @@ export class CreateCustomerComponent implements OnInit {
         }
         this.service.getExternalProducts().subscribe((response) => {
             this.products = response;
+        });
+        this.service.getAllStates().subscribe((response) => {
+            this.allStates = response;
         });
     }
     addProduct() {
@@ -116,10 +120,10 @@ export class CreateCustomerComponent implements OnInit {
         }
     }
 
-    productChangeHandler(mprod) {        
+    productChangeHandler(mprod) {
         const product = this.addedProduct.filter(t => t.ExternalProductID === mprod.ExternalProductID);
         const product1 = this.newlyAddedproduct.filter(t => t.ExternalProductID === mprod.ExternalProductID);
-        if (product.length === 2 || product1.length === 2 ) {
+        if (product.length === 2 || product1.length === 2) {
             mprod.ExternalProductID = '';
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',

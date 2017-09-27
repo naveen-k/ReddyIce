@@ -1,3 +1,4 @@
+import { NotificationsService } from 'angular2-notifications';
 import { MProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,11 +16,14 @@ export class SetPriceComponent implements OnInit {
     externalProducts: any = [];
     newProductList: any = [];
     isProductAlreadyExist: boolean = false;
+    editClicked: any = [];
+    isFormTouched: boolean = false;
 
     constructor(
         protected service: CustomerManagementService,
         public activatedRoute: ActivatedRoute,
         protected route: Router,
+        protected notification: NotificationsService,
     ) { }
 
     ngOnInit() {
@@ -29,6 +33,8 @@ export class SetPriceComponent implements OnInit {
     getExternalProducts() {
         this.service.getExternalProducts().subscribe((res) => {
             this.externalProducts = res;
+            this.editClicked = new Array(this.externalProducts.length);
+            this.editClicked.fill(false);
         }, (err) => {
         });
     }
@@ -37,7 +43,8 @@ export class SetPriceComponent implements OnInit {
         const priceProduct = { 'SetGenricPrice': this.externalProducts, 'AddNewExternalProduct': this.newProductList }
         this.service.setGenericPrice(priceProduct).subscribe((res) => {
             this.service.getAllCustomers();
-            this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
+            this.editClicked = false;
+            this.route.navigate(['../'], { relativeTo: this.activatedRoute });
         }, (err) => {
         });
     }
@@ -48,10 +55,31 @@ export class SetPriceComponent implements OnInit {
 
     isProductExist(name) {
         this.service.isProductExist(name).subscribe((res) => {
+            // if (res === true) {
+
+            //     this.notification.error('Product Already Exist in List !!!');
+            //     this.isFormTouched = false;
+            // } else {
+            //     this.isFormTouched = true;
+            // }
 
         },
             (err) => {
-
             });
     }
+
+    editClickHandler(product, index) {
+        if (product) {
+            this.editClicked.fill(false);
+            this.editClicked[index] = true;
+        }
+    }
+
+
+
+    formTouchHandler() {
+        this.isFormTouched = true;
+    }
+
+
 }

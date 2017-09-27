@@ -336,7 +336,7 @@ export class UserManagementComponent implements OnInit {
         this.getBranches();
         this.isDistributorAdmin = true;
         this.getUserList(parseInt(userId, 10));
-        this.userSubTitle = (this.isDistributorExist)?' '+response.Distributor.DistributorName:'';
+        this.userSubTitle = (this.isDistributorExist)?'-'+' '+response.Distributor.DistributorName:'';
       }
     });
 

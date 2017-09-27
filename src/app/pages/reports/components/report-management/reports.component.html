@@ -1,4 +1,65 @@
-<div>
+<div style="height: 600px;">
+<!-- <ba-card cardTitle="Reports" baCardClass="with-scroll" class="smart-table-container"> -->
+<ba-card cardTitle="Reports">
+    <div class="row">
+        <div class="col-md-2" style="padding-top:10px;">
+            <label>Report Type</label>
+        </div>
+        <div class="col-md-3">
+            <select class="form-control" [(ngModel)]="selectedReport" (ngModelChange)="change(selectedReport)">
+                <option value="DS">Delivery Status</option>
+                <option value="DR">Deposit Report</option>
+                <option value="ED">End of Day Report</option>
+                <!-- <option value="volvo">Route Settlement</option>
+                <option value="volvo">Sales Report</option>
+                <option value="volvo">Assets Scanning</option>
+                <option value="volvo">Drayage Report</option> -->
+            </select>
+        </div>
+        <div class="col-md-7 text-right">
+            <button class="btn btn-danger" (click)="updateLink()" style="margin-top: 5px;">View Report</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-sm-3">
+            <label>Start Date</label>
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="date" disabled>
+                <button class="input-group-addon" (click)="d.toggle()" type="button">
+                    <i class="ion-calendar"></i>
+                    <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                </button>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label>Select Branch</label>
+            <select class="form-control">
+                <option value="1362">311-Dallas</option>
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <label>User</label>
+            <select class="form-control" [(ngModel)]="value1" (ngModelChange)="User(value1)">
+                <option [value]="10"  [selected]="value1 == '10'">Jasons634</option>
+                <option [value]="11">Robert</option>
+                <option [value]="1310">Hari</option>
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <label>Trip Code</label>
+            <select class="form-control" [(ngModel)]="value2" (ngModelChange)="tripcodefunc(value2)">
+                <option [value]="1"  [selected]="value2 == '1'">1</option>
+                <option [value]="2">2</option>
+                <option [value]="3">3</option>
+            </select>
+        </div>
+    </div>
+    <iframe *ngIf="viewReport" width="100%" height="{{sHeight}}px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
+</ba-card>
+</div>
+
+<!-- Previous code below this -->
+<!-- <div>
     <div class="row" id="r0">
         <div class="col-md-6">
         </div>
@@ -13,7 +74,7 @@
                 <!-- <option value="volvo">Route Settlement</option>
                 <option value="volvo">Sales Report</option>
                 <option value="volvo">Assets Scanning</option>
-                <option value="volvo">Drayage Report</option> -->
+                <option value="volvo">Drayage Report</option> 
             </select>
         </div>
     </div>
@@ -27,7 +88,7 @@
                 <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="date" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                   <i class="ion-calendar"></i>
-                  <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                  <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> 
                 </button>
             </div>
         </div>
@@ -108,7 +169,7 @@
         </div>
     </div>
     <hr>
-    <div class="row"> -->
+    <div class="row"> 
 
     <iframe *ngIf="viewReport" width="100%" height="{{sHeight}}px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
     <!-- <div class="col-md-1" style="vertical-align: top;font-family: courier;">
@@ -134,7 +195,7 @@
         </div>
         <div class="col-md-1" style="vertical-align: top;font-family: courier;">
             Customer Type
-        </div> -->
+        </div> 
 </div>
 <!--hr-->
 <!-- <div class="row">

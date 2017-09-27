@@ -21,7 +21,7 @@ a.collapse-menu-link {
 	}
 }
 .custom-tooltip-ion:hover .tooltiptext{
-visibility: visible;
+    visibility: visible;
 }
 .tooltiptext {
     visibility: hidden;
@@ -86,6 +86,11 @@ border: 1px solid #ef8989;
    padding: 4px 8px;
     margin-top: 3px;
     height: 28px !important;
+}
+
+.textRightPadding {
+    text-align: right;
+    padding-right: 12px !important;
 }
 
 

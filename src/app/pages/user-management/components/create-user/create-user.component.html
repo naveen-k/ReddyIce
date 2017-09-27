@@ -26,7 +26,7 @@
       <label for="fname" class="control-label">First Name</label>
       <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
         minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (change)="changeHandler()"
-        (blur)="spaceRemoverFn(user.FirstName)" maxlength="8">
+        (blur)="spaceRemoverFn(user.FirstName)" maxlength="50">
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="FirstName.errors.required" class="custom-tooltip bottom">First Name is required</div>
@@ -37,7 +37,7 @@
     <div class="col-md-6  page-header">
       <label for="lname" class="control-label">Last Name</label>
       <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
-        name="LastName" #LastName="ngModel" required minlength="2" maxlength="8" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
+        name="LastName" #LastName="ngModel" required minlength="2" maxlength="50" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">

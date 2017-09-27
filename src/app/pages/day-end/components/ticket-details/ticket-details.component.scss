@@ -1,7 +1,7 @@
 @import '../../../../theme/sass/smartTable';
 
 .page-header {
-    margin: 15px 0;
+    margin: 10px 0;
 };
 .bottom-margin{
     margin-bottom: 20px;
@@ -39,4 +39,9 @@
     div span{
         font-weight: bold;
     }
+}
+
+.textRightPadd {
+    text-align: right;
+    padding-right: 10px;
 }
