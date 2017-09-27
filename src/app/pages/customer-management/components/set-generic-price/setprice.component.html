@@ -7,46 +7,48 @@
             <button class="btn btn-danger pull-right" [routerLink]="['../list']">Back</button>
         </div>
         <div class="col-md-1 head-button-container-for-save">
-            <button (click)='setGenericPrice()' class="btn btn-danger pull-right">Save</button>
+            <button (click)='setGenericPrice()' [disabled]="!isFormTouched" class="btn btn-danger pull-right">Save</button>
         </div>
     </div>
     <div class="row">
         <div class="col-md-11">
         </div>
         <div class="col-md-1 head-button-container-for-add">
-            <button class="btn btn-danger pull-right" (click)="addProduct()">Add New Product</button>
+            <button class="btn btn-danger pull-right" (click)="addProduct(); formTouchHandler()">Add New Product</button>
         </div>
     </div>
     <br/>
     <div>
         <table class="table table-striped">
-            <thead>
+            <thead class="tableHeader">
                 <tr>
                     <th>Actions</th>
                     <th>Product</th>
-                    <th>Price $</th>
+                    <th class="text-alignment padding-rightside">Product Number</th>
+                    <th class="text-alignment padding-rightside">RIProduct</th>
+                    <th class="text-alignment padding-rightside">Price ($)</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let product of externalProducts ; let index=index">
+                <tr *ngFor="let product of externalProducts; let index=index">
                     <td>
-                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editClickHandler(product,index);formTouchHandler()">
                             <span class="tooltiptext">Edit</span>
                         </i>
-                        <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px">
-                            <span class="tooltiptext">Deactivate</span>
-                        </i>
                     </td>
-                    <td>{{ product.ProductName }}</td>
-                    <td class="td-width">
+                    <td>{{product.ProductName}}</td>
+                    <td class="text-alignment">{{product.ProductCode}}</td>
+                    <td class="text-alignment"><input type="checkbox" value="" disabled [checked]=product.IsInternal></td>
+                    <td class="td-width text-alignment" [hidden]="editClicked[index]">{{product.ProductPrice}}</td>
+                    <td class="td-width" [hidden]="!editClicked[index]">
                         <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
                     </td>
                 </tr>
-                <tr *ngFor="let product of newProductList ; let index=index">
-                    <td>{{ externalProducts.length+index+1 }}</td>
+                <tr *ngFor="let product of newProductList">
+                    <td></td>
                     <td>
-                        <input type="text" [(ngModel)]='product.ProductName' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;"
-                            (ngModelChange)="isProductExist(product.ProductName)">
+                        <input type="text" [(ngModel)]='product.ProductName' class="form-control" id="price" placeholder="Product Name" style="padding: 5px; margin-top: 3px;"
+                           (blur)="isProductExist(product.ProductName)" >
                     </td>
                     <td>
                         <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">

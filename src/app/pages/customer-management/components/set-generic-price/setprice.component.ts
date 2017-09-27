@@ -15,6 +15,8 @@ export class SetPriceComponent implements OnInit {
     externalProducts: any = [];
     newProductList: any = [];
     isProductAlreadyExist: boolean = false;
+    editClicked: any = [];
+    isFormTouched: boolean = false;
 
     constructor(
         protected service: CustomerManagementService,
@@ -29,6 +31,8 @@ export class SetPriceComponent implements OnInit {
     getExternalProducts() {
         this.service.getExternalProducts().subscribe((res) => {
             this.externalProducts = res;
+            this.editClicked = new Array(this.externalProducts.length);
+            this.editClicked.fill(false);
         }, (err) => {
         });
     }
@@ -37,7 +41,8 @@ export class SetPriceComponent implements OnInit {
         const priceProduct = { 'SetGenricPrice': this.externalProducts, 'AddNewExternalProduct': this.newProductList }
         this.service.setGenericPrice(priceProduct).subscribe((res) => {
             this.service.getAllCustomers();
-            this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
+            this.editClicked = false;
+            this.route.navigate(['../'], { relativeTo: this.activatedRoute });
         }, (err) => {
         });
     }
@@ -51,7 +56,21 @@ export class SetPriceComponent implements OnInit {
 
         },
             (err) => {
-
             });
     }
+
+    editClickHandler(product, index) {
+        if (product) {
+            this.editClicked.fill(false);
+            this.editClicked[index] = true;
+        }
+    }
+
+
+
+    formTouchHandler() {
+        this.isFormTouched = true;
+    }
+
+
 }

@@ -6,7 +6,7 @@
             <button [hidden]="mode!=1" class="btn btn-danger pull-right" [routerLink]="['../list']">Back</button>
         </div>
         <div class="col-sm-1 head-button-container-for-save">
-            <button [disabled]="mode ===3" class="btn btn-danger pull-right" (click)="save()">Save</button>
+            <button [hidden]="mode ===3" class="btn btn-danger pull-right" (click)="save()">Save</button>
         </div>
     </div>
     <div class="row">
@@ -154,11 +154,11 @@
                 </div>
                 <div class="row box-top-margin">
                     <div class="col-sm-12">
-                        <table class="table">
+                        <table class="table table-striped">
                             <thead class="tableHeader">
                                 <th>Product</th>
-                                <th>Price $</th>
-                                <th style="width:100px"><button [disabled]="mode ===3" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
+                                <th>Price ($)</th>
+                                <th style="width:100px" class="remove-padding"><button [hidden]="mode ===3" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
                             </thead>
                             <!-- <thead>
                                 <th>Product</th>
@@ -171,7 +171,7 @@
                                         {{mprod.DisplayName}}
                                     </td>
                                     <td class="td-width">
-                                        <input [disabled]="mode===3" class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                        <input [disabled]="mode===3" class="form-control" type="number" [(ngModel)]="mprod.ProductPrice">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3">
