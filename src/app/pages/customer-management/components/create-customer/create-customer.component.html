@@ -96,8 +96,11 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">State</label>
                             <div class="col-sm-9">
-                                <input [disabled]="mode ===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
-                                /> 
+                                <!-- <input [disabled]="mode ===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
+                                />  -->
+                                <select [disabled]="mode ===3" [(ngModel)]="customer.State" class="form-control">
+                                        <option *ngFor="let state of allStates" [value]="state.StateId">{{state.StateName}}</option>
+                                    </select>
                             </div>
                         </div>
                     </div>
