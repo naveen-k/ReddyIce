@@ -81,11 +81,19 @@
                         <!--Removed sorting functionality as it was causing rendering issues  -->
                         <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">
-                                <i *ngIf="!logedInUser.IsRIInternal || logedInUser.Role.RoleID==3" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
+                                <!-- <i *ngIf="!logedInUser.IsRIInternal || logedInUser.Role.RoleID==3" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
                                 <i *ngIf="logedInUser.IsRIInternal && logedInUser.Role.RoleID == 1" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
+                                    style="margin-right: 5px">
+                                    <span class="tooltiptext">Edit</span>
+                                </i> -->
+                                <i *ngIf="item.isDistributor === 1" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
+                                    style="margin-right: 5px">
+                                    <span class="tooltiptext">View</span>
+                                </i>
+                                <i *ngIf="item.isDistributor === 0" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
                                     style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>

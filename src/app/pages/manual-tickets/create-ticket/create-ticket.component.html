@@ -22,7 +22,7 @@
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>
-                <button class="btn btn-danger buttonMargin" [hidden]="tripMode" [disabled]="ticket.TicketStatusID !== 23" (click)="deleteTicket()">
+                <button class="btn btn-danger buttonMargin" [hidden]="tripMode || ticket.TicketStatusID !== 23" [disabled]="ticket.TicketStatusID !== 23" (click)="deleteTicket()">
                     Delete
                 </button>
                 <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly || tripMode" [disabled]="ticket.TicketStatusID != 23">

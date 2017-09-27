@@ -2,7 +2,7 @@
     <div class=" col-md-12">
         <ba-card cardTitle="Trip Details" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==24 || user?.IsDistributor" (click)="submitTickets()">Approve</button>
+                <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==24 || user?.IsDistributor" [disabled]="!tripData.IsClosed" (click)="submitTickets()">Approve</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row">

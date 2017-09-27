@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateTicketComponent implements OnInit {
 
-  pageTitle: string = "New Manual Ticket";
+  pageTitle: string = 'New Manual Ticket';
 
   ticket: ManualTicket = {} as ManualTicket;
 
@@ -320,7 +320,7 @@ export class CreateTicketComponent implements OnInit {
     };
     if (this.user.IsDistributor && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
-    } else {
+    } else if (!this.user.IsDistributor) {
       this.loadCustomerOfBranch(this.ticket.BranchID, callback);
     }
   }
@@ -636,6 +636,8 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
       this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
 
+      this.ticket.CustomerType = this.ticket.Customer.CustomerType;
+
       // Initialize to check/uncheck POD Received
       this.tempModels.podReceived = !!this.ticket.PODImageID;
 
@@ -651,9 +653,9 @@ export class CreateTicketComponent implements OnInit {
       this.loadCustomerDetail(this.ticket.CustomerID);
 
       // load customers if current logged-in user is distributor
-      if (this.user.IsDistributor) {
-        this.loadCustomers();
-      }
+      // if (this.user.IsDistributor) {
+      //   this.loadCustomers();
+      // }
     });
   }
 
@@ -667,7 +669,7 @@ export class CreateTicketComponent implements OnInit {
       this.service.updateTicket(ticket).subscribe(res => {
         this.notification.success(res);
         this.isFormDirty = false;
-        if (this.ticket.TicketStatusID === 24) {
+        if (this.ticket.TicketStatusID !== 23) {
           this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
         }
       });
@@ -681,6 +683,7 @@ export class CreateTicketComponent implements OnInit {
         this.location.back();
         return;
       }
+      this.isFormDirty = false;
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     }, (error) => {
       if (error) {
