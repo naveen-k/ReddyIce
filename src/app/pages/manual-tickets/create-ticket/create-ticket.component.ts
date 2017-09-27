@@ -531,6 +531,11 @@ export class CreateTicketComponent implements OnInit {
   }
 
   typeChangeHandler() {
+    if (this.ticket.TicketTypeID === 22) {
+      this.ticket.IsSaleTicket = true;
+    } else if (this.ticket.TicketTypeID === 23) {
+      this.ticket.IsSaleTicket = false;
+    }
     this.resetCashAndCheck();
   }
 
