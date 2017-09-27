@@ -1,6 +1,6 @@
 import { User } from '../../../user-management/user-management.interface';
 import { UserService } from '../../../../shared/user.service';
-import { NotificationsService } from 'angular2-notifications/dist';
+import { NotificationsService } from 'angular2-notifications';
 import { any } from 'codelyzer/util/function';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DayEndService } from '../../day-end.service';
@@ -84,6 +84,6 @@ export class TicketDetailsComponent implements OnInit {
     }
 
     createTicket() {
-        
+
     }
 }
