@@ -34,6 +34,8 @@ export class TicketListComponent implements OnInit {
     disableApprove: boolean = true;
 
     searchString: any;
+    isDistributorExist: boolean;
+    userSubTitle: string = '';
 
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
 
@@ -45,6 +47,13 @@ export class TicketListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        const userId = localStorage.getItem('userId') || '';
+        this.userService.getUserDetails(userId).subscribe((response) => {
+            this.isDistributorExist = response.IsDistributor;
+            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+        });
+
+
         this.searchObj = this.service.getSearchedObject();
 
         const now = new Date();
