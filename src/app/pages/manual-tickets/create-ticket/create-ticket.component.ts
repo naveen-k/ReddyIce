@@ -193,7 +193,7 @@ export class CreateTicketComponent implements OnInit {
 
     this.ticket.DeliveryDate = this.date.minDate;
 
-    this.ticket.BranchID = +queryParams.branchId; // Set branchId
+    this.ticket.BranchID = this.user.IsDistributor ? null : +queryParams.branchId; // Set branchId, for distributor branch id would be null
     this.ticket.isUserTypeDistributor = !!(+queryParams.isDistributor); // Set User type
     if (this.ticket.isUserTypeDistributor) {
       this.ticket.DistributorCopackerID = +queryParams.driverId;

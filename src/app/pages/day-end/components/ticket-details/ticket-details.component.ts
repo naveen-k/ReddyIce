@@ -16,7 +16,7 @@ export class TicketDetailsComponent implements OnInit {
     tripId: number;
     tripData: any = {};
 
-    user: User= <User>{};
+    user: User = <User>{};
 
     total: any = {
         totalInvoice: 0,
@@ -35,7 +35,7 @@ export class TicketDetailsComponent implements OnInit {
     ) { }
     ngOnInit() {
         this.user = this.userService.getUser();
-        
+
         this.tripId = +this.route.snapshot.params['tripId'];
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.tripData = res.Tripdetail[0];
@@ -58,13 +58,13 @@ export class TicketDetailsComponent implements OnInit {
         let statusText = '';
         switch (statusCode) {
             case 23:
-                statusText = "Draft";
+                statusText = 'Draft';
                 break;
             case 24:
-                statusText = "Submitted";
+                statusText = 'Submitted';
                 break;
             case 25:
-                statusText = "Approved";
+                statusText = 'Approved';
                 break;
             default:
                 statusText = statusCode;
@@ -74,12 +74,16 @@ export class TicketDetailsComponent implements OnInit {
 
     submitTickets() {
         this.service.saveRecociliation({ TripStatusID: 25, TripID: this.tripId }).subscribe((res) => {
-            this.notification.success("Success", res);
+            this.notification.success('Success', res);
             this.tripData.TripStatusID = 25;
             // this.router.navigate(['../list'])
         }, (err) => {
             err = JSON.parse(err._body);
             // this.notification.error("Error", err.Message);
         });
+    }
+
+    createTicket() {
+        
     }
 }

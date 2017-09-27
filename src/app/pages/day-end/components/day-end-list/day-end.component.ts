@@ -23,6 +23,8 @@ export class DayEndComponent implements OnInit {
     customer: any = {};
     logedInUser: any = {};
     userBranch: any = '0';
+    isDistributorExist: boolean;
+    userSubTitle: string = '';
 
     // Note - IsForAll is to see all trips or Mytrips
     // (checker can view all Trips Mytrips while Driver can view only Mytrips) 
@@ -36,6 +38,14 @@ export class DayEndComponent implements OnInit {
     constructor(private service: DayEndService, private userService: UserService) { }
 
     ngOnInit() {
+        const userId = localStorage.getItem('userId') || '';
+        this.userService.getUserDetails(userId).subscribe((response) => {
+            this.isDistributorExist = response.IsDistributor;
+            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+        });
+
+
+
         this.filter = this.service.getFilter();
         // this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
         this.loadBranches();

@@ -1,3 +1,4 @@
+import { NotificationsService } from 'angular2-notifications';
 import { MProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,6 +23,7 @@ export class SetPriceComponent implements OnInit {
         protected service: CustomerManagementService,
         public activatedRoute: ActivatedRoute,
         protected route: Router,
+        protected notification: NotificationsService,
     ) { }
 
     ngOnInit() {
@@ -53,6 +55,13 @@ export class SetPriceComponent implements OnInit {
 
     isProductExist(name) {
         this.service.isProductExist(name).subscribe((res) => {
+            // if (res === true) {
+
+            //     this.notification.error('Product Already Exist in List !!!');
+            //     this.isFormTouched = false;
+            // } else {
+            //     this.isFormTouched = true;
+            // }
 
         },
             (err) => {
