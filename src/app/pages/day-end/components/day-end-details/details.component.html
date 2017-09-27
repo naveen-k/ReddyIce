@@ -289,7 +289,7 @@
                                                     <i (click)="removeProduct(i);" class="ion-trash-a remove-item"></i>
                                                 </td>
                                             </tr>
-                                            <tr *ngIf="!unitReconciliation.length">
+                                            <tr *ngIf="!unitReconciliation.length && !newlyAddedProduct.length">
                                                 <th class="text-center" colspan="12"> No data found </th>
                                             </tr>
                                         </tbody>

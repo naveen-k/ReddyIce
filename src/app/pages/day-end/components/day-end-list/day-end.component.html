@@ -48,7 +48,7 @@
                                      <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <th>
+                            <th class="text-right">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
                                     Trip Code
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
@@ -102,7 +102,7 @@
                             <td *ngIf="logedInUser.IsRIInternal">{{item.RouteNumber?item.RouteNumber :'Unplanned'}}</td>
                             <td  *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
-                            <td>{{item.TripCode}}</td>
+                            <td class="textRightPadding">{{item.TripCode}}</td>
                             <td class="textRightPadding">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
                             <td class="textRightPadding">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
                             <td class="textAlignCenter">
