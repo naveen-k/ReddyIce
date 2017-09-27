@@ -17,10 +17,10 @@
             </select>
         </div>
         <div class="col-md-7 text-right">
-            <button class="btn btn-danger" (click)="updateLink()">View Report</button>
+            <button class="btn btn-danger" (click)="updateLink()" style="margin-top: 5px;">View Report</button>
         </div>
     </div>
-    <br><br>
+    <hr>
     <div class="row">
         <div class="col-sm-3">
             <label>Start Date</label>
@@ -55,7 +55,6 @@
             </select>
         </div>
     </div>
-    <hr>
     <iframe *ngIf="viewReport" width="100%" height="{{sHeight}}px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
 </ba-card>
 </div>

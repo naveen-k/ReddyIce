@@ -107,8 +107,9 @@ export class TrackerComponent {
           if (this.trips[0]) {
             this.tripFilterOption.TripCode = this.trips[0].TripCode;
             this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
-            this.drawMapPath();
+            
           }
+          this.drawMapPath();
         } else {
           this.trips = [];
         }
