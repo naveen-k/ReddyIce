@@ -113,10 +113,16 @@ export class CreateCustomerComponent implements OnInit {
 
     deactivateMappedProduct(mprod) {
         const index = this.addedProduct.indexOf(mprod);
-        if (this.mode === 2 || index > -1) {
+        if (this.mode === 1 || index > -1) {
             this.addedProduct.splice(index, 1);
             this.addedProduct = this.addedProduct;
-
+            this.addProductCheck.splice(index,1);
+        }
+        const index2 = this.newlyAddedproduct.indexOf(mprod);
+        if (this.mode === 2 || index2 > -1) {
+            this.newlyAddedproduct.splice(index2, 1);
+            this.newlyAddedproduct = this.newlyAddedproduct;
+            this.addNewProductCheck.splice(index2,1);
         }
     }
 
