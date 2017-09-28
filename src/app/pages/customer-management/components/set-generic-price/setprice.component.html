@@ -55,5 +55,7 @@
                 </tr>
             </tbody>
         </table>
+        <div class='marginTopCenter'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+        <div *ngIf="!externalProducts.length && !showSpinner" class='marginTopCenter'> No data found </div>
     </div>
 </ba-card>

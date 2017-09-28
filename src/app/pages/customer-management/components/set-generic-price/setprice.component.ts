@@ -20,6 +20,7 @@ export class SetPriceComponent implements OnInit {
     isFormTouched: boolean = false;
     isDistributorExist: boolean;
     userSubTitle: string = '';
+    showSpinner: boolean = false;
 
     constructor(
         protected service: CustomerManagementService,
@@ -39,8 +40,10 @@ export class SetPriceComponent implements OnInit {
     }
 
     getExternalProducts() {
+        this.showSpinner = true;
         this.service.getExternalProducts().subscribe((res) => {
             this.externalProducts = res;
+            this.showSpinner = false;
             this.editClicked = new Array(this.externalProducts.length);
             this.editClicked.fill(false);
         }, (err) => {

@@ -12,6 +12,7 @@ export class CustomerManagementComponent implements OnInit {
     // selectedCustomer: any = [];
     isDistributorExist: boolean;
     userSubTitle: string = '';
+    showSpinner: boolean = false;
     constructor(
         protected service: CustomerManagementService,
         private route: ActivatedRoute,
@@ -29,8 +30,10 @@ export class CustomerManagementComponent implements OnInit {
 
 
     getAllCustomers() {
+        this.showSpinner = true;
         this.service.getAllCustomers().subscribe((res) => {
             this.customers = res;
+            this.showSpinner = false;
             // console.log(this.customers);
         }, (err) => {
             // console.log(err);
