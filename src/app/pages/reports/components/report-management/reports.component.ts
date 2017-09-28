@@ -26,6 +26,7 @@ export class ReportsComponent implements OnInit {
     sHeight: any = 340;
     isDistributorExist: boolean;
     userSubTitle: string = '';
+    todaysDate: any;
 
     constructor(private sanitizer: DomSanitizer, protected userService: UserService) {
         /* window.onload = (e) =>
@@ -44,6 +45,8 @@ export class ReportsComponent implements OnInit {
          };*/
     }
     ngOnInit() {
+        const now = new Date();
+        this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         const userId = localStorage.getItem('userId') || '';
         this.userService.getUserDetails(userId).subscribe((response) => {
             this.isDistributorExist = response.IsDistributor;

@@ -24,7 +24,7 @@
         <div class="col-sm-3">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="date" disabled>
+                <input [maxDate]="todaysDate" class="form-control"  name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="date" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
                     <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
