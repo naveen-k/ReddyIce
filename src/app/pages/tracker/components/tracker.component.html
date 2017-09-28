@@ -130,7 +130,7 @@
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr>
                                         <td [hidden]="isDistributor">{{subitem.PlannedSequence}}</td>
-                                        <td style="text-align:center;" *ngIf="!isNewTicket" title="{{subitem.Created}}">
+                                        <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
                                             {{subitem.ActualSequence}}
                                         </td>
                                         <!-- <td>{{tripStartDate | date}}</td> -->

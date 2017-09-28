@@ -1195,9 +1195,9 @@ export class TrackerComponent {
       });
   }
 
-  // sliceTime(str) {
-  //   console.log("str : ", str);
-  // }
+  sliceTime(str) {
+    return str.slice(11, 16);
+  }
 
   // Filter TicketDetails based on the Trip selected
   fetchTicketDetailsByTrip(TripCode) {
