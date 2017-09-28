@@ -139,7 +139,7 @@ export class TicketListComponent implements OnInit {
         const dt = `${searchObj.CreatedDate.month}-${searchObj.CreatedDate.day}-${searchObj.CreatedDate.year}`;
 
         this.showSpinner = true;
-
+        if (this.user.IsDistributor) { searchObj.BranchId = null; }
         // TODO- to check with nikhil/naveen, what to send incase of distributor selected
         return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
             if (response) {

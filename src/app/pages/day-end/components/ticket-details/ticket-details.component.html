@@ -83,21 +83,21 @@
                                 </th>
                                 <th>
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'custNumber';customer.isAsc=!customer.isAsc;">
-                                                Customer 
-                                             <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                        </span>
+                                        Customer 
+                                        <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    </span>
                                 </th>
                                 <th class="textRightPadd">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
-                                                Sale Invoice
-                                                <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
+                                        Sale Invoice
+                                        <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    </span>
                                 </th>
                                 <th class="textRightPadd">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'cash';customer.isAsc=!customer.isAsc;">
-                                                Recd. Amount
-                                                <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
+                                        Recd. Amount
+                                        <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    </span>
                                 </th>
                                 <th class="textRightPadd" *ngIf="!user.IsRIInternal">
                                     Drayage
@@ -122,7 +122,7 @@
                                 </td>
                                 <td class="text-align-left">{{item.TicketNumber }}</td>
                                 <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
-                                <td>{{item.CustomerID }} - {{ item.CustomerName }}</td>
+                                <td><span [title]="item.CustomerID +'-'+ item.CustomerName">{{item.CustomerID }} - {{item.CustomerName | cutString:true:20 }}</span></td>
                                 <td class="textRightPadd">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
@@ -133,12 +133,12 @@
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal">{{item.DistAmt}}</td>
                             </tr>
                             <tr>
-                                <td *ngIf="!user.IsRIInternal" colspan="4"><b>Total</b></td>
-                                <td *ngIf="user.IsRIInternal" colspan="4"><b>Total</b></td>
+                                <td colspan="4"><b>Total</b></td>                                
                                 <td class="textRightPadd"><b>{{total.totalInvoice | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
+                                <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{0 | currency:'USD':true:'1.2'}}</b></td>
                             </tr>
                         </tbody>
                     </table>

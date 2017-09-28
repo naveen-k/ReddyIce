@@ -97,6 +97,18 @@
                               <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                           </span>
                     </th>
+                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
+                        <span class="cursorPointer" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;">
+                            Drayage
+                            <i *ngIf="(customer.sortField == 'Drayage')" [ngClass]="(customer.isAsc && customer.sortField == 'Drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        </span>
+                    </th>
+                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
+                        <span class="cursorPointer" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;">
+                            Buy Back
+                            <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        </span>
+                    </th>
                     <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
                         <span class="cursorPointer">
                           Status
@@ -134,6 +146,8 @@
                     <td class="textAlignRight">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currency:'USD':true:'1.2' }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.BuyBack | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignCenter">
                         <i class="custom-tooltip-ion">
                             <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TicketStatusID == 23" width="15">
