@@ -14,10 +14,10 @@ export class TicketTypePipe implements PipeTransform {
             if (value) {
                 return 'PBM - Sale';
             } else {
-                return 'PBM - Consignment';
+                return 'PBM - Cons';
             }
         } else {
-            return 'PBS - Consignment'
+            return 'PBS - Cons';
         }
     }
 }

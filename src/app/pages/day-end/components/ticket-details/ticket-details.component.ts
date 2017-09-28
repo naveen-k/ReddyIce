@@ -15,9 +15,9 @@ export class TicketDetailsComponent implements OnInit {
 
     tripId: number;
     tripData: any = {};
-    
-isDistributorExist: boolean;
-userSubTitle: string = '';
+
+    isDistributorExist: boolean;
+    userSubTitle: string = '';
 
     user: User = <User>{};
 

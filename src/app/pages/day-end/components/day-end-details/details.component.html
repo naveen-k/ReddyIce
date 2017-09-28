@@ -18,7 +18,7 @@
                     <div class="row page-header bold-head">
                         <div class="col-md-3">
                             <span>Branch:</span>
-                            <label>{{tripData.BranchID}} - {{tripData.BranchName}}</label>
+                            <label>{{tripData.BranchCode}} - {{tripData.BranchName}}</label>
                         </div>
                         <div class="col-md-2">
                             <span>Route:</span>
@@ -78,8 +78,7 @@
                                     <table class="table table-striped">
                                         <thead class="tableHeader">
                                             <tr>
-                                                <th></th>
-                                                <th>Actions</th>
+                                                <th></th>                                                
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
                                                 Ticket Number
@@ -123,15 +122,13 @@
                                                     <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket">
                                                         <span class="tooltiptext">Edit</span>
                                                     </i>
-                                                </td>
-                                                <td class="table-id" style="cursor: pointer">
                                                     <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.IsPaperTicket">
                                                         <span class="tooltiptext">View</span>
                                                     </i>
                                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket">
                                                         <span class="tooltiptext">Edit</span>
                                                     </i>
-                                                </td>
+                                                </td>                                                
                                                 <td>{{item.TicketNumber }}</td>
                                                 <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
                                                 <td>{{item.CustomerID }} - {{ item.CustomerName }}</td>
@@ -143,7 +140,7 @@
                                                 <th class="text-center" colspan="9"> No data found </th>
                                             </tr>
                                             <tr>
-                                                <td class="text-align-right" colspan="5"><b>Total</b></td>
+                                                <td class="text-align-right" colspan="4"><b>Total</b></td>
                                                 <td class="text-align-right">{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</td>
                                                 <td class="text-align-right">{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</td>
                                             </tr>
