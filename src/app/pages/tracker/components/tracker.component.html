@@ -22,17 +22,17 @@
                 </div>
                 <div class="col-sm-3">
                     <label>Select Driver</label>
-                    <select class="form-control">
-                        <option *ngFor="let route of trips">
-                            {{route.DriverName}}
+                    <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
+                        <option *ngFor="let driver of trips">
+                            {{driver.DriverName}}
                         </option>
                     </select>
                 </div>
                 <div class="col-sm-3">
                     <label>Select Trip</label>
-                    <select class="form-control" [(ngModel)]='tripFilterOption.TripID' (change)="tripChangeHandler()">
-                        <option *ngFor="let trip of trips">
-                            {{trip.TripCode}}
+                    <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' (change)="tripChangeHandler()">
+                        <option *ngFor="let trip of driverSpecTrips">
+                            {{trip}}
                         </option>
                     </select>
                 </div>
