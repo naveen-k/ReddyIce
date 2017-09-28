@@ -12,16 +12,16 @@
     <div class="row">
         <div class="col-sm-4 page-header">
             <div class="row">
-                <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
+                <label for="example-text-input" class="col-sm-5 col-form-label" >Customer Number</label>
                 <div class="col-sm-7 padding-eater">
-                    <input [disabled]="mode ===3" id="typeahead-basic" type="number" [(ngModel)]="customer.CustomerNumber" class="form-control"
+                    <input maxlength="25" [disabled]="mode ===3" id="typeahead-basic" type="number" [(ngModel)]="customer.CustomerNumber" class="form-control"
                         placeholder="Customer Number" (blur)="isCutomerNumberExist(customer.CustomerNumber)"/>
                 </div>
             </div>
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Name</label>
                 <div class="col-sm-7 padding-eater">
-                    <input [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" class="form-control"
+                    <input maxlength="50" [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" class="form-control"
                         placeholder="Customer Name" />
                 </div>
             </div>
@@ -61,16 +61,15 @@
 
                 <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
                 <div class="col-sm-7 padding-eater">
-                    <input [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' id="typeahead-basic" type="number"
+                    <input maxlength="2" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' id="typeahead-basic" type="number"
                         class="form-control" placeholder="Tax Percentage" />
                 </div>
             </div>
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Chain</label>
                 <div class="col-sm-7 padding-eater">
-                    <select [disabled]="mode ===3" [(ngModel)]="customer.Chain" class="form-control">
-                        <option [value]="1">Chain 1</option>
-                        <option [value]="2">Chain 2</option>
+                    <select [disabled]="mode ===3" [(ngModel)]="customer.ChainID" class="form-control">
+                        <option *ngFor="let chain of chains" [value]="chain.ChainId">{{chain.ChainName}}</option>
                     </select>
                 </div>
             </div>
@@ -108,7 +107,7 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">City</label>
                             <div class="col-sm-9">
-                                <input [disabled]="mode ===3" [(ngModel)]='customer.City' id="typeahead-basic" type="text" class="form-control" placeholder="City"
+                                <input maxlength="25" [disabled]="mode ===3" [(ngModel)]='customer.City' id="typeahead-basic" type="text" class="form-control" placeholder="City"
                                 />
                             </div>
                         </div>
@@ -117,7 +116,7 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">Zip</label>
                             <div class="col-sm-9">
-                                <input [disabled]="mode ===3" [(ngModel)]='customer.ZipCode' id="typeahead-basic" type="number" class="form-control" placeholder="Zip"
+                                <input maxlength="10" [disabled]="mode ===3" [(ngModel)]='customer.ZipCode' id="typeahead-basic" type="number" class="form-control" placeholder="Zip"
                                 />
                             </div>
                         </div>
@@ -128,7 +127,7 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Primary Contact</label>
                             <div class="col-sm-10">
-                                <input [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" id="typeahead-basic" type="text" class="form-control"
+                                <input maxlength="50" [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" id="typeahead-basic" type="text" class="form-control"
                                     placeholder="Primary Contact" />
                             </div>
                         </div>
@@ -138,7 +137,7 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Phone</label>
                             <div class="col-sm-10">
-                                <input [disabled]="mode ===3" [(ngModel)]='customer.Phone' id="typeahead-basic" type="number" class="form-control" placeholder="Phone"
+                                <input maxlength="15" [disabled]="mode ===3" [(ngModel)]='customer.Phone' id="typeahead-basic" type="number" class="form-control" placeholder="Phone"
                                 />
                             </div>
                         </div>
@@ -149,8 +148,8 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Email</label>
                             <div class="col-sm-10">
-                                <input [disabled]="mode === 3" [(ngModel)]='customer.EmailID' id="typeahead-basic" type="email" class="form-control" placeholder="Email"
-                                />
+                                <input maxlength="50" [disabled]="mode === 3" [(ngModel)]='customer.EmailID' id="typeahead-basic" type="email" class="form-control" placeholder="Email"
+                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"/>
                             </div>
                         </div>
                     </div>

@@ -61,10 +61,11 @@ export interface Customer {
     Address: string;
     EmailID: string;
     IsDex: boolean;
-    Chain:string;
+    Chain: string;
     EditedProducts?: MProducts[];
     NewAddedProducts?: MProducts[];
-    IsInternal:boolean;
+    IsInternal: boolean;
+    ChainID: number;
 }
 export interface MProducts {
     ExternalCustomerProductID: number;

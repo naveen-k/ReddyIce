@@ -55,7 +55,7 @@ export class SetPriceComponent implements OnInit {
         this.service.setGenericPrice(priceProduct).subscribe((res) => {
             this.service.getAllCustomers();
             this.editClicked = false;
-            this.route.navigate(['../'], { relativeTo: this.activatedRoute });
+            this.route.navigate(['/pages/customer-management/set-price'], { relativeTo: this.activatedRoute });
         }, (err) => {
         });
     }
