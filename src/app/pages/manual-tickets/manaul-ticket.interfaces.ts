@@ -74,4 +74,5 @@ export interface ManualTicket {
     CustomerType?: number;
     isUserTypeDistributor?: boolean;
     DistributorCopackerID: number;
+    CustomerSourceID: number;
 }

@@ -756,6 +756,7 @@ export class CreateTicketComponent implements OnInit {
     }
 
     clonedObject.IsPaperTicket = true;
+    clonedObject.CustomerSourceID = 101;
 
     this.setSaleTicketType(clonedObject);
 

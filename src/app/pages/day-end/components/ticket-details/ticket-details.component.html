@@ -11,7 +11,7 @@
                     <div class="row page-header bold-head">
                         <div class="col-md-3">
                             <span>Branch:</span>
-                            <label>{{tripData.BranchID}} - {{tripData.BranchName}}</label>
+                            <label>{{tripData.BranchCode}} - {{tripData.BranchName}}</label>
                         </div>
                         <div class="col-md-2">
                             <span>Route:</span>
@@ -69,9 +69,9 @@
                         <thead class="tableHeader">
                             <tr>
                                 <th></th>
-                                <th>
+                                <th class="text-align-left">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
-                                        Ticket Number
+                                        Ticket #
                                          <i *ngIf="(customer.sortField === 'ticket')" [ngClass]="(customer.isAsc && customer.sortField === 'ticket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
@@ -87,22 +87,22 @@
                                              <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                         </span>
                                 </th>
-                                <th class="text-align-right">
+                                <th class="textRightPadd">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
                                                 Sale Invoice
                                                 <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
                                 </th>
-                                <th class="text-align-right">
+                                <th class="textRightPadd">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'cash';customer.isAsc=!customer.isAsc;">
-                                                Received Amount
+                                                Recd. Amount
                                                 <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
                                 </th>
-                                <th>
+                                <th class="textRightPadd">
                                     Drayage
                                 </th>
-                                <th>
+                                <th class="textRightPadd">
                                     BuyBack
                                 </th>
                             </tr>
@@ -122,19 +122,21 @@
                                                 <span class="tooltiptext">Edit</span>
                                             </i>
                                 </td> -->
-                                <td class="textRightPadd">{{item.TicketNumber }}</td>
+                                <td class="text-align-left">{{item.TicketNumber }}</td>
                                 <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
                                 <td>{{item.CustomerID }} - {{ item.CustomerName }}</td>
                                 <td class="textRightPadd">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
-                                <td class="textRightPadd">{{item.Drayage| currency:'USD':true:'1.2'}}</td>
-                                <td class="textRightPadd">{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd" [hidden]="item.Drayage"></td>
+                                <td class="textRightPadd" [hidden]="!item.Drayage">{{item.Drayage| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd" [hidden]="item.BuyBack"></td>
+                                <td class="textRightPadd" [hidden]="!item.BuyBack">{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
                             </tr>
                             <tr>
                                 <td colspan="4">Total</td>
                                 <td class="textRightPadd">{{total.totalInvoice | currency:'USD':true:'1.2'}}</td>
-                                <td class="textRightPadd">{{total.totalCash | currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd">{{total.totalCash + total.totalCheck | currency:'USD':true:'1.2'}}</td>
                                 <!--<td class="textRightPadd">{{total.totalCheck | currency:'USD':true:'1.2'}}</td>
                                 <td class="textRightPadd">{{total.totalCharge | currency:'USD':true:'1.2'}}</td> -->
                                 <td class="textRightPadd">{{total.totalDrayage | currency:'USD':true:'1.2'}}</td>
