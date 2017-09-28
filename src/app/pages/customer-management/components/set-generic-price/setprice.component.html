@@ -23,7 +23,7 @@
                 <tr>
                     <th>Actions</th>
                     <th>Product</th>
-                    <th class="text-alignment padding-rightside">Product Number</th>
+                    <th>Product #</th>
                     <th class="center">RI Product</th>
                     <th class="text-alignment">Price ($)</th>
                 </tr>
@@ -36,9 +36,9 @@
                         </i>
                     </td>
                     <td>{{product.ProductName}}</td>
-                    <td class="text-alignment">{{product.ProductCode}}</td>
+                    <td>{{product.ProductCode}}</td>
                     <td class="center"><input type="checkbox" value="" disabled [checked]=product.IsInternal></td>
-                    <td class="td-width text-alignment tdpadding" [hidden]="editClicked[index]">{{product.ProductPrice}}</td>
+                    <td class="td-width text-alignment tdpadding" [hidden]="editClicked[index]">{{product.ProductPrice|currency:'USD':true:'1.2'}}</td>
                     <td class="td-width" [hidden]="!editClicked[index]">
                         <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
                     </td>

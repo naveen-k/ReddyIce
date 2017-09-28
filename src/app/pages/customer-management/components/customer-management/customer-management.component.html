@@ -19,34 +19,37 @@
             <thead class="tableHeader">
                 <tr>
                     <th class="table-id">Actions</th>
-                    <th class="text-alignment">
+                    <th>
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerId';customer.isAsc=!customer.isAsc;">
-                                    Customer Number
-                                    <i *ngIf="(customer.sortField == 'CustomerId')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
-                                </span>
+                            Customer #
+                            <i *ngIf="(customer.sortField == 'CustomerId')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                     <th>
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerName';customer.isAsc=!customer.isAsc;">
-                                    Customer Name
-                                    <i *ngIf="(customer.sortField == 'CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
-                                </span>
-                    </th>
-                    <th>
-                        <span>
-                                       Chain
-                                       
-                                    </span>
+                            Customer Name
+                            <i *ngIf="(customer.sortField == 'CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                     <th class="text-alignment-center">
                         <span>
-                                    Is RICustomer
-                                </span>
+                            RI Customer
+                        </span>
                     </th>
                     <th>
                         <span>
-                                    PaymentType
-                                    
-                                </span>
+                            PaymentType
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Contact
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Customer Type
+                        </span>
                     </th>
                 </tr>
             </thead>
@@ -63,11 +66,12 @@
                                     <span class="tooltiptext" >View</span>
                                 </i>
                     </td>
-                    <td class="text-alignment tdpadding">{{ cust.CustomerId }}</td>
+                    <td>{{ cust.CustomerId }}</td>
                     <td>{{ cust.CustomerName }}</td>
-                    <td>{{ cust?.Chain }}</td>
                     <td class="text-alignment-center"><input type="checkbox" value="" disabled [checked]=cust.IsRICustomer></td>
                     <td><a class="email-link">{{ cust.PaymentType=='1'||cust.PaymentType=='18'?'Cash':'Charge'}}</a></td>
+                    <td>{{cust.Contact}}</td>
+                    <td>{{cust.CustomerTypeID}}</td>
                 </tr>
                 <tr *ngIf="!customers.length">
                     <th class="text-center" colspan="7"> No data found </th>
