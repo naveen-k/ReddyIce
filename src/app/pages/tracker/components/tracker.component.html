@@ -94,7 +94,7 @@
                                             Date-Time
                                         </span>
                                     </th> -->
-                                    <th style="text-align: center;">
+                                    <th style="text-align: left;">
                                         <span>
                                             Customer#
                                         </span>
@@ -116,25 +116,30 @@
                                 <!-- <ng-template ngFor let-item [ngForOf]="trips" let-itemIndex="index">
                                     <ng-template ngFor let-subitem [ngForOf]="item.TripTicketList" let-subitemIndex="index">
                                         <tr>
-                                            <td>{{subitem.PlannedSequence}}</td>
-                                            <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                                            <td [hidden]="isDistributor">{{subitem.PlannedSequence}}</td>
+                                            <td title="{{item.Created}}" style="cursor: pointer; text-align:center;" *ngIf="!isNewTicket">
                                                 {{subitem.ActualSequence}}
                                             </td>
-                                            <td>{{item.TripStartDate | date}}</td>
-                                            <td>{{subitem.CustomerName}}</td>
+                                            <!-- <td>{{item.TripStartDate | date}}</td>
+                                            <td title="{{subitem.CustomerName}}" style="text-align: left;">
+                                                {{subitem.CustomerID}}
+                                            </td>
                                         </tr>
                                     </ng-template>
                                 </ng-template>     -->
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr>
                                         <td [hidden]="isDistributor">{{subitem.PlannedSequence}}</td>
-                                        <td style="text-align:center;" *ngIf="!isNewTicket">
+                                        <td style="text-align:center;" *ngIf="!isNewTicket" title="{{subitem.Created}}">
                                             {{subitem.ActualSequence}}
                                         </td>
                                         <!-- <td>{{tripStartDate | date}}</td> -->
-                                        <td class="custom-tooltip-ion" style="text-align: center;">
+                                        <!-- <td class="custom-tooltip-ion" style="text-align: left;">
                                             {{subitem.CustomerID}}
                                             <span class="tooltiptext">{{subitem.CustomerName}}</span>
+                                        </td> -->
+                                        <td title="{{subitem.CustomerName}}" style="text-align: left;">
+                                            {{subitem.CustomerID}}
                                         </td>
                                     </tr>
                                 </ng-template>
