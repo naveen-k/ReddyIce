@@ -15,6 +15,9 @@ export class TicketDetailsComponent implements OnInit {
 
     tripId: number;
     tripData: any = {};
+    
+isDistributorExist: boolean;
+userSubTitle: string = '';
 
     user: User = <User>{};
 
@@ -34,6 +37,12 @@ export class TicketDetailsComponent implements OnInit {
         private userService: UserService,
     ) { }
     ngOnInit() {
+        const userId = localStorage.getItem('userId') || '';
+        this.userService.getUserDetails(userId).subscribe((response) => {
+            this.isDistributorExist = response.IsDistributor;
+            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+        });
+
         this.user = this.userService.getUser();
 
         this.tripId = +this.route.snapshot.params['tripId'];

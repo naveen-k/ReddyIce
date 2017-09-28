@@ -1,6 +1,6 @@
 <div class="row">
     <div class=" col-md-12">
-        <ba-card cardTitle="  Trip Detail" baCardClass="with-scroll" class="smart-table-container" #customer>
+        <ba-card cardTitle="  Trip Detail {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
             <img src="assets/reddyIce/draftTicket.png" *ngIf="tripData.TripStatusID == 23"
             width="15" class="newTicketTitleStatusIcon">
             <img src="assets/reddyIce/submitTicket.png" *ngIf="tripData.TripStatusID == 24" width="18" class="newTicketTitleStatusIcon">

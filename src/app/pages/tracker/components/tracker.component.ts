@@ -30,6 +30,8 @@ export class TrackerComponent {
   planned: boolean = true;
   actual: boolean = false;
   both: boolean = false;
+  isDistributorExist: boolean;
+  userSubTitle: string = '';
 
   selectedTrip: any;
   
@@ -56,6 +58,12 @@ export class TrackerComponent {
   }
 
   ngOnInit() {
+
+    const userId = localStorage.getItem('userId') || '';
+    this.userService.getUserDetails(userId).subscribe((response) => {
+        this.isDistributorExist = response.IsDistributor;
+        this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+    });
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };

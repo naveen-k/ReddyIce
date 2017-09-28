@@ -72,7 +72,7 @@
                     RI Internal
                 </span>
               </th>
-              <th *ngIf="isDistributorExist" class="allign">
+              <th *ngIf="isDistributorExist && !hideColumn" class="allign">
                   <span style="cursor:pointer;" (click)="customer.sortField = 'EmailID';customer.isAsc=!customer.isAsc;">
                       Email
                       <i *ngIf="(customer.sortField === 'EmailID')" [ngClass]="(customer.isAsc && customer.sortField === 'EmailID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
@@ -108,7 +108,7 @@
               <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
               <td *ngIf="!hideColumn && !isDistributorExist" class="userCell">{{item.Branch?.BranchCode}}  {{item.Branch?.BranchName}}</td>
               <td *ngIf="!isDistributorExist" class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
-              <td *ngIf="isDistributorExist" class="userCell">{{item.EmailID}}</td>
+              <td *ngIf="isDistributorExist && !hideColumn" class="userCell">{{item.EmailID}}</td>
               <td *ngIf="isDistributorExist" class="userCell text-in-center">{{item.Phone}}</td>
             </tr>
             <tr [hidden]='!showSpinner' class="text-center">

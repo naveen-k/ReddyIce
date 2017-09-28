@@ -1,13 +1,14 @@
 
-import { Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { UserService } from '../../../../shared/user.service';
 
 @Component({
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
 })
-export class ReportsComponent {
+export class ReportsComponent implements OnInit {
 
     linkRpt: SafeResourceUrl;
     selectedReport: any;
@@ -18,29 +19,37 @@ export class ReportsComponent {
     location: any = "578";
     user: any = "10";
     tripcode: any = "1";
-    viewReport:boolean=false;
-    value:any = "578";
-    value1:any = "10";
-    value2:any = "1";
-    sHeight:any = 340;
+    viewReport: boolean = false;
+    value: any = "578";
+    value1: any = "10";
+    value2: any = "1";
+    sHeight: any = 340;
+    isDistributorExist: boolean;
+    userSubTitle: string = '';
 
-    constructor(private sanitizer: DomSanitizer) {
-       /* window.onload = (e) =>
-        {
-            ngZone.run(() => {
+    constructor(private sanitizer: DomSanitizer, protected userService: UserService) {
+        /* window.onload = (e) =>
+         {
+             ngZone.run(() => {
+                 
+                 this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
+             });
+         };
+         window.onresize = (e) =>
+         {
+             ngZone.run(() => {
                 
-                this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
-            });
-        };
-        window.onresize = (e) =>
-        {
-            ngZone.run(() => {
-               
-                this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
-            });
-        };*/
+                 this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
+             });
+         };*/
     }
-    
+    ngOnInit() {
+        const userId = localStorage.getItem('userId') || '';
+        this.userService.getUserDetails(userId).subscribe((response) => {
+            this.isDistributorExist = response.IsDistributor;
+            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+        });
+    }
     change(value) {
         if (value) {
             this.displayName = value;
@@ -58,12 +67,12 @@ export class ReportsComponent {
     }
 
     updateLink() {
-        this.viewReport=true;
-        console.log(this.displayName, "this.location ",this.location);
+        this.viewReport = true;
+        console.log(this.displayName, "this.location ", this.location);
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
             ('http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx?Rtype='
-            + this.displayName + '&DeliveryDate='+this.formatDate(this.date)+'&BranchCode=311&RouteNumber=801&DriverID='
-            + this.user+ '&routeID=1208&LocationID='+this.location+'&BranchID=1362&TripCode='+this.tripcode+'&DistributormasterID=0');
+            + this.displayName + '&DeliveryDate=' + this.formatDate(this.date) + '&BranchCode=311&RouteNumber=801&DriverID='
+            + this.user + '&routeID=1208&LocationID=' + this.location + '&BranchID=1362&TripCode=' + this.tripcode + '&DistributormasterID=0');
     }
 
     formatDate(date) {
@@ -72,7 +81,7 @@ export class ReportsComponent {
         if (mm < 10) { mm = '0' + mm }
         if (dd < 10) { dd = '0' + dd }
         return mm + '/' + dd + '/' + yy;
-    
+
 
     }
 }

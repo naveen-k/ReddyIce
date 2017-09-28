@@ -18,16 +18,24 @@ export class SetPriceComponent implements OnInit {
     isProductAlreadyExist: boolean = false;
     editClicked: any = [];
     isFormTouched: boolean = false;
+    isDistributorExist: boolean;
+    userSubTitle: string = '';
 
     constructor(
         protected service: CustomerManagementService,
         public activatedRoute: ActivatedRoute,
         protected route: Router,
         protected notification: NotificationsService,
+        protected userService: UserService,
     ) { }
 
     ngOnInit() {
         this.getExternalProducts();
+        const userId = localStorage.getItem('userId') || '';
+        this.userService.getUserDetails(userId).subscribe((response) => {
+            this.isDistributorExist = response.IsDistributor;
+            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+        });
     }
 
     getExternalProducts() {

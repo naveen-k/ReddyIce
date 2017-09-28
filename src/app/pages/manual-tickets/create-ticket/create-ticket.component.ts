@@ -50,7 +50,8 @@ export class CreateTicketComponent implements OnInit {
   customer: Customer;
 
   modes: any[] = [];
-
+  isDistributorExist: boolean;
+  userSubTitle: string = '';
 
   ticketId: number; // Id of current ticket object
   tripId: number;   // tripId, redirected from day end page
@@ -117,6 +118,12 @@ export class CreateTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    const userId = localStorage.getItem('userId') || '';
+    this.userService.getUserDetails(userId).subscribe((response) => {
+        this.isDistributorExist = response.IsDistributor;
+        this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+    });
     const now = new Date();
     this.date.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 

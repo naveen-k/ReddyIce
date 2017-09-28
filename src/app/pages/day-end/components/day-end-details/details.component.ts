@@ -23,6 +23,8 @@ export class DetailsComponent implements OnInit {
     isNewlyAdded: boolean = false;
     newlyAddedProduct: any = [];
     selectedProduct: object;
+    isDistributorExist: boolean;
+    userSubTitle: string = '';
 
     totalUnit: any = {
         TotalLoad: 0,
@@ -71,6 +73,12 @@ export class DetailsComponent implements OnInit {
     }
 
     ngOnInit() {
+        const userId = localStorage.getItem('userId') || '';
+        this.userService.getUserDetails(userId).subscribe((response) => {
+            this.isDistributorExist = response.IsDistributor;
+            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+        });
+
         this.logedInUser = this.userService.getUser();
         this.tripId = +this.route.snapshot.params['tripId'];
 

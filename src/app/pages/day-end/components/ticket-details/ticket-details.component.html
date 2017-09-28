@@ -1,6 +1,6 @@
 <div class="row">
     <div class=" col-md-12">
-        <ba-card cardTitle="Trip Details" baCardClass="with-scroll" class="smart-table-container" #customer>
+        <ba-card cardTitle="Trip Details {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==24 || user?.IsDistributor" [disabled]="!tripData.IsClosed"
                     (click)="submitTickets()">Approve</button>

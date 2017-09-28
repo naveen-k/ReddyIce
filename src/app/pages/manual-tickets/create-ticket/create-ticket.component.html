@@ -1,4 +1,4 @@
-<ba-card cardTitle="{{pageTitle}}" id="newTicket">
+<ba-card cardTitle="{{pageTitle}} {{userSubTitle}}" id="newTicket">
     <img src="assets/reddyIce/draftTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 23"
         width="15" class="newTicketTitleStatusIcon">
     <img src="assets/reddyIce/submitTicket.png" *ngIf="ticket.TicketStatusID == 24" width="18" class="newTicketTitleStatusIcon">

@@ -1,4 +1,4 @@
-<ba-card cardTitle="Create Customer" baCardClass="with-scroll" class="smart-table-container">
+<ba-card cardTitle="Create Customer {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container">
     <div class="row">
         <div class="col-sm-9"></div>
         <div class="col-sm-2 head-button-container-for-back">
@@ -15,7 +15,7 @@
                 <label for="example-text-input" class="col-sm-5 col-form-label">Customer Number</label>
                 <div class="col-sm-7 padding-eater">
                     <input [disabled]="mode ===3" id="typeahead-basic" type="number" [(ngModel)]="customer.CustomerNumber" class="form-control"
-                        placeholder="Customer Number" />
+                        placeholder="Customer Number" (blur)="isCutomerNumberExist(customer.CustomerNumber)"/>
                 </div>
             </div>
             <div class="row box-top-margin">
@@ -65,7 +65,7 @@
                         class="form-control" placeholder="Tax Percentage" />
                 </div>
             </div>
-            <div class="row box-top-margin" [hidden]="!customer.IsDex">
+            <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">Chain</label>
                 <div class="col-sm-7 padding-eater">
                     <select [disabled]="mode ===3" [(ngModel)]="customer.Chain" class="form-control">
@@ -74,7 +74,7 @@
                     </select>
                 </div>
             </div>
-            <div class="row box-top-margin" [hidden]="!customer.IsDex">
+            <div class="row box-top-margin">
                 <label for="example-text-input" class="col-sm-5 col-form-label">DUNS Number</label>
                 <div class="col-sm-7 padding-eater">
                     <input [disabled]="mode ===3" type="number" [(ngModel)]='customer.DUNSNumber' class="form-control" />
@@ -160,7 +160,7 @@
                         <table class="table table-striped">
                             <thead class="tableHeader">
                                 <th>Product</th>
-                                <th>Price ($)</th>
+                                <th class="right">Price ($)</th>
                                 <th style="width:100px" class="remove-padding"><button [hidden]="mode ===3" (click)=addProduct(); class="btn btn-danger">Add Product</button></th>
                             </thead>
                             <!-- <thead>
@@ -173,8 +173,8 @@
                                     <td class="text-align-left">
                                         {{mprod.DisplayName}}
                                     </td>
-                                    <td class="td-width">
-                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                    <td class="td-width right">
+                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right" type="number" [(ngModel)]="mprod.Price">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
@@ -196,7 +196,7 @@
                                             </select>
                                     </td>
                                     <td class="td-width">
-                                        <input [disabled]="!addProductCheck[k]" class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                        <input [disabled]="!addProductCheck[k]" class="form-control right" type="number" [(ngModel)]="mprod.Price">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,k)">
@@ -218,7 +218,7 @@
                                         </select>
                                     </td>
                                     <td class="td-width">
-                                        <input [disabled]="!addNewProductCheck[i]" class="form-control" type="number" [(ngModel)]="mprod.Price">
+                                        <input [disabled]="!addNewProductCheck[i]" class="form-control right" type="number" [(ngModel)]="mprod.Price">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
