@@ -28,6 +28,7 @@ export class TicketDetailsComponent implements OnInit {
         totalCharge: 0,
         totalDrayage: 0,
         totalBuyBack: 0,
+        totalDistAmt: 0,
     };
 
     constructor(private service: DayEndService,
@@ -56,6 +57,7 @@ export class TicketDetailsComponent implements OnInit {
                 this.total.totalCharge += ticket.ChargeAmount || 0;
                 this.total.totalDrayage += ticket.Drayage || 0;
                 this.total.totalBuyBack += ticket.BuyBack || 0;
+                this.total.totalDistAmt += ticket.DistAmt || 0;
             });
 
         }, (err) => {

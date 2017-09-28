@@ -1,3 +1,4 @@
+import { CustomerTypeToNamePipe } from './pipes/customer-type.pipe';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { CustomerManagementService } from './customer-management.service';
@@ -52,7 +53,7 @@ const routes: Routes = [
 
 
 @NgModule({
-    declarations: [CustomerManagementComponent, CreateCustomerComponent, CustomerContainerComponent, SetPriceComponent],
+    declarations: [CustomerManagementComponent, CreateCustomerComponent, CustomerContainerComponent, SetPriceComponent, CustomerTypeToNamePipe],
     imports: [SharedModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule, NgbModule],
     providers: [CustomerManagementService],
 })

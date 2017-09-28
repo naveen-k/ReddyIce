@@ -11,7 +11,7 @@ import { NotificationsService } from 'angular2-notifications';
   templateUrl: 'tracker.component.html',
   styleUrls: ['./tracker.component.scss'],
 })
-export class TrackerComponent {
+export class TrackerComponent implements OnInit {
 
   todaysDate: any;
   allBranches: any;
@@ -20,12 +20,12 @@ export class TrackerComponent {
   trips: any = [];
   selectedDate: any = '2017-09-26';
   tripFilterOption: any = {
-    uId: "0",
+    uId: '0',
     tripDate: this.selectedDate,
-    branchId: 0,// 1364
+    branchId: 0,
     isForAll: false,
     TripCode: 1,
-    DriverName: 'abc'
+    DriverName: 'abc',
   };
 
   planned: boolean = true;
@@ -59,7 +59,6 @@ export class TrackerComponent {
   }
 
   ngOnInit() {
-
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.isDistributorExist = response.IsDistributor;
@@ -70,10 +69,9 @@ export class TrackerComponent {
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     // get the user type: isDistributor or internal
-    this.isDistributor = this.userService.getUser().IsDistributor;
-    console.log("this.isDistributor", this.isDistributor);
+    this.isDistributor = this.userService.getUser().IsDistributor;    
 
-    if (this.isDistributor == true) {
+    if (this.isDistributor === true) {
       this.actual = true;
       this.planned = false;
       this.tripFilterOption.branchId = 0;

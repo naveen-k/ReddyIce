@@ -105,7 +105,7 @@
                     </th>
                     <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
                         <span class="cursorPointer" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;">
-                            Buy Back
+                            Buyback
                             <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                         </span>
                     </th>
@@ -141,7 +141,7 @@
                     </td>
                     <td>{{ item.TicketNumber }}</td>
                     <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td>
-                    <td>{{ item.Customer.CustomerID }} - {{ item.Customer.CustomerName }}</td>
+                    <td><span [title]="item.Customer.CustomerID + ' - ' +item.Customer.CustomerName">{{item.Customer.CustomerID }} - {{item.Customer.CustomerName | cutString:true:15 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>

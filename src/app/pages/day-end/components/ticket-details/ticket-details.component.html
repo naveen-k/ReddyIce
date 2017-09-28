@@ -103,7 +103,7 @@
                                     Drayage
                                 </th>
                                 <th class="textRightPadd" *ngIf="!user.IsRIInternal">
-                                    BuyBack
+                                    Buyback
                                 </th>
                                 <th class="textRightPadd" *ngIf="!user.IsRIInternal">
                                     Dist Amt
@@ -114,8 +114,8 @@
 
                             <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
                                 <td>
-                                    <i class="ion-iphone" style="margin: 0 5px" *ngIf="!item.IsPaperTicket"></i>
-                                    <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket"><span class="tooltiptext">Edit</span></i>
+                                    <i class="ion-iphone" style="margin: 0 5px" *ngIf="!item.IsPaperTicket"><span class="tooltiptext">HH Ticket</span></i>
+                                    <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket"><span class="tooltiptext">Paper Ticket</span></i>
                                     <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                         <span class="tooltiptext">View</span>
                                     </i>
@@ -130,7 +130,7 @@
                                 <td class="textRightPadd" [hidden]="!item.Drayage" *ngIf="!user.IsRIInternal">{{item.Drayage| currency:'USD':true:'1.2'}}</td>
                                 <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="!user.IsRIInternal"></td>
                                 <td class="textRightPadd" [hidden]="!item.BuyBack" *ngIf="!user.IsRIInternal">{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
-                                <td class="textRightPadd" *ngIf="!user.IsRIInternal">{{item.DistAmt}}</td>
+                                <td class="textRightPadd" *ngIf="!user.IsRIInternal">{{item.DistAmt | currency:'USD':true:'1.2'}}</td>
                             </tr>
                             <tr>
                                 <td colspan="4"><b>Total</b></td>                                
@@ -138,7 +138,7 @@
                                 <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
-                                <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{0 | currency:'USD':true:'1.2'}}</b></td>
+                                <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td>
                             </tr>
                         </tbody>
                     </table>

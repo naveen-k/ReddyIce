@@ -22,8 +22,8 @@
             <thead class="tableHeader">
                 <tr>
                     <th>Actions</th>
-                    <th>Product</th>
                     <th>Product #</th>
+                    <th>Product</th>
                     <th class="center">RI Product</th>
                     <th class="text-alignment">Price ($)</th>
                 </tr>
@@ -35,8 +35,8 @@
                             <span class="tooltiptext">Edit</span>
                         </i>
                     </td>
-                    <td>{{product.ProductName}}</td>
                     <td>{{product.ProductCode}}</td>
+                    <td>{{product.ProductName}}</td>
                     <td class="center"><input type="checkbox" value="" disabled [checked]=product.IsInternal></td>
                     <td class="td-width text-alignment tdpadding" [hidden]="editClicked[index]">{{product.ProductPrice|currency:'USD':true:'1.2'}}</td>
                     <td class="td-width" [hidden]="!editClicked[index]">

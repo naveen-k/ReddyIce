@@ -99,7 +99,7 @@
                                 </i>
                             </td>
                            
-                            <td *ngIf="logedInUser.IsRIInternal">{{item.RouteNumber?item.RouteNumber :'Unplanned'}}</td>
+                            <td *ngIf="logedInUser.IsRIInternal">{{!item.IsUnplanned?item.RouteNumber :'Unplanned'}}</td>
                             <td  *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
                             <td class="textRightPadding">{{item.TripCode}}</td>
