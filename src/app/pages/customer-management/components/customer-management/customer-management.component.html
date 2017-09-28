@@ -74,6 +74,8 @@
                 </tr>
             </tbody>
         </table>
+        <div class='marginTopCenter'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+        <div *ngIf="!customers.length && !showSpinner" class='marginTopCenter'> No data found </div>
         <!--<div style='text-align:center'> <a> <img [hidden]='customers.length > 0' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>-->
 
     </div>
