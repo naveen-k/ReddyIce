@@ -61,4 +61,8 @@ export class CustomerManagementService extends SharedService {
   isCustomerNumberExist(CustomerNumber) {
     return this.http.get(`api/customer/iscustnoexist?CustomerNumber=${CustomerNumber}`).map((res => res.json()));
   }
+  getChain() {
+    return this.http.get(`api/customer/getchain`)
+      .map((res) => res.json());
+  }
 }

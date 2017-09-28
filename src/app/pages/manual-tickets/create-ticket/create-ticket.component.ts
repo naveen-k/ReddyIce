@@ -799,7 +799,7 @@ export class CreateTicketComponent implements OnInit {
     }
 
     const selectedTicket = this.getSelectedTicketTypeObject();
-    selectedTicket.userType = this.ticket.isUserTypeDistributor ? 'Internal' : 'External'
+    selectedTicket.userType = this.ticket.isUserTypeDistributor ? 'Internal' : 'External';
   }
 
   /**

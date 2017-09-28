@@ -31,6 +31,7 @@ export class CreateCustomerComponent implements OnInit {
     isCustNumberExist: boolean;
     isDistributorExist: boolean;
     userSubTitle: string = '';
+    chains: any = [];
 
     mode: number; // 1-Create Mode, 2-Edit Mode, 3-View Mode 
     addProductCheck: any = [];
@@ -54,6 +55,12 @@ export class CreateCustomerComponent implements OnInit {
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
+
+        this.service.getChain().subscribe((res) => {
+            this.chains = res;
+        }, (err) => { });
+
+
         if (this.mode === 2 || this.mode === 3) {
             this.service.getCustomer(this.customerId).subscribe((response) => {
                 this.customer = response.CustomerDetails;
@@ -77,7 +84,7 @@ export class CreateCustomerComponent implements OnInit {
             this.addProductCheck.fill(false);
             this.addedProduct.push({} as MProducts);
             this.addProductCheck.push(true);
-            console.log("addedProduct ", this.addedProduct)
+            // console.log("addedProduct ", this.addedProduct)
         } else {
             this.addProductCheck.fill(false);
             this.addNewProductCheck.fill(false);
@@ -88,13 +95,13 @@ export class CreateCustomerComponent implements OnInit {
 
     save() {
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
-            //console.log("sdsa ---0-----", this.customer);
+            // console.log("sdsa ---0-----", this.customer);
             if (this.mode === 2) {
                 ///const mAddedProduct = this.addedProduct.concat(this.newlyAddedproduct);
-                //this.customer.MappedProducts = mAddedProduct;
+                // this.customer.MappedProducts = mAddedProduct;
                 this.customer.EditedProducts = this.addedProduct;
                 this.customer.NewAddedProducts = this.newlyAddedproduct;
-                console.log("this.customerId, this.customer ", this.customerId, " :--> ", this.customer)
+                // console.log("this.customerId, this.customer ", this.customerId, " :--> ", this.customer)
                 this.service.updateCustomer(this.customerId, this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('Customer Edited successfully');
@@ -108,7 +115,7 @@ export class CreateCustomerComponent implements OnInit {
                 this.customer.MappedProducts = this.addedProduct;
                 this.customer.EditedProducts = this.addedProduct;
                 this.customer.NewAddedProducts = this.addedProduct;
-                console.log("this.customerId ", this.customer)
+                // console.log("this.customerId ", this.customer)
                 this.service.createCustomer(this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('Customer Added successfully');
@@ -172,7 +179,7 @@ export class CreateCustomerComponent implements OnInit {
         } else if (customer.IsTaxassble && !customer.TaxPercentage) {
             this.notification.error('Tax Percentage is mandatory!!!');
             return false;
-        } else if (customer.IsDex && !customer.Chain) {
+        } else if (customer.IsDex && !customer.ChainID) {
             this.notification.error('Chain Number is mandatory!!!');
             return false;
         } else if (customer.IsDex && !customer.DUNSNumber) {
@@ -199,16 +206,15 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!customer.EmailID) {
             this.notification.error('Customer EmailID is mandatory!!!');
             return false;
-        }
-        else if (mode === 1 && (addedProduct.length === undefined || addedProduct.length === 0)) {
+        }else if (mode === 1 && (addedProduct.length === undefined || addedProduct.length === 0)) {
             this.notification.error('Atleast one product is mandatory!!!');
             return false;
         } else if (mode === 1 && addedProduct.length > 0) {
-            console.log("addedProduct ----------------------", addedProduct)
+            // console.log("addedProduct ----------------------", addedProduct)
             if (addedProduct) {
                 var check = true;
                 addedProduct.forEach(element => {
-                    console.log("element.ExternalProductID || ! element.Price", element.ExternalProductID, element.Price);
+                    // console.log("element.ExternalProductID || ! element.Price", element.ExternalProductID, element.Price);
                     if (!element.ExternalProductID || !element.Price) {
                         check = false;
                     }
@@ -218,7 +224,7 @@ export class CreateCustomerComponent implements OnInit {
                 }
                 return check;
             } else {
-                console.log("succe1");
+                // console.log("succe1");
                 return true;
             }
 
@@ -234,19 +240,19 @@ export class CreateCustomerComponent implements OnInit {
                 if (!check) {
                     this.notification.error('Product Name and its Price is mandatory!!!');
                 }
-                console.log("succe0");
+                // console.log("succe0");
                 return check;
             } else {
                 return true;
             }
 
         } else {
-            console.log("succe2");
+            // console.log("succe2");
             return true;
         }
     }
     editProductPrice(mode, index) {
-        console.log("mode ----- ", mode, " index---", index);
+        // console.log("mode ----- ", mode, " index---", index);
         if (mode === 1) {
             this.addProductCheck.fill(false);
             this.addProductCheck[index] = true;

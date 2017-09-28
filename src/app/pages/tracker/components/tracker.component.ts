@@ -35,7 +35,7 @@ export class TrackerComponent {
   userSubTitle: string = '';
 
   selectedTrip: any;
-  
+
   tripStartDate: any;
 
   marker: any = [];
@@ -43,11 +43,11 @@ export class TrackerComponent {
   userId = localStorage.getItem('userId');
 
   // variables for drawing route
-  map:any;
-  infowindow:any;
-  bounds:any;
-  pinColor:any;
-  pinImage:any;
+  map: any;
+  infowindow: any;
+  bounds: any;
+  pinColor: any;
+  pinImage: any;
 
   isDistributor: any;
 
@@ -62,8 +62,8 @@ export class TrackerComponent {
 
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
-        this.isDistributorExist = response.IsDistributor;
-        this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+      this.isDistributorExist = response.IsDistributor;
+      this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
     });
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -82,7 +82,7 @@ export class TrackerComponent {
       this.tripFilterOption.branchId = 1;
       this.tripFilterOption.isForAll = true;
     }
-    
+
     this.loadBranches();
     this.loadTrips();
   }
@@ -1178,9 +1178,10 @@ export class TrackerComponent {
           //   "TripStatusID": 23
           // }];
           console.log('this.trips', this.trips.length);
-          this.tripFilterOption.DriverName = this.trips[0].DriverName;
-          this.driverChangeHandler();
+
           if (this.trips[0]) {
+            this.tripFilterOption.DriverName = this.trips[0].DriverName;
+            this.driverChangeHandler();
             this.tripFilterOption.TripCode = this.trips[0].TripCode;
             this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
           }
@@ -1232,7 +1233,7 @@ export class TrackerComponent {
     this.driverSpecTrips = [];
     for (var i = 0; i < this.trips.length; i++) {
       if (this.tripFilterOption.DriverName == this.trips[i].DriverName) {
-        this.driverSpecTrips.push(this.trips[i].TripCode);        
+        this.driverSpecTrips.push(this.trips[i].TripCode);
       }
     }
     console.log('this.driverSpecTrips', this.driverSpecTrips);
@@ -1256,7 +1257,7 @@ export class TrackerComponent {
     }
     this.drawMapPath();
   }
-  
+
   drawMapPath() {
     let el = this._elementRef.nativeElement.querySelector('.google-maps');
     // TODO: do not load this each time as we already have the library after first attempt
@@ -1282,60 +1283,6 @@ export class TrackerComponent {
         this.drawPolyline(google, 1);
       } else if (this.actual) {
         this.drawPolyline(google, 2);
-        // for (var i = 0; i < this.selectedTrip.length - 1; i++) {
-
-        //   // changing color of the marker icon based on condition
-        //   if (this.selectedTrip[i].TktType === 'R') {
-        //     this.pinColor = 'ffff00';    // yellow color for Did Not Service stops
-        //   } else if (this.selectedTrip[i].TicketNumber == null) {
-        //     this.pinColor = 'ff0000';    // red color for Skipped stops
-        //   } else {
-        //     this.pinColor = 'b8d5f4';          // default color for markers
-        //   }
-
-        //   // customising the marker icon here
-        //   this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
-        //     new google.maps.Size(21, 34),
-        //     new google.maps.Point(0, 0),
-        //     new google.maps.Point(10, 34));
-
-        //   // start point of straight line
-        //   if (this.selectedTrip[i])
-        //     var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
-
-        //   // adding check here to avoid 'undefined' condition
-        //   var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
-
-        //   // this will draw straight line between multiple points
-        //   var polyline = new google.maps.Polyline({
-        //     path: [startPt, endPt],
-        //     strokeColor: 'brown',
-        //     strokeWeight: 2,
-        //     strokeOpacity: 1
-        //   });
-
-        //   polyline.setMap(this.map);
-        //   this.bounds.extend(startPt);
-        //   this.bounds.extend(endPt);
-
-        //   // adding pushpin marker logic here
-        //   var marker = new google.maps.Marker({
-        //     position: new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude),
-        //     map: this.map,
-        //     icon: this.pinImage
-        //   });
-
-        //   // snippet for showing info window on marker click
-        //   google.maps.event.addListener(marker, 'click', ((marker, i) => {
-        //     return () => {
-        //       this.infowindow.setContent('Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>' +
-        //         'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>' +
-        //         'Total Amount : ' + this.selectedTrip[i].TotalAmount);
-        //       this.infowindow.open(this.map, marker);
-        //     }
-        //   })(marker, i));
-        // }
-        // this.map.fitBounds(this.bounds);
       } else {
         this.drawPolyline(google, 1);
       }
@@ -1343,97 +1290,99 @@ export class TrackerComponent {
   }
 
   drawPolyline(google, sequence) {
-    for (var i = 0; i < this.selectedTrip.length; i++) {
+    if (this.selectedTrip) {
+      for (var i = 0; i < this.selectedTrip.length; i++) {
 
-      // changing color of the marker icon based on condition
-      if (this.selectedTrip[i].TktType === 'R') {
-        this.pinColor = 'ffff00';    // yellow color for Did Not Service stops
-      } else if (this.selectedTrip[i].TicketNumber == null) {
-        this.pinColor = 'ff0000';    // red color for Skipped stops
-      } else {
-        this.pinColor = 'b8d5f4';          // default color for markers
-      }
-
-      // customising the marker icon here
-      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (i+1).toString() + "|" + this.pinColor + "|000",
-        new google.maps.Size(21, 34),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(10, 34));
-
-      // start point of straight line
-      if (sequence === 1) {
-        var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
-      } else if (sequence === 2) {
-        var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
-      }
-
-
-      // end point fo straight line
-      if (sequence === 1) {
-        // adding check here to avoid 'undefined' condition
-        if (this.selectedTrip[i + 1]) {
-          var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
-        }
-      } else if (sequence === 2) {
-        // adding check here to avoid 'undefined' condition
-        if (this.selectedTrip[i + 1]) {
-          var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
-        }
-      }
-      // this will draw straight line between multiple points
-      var polyline = new google.maps.Polyline({
-        path: [startPt, endPt],
-        strokeColor: 'brown',
-        strokeWeight: 2,
-        strokeOpacity: 1
-      });
-
-      polyline.setMap(this.map);
-      this.bounds.extend(startPt);
-      this.bounds.extend(endPt);
-
-      // adding pushpin marker logic here
-      let positionLatitude: any;
-      let positionLongitude: any;
-      if (sequence === 1) {
-        positionLatitude = this.selectedTrip[i].PlannedLatitude;
-        positionLongitude = this.selectedTrip[i].PlannedLongitude;
-      } else if (sequence === 2) {
-        positionLatitude = this.selectedTrip[i].ActualLatitude;
-        positionLongitude = this.selectedTrip[i].ActualLongitude;
-      }
-      var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(positionLatitude, positionLongitude),
-        map: this.map,
-        icon: this.pinImage,
-        title: (i+1).toString(),
-        // label: (i+1).toString()
-      });
-
-      // snippet for showing info window on marker click
-      google.maps.event.addListener(marker, 'click', ((marker, i) => {
-        let infowindowContent = '';
-        if (this.selectedTrip[i].CustomerName) {
-          infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
+        // changing color of the marker icon based on condition
+        if (this.selectedTrip[i].TktType === 'R') {
+          this.pinColor = 'ffff00';    // yellow color for Did Not Service stops
+        } else if (this.selectedTrip[i].TicketNumber == null) {
+          this.pinColor = 'ff0000';    // red color for Skipped stops
         } else {
-          infowindowContent += 'Customer Name : ' + '-' + '<br>';
+          this.pinColor = 'b8d5f4';          // default color for markers
         }
-        if (this.selectedTrip[i].TotalSale) {
-          infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>';
-        } else {
-          infowindowContent += 'Total Sale : ' + '-' + '<br>';
+
+        // customising the marker icon here
+        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (i + 1).toString() + "|" + this.pinColor + "|000",
+          new google.maps.Size(21, 34),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34));
+
+        // start point of straight line
+        if (sequence === 1) {
+          var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
+        } else if (sequence === 2) {
+          var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
         }
-        if (this.selectedTrip[i].TotalAmount) {
-          infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
-        } else {
-          infowindowContent += 'Total Amount : ' + '-' + '<br>';
+
+
+        // end point fo straight line
+        if (sequence === 1) {
+          // adding check here to avoid 'undefined' condition
+          if (this.selectedTrip[i + 1]) {
+            var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+          }
+        } else if (sequence === 2) {
+          // adding check here to avoid 'undefined' condition
+          if (this.selectedTrip[i + 1]) {
+            var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+          }
         }
-        return () => {
-          this.infowindow.setContent(infowindowContent);
-          this.infowindow.open(this.map, marker);
+        // this will draw straight line between multiple points
+        var polyline = new google.maps.Polyline({
+          path: [startPt, endPt],
+          strokeColor: 'brown',
+          strokeWeight: 2,
+          strokeOpacity: 1
+        });
+
+        polyline.setMap(this.map);
+        this.bounds.extend(startPt);
+        this.bounds.extend(endPt);
+
+        // adding pushpin marker logic here
+        let positionLatitude: any;
+        let positionLongitude: any;
+        if (sequence === 1) {
+          positionLatitude = this.selectedTrip[i].PlannedLatitude;
+          positionLongitude = this.selectedTrip[i].PlannedLongitude;
+        } else if (sequence === 2) {
+          positionLatitude = this.selectedTrip[i].ActualLatitude;
+          positionLongitude = this.selectedTrip[i].ActualLongitude;
         }
-      })(marker, i));
+        var marker = new google.maps.Marker({
+          position: new google.maps.LatLng(positionLatitude, positionLongitude),
+          map: this.map,
+          icon: this.pinImage,
+          title: (i + 1).toString(),
+          // label: (i+1).toString()
+        });
+
+        // snippet for showing info window on marker click
+        google.maps.event.addListener(marker, 'click', ((marker, i) => {
+          let infowindowContent = '';
+          if (this.selectedTrip[i].CustomerName) {
+            infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
+          } else {
+            infowindowContent += 'Customer Name : ' + '-' + '<br>';
+          }
+          if (this.selectedTrip[i].TotalSale) {
+            infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>';
+          } else {
+            infowindowContent += 'Total Sale : ' + '-' + '<br>';
+          }
+          if (this.selectedTrip[i].TotalAmount) {
+            infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
+          } else {
+            infowindowContent += 'Total Amount : ' + '-' + '<br>';
+          }
+          return () => {
+            this.infowindow.setContent(infowindowContent);
+            this.infowindow.open(this.map, marker);
+          }
+        })(marker, i));
+      }
+      this.map.fitBounds(this.bounds);
     }
-    this.map.fitBounds(this.bounds);
   }
 }
