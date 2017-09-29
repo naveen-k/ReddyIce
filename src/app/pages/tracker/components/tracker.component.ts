@@ -208,7 +208,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": null,
           //     "ActualLongitude": null,
-          //     "ActualSequence": null,
+          //     "ActualSequence": 7,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 21,
@@ -225,7 +225,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 5
           //   }, {
           //     "CustomerID": 103891,
           //     "CustomerType": 0,
@@ -287,7 +287,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.811211",
           //     "ActualLongitude": "-97.057602",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 6,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 21,
@@ -304,7 +304,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 4
           //   }, {
           //     "CustomerID": 3452,
           //     "CustomerType": 0,
@@ -366,7 +366,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.8481",
           //     "ActualLongitude": "-96.8512",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 5,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -383,7 +383,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 3
           //   }, {
           //     "CustomerID": 164664,
           //     "CustomerType": 0,
@@ -445,7 +445,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.7905",
           //     "ActualLongitude": "-96.8104",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 4,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -462,7 +462,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 6
           //   }, {
           //     "CustomerID": 89,
           //     "CustomerType": 0,
@@ -524,7 +524,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.7498",
           //     "ActualLongitude": "-96.8720",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 1,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -553,7 +553,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 2
           //   }, {
           //     "CustomerID": 9,
           //     "CustomerType": 0,
@@ -615,7 +615,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.736259",
           //     "ActualLongitude": "-96.864586",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 2,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -644,7 +644,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 1
           //   }],
           //   "TripStatusID": 23
           // }, {
@@ -735,7 +735,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": null,
           //     "ActualLongitude": null,
-          //     "ActualSequence": null,
+          //     "ActualSequence": 3,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 21,
@@ -752,7 +752,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 5
           //   }, {
           //     "CustomerID": 103891,
           //     "CustomerType": 0,
@@ -814,7 +814,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.811211",
           //     "ActualLongitude": "-97.057602",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 7,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 21,
@@ -831,7 +831,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 4
           //   }, {
           //     "CustomerID": 3452,
           //     "CustomerType": 0,
@@ -893,7 +893,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.8481",
           //     "ActualLongitude": "-96.8512",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 6,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -910,7 +910,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 3
           //   }, {
           //     "CustomerID": 164664,
           //     "CustomerType": 0,
@@ -972,7 +972,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.7905",
           //     "ActualLongitude": "-96.8104",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 5,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -989,7 +989,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 2
           //   }, {
           //     "CustomerID": 89,
           //     "CustomerType": 0,
@@ -1051,7 +1051,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.7498",
           //     "ActualLongitude": "-96.8720",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 4,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -1080,7 +1080,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 6
           //   }, {
           //     "CustomerID": 9,
           //     "CustomerType": 0,
@@ -1142,7 +1142,7 @@ export class TrackerComponent implements OnInit {
           //     "PlannedLongitude": "",
           //     "ActualLatitude": "32.736259",
           //     "ActualLongitude": "-96.864586",
-          //     "ActualSequence": null,
+          //     "ActualSequence": 1,
           //     "VisitTime": null,
           //     "TicketProduct": [{
           //       "ProductID": 24,
@@ -1171,7 +1171,7 @@ export class TrackerComponent implements OnInit {
           //     }],
           //     "Drayage": null,
           //     "BuyBack": null,
-          //     "PlannedSequence": null
+          //     "PlannedSequence": 1
           //   }],
           //   "TripStatusID": 23
           // }];
@@ -1206,6 +1206,7 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
+    console.log(this.selectedTrip.sort(this.comparator));
     this.drawMapPath();
   }
 
@@ -1266,7 +1267,7 @@ export class TrackerComponent implements OnInit {
     GoogleMapsLoader.load((google) => {
       this.map = new google.maps.Map(el, {
         center: new google.maps.LatLng(32.736259, -96.864586),
-        // zoom: 1,
+        zoom: 1,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       });
       this.infowindow = new google.maps.InfoWindow();
@@ -1291,6 +1292,10 @@ export class TrackerComponent implements OnInit {
     });
   }
 
+  comparator(a, b) {
+    return a["PlannedSequence"] - b["PlannedSequence"];
+  }
+
   drawPolyline(google, sequence) {
     if (this.selectedTrip) {
       for (var i = 0; i < this.selectedTrip.length; i++) {
@@ -1305,11 +1310,22 @@ export class TrackerComponent implements OnInit {
         }
 
         // customising the marker icon here
-        if (this.selectedTrip[i].ActualSequence != null)
-        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
-          new google.maps.Size(21, 34),
-          new google.maps.Point(0, 0),
-          new google.maps.Point(10, 34));
+        if (sequence === 2) {
+          if (this.selectedTrip[i].ActualSequence != null) {
+            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(10, 34));
+          }
+        } else if (sequence === 1) {
+          if (this.selectedTrip[i].PlannedSequence != null) {
+            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|000",
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(10, 34));
+          }
+        }
+        
 
         // start point of straight line
         if (sequence === 1) {
