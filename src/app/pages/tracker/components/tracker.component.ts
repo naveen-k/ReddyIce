@@ -1266,7 +1266,7 @@ export class TrackerComponent implements OnInit {
     GoogleMapsLoader.load((google) => {
       this.map = new google.maps.Map(el, {
         center: new google.maps.LatLng(32.736259, -96.864586),
-        zoom: 9,
+        // zoom: 1,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       });
       this.infowindow = new google.maps.InfoWindow();
@@ -1296,7 +1296,7 @@ export class TrackerComponent implements OnInit {
       for (var i = 0; i < this.selectedTrip.length; i++) {
 
         // changing color of the marker icon based on condition
-        if (this.selectedTrip[i].TktType === 'R') {
+        if (this.selectedTrip[i].TktType === 29) {
           this.pinColor = 'ffff00';    // yellow color for Did Not Service stops
         } else if (this.selectedTrip[i].TicketNumber == null) {
           this.pinColor = 'ff0000';    // red color for Skipped stops
@@ -1305,7 +1305,8 @@ export class TrackerComponent implements OnInit {
         }
 
         // customising the marker icon here
-        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (i + 1).toString() + "|" + this.pinColor + "|000",
+        if (this.selectedTrip[i].ActualSequence != null)
+        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
           new google.maps.Size(21, 34),
           new google.maps.Point(0, 0),
           new google.maps.Point(10, 34));
