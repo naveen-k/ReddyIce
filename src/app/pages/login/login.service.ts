@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { UserService } from '../../shared/user.service';
 import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions } from '@angular/http';
@@ -5,8 +6,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class LoginService {
-   API_ENDPOINT = 'http://frozen.reddyice.com/myiceboxservice_dev/';
-   //API_ENDPOINT = 'http://frozen.reddyice.com/IceboxTripEndService/';
+    
+   API_ENDPOINT = environment.apiEndpoint;
+   
     constructor(private http: Http, private userService: UserService) { }
     userInfo: any;
     login(data: any): Observable<any> {

@@ -1,3 +1,29 @@
+/**
+* Start Override default bootstarp CSS
+*/
+fieldset {
+    border: 1px solid #5bc0de;
+    padding: 0.35em 0.625em 0.75em;
+    margin: 5px 0;
+}
+
+legend {
+    width: auto;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 0px 5px;
+    margin-bottom: 0;
+}
+.form-control {
+    padding: 6.5px 8px;
+}
+select.form-control:not([size]):not([multiple]){
+    height: 32px;
+}
+/**
+* End Override default bootstarp CSS
+*/
+
 /* You can add global styles to this file, and also import other style files */
 .padding-eater{
     padding: 0;
@@ -92,5 +118,3 @@ border: 1px solid #ef8989;
     text-align: right;
     padding-right: 12px !important;
 }
-
-

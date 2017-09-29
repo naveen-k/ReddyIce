@@ -1,14 +1,18 @@
 @import "../../../theme/sass/conf/conf.scss";
 label {
   text-align: right;
+  padding-right: 10px;
+}
+
+.row {
+  padding: 5px 0;
 }
 
 .buttonMargin {
   margin-left:10px;
 }
 
-.radioButtonMargin {
-  margin-left:10px;
+.radioButtonMargin {  
   margin-top: 6px;
 }
 
@@ -130,22 +134,22 @@ label {
   border:1px solid #5bc0de;
 }
 
-.frameHeading {
-  position: absolute;
-  top: -9px;
-  background: white;
-  width: 135px;
-  padding: 0px 10px;
-  text-align: center;
-}
+// .frameHeading {
+//   position: absolute;
+//   top: -9px;
+//   background: white;
+//   width: 135px;
+//   padding: 0px 10px;
+//   text-align: center;
+// }
 
-.frameMargin {
-  margin-left: -15px;
-}
+// .frameMargin {
+//   margin-left: -15px;
+// }
 
-.cashPanel {
-  margin-left: 5px;
-}
+// .cashPanel {
+//   margin-left: 5px;
+// }
 
 .tablePanel {
   margin-top:10px;
@@ -158,25 +162,25 @@ label {
   padding-top: 10px; 
 }
 
-.topMargin30 {
-  margin-top:30px;
-}
+// .topMargin30 {
+//   margin-top:30px;
+// }
 
-.topMargin15 {
-  margin-top:15px;
-}
+// .topMargin15 {
+//   margin-top:15px;
+// }
 
-.input-group {
-  margin-bottom: 0;
-}
+// .input-group {
+//   margin-bottom: 0;
+// }
 
-.listOfProdMargin {
-  margin-left: 40px; 
-}
+// .listOfProdMargin {
+//   margin-left: 40px; 
+// }
 
-.cashPanelMargin {
-  margin-left: 36px;
-}
+// .cashPanelMargin {
+//   margin-left: 36px;
+// }
 
 .ionTrash {
   font-size: 20px;
@@ -207,70 +211,3 @@ label {
 .textAlignCenter {
   text-align: center;
 }
-/*
-.radioList {
-  margin-top: 5px;
-  .radioItem {
-    margin-right: 10px;
-  }
-}
-
-.calendarRow .input-group {
-  margin-bottom: 0;
-}
-
-.showError {
-  color: #ed7878;
-  position: absolute;
-  right: 23px;
-  top: 33px;
-}
-
-.custom-tooltip {
-  background: #ed7878;
-  color: white;
-  padding: 5px;
-  display: inline;
-  position: absolute;
-  border-radius: 4px;
-  top: 3px;
-  right: 1%;
-}
-
-.showError:after {
-  content: '';
-  width: 0;
-  display: inline;
-  position: absolute;
-  right: -5px;
-  margin: -5px;
-  top: 9%;
-  border: 5px solid #ed7878;
-  border-right-color: transparent;
-  border-bottom-color: transparent; 
-  border-top-color: #ed7878;
-  border-left-color: transparent;
-  left: 56%;
-}
-
-.pull-right {
-  float: right;
-}
-
-.addProdManualTickets {
-  margin-top: 23px;
-}
-
-.createNewTicket {
-  border: 1px solid;
-  padding-top: 8px;
-}
-
-.select {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.alignMiddle {
-  vertical-align: middle;
-}*/
