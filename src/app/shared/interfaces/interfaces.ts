@@ -79,6 +79,7 @@ export interface MProducts {
     Modified: any;
     ModifiedBy: any;
     ExternalProductID: number;
+    ProductId: number;
     ExternalProductId: any;
 }
 

@@ -18,7 +18,7 @@ export class CustomerManagementComponent implements OnInit {
         protected service: CustomerManagementService,
         private route: ActivatedRoute,
         private userService: UserService,
-        private notification:NotificationsService,
+        private notification: NotificationsService,
     ) { }
 
     ngOnInit() {
@@ -43,9 +43,9 @@ export class CustomerManagementComponent implements OnInit {
     }
 
     deleteCustomer(customerId) {
-        const data = [{ 'CustomerType': 1, 'CustomerId': customerId }];
+        const data = [{ 'CustomerType': 2, 'CustomerId': customerId }];
         this.service.deleteCustomer(data).subscribe((res) => {
-           this.notification.success("Deleted Succesfully!!");
+            this.notification.success("Deleted Succesfully!!");
         }, (err) => {
             this.notification.error("Error in Deleting a customer!!");
         });

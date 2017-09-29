@@ -266,6 +266,7 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     isCutomerNumberExist(CustomerNumber) {
+
         this.service.isCustomerNumberExist(CustomerNumber).subscribe((response) => {
             this.isCustNumberExist = response;
             if (this.isCustNumberExist) {

@@ -71,7 +71,7 @@ export class ReportsComponent implements OnInit {
 
     updateLink() {
         this.viewReport = true;
-        console.log(this.displayName, "this.location ", this.location);
+        // console.log(this.displayName, "this.location ", this.location);
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
             ('http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx?Rtype='
             + this.displayName + '&DeliveryDate=' + this.formatDate(this.date) + '&BranchCode=311&RouteNumber=801&DriverID='
