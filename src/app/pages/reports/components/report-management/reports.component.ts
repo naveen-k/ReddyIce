@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     templateUrl: './reports.component.html',
@@ -75,7 +76,7 @@ export class ReportsComponent implements OnInit {
         this.viewReport = true;
         // console.log(this.displayName, "this.location ", this.location);
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-            ('http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx?Rtype='
+            (environment.reportEndpoint+'?Rtype='
             + this.displayName + '&DeliveryDate=' + this.formatDate(this.date) + '&BranchCode=311&RouteNumber=801&DriverID='
             + this.user + '&routeID=1208&LocationID=' + this.location + '&BranchID=1362&TripCode=' + this.tripcode + '&DistributormasterID=0');
     }

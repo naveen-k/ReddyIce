@@ -6,6 +6,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { DayEndService } from '../../day-end.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     templateUrl: './ticket-details.component.html',
@@ -98,7 +99,7 @@ export class TicketDetailsComponent implements OnInit {
 
     viewTicket(ticketID) {
         if (ticketID) {
-            window.open("http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
+            window.open(environment.reportEndpoint+"?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
         } else {
             this.notification.error("Ticket preview unavailable!!");
         }
