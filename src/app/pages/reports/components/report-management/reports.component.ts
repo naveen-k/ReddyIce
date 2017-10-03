@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
@@ -15,6 +14,7 @@ export class ReportsComponent implements OnInit {
     displayName: any;
     url: any;
     date: any;
+    date1:any;
     driverID: any = '10-Jasons634';
     location: any = "578";
     user: any = "10";
@@ -27,6 +27,8 @@ export class ReportsComponent implements OnInit {
     isDistributorExist: boolean;
     userSubTitle: string = '';
     todaysDate: any;
+    isRIFlag: boolean = true;
+    isDistributorFlag: boolean = false;
 
     constructor(private sanitizer: DomSanitizer, protected userService: UserService) {
         /* window.onload = (e) =>
@@ -86,5 +88,14 @@ export class ReportsComponent implements OnInit {
         return mm + '/' + dd + '/' + yy;
 
 
+    }
+
+    IsRI() {
+        this.isRIFlag = true;
+        this.isDistributorFlag = false;
+    }
+    IsDistriButor() {
+        this.isRIFlag = false;
+        this.isDistributorFlag = true;
     }
 }
