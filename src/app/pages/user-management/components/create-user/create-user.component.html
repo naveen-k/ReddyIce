@@ -24,7 +24,7 @@
   <div class="row page-header rowContainer first-form-row">
     <div class="col-md-6  page-header">
       <label for="fname" class="control-label">First Name</label>
-      <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
+      <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
         minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (change)="changeHandler()"
         (blur)="spaceRemoverFn(user.FirstName)" maxlength="50">
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
@@ -36,7 +36,7 @@
 
     <div class="col-md-6  page-header">
       <label for="lname" class="control-label">Last Name</label>
-      <input [disabled]="!isNewUser || user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
+      <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
         name="LastName" #LastName="ngModel" required minlength="2" maxlength="50" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>

@@ -1,63 +1,128 @@
 <div style="height: 600px;">
-    <!-- <ba-card cardTitle="Reports" baCardClass="with-scroll" class="smart-table-container"> -->
     <ba-card cardTitle="Reports{{userSubTitle}}">
         <div class="row">
-            <div class="col-md-2" style="padding-top:10px;">
-                <label>Report Type</label>
-            </div>
-            <div class="col-md-3">
-                <select class="form-control" [(ngModel)]="selectedReport" (ngModelChange)="change(selectedReport)">
-                <option value="ED">End of Day Report</option>
-                <option value="DS">Delivery Status</option>
-                <option value="DR">Deposit Report</option>
-               
-                <!-- <option value="volvo">Route Settlement</option>
-                <option value="volvo">Sales Report</option>
-                <option value="volvo">Assets Scanning</option>
-                <option value="volvo">Drayage Report</option> -->
-            </select>
-            </div>
-            <div class="col-md-7 text-right">
-                <button class="btn btn-danger" (click)="updateLink()" style="margin-top: 5px;">View Report</button>
-            </div>
-        </div>
-        <div class="row" style="margin-top: 15px;">
             <div class="col-sm-3">
                 <label>Start Date</label>
                 <div class="input-group">
                     <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="date" disabled>
                     <button class="input-group-addon" (click)="d.toggle()" type="button">
-                    <i class="ion-calendar"></i>
-                    <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
-                </button>
+                            <i class="ion-calendar"></i>
+                        </button>
                 </div>
             </div>
             <div class="col-sm-3">
-                <label>Branch</label>
-                <select class="form-control">
-                <option value="1362">311-Dallas</option>
-            </select>
+                <label>End Date</label>
+                <div class="input-group">
+                    <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="date1" disabled>
+                    <button class="input-group-addon" (click)="d1.toggle()" type="button">
+                                <i class="ion-calendar"></i>
+                            </button>
+                </div>
             </div>
-            <div class="col-sm-3">
-                <label>Driver</label>
-                <select class="form-control" [(ngModel)]="value1" (ngModelChange)="User(value1)">
-                <option [value]="10"  [selected]="value1 == '10'">Jasons634</option>
-                <option [value]="11">Robert</option>
-                <option [value]="1310">Hari</option>
-            </select>
+            <div class="col-sm-4">
+                <label>Select Report</label>
+                <select class="form-control" [(ngModel)]="selectedReport" (ngModelChange)="change(selectedReport)">
+                            <option value="ED">End of Day Report</option>
+                            <option value="DS">Delivery Status</option>
+                            <option value="DR">Deposit Report</option>
+                               
+                            <!-- <option value="volvo">Route Settlement</option>
+                            <option value="volvo">Sales Report</option>
+                            <option value="volvo">Assets Scanning</option>
+                            <option value="volvo">Drayage Report</option> -->
+                        </select>
             </div>
-            <div class="col-sm-3">
-                <label>Trip Code</label>
-                <select class="form-control" [(ngModel)]="value2" (ngModelChange)="tripcodefunc(value2)">
-                <option [value]="1"  [selected]="value2 == '1'">1</option>
-                <option [value]="2">2</option>
-                <option [value]="3">3</option>
-            </select>
+            <div class="col-md-2 text-right">
+                <button class="btn btn-danger button-top-margin" (click)="updateLink()">View Report</button>
+            </div>
+        </div>
+        <div class="row top-margin">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-3 div-border left-margin-of-shortdiv">
+                        <span class="col-sm-4 local-padding-eater">
+                            <label class="top-margin">Ticket Type</label>
+                        </span>
+                        <span class="col-sm-4 local-padding-eater left-margin">
+                            <input type="radio" name="ticketType" class="top-margin" checked>
+                            <label class="top-margin"><b>Regular</b></label>
+                        </span>
+                        <span class="col-sm-4 local-padding-eater left-margin">
+                            <input type="radio" name="ticketType" class="top-margin">
+                            <label class="top-margin"><b>Paper</b></label>
+                        </span>
+                    </div>
+                    <div class="col-sm-8 div-border left-margin-of-longdiv">
+                        <div class="row" style="padding-top:2px;">
+                            <div class="col-sm-3">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <input type="radio" name="userType" (change)="IsRI()" checked >
+                                        <label class="top-margin"><b>RI</b></label>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input type="radio"  name="userType" (change)="IsDistriButor()">
+                                        <label class="top-margin"><b>Distributor</b></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <ng-container *ngIf="isRIFlag && !isDistributorFlag">
+                                    <div class="col-sm-2">
+                                        <label class="top-margin pull-right"><b>Branch</b></label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select class="form-control">
+                                            <option>Branch1</option>
+                                            <option>Branch2</option>
+                                            <option>Branch3</option>
+                                        </select>
+                                    </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="!isRIFlag && isDistributorFlag">
+                                        <div class="col-sm-2">
+                                            <label class="top-margin pull-right"><b>Distributor</b></label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <select class="form-control">
+                                                <option>Dist1</option>
+                                                <option>Dist2</option>
+                                                <option>Dist3</option>
+                                            </select>
+                                        </div>
+                                    </ng-container>
+                                    <div class="col-sm-2">
+                                        <label class="top-margin pull-right"><b>Driver</b></label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select class="form-control">
+                                            <option>Driver1</option>
+                                            <option>Driver2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <iframe *ngIf="viewReport" width="100%" height="{{sHeight}}px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
     </ba-card>
 </div>
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- Previous code below this -->
 <!-- <div>
