@@ -80,13 +80,18 @@ export class ManualTicketService extends SharedService {
   }
 
   deleteDraftTicket(ticketId: any) {
-    return this.http.delete(`api/manualticket?ticketid=${ticketId}`)
+    return this.http.delete(`api/manualticket/?ticketid=${ticketId}`)
       .map(res => res.json());
   }
 
   getSearchedObject(): any {
     return this._searchObject;
   }
+  getImageByID(imageID): any {
+    return this.http.get(`api/manualticket/getimage?imageid=${imageID}`)
+    .map(res => res.json());
+  }
+  
 
   /* fileUpload() {
     const fileObj = {

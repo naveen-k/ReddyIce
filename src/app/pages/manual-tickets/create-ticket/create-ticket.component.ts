@@ -609,6 +609,40 @@ export class CreateTicketComponent implements OnInit {
       this.saveTicket();
     });
   }
+  downloadPODImage(imageID,obj) {
+    console.log("obj ",obj);
+    this.service.getImageByID(imageID).subscribe((res) => {
+      if (res.ImageData) {
+        this.saveAs(res.ImageData,res.ImageId+".png")
+      
+      } else  {
+        //show error;
+      }
+    });
+  }
+  saveAs(data, fileName) {
+    var byteCharacters = atob(data);
+    var byteNumbers = new Array(byteCharacters.length);
+    for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    var byteArray = new Uint8Array(byteNumbers);
+    var blob = new Blob([byteArray], { type: 'application/octet-stream' });
+    var url = window.URL.createObjectURL(blob);
+
+    var anchorElem = document.createElement("a");
+    anchorElem.style.display = "none";
+    anchorElem.href = url;
+    anchorElem.download = fileName;
+
+    document.body.appendChild(anchorElem);
+    anchorElem.click();
+
+    document.body.removeChild(anchorElem);
+    setTimeout(function() {
+        window.URL.revokeObjectURL(url);
+    }, 1000);
+}
 
   deleteProductHandler(tdetail) {
     const index = this.ticket.TicketProduct.findIndex((t) => t.ProductID === tdetail.ProductID);
@@ -647,6 +681,7 @@ export class CreateTicketComponent implements OnInit {
 
       // Initialize to check/uncheck POD Received
       this.tempModels.podReceived = !!this.ticket.PODImageID;
+
 
       this.loadCustomers();
 
