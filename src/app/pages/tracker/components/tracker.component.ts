@@ -348,7 +348,8 @@ export class TrackerComponent implements OnInit {
           }
         })(marker, i));
       }
-      this.map.fitBounds(this.bounds);
+      this.map.fitBounds(this.bounds);      // auto-zoom
+      this.map.panToBounds(this.bounds);    // auto-center
     }
   }
 }
