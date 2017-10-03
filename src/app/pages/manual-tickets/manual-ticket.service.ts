@@ -46,13 +46,17 @@ export class ManualTicketService extends SharedService {
       .map(res => res.json());
   }
 
-  getTypeBasedCustomers(custType: number): Observable<Customer[]> {
-    return this.http.get(`api/customer?custType=${custType}`)
+  getTypeBasedCustomers(custType: number, distcopackerid?: number): Observable<Customer[]> {
+    let url = `api/customer?custType=${custType}`;
+    if (distcopackerid) {
+      url = `api/customer?custType=${custType}&distcopackerid=${distcopackerid}`
+    }
+    return this.http.get(url)
       .map(res => res.json());
   }
 
-  getCustomerDetail(customerId): Observable<Customer> {
-    return this.http.get(`api/customer?customerid=${customerId}`).map((res) => res.json());
+  getCustomerDetail(customerId: number, isInternal: boolean = true): Observable<Customer> {
+    return this.http.get(`api/customer?customerid=${customerId}&isInternal=${isInternal}`).map((res) => res.json());
   }
 
   getCustomerBasedProducts(customerId: string) {

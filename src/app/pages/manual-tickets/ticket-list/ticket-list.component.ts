@@ -71,7 +71,7 @@ export class TicketListComponent implements OnInit {
             this.sortBranches();
         }
 
-        if (this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
+        if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
             this.searchObj.BranchId = this.user.Branch.BranchID;
         }
 
@@ -80,12 +80,13 @@ export class TicketListComponent implements OnInit {
         }
 
         // Set first branch default selected
-        if (this.searchObj.BranchId || this.user.IsDistributor) {
+        if (this.searchObj.BranchId) {
             this.branchChangeHandler();
         }
 
-        if (this.user.IsDistributor) {
-            this.getSearchedTickets();
+        if (this.searchObj.DistributorID) {
+            this.getDistributors();
+            // this.getSearchedTickets();
         }
     }
 
@@ -118,19 +119,15 @@ export class TicketListComponent implements OnInit {
         });
     }
 
-    getDistributors(branchId) {
-        this.service.getDistributorsByBranch(branchId ? branchId.toString() : null).subscribe(res => {
+    getDistributors() {
+        this.service.getDistributerAndCopacker().subscribe(res => {
             this.distributors = res;
             this.getSearchedTickets();
         });
     }
 
     branchChangeHandler() {
-        if (this.searchObj.userType === 'Internal') {
-            this.getDrivers();
-        } else {
-            this.getDistributors(this.searchObj.BranchId);
-        }
+        this.getDrivers();
     }
 
     getSearchedTickets() {
@@ -139,7 +136,7 @@ export class TicketListComponent implements OnInit {
         const dt = `${searchObj.CreatedDate.month}-${searchObj.CreatedDate.day}-${searchObj.CreatedDate.year}`;
 
         this.showSpinner = true;
-        if (this.user.IsDistributor) { searchObj.BranchId = null; }        
+        if (searchObj.userType=='External') { searchObj.BranchId = null; }        
         return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
             if (response) {
                 this.showSpinner = false;
@@ -205,18 +202,18 @@ export class TicketListComponent implements OnInit {
     }
 
     typeChangeHandler() {
-        if (!this.searchObj.BranchId) {
-            return;
-        }
+        // if (!this.searchObj.BranchId) {
+        //     return;
+        // }
         if (this.searchObj.userType === 'External') {
-            this.getDistributors(this.searchObj.BranchId);
+            this.getDistributors();
         } else {
             this.getDrivers();
         }
     }
 
     userChangeHandler() {
-        // this.getSearchedTickets();
+        this.getSearchedTickets();
     }
 
     // delete ticket in the draft state

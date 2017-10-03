@@ -44,6 +44,10 @@ export class SharedService {
         return this.http.get(url).map((res) => res.json());
     }
 
+    getDistributerAndCopacker(): Observable<any> {
+        return this.http.get('api/Distributor').map((res) => res.json());
+    }
+
     formatDate(date) {
         if (!date.year) { return '' };
         let yy = date.year, mm = date.month, dd = date.day;

@@ -43,10 +43,6 @@ export class UserManagementService extends SharedService {
         return this.http.get('api/roles').map((res) => res.json());
     }
 
-    getDistributerAndCopacker(): Observable<any> {
-        return this.http.get('api/Distributor').map((res) => res.json());
-    }
-
     searchInternalUsers(searchString: string): Observable<any[]> {
         let searchObj = {};
         if (this.userService.getPrivateKeys()) {

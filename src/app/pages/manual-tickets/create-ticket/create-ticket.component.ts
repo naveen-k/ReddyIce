@@ -118,11 +118,10 @@ export class CreateTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     const userId = localStorage.getItem('userId') || '';
     this.userService.getUserDetails(userId).subscribe((response) => {
-        this.isDistributorExist = response.IsDistributor;
-        this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+      this.isDistributorExist = response.IsDistributor;
+      this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
     });
     const now = new Date();
     this.date.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -154,18 +153,20 @@ export class CreateTicketComponent implements OnInit {
     this.branches = this.branches.filter((b) => b.BranchID !== 1);
     this.sortBranches();
     this.ticketTypes = activatedRouteObject['ticketTypes'];
-    this.prepareTicketTypes();
 
-    if (this.user.IsDistributor) {
-      this.loadCustomers();
+    if (this.user.IsDistributor || this.ticket.DistributorCopackerID) {
+      // this.loadCustomers();
       this.loadDisributors();
-
-      // Set distributor 
-      this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
+      if (!this.ticket.DistributorCopackerID) {
+        // Set distributor 
+        this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
+      }
     }
 
+    this.prepareTicketTypes();
+
     // load customers, if BranchID is available
-    if (this.ticket.BranchID) {
+    if (this.ticket.BranchID || this.ticket.DistributorCopackerID) {
       this.loadCustomers();
     }
 
@@ -263,6 +264,10 @@ export class CreateTicketComponent implements OnInit {
     }
 
     this.resetCashAndCheck();
+
+    if (this.ticket.DistributorCopackerID) {
+      this.loadCustomers();
+    }
   }
 
   initializeSubTicketAndMode(selectedTicket) {
@@ -310,7 +315,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadCustomersByType(custType, callback) {
-    this.service.getTypeBasedCustomers(custType).subscribe((res) => {
+    this.service.getTypeBasedCustomers(custType, this.ticket.DistributorCopackerID).subscribe((res) => {
       callback(res);
     });
   }
@@ -325,9 +330,9 @@ export class CreateTicketComponent implements OnInit {
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
-    if (this.user.IsDistributor && this.ticket.CustomerType) {
+    if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
-    } else if (!this.user.IsDistributor) {
+    } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
       this.loadCustomerOfBranch(this.ticket.BranchID, callback);
     }
   }
@@ -340,32 +345,41 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadDisributors(branchId?: any) {
-    this.service.getDistributorsByBranch(branchId).subscribe(res => {
+    this.service.getDistributerAndCopacker().subscribe(res => {
       this.distributors = res;
-    });
+    })
+    // this.service.getDistributorsByBranch(branchId).subscribe(res => {
+    //   this.distributors = res;
+    // });
   }
 
   customerChangeHandler(event) {
+
     // const customer = this.customers.filter((c) => c.CustomerId === this.ticket.CustomerID);
     this.ticket.CustomerID = event.item.CustomerId;
-    this.loadCustomerDetail(this.ticket.CustomerID);
+    this.loadCustomerDetail(this.ticket.CustomerID, event.item.IsRICustomer);
 
+    this.ticket.CustomerSourceID = event.item.IsRICustomer ? 101 : 103
     // Reset ticket details
     this.ticket.TicketProduct = [{} as TicketProduct];
   }
 
-  customerFocusOut() {
-
+  distributorChangeHandler() {
+    this.loadCustomers();
   }
+
+  // customerFocusOut() {
+
+  // }
 
   addProductRow() {
     if (!this.ticket.TicketProduct) { return; }
     this.ticket.TicketProduct.push({} as TicketProduct);
   }
 
-  loadCustomerDetail(customerId) {
+  loadCustomerDetail(customerId, isRICustomer: boolean = true) {
     // this.isFormDirty = true;
-    this.service.getCustomerDetail(customerId).subscribe((res) => {
+    this.service.getCustomerDetail(customerId, isRICustomer).subscribe((res) => {
       this.customer = res;
 
       // set first product selected
@@ -609,13 +623,13 @@ export class CreateTicketComponent implements OnInit {
       this.saveTicket();
     });
   }
-  downloadPODImage(imageID,obj) {
-    console.log("obj ",obj);
+  downloadPODImage(imageID, obj) {
+    console.log("obj ", obj);
     this.service.getImageByID(imageID).subscribe((res) => {
       if (res.ImageData) {
-        this.saveAs(res.ImageData,res.ImageId+".png")
-      
-      } else  {
+        this.saveAs(res.ImageData, res.ImageId + ".png")
+
+      } else {
         //show error;
       }
     });
@@ -624,7 +638,7 @@ export class CreateTicketComponent implements OnInit {
     var byteCharacters = atob(data);
     var byteNumbers = new Array(byteCharacters.length);
     for (var i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     var byteArray = new Uint8Array(byteNumbers);
     var blob = new Blob([byteArray], { type: 'application/octet-stream' });
@@ -639,10 +653,10 @@ export class CreateTicketComponent implements OnInit {
     anchorElem.click();
 
     document.body.removeChild(anchorElem);
-    setTimeout(function() {
-        window.URL.revokeObjectURL(url);
+    setTimeout(function () {
+      window.URL.revokeObjectURL(url);
     }, 1000);
-}
+  }
 
   deleteProductHandler(tdetail) {
     const index = this.ticket.TicketProduct.findIndex((t) => t.ProductID === tdetail.ProductID);
@@ -791,7 +805,7 @@ export class CreateTicketComponent implements OnInit {
     }
 
     clonedObject.IsPaperTicket = true;
-    clonedObject.CustomerSourceID = 101;
+    clonedObject.CustomerSourceID = clonedObject.CustomerSourceID ? clonedObject.CustomerSourceID : 101;
 
     this.setSaleTicketType(clonedObject);
 
@@ -826,15 +840,15 @@ export class CreateTicketComponent implements OnInit {
   }
 
   userTypeChangeHandler() {
-    this.ticket.UserID = this.ticket.DistributorCopackerID = null;
+    this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = null;
     if (this.ticket.isUserTypeDistributor) {
-      this.loadDisributors(this.ticket.BranchID);
+      this.loadDisributors();
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
 
-    const selectedTicket = this.getSelectedTicketTypeObject();
-    selectedTicket.userType = this.ticket.isUserTypeDistributor ? 'Internal' : 'External';
+    // const selectedTicket = this.getSelectedTicketTypeObject();
+    // selectedTicket.userType = this.ticket.isUserTypeDistributor ? 'Internal' : 'External';
   }
 
   /**

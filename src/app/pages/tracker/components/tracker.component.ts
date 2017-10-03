@@ -250,11 +250,11 @@ export class TrackerComponent implements OnInit {
 
         // changing color of the marker icon based on condition
         if (this.selectedTrip[i].TktType === 29) {
-          this.pinColor = 'ffff00';    // yellow color for Did Not Service stops
+          this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
         } else if (this.selectedTrip[i].TicketNumber == null) {
-          this.pinColor = 'ff0000';    // red color for Skipped stops
+          this.pinColor = 'ff0000';   // red color for Skipped stops
         } else {
-          this.pinColor = 'b8d5f4';          // default color for markers
+          this.pinColor = 'b8d5f4';   // default color for markers
         }
 
         // customising the marker icon here

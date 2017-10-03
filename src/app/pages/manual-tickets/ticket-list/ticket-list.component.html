@@ -10,20 +10,19 @@
                 </button>
             </div>
         </div>
-        <div class="col-sm-3" *ngIf="!user.IsDistributor">
-            <label>Select Branch</label>
-            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
-                <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
-                    <!-- {{obj.BranchID}}-{{obj.BranchName}} -->
-                    {{obj.BranchCode}}-{{obj.BranchName}}
-                </option>
-            </select>
-        </div>
         <div class="col-sm-2">
             <label>Select Driver Type</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                 <option [value]="'Internal'">RI Driver</option>
                 <option [value]="'External'">Dist./CoPacker</option>
+            </select>
+        </div>
+        <div class="col-sm-3" *ngIf="!user.IsDistributor" [hidden]="searchObj.userType=='External'">
+            <label>Select Branch</label>
+            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
+                <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
+                    {{obj.BranchCode}}-{{obj.BranchName}}
+                </option>
             </select>
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
@@ -37,8 +36,8 @@
         <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
             <label>Dist./CoPacker</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.DistributorID" (ngModelChange)="userChangeHandler()">
-                <option *ngFor="let obj of distributors" [value]="obj.DistributorID">
-                    {{obj.DistributorName}}
+                <option *ngFor="let obj of distributors" [value]="obj.DistributorCopackerID">
+                    {{obj.Name}}
                 </option>
             </select>
         </div>
@@ -117,8 +116,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc"> -->
+            <tbody>                
                 <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID )  | sort:customer.sortField:customer.isAsc | filter:searchString:['TicketNumber', 'UserName', 'Customer.CustomerName', 'Customer.CustomerID', 'CashAmount', 'TotalSale']:allTickets">
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"

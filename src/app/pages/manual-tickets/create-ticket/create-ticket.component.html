@@ -40,12 +40,12 @@
                     <label for="example-text-input" class="col-sm-4 col-form-label">Type:</label>
                     <div [hidden]="isReadOnly || tripMode" class="col-sm-7">
                         <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input [disabled]="user.IsDistributor" type="radio" name="driverType" [value]="false" 
+                            <input [disabled]="user.IsDistributor || !!ticket.TicketID" type="radio" name="driverType" [value]="false" 
                             [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
                             <span>RI Driver</span>
                         </label>
                         <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input [disabled]="user.IsDistributor" type="radio" name="driverType" [value]="true" 
+                            <input [disabled]="user.IsDistributor || !!ticket.TicketID" type="radio" name="driverType" [value]="true" 
                                 [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
                             <span>Distributor/CoPacker</span>
                         </label>
@@ -65,6 +65,17 @@
                     </div>
                 </div>
                 <div class="row" [hidden]="ticket.isUserTypeDistributor">
+                    <label for="example-text-input" class="col-sm-4 col-form-label">Branch:</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
+                            [disabled]="ticket.TicketID || tripMode">
+                            <option *ngFor="let branch of branches" [ngValue]="branch.BranchID">
+                                {{branch.BranchCode}} - {{branch.BranchName}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" [hidden]="ticket.isUserTypeDistributor">
                     <label for="example-text-input" class="col-sm-4 col-form-label">Driver:</label>
                     <div class="col-sm-7">
                         <select class="form-control" name="customer" [(ngModel)]="ticket.UserID" [disabled]="isReadOnly" (ngModelChange)="isFormDirty=true">
@@ -75,8 +86,8 @@
                 <div class="row" [hidden]="!ticket.isUserTypeDistributor">
                     <label for="example-text-input" class="col-sm-4 col-form-label">Distributor/CoPacker:</label>
                     <div class="col-sm-7">
-                        <select class="form-control" name="customer" [(ngModel)]="ticket.DistributorCopackerID" [disabled]="isReadOnly" (ngModelChange)="isFormDirty=true">
-                            <option *ngFor="let ds of distributors" [ngValue]="ds.DistributorID"> {{ds.DistributorName}} </option>
+                        <select class="form-control" name="customer" [(ngModel)]="ticket.DistributorCopackerID" [disabled]="user.IsDistributor || isReadOnly" (ngModelChange)="distributorChangeHandler();isFormDirty=true">
+                            <option *ngFor="let ds of distributors" [ngValue]="ds.DistributorCopackerID"> {{ds.Name}} </option>
                         </select>
                     </div>
                 </div>
@@ -93,18 +104,17 @@
                     </button>
                 </div>
             </div>
-            <div class="row" *ngIf="!user.IsDistributor">
+            <!-- <div class="row" *ngIf="!user.IsDistributor">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Branch:</label>
                 <div class="col-sm-7">
                     <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
                         [disabled]="ticket.TicketID || tripMode">
-                        <option *ngFor="let branch of branches" [ngValue]="branch.BranchID"> 
-                            <!-- {{branch.BranchID}} - {{branch.BranchName}}  -->
+                        <option *ngFor="let branch of branches" [ngValue]="branch.BranchID">                             
                             {{branch.BranchCode}} - {{branch.BranchName}}
                         </option>
                     </select>
                 </div>
-            </div>
+            </div> -->
             <div class="row" [style.visibility]="(ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type:</label>
                 <div class="col-sm-7">

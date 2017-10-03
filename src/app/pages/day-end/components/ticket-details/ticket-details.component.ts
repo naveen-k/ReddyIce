@@ -37,6 +37,8 @@ export class TicketDetailsComponent implements OnInit {
         private notification: NotificationsService,
         private userService: UserService,
     ) { }
+
+
     ngOnInit() {
         const userId = localStorage.getItem('userId') || '';
         this.userService.getUserDetails(userId).subscribe((response) => {
@@ -94,7 +96,12 @@ export class TicketDetailsComponent implements OnInit {
         });
     }
 
-    createTicket() {
+    viewTicket(ticketID) {
+        if (ticketID) {
+            window.open("http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
+        } else {
+            this.notification.error("Ticket preview unavailable!!");
+        }
 
     }
 }
