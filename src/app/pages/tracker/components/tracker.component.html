@@ -160,7 +160,7 @@
                             </tbody>
                         </table>
                         <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-                        <div *ngIf="!selectedTrip.length && !showSpinner" style='text-align:center; margin-top:10px;'> No data found </div>
+                        <div *ngIf="selectedTrip && !selectedTrip.length && !showSpinner" style='text-align:center; margin-top:10px;'> No data found </div>
                     </div>
                 </div>
                 <!-- <div class="col-md-8" style="overflow-y: hidden;height: 255px;">
