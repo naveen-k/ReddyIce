@@ -6,6 +6,7 @@ import { Branch } from '../../../shared/interfaces/interfaces';
 import { UserService } from '../../../shared/user.service';
 import { ManualTicketService } from '../manual-ticket.service';
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 @Component({
     templateUrl: './ticket-list.component.html',
     styleUrls: ['./ticket-list.component.scss'],
@@ -136,7 +137,7 @@ export class TicketListComponent implements OnInit {
         const dt = `${searchObj.CreatedDate.month}-${searchObj.CreatedDate.day}-${searchObj.CreatedDate.year}`;
 
         this.showSpinner = true;
-        if (searchObj.userType=='External') { searchObj.BranchId = null; }        
+        if (searchObj.userType == 'External') { searchObj.BranchId = null; }
         return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
             if (response) {
                 this.showSpinner = false;
@@ -231,5 +232,14 @@ export class TicketListComponent implements OnInit {
                 }
             },
         );
+    }
+
+    viewTicket(ticketID) {
+        // ticketID = 3212;
+        if (ticketID) {
+            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
+        } else {
+            this.notificationService.error("Ticket preview unavailable!!");
+        }
     }
 }

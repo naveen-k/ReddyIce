@@ -4,7 +4,7 @@ import * as GoogleMapsLoader from 'google-maps';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Component, HostListener, OnInit, ElementRef } from '@angular/core';
-
+import { environment } from '../../../../environments/environment';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
@@ -55,6 +55,7 @@ export class TrackerComponent implements OnInit {
     private _elementRef: ElementRef,
     private service: TrackerService,
     private userService: UserService,
+    private notification: NotificationsService,
   ) {
   }
 
@@ -116,25 +117,31 @@ export class TrackerComponent implements OnInit {
 
   // Load all trips based on Date and Branch
   loadTrips() {
+    this.showSpinner = true;
     this.service.getTrips(this.userId, this.selectedDate,
       this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
         if (typeof res == 'object') {
           this.trips = res.Trips;
           console.log('this.trips', this.trips.length);
-
+          this.showSpinner = false;
           if (this.trips[0]) {
             this.tripFilterOption.DriverName = this.trips[0].DriverName;
             this.driverChangeHandler();
             this.tripFilterOption.TripCode = this.trips[0].TripCode;
             this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
+          } else {
+            this.driverSpecTrips = [];
+            this.selectedTrip = [];
           }
           this.drawMapPath();
         } else {
           this.trips = [];
+          this.showSpinner = false;
         }
       }, (error) => {
         console.log(error);
         this.trips = [];
+        this.showSpinner = false;
       });
   }
 
@@ -146,7 +153,12 @@ export class TrackerComponent implements OnInit {
   // Filter TicketDetails based on the Trip selected
   fetchTicketDetailsByTrip(TripCode) {
     for (var i = 0; i < this.trips.length; i++) {
-      if (parseInt(TripCode) === this.trips[i].TripCode) {
+      // if (parseInt(TripCode) === this.trips[i].TripCode) {
+      //   this.selectedTrip = this.trips[i].TripTicketList;
+      //   this.tripStartDate = this.trips[i].TripStartDate
+      // }
+      if (parseInt(TripCode) === this.trips[i].TripCode && 
+      this.tripFilterOption.DriverName == this.trips[i].DriverName) {
         this.selectedTrip = this.trips[i].TripTicketList;
         this.tripStartDate = this.trips[i].TripStartDate
       }
@@ -178,7 +190,7 @@ export class TrackerComponent implements OnInit {
   driverSpecTrips: any = [];
   // Fetch selected Driver
   driverChangeHandler() {
-    console.log('TripCode', this.tripFilterOption.DriverName);
+    console.log('DriverName', this.tripFilterOption.DriverName);
     this.driverSpecTrips = [];
     for (var i = 0; i < this.trips.length; i++) {
       if (this.tripFilterOption.DriverName == this.trips[i].DriverName) {
@@ -213,12 +225,12 @@ export class TrackerComponent implements OnInit {
     GoogleMapsLoader.load((google) => {
       this.map = new google.maps.Map(el, {
         center: new google.maps.LatLng(32.736259, -96.864586),
-        zoom: 1,
+        zoom: 13,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       });
       this.infowindow = new google.maps.InfoWindow();
       this.bounds = new google.maps.LatLngBounds();
-      this.pinColor = "A52A2A";
+      this.pinColor = "0000ff";
       this.pinImage = new google.maps.MarkerImage(
         "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
         new google.maps.Size(21, 34),
@@ -251,10 +263,12 @@ export class TrackerComponent implements OnInit {
         // changing color of the marker icon based on condition
         if (this.selectedTrip[i].TktType === 29) {
           this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
-        } else if (this.selectedTrip[i].TicketNumber == null) {
+        } else if (this.selectedTrip[i].OrderID == null) {
+          this.pinColor = '0000ff';   // blue color for Unplanned Service
+        } else if (this.selectedTrip[i].OrderID != null) {
+          this.pinColor = 'A52A2A';   // brown color for Planned Service
+        } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber == null) {
           this.pinColor = 'ff0000';   // red color for Skipped stops
-        } else {
-          this.pinColor = 'b8d5f4';   // default color for markers
         }
 
         // customising the marker icon here
@@ -350,6 +364,15 @@ export class TrackerComponent implements OnInit {
       }
       this.map.fitBounds(this.bounds);      // auto-zoom
       this.map.panToBounds(this.bounds);    // auto-center
+    }
+  }
+
+  viewTicket(ticketID) {
+    // ticketID = 3212;
+    if (ticketID) {
+        window.open(environment.reportEndpoint+"?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
+    } else {
+        this.notification.error("Ticket preview unavailable!!");
     }
   }
 }

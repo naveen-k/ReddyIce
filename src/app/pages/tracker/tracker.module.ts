@@ -1,3 +1,4 @@
+import { UniquePipe } from './tracker.pipe';
 import { TrackerService } from './tracker.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TrackerComponent } from './components/tracker.component';
@@ -21,7 +22,10 @@ const routes: Routes = [
 
 
 @NgModule({
-    declarations: [TrackerComponent],
+    declarations: [
+        TrackerComponent,
+        UniquePipe,
+    ],
     imports: [
         SharedModule, 
         Ng2SmartTableModule, 
