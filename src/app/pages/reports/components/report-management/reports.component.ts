@@ -1,8 +1,10 @@
+import { User } from '../../../user-management/user-management.interface';
+import { environment } from '../../../../../environments/environment.prod';
 import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
-import { environment } from '../../../../../environments/environment';
+import { ReportService } from '../../reports.service';
 
 @Component({
     templateUrl: './reports.component.html',
@@ -10,93 +12,94 @@ import { environment } from '../../../../../environments/environment';
 })
 export class ReportsComponent implements OnInit {
 
-    linkRpt: SafeResourceUrl;
-    selectedReport: any;
-    displayName: any;
-    url: any;
-    date: any;
-    date1:any;
-    driverID: any = '10-Jasons634';
-    location: any = "578";
-    user: any = "10";
-    tripcode: any = "1";
-    viewReport: boolean = false;
-    value: any = "578";
-    value1: any = "10";
-    value2: any = "1";
-    sHeight: any = 340;
-    isDistributorExist: boolean;
-    userSubTitle: string = '';
-    todaysDate: any;
-    isRIFlag: boolean = true;
-    isDistributorFlag: boolean = false;
+    filter: any = {
+        startDate: null,
+        endDate: null,
+        reportType: null,
+        ticketType: null,
+        userType: 'internal',
+        distributor: null,
+        branch: null,
+        internalDriver: null,
+        distDriver: null,
+    };
 
-    constructor(private sanitizer: DomSanitizer, protected userService: UserService) {
-        /* window.onload = (e) =>
-         {
-             ngZone.run(() => {
-                 
-                 this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
-             });
-         };
-         window.onresize = (e) =>
-         {
-             ngZone.run(() => {
-                
-                 this.sHeight = window.innerHeight - (document.getElementById("r1").offsetHeight + document.getElementById("r0").offsetHeight + 100);
-             });
-         };*/
+    user: User;
+
+    linkRpt: SafeResourceUrl;
+    
+    distributors: any = [];
+    branches: any = [];
+    drivers: any = [];
+    driversofDist: any = [];
+    
+    viewReport: boolean = false;
+    
+    userSubTitle: string = '';
+    
+    constructor(private sanitizer: DomSanitizer, protected userService: UserService, protected reportService: ReportService) {
     }
     ngOnInit() {
         const now = new Date();
-        this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-        const userId = localStorage.getItem('userId') || '';
-        this.userService.getUserDetails(userId).subscribe((response) => {
-            this.isDistributorExist = response.IsDistributor;
-            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
-        });
+        this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+        this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+
+        this.user = this.userService.getUser();
+        this.userSubTitle = this.user.IsDistributor ? this.user.Distributor.DistributorName : '';
+
+        this.getAllBranches();
     }
-    change(value) {
-        if (value) {
-            this.displayName = value;
+
+    getAllBranches() {
+        this.reportService.getBranches().subscribe((res) => {
+            this.branches = res;
+            this.branches.shift();
+        }, (err) => { });
+    }
+
+    getDistributors() {
+        this.reportService.getDistributors().subscribe((res) => {
+            this.distributors = res;
+        }, (err) => { });
+    }
+
+    userTypeChangeHandler() {
+        if (this.filter.userType === 'internal') {
+            this.getAllBranches();
+        } else {
+            this.getDistributors();
         }
     }
-
-    locationfunc(value) {
-        this.location = value;
-    }
-    tripcodefunc(value2) {
-        this.tripcode = value2;
-    }
-    User(value1) {
-        this.user = value1;
-    }
-
     updateLink() {
         this.viewReport = true;
         // console.log(this.displayName, "this.location ", this.location);
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-            (environment.reportEndpoint+'?Rtype='
-            + this.displayName + '&DeliveryDate=' + this.formatDate(this.date) + '&BranchCode=311&RouteNumber=801&DriverID='
-            + this.user + '&routeID=1208&LocationID=' + this.location + '&BranchID=1362&TripCode=' + this.tripcode + '&DistributormasterID=0');
+            (`${environment.reportEndpoint}?Rtype=${this.filter.reportType}
+        &DeliveryDate=${this.formatDate(this.filter.startDate)}&BranchCode=${this.filter.branch}&DriverID=${this.filter.internalDriver}`)
+        // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+        //     (environment.reportEndpoint + '?Rtype='
+        //     + this.displayName + '&DeliveryDate=' + this.formatDate(this.startLatestDate) + '&BranchCode=311&RouteNumber=801&DriverID='
+        //     + this.user + '&routeID=1208&LocationID=' + this.location + '&BranchID=1362&TripCode=' + this.tripcode + '&DistributormasterID=0');
     }
 
-    formatDate(date) {
-        if (!date.year) { return '' };
-        let yy = date.year, mm = date.month, dd = date.day;
+    formatDate(startLatestDate) {
+        if (!startLatestDate.year) { return ''; }
+        let yy = startLatestDate.year, mm = startLatestDate.month, dd = startLatestDate.day;
         if (mm < 10) { mm = '0' + mm }
         if (dd < 10) { dd = '0' + dd }
         return mm + '/' + dd + '/' + yy;
-
-
     }
 
-    IsRI() {
-        this.isRIFlag = true;
-        this.isDistributorFlag = false;
+    branchChangeHandler() {
+        this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
+            this.drivers = res;
+        }, (err) => { });
     }
-    IsDistriButor() {
-        this.isRIFlag = false;
-        this.isDistributorFlag = true;
+    distributorChangeHandler() {
+        this.reportService.getDriversbyDistributors(this.filter.distributor).subscribe((res) => {
+            this.driversofDist = res;
+        }, (err) => {
+
+        });
     }
 }

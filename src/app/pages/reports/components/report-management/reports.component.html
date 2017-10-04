@@ -1,293 +1,120 @@
-<div style="height: 600px;">
-    <ba-card cardTitle="Reports{{userSubTitle}}">
-        <div class="row">
-            <div class="col-sm-3">
-                <label>Start Date</label>
-                <div class="input-group">
-                    <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="date" disabled>
-                    <button class="input-group-addon" (click)="d.toggle()" type="button">
+<ba-card cardTitle="Reports{{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container">
+    <div class="row">
+        <div class="col-sm-4">
+            <label>Start Date</label>
+            <div class="input-group">
+                <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
+                    disabled>
+                <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <label>End Date</label>
-                <div class="input-group">
-                    <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="date1" disabled>
-                    <button class="input-group-addon" (click)="d1.toggle()" type="button">
-                                <i class="ion-calendar"></i>
-                            </button>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <label>Select Report</label>
-                <select class="form-control" [(ngModel)]="selectedReport" (ngModelChange)="change(selectedReport)">
-                            <option value="ED">End of Day Report</option>
-                            <option value="DS">Delivery Status</option>
-                            <option value="DR">Deposit Report</option>
-                               
-                            <!-- <option value="volvo">Route Settlement</option>
-                            <option value="volvo">Sales Report</option>
-                            <option value="volvo">Assets Scanning</option>
-                            <option value="volvo">Drayage Report</option> -->
-                        </select>
-            </div>
-            <div class="col-md-2 text-right">
-                <button class="btn btn-danger button-top-margin" (click)="updateLink()">View Report</button>
             </div>
         </div>
-        <div class="row top-margin">
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-sm-3 div-border left-margin-of-shortdiv">
-                        <span class="col-sm-4 local-padding-eater">
+        <div class="col-sm-4">
+            <label>End Date</label>
+            <div class="input-group">
+                <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate"
+                    disabled>
+                <button class="input-group-addon" (click)="d1.toggle()" type="button">
+                                <i class="ion-calendar"></i>
+                            </button>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label>Select Report</label>
+            <select class="form-control" [(ngModel)]="filter.reportType">
+                    <option value="ED">End of Day Report</option>
+                    <option value="DS">Delivery Status</option>
+                    <option value="DR">Deposit Report</option>
+                    <option value="RS">Route Settlement</option>
+                    <option value="SR">Sales Report</option>
+                    <option value="AS">Assets Scanning</option>
+                    <option value="DRA">Drayage Report</option>
+                </select>
+        </div>
+        <div class="col-md-2 text-right head-button-container">
+            <button class="btn btn-danger button-top-margin" (click)="updateLink()">View Report</button>
+        </div>
+    </div>
+    <div class="row top-margin">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-3 div-border left-margin-of-shortdiv">
+                    <span class="col-sm-4 local-padding-eater">
                             <label class="top-margin">Ticket Type</label>
                         </span>
-                        <span class="col-sm-4 local-padding-eater left-margin">
+                    <span class="col-sm-4 local-padding-eater left-margin">
                             <input type="radio" name="ticketType" class="top-margin" checked>
                             <label class="top-margin"><b>Regular</b></label>
                         </span>
-                        <span class="col-sm-4 local-padding-eater left-margin">
+                    <span class="col-sm-4 local-padding-eater left-margin">
                             <input type="radio" name="ticketType" class="top-margin">
                             <label class="top-margin"><b>Paper</b></label>
                         </span>
-                    </div>
-                    <div class="col-sm-8 div-border left-margin-of-longdiv">
-                        <div class="row" style="padding-top:2px;">
-                            <div class="col-sm-3">
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <input type="radio" name="userType" (change)="IsRI()" checked >
-                                        <label class="top-margin"><b>RI</b></label>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <input type="radio"  name="userType" (change)="IsDistriButor()">
-                                        <label class="top-margin"><b>Distributor</b></label>
-                                    </div>
+                </div>
+                <div class="col-sm-8 div-border left-margin-of-longdiv">
+                    <div class="row" style="padding-top:2px;">
+                        <div class="col-sm-3">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()">
+                                    <label class="top-margin"><b>RI</b></label>
+                                </div>
+                                <div class="col-sm-8">
+                                    <input type="radio" name="userType" value="external" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()">
+                                    <label class="top-margin"><b>Distributor</b></label>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
-                                <div class="row">
-                                    <ng-container *ngIf="isRIFlag && !isDistributorFlag">
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <ng-container *ngIf="filter.userType === 'internal'">
                                     <div class="col-sm-2">
                                         <label class="top-margin pull-right"><b>Branch</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control">
-                                            <option>Branch1</option>
-                                            <option>Branch2</option>
-                                            <option>Branch3</option>
+                                        <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler()">
+                                            <option *ngFor="let branch of branches" [value]="branch.BranchID">{{branch.BranchID}} {{branch.BranchName}}</option>
                                         </select>
                                     </div>
-                                    </ng-container>
-                                    <ng-container *ngIf="!isRIFlag && isDistributorFlag">
-                                        <div class="col-sm-2">
-                                            <label class="top-margin pull-right"><b>Distributor</b></label>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <select class="form-control">
-                                                <option>Dist1</option>
-                                                <option>Dist2</option>
-                                                <option>Dist3</option>
+                                </ng-container>
+                                <ng-container *ngIf="filter.userType === 'external'">
+                                    <div class="col-sm-2">
+                                        <label class="top-margin pull-right"><b>Distributor</b></label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler()">
+                                                <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
                                             </select>
-                                        </div>
-                                    </ng-container>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="filter.userType === 'internal'">
                                     <div class="col-sm-2">
                                         <label class="top-margin pull-right"><b>Driver</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control">
-                                            <option>Driver1</option>
-                                            <option>Driver2</option>
-                                        </select>
+                                        <select class="form-control pull-right" [(ngModel)]="filter.internalDriver">
+                                                <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
+                                            </select>
                                     </div>
-                                </div>
+                                </ng-container>
+                                <ng-container *ngIf="filter.userType === 'external'">
+                                    <div class="col-sm-2">
+                                        <label class="top-margin pull-right"><b>Driver</b></label>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select class="form-control pull-right" [(ngModel)]="filter.distDriver">
+                                                <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
+                                            </select>
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-        <iframe *ngIf="viewReport" width="100%" height="{{sHeight}}px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
-    </ba-card>
-</div>
 
-
-
-
-
-
-
-
-
-
-
-
-<!-- Previous code below this -->
-<!-- <div>
-    <div class="row" id="r0">
-        <div class="col-md-6">
-        </div>
-        <div class="col-md-3 text-right" style="padding-top:10px;">
-            <label>Report Type</label>
-        </div>
-        <div class="col-md-3">
-            <select class="form-control" [(ngModel)]="selectedReport" (ngModelChange)="change(selectedReport)">
-                <option value="DS">Delivery Status</option>
-                <option value="DR">Deposit Report</option>
-                <option value="ED">End of Day Report</option>
-                <!-- <option value="volvo">Route Settlement</option>
-                <option value="volvo">Sales Report</option>
-                <option value="volvo">Assets Scanning</option>
-                <option value="volvo">Drayage Report</option> 
-            </select>
         </div>
     </div>
-    <hr>
-    <div class="row" id="r1">
-        <div class="col-md-2 padding-top text-center">
-            <label class="paddingTopDate">Start Date</label>
-        </div>
-        <div class="col-md-2">
-            <div class="input-group">
-                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="date" disabled>
-                <button class="input-group-addon" (click)="d.toggle()" type="button">
-                  <i class="ion-calendar"></i>
-                  <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> 
-                </button>
-            </div>
-        </div>
-        <div class="col-md-2 text-center" style="padding-top:10px;">
-            <label>Branch</label>
-        </div>
-        <div class="col-md-2">
-            <select class="form-control">
-                <option value="1362">311-Dallas</option>
-            </select>
-        </div>
-        <div class="col-md-2 text-center" style="padding-top:10px;">
-            <label>Location</label>
-        </div>
-        <div class="col-md-2">
-            <select class="form-control" [(ngModel)]="value" (ngModelChange)="locationfunc(value)">
-                <option [value] = "578" [selected]="value == '578'">311-DALLAS</option>
-            </select>
-        </div>
-        <div class="col-md-2 text-center" style="padding-top:10px;">
-            <label>User</label>
-        </div>
-        <div class="col-md-2">
-            <select class="form-control" [(ngModel)]="value1" (ngModelChange)="User(value1)">
-                <option [value]="10"  [selected]="value1 == '10'">Jasons634</option>
-                <option [value]="11">Robert</option>
-                <option [value]="1310">Hari</option>
-            </select>
-        </div>
-        <div class="col-md-2 text-center" style="padding-top:10px;">
-            <label>Trip Code</label>
-        </div>
-        <div class="col-md-2">
-            <select class="form-control" [(ngModel)]="value2" (ngModelChange)="tripcodefunc(value2)">
-                <option [value]="1"  [selected]="value2 == '1'">1</option>
-                <option [value]="2">2</option>
-                <option [value]="3">3</option>
-            </select>
-        </div>
-        <div class="col-md-4 text-right" style="padding-top:10px;">
-            <button class="btn btn-danger" (click)="updateLink()">View Report</button>
-        </div>
-    </div>
-    <hr>
-    <!--div class="row">
-        <div class="col-md-12">
-            <span style="display: block;text-align: center;font-size: 14px;font-family: courier;"><b>Reddy Ice</b></span>
-            <span style="display: block;text-align: center;font-size: 16px;font-family: courier;"><b>{{selectedReport}}</b></span>
-        </div>
-    </div>
-    <hr-->
-<!-- <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-4">
-            <div style="font-size: 14px;font-family: courier;">
-                Delivery Date : 07-26-2017
-            </div>
-            <div style="font-size: 14px;font-family: courier;">
-                Route Number : 811
-            </div>
-            <div style="font-size: 14px;font-family: courier;">
-                Driver Name : Jason Kelsey
-            </div>
-        </div>
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-5">
-            <div style="font-size: 14px;font-family: courier;">
-                Date Time : 07-26-2017
-            </div>
-            <div style="font-size: 14px;font-family: courier;">
-                Roadnet Manifest Route # : 804
-            </div>
-            <div style="font-size: 14px;font-family: courier;">
-                Inp Code : 1
-            </div>
-        </div>
-    </div>
-    <hr>
-    <div class="row"> 
-
     <iframe *ngIf="viewReport" width="100%" height="{{sHeight}}px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
-    <!-- <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            Customer Number
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            Customer Name
-        </div>
-        <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            Status
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            Ticket Number
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            Ticket [Total - Tax]
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            Amount Received
-        </div>
-        <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            Final Balance
-        </div>
-        <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            Customer Type
-        </div> 
-</div>
-<!--hr-->
-<!-- <div class="row">
-        <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            0000456123
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            Walmart #5707 SUP
-        </div>
-        <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            CS
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            5386941235
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            228.90
-        </div>
-        <div class="col-md-2" style="vertical-align: top;font-family: courier;">
-            0.00
-        </div>
-        <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            228.90
-        </div>
-        <div class="col-md-1" style="vertical-align: top;font-family: courier;">
-            CH
-        </div>
-    </div>
-</div> -->
+</ba-card>
