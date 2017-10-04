@@ -213,7 +213,7 @@ export class TrackerComponent implements OnInit {
     GoogleMapsLoader.load((google) => {
       this.map = new google.maps.Map(el, {
         center: new google.maps.LatLng(32.736259, -96.864586),
-        zoom: 1,
+        zoom: 13,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       });
       this.infowindow = new google.maps.InfoWindow();
