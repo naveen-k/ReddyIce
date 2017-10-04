@@ -181,11 +181,11 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">POD:</label>
                 <div [hidden]="isReadOnly" class="col-sm-9" *ngIf="!isDownloadable">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="pod" id="podRadio1" [value]="true" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true" [disabled]="!ticket.TicketID">
+                        <input type="radio" name="pod" id="podRadio1" [value]="true" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true">
                         <span>Received</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="pod" id="podRadio2" [value]="false" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true" [disabled]="!ticket.TicketID">
+                        <input type="radio" name="pod" id="podRadio2" [value]="false" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true">
                         <span>Not-Received</span>
                     </label>
                 </div>
@@ -201,7 +201,7 @@
                     </label>
                     
                 </div>
-                <div class="col-sm-9" *ngIf="isDownloadable"><span (click)="downloadPODImage(ticket.PODImageID)" title="Download POD Image"><i class="icon ion-arrow-down-c"></i> <label for="example-text-input" class="col-form-label"><u>Download</u></label></span> <!--label (click)="deletePODImage(ticket.PODImageID)" [hidden]="isReadOnly" title="Delete POD Image"><i class="icon ion-android-delete"></i></label--></div>
+                <div class="col-sm-9" *ngIf="isDownloadable"><label for="example-text-input" style="cursor:pointer;" (click)="downloadPODImage(ticket.PODImageID)" class="col-form-label"><span title="Download POD Image"><i class="icon ion-arrow-down-c"></i></span> <u>Download</u></label> <!--label (click)="deletePODImage(ticket.PODImageID)" [hidden]="isReadOnly" title="Delete POD Image"><i class="icon ion-android-delete"></i></label--></div>
             </div>
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Ticket#:</label>
