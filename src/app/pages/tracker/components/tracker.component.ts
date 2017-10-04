@@ -117,12 +117,13 @@ export class TrackerComponent implements OnInit {
 
   // Load all trips based on Date and Branch
   loadTrips() {
+    this.showSpinner = true;
     this.service.getTrips(this.userId, this.selectedDate,
       this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
         if (typeof res == 'object') {
           this.trips = res.Trips;
           console.log('this.trips', this.trips.length);
-
+          this.showSpinner = false;
           if (this.trips[0]) {
             this.tripFilterOption.DriverName = this.trips[0].DriverName;
             this.driverChangeHandler();
@@ -135,10 +136,12 @@ export class TrackerComponent implements OnInit {
           this.drawMapPath();
         } else {
           this.trips = [];
+          this.showSpinner = false;
         }
       }, (error) => {
         console.log(error);
         this.trips = [];
+        this.showSpinner = false;
       });
   }
 
@@ -264,6 +267,8 @@ export class TrackerComponent implements OnInit {
           this.pinColor = '0000ff';   // blue color for Unplanned Service
         } else if (this.selectedTrip[i].OrderID != null) {
           this.pinColor = 'A52A2A';   // brown color for Planned Service
+        } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber == null) {
+          this.pinColor = 'ff0000';   // red color for Skipped stops
         }
 
         // customising the marker icon here
