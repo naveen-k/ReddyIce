@@ -95,12 +95,12 @@
                                             Date-Time
                                         </span>
                                     </th> -->
-                                    <th style="text-align: left;" [hidden]="isDistributor">
+                                    <th style="text-align: left;padding-left: 7px;" [hidden]="isDistributor">
                                         <span>
                                             Customer#
                                         </span>
                                     </th>
-                                    <th style="text-align: left;" [hidden]="!isDistributor">
+                                    <th style="text-align: left;padding-left: 7px;" [hidden]="!isDistributor">
                                         <span>
                                             Customer
                                         </span>
@@ -136,8 +136,8 @@
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr>
                                         <td>
-                                            <i class="ion-ios-browsers custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(subitem.ID)">
-                                                <span class="tooltiptext">View </span>
+                                            <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(subitem.ID)">
+                                                <span class="tooltiptext">View Ticket Details</span>
                                             </i>
                                         </td>
                                         <td [hidden]="isDistributor">{{subitem.PlannedSequence}}</td>
@@ -152,8 +152,8 @@
                                         <td title="{{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
                                             {{subitem.CustomerNumber}}
                                         </td>
-                                        <td title="{{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
-                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName}}
+                                        <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
+                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}
                                         </td>
                                     </tr>
                                 </ng-template>

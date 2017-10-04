@@ -60,7 +60,7 @@
                             Approve
                         </button>
                     </th>
-                    <th class="table-id thVerticalAlign actionAlignCenter" style="width:72px;">Actions</th>
+                    <th class="table-id thVerticalAlign actionAlignCenter" style="width:90px;">Actions</th>
                     <th class="thVerticalAlign table-text-align">
                         <span class="cursorPointer" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
                           Ticket #
@@ -123,6 +123,9 @@
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
                     </td>
                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
+                        <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.TicketID)">
+                            <span class="tooltiptext">View Ticket Details</span>
+                        </i>
                         <a [routerLink]="['../view/'+item.TicketID]">
                             <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">View</span>
