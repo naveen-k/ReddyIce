@@ -90,11 +90,6 @@
                                             Actual
                                         </span>
                                     </th>
-                                    <!-- <th class="thVerticalAlign table-text-align">
-                                        <span class="cursorPointer">
-                                            Date-Time
-                                        </span>
-                                    </th> -->
                                     <th style="text-align: left;padding-left: 7px;" [hidden]="isDistributor">
                                         <span>
                                             Customer#
@@ -108,31 +103,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr *ngFor="let item of allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID | sort:customer.sortField:customer.isAsc"> -->
-                                <!-- <tr *ngFor="let item of trips">
-                                    <td>{{item.TripTicketList[0].PlannedSequence}}</td>
-                                    <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
-                                        {{item.TripTicketList[0].ActualSequence}}
-                                    </td>
-                                    <td>{{item.TripStartDate | date}}</td>
-                                    <td>{{item.TripTicketList[0].CustomerName}}</td>
-                                </tr> -->
-
-                                <!-- hack for nested ng-For -->
-                                <!-- <ng-template ngFor let-item [ngForOf]="trips" let-itemIndex="index">
-                                    <ng-template ngFor let-subitem [ngForOf]="item.TripTicketList" let-subitemIndex="index">
-                                        <tr>
-                                            <td [hidden]="isDistributor">{{subitem.PlannedSequence}}</td>
-                                            <td title="{{item.Created}}" style="cursor: pointer; text-align:center;" *ngIf="!isNewTicket">
-                                                {{subitem.ActualSequence}}
-                                            </td>
-                                            <!-- <td>{{item.TripStartDate | date}}</td>
-                                            <td title="{{subitem.CustomerName}}" style="text-align: left;">
-                                                {{subitem.CustomerID}}
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </ng-template>     -->
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr>
                                         <td>
@@ -144,11 +114,6 @@
                                         <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
                                             {{subitem.ActualSequence}}
                                         </td>
-                                        <!-- <td>{{tripStartDate | date}}</td> -->
-                                        <!-- <td class="custom-tooltip-ion" style="text-align: left;">
-                                            {{subitem.CustomerID}}
-                                            <span class="tooltiptext">{{subitem.CustomerName}}</span>
-                                        </td> -->
                                         <td title="{{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
                                             {{subitem.CustomerNumber}}
                                         </td>
@@ -163,9 +128,6 @@
                         <div *ngIf="selectedTrip && !selectedTrip.length && !showSpinner" style='text-align:center; margin-top:10px;'> No data found </div>
                     </div>
                 </div>
-                <!-- <div class="col-md-8" style="overflow-y: hidden;height: 255px;">
-                    <img src="../../../assets/img/Tracker-Map.PNG">
-                </div> -->
                 <div class="col-md-8" style="overflow-y: hidden;height: 384px;">
                     <ba-card cardTitle="Route Map">
                         <div class="google-maps"></div>

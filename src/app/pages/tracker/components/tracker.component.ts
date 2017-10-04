@@ -33,11 +33,8 @@ export class TrackerComponent implements OnInit {
   both: boolean = false;
   isDistributorExist: boolean;
   userSubTitle: string = '';
-
   selectedTrip: any;
-
   tripStartDate: any;
-
   marker: any = [];
   // selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
   userId = localStorage.getItem('userId');
@@ -153,10 +150,6 @@ export class TrackerComponent implements OnInit {
   // Filter TicketDetails based on the Trip selected
   fetchTicketDetailsByTrip(TripCode) {
     for (var i = 0; i < this.trips.length; i++) {
-      // if (parseInt(TripCode) === this.trips[i].TripCode) {
-      //   this.selectedTrip = this.trips[i].TripTicketList;
-      //   this.tripStartDate = this.trips[i].TripStartDate
-      // }
       if (parseInt(TripCode) === this.trips[i].TripCode && 
       this.tripFilterOption.DriverName == this.trips[i].DriverName) {
         this.selectedTrip = this.trips[i].TripTicketList;
@@ -221,7 +214,6 @@ export class TrackerComponent implements OnInit {
 
   drawMapPath() {
     let el = this._elementRef.nativeElement.querySelector('.google-maps');
-    // TODO: do not load this each time as we already have the library after first attempt
     GoogleMapsLoader.load((google) => {
       this.map = new google.maps.Map(el, {
         center: new google.maps.LatLng(32.736259, -96.864586),
