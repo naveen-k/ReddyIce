@@ -3,7 +3,7 @@
         <div class="col-sm-4">
             <label>Start Date</label>
             <div class="input-group">
-                <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
+                <input class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
                     disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
@@ -13,7 +13,7 @@
         <div class="col-sm-4">
             <label>End Date</label>
             <div class="input-group">
-                <input [maxDate]="todaysDate" class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate"
+                <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate"
                     disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
                                 <i class="ion-calendar"></i>
