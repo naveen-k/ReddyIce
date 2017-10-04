@@ -23,7 +23,7 @@
                 <div class="col-sm-3">
                     <label>Select Driver</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
-                        <option *ngFor="let driver of trips">
+                        <option *ngFor="let driver of trips | unique">
                             {{driver.DriverName}}
                         </option>
                     </select>
