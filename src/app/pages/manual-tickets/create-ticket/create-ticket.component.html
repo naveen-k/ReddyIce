@@ -179,7 +179,7 @@
         <div class="col-sm-6">
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">POD:</label>
-                <div [hidden]="isReadOnly" class="col-sm-9" *ngIf="!tempModels.podReceived">
+                <div [hidden]="isReadOnly" class="col-sm-9" *ngIf="!isDownloadable">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="pod" id="podRadio1" [value]="true" [(ngModel)]="tempModels.podReceived" (ngModelChange)="isFormDirty=true" [disabled]="!ticket.TicketID">
                         <span>Received</span>
@@ -190,7 +190,7 @@
                     </label>
                 </div>
                 <!--Hack for displaying disabled in case of read only mode-->
-                <div [hidden]="!isReadOnly" class="col-sm-9" *ngIf="!tempModels.podReceived">
+                <div [hidden]="!isReadOnly" class="col-sm-9" *ngIf="!isDownloadable">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="pod1" [value]="true" [(ngModel)]="tempModels.podReceived" [disabled]="true">
                         <span>Received</span>
@@ -201,7 +201,7 @@
                     </label>
                     
                 </div>
-                <div class="col-sm-9" *ngIf="tempModels.podReceived" (click)="downloadPODImage(ticket.PODImageID)"><label for="example-text-input" class="col-form-label"><u>Download</u></label></div>
+                <div class="col-sm-9" *ngIf="isDownloadable"><span (click)="downloadPODImage(ticket.PODImageID)" title="Download POD Image"><i class="icon ion-arrow-down-c"></i> <label for="example-text-input" class="col-form-label"><u>Download</u></label></span> <!--label (click)="deletePODImage(ticket.PODImageID)" [hidden]="isReadOnly" title="Delete POD Image"><i class="icon ion-android-delete"></i></label--></div>
             </div>
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Ticket#:</label>

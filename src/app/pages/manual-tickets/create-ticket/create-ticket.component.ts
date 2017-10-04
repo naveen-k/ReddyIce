@@ -87,7 +87,7 @@ export class CreateTicketComponent implements OnInit {
   inventoryCount: number = 0;
   mreadingCount: number = 0;
   readingCheck: boolean = false;
-
+  isDownloadable: boolean =false;
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
 
@@ -620,6 +620,7 @@ export class CreateTicketComponent implements OnInit {
     }
     this.service.uploadFile(file).subscribe((response) => {
       this.ticket.PODImageID = response.ImageID;
+      this.isDownloadable = true;
       this.saveTicket();
     });
   }
@@ -657,7 +658,10 @@ export class CreateTicketComponent implements OnInit {
       window.URL.revokeObjectURL(url);
     }, 1000);
   }
-
+  deletePODImage(imageID){
+    console.log("imageID---TODO",imageID);
+    this.isDownloadable = false;
+  }
   deleteProductHandler(tdetail) {
     const index = this.ticket.TicketProduct.findIndex((t) => t.ProductID === tdetail.ProductID);
     this.ticket.TicketProduct.splice(index, 1);
@@ -695,7 +699,9 @@ export class CreateTicketComponent implements OnInit {
 
       // Initialize to check/uncheck POD Received
       this.tempModels.podReceived = !!this.ticket.PODImageID;
-
+      if(this.ticket.PODImageID) {
+        this.isDownloadable = true;
+      }
 
       this.loadCustomers();
 
@@ -722,17 +728,23 @@ export class CreateTicketComponent implements OnInit {
     const ticket = this.modifyTicketForSave(this.ticket);
     if (this.ticketId) {
       // Update ticket
+      this.isFormDirty = false;
       this.service.updateTicket(ticket).subscribe(res => {
-        this.notification.success(res);
         this.isFormDirty = false;
+        this.notification.success(res);
+       
         if (this.ticket.TicketStatusID !== 23) {
           this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
         }
+      }, err =>{
+        this.isFormDirty = true;
+        this.notification.error(err);
       });
       return;
     }
     // Save ticket
     // if (!this.custType || this.ticket.CustomerType != 20) {
+    this.isFormDirty = false;
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('Ticket created successfully!');
       if (this.tripMode) {
@@ -743,6 +755,7 @@ export class CreateTicketComponent implements OnInit {
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     }, (error) => {
       if (error) {
+        this.isFormDirty = true;
         this.notification.error('Error while creating ticket!');
       }
     });
