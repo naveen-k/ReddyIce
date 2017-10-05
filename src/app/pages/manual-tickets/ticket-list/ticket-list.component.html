@@ -62,9 +62,9 @@
                     </th>
                     <th class="table-id thVerticalAlign actionAlignCenter" style="width:90px;">Actions</th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TicketID';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
                           Ticket #
-                           <i *ngIf="(customer.sortField == 'TicketID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                           <i *ngIf="(customer.sortField == 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
@@ -80,21 +80,22 @@
                       </span>
                     </th>
                     <th class="thVerticalAlign table-text-align" [hidden]="searchObj.userType!='Internal'">
-                        <span class="cursorPointer">
+                        <span class="cursorPointer" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;">
                             Driver
+                            <i *ngIf="(customer.sortField == 'UserName')" [ngClass]="(customer.isAsc && customer.sortField == 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                         </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
                         <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
-                          Total Invoice
-                          <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            Total Invoice
+                            <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
                         <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
                              Total Amount
-                              <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                          </span>
+                            <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        </span>
                     </th>
                     <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
                         <span class="cursorPointer" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;">
