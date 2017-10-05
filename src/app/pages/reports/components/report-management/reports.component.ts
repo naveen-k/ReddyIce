@@ -22,6 +22,7 @@ export class ReportsComponent implements OnInit {
         branch: null,
         internalDriver: null,
         distDriver: null,
+        driver:null,
     };
 
     user: User;
@@ -34,7 +35,8 @@ export class ReportsComponent implements OnInit {
     driversofDist: any = [];
     
     viewReport: boolean = false;
-    
+    RI:boolean=false;
+    isPaperTicket:boolean=false;
     userSubTitle: string = '';
     
     constructor(private sanitizer: DomSanitizer, protected userService: UserService, protected reportService: ReportService) {
@@ -65,14 +67,24 @@ export class ReportsComponent implements OnInit {
 
     userTypeChangeHandler() {
         if (this.filter.userType === 'internal') {
+            this.RI=true;
             this.getAllBranches();
         } else {
+            this.RI=false;
             this.getDistributors();
         }
     }
+    ticketTypeChangeHandler(){
+        if(this.filter.ticketType === 'paper'){
+            this.isPaperTicket=true;
+        }else{
+            this.isPaperTicket = false;
+        }
+    }
     updateLink() {
+        debugger
         this.viewReport = true;
-        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl('http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=SR&StartDate=01/01/2017&EndDate=1/1/2017&IsPaperTicket=false&IsRI=false&BranchID=0&DistributoID=1362&DriverID=10&DeliveryDate=08/27/2017&BranchCode=311&RouteNumber=802&routeID=1208&LocationID=578&TripCode=3&DistributormasterID=0');
+        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=this.formatDate(${this.filter.startDate})&EndDate=this.formatDate(${this.filter.endDate})&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.RI}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
         // console.log(this.displayName, "this.location ", this.location);
         // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
         //     (`${environment.reportEndpoint}?Rtype=${this.filter.reportType}

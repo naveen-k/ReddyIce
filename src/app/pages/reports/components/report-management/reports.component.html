@@ -1,4 +1,4 @@
-<ba-card cardTitle="Reports{{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container">
+<ba-card cardTitle="Reports{{userSubTitle}}" >
     <div class="row">
         <div class="col-sm-4">
             <label>Start Date</label>
@@ -23,13 +23,13 @@
         <div class="col-sm-4">
             <label>Select Report</label>
             <select class="form-control" [(ngModel)]="filter.reportType">
-                    <option value="ED">End of Day Report</option>
+                    <!-- <option value="ED">End of Day Report</option>
                     <option value="DS">Delivery Status</option>
                     <option value="DR">Deposit Report</option>
-                    <option value="RS">Route Settlement</option>
-                    <option value="SR">Sales Report</option>
-                    <option value="AS">Assets Scanning</option>
-                    <option value="DRA">Drayage Report</option>
+                    <option value="RS">Route Settlement</option> -->
+                    <option value="SR">Sales Register</option>
+                    <!-- <option value="AS">Assets Scanning</option>
+                    <option value="DRA">Drayage Report</option> -->
                 </select>
         </div>
         <div class="col-md-2 text-right head-button-container">
@@ -44,11 +44,11 @@
                             <label class="top-margin">Ticket Type</label>
                         </span>
                     <span class="col-sm-4 local-padding-eater left-margin">
-                            <input type="radio" name="ticketType" class="top-margin" checked>
+                            <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" (ngModelChange)="ticketTypeChangeHandler()" class="top-margin" checked>
                             <label class="top-margin"><b>Regular</b></label>
                         </span>
                     <span class="col-sm-4 local-padding-eater left-margin">
-                            <input type="radio" name="ticketType" class="top-margin">
+                            <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" (ngModelChange)="ticketTypeChangeHandler()" class="top-margin">
                             <label class="top-margin"><b>Paper</b></label>
                         </span>
                 </div>
@@ -93,7 +93,7 @@
                                         <label class="top-margin pull-right"><b>Driver</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control pull-right" [(ngModel)]="filter.internalDriver">
+                                        <select class="form-control pull-right" [(ngModel)]="filter.driver">
                                                 <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
                                             </select>
                                     </div>
@@ -103,7 +103,7 @@
                                         <label class="top-margin pull-right"><b>Driver</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control pull-right" [(ngModel)]="filter.distDriver">
+                                        <select class="form-control pull-right" [(ngModel)]="filter.driver">
                                                 <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
                                             </select>
                                     </div>
