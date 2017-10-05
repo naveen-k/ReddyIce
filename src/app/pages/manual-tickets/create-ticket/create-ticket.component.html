@@ -220,7 +220,7 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">PO#:</label>
                 <div class="col-sm-7">
                     <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
-                        name="PONumber" #PONumber="ngModel" required numberOnly (ngModelChange)="isFormDirty=true;">
+                        name="PONumber" #PONumber="ngModel" required (ngModelChange)="isFormDirty=true;">
                     <div *ngIf="poContainsCharacters" class="error-message">
                         <i class="ion-android-alert showError"></i>
                         <div class="custom-tooltip bottom">PO number should be alphanumeric</div>

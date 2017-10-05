@@ -141,7 +141,7 @@
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td>
-                                <td></td>
+                                <td *ngIf="user.IsRIInternal"></td>
                             </tr>
                         </tbody>
                     </table>

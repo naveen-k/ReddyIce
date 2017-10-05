@@ -72,10 +72,11 @@ export class ReportsComponent implements OnInit {
     }
     updateLink() {
         this.viewReport = true;
+        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl('http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=SR&StartDate=01/01/2017&EndDate=1/1/2017&IsPaperTicket=false&IsRI=false&BranchID=0&DistributoID=1362&DriverID=10&DeliveryDate=08/27/2017&BranchCode=311&RouteNumber=802&routeID=1208&LocationID=578&TripCode=3&DistributormasterID=0');
         // console.log(this.displayName, "this.location ", this.location);
-        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-            (`${environment.reportEndpoint}?Rtype=${this.filter.reportType}
-        &DeliveryDate=${this.formatDate(this.filter.startDate)}&BranchCode=${this.filter.branch}&DriverID=${this.filter.internalDriver}`)
+        // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+        //     (`${environment.reportEndpoint}?Rtype=${this.filter.reportType}
+        // &DeliveryDate=${this.formatDate(this.filter.startDate)}&BranchCode=${this.filter.branch}&DriverID=${this.filter.internalDriver}`)
         // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
         //     (environment.reportEndpoint + '?Rtype='
         //     + this.displayName + '&DeliveryDate=' + this.formatDate(this.startLatestDate) + '&BranchCode=311&RouteNumber=801&DriverID='
