@@ -73,7 +73,7 @@ export class TrackerComponent implements OnInit {
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     // get the user type: isDistributor or internal
-    this.isDistributor = this.userService.getUser().IsDistributor;    
+    this.isDistributor = this.userService.getUser().IsDistributor;
 
     if (this.isDistributor === true) {
       this.actual = true;
@@ -156,8 +156,8 @@ export class TrackerComponent implements OnInit {
   // Filter TicketDetails based on the Trip selected
   fetchTicketDetailsByTrip(TripCode) {
     for (var i = 0; i < this.trips.length; i++) {
-      if (parseInt(TripCode) === this.trips[i].TripCode && 
-      this.tripFilterOption.DriverName == this.trips[i].DriverName) {
+      if (parseInt(TripCode) === this.trips[i].TripCode &&
+        this.tripFilterOption.DriverName == this.trips[i].DriverName) {
         this.selectedTrip = this.trips[i].TripTicketList;
         this.tripStartDate = this.trips[i].TripStartDate
       }
@@ -233,7 +233,7 @@ export class TrackerComponent implements OnInit {
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34));
-      
+
       ///
       this.pinImage1 = new google.maps.MarkerImage(
         "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
@@ -286,29 +286,29 @@ export class TrackerComponent implements OnInit {
         if (sequence === 2) {
           if (this.selectedTrip[i].ActualSequence != null) {
             this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
-            new google.maps.Size(21, 34),
-            new google.maps.Point(0, 0),
-            new google.maps.Point(10, 34));
+              new google.maps.Size(21, 34),
+              new google.maps.Point(0, 0),
+              new google.maps.Point(10, 34));
           }
         } else if (sequence === 1) {
           if (this.selectedTrip[i].PlannedSequence != null) {
             this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|000",
-            new google.maps.Size(21, 34),
-            new google.maps.Point(0, 0),
-            new google.maps.Point(10, 34));
+              new google.maps.Size(21, 34),
+              new google.maps.Point(0, 0),
+              new google.maps.Point(10, 34));
           }
         } else {
           if (this.selectedTrip[i].ActualSequence != null) {
             this.pinImage2 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
-            new google.maps.Size(21, 34),
-            new google.maps.Point(0, 0),
-            new google.maps.Point(10, 34));
+              new google.maps.Size(21, 34),
+              new google.maps.Point(0, 0),
+              new google.maps.Point(10, 34));
           }
           if (this.selectedTrip[i].PlannedSequence != null) {
             this.pinImage1 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|000",
-            new google.maps.Size(21, 34),
-            new google.maps.Point(0, 0),
-            new google.maps.Point(10, 34));
+              new google.maps.Size(21, 34),
+              new google.maps.Point(0, 0),
+              new google.maps.Point(10, 34));
           }
         }
 
@@ -344,9 +344,15 @@ export class TrackerComponent implements OnInit {
 
         // this will draw straight line between multiple points
         if (sequence != 3) {
+          var strokeColour = '';
+          if (sequence == 2) {
+            strokeColour = 'blue'
+          } else {
+            strokeColour = 'brown'
+          }
           var polyline = new google.maps.Polyline({
             path: [startPt, endPt],
-            strokeColor: 'brown',
+            strokeColor: strokeColour,
             strokeWeight: 2,
             strokeOpacity: 1
           });
@@ -497,9 +503,9 @@ export class TrackerComponent implements OnInit {
   viewTicket(ticketID) {
     // ticketID = 3212;
     if (ticketID) {
-        window.open(environment.reportEndpoint+"?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
+      window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
     } else {
-        this.notification.error("Ticket preview unavailable!!");
+      this.notification.error("Ticket preview unavailable!!");
     }
   }
 }
