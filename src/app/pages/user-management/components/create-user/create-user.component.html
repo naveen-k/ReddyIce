@@ -112,6 +112,12 @@
     </div>
 
 
+    <div *ngIf="user.IsRIInternal" class="col-md-6 page-header">
+      <label for="iseriesroute" class="control-label">ISeries Route</label>
+      <input type="number" class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber"
+        #ISeriesRouteNumber="ngModel" maxlength="10" (change)="changeHandler()" >
+    </div>
+
     <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">
       <label for="distributor">Distributor</label>
       <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
@@ -149,7 +155,7 @@
 </form>
 
 
-<form *ngIf="actionName == 'view'">
+<form *ngIf="actionName === 'view'">
   <div class="row page-header rowContainer first-form-row">
     <div class="col-md-5 padding-eater first-column">
       <label for="fname" class="control-label">First Name</label>
@@ -190,9 +196,20 @@
       </select>
     </div>
   </div>
+  <div class="row page-header rowContainer" *ngIf="user.IsRIInternal && user.ISeriesRouteNumber">
+    <div class="col-md-5 padding-eater first-column">
+      <label for="inputiseriesroute" class="control-label">ISeries Route</label>
+      <input type="number" class="form-control" id="iseriseroute" placeholder="ISerise Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel"
+         disabled>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 padding-eater">
+    </div>
+  </div>
+  
   <div class="checkbox active-user page-header rowContainer">
     <div class="row">
-      <div class="col-md-5">
+      <div class="col-md-5" *ngIf="user.IsRIInternal">
         <label for="exampleSelect1">Branch</label>
         <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
           disabled>
@@ -204,8 +221,8 @@
           </option>
         </select>
       </div>
-      <div class="col-md-2"></div>
-      <div class="col-md-5 padding-eater">
+      <div class="col-md-2" *ngIf="user.IsRIInternal" [hidden]="!userObject.IsDistributor"></div>
+      <div class="col-md-5 (user.IsRIInternal || isDistributorAdmin)?padding-eater:''">
         <br/><br/>
         <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
         <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>

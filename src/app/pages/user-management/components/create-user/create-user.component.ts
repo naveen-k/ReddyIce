@@ -164,6 +164,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (!this.user.IsRIInternal && !this.user.IsSeasonal) {
             this.user.BranchID = null;
         }
+        //console.log("this.user ----> ",this.user);
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
 
@@ -192,7 +193,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     ngOnInit() {
         this.umService.getDistributerAndCopacker().subscribe((res) => {
             this.distributorsAndCopackers = res;
-            console.log(res);
+            //console.log("------------------",res);
         });
         this.userObject = this.userService.getUser();
         if (this.isNewUser) {
@@ -222,9 +223,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     isDistributorSeasonal() {
         if (!this.user.DistributorMasterID) { return false };
         const tmp = this.distributorsAndCopackers.filter((dis) => {
+            //console.log(" dis.DistributorCopackerID === +this.user.DistributorMasterID ",dis.DistributorCopackerID," : ",this.user.DistributorMasterID);
             return dis.DistributorCopackerID === +this.user.DistributorMasterID
         });
-        return tmp[0].IsSeasonal;
+        //console.log("--------->>>>>>.",tmp);
+        return (tmp[0])?tmp[0].IsSeasonal:false;
     }
 
     changeHandler() {
@@ -260,7 +263,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
         }
-        this.formChanged.emit('changed');
+        setTimeout(this.formChanged.emit('changed'), 1000);
+        
     }
 
     resetUser() {
@@ -279,6 +283,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         });
     }
+    
     roleChange(roleID) {
         this.user.BranchID = null;
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {

@@ -7,6 +7,7 @@ export interface User {
   EmailID: string;
   Phone: string;
   role: string;
+  ISeriesRouteNumber: number;
   IsActive: boolean;
   RoleID?: string;
   BranchID: string;

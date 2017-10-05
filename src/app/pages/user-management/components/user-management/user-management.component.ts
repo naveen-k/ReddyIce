@@ -39,7 +39,7 @@ export class UserManagementComponent implements OnInit {
   // ngModel for usertype dropdown
   userType: string = 'active';
   userSubTitle: string = '';
-  idDataLoaded:boolean = false;
+  idDataLoaded: boolean = false;
   constructor(
     private service: UserManagementService,
     private notification: NotificationsService,
@@ -48,8 +48,8 @@ export class UserManagementComponent implements OnInit {
   ) { }
 
   showNewCustomer(newCustomer) {
-     this.formIsDirty = false;
-     this.action = 'create';
+    this.formIsDirty = false;
+    this.action = 'create';
     this.rightCardOpen = !this.rightCardOpen;
     this.isNewUser = true;
     this.hideColumn = !this.hideColumn;
@@ -87,7 +87,7 @@ export class UserManagementComponent implements OnInit {
         this.isNewUser = false;
         this.hideColumn = !this.hideColumn;
         this.formIsDirty = false;
-        
+
       });
 
     } else {
@@ -123,17 +123,17 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
-      this.action = 'edit';
-      this.newUser = Object.assign({}, user);
-      this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
-      this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
-      this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
-      this.cardTitle = 'Edit User';
-      this.isNewUser = false;
+    this.action = 'edit';
+    this.newUser = Object.assign({}, user);
+    this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+    this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
+    this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
+    this.cardTitle = 'Edit User';
+    this.isNewUser = false;
     if (!this.rightCardOpen) {
       this.rightCardOpen = !this.rightCardOpen;
       this.hideColumn = !this.hideColumn;
-      
+
     }
 
   }
@@ -159,11 +159,11 @@ export class UserManagementComponent implements OnInit {
         this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.isNewUser = false;
         this.action = 'edit';
-        
+
 
       });
 
-    }else {
+    } else {
       this.cardTitle = 'User Detail';
       this.newUser = Object.assign({}, user);
       this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
@@ -176,10 +176,11 @@ export class UserManagementComponent implements OnInit {
         this.hideColumn = !this.hideColumn;
       }
     }
-    
+
   }
 
   onSaveUser(user) {
+    console.log("user --------- ",user);
     delete user.role;
     if (!user.IsRIInternal) { delete user.UserName; }
     this.service.createUser(user).subscribe((res) => {
@@ -195,7 +196,7 @@ export class UserManagementComponent implements OnInit {
       const userId = localStorage.getItem('userId');
       this.getUserList(parseInt(userId));
 
-      
+
     },
       (error) => {
         console.log();
@@ -229,7 +230,7 @@ export class UserManagementComponent implements OnInit {
       const userId = localStorage.getItem('userId');
       this.getUserList(parseInt(userId));
 
-      
+
     },
       (error) => {
         error = JSON.parse(error._body);
@@ -254,13 +255,13 @@ export class UserManagementComponent implements OnInit {
         this.updateUserTableOnTypeChange();
         const userId = localStorage.getItem('userId');
         this.getUserList(parseInt(userId));
-  
-        
+
+
         // this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
       },
         (error) => {
           error = JSON.parse(error._body);
-           this.notification.error('Error', error.Message);
+          this.notification.error('Error', error.Message);
         });
     });
 
@@ -336,7 +337,7 @@ export class UserManagementComponent implements OnInit {
         this.getBranches();
         this.isDistributorAdmin = true;
         this.getUserList(parseInt(userId, 10));
-        this.userSubTitle = (this.isDistributorExist)?'-'+' '+response.Distributor.DistributorName:'';
+        this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
       }
     });
 
