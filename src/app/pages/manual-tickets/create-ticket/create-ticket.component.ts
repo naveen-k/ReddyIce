@@ -73,7 +73,7 @@ export class CreateTicketComponent implements OnInit {
   checkContainsCharacters: boolean = false;
 
   custType: boolean = false;
- 
+
   urlString = '../../list';
 
   // Current User Object
@@ -210,7 +210,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.BranchID = this.user.IsDistributor ? null : +queryParams.branchId; // Set branchId, for distributor branch id would be null
     this.ticket.isUserTypeDistributor = !!(+queryParams.isDistributor); // Set User type
     if (this.ticket.isUserTypeDistributor) {
-      this.ticket.DistributorCopackerID = +queryParams.driverId;
+      this.ticket.DistributorCopackerID = +queryParams.isDistributor;
     } else {
       this.ticket.UserID = +queryParams.driverId;
     }
@@ -298,7 +298,7 @@ export class CreateTicketComponent implements OnInit {
     this.modes = selectedTicket.Mode;
   }
 
-  branchChangeHandler() {    
+  branchChangeHandler() {
     this.ticket.Customer = '';
     this.ticket.DistributorCopackerID = null;
     this.ticket.UserID = null;
@@ -325,7 +325,7 @@ export class CreateTicketComponent implements OnInit {
 
   loadCustomers() {
     this.customers = [];
-    const callback = (res) => {      
+    const callback = (res) => {
       this.customers = res;
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
@@ -371,7 +371,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketProduct.push({} as TicketProduct);
   }
 
-  loadCustomerDetail(customerId, isRICustomer: boolean = true) {    
+  loadCustomerDetail(customerId, isRICustomer: boolean = true) {
     this.service.getCustomerDetail(customerId, isRICustomer).subscribe((res) => {
       this.customer = res;
       // set first product selected
@@ -430,10 +430,10 @@ export class CreateTicketComponent implements OnInit {
     this.checkNumberValidation();
   }
 
-  productChangeHandler(ticketDetail) {    
+  productChangeHandler(ticketDetail) {
     const product = this.ticket.TicketProduct.filter(t => t.ProductID === ticketDetail.ProductID);
     if (product.length === 2) {
-      ticketDetail.ProductID = '';      
+      ticketDetail.ProductID = '';
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
@@ -570,7 +570,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   routeToTicketListing() {
-    if (this.tripMode) {      
+    if (this.tripMode) {
       this.location.back();
       return;
     }
@@ -639,7 +639,7 @@ export class CreateTicketComponent implements OnInit {
     document.body.removeChild(anchorElem);
     setTimeout(function () {
       window.URL.revokeObjectURL(url);
-    }, 1000);
+    });
   }
   deletePODImage(imageID) {
     console.log("imageID---TODO", imageID);
@@ -705,7 +705,7 @@ export class CreateTicketComponent implements OnInit {
     }
 
     // Check if POD needs to upload
-    if(this.file.Image){
+    if (this.file.Image) {
       this.uploadFile(this.file);
       return;
     }
@@ -926,6 +926,16 @@ export class CreateTicketComponent implements OnInit {
     return this.mreadingCount;
   }
 
+  isPOReuquired() {
+    const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
+    return !!selectedCustomer.PORequired;
+  }
+
+  isPODRequired() {
+    const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
+    return !!selectedCustomer.ChainID;
+  }
+
   validateTicket(ticket): boolean {
     if (!ticket.TicketNumber) {
       this.notification.error('Ticket Number is mandatory!!!');
@@ -933,8 +943,11 @@ export class CreateTicketComponent implements OnInit {
     } else if (!this.ticket.Customer) {
       this.notification.error('Customer is mandatory!!!');
       return false;
-    } else if (!this.ticket.PONumber) {
+    } else if (this.isPOReuquired() && !this.ticket.PONumber) {
       this.notification.error('PO number is mandatory!!!');
+      return false;
+    } else if (this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image) {
+      this.notification.error('POD is mandatory!!!');
       return false;
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
       this.notification.error('Driver is mandatory!!!');

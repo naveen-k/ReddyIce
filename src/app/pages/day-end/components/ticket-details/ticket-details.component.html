@@ -105,7 +105,7 @@
                                 <th class="textRightPadd" *ngIf="!user.IsRIInternal">
                                     Buyback
                                 </th>
-                                <th class="textRightPadd">
+                                <th class="text-align-center">
                                     RI Internal
                                 </th>
                             </tr>
@@ -130,7 +130,9 @@
                                 <td class="textRightPadd" [hidden]="!item.Drayage" *ngIf="!user.IsRIInternal">{{item.Drayage| currency:'USD':true:'1.2'}}</td>
                                 <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="!user.IsRIInternal"></td>
                                 <td class="textRightPadd" [hidden]="!item.BuyBack" *ngIf="!user.IsRIInternal">{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
-                                <td class="textRightPadd"></td>
+                                <td class="text-align-center">
+                                    <input type="checkbox" disabled name="riInternal" [(ngModel)]="item.CustomerSourceID">
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="4"><b>Total</b></td>                                
@@ -139,6 +141,7 @@
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
