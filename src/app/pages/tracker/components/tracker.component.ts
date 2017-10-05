@@ -36,6 +36,7 @@ export class TrackerComponent implements OnInit {
   selectedTrip: any;
   tripStartDate: any;
   marker: any = [];
+  driverSpecTrips: any = [];
   // selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
   userId = localStorage.getItem('userId');
 
@@ -45,6 +46,11 @@ export class TrackerComponent implements OnInit {
   bounds: any;
   pinColor: any;
   pinImage: any;
+
+  ///
+  pinImage1: any;
+  pinImage2: any;
+  ///
 
   isDistributor: any;
 
@@ -180,7 +186,6 @@ export class TrackerComponent implements OnInit {
     this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
   }
 
-  driverSpecTrips: any = [];
   // Fetch selected Driver
   driverChangeHandler() {
     console.log('DriverName', this.tripFilterOption.DriverName);
@@ -199,13 +204,13 @@ export class TrackerComponent implements OnInit {
     if (sequence === 1) {
       this.planned = true;
       this.actual = false;
-      this.both = false;
+      // this.both = false;
     } else if (sequence === 2) {
       this.actual = true;
       this.planned = false;
-      this.both = false;
+      // this.both = false;
     } else {
-      this.both = true;
+      // this.both = true;
       this.planned = false;
       this.actual = false;
     }
@@ -228,6 +233,20 @@ export class TrackerComponent implements OnInit {
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34));
+      
+      ///
+      this.pinImage1 = new google.maps.MarkerImage(
+        "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(10, 34));
+
+      this.pinImage2 = new google.maps.MarkerImage(
+        "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + this.pinColor,
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(10, 34));
+      ///
 
       //const selectedTrip = [{ PlannedLatitude: '32.736259', PlannedLongitude: '-96.864586' }, { PlannedLatitude: '32.7498', PlannedLongitude: '-96.8720' }, { PlannedLatitude: '32.7905', PlannedLongitude: '-96.8104' }, { PlannedLatitude: '32.8481', PlannedLongitude: '-96.8512' }]
 
@@ -237,7 +256,7 @@ export class TrackerComponent implements OnInit {
       } else if (this.actual) {
         this.drawPolyline(google, 2);
       } else {
-        this.drawPolyline(google, 1);
+        this.drawPolyline(google, 3);
       }
     });
   }
@@ -278,6 +297,19 @@ export class TrackerComponent implements OnInit {
             new google.maps.Point(0, 0),
             new google.maps.Point(10, 34));
           }
+        } else {
+          if (this.selectedTrip[i].ActualSequence != null) {
+            this.pinImage2 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(10, 34));
+          }
+          if (this.selectedTrip[i].PlannedSequence != null) {
+            this.pinImage1 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|000",
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(10, 34));
+          }
         }
 
         // start point of straight line
@@ -285,6 +317,9 @@ export class TrackerComponent implements OnInit {
           var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
         } else if (sequence === 2) {
           var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
+        } else {
+          var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
+          var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
         }
 
         // end point fo straight line
@@ -298,61 +333,161 @@ export class TrackerComponent implements OnInit {
           if (this.selectedTrip[i + 1]) {
             var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
           }
+        } else {
+          if (this.selectedTrip[i + 1]) {
+            var endPtP = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+          }
+          if (this.selectedTrip[i + 1]) {
+            var endPtA = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+          }
         }
 
         // this will draw straight line between multiple points
-        var polyline = new google.maps.Polyline({
-          path: [startPt, endPt],
-          strokeColor: 'brown',
-          strokeWeight: 2,
-          strokeOpacity: 1
-        });
+        if (sequence != 3) {
+          var polyline = new google.maps.Polyline({
+            path: [startPt, endPt],
+            strokeColor: 'brown',
+            strokeWeight: 2,
+            strokeOpacity: 1
+          });
+          polyline.setMap(this.map);
+          this.bounds.extend(startPt);
+          this.bounds.extend(endPt);
+        } else {
+          var polyline2 = new google.maps.Polyline({
+            path: [startPtA, endPtA],
+            strokeColor: 'blue',
+            strokeWeight: 2,
+            strokeOpacity: 1
+          });
+          polyline2.setMap(this.map);
+          this.bounds.extend(startPtA);
+          this.bounds.extend(endPtA);
 
-        polyline.setMap(this.map);
-        this.bounds.extend(startPt);
-        this.bounds.extend(endPt);
+          var polyline1 = new google.maps.Polyline({
+            path: [startPtP, endPtP],
+            strokeColor: 'brown',
+            strokeWeight: 2,
+            strokeOpacity: 1
+          });
+          polyline1.setMap(this.map);
+          this.bounds.extend(startPtP);
+          this.bounds.extend(endPtP);
+        }
 
         // adding pushpin marker logic here
         let positionLatitude: any;
         let positionLongitude: any;
+
+        let positionLatitude1: any;
+        let positionLatitude2: any;
+        let positionLongitude1: any;
+        let positionLongitude2: any;
         if (sequence === 1) {
           positionLatitude = this.selectedTrip[i].PlannedLatitude;
           positionLongitude = this.selectedTrip[i].PlannedLongitude;
         } else if (sequence === 2) {
           positionLatitude = this.selectedTrip[i].ActualLatitude;
           positionLongitude = this.selectedTrip[i].ActualLongitude;
+        } else {
+          positionLatitude1 = this.selectedTrip[i].PlannedLatitude;
+          positionLongitude1 = this.selectedTrip[i].PlannedLongitude;
+          positionLatitude2 = this.selectedTrip[i].ActualLatitude;
+          positionLongitude2 = this.selectedTrip[i].ActualLongitude;
         }
-        var marker = new google.maps.Marker({
-          position: new google.maps.LatLng(positionLatitude, positionLongitude),
-          map: this.map,
-          icon: this.pinImage,
-          title: (i + 1).toString(),
-          // label: (i+1).toString()
-        });
+        if (sequence != 3) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(positionLatitude, positionLongitude),
+            map: this.map,
+            icon: this.pinImage,
+            title: (i + 1).toString(),
+            // label: (i+1).toString()
+          });
+        } else {
+          var marker1 = new google.maps.Marker({
+            position: new google.maps.LatLng(positionLatitude1, positionLongitude1),
+            map: this.map,
+            icon: this.pinImage1,
+            title: (i + 1).toString(),
+          });
+          var marker2 = new google.maps.Marker({
+            position: new google.maps.LatLng(positionLatitude2, positionLongitude2),
+            map: this.map,
+            icon: this.pinImage2,
+            title: (i + 1).toString(),
+          });
+        }
 
         // snippet for showing info window on marker click
-        google.maps.event.addListener(marker, 'click', ((marker, i) => {
-          let infowindowContent = '';
-          if (this.selectedTrip[i].CustomerName) {
-            infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
-          } else {
-            infowindowContent += 'Customer Name : ' + '-' + '<br>';
-          }
-          if (this.selectedTrip[i].TotalSale) {
-            infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>';
-          } else {
-            infowindowContent += 'Total Sale : ' + '-' + '<br>';
-          }
-          if (this.selectedTrip[i].TotalAmount) {
-            infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
-          } else {
-            infowindowContent += 'Total Amount : ' + '-' + '<br>';
-          }
-          return () => {
-            this.infowindow.setContent(infowindowContent);
-            this.infowindow.open(this.map, marker);
-          }
-        })(marker, i));
+        if (sequence != 3) {
+          google.maps.event.addListener(marker, 'click', ((marker, i) => {
+            let infowindowContent = '';
+            if (this.selectedTrip[i].CustomerName) {
+              infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
+            } else {
+              infowindowContent += 'Customer Name : ' + '-' + '<br>';
+            }
+            if (this.selectedTrip[i].TotalSale) {
+              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>';
+            } else {
+              infowindowContent += 'Total Sale : ' + '-' + '<br>';
+            }
+            if (this.selectedTrip[i].TotalAmount) {
+              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
+            } else {
+              infowindowContent += 'Total Amount : ' + '-' + '<br>';
+            }
+            return () => {
+              this.infowindow.setContent(infowindowContent);
+              this.infowindow.open(this.map, marker);
+            }
+          })(marker, i));
+        } else {
+          google.maps.event.addListener(marker1, 'click', ((marker1, i) => {
+            let infowindowContent = '';
+            if (this.selectedTrip[i].CustomerName) {
+              infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
+            } else {
+              infowindowContent += 'Customer Name : ' + '-' + '<br>';
+            }
+            if (this.selectedTrip[i].TotalSale) {
+              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>';
+            } else {
+              infowindowContent += 'Total Sale : ' + '-' + '<br>';
+            }
+            if (this.selectedTrip[i].TotalAmount) {
+              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
+            } else {
+              infowindowContent += 'Total Amount : ' + '-' + '<br>';
+            }
+            return () => {
+              this.infowindow.setContent(infowindowContent);
+              this.infowindow.open(this.map, marker1);
+            }
+          })(marker1, i));
+          google.maps.event.addListener(marker2, 'click', ((marker2, i) => {
+            let infowindowContent = '';
+            if (this.selectedTrip[i].CustomerName) {
+              infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
+            } else {
+              infowindowContent += 'Customer Name : ' + '-' + '<br>';
+            }
+            if (this.selectedTrip[i].TotalSale) {
+              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>';
+            } else {
+              infowindowContent += 'Total Sale : ' + '-' + '<br>';
+            }
+            if (this.selectedTrip[i].TotalAmount) {
+              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
+            } else {
+              infowindowContent += 'Total Amount : ' + '-' + '<br>';
+            }
+            return () => {
+              this.infowindow.setContent(infowindowContent);
+              this.infowindow.open(this.map, marker2);
+            }
+          })(marker2, i));
+        }
       }
       this.map.fitBounds(this.bounds);      // auto-zoom
       this.map.panToBounds(this.bounds);    // auto-center
