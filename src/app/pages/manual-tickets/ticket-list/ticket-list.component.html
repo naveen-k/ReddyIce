@@ -86,9 +86,9 @@
                         </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TotalSale';customer.isAsc=!customer.isAsc;">
                             Total Invoice
-                            <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'TotalSale')" [ngClass]="(customer.isAsc && customer.sortField == 'TotalSale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
