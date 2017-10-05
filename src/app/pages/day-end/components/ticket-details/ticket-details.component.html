@@ -89,13 +89,13 @@
                                 </th>
                                 <th class="textRightPadd">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
-                                        Sale Invoice
+                                        Total Sale
                                         <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
                                 <th class="textRightPadd">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'cash';customer.isAsc=!customer.isAsc;">
-                                        Recd. Amount
+                                        Received Amt
                                         <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
@@ -140,8 +140,8 @@
                                 <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
                                 <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
-                                <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td>
-                                <td *ngIf="user.IsRIInternal"></td>
+                                <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td> -->
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
