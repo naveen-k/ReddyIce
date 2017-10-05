@@ -15,8 +15,8 @@ export class ReportsComponent implements OnInit {
     filter: any = {
         startDate: null,
         endDate: null,
-        reportType: null,
-        ticketType: null,
+        reportType: 'SR',
+        ticketType: 'regular',
         userType: 'internal',
         distributor: null,
         branch: null,
@@ -66,11 +66,9 @@ export class ReportsComponent implements OnInit {
     }
 
     userTypeChangeHandler() {
-        if (this.filter.userType === 'internal') {
-            this.RI=true;
+        if (this.filter.userType === 'internal') {            
             this.getAllBranches();
         } else {
-            this.RI=false;
             this.getDistributors();
         }
     }
@@ -81,18 +79,10 @@ export class ReportsComponent implements OnInit {
             this.isPaperTicket = false;
         }
     }
-    updateLink() {
-        debugger
+    updateLink() {        
         this.viewReport = true;
-        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=this.formatDate(${this.filter.startDate})&EndDate=this.formatDate(${this.filter.endDate})&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.RI}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
-        // console.log(this.displayName, "this.location ", this.location);
-        // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-        //     (`${environment.reportEndpoint}?Rtype=${this.filter.reportType}
-        // &DeliveryDate=${this.formatDate(this.filter.startDate)}&BranchCode=${this.filter.branch}&DriverID=${this.filter.internalDriver}`)
-        // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-        //     (environment.reportEndpoint + '?Rtype='
-        //     + this.displayName + '&DeliveryDate=' + this.formatDate(this.startLatestDate) + '&BranchCode=311&RouteNumber=801&DriverID='
-        //     + this.user + '&routeID=1208&LocationID=' + this.location + '&BranchID=1362&TripCode=' + this.tripcode + '&DistributormasterID=0');
+        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+        (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
     }
 
     formatDate(startLatestDate) {
