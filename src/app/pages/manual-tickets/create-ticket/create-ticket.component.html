@@ -103,18 +103,7 @@
                         <i class="ion-calendar"></i>
                     </button>
                 </div>
-            </div>
-            <!-- <div class="row" *ngIf="!user.IsDistributor">
-                <label for="example-text-input" class="col-sm-3 col-form-label">Branch:</label>
-                <div class="col-sm-7">
-                    <select class="form-control" name="branch" [(ngModel)]="ticket.BranchID" (ngModelChange)="branchChangeHandler();isFormDirty=true;"
-                        [disabled]="ticket.TicketID || tripMode">
-                        <option *ngFor="let branch of branches" [ngValue]="branch.BranchID">                             
-                            {{branch.BranchCode}} - {{branch.BranchName}}
-                        </option>
-                    </select>
-                </div>
-            </div> -->
+            </div>            
             <div class="row" [style.visibility]="(ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type:</label>
                 <div class="col-sm-7">
@@ -206,7 +195,7 @@
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Ticket#:</label>
                 <div class="col-sm-7">
-                    <input type="number" min="1" oninput="validity.valid||(value='');" onKeyPress="if(this.value.length==10) return false;" class="form-control"
+                    <input type="text" numberOnly oninput="validity.valid||(value='');" onKeyPress="if(this.value.length==10) return false;" class="form-control"
                         [(ngModel)]="ticket.TicketNumber" id="TicketNumber" placeholder="Ticket Number" (blur)="ticketNumberChangeHandler()"
                         name="TicketNumber" (ngModelChange)="isFormDirty=true;" #TicketNumber="ngModel" required [disabled]="isReadOnly">
                     <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">

@@ -46,6 +46,7 @@ import { NgModule } from '@angular/core';
         DualListComponent,
         ListComponent,
         CutStringPipe,
+        NumberOnlyDirective,
     ],
     entryComponents: [
         ModalComponent,
