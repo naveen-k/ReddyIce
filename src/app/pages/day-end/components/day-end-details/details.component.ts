@@ -238,7 +238,9 @@ export class DetailsComponent implements OnInit {
         this.ticketTotal.invoiceTotal = this.ticketTotal.receivedTotal = 0;
         this.tripData.TripTicketList.forEach(t => {
             this.ticketTotal.invoiceTotal += t.TotalSale;
-            this.ticketTotal.receivedTotal += (!t.CheckAmount && !t.CashAmount) ? t.TotalSale : t.CheckAmount + t.CashAmount;
+            if (t.IsSaleTicket) {
+                this.ticketTotal.receivedTotal += (!t.CheckAmount && !t.CashAmount) ? t.TotalSale : t.CheckAmount + t.CashAmount;
+            }
         });
     }
 }

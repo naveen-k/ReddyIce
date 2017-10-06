@@ -89,7 +89,7 @@
                                 </th>
                                 <th class="textRightPadd">
                                     <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
-                                        Total Sale
+                                        Total Invoice
                                         <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
@@ -125,13 +125,13 @@
                                 <td><span [title]="item.CustomerID +'-'+ item.CustomerName">{{item.CustomerID }} - {{item.CustomerName | cutString:true:20 }}</span></td>
                                 <td class="textRightPadd">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
-                                <td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                                <td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.IsSaleTicket ? item.TotalSale:0 | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="!user.IsRIInternal"></td>
                                 <td class="textRightPadd" [hidden]="!item.Drayage" *ngIf="!user.IsRIInternal">{{item.Drayage| currency:'USD':true:'1.2'}}</td>
                                 <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="!user.IsRIInternal"></td>
                                 <td class="textRightPadd" [hidden]="!item.BuyBack" *ngIf="!user.IsRIInternal">{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
                                 <td class="text-align-center">
-                                    <input type="checkbox" disabled name="riInternal" [(ngModel)]="item.CustomerSourceID">
+                                    <input type="checkbox" disabled name="riInternal" [checked]="item.CustomerSourceID===101">
                                 </td>
                             </tr>
                             <tr>

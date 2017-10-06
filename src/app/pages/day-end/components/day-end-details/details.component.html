@@ -134,15 +134,15 @@
                                                 <td>{{item.CustomerID }} - {{ item.CustomerName }}</td>
                                                 <td class="text-align-right">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                                                 <td class="text-align-right" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
-                                                <td class="text-align-right" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                                                <td class="text-align-right" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.IsSaleTicket ? item.TotalSale : 0 | currency:'USD':true:'1.2' }}</td>
                                             </tr>
                                             <tr *ngIf="!tripData?.TripTicketList?.length">
                                                 <th class="text-center" colspan="9"> No data found </th>
                                             </tr>
                                             <tr>
                                                 <td class="text-align-right" colspan="4"><b>Total</b></td>
-                                                <td class="text-align-right">{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</td>
-                                                <td class="text-align-right">{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</td>
+                                                <td class="text-align-right"><b>{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</b></td>
+                                                <td class="text-align-right"><b>{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</b></td>
                                             </tr>
                                         </tbody>
                                     </table>

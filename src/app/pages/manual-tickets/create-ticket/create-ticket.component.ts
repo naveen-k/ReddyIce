@@ -89,6 +89,8 @@ export class CreateTicketComponent implements OnInit {
 
   file: any = {};
 
+  acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png'];
+
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
 
@@ -291,7 +293,7 @@ export class CreateTicketComponent implements OnInit {
 
   resetSubTypesAndMode(selectedTicket) {
     this.ticketSubTypes = selectedTicket['category'];
-    if (this.ticket.TicketTypeID !== 22) {
+    if (this.ticket.TicketTypeID !== 26) {
       this.ticket.Mode = null;
       return;
     }
@@ -583,8 +585,14 @@ export class CreateTicketComponent implements OnInit {
 
   onFileUpload(event) {
     const fileReader = new FileReader();
-    fileReader.addEventListener('load', () => {
-      this.file['Image'] = fileReader.result.split(',')[1];
+    fileReader.addEventListener('load', (e) => {
+      let f = fileReader.result.split(','),
+        accepted = this.acceptedPodFormat.filter(format => f[0].indexOf(format) > 0).length;
+      if (accepted) {
+        this.file['Image'] = f[1];
+      } else {
+        alert('format not supported')
+      }
     });
 
     if (fileReader) {
@@ -820,9 +828,9 @@ export class CreateTicketComponent implements OnInit {
   }
 
   setSaleTicketType(ticket) {
-    if (ticket.TicketTypeID === 22) {
+    if (ticket.TicketTypeID === 26) {
       ticket.IsSaleTicket = true;
-    } else if (ticket.TicketTypeID === 23) {
+    } else if (ticket.TicketTypeID === 27) {
       ticket.IsSaleTicket = false;
     }
   }
@@ -1013,7 +1021,7 @@ export class CreateTicketComponent implements OnInit {
         if (this.ticket.CheckAmount || this.ticket.CheckAmount === 0) {
           return true;
         } else {
-          if (this.ticket.TicketTypeID === 22) {
+          if (this.ticket.TicketTypeID === 26) {
             this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
             return false;
           } else {
