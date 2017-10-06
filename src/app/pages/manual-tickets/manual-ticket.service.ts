@@ -97,8 +97,8 @@ export class ManualTicketService extends SharedService {
     .map(res => res.json());
   }
 
-  deleteImageByID(imageID): any {
-    return this.http.delete(`api/manualticket/deleteimage?Id=${imageID}`)
+  deleteImageByID(imageID, TicketID): any {
+    return this.http.delete(`api/manualticket/deleteimage?imageId=${imageID}&ticketId=${TicketID}`)
     .map(res => res.json());
   }
   
