@@ -1,7 +1,7 @@
 import { UserService } from '../../../../shared/user.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Customer, DualListItem, MProducts } from '../../../../shared/interfaces/interfaces';
+import { Customer, DualListItem, MapProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,8 +20,8 @@ export class CreateCustomerComponent implements OnInit {
 
     selectedProducts: DualListItem[] = [];
 
-    addedProduct: MProducts[] = [];
-    newlyAddedproduct: MProducts[] = [];
+    addedProduct: MapProducts[] = [];
+    newlyAddedproduct: MapProducts[] = [];
 
     keepSorted = true;
     // action: string = 'create';
@@ -68,12 +68,14 @@ export class CreateCustomerComponent implements OnInit {
                     this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
                 this.addedProduct = response.ProductDetail;
+               // console.log("this.addedProduct ------ ",this.addedProduct);
                 this.addProductCheck = new Array(this.addedProduct.length);
                 this.addProductCheck.fill(false);
             });
         }
         this.service.getExternalProducts().subscribe((response) => {
             this.products = response;
+           // console.log(" this.products---------------", this.products);
         });
         this.service.getAllStates().subscribe((response) => {
             this.allStates = response;
@@ -82,13 +84,13 @@ export class CreateCustomerComponent implements OnInit {
     addProduct() {
         if (this.mode === 1) {
             this.addProductCheck.fill(false);
-            this.addedProduct.push({} as MProducts);
+            this.addedProduct.push({} as MapProducts);
             this.addProductCheck.push(true);
             // console.log("addedProduct ", this.addedProduct)
         } else {
             this.addProductCheck.fill(false);
             this.addNewProductCheck.fill(false);
-            this.newlyAddedproduct.push({} as MProducts);
+            this.newlyAddedproduct.push({} as MapProducts);
             this.addNewProductCheck.push(true);
         }
     }
@@ -108,7 +110,8 @@ export class CreateCustomerComponent implements OnInit {
                         this.router.navigate(['../../list'], { relativeTo: this.route });
                     }
                 }, (err) => {
-                    this.notification.success('API Error');
+                    //console.log("err ",err);
+                    this.notification.error(err._body);
                 });
 
             } else {
@@ -122,7 +125,8 @@ export class CreateCustomerComponent implements OnInit {
                         this.router.navigate(['/pages/customer-management/list'], { relativeTo: this.route });
                     }
                 }, (err) => {
-                    this.notification.success('API Error');
+                    //console.log("err ",err);
+                    this.notification.error(err._body);
                 });
             }
         }
@@ -145,10 +149,15 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     productChangeHandler(mprod) {
-        const product = this.addedProduct.filter(t => t.ExternalProductID === mprod.ExternalProductID);
-        const product1 = this.newlyAddedproduct.filter(t => t.ExternalProductID === mprod.ExternalProductID);
-        if (product.length === 2 || product1.length === 2) {
-            mprod.ExternalProductID = '';
+
+        let mProdTemp = mprod.cProductId.split('-');
+        const product = this.addedProduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
+        const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId);
+        if ((product.length + product1.length) === 2) {
+            
+            if (this.mode === 2){ product1.pop(); } else { product.pop(); }
+           
+            mprod.cProductId = '';
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',
                 backdrop: 'static',
@@ -160,8 +169,26 @@ export class CreateCustomerComponent implements OnInit {
             });
             return;
         } else {
-            mprod.Price = this.products.filter(prod => +prod.ExternalProductId === +mprod.ExternalProductID)[0].ProductPrice;
+           /* mprod.ProductPrice = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductPrice;
+            mprod.ProductCode = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductCode;
+            mprod.IsInternal = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsInternal;
+            mprod.DisplayName = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].DisplayName;
+            mprod.ProductName = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductName;
+            mprod.ExternalProductId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalProductId;
+            mprod.ExternalCustomerId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalCustomerId;
+            mprod.IsActive = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsActive;*/
+            let tempProd = this.products.filter(prod => +prod.ProductId === +mProdTemp[0] && prod.IsInternal === !!mProdTemp[1])[0];
+            mprod.ProductId = tempProd.ProductId;
+            mprod.ProductPrice = tempProd.ProductPrice;
+            mprod.ProductCode = tempProd.ProductCode;
+            mprod.IsInternal = tempProd.IsInternal;
+            mprod.DisplayName = tempProd.DisplayName;
+            mprod.ProductName = tempProd.ProductName;
+            mprod.ExternalProductId = tempProd.ExternalProductId;
+            mprod.ExternalCustomerId = tempProd.ExternalCustomerId;
+            mprod.IsActive = tempProd.IsActive;
         }
+        //console.log("this.addedProduct   -------",this.addedProduct);
     }
     validateCustomer(customer, newlyAddedproduct, addedProduct, mode): boolean {
         if (!customer.CustomerNumber) {
@@ -215,7 +242,7 @@ export class CreateCustomerComponent implements OnInit {
                 var check = true;
                 addedProduct.forEach(element => {
                     // console.log("element.ExternalProductID || ! element.Price", element.ExternalProductID, element.Price);
-                    if (!element.ExternalProductID || !element.Price) {
+                    if (!element.cProductId || !element.ProductPrice) {
                         check = false;
                     }
                 });
@@ -232,7 +259,7 @@ export class CreateCustomerComponent implements OnInit {
             if (newlyAddedproduct) {
                 var check = true;
                 newlyAddedproduct.forEach(element => {
-                    if (!element.ExternalProductID || !element.Price) {
+                    if (!element.cProductId || !element.ProductPrice) {
 
                         check = false;
                     }

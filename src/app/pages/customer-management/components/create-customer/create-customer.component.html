@@ -173,7 +173,7 @@
                                         {{mprod.DisplayName}}
                                     </td>
                                     <td class="td-width right">
-                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="number" [(ngModel)]="mprod.Price">
+                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="number" [(ngModel)]="mprod.ProductPrice">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
@@ -188,14 +188,14 @@
                             <tbody *ngIf="mode === 1">
                                 <tr *ngFor="let mprod of addedProduct; let k=index">
                                     <td class="text-align-left">
-                                        <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="product" [(ngModel)]="mprod.ExternalProductID" (ngModelChange)="productChangeHandler(mprod)">
-                                                <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
+                                        <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="product" [(ngModel)]="mprod.cProductId" (ngModelChange)="productChangeHandler(mprod)">
+                                                <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                     {{prod.DisplayName}}  
                                                 </option>
                                             </select>
                                     </td>
                                     <td class="td-width">
-                                        <input [disabled]="!addProductCheck[k]" class="form-control right prodListElement" type="number" [(ngModel)]="mprod.Price">
+                                        <input [disabled]="!addProductCheck[k]" class="form-control right prodListElement" type="number" [(ngModel)]="mprod.ProductPrice">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,k)">
@@ -210,14 +210,14 @@
                             <tbody *ngIf="mode === 2 ">
                                 <tr *ngFor="let mprod of newlyAddedproduct; let i=index">
                                     <td class="text-align-left">
-                                        <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="product" [(ngModel)]="mprod.ExternalProductID" (ngModelChange)="productChangeHandler(mprod)">
-                                            <option *ngFor="let prod of products" [value]="prod.ExternalProductId"> 
+                                        <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="product" [(ngModel)]="mprod.cProductId" (ngModelChange)="productChangeHandler(mprod)">
+                                            <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                 {{prod.DisplayName}}
                                             </option>
                                         </select>
                                     </td>
                                     <td class="td-width">
-                                        <input [disabled]="!addNewProductCheck[i]" class="form-control right" type="number" [(ngModel)]="mprod.Price">
+                                        <input [disabled]="!addNewProductCheck[i]" class="form-control right" type="number" [(ngModel)]="mprod.ProductPrice">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">

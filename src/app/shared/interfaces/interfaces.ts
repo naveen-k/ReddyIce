@@ -55,15 +55,15 @@ export interface Customer {
     Tax: number;
     CustomerTypeID: number;
     PaymentType: number;
-    MappedProducts?: MProducts[];
+    MappedProducts?: MapProducts[];
     CustomerType: number;
     IsTaxassble: boolean;
     Address: string;
     EmailID: string;
     IsDex: boolean;
     Chain: string;
-    EditedProducts?: MProducts[];
-    NewAddedProducts?: MProducts[];
+    EditedProducts?: MapProducts[];
+    NewAddedProducts?: MapProducts[];
     IsInternal: boolean;
     ChainID: number;
 }
@@ -81,6 +81,18 @@ export interface MProducts {
     ExternalProductID: number;
     ProductId: number;
     ExternalProductId: any;
+}
+export interface MapProducts {
+    ProductCode: number;
+    ProductId: number;
+    DisplayName: string;
+    ProductName: string;
+    ExternalProductId: number;
+    ProductPrice: number;
+    ExternalCustomerId:number;
+    IsInternal:boolean;
+    IsActive:boolean;
+    cProductId: string;
 }
 
 export interface ProductDetail {
