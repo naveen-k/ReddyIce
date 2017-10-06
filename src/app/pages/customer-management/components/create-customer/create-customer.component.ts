@@ -75,7 +75,7 @@ export class CreateCustomerComponent implements OnInit {
         }
         this.service.getExternalProducts().subscribe((response) => {
             this.products = response;
-           // console.log(" this.products---------------", this.products);
+            console.log(" this.products---------------", this.products);
         });
         this.service.getAllStates().subscribe((response) => {
             this.allStates = response;
@@ -149,13 +149,14 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     productChangeHandler(mprod) {
-
+        //console.log("mprod ---- ------- ",mprod);
         let mProdTemp = mprod.cProductId.split('-');
         const product = this.addedProduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
-        const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId);
+        const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
+        console.log("product ----- ", product,"product1 ----- ",product1);
         if ((product.length + product1.length) === 2) {
             
-            if (this.mode === 2){ product1.pop(); } else { product.pop(); }
+           // if (this.mode === 2){ product1.pop(); } else { product.pop(); }
            
             mprod.cProductId = '';
             const activeModal = this.modalService.open(ModalComponent, {
@@ -177,7 +178,8 @@ export class CreateCustomerComponent implements OnInit {
             mprod.ExternalProductId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalProductId;
             mprod.ExternalCustomerId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalCustomerId;
             mprod.IsActive = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsActive;*/
-            let tempProd = this.products.filter(prod => +prod.ProductId === +mProdTemp[0] && prod.IsInternal === !!mProdTemp[1])[0];
+            console.log("prod.IsInternal === mProdTemp[1] ",mProdTemp[1]);
+            let tempProd = this.products.filter(prod => +prod.ProductId === +mProdTemp[0] && (prod.IsInternal+'' === ''+mProdTemp[1]))[0];
             mprod.ProductId = tempProd.ProductId;
             mprod.ProductPrice = tempProd.ProductPrice;
             mprod.ProductCode = tempProd.ProductCode;

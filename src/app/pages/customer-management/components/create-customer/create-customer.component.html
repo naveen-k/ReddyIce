@@ -188,7 +188,7 @@
                             <tbody *ngIf="mode === 1">
                                 <tr *ngFor="let mprod of addedProduct; let k=index">
                                     <td class="text-align-left">
-                                        <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="product" [(ngModel)]="mprod.cProductId" (ngModelChange)="productChangeHandler(mprod)">
+                                        <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="cProductId" [(ngModel)]="mprod.cProductId" (ngModelChange)="productChangeHandler(mprod)">
                                                 <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                     {{prod.DisplayName}}  
                                                 </option>
@@ -210,7 +210,7 @@
                             <tbody *ngIf="mode === 2 ">
                                 <tr *ngFor="let mprod of newlyAddedproduct; let i=index">
                                     <td class="text-align-left">
-                                        <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="product" [(ngModel)]="mprod.cProductId" (ngModelChange)="productChangeHandler(mprod)">
+                                        <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId" (ngModelChange)="productChangeHandler(mprod)">
                                             <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                 {{prod.DisplayName}}
                                             </option>
