@@ -190,7 +190,16 @@
                     </label>
                     
                 </div>
-                <div class="col-sm-9" *ngIf="isDownloadable"><label for="example-text-input" style="cursor:pointer;" (click)="downloadPODImage(ticket.PODImageID)" class="col-form-label"><span title="Download POD Image"><i class="icon ion-arrow-down-c"></i></span> <u>Download</u></label> <!--label (click)="deletePODImage(ticket.PODImageID)" [hidden]="isReadOnly" title="Delete POD Image"><i class="icon ion-android-delete"></i></label--></div>
+                <div class="col-sm-9" *ngIf="isDownloadable">
+                    <label for="example-text-input" style="cursor:pointer;" (click)="downloadPODImage(ticket.PODImageID)" class="col-form-label">
+                        <span title="Download POD Image">
+                            <i class="icon ion-arrow-down-c"></i>
+                        </span> <u>Download</u>
+                    </label> 
+                    <label (click)="deletePODImage(ticket.PODImageID)" [hidden]="isReadOnly" title="Delete POD Image">
+                        <i class="icon ion-android-delete"></i>
+                    </label>
+                </div>
             </div>
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Ticket#:</label>

@@ -91,8 +91,14 @@ export class ManualTicketService extends SharedService {
   getSearchedObject(): any {
     return this._searchObject;
   }
+
   getImageByID(imageID): any {
     return this.http.get(`api/manualticket/getimage?imageid=${imageID}`)
+    .map(res => res.json());
+  }
+
+  deleteImageByID(imageID): any {
+    return this.http.delete(`api/manualticket/deleteimage?Id=${imageID}`)
     .map(res => res.json());
   }
   

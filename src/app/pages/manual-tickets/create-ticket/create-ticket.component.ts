@@ -643,7 +643,15 @@ export class CreateTicketComponent implements OnInit {
   }
   deletePODImage(imageID) {
     console.log("imageID---TODO", imageID);
-    this.isDownloadable = false;
+    this.service.deleteImageByID(imageID).subscribe((res) => {
+      if (res) {
+        this.isDownloadable = false;
+        console.log("image deleted, this.isDownloadable", this.isDownloadable);
+        this.notification.success("POD Image deleted successfully");
+      } else {
+        this.notification.success("Something went wrong while deletion of POD Image");
+      }
+    });
   }
   deleteProductHandler(tdetail) {
     const index = this.ticket.TicketProduct.findIndex((t) => t.ProductID === tdetail.ProductID);
