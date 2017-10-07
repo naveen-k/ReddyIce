@@ -44,13 +44,14 @@
                     </td>
                 </tr>
                 <tr *ngFor="let product of newProductList">
-                    <td></td>
+                    <td colspan="2"></td>
                     <td>
-                        <input type="text" [(ngModel)]='product.ProductName' class="form-control" id="price" placeholder="Product Name" style="padding: 5px; margin-top: 3px;"
+                        <input type="text" [(ngModel)]='product.ProductName' maxlength="100" class="form-control" id="price" placeholder="Product Name" style="padding: 5px; margin-top: 3px;"
                            (blur)="isProductExist(product.ProductName)" >
                     </td>
+                    <td></td>
                     <td>
-                        <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
+                        <input type="text" numberOnly [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" maxlength="10" style="padding: 5px; margin-top: 3px;text-align:right;">
                     </td>
                 </tr>
             </tbody>

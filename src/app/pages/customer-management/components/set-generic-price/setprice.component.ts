@@ -51,13 +51,15 @@ export class SetPriceComponent implements OnInit {
     }
 
     setGenericPrice() {
+        
+        this.isFormTouched = false;   
         const priceProduct = { 'SetGenricPrice': this.externalProducts, 'AddNewExternalProduct': this.newProductList }
         this.service.setGenericPrice(priceProduct).subscribe((res) => {
             this.service.getAllCustomers();
-            this.editClicked = false;
             this.notification.success(res);
-            // this.route.navigate(['/pages/customer-management/set-price'], { relativeTo: this.activatedRoute });
+            this.editClicked = false;   
         }, (err) => {
+            this.isFormTouched = true;   
         });
     }
 

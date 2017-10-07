@@ -153,10 +153,10 @@ export class CreateCustomerComponent implements OnInit {
         let mProdTemp = mprod.cProductId.split('-');
         const product = this.addedProduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
         const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
-        console.log("product ----- ", product,"product1 ----- ",product1);
+        //console.log("product ----- ", product,"product1 ----- ",product1);
         if ((product.length + product1.length) === 2) {
             
-           // if (this.mode === 2){ product1.pop(); } else { product.pop(); }
+           // if (this.mode === 2){ product1.length =0; product1.pop(); } else { product.length=0; product.pop(); }
            
             mprod.cProductId = '';
             const activeModal = this.modalService.open(ModalComponent, {
