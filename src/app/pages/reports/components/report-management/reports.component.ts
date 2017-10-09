@@ -25,30 +25,30 @@ export class ReportsComponent implements OnInit {
         branch: null,
         internalDriver: null,
         distDriver: null,
-        driver:null,
+        driver: null,
     };
 
     user: User;
 
     linkRpt: SafeResourceUrl;
-    
+
     distributors: any = [];
     branches: any = [];
     drivers: any = [];
     driversofDist: any = [];
-    
+
     viewReport: boolean = false;
-    RI:boolean=false;
-    isPaperTicket:boolean=false;
+    RI: boolean = false;
+    isPaperTicket: boolean = false;
     userSubTitle: string = '';
-    
+
     constructor(
-        private sanitizer: DomSanitizer, 
-        protected userService: UserService, 
+        private sanitizer: DomSanitizer,
+        protected userService: UserService,
         protected reportService: ReportService,
         protected modalService: NgbModal,
         protected notification: NotificationsService
-    ) {}
+    ) { }
     ngOnInit() {
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -60,9 +60,16 @@ export class ReportsComponent implements OnInit {
         // to select Distributor radio button by default if logged in with distributor
         if (this.user.IsDistributor) {
             this.filter.userType = 'external';
+            this.filter.distributor = this.user.Distributor.DistributorMasterId;
+            this.getDistributors();
+            this.distributorChangeHandler();
+            if(this.user.Role.RoleID == 3) {
+                this.filter.driver = this.user.Role.RoleID;
+            }
+        } else {
+            this.getAllBranches();
         }
 
-        this.getAllBranches();
     }
 
     getAllBranches() {
@@ -90,6 +97,23 @@ export class ReportsComponent implements OnInit {
         });
     }
 
+    sortDrivers() {
+        // sort by name
+        this.drivers.sort(function (a, b) {
+            const nameA = a.UserName.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.UserName.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            // names must be equal
+            return 0;
+        });
+    }
+
     getDistributors() {
         this.reportService.getDistributors().subscribe((res) => {
             this.distributors = res;
@@ -97,16 +121,16 @@ export class ReportsComponent implements OnInit {
     }
 
     userTypeChangeHandler() {
-        if (this.filter.userType === 'internal') {            
+        if (this.filter.userType === 'internal') {
             this.getAllBranches();
         } else {
             this.getDistributors();
         }
     }
-    ticketTypeChangeHandler(){
-        if(this.filter.ticketType === 'paper'){
-            this.isPaperTicket=true;
-        }else{
+    ticketTypeChangeHandler() {
+        if (this.filter.ticketType === 'paper') {
+            this.isPaperTicket = true;
+        } else {
             this.isPaperTicket = false;
         }
     }
@@ -118,7 +142,7 @@ export class ReportsComponent implements OnInit {
             this.viewReport = false;
         }
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-        (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
+            (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
     }
 
     formatDate(startLatestDate) {
@@ -132,6 +156,7 @@ export class ReportsComponent implements OnInit {
     branchChangeHandler() {
         this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
             this.drivers = res;
+            this.sortDrivers();
         }, (err) => { });
     }
     distributorChangeHandler() {
