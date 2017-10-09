@@ -63,8 +63,26 @@ export class ReportsComponent implements OnInit {
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
             this.branches = res;
-            this.branches.shift();
+            // this.branches.shift();
+            this.sortBranches();
         }, (err) => { });
+    }
+
+    sortBranches() {
+        // sort by name
+        this.branches.sort(function (a, b) {
+            const nameA = a.BranchCode;
+            const nameB = b.BranchCode;
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            // names must be equal
+            return 0;
+        });
     }
 
     getDistributors() {
