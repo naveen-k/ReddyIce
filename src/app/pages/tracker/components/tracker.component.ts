@@ -18,7 +18,8 @@ export class TrackerComponent implements OnInit {
   allTrips: any = {};
   showSpinner: boolean = false;
   trips: any = [];
-  selectedDate: any = '2017-09-26';
+  // selectedDate: any = '2017-09-26';
+  selectedDate: any;
   tripFilterOption: any = {
     uId: '0',
     tripDate: this.selectedDate,
@@ -70,6 +71,7 @@ export class TrackerComponent implements OnInit {
     });
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+    this.selectedDate = this.service.formatDate({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() });
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     // get the user type: isDistributor or internal
