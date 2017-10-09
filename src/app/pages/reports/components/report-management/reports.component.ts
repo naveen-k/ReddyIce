@@ -57,6 +57,11 @@ export class ReportsComponent implements OnInit {
         this.user = this.userService.getUser();
         this.userSubTitle = this.user.IsDistributor ? this.user.Distributor.DistributorName : '';
 
+        // to select Distributor radio button by default if logged in with distributor
+        if (this.user.IsDistributor) {
+            this.filter.userType = 'external';
+        }
+
         this.getAllBranches();
     }
 
