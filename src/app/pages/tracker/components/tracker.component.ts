@@ -12,7 +12,9 @@ import { NotificationsService } from 'angular2-notifications';
   styleUrls: ['./tracker.component.scss'],
 })
 export class TrackerComponent implements OnInit {
-
+  searchObj: any = {
+    userType: 'Internal'
+  }
   todaysDate: any;
   allBranches: any;
   allTrips: any = {};
@@ -27,6 +29,7 @@ export class TrackerComponent implements OnInit {
     isForAll: false,
     TripCode: 1,
     DriverName: 'abc',
+    DistributorID: 0
   };
 
   planned: boolean = true;
@@ -78,6 +81,7 @@ export class TrackerComponent implements OnInit {
     this.isDistributor = this.userService.getUser().IsDistributor;
 
     if (this.isDistributor === true) {
+      this.searchObj.userType = 'External';
       this.actual = true;
       this.planned = false;
       this.tripFilterOption.branchId = 0;
@@ -270,7 +274,7 @@ export class TrackerComponent implements OnInit {
 
   // function to draw the polyline on map
   drawPolyline(google, sequence) {
-    if (this.selectedTrip) {
+    if (this.selectedTrip && this.selectedTrip.length > 1) {
       for (var i = 0; i < this.selectedTrip.length; i++) {
 
         // changing color of the marker icon based on condition
@@ -509,5 +513,13 @@ export class TrackerComponent implements OnInit {
     } else {
       this.notification.error("Ticket preview unavailable!!");
     }
+  }
+
+  typeChangeHandler() {
+    
+  }
+
+  userChangeHandler() {
+
   }
 }

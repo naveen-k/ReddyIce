@@ -2,7 +2,7 @@
     <div class='col-md-12'>
         <ba-card cardTitle="Tracker{{userSubTitle}}" baCardClass="medium-card" class="smart-table-container">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>Select Date</label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tripFilterOption.tripDate" [maxDate]="todaysDate"
@@ -12,7 +12,14 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-sm-3" [hidden]="isDistributor">
+                <div class="col-sm-2">
+                    <label>Select Driver Type</label>
+                    <select [disabled]="isDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+                        <option [value]="'Internal'">RI Driver</option>
+                        <option [value]="'External'">Dist./CoPacker</option>
+                    </select>
+                </div>
+                <div class="col-sm-3" [hidden]="isDistributor" *ngIf="searchObj.userType=='Internal'">
                     <label>Select Branch</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="branchChangeHandler()">
                         <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
@@ -20,7 +27,7 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>Select Driver</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
                         <option *ngFor="let driver of trips | unique">
