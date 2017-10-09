@@ -37,7 +37,7 @@ export interface ManualTicket {
     IsDexed: boolean;
     PrintedCopies: string;
     Notes: string;
-    TaxAmount: string;
+    TaxAmount: number;
     IsPaperTicket: boolean;
     IsNoPayment: boolean;
     CardPaymentStatus: string;

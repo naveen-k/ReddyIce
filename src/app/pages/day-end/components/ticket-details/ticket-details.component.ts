@@ -54,7 +54,7 @@ export class TicketDetailsComponent implements OnInit {
             this.tripData = res.Tripdetail[0];
             this.tripData.TripTicketList.forEach(ticket => {
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
-                this.total.totalInvoice += ticket.TotalSale || 0;
+                this.total.totalInvoice += ticket.IsSaleTicket ? ticket.TotalSale : - ticket.TotalSale || 0;
                 this.total.totalCash += ticket.CashAmount || 0;
                 this.total.totalCheck += ticket.CheckAmount || 0;
                 this.total.totalCharge += ticket.ChargeAmount || 0;
@@ -99,7 +99,7 @@ export class TicketDetailsComponent implements OnInit {
 
     viewTicket(ticketID) {
         if (ticketID) {
-            window.open(environment.reportEndpoint+"?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
+            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
         } else {
             this.notification.error("Ticket preview unavailable!!");
         }

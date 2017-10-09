@@ -1,3 +1,5 @@
+import { NotificationsService } from 'angular2-notifications';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../user-management/user-management.interface';
 import { environment } from '../../../../../environments/environment.prod';
 import { Component, OnInit } from '@angular/core';
@@ -5,6 +7,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
 import { ReportService } from '../../reports.service';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
     templateUrl: './reports.component.html',
@@ -22,25 +25,30 @@ export class ReportsComponent implements OnInit {
         branch: null,
         internalDriver: null,
         distDriver: null,
-        driver:null,
+        driver: null,
     };
 
     user: User;
 
     linkRpt: SafeResourceUrl;
-    
+
     distributors: any = [];
     branches: any = [];
     drivers: any = [];
     driversofDist: any = [];
-    
+
     viewReport: boolean = false;
-    RI:boolean=false;
-    isPaperTicket:boolean=false;
+    RI: boolean = false;
+    isPaperTicket: boolean = false;
     userSubTitle: string = '';
-    
-    constructor(private sanitizer: DomSanitizer, protected userService: UserService, protected reportService: ReportService) {
-    }
+
+    constructor(
+        private sanitizer: DomSanitizer,
+        protected userService: UserService,
+        protected reportService: ReportService,
+        protected modalService: NgbModal,
+        protected notification: NotificationsService
+    ) { }
     ngOnInit() {
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -49,14 +57,61 @@ export class ReportsComponent implements OnInit {
         this.user = this.userService.getUser();
         this.userSubTitle = this.user.IsDistributor ? this.user.Distributor.DistributorName : '';
 
-        this.getAllBranches();
+        // to select Distributor radio button by default if logged in with distributor
+        if (this.user.IsDistributor) {
+            this.filter.userType = 'external';
+            this.filter.distributor = this.user.Distributor.DistributorMasterId;
+            this.getDistributors();
+            this.distributorChangeHandler();
+            if(this.user.Role.RoleID == 3) {
+                this.filter.driver = this.user.Role.RoleID;
+            }
+        } else {
+            this.getAllBranches();
+        }
+
     }
 
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
             this.branches = res;
-            this.branches.shift();
+            // this.branches.shift();
+            this.sortBranches();
         }, (err) => { });
+    }
+
+    sortBranches() {
+        // sort by name
+        this.branches.sort(function (a, b) {
+            const nameA = a.BranchCode;
+            const nameB = b.BranchCode;
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            // names must be equal
+            return 0;
+        });
+    }
+
+    sortDrivers() {
+        // sort by name
+        this.drivers.sort(function (a, b) {
+            const nameA = a.UserName.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.UserName.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+
+            // names must be equal
+            return 0;
+        });
     }
 
     getDistributors() {
@@ -66,23 +121,28 @@ export class ReportsComponent implements OnInit {
     }
 
     userTypeChangeHandler() {
-        if (this.filter.userType === 'internal') {            
+        if (this.filter.userType === 'internal') {
             this.getAllBranches();
         } else {
             this.getDistributors();
         }
     }
-    ticketTypeChangeHandler(){
-        if(this.filter.ticketType === 'paper'){
-            this.isPaperTicket=true;
-        }else{
+    ticketTypeChangeHandler() {
+        if (this.filter.ticketType === 'paper') {
+            this.isPaperTicket = true;
+        } else {
             this.isPaperTicket = false;
         }
     }
-    updateLink() {        
+    updateLink() {
         this.viewReport = true;
+        // hack to check if start date is not greater than end date
+        if ((Date.parse(this.formatDate(this.filter.endDate)) <= Date.parse(this.formatDate(this.filter.startDate)))) {
+            this.notification.error('Start Date cannot be greater than End Date!!!');
+            this.viewReport = false;
+        }
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-        (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
+            (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
     }
 
     formatDate(startLatestDate) {
@@ -96,6 +156,7 @@ export class ReportsComponent implements OnInit {
     branchChangeHandler() {
         this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
             this.drivers = res;
+            this.sortDrivers();
         }, (err) => { });
     }
     distributorChangeHandler() {

@@ -123,7 +123,8 @@
                                 <td class="text-align-left">{{item.TicketNumber }}</td>
                                 <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
                                 <td><span [title]="item.CustomerID +'-'+ item.CustomerName">{{item.CustomerID }} - {{item.CustomerName | cutString:true:20 }}</span></td>
-                                <td class="textRightPadd">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                                <!-- <td class="textRightPadd">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td> -->
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':!item.IsSaleTicket}"><span [hidden]="item.IsSaleTicket">(</span>{{ item.TotalSale + item.TaxAmount | currency:'USD':true:'1.2' }}<span [hidden]="item.IsSaleTicket">)</span></td>
                                 <td class="textRightPadd" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.IsSaleTicket ? item.TotalSale:0 | currency:'USD':true:'1.2' }}</td>
                                 <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="!user.IsRIInternal"></td>

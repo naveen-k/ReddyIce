@@ -186,9 +186,12 @@
                             <i class="icon ion-arrow-down-c"></i>
                         </span> <u>Download</u>
                     </label> 
-                    <label (click)="deletePODImage(ticket.PODImageID, ticket.TicketID)" [hidden]="isReadOnly" title="Delete POD Image">
+                    <label (click)="deletePODImage(ticket.PODImageID, ticket.TicketID)" style="cursor:pointer" [hidden]="isReadOnly" *ngIf="ticket.PODImageID && !ticket.Customer.ChainID" title="Delete POD Image">
                         <i class="icon ion-android-delete"></i>
                     </label>
+                    <label onclick="document.getElementById('file').click()" style="cursor:pointer" [hidden]="isReadOnly" *ngIf="ticket.PODImageID && ticket.Customer.ChainID" title="Replace POD Image">
+                        <i class="icon ion-ios-loop-strong"></i>
+                    </label>                    
                 </div>
             </div>
             <div class="row">
@@ -285,13 +288,13 @@
                                         <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
                                             <td colspan="2"></td>
                                             <td class="textAlignRight"><b>Total Tax</b></td>
-                                            <td class="textAlignRight"><b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b></td>
+                                            <td class="textAlignRight"><b>{{ticket.TaxAmount | currency:'USD':true:'1.2'}}</b></td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
                                         <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
                                             <td colspan="2"></td>
                                             <td class="textAlignRight"><b>Total Amount</b></td>
-                                            <td class="textAlignRight"><b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b></td>
+                                            <td class="textAlignRight"><b>{{(ticket.TotalSale + ticket.TaxAmount) | currency:'USD':true:'1.2'}}</b></td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
                                     </tbody>

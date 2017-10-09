@@ -332,6 +332,7 @@ export class CreateTicketComponent implements OnInit {
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
         this.ticket.CustomerType = customer.CustomerTypeID;
+        this.ticket.Customer.ChainID = customer.ChainID;
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
@@ -590,6 +591,7 @@ export class CreateTicketComponent implements OnInit {
         accepted = this.acceptedPodFormat.filter(format => f[0].indexOf(format) > 0).length;
       if (accepted) {
         this.file['Image'] = f[1];
+        this.isFormDirty = true;
       } else {
         const activeModal = this.modalService.open(ModalComponent, {
           size: 'sm',
@@ -666,7 +668,7 @@ export class CreateTicketComponent implements OnInit {
         }
       }, (error) => {
         if (error) {
-          this.notification.success('Something went wrong while deletion of POD Image');
+          this.notification.error('Something went wrong while deletion of POD Image');
         }
       },
     );
@@ -904,9 +906,10 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketProduct.forEach((t) => {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       this.ticket.TotalSale += +t['totalAmount'] || 0;
-    });
-    this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
-    this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
+    });    
+    // this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
+    this.ticket.TaxAmount = (this.ticket.TotalSale * this.customer.Tax) / 100;
+    this.ticket.TotalSale = this.ticket.TotalSale //+ (this.ticket.TotalSale * this.customer.Tax) / 100;
   }
 
   pbsQuantityCheck() {

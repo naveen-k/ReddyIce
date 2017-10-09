@@ -74,7 +74,14 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler()">
-                                            <option *ngFor="let branch of branches" [value]="branch.BranchID">{{branch.BranchID}} {{branch.BranchName}}</option>
+                                            <option *ngFor="let branch of branches" [value]="branch.BranchID">
+                                                <span *ngIf="branch.BranchID != '1'">
+                                                    {{branch.BranchCode}} {{branch.BranchName}}
+                                                </span>
+                                                <span *ngIf="branch.BranchID == '1'">
+                                                    {{branch.BranchName}}
+                                                </span>
+                                            </option>
                                         </select>
                                     </div>
                                 </ng-container>
@@ -83,9 +90,9 @@
                                         <label class="top-margin pull-right"><b>Distributor</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler()">
-                                                <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
-                                            </select>
+                                        <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler()">
+                                            <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
+                                        </select>
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'internal'">
@@ -94,8 +101,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control pull-right" [(ngModel)]="filter.driver">
-                                                <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
-                                            </select>
+                                            <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
+                                        </select>
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'external'">
@@ -104,8 +111,8 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control pull-right" [(ngModel)]="filter.driver">
-                                                <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
-                                            </select>
+                                            <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
+                                        </select>
                                     </div>
                                 </ng-container>
                             </div>
