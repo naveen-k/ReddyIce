@@ -137,12 +137,12 @@ export class ReportsComponent implements OnInit {
     updateLink() {
         this.viewReport = true;
         // hack to check if start date is not greater than end date
-        if ((Date.parse(this.formatDate(this.filter.endDate)) <= Date.parse(this.formatDate(this.filter.startDate)))) {
+        if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
             this.notification.error('Start Date cannot be greater than End Date!!!');
             this.viewReport = false;
         }
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-            (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
+            (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
     }
 
     formatDate(startLatestDate) {
