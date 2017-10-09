@@ -591,7 +591,13 @@ export class CreateTicketComponent implements OnInit {
       if (accepted) {
         this.file['Image'] = f[1];
       } else {
-        alert('format not supported')
+        const activeModal = this.modalService.open(ModalComponent, {
+          size: 'sm',
+          backdrop: 'static',
+        });
+        activeModal.componentInstance.BUTTONS.OK = 'OK';
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `Format not supported !!!`;        
       }
     });
 

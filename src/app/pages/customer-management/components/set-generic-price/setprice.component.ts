@@ -21,6 +21,7 @@ export class SetPriceComponent implements OnInit {
     isDistributorExist: boolean;
     userSubTitle: string = '';
     showSpinner: boolean = false;
+    counter: number = 0;
 
     constructor(
         protected service: CustomerManagementService,
@@ -51,20 +52,26 @@ export class SetPriceComponent implements OnInit {
     }
 
     setGenericPrice() {
-        
-        this.isFormTouched = false;   
+
+        this.isFormTouched = false;
         const priceProduct = { 'SetGenricPrice': this.externalProducts, 'AddNewExternalProduct': this.newProductList }
         this.service.setGenericPrice(priceProduct).subscribe((res) => {
             this.service.getAllCustomers();
             this.notification.success(res);
-            this.editClicked = false;   
+            this.getExternalProducts();
+            for (let i = 0; i < this.counter; i = i + 1) {
+                this.newProductList.pop({ isActive: true } as MProducts);
+            }
+            this.editClicked = false;
         }, (err) => {
-            this.isFormTouched = true;   
+            this.isFormTouched = true;
         });
     }
 
     addProduct() {
         this.newProductList.push({ isActive: true } as MProducts);
+        this.counter = this.counter + 1;
+        console.log(this.counter);
     }
 
     isProductExist(name) {
