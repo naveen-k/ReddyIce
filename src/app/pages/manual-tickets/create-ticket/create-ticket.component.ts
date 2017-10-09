@@ -660,7 +660,7 @@ export class CreateTicketComponent implements OnInit {
         }
       }, (error) => {
         if (error) {
-          this.notification.success('Something went wrong while deletion of POD Image');
+          this.notification.error('Something went wrong while deletion of POD Image');
         }
       },
     );

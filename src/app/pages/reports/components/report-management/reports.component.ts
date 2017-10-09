@@ -1,3 +1,5 @@
+import { NotificationsService } from 'angular2-notifications';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../user-management/user-management.interface';
 import { environment } from '../../../../../environments/environment.prod';
 import { Component, OnInit } from '@angular/core';
@@ -5,6 +7,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
 import { ReportService } from '../../reports.service';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
     templateUrl: './reports.component.html',
@@ -39,8 +42,13 @@ export class ReportsComponent implements OnInit {
     isPaperTicket:boolean=false;
     userSubTitle: string = '';
     
-    constructor(private sanitizer: DomSanitizer, protected userService: UserService, protected reportService: ReportService) {
-    }
+    constructor(
+        private sanitizer: DomSanitizer, 
+        protected userService: UserService, 
+        protected reportService: ReportService,
+        protected modalService: NgbModal,
+        protected notification: NotificationsService
+    ) {}
     ngOnInit() {
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -79,8 +87,13 @@ export class ReportsComponent implements OnInit {
             this.isPaperTicket = false;
         }
     }
-    updateLink() {        
+    updateLink() {
         this.viewReport = true;
+        // hack to check if start date is not greater than end date
+        if ((Date.parse(this.formatDate(this.filter.endDate)) <= Date.parse(this.formatDate(this.filter.startDate)))) {
+            this.notification.error('Start Date cannot be greater than End Date!!!');
+            this.viewReport = false;
+        }
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
         (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributoID=${this.filter.distributor}&DriverID=${this.filter.driver}`);
     }
