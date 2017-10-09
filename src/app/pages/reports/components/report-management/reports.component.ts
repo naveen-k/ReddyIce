@@ -137,7 +137,7 @@ export class ReportsComponent implements OnInit {
     updateLink() {
         this.viewReport = true;
         // hack to check if start date is not greater than end date
-        if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
+        if ((Date.parse(this.formatDate(this.filter.endDate)) <= Date.parse(this.formatDate(this.filter.startDate)))) {
             this.notification.error('Start Date cannot be greater than End Date!!!');
             this.viewReport = false;
         }
