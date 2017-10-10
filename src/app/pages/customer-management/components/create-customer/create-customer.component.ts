@@ -322,7 +322,7 @@ export class CreateCustomerComponent implements OnInit {
                 this.router.navigate(['/pages/customer-management'], { relativeTo: this.route });
             });
         } else {
-          this.router.navigate(['/pages/customer-management/create'], { relativeTo: this.route });
+          this.router.navigate(['/pages/customer-management'], { relativeTo: this.route });
         }
     }
 }
