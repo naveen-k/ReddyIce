@@ -70,8 +70,8 @@ export class SetPriceComponent implements OnInit {
             this.notification.success(res);
             this.getExternalProducts();
             for (let i = 0; i < this.counter; i = i + 1) {
-                this.newProductList.pop({ isActive: true } as MProducts);
-            }
+                 this.newProductList.pop({ isActive: true } as MProducts);
+             }
             this.editClicked = false;
         }, (err) => {
             this.isFormTouched = true;
@@ -81,7 +81,6 @@ export class SetPriceComponent implements OnInit {
     addProduct() {
         this.newProductList.push({ isActive: true } as MProducts);
         this.counter = this.counter + 1;
-        console.log(this.counter);
     }
 
     isProductExist(name) {

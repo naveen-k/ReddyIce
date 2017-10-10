@@ -52,7 +52,7 @@ export class CustomerManagementService extends SharedService {
   }
 
   isProductExist(productname) {
-    return this.http.get(`api/customer/IsProductExistByName?productname=${productname}`).map((res => res.json()));
+    return this.http.get(`api/customer/IsProductExistByName?ms-productname=${productname}`).map((res => res.json()));
   }
   getAllStates() {
     return this.http.get(`api/customer/getstates`)
