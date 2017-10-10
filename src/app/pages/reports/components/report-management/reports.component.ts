@@ -47,7 +47,7 @@ export class ReportsComponent implements OnInit {
         protected userService: UserService,
         protected reportService: ReportService,
         protected modalService: NgbModal,
-        protected notification: NotificationsService
+        protected notification: NotificationsService,
     ) { }
     ngOnInit() {
         const now = new Date();
@@ -63,7 +63,7 @@ export class ReportsComponent implements OnInit {
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
             this.getDistributors();
             this.distributorChangeHandler();
-            if(this.user.Role.RoleID == 3) {
+            if (this.user.Role.RoleID == 3) {
                 this.filter.driver = this.user.Role.RoleID;
             }
         } else {
@@ -75,7 +75,7 @@ export class ReportsComponent implements OnInit {
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
             this.branches = res;
-            // this.branches.shift();
+            this.branches.shift();
             this.sortBranches();
         }, (err) => { });
     }
@@ -117,13 +117,18 @@ export class ReportsComponent implements OnInit {
     getDistributors() {
         this.reportService.getDistributors().subscribe((res) => {
             this.distributors = res;
+            // this.distributors.splice(0, 0, { 'id': '0', 'Name': '1 - All Distributors' });
         }, (err) => { });
     }
 
     userTypeChangeHandler() {
         if (this.filter.userType === 'internal') {
+            this.filter.distributor = null;
+            this.filter.driver = null;
             this.getAllBranches();
         } else {
+            this.filter.branch = null;
+            this.filter.driver = null;
             this.getDistributors();
         }
     }
@@ -135,6 +140,7 @@ export class ReportsComponent implements OnInit {
         }
     }
     updateLink() {
+        debugger
         this.viewReport = true;
         // hack to check if start date is not greater than end date
         if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
@@ -156,14 +162,14 @@ export class ReportsComponent implements OnInit {
     branchChangeHandler() {
         this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
             this.drivers = res;
-            this.drivers.splice( 0, 0, {'UserName' : 'All Drivers'} );
+            // this.drivers.splice(0, 0, { 'UserName': 'All Drivers' });
             this.sortDrivers();
         }, (err) => { });
     }
     distributorChangeHandler() {
         this.reportService.getDriversbyDistributors(this.filter.distributor).subscribe((res) => {
             this.driversofDist = res;
-            this.driversofDist.splice( 0, 0, {'FirstName' : 'All Drivers'});
+            // this.driversofDist.splice(0, 0, { 'FirstName': 'All Drivers' });
         }, (err) => {
 
         });

@@ -22,7 +22,7 @@ export class CreateCustomerComponent implements OnInit {
 
     addedProduct: MapProducts[] = [];
     newlyAddedproduct: MapProducts[] = [];
-
+    isFromDirty: boolean = false;
     keepSorted = true;
     // action: string = 'create';
 
@@ -68,7 +68,7 @@ export class CreateCustomerComponent implements OnInit {
                     this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
                 this.addedProduct = response.ProductDetail;
-               // console.log("this.addedProduct ------ ",this.addedProduct);
+                // console.log("this.addedProduct ------ ",this.addedProduct);
                 this.addProductCheck = new Array(this.addedProduct.length);
                 this.addProductCheck.fill(false);
             });
@@ -155,9 +155,9 @@ export class CreateCustomerComponent implements OnInit {
         const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
         //console.log("product ----- ", product,"product1 ----- ",product1);
         if ((product.length + product1.length) === 2) {
-            
-           // if (this.mode === 2){ product1.length =0; product1.pop(); } else { product.length=0; product.pop(); }
-           
+
+            // if (this.mode === 2){ product1.length =0; product1.pop(); } else { product.length=0; product.pop(); }
+
             mprod.cProductId = '';
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',
@@ -170,16 +170,16 @@ export class CreateCustomerComponent implements OnInit {
             });
             return;
         } else {
-           /* mprod.ProductPrice = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductPrice;
-            mprod.ProductCode = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductCode;
-            mprod.IsInternal = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsInternal;
-            mprod.DisplayName = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].DisplayName;
-            mprod.ProductName = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductName;
-            mprod.ExternalProductId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalProductId;
-            mprod.ExternalCustomerId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalCustomerId;
-            mprod.IsActive = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsActive;*/
-            console.log("prod.IsInternal === mProdTemp[1] ",mProdTemp[1]);
-            let tempProd = this.products.filter(prod => +prod.ProductId === +mProdTemp[0] && (prod.IsInternal+'' === ''+mProdTemp[1]))[0];
+            /* mprod.ProductPrice = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductPrice;
+             mprod.ProductCode = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductCode;
+             mprod.IsInternal = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsInternal;
+             mprod.DisplayName = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].DisplayName;
+             mprod.ProductName = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ProductName;
+             mprod.ExternalProductId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalProductId;
+             mprod.ExternalCustomerId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalCustomerId;
+             mprod.IsActive = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsActive;*/
+            console.log("prod.IsInternal === mProdTemp[1] ", mProdTemp[1]);
+            let tempProd = this.products.filter(prod => +prod.ProductId === +mProdTemp[0] && (prod.IsInternal + '' === '' + mProdTemp[1]))[0];
             mprod.ProductId = tempProd.ProductId;
             mprod.ProductPrice = tempProd.ProductPrice;
             mprod.ProductCode = tempProd.ProductCode;
@@ -192,6 +192,7 @@ export class CreateCustomerComponent implements OnInit {
         }
         //console.log("this.addedProduct   -------",this.addedProduct);
     }
+
     validateCustomer(customer, newlyAddedproduct, addedProduct, mode): boolean {
         if (!customer.CustomerNumber) {
             this.notification.error('Customer Number is mandatory!!!');
@@ -235,7 +236,7 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!customer.EmailID) {
             this.notification.error('Customer EmailID is mandatory!!!');
             return false;
-        }else if (mode === 1 && (addedProduct.length === undefined || addedProduct.length === 0)) {
+        } else if (mode === 1 && (addedProduct.length === undefined || addedProduct.length === 0)) {
             this.notification.error('Atleast one product is mandatory!!!');
             return false;
         } else if (mode === 1 && addedProduct.length > 0) {
@@ -303,5 +304,26 @@ export class CreateCustomerComponent implements OnInit {
             }
         });
     }
-
+    formFlagHandler() {
+        this.isFromDirty = true;
+    }
+    backClickHandler() {
+        if (this.isFromDirty) {
+            const activeModal = this.modalService.open(ModalComponent, {
+                size: 'sm',
+                backdrop: 'static',
+            });
+            activeModal.componentInstance.BUTTONS.OK = 'Discard';
+            activeModal.componentInstance.showCancel = true;
+            activeModal.componentInstance.modalHeader = 'Warning!';
+            activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+            activeModal.componentInstance.closeModalHandler = (() => {
+                this.isFromDirty = false;
+                this.router.navigate(['/pages/customer-management'], { relativeTo: this.route });
+            });
+        } else {
+          this.router.navigate(['/pages/customer-management/create'], { relativeTo: this.route });
+        }
+    }
 }
+

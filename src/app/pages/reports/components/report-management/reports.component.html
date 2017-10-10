@@ -74,6 +74,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler()">
+                                            <option [value]="0">All Branches</option>
                                             <option *ngFor="let branch of branches" [value]="branch.BranchID">
                                                 <span *ngIf="branch.BranchID != '1'">
                                                     {{branch.BranchCode}} {{branch.BranchName}}
@@ -87,10 +88,11 @@
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'external'">
                                     <div class="col-sm-2">
-                                        <label class="top-margin pull-right"><b>Distributor</b></label>
+                                        <label class="top-margin pull-right"><b>Dist/Copacker</b></label>
                                     </div>
                                     <div class="col-sm-4">
                                         <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler()">
+                                                <option [value]='0'>All Distributors</option>
                                             <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
                                         </select>
                                     </div>
@@ -101,6 +103,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control pull-right" [(ngModel)]="filter.driver">
+                                                <option [value]='0'>All Drivers</option>
                                             <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
                                         </select>
                                     </div>
@@ -111,6 +114,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control pull-right" [(ngModel)]="filter.driver">
+                                            <option [value]='0'>All Drivers</option>
                                             <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
                                         </select>
                                     </div>

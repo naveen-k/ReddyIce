@@ -11,6 +11,7 @@ import { CustomerManagementComponent } from './components/customer-management/cu
 import { NgModule } from '@angular/core';
 import { CustomerContainerComponent } from './components/customer-management-container/customer-management-container.component';
 import { SetPriceComponent } from './components/set-generic-price/setprice.component';
+import { CreateProductPriceComponent } from './components/create-product-price/create-product-price.component'
 
 const routes: Routes = [
     {
@@ -53,7 +54,7 @@ const routes: Routes = [
 
 
 @NgModule({
-    declarations: [CustomerManagementComponent, CreateCustomerComponent, CustomerContainerComponent, SetPriceComponent, CustomerTypeToNamePipe],
+    declarations: [CustomerManagementComponent, CreateCustomerComponent, CustomerContainerComponent, SetPriceComponent, CustomerTypeToNamePipe,CreateProductPriceComponent],
     imports: [SharedModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule, NgbModule],
     providers: [CustomerManagementService],
 })
