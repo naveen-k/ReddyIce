@@ -38,8 +38,10 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     }
     set action(values) {
         if (values === '') { return; }
+        this.isSuccess = false;
         this.actionName = values;
         if (values == 'create') {
+            this.isSuccess = false;
             this.isFormValid = true;
             
         }
@@ -81,6 +83,7 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         if (!this.validateProduct(this.product)) { this.isSuccess = false; return };
         
         this.isNewProduct ? this.onSaveProduct.emit(this.product) : this.onUpdateProduct.emit(this.product);
+        if(!this.isNewProduct) {this.isSuccess = false;}
     }
     spaceRemoverFn(value) {
         this.product.ProductName = value.replace(/^\s+|\s+$/g, '');
@@ -107,6 +110,7 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     changeHandler() {
       this.isFormValid = true;
       this.formIsDirty = false;
+      this.isSuccess = false;
       setTimeout(this.formChanged.emit('changed'), 1000);
     }
 

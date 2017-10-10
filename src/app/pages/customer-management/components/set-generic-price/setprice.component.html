@@ -7,7 +7,7 @@
             <!--div class="col-md-2 head-button-container">
                
             </div-->
-            <div class="col-md-1 head-button-container-for-save">
+            <div class="col-md-1" [ngClass]="{'head-button-container-for-save':!rightCardOpen, 'head-button-container-for-add':rightCardOpen}">
                 <button class="btn btn-danger pull-right" [routerLink]="['../list']">Back</button>
                 <!--button (click)='setGenericPrice()' [disabled]="!isFormTouched" class="btn btn-danger pull-right">Save</button-->
             </div>
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-11">
             </div>
-            <div class="col-md-1 head-button-container-for-add">
+            <div class="col-md-1 head-button-container-for-add" *ngIf="!rightCardOpen">
                 <button class="btn btn-danger pull-right" (click)="showNewProduct($event)" [disabled]="rightCardOpen">Add New Product</button>
             </div>
         </div>
