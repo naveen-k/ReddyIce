@@ -118,3 +118,19 @@ border: 1px solid #ef8989;
     text-align: right;
     padding-right: 12px !important;
 }
+
+/*
+* Override multiple-select css
+*/
+.ms-parent {
+    width: 100% !important;
+}
+.ms-choice {
+    height: 32px;
+    span {
+        top: 3px;
+    }
+    div {
+        top: 3px;
+    }
+}

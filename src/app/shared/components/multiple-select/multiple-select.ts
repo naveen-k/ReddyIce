@@ -3,12 +3,15 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, View
 declare var $: any;
 @Component({
     selector: 'reddy-select',
-    template: `<select #select></select>`,
+    template: `<select #select [disabled]="disabled"></select>`,
 })
 export class SelectComponent implements AfterViewInit {
     @ViewChild('select') select: ElementRef;
 
     elementRef: any;
+
+    @Input()
+    disabled: boolean = false;
 
     @Input()
     multiple: boolean = false;
@@ -51,9 +54,6 @@ export class SelectComponent implements AfterViewInit {
             single: !this.multiple,
             onClose: this.onClose.bind(this),
         });
-        setTimeout(() => {
-            this.elementRef.next().css('width', '100%');
-        })
     }
 
     onClose() {
@@ -71,6 +71,7 @@ export class SelectComponent implements AfterViewInit {
     }
 
     initSelect() {
+        if (!this.elementRef) { setTimeout(this.initSelect.bind(this)); return; }
         this.options.forEach((option) => {
             this.elementRef.append($("<option />", {
                 value: option.value,

@@ -19,11 +19,7 @@
         </div>
         <div class="col-sm-3" *ngIf="!user.IsDistributor" [hidden]="searchObj.userType=='External'">
             <label>Select Branch</label>
-            <select class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.BranchId" (ngModelChange)="branchChangeHandler()">
-                <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
-                    {{obj.BranchCode}}-{{obj.BranchName}}
-                </option>
-            </select>
+            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler()"></reddy-select>            
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>

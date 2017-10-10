@@ -18,7 +18,7 @@
                     [hidden]="isReadOnly">
                     Upload POD
                 </button>
-                <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png,image/jpeg" />
+                <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png,image/jpeg,application/pdf" />
                 <button class="btn btn-danger buttonMargin" (click)="saveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
                     Save
                 </button>

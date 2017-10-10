@@ -16,7 +16,7 @@ export class TicketListComponent implements OnInit {
     showSpinner: boolean = false;
 
     // allbranches related to loggen in usr
-    allBranches: Branch[];
+    allBranches: Array<any>;
 
     // logged in user
     user: User = {} as User;
@@ -63,14 +63,15 @@ export class TicketListComponent implements OnInit {
         // Get loggedIn user details
         this.user = this.userService.getUser();
 
-        // load all branches
-        this.allBranches = this.activatedRoute.snapshot.data['branches'];
 
+        // load all branches
+        let branches = this.activatedRoute.snapshot.data['branches'];
         // Remove 'All branch' object
-        if (this.allBranches.length && this.allBranches[0].BranchID === 1) {
-            this.allBranches.shift();
-            this.sortBranches();
+        if (branches.length && branches[0].value === 1) {
+            branches.shift();
+            this.sortBranches(branches);
         }
+        this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
         if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
             this.searchObj.BranchId = this.user.Branch.BranchID;
@@ -91,9 +92,9 @@ export class TicketListComponent implements OnInit {
         }
     }
 
-    sortBranches() {
+    sortBranches(branches) {
         // sort by name
-        this.allBranches.sort(function (a, b) {
+        branches.sort(function (a, b) {
             const nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
             const nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
             if (nameA < nameB) {

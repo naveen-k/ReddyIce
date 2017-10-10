@@ -89,7 +89,7 @@ export class CreateTicketComponent implements OnInit {
 
   file: any = {};
 
-  acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png'];
+  acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
 
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
@@ -591,6 +591,7 @@ export class CreateTicketComponent implements OnInit {
         accepted = this.acceptedPodFormat.filter(format => f[0].indexOf(format) > 0).length;
       if (accepted) {
         this.file['Image'] = f[1];
+        this.file['ImageMetaData'] = f[0];
         this.isFormDirty = true;
       } else {
         const activeModal = this.modalService.open(ModalComponent, {
@@ -599,7 +600,7 @@ export class CreateTicketComponent implements OnInit {
         });
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.modalHeader = 'Warning!';
-        activeModal.componentInstance.modalContent = `Format not supported !!!`;        
+        activeModal.componentInstance.modalContent = `Format not supported !!!`;
       }
     });
 
@@ -624,13 +625,10 @@ export class CreateTicketComponent implements OnInit {
     });
   }
   downloadPODImage(imageID, obj) {
-    console.log("obj ", obj);
     this.service.getImageByID(imageID).subscribe((res) => {
       if (res.ImageData) {
-        this.saveAs(res.ImageData, res.ImageId + ".png")
-
-      } else {
-        //show error;
+        let ext = res.ImageMetaData ? res.ImageMetaData.substring(res.ImageMetaData.indexOf('/') + 1, res.ImageMetaData.indexOf(';')) : 'png';
+        this.saveAs(res.ImageData, `${res.ImageId}.${ext}`)
       }
     });
   }
@@ -906,7 +904,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketProduct.forEach((t) => {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       this.ticket.TotalSale += +t['totalAmount'] || 0;
-    });    
+    });
     // this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
     this.ticket.TaxAmount = (this.ticket.TotalSale * this.customer.Tax) / 100;
     this.ticket.TotalSale = this.ticket.TotalSale //+ (this.ticket.TotalSale * this.customer.Tax) / 100;
