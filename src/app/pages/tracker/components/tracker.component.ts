@@ -31,6 +31,7 @@ export class TrackerComponent implements OnInit {
     DriverName: 'abc',
     DistributorID: 0,
     DistributorName: '',
+    DistributorCopackerID: 0
   };
 
   planned: boolean = true;
@@ -98,22 +99,15 @@ export class TrackerComponent implements OnInit {
 
   loadBranches() {
     this.service.getBranches(this.userId).subscribe((res) => {
-      this.allBranches = res;
-
-      // Remove 'All branch' object
-      if (this.allBranches.length && this.allBranches[0].BranchID === 1) {
-        // this.allBranches.shift();
-        this.sortBranches();
-      }
+      this.sortBranches(res);
+      this.allBranches = this.service.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
     }, (error) => {
     });
   }
 
-  sortBranches() {
+  sortBranches(branches) {
     // sort by name
-    this.allBranches.sort(function (a, b) {
-      // var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
-      // var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+    branches.sort(function (a, b) {
       const nameA = a.BranchCode;
       const nameB = b.BranchCode;
       if (nameA < nameB) {
@@ -519,7 +513,7 @@ export class TrackerComponent implements OnInit {
   }
   distributors: any = [];
   typeChangeHandler() {
-    if(this.searchObj.userType == 'External') {
+    if (this.searchObj.userType == 'External') {
       this.service.getDistributors().subscribe((res) => {
         if (typeof res == 'object') {
           this.distributors = res;
@@ -528,6 +522,7 @@ export class TrackerComponent implements OnInit {
         } else {
           this.showSpinner = false;
         }
+        //this.distributorChangeHandler();
       }, (error) => {
         console.log(error);
         this.showSpinner = false;
@@ -540,9 +535,21 @@ export class TrackerComponent implements OnInit {
     }
   }
 
+  DistributorCopackerID = 0;
+  DistributorTrips = [];
   distributorChangeHandler() {
     console.log(this.tripFilterOption.DistributorName);
-    //for (var i)
+    for (var i = 0; i < this.distributors.length; i++) {
+      if (this.tripFilterOption.DistributorName == this.distributors[i].Name) {
+        this.DistributorCopackerID = this.distributors[i].DistributorCopackerID;
+
+      }
+    }
+    for (var i = 0; i < this.trips.length; i++) {
+      if (this.distributors[i].DistributorCopackerID == this.trips[i].DistributorMasterID) {
+        console.log(this.trips[i].DriverName);
+        this.DistributorTrips.push(this.trips[i].DriverName);
+      }
+    }
   }
 }
- 

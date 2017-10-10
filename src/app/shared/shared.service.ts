@@ -1,3 +1,4 @@
+import { IOption } from './components/multiple-select/multiple-select';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { HttpService } from './http.service';
@@ -55,5 +56,17 @@ export class SharedService {
         if (dd < 10) { dd = '0' + dd }
         return yy + '-' + mm + '-' + dd;
 
+    }
+
+    transformOptionsReddySelect(options: Array<any>, value: string, label_1: string, label_2?: string) {
+        let tmpArr: Array<IOption> = [];
+        options.forEach((option) => {            
+            tmpArr.push({
+                value: option[value],
+                label: label_2 ? `${option[label_1]} - ${option[label_2]}` : option[label_1],
+                data: option
+            })
+        })
+        return tmpArr;
     }
 }

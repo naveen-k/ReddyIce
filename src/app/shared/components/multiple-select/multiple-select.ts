@@ -17,7 +17,7 @@ export class SelectComponent implements AfterViewInit {
     @Input()
     set selected(value: any) {
         if (!value) { return; }
-        if (!this.multiple && !(value instanceof Array)) { value = [value] };        
+        if (!this.multiple && !(value instanceof Array)) { value = [value] };
         this._selected = value;
     }
 
@@ -32,6 +32,7 @@ export class SelectComponent implements AfterViewInit {
 
     @Input()
     set options(value: Array<IOption>) {
+        if (!value) { return; }
         this._options = value;
         if (value.length) {
             setTimeout(this.initSelect())
@@ -81,7 +82,7 @@ export class SelectComponent implements AfterViewInit {
     }
 }
 
-interface IOption {
+export interface IOption {
     value: any;
     label: string;
     data?: any;
