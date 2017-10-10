@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-sm-3" *ngIf="searchObj.userType=='External'">
                     <label>Dist./CoPacker</label>
-                    <reddy-select [options]="allBranches" [(selected)]="tripFilterOption.branchId" (selectedChange)="branchChangeHandler()"></reddy-select>
+                    <reddy-select [options]="distributors" [(selected)]="tripFilterOption.DistributorName" (selectedChange)="distributorChangeHandler()"></reddy-select>
                     <!-- <select class="form-control" [(ngModel)]='tripFilterOption.DistributorName' (change)="distributorChangeHandler()">
                         <option *ngFor="let distributor of distributors">
                             {{distributor.Name}}

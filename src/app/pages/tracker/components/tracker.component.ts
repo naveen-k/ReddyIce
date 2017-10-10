@@ -516,7 +516,8 @@ export class TrackerComponent implements OnInit {
     if (this.searchObj.userType == 'External') {
       this.service.getDistributors().subscribe((res) => {
         if (typeof res == 'object') {
-          this.distributors = res;
+          // this.distributors = res;
+          this.distributors = this.service.transformOptionsReddySelect(res, 'BranchID', 'Name');
           console.log(res[0].Name);
           this.showSpinner = false;
         } else {
