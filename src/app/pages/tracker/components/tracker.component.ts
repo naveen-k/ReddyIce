@@ -519,7 +519,6 @@ export class TrackerComponent implements OnInit {
   }
   distributors: any = [];
   typeChangeHandler() {
-    this.driverSpecTrips = [];
     if(this.searchObj.userType == 'External') {
       this.service.getDistributors().subscribe((res) => {
         if (typeof res == 'object') {
@@ -533,11 +532,17 @@ export class TrackerComponent implements OnInit {
         console.log(error);
         this.showSpinner = false;
       });
+    } else {
+      this.selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
+      this.tripFilterOption.branchId = 1;
+      this.loadBranches();
+      this.loadTrips();
     }
   }
 
   distributorChangeHandler() {
     console.log(this.tripFilterOption.DistributorName);
+    //for (var i)
   }
 }
  
