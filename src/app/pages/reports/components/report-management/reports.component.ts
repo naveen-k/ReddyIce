@@ -75,7 +75,6 @@ export class ReportsComponent implements OnInit {
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
             this.branches = res;
-            this.branches.shift();
             this.sortBranches();
         }, (err) => { });
     }
