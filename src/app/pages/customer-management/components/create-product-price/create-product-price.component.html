@@ -1,0 +1,35 @@
+<form #productpriceForm="ngForm" class="user-form">
+  <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!productpriceForm.form.valid || isSuccess ||!isFormValid"
+    (click)="onSubmit()">Save</button>
+
+  <div class="row rowContainer margin-eater">
+  <div class="row page-header rowContainer first-form-row">
+    <div class="col-md-6  page-header">
+      <label for="fname" class="control-label">Product Name</label>
+      <input  type="text" [disabled]="actionName=='edit'" class="form-control" id="pname" placeholder="Product Name"
+        minlength="2" [(ngModel)]="product.ProductName" name="ProductName" #ProductName="ngModel" required (change)="changeHandler()"
+        (blur)="spaceRemoverFn(product.ProductName)" maxlength="50">
+      <div *ngIf="actionName=='create' && ProductName.invalid && (ProductName.dirty || ProductName.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="ProductName.errors.required" class="custom-tooltip bottom">Product Name is required</div>
+        <div *ngIf="ProductName.errors.minlength" class="custom-tooltip bottom">Minimum 2 characters</div>
+      </div>
+    </div>
+
+    <div class="col-md-6  page-header">
+      <label for="lname" class="control-label">Product Price</label>
+      <input type="text" numberOnly class="form-control" id="pprice" placeholder="Price" [(ngModel)]="product.ProductPrice"
+        name="ProductPrice"  #ProductPrice="ngModel" required minlength="1" maxlength="10" (change)="changeHandler();">
+      <div *ngIf="ProductPrice.invalid && (ProductPrice.dirty || ProductPrice.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="ProductPrice.errors.required" class="custom-tooltip bottom">
+          Product Price is required.
+        </div>
+        <div *ngIf="ProductPrice.errors.minlength" class="custom-tooltip bottom">
+          Minimum 1 characters.
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</form>

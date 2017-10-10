@@ -1,11 +1,12 @@
 import { NotificationsService } from 'angular2-notifications';
-import { MProducts } from '../../../../shared/interfaces/interfaces';
+import { MProducts,MapProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../shared/user.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 
 @Component({
     templateUrl: './setprice.component.html',
@@ -13,15 +14,23 @@ import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 })
 
 export class SetPriceComponent implements OnInit {
+    rightCardOpen: boolean = false;
     externalProducts: any = [];
     newProductList: any = [];
     isProductAlreadyExist: boolean = false;
     editClicked: any = [];
     isFormTouched: boolean = false;
+    formIsDirty: boolean = false;
     isDistributorExist: boolean;
     userSubTitle: string = '';
     showSpinner: boolean = false;
     counter: number = 0;
+    isNewProduct: boolean = false;
+    hideColumn: boolean = false;
+    newProduct: any = {};
+    action: string = '';
+    cardTitle: string;
+    
 
     constructor(
         protected service: CustomerManagementService,
@@ -29,6 +38,7 @@ export class SetPriceComponent implements OnInit {
         protected route: Router,
         protected notification: NotificationsService,
         protected userService: UserService,
+        private modalService: NgbModal
     ) { }
 
     ngOnInit() {
@@ -101,6 +111,99 @@ export class SetPriceComponent implements OnInit {
     formTouchHandler() {
         this.isFormTouched = true;
     }
+
+
+    closeRightCard() {
+        if (this.formIsDirty) {
+          const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
+          });
+          activeModal.componentInstance.BUTTONS.OK = 'Discard';
+          activeModal.componentInstance.showCancel = true;
+          activeModal.componentInstance.modalHeader = 'Warning!';
+          activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+          activeModal.componentInstance.closeModalHandler = (() => {
+            this.rightCardOpen = !this.rightCardOpen;
+            this.isNewProduct = false;
+            this.hideColumn = !this.hideColumn;
+            this.formIsDirty = false;
+    
+          });
+    
+        } else {
+          this.rightCardOpen = !this.rightCardOpen;
+          this.isNewProduct = false;
+          this.hideColumn = !this.hideColumn;
+        }
+      }
+      formChangedHandler() {
+        this.formIsDirty = true;
+      }
+      showNewProduct(newProduct) {
+        this.formIsDirty = false;
+        this.action = 'create';
+        this.rightCardOpen = !this.rightCardOpen;
+        this.isNewProduct = true;
+        this.hideColumn = !this.hideColumn;
+        this.cardTitle = 'Create New Product';
+        this.newProduct = <MapProducts>{
+            ProductName:'',
+            ProductPrice:0
+        };
+      }
+
+      onSaveProduct(product) {
+        if(product){
+            product.IsActive = true;
+            let tempProd:MapProducts[] = [];
+            tempProd.push(product);
+            const priceProduct = {'AddNewExternalProduct': tempProd };
+            this.service.setGenericPrice(priceProduct).subscribe((res) => {
+                this.rightCardOpen = !this.rightCardOpen;
+                this.hideColumn = !this.hideColumn;
+                this.isNewProduct = false;
+                this.formIsDirty = false;
+                this.service.getAllCustomers();
+                this.notification.success(res);
+                this.getExternalProducts();
+            }, (err) => {
+                this.notification.error(err);
+            });
+        }
+      }
+      onUpdateProduct(product) {
+        if(product){
+            console.log("product ",product);
+            product.IsActive = true;
+            let tempProd:MapProducts[] = [];
+            tempProd.push(product);
+            const priceProduct = {'SetGenricPrice': tempProd };
+            this.service.setGenericPrice(priceProduct).subscribe((res) => {
+                this.rightCardOpen = !this.rightCardOpen;
+                this.hideColumn = !this.hideColumn;
+                this.isNewProduct = false;
+                this.formIsDirty = false;
+                this.service.getAllCustomers();
+                this.notification.success(res);
+                this.getExternalProducts();
+            }, (err) => {
+                this.notification.error(err);
+            });
+        }
+      }
+      onEditClicked(product) {
+        this.action = 'edit';
+        this.newProduct = Object.assign({}, product);
+        this.cardTitle = 'Edit Product Price';
+        this.isNewProduct = false;
+        if (!this.rightCardOpen) {
+          this.rightCardOpen = !this.rightCardOpen;
+          this.hideColumn = !this.hideColumn;
+    
+        }
+    
+      }
 
 
 }
