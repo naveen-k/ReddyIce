@@ -50,7 +50,7 @@ export class DayEndComponent implements OnInit {
         // this.selectedDate = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() };
         this.loadBranches();
         this.logedInUser = this.userService.getUser();
-         this.userBranch = this.logedInUser.Branch ? this.logedInUser.Branch.BranchID : null;
+        this.userBranch = this.logedInUser.Branch ? this.logedInUser.Branch.BranchID : null;
         if (this.logedInUser.Role.RoleID == 1 || this.logedInUser.Role.RoleID == 2) {
             this.tripFilterOption.isForAll = true;
         }
@@ -69,17 +69,17 @@ export class DayEndComponent implements OnInit {
 
     loadFilteredTrips() {
         this.service.getTrips(this.tripFilterOption.tripDate, this.tripFilterOption.branchId || 1).subscribe((res) => {
-                if (typeof res == 'object') {
-                    this.trips = res.Trips;
-                }
-                else {
-                    this.trips = [];
-                }
-
-            }, (error) => {
-                console.log(error);
+            if (typeof res == 'object') {
+                this.trips = res.Trips;
+            }
+            else {
                 this.trips = [];
-            });
+            }
+
+        }, (error) => {
+            console.log(error);
+            this.trips = [];
+        });
     }
     getTripByDate(date) {
         date = this.service.formatDate(date);
@@ -92,8 +92,15 @@ export class DayEndComponent implements OnInit {
     loadBranches() {
         const userId = localStorage.getItem('userId');
         this.service.getBranches(userId).subscribe((res) => {
-            this.branches = res;
-            // console.log(res);
+            let tempArr = []
+            res.forEach(branch => {
+                tempArr.push({
+                    value: branch.BranchID,
+                    label: `${branch.BranchCode} - ${branch.BranchName}`,
+                    date: branch
+                })
+            });
+            this.branches = tempArr;            
         }, (error) => {
         });
 

@@ -14,19 +14,7 @@
                 </div>
                 <div class="col-md-6"  *ngIf="logedInUser.IsRIInternal">
                     <label><b>Select Branch</b></label>
-                    <select class="form-control" [(ngModel)]='filter.userBranch' (change)="selectionchangeHandler()">
-                         <option *ngFor="let branch of branches" [value] = 'branch.BranchID' >
-                            <span *ngIf="branch.BranchID != '1'">
-                                {{branch.BranchCode}} - {{branch.BranchName}}
-                            </span>
-                            <span *ngIf="branch.BranchID == '1'">
-                                {{branch.BranchName}}
-                            </span>
-                        </option> 
-                    </select>
-                    <!-- <ng-select [allowClear]="true" [items]="branches"
-                         placeholder="No city selected">
-                    </ng-select> -->
+                    <reddy-select [options]="branches" [(selected)]="filter.userBranch" (selectedChange)="selectionchangeHandler()"></reddy-select>
                 </div>
             </div>
             <div>

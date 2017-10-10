@@ -1,3 +1,4 @@
+import { SelectComponent } from './components/multiple-select/multiple-select';
 import { CutStringPipe } from './pipes/cut-string.pipe';
 import { ListComponent } from './components/dual-list/list.component';
 import { DualListComponent } from './components/dual-list/dual-list.component';
@@ -32,6 +33,7 @@ import { NgModule } from '@angular/core';
         DualListComponent,
         ListComponent,
         CutStringPipe,
+        SelectComponent
     ],
     exports: [
         GenericFilter,
@@ -47,6 +49,7 @@ import { NgModule } from '@angular/core';
         ListComponent,
         CutStringPipe,
         NumberOnlyDirective,
+        SelectComponent
     ],
     entryComponents: [
         ModalComponent,

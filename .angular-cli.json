@@ -26,8 +26,8 @@
         "../node_modules/bootstrap/scss/bootstrap.scss",        
         "../node_modules/chartist/dist/chartist.css",
         "../node_modules/fullcalendar/dist/fullcalendar.css",        
-        "../node_modules/ng2-slim-loading-bar/style.css",
-        "../node_modules/select2/dist/css/select2.min.css",
+        "../node_modules/multiple-select/multiple-select.css",
+        "../node_modules/ng2-slim-loading-bar/style.css",        
         "app/theme/theme.scss",
         "styles.scss"
       ],
@@ -36,8 +36,8 @@
         "../node_modules/easy-pie-chart/dist/jquery.easypiechart.js",
         "../node_modules/jquery-slimscroll/jquery.slimscroll.js",
         "../node_modules/tether/dist/js/tether.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.js",
-        "../node_modules/select2/dist/js/select2.min.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",        
+        "../node_modules/multiple-select/multiple-select.js",
         "./assets/js/user.js"
       ],
       "environmentSource": "environments/environment.ts",
