@@ -23,7 +23,21 @@
                     <label>Select Branch</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="branchChangeHandler()">
                         <option *ngFor="let obj of allBranches" [value]="obj.BranchID">
-                            {{obj.BranchCode}} - {{obj.BranchName}}
+                            <!-- {{obj.BranchCode}} - {{obj.BranchName}} -->
+                            <span *ngIf="obj.BranchID != '1'">
+                                {{obj.BranchCode}} - {{obj.BranchName}}
+                            </span>
+                            <span *ngIf="obj.BranchID == '1'">
+                                {{obj.BranchName}}
+                            </span>
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-3" *ngIf="searchObj.userType=='External'">
+                    <label>Dist./CoPacker</label>
+                    <select class="form-control" [(ngModel)]='tripFilterOption.DistributorName' (change)="distributorChangeHandler()">
+                        <option *ngFor="let distributor of distributors">
+                            {{distributor.Name}}
                         </option>
                     </select>
                 </div>

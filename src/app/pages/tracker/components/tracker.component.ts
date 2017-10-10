@@ -29,7 +29,8 @@ export class TrackerComponent implements OnInit {
     isForAll: false,
     TripCode: 1,
     DriverName: 'abc',
-    DistributorID: 0
+    DistributorID: 0,
+    DistributorName: '',
   };
 
   planned: boolean = true;
@@ -86,12 +87,12 @@ export class TrackerComponent implements OnInit {
       this.planned = false;
       this.tripFilterOption.branchId = 0;
       this.tripFilterOption.isForAll = false;
+      this.typeChangeHandler(); // to load distributors
     } else {
+      this.loadBranches();
       this.tripFilterOption.branchId = 1;
       this.tripFilterOption.isForAll = true;
     }
-
-    this.loadBranches();
     this.loadTrips();
   }
 
@@ -101,7 +102,7 @@ export class TrackerComponent implements OnInit {
 
       // Remove 'All branch' object
       if (this.allBranches.length && this.allBranches[0].BranchID === 1) {
-        this.allBranches.shift();
+        // this.allBranches.shift();
         this.sortBranches();
       }
     }, (error) => {
@@ -111,8 +112,10 @@ export class TrackerComponent implements OnInit {
   sortBranches() {
     // sort by name
     this.allBranches.sort(function (a, b) {
-      var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
-      var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+      // var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
+      // var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
+      const nameA = a.BranchCode;
+      const nameB = b.BranchCode;
       if (nameA < nameB) {
         return -1;
       }
@@ -514,12 +517,27 @@ export class TrackerComponent implements OnInit {
       this.notification.error("Ticket preview unavailable!!");
     }
   }
-
+  distributors: any = [];
   typeChangeHandler() {
-    
+    this.driverSpecTrips = [];
+    if(this.searchObj.userType == 'External') {
+      this.service.getDistributors().subscribe((res) => {
+        if (typeof res == 'object') {
+          this.distributors = res;
+          console.log(res[0].Name);
+          this.showSpinner = false;
+        } else {
+          this.showSpinner = false;
+        }
+      }, (error) => {
+        console.log(error);
+        this.showSpinner = false;
+      });
+    }
   }
 
-  userChangeHandler() {
-
+  distributorChangeHandler() {
+    console.log(this.tripFilterOption.DistributorName);
   }
 }
+ 

@@ -156,12 +156,14 @@ export class ReportsComponent implements OnInit {
     branchChangeHandler() {
         this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
             this.drivers = res;
+            this.drivers.splice( 0, 0, {'UserName' : 'All Drivers'} );
             this.sortDrivers();
         }, (err) => { });
     }
     distributorChangeHandler() {
         this.reportService.getDriversbyDistributors(this.filter.distributor).subscribe((res) => {
             this.driversofDist = res;
+            this.driversofDist.splice( 0, 0, {'FirstName' : 'All Drivers'});
         }, (err) => {
 
         });
