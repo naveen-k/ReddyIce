@@ -123,6 +123,9 @@ export class TrackerComponent implements OnInit {
 
   // Load all trips based on Date and Branch
   loadTrips() {
+    if (this.selectedTrip) {
+      this.selectedTrip = [];
+    }
     this.showSpinner = true;
     this.service.getTrips(this.userId, this.selectedDate,
       this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
