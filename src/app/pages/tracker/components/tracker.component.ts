@@ -98,7 +98,7 @@ export class TrackerComponent implements OnInit {
   }
 
   loadBranches() {
-    this.service.getBranches(this.userId).subscribe((res) => {
+    this.service.getBranchesByDate(this.userId, this.selectedDate).subscribe((res) => {
       this.sortBranches(res);
       this.allBranches = this.service.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
     }, (error) => {
@@ -127,16 +127,23 @@ export class TrackerComponent implements OnInit {
       this.selectedTrip = [];
     }
     this.showSpinner = true;
+    if (!this.tripFilterOption.branchId) {
+      if (this.isDistributor) {
+        this.tripFilterOption.branchId = 0;
+      } else {
+        this.tripFilterOption.branchId = 1;
+      }
+    }
     this.service.getTrips(this.userId, this.selectedDate,
       this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
         if (typeof res == 'object') {
           this.trips = res.Trips;
           console.log('this.trips', this.trips.length);
           this.showSpinner = false;
-          if (this.trips[0]) {
-            this.tripFilterOption.DriverName = this.trips[0].DriverName;
+          if (this.trips[0]) {                                              // check if trips are available                         
+            this.tripFilterOption.DriverName = this.trips[0].DriverName;    // assigning in model
             this.driverChangeHandler();
-            this.tripFilterOption.TripCode = this.trips[0].TripCode;
+            this.tripFilterOption.TripCode = this.trips[0].TripCode;        // assigning in model
             this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
           } else {
             this.driverSpecTrips = [];
@@ -164,18 +171,31 @@ export class TrackerComponent implements OnInit {
     for (var i = 0; i < this.trips.length; i++) {
       if (parseInt(TripCode) === this.trips[i].TripCode &&
         this.tripFilterOption.DriverName == this.trips[i].DriverName) {
-        this.selectedTrip = this.trips[i].TripTicketList;
+        this.selectedTrip = this.trips[i].TripTicketList; // creating array based on driver and tripcode selected
         this.tripStartDate = this.trips[i].TripStartDate
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
-    console.log(this.selectedTrip.sort(this.comparator));
+    // if distributors are unavailable, making selectedTrip blank
+    // var tempTripStorage = this.selectedTrip;
+    // if (!this.distributors || this.distributors.length == 0) {
+    //   this.selectedTrip = [];
+    // } else {
+    //   this.selectedTrip = tempTripStorage;
+    // }
+    // console.log(this.selectedTrip.sort(this.comparator));
+    this.selectedTrip.sort(this.comparator); // sorting planned sequence
     this.drawMapPath();
   }
 
   // Fetch selected Date
   dateChangeHandler() {
     this.selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
+    if (this.isDistributor) {
+      this.typeChangeHandler();
+    } else {
+      this.loadBranches();
+    }
     this.loadTrips();
     this.drawMapPath();
   }
@@ -202,6 +222,13 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log('this.driverSpecTrips', this.driverSpecTrips);
+    // var tempDriverStorage = this.driverSpecTrips;
+    // if (!this.distributors || this.distributors.length == 0) {
+    //   this.driverSpecTrips = [];
+    //   this.selectedTrip = [];
+    // } else {
+    //   this.driverSpecTrips = tempDriverStorage;
+    // }
     this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
   }
 
@@ -274,7 +301,7 @@ export class TrackerComponent implements OnInit {
 
   // function to draw the polyline on map
   drawPolyline(google, sequence) {
-    if (this.selectedTrip && this.selectedTrip.length > 1) {
+    if (this.selectedTrip && this.selectedTrip.length >= 1) {
       for (var i = 0; i < this.selectedTrip.length; i++) {
 
         // changing color of the marker icon based on condition
@@ -356,35 +383,41 @@ export class TrackerComponent implements OnInit {
           } else {
             strokeColour = 'brown'
           }
-          var polyline = new google.maps.Polyline({
-            path: [startPt, endPt],
-            strokeColor: strokeColour,
-            strokeWeight: 2,
-            strokeOpacity: 1
-          });
-          polyline.setMap(this.map);
-          this.bounds.extend(startPt);
-          this.bounds.extend(endPt);
+          if (startPt && endPt) {
+            var polyline = new google.maps.Polyline({
+              path: [startPt, endPt],
+              strokeColor: strokeColour,
+              strokeWeight: 2,
+              strokeOpacity: 1
+            });
+            polyline.setMap(this.map);
+            this.bounds.extend(startPt);
+            this.bounds.extend(endPt);
+          }
         } else {
-          var polyline2 = new google.maps.Polyline({
-            path: [startPtA, endPtA],
-            strokeColor: 'blue',
-            strokeWeight: 2,
-            strokeOpacity: 1
-          });
-          polyline2.setMap(this.map);
-          this.bounds.extend(startPtA);
-          this.bounds.extend(endPtA);
+          if (startPtA && endPtA) {
+            var polyline2 = new google.maps.Polyline({
+              path: [startPtA, endPtA],
+              strokeColor: 'blue',
+              strokeWeight: 2,
+              strokeOpacity: 1
+            });
+            polyline2.setMap(this.map);
+            this.bounds.extend(startPtA);
+            this.bounds.extend(endPtA);
+          }
 
-          var polyline1 = new google.maps.Polyline({
-            path: [startPtP, endPtP],
-            strokeColor: 'brown',
-            strokeWeight: 2,
-            strokeOpacity: 1
-          });
-          polyline1.setMap(this.map);
-          this.bounds.extend(startPtP);
-          this.bounds.extend(endPtP);
+          if(startPtP && endPtP) {
+            var polyline1 = new google.maps.Polyline({
+              path: [startPtP, endPtP],
+              strokeColor: 'brown',
+              strokeWeight: 2,
+              strokeOpacity: 1
+            });
+            polyline1.setMap(this.map);
+            this.bounds.extend(startPtP);
+            this.bounds.extend(endPtP);
+          }
         }
 
         // adding pushpin marker logic here
@@ -517,7 +550,7 @@ export class TrackerComponent implements OnInit {
   distributors: any = [];
   typeChangeHandler() {
     if (this.searchObj.userType == 'External') {
-      this.service.getDistributors().subscribe((res) => {
+      this.service.getDistributors(this.userId, this.selectedDate).subscribe((res) => {
         if (typeof res == 'object') {
           // this.distributors = res;
           this.distributors = this.service.transformOptionsReddySelect(res, 'BranchID', 'Name');
