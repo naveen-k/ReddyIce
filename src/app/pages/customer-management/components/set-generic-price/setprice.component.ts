@@ -149,7 +149,7 @@ export class SetPriceComponent implements OnInit {
         this.cardTitle = 'Create New Product';
         this.newProduct = <MapProducts>{
             ProductName: '',
-            ProductPrice: 0
+            ProductPrice: 0,
         };
     }
 
@@ -206,9 +206,12 @@ export class SetPriceComponent implements OnInit {
     }
 
     deleteProduct(productID) {
-        this.service.deleteProduct(productID).subscribe((res) => { 
+        this.service.deleteProduct(productID).subscribe((res) => {
+            this.notification.success('Product Deleted Successfully!!!'); 
             this.getExternalProducts();
-        }, (err) => { });
+        }, (err) => {
+            this.notification.error('Problem Deleting Product!!!'); 
+         });
     }
 
     updateProductOnTypeChange() {
