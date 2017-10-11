@@ -1,5 +1,5 @@
 import { NotificationsService } from 'angular2-notifications';
-import { MProducts,MapProducts } from '../../../../shared/interfaces/interfaces';
+import { MProducts, MapProducts } from '../../../../shared/interfaces/interfaces';
 import { CustomerManagementService } from '../../customer-management.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
@@ -30,7 +30,8 @@ export class SetPriceComponent implements OnInit {
     newProduct: any = {};
     action: string = '';
     cardTitle: string;
-    
+    productType: any = 'all';
+
 
     constructor(
         protected service: CustomerManagementService,
@@ -70,8 +71,8 @@ export class SetPriceComponent implements OnInit {
             this.notification.success(res);
             this.getExternalProducts();
             for (let i = 0; i < this.counter; i = i + 1) {
-                 this.newProductList.pop({ isActive: true } as MProducts);
-             }
+                this.newProductList.pop({ isActive: true } as MProducts);
+            }
             this.editClicked = false;
         }, (err) => {
             this.isFormTouched = true;
@@ -114,32 +115,32 @@ export class SetPriceComponent implements OnInit {
 
     closeRightCard() {
         if (this.formIsDirty) {
-          const activeModal = this.modalService.open(ModalComponent, {
-            size: 'sm',
-            backdrop: 'static',
-          });
-          activeModal.componentInstance.BUTTONS.OK = 'Discard';
-          activeModal.componentInstance.showCancel = true;
-          activeModal.componentInstance.modalHeader = 'Warning!';
-          activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
-          activeModal.componentInstance.closeModalHandler = (() => {
+            const activeModal = this.modalService.open(ModalComponent, {
+                size: 'sm',
+                backdrop: 'static',
+            });
+            activeModal.componentInstance.BUTTONS.OK = 'Discard';
+            activeModal.componentInstance.showCancel = true;
+            activeModal.componentInstance.modalHeader = 'Warning!';
+            activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+            activeModal.componentInstance.closeModalHandler = (() => {
+                this.rightCardOpen = !this.rightCardOpen;
+                this.isNewProduct = false;
+                this.hideColumn = !this.hideColumn;
+                this.formIsDirty = false;
+
+            });
+
+        } else {
             this.rightCardOpen = !this.rightCardOpen;
             this.isNewProduct = false;
             this.hideColumn = !this.hideColumn;
-            this.formIsDirty = false;
-    
-          });
-    
-        } else {
-          this.rightCardOpen = !this.rightCardOpen;
-          this.isNewProduct = false;
-          this.hideColumn = !this.hideColumn;
         }
-      }
-      formChangedHandler() {
+    }
+    formChangedHandler() {
         this.formIsDirty = true;
-      }
-      showNewProduct(newProduct) {
+    }
+    showNewProduct(newProduct) {
         this.formIsDirty = false;
         this.action = 'create';
         this.rightCardOpen = !this.rightCardOpen;
@@ -147,17 +148,17 @@ export class SetPriceComponent implements OnInit {
         this.hideColumn = !this.hideColumn;
         this.cardTitle = 'Create New Product';
         this.newProduct = <MapProducts>{
-            ProductName:'',
-            ProductPrice:0
+            ProductName: '',
+            ProductPrice: 0
         };
-      }
+    }
 
-      onSaveProduct(product) {
-        if(product){
+    onSaveProduct(product) {
+        if (product) {
             product.IsActive = true;
-            let tempProd:MapProducts[] = [];
+            let tempProd: MapProducts[] = [];
             tempProd.push(product);
-            const priceProduct = {'AddNewExternalProduct': tempProd };
+            const priceProduct = { 'AddNewExternalProduct': tempProd };
             this.service.setGenericPrice(priceProduct).subscribe((res) => {
                 this.rightCardOpen = !this.rightCardOpen;
                 this.hideColumn = !this.hideColumn;
@@ -170,14 +171,14 @@ export class SetPriceComponent implements OnInit {
                 this.notification.error(err);
             });
         }
-      }
-      onUpdateProduct(product) {
-        if(product){
-            console.log("product ",product);
+    }
+    onUpdateProduct(product) {
+        if (product) {
+            console.log("product ", product);
             product.IsActive = true;
-            let tempProd:MapProducts[] = [];
+            let tempProd: MapProducts[] = [];
             tempProd.push(product);
-            const priceProduct = {'SetGenricPrice': tempProd };
+            const priceProduct = { 'SetGenricPrice': tempProd };
             this.service.setGenericPrice(priceProduct).subscribe((res) => {
                 this.rightCardOpen = !this.rightCardOpen;
                 this.hideColumn = !this.hideColumn;
@@ -190,19 +191,19 @@ export class SetPriceComponent implements OnInit {
                 this.notification.error(err);
             });
         }
-      }
-      onEditClicked(product) {
+    }
+    onEditClicked(product) {
         this.action = 'edit';
         this.newProduct = Object.assign({}, product);
         this.cardTitle = 'Edit Product Price';
         this.isNewProduct = false;
         if (!this.rightCardOpen) {
-          this.rightCardOpen = !this.rightCardOpen;
-          this.hideColumn = !this.hideColumn;
-    
+            this.rightCardOpen = !this.rightCardOpen;
+            this.hideColumn = !this.hideColumn;
+
         }
-    
-      }
+
+    }
 
 
 }

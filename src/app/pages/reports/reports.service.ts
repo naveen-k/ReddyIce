@@ -37,4 +37,12 @@ export class ReportService extends SharedService {
                 return res;
             });
     }
+
+    getCustomersByBranchandDist(branchId, distributorId) {
+        return this.http.get(`api/user/getcustomerbybranchidordistributorid?branchId=${branchId}&distributorId=${distributorId}
+        `)
+            .map((res) => res.json()).map((res) => {
+                return res;
+            });
+    }
 }

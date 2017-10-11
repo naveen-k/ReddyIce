@@ -18,7 +18,7 @@ export class ReportsComponent implements OnInit {
     filter: any = {
         startDate: null,
         endDate: null,
-        reportType: 'SR',
+        reportType: 'DR',
         ticketType: 'regular',
         userType: 'internal',
         distributor: null,
@@ -26,6 +26,7 @@ export class ReportsComponent implements OnInit {
         internalDriver: null,
         distDriver: null,
         driver: null,
+        custID: null,
     };
 
     user: User;
@@ -33,9 +34,12 @@ export class ReportsComponent implements OnInit {
     linkRpt: SafeResourceUrl;
 
     distributors: any = [];
+    customers: any = [];
     branches: any = [];
     drivers: any = [];
     driversofDist: any = [];
+    isSRReport: boolean = false;
+    isTRReport: boolean = false;
 
     viewReport: boolean = false;
     RI: boolean = false;
@@ -138,15 +142,41 @@ export class ReportsComponent implements OnInit {
             this.isPaperTicket = false;
         }
     }
-    updateLink() {        
+    updateLink(rType) {
         this.viewReport = true;
         // hack to check if start date is not greater than end date
         if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
             this.notification.error('Start Date cannot be greater than End Date!!!');
             this.viewReport = false;
         }
-        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-            (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+        debugger
+        if (rType) {
+            if (rType === 'DR') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+            } else if (rType === 'RS') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+            } else if (rType === 'SR') {
+                this.isSRReport = true;
+                this.isTRReport = false;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+            } else if (rType === 'TR') {
+                this.isSRReport = false;
+                this.isTRReport = true;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (`http://frozen.reddyice.com/NewDashboardReports/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}`);
+
+            } else {
+                return false;
+            }
+        }
+        console.log(this.linkRpt);
     }
 
     formatDate(startLatestDate) {
@@ -157,12 +187,14 @@ export class ReportsComponent implements OnInit {
         return mm + '/' + dd + '/' + yy;
     }
 
-    branchChangeHandler() {
+    branchChangeHandler(branchID) {
         this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
             this.drivers = res;
             // this.drivers.splice(0, 0, { 'UserName': 'All Drivers' });
             this.sortDrivers();
         }, (err) => { });
+
+        this.getCustomers(branchID);
     }
     distributorChangeHandler() {
         this.reportService.getDriversbyDistributors(this.filter.distributor).subscribe((res) => {
@@ -171,5 +203,51 @@ export class ReportsComponent implements OnInit {
         }, (err) => {
 
         });
+
+    }
+    reportTypeChangeHandler(rType) {
+        if (rType) {
+            if (rType === 'DR') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+               
+            } else if (rType === 'RS') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                
+            } else if (rType === 'SR') {
+                this.isSRReport = true;
+                this.isTRReport = false;
+                
+            } else if (rType === 'TR') {
+                this.isSRReport = false;
+                this.isTRReport = true;
+               
+
+            } else {
+                return false;
+            }
+       
+
+    }
+}
+    getCustomers(branchID) {
+        if (this.filter.reportType === 'TR') {
+            this.reportService.getCustomersByBranchandDist(branchID, 0).subscribe((res) => {
+                this.customers = res;
+            }, (err) => {
+
+            });
+        }
+    }
+
+    getAllCustomers(distID) {
+        if (this.filter.reportType === 'TR') {
+            this.reportService.getCustomersByBranchandDist(0, distID).subscribe((res) => {
+                this.customers = res;
+            }, (err) => {
+
+            });
+        }
     }
 }

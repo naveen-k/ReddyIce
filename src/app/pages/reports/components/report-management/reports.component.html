@@ -1,10 +1,9 @@
-<ba-card cardTitle="Reports - {{userSubTitle}}" >
+<ba-card cardTitle="Reports - {{userSubTitle}}">
     <div class="row">
         <div class="col-sm-4">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
-                    disabled>
+                <input class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
@@ -13,8 +12,7 @@
         <div class="col-sm-4">
             <label>End Date</label>
             <div class="input-group">
-                <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate"
-                    disabled>
+                <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
                                 <i class="ion-calendar"></i>
                             </button>
@@ -22,24 +20,27 @@
         </div>
         <div class="col-sm-4">
             <label>Select Report</label>
-            <select class="form-control" [(ngModel)]="filter.reportType">
+            <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler(filter.reportType)">
                     <!-- <option value="ED">End of Day Report</option>
                     <option value="DS">Delivery Status</option> -->
                     <option value="DR">Deposit Report</option>
                     <option value="RS">Route Settlement</option>
-                    <option value="SR">Sales Register</option>
+                    <option value="SR">Sales Register Report</option>
+                    <option value="TR">Ticket List Report</option>
+                    <!-- <option value="TK">Ticket Detail Report</option>
+                    <option value="AS">Asset Scanning Report</option> -->
                     <!-- <option value="AS">Assets Scanning</option>
                     <option value="DRA">Drayage Report</option> -->
                 </select>
         </div>
         <div class="col-md-2 text-right head-button-container">
-            <button class="btn btn-danger button-top-margin" (click)="updateLink()">View Report</button>
+            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
         </div>
     </div>
-    <div class="row top-margin">
+    <div [ngClass]="{'row top-margin':isSRReport,'row top-margin no-margin':!isSRReport}">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-3 div-border left-margin-of-shortdiv">
+                <div class="col-sm-3 div-border " [hidden]="!isSRReport">
                     <span class="col-sm-4 local-padding-eater">
                             <label class="top-margin">Ticket Type</label>
                         </span>
@@ -52,12 +53,13 @@
                             <label class="top-margin"><b>Paper</b></label>
                         </span>
                 </div>
-                <div class="col-sm-8 div-border left-margin-of-longdiv">
+                <div class='col-sm-9 div-border'>
                     <div class="row" style="padding-top:2px;">
                         <div class="col-sm-3">
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()">
+                                    <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()"
+                                        [disabled]="user.IsDistributor">
                                     <label class="top-margin"><b>RI</b></label>
                                 </div>
                                 <div class="col-sm-8">
@@ -73,7 +75,7 @@
                                         <label class="top-margin pull-right"><b>Branch</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler()">
+                                        <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler(filter.branch)">
                                             <option *ngFor="let branch of branches" [value]="branch.BranchID">
                                                 <span *ngIf="branch.BranchID != '1'">
                                                     {{branch.BranchCode}} {{branch.BranchName}}
@@ -90,7 +92,7 @@
                                         <label class="top-margin pull-right"><b>Dist/Copacker</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler()">
+                                        <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler();getAllCustomers(filter.distributor)">
                                                 <option [value]='0'>All Distributors</option>
                                             <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
                                         </select>
@@ -102,7 +104,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select class="form-control pull-right" [(ngModel)]="filter.driver">
-                                                <option [value]='0'>All Drivers</option>
+                                            <option [value]='0'>All Drivers</option>
                                             <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
                                         </select>
                                     </div>
@@ -119,6 +121,18 @@
                                     </div>
                                 </ng-container>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3" [hidden]="isSRReport || !isTRReport">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label class="top-margin pull-right"><b>Customer</b></label>
+                        </div>
+                        <div class="col-sm-8">
+                            <select class="form-control pull-right" [(ngModel)]="filter.custID">
+                                <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
+                            </select>
                         </div>
                     </div>
                 </div>
