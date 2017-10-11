@@ -131,6 +131,7 @@
                         </div>
                         <div class="col-sm-8">
                             <select class="form-control pull-right" [(ngModel)]="filter.custID">
+                                <option [value]='0'>All Customers</option>
                                 <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
                             </select>
                         </div>

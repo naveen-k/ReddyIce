@@ -7,7 +7,7 @@
                     <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
                 </div>
                 <div class="col-sm-2" [hidden]="rightCardOpen">
-                    <select class="form-control" [(ngModel)]="productType">
+                    <select class="form-control" [(ngModel)]="productType" (ngModelChange)="updateProductOnTypeChange()">
                         <option value="active">Active</option>
                         <option value="inActive">InActive</option>
                         <option value="all">All</option>
@@ -46,10 +46,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let product of externalProducts|filter:customer.searchString; let index=index">
+                            <ng-container *ngIf="product.IsActive">
                             <td>
                                 <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px; cursor:pointer" (click)="onEditClicked(product);formTouchHandler()">
                                 <span class="tooltiptext">Edit</span></i>
-                                <i class="ion-trash-a custom-tooltip-ion" [hidden]="product.IsInternal" style="margin-right: 5px;cursor:pointer" (click)="onEditClicked(product);formTouchHandler()">
+                                <i class="ion-trash-a custom-tooltip-ion" [hidden]="product.IsInternal" style="margin-right: 5px;cursor:pointer" (click)="deleteProduct(product.ProductId)">
                                 <span class="tooltiptext">Delete</span>
                             </i>
                             </td>
@@ -60,6 +61,7 @@
                             <td class="td-width" [hidden]="!editClicked[index]">
                                 <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
                             </td>
+                            </ng-container>
                         </tr>
                         <tr *ngFor="let product of newProductList">
                             <td colspan="2"></td>

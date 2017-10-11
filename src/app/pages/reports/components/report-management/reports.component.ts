@@ -25,8 +25,8 @@ export class ReportsComponent implements OnInit {
         branch: null,
         internalDriver: null,
         distDriver: null,
-        driver: null,
-        custID: null,
+        driver: 0,
+        custID: 0,
     };
 
     user: User;

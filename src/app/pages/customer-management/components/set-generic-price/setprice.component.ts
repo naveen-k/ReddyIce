@@ -205,5 +205,22 @@ export class SetPriceComponent implements OnInit {
 
     }
 
+    deleteProduct(productID) {
+        this.service.deleteProduct(productID).subscribe((res) => { 
+            this.getExternalProducts();
+        }, (err) => { });
+    }
+
+    updateProductOnTypeChange() {
+        this.externalProducts = this.externalProducts.filter((p) => {
+          if (this.productType === 'active') {
+            return p.IsActive;
+          }
+          if (this.productType === 'inActive') {
+            return !p.IsActive;
+          }
+          return true;
+        });
+      }
 
 }
