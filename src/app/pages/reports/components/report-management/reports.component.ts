@@ -126,12 +126,12 @@ export class ReportsComponent implements OnInit {
 
     userTypeChangeHandler() {
         if (this.filter.userType === 'internal') {
-            this.filter.distributor = null;
-            this.filter.driver = null;
+            this.filter.distributor = 0;
+            this.filter.driver = 0;
             this.getAllBranches();
         } else {
-            this.filter.branch = null;
-            this.filter.driver = null;
+            this.filter.branch = 0;
+            this.filter.driver = 0;
             this.getDistributors();
         }
     }
