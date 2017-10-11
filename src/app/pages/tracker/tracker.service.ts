@@ -20,8 +20,15 @@ export class TrackerService extends SharedService {
     });
   }
 
-  getDistributors() {
-    return this.http.get(`api/Distributor`)
+  getDistributors(userId, selectedDate) {
+    return this.http.get(`api/trip/listofdistributorfordate?Id=${userId}&Date=${selectedDate}`)
+    .map((res) => res.json()).map((res) => {
+        return res;
+    });
+  }
+
+  getBranchesByDate(userId, selectedDate) {
+    return this.http.get(`api/trip/listofbranchesfordate?Id=${userId}&Date=${selectedDate}`)
     .map((res) => res.json()).map((res) => {
         return res;
     });

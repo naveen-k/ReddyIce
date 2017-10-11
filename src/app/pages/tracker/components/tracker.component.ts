@@ -98,7 +98,7 @@ export class TrackerComponent implements OnInit {
   }
 
   loadBranches() {
-    this.service.getBranches(this.userId).subscribe((res) => {
+    this.service.getBranchesByDate(this.userId, this.selectedDate).subscribe((res) => {
       this.sortBranches(res);
       this.allBranches = this.service.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
     }, (error) => {
@@ -127,6 +127,13 @@ export class TrackerComponent implements OnInit {
       this.selectedTrip = [];
     }
     this.showSpinner = true;
+    if (!this.tripFilterOption.branchId) {
+      if (this.isDistributor) {
+        this.tripFilterOption.branchId = 0;
+      } else {
+        this.tripFilterOption.branchId = 1;
+      }
+    }
     this.service.getTrips(this.userId, this.selectedDate,
       this.tripFilterOption.branchId, this.tripFilterOption.isForAll).subscribe((res) => {
         if (typeof res == 'object') {
@@ -524,7 +531,7 @@ export class TrackerComponent implements OnInit {
   distributors: any = [];
   typeChangeHandler() {
     if (this.searchObj.userType == 'External') {
-      this.service.getDistributors().subscribe((res) => {
+      this.service.getDistributors(this.userId, this.selectedDate).subscribe((res) => {
         if (typeof res == 'object') {
           // this.distributors = res;
           this.distributors = this.service.transformOptionsReddySelect(res, 'BranchID', 'Name');
