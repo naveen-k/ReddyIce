@@ -177,12 +177,12 @@ export class TrackerComponent implements OnInit {
     }
     console.log('this.selectedTrip', this.selectedTrip);
     // if distributors are unavailable, making selectedTrip blank
-    var tempTripStorage = this.selectedTrip;
-    if (!this.distributors || this.distributors.length == 0) {
-      this.selectedTrip = [];
-    } else {
-      this.selectedTrip = tempTripStorage;
-    }
+    // var tempTripStorage = this.selectedTrip;
+    // if (!this.distributors || this.distributors.length == 0) {
+    //   this.selectedTrip = [];
+    // } else {
+    //   this.selectedTrip = tempTripStorage;
+    // }
     // console.log(this.selectedTrip.sort(this.comparator));
     this.selectedTrip.sort(this.comparator); // sorting planned sequence
     this.drawMapPath();
@@ -191,6 +191,7 @@ export class TrackerComponent implements OnInit {
   // Fetch selected Date
   dateChangeHandler() {
     this.selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
+    this.loadBranches();
     this.loadTrips();
     this.drawMapPath();
   }
@@ -217,13 +218,13 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log('this.driverSpecTrips', this.driverSpecTrips);
-    var tempDriverStorage = this.driverSpecTrips;
-    if (!this.distributors || this.distributors.length == 0) {
-      this.driverSpecTrips = [];
-      this.selectedTrip = [];
-    } else {
-      this.driverSpecTrips = tempDriverStorage;
-    }
+    // var tempDriverStorage = this.driverSpecTrips;
+    // if (!this.distributors || this.distributors.length == 0) {
+    //   this.driverSpecTrips = [];
+    //   this.selectedTrip = [];
+    // } else {
+    //   this.driverSpecTrips = tempDriverStorage;
+    // }
     this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
   }
 
