@@ -133,10 +133,10 @@ export class TrackerComponent implements OnInit {
           this.trips = res.Trips;
           console.log('this.trips', this.trips.length);
           this.showSpinner = false;
-          if (this.trips[0]) {
-            this.tripFilterOption.DriverName = this.trips[0].DriverName;
+          if (this.trips[0]) {                                              // check if trips are available                         
+            this.tripFilterOption.DriverName = this.trips[0].DriverName;    // assigning in model
             this.driverChangeHandler();
-            this.tripFilterOption.TripCode = this.trips[0].TripCode;
+            this.tripFilterOption.TripCode = this.trips[0].TripCode;        // assigning in model
             this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
           } else {
             this.driverSpecTrips = [];
@@ -164,12 +164,13 @@ export class TrackerComponent implements OnInit {
     for (var i = 0; i < this.trips.length; i++) {
       if (parseInt(TripCode) === this.trips[i].TripCode &&
         this.tripFilterOption.DriverName == this.trips[i].DriverName) {
-        this.selectedTrip = this.trips[i].TripTicketList;
+        this.selectedTrip = this.trips[i].TripTicketList; // creating array based on driver and tripcode selected
         this.tripStartDate = this.trips[i].TripStartDate
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
-    console.log(this.selectedTrip.sort(this.comparator));
+    // console.log(this.selectedTrip.sort(this.comparator));
+    this.selectedTrip.sort(this.comparator); // sorting planned sequence
     this.drawMapPath();
   }
 
@@ -274,7 +275,7 @@ export class TrackerComponent implements OnInit {
 
   // function to draw the polyline on map
   drawPolyline(google, sequence) {
-    if (this.selectedTrip && this.selectedTrip.length > 1) {
+    if (this.selectedTrip && this.selectedTrip.length >= 1) {
       for (var i = 0; i < this.selectedTrip.length; i++) {
 
         // changing color of the marker icon based on condition
@@ -356,35 +357,41 @@ export class TrackerComponent implements OnInit {
           } else {
             strokeColour = 'brown'
           }
-          var polyline = new google.maps.Polyline({
-            path: [startPt, endPt],
-            strokeColor: strokeColour,
-            strokeWeight: 2,
-            strokeOpacity: 1
-          });
-          polyline.setMap(this.map);
-          this.bounds.extend(startPt);
-          this.bounds.extend(endPt);
+          if (startPt && endPt) {
+            var polyline = new google.maps.Polyline({
+              path: [startPt, endPt],
+              strokeColor: strokeColour,
+              strokeWeight: 2,
+              strokeOpacity: 1
+            });
+            polyline.setMap(this.map);
+            this.bounds.extend(startPt);
+            this.bounds.extend(endPt);
+          }
         } else {
-          var polyline2 = new google.maps.Polyline({
-            path: [startPtA, endPtA],
-            strokeColor: 'blue',
-            strokeWeight: 2,
-            strokeOpacity: 1
-          });
-          polyline2.setMap(this.map);
-          this.bounds.extend(startPtA);
-          this.bounds.extend(endPtA);
+          if (startPtA && endPtA) {
+            var polyline2 = new google.maps.Polyline({
+              path: [startPtA, endPtA],
+              strokeColor: 'blue',
+              strokeWeight: 2,
+              strokeOpacity: 1
+            });
+            polyline2.setMap(this.map);
+            this.bounds.extend(startPtA);
+            this.bounds.extend(endPtA);
+          }
 
-          var polyline1 = new google.maps.Polyline({
-            path: [startPtP, endPtP],
-            strokeColor: 'brown',
-            strokeWeight: 2,
-            strokeOpacity: 1
-          });
-          polyline1.setMap(this.map);
-          this.bounds.extend(startPtP);
-          this.bounds.extend(endPtP);
+          if(startPtP && endPtP) {
+            var polyline1 = new google.maps.Polyline({
+              path: [startPtP, endPtP],
+              strokeColor: 'brown',
+              strokeWeight: 2,
+              strokeOpacity: 1
+            });
+            polyline1.setMap(this.map);
+            this.bounds.extend(startPtP);
+            this.bounds.extend(endPtP);
+          }
         }
 
         // adding pushpin marker logic here
