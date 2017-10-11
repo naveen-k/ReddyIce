@@ -191,7 +191,11 @@ export class TrackerComponent implements OnInit {
   // Fetch selected Date
   dateChangeHandler() {
     this.selectedDate = this.service.formatDate(this.tripFilterOption.tripDate);
-    this.loadBranches();
+    if (this.isDistributor) {
+      this.typeChangeHandler();
+    } else {
+      this.loadBranches();
+    }
     this.loadTrips();
     this.drawMapPath();
   }
