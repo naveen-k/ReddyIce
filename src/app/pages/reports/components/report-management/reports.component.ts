@@ -83,17 +83,17 @@ export class ReportsComponent implements OnInit {
             //this.branches = this.reportService.transformOptionsReddySelect(res,);
             // this.branches.splice(0,0,branch.BranchID=0)
             this.branches = res;
-            this.sortBranches();
-            
-            // let tempArr = []
-            // res.forEach(branch => {
-            //     tempArr.push({
-            //         value: branch.ChainId,
-            //         label: `${branch.ChainName}`,
-            //         //date: branch,
-            //     })
-            // });
-            // this.branches = tempArr;
+            //this.sortBranches();
+
+            let tempArr = []
+            res.forEach(branch => {
+                tempArr.push({
+                    value: branch.BranchID,
+                    label: `${branch.BranchName}`,
+                    //date: branch,
+                })
+            });
+            this.branches = tempArr;
         }, (err) => { });
     }
 
@@ -134,6 +134,16 @@ export class ReportsComponent implements OnInit {
     getDistributors() {
         this.reportService.getDistributors().subscribe((res) => {
             this.distributors = res;
+            let tempArr = []
+            res.forEach(distributor => {
+                tempArr.push({
+                    value: distributor.DistributorCopackerID,
+                    label: `${distributor.Name}`,
+                    //date: branch,
+                })
+            });
+            tempArr.unshift({ value: 0, label: 'All Distributors' });
+            this.distributors = tempArr;
             // this.distributors.splice(0, 0, { 'id': '0', 'Name': '1 - All Distributors' });
         }, (err) => { });
     }
@@ -208,14 +218,35 @@ export class ReportsComponent implements OnInit {
         this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
             this.drivers = res;
             // this.drivers.splice(0, 0, { 'UserName': 'All Drivers' });
-            this.sortDrivers();
+            //this.sortDrivers();
+            let tempArr = []
+            res.forEach(driver => {
+                tempArr.push({
+                    value: driver.UserId,
+                    label: `${driver.UserName}`,
+                    //date: branch,
+                });
+            });
+            tempArr.unshift({ value: 0, label: 'All Drivers' });
+            this.drivers = tempArr;
         }, (err) => { });
 
         this.getCustomers(branchID);
     }
+
     distributorChangeHandler() {
         this.reportService.getDriversbyDistributors(this.filter.distributor).subscribe((res) => {
             this.driversofDist = res;
+            let tempArr = []
+            res.forEach(driver => {
+                tempArr.push({
+                    value: driver.UserId,
+                    label: `${driver.FirstName}`,
+                    //date: branch,
+                });
+            });
+            tempArr.unshift({ value: 0, label: 'All Drivers' });
+            this.driversofDist = tempArr;
             // this.driversofDist.splice(0, 0, { 'FirstName': 'All Drivers' });
         }, (err) => {
 
@@ -223,6 +254,7 @@ export class ReportsComponent implements OnInit {
 
     }
     reportTypeChangeHandler(rType) {
+        this.viewReport = false;
         if (rType) {
             if (rType === 'DR') {
                 this.isSRReport = false;
@@ -256,6 +288,16 @@ export class ReportsComponent implements OnInit {
         if (this.filter.reportType === 'TR') {
             this.reportService.getCustomersByBranchandDist(branchID, 0).subscribe((res) => {
                 this.customers = res;
+                let tempArr = []
+                res.forEach(cust => {
+                    tempArr.push({
+                        value: cust.CustomerId,
+                        label: `${cust.CustomerName}`,
+                        //date: branch,
+                    });
+                });
+                tempArr.unshift({ value: 0, label: 'All Customers' });
+                this.customers = tempArr;
             }, (err) => {
                 this.customers = [];
             });
@@ -266,6 +308,16 @@ export class ReportsComponent implements OnInit {
         if (this.filter.reportType === 'TR') {
             this.reportService.getCustomersByBranchandDist(0, distID).subscribe((res) => {
                 this.customers = res;
+                let tempArr = []
+                res.forEach(cust => {
+                    tempArr.push({
+                        value: cust.CustomerId,
+                        label: `${cust.CustomerName}`,
+                        //date: branch,
+                    });
+                });
+                tempArr.unshift({ value: 0, label: 'All Customers' });
+                this.customers = tempArr;
             }, (err) => {
 
             });

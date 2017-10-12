@@ -27,6 +27,7 @@
                     <option value="RS">Route Settlement Report</option>
                     <option value="SR">Sales Register</option>
                     <option value="TR">Ticket List</option>
+                    <option value="AS">Asset Scanning</option>
                     <!-- <option value="TK">Ticket Detail Report</option>
                     <option value="AS">Asset Scanning Report</option> -->
                     <!-- <option value="AS">Assets Scanning</option>
@@ -75,8 +76,8 @@
                                         <label class="top-margin pull-right"><b>Branch</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <!-- <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)" ></reddy-select> -->
-                                        <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler(filter.branch)">
+                                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)" ></reddy-select>
+                                        <!-- <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler(filter.branch)">
                                             <option *ngFor="let branch of branches" [value]="branch.BranchID">
                                                 <span *ngIf="branch.BranchID != '1'">
                                                     {{branch.BranchCode}} {{branch.BranchName}}
@@ -85,7 +86,7 @@
                                                     {{branch.BranchName}}
                                                 </span>
                                             </option>
-                                        </select>
+                                        </select> -->
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'external'">
@@ -93,11 +94,11 @@
                                         <label class="top-margin pull-right"><b>Dist/Copacker</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler();getAllCustomers(filter.distributor)">
+                                        <!-- <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler();getAllCustomers(filter.distributor)">
                                             <option [value]='0'>All Distributors</option>
                                             <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
-                                        </select>
-                                        <!-- <reddy-select [options]="distributors" [(selected)]="distributors.DistributorCopackerID" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select> -->
+                                        </select> -->
+                                        <reddy-select [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select> 
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'internal'">
@@ -105,10 +106,11 @@
                                         <label class="top-margin pull-right"><b>Driver</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control pull-right" [(ngModel)]="filter.driver">
+                                        <!-- <select class="form-control pull-right" [(ngModel)]="filter.driver">
                                             <option [value]='0'>All Drivers</option>
                                             <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
-                                        </select>
+                                        </select> -->
+                                        <reddy-select [options]="drivers" [(selected)]="filter.driver" ></reddy-select>
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'external'">
@@ -116,10 +118,11 @@
                                         <label class="top-margin pull-right"><b>Driver</b></label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <select class="form-control pull-right" [(ngModel)]="filter.driver">
+                                        <!-- <select class="form-control pull-right" [(ngModel)]="filter.driver">
                                             <option [value]='0'>All Drivers</option>
                                             <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
-                                        </select>
+                                        </select> -->
+                                        <reddy-select [options]="driversofDist" [(selected)]="filter.driver" ></reddy-select>
                                     </div>
                                 </ng-container>
                             </div>
@@ -132,10 +135,12 @@
                             <label class="top-margin pull-right"><b>Customer</b></label>
                         </div>
                         <div class="col-sm-8">
-                            <select class="form-control pull-right" [(ngModel)]="filter.custID">
+                            <!-- <select class="form-control pull-right" [(ngModel)]="filter.custID">
                                 <option [value]='0'>All Customers</option>
                                 <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
-                            </select>
+                            </select> -->
+                            <reddy-select [options]="customers" [(selected)]="filter.custID" ></reddy-select>
+
                         </div>
                         <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
                         <div *ngIf="(customers && !customers.length && !showSpinner) || (!customers && !showSpinner)" style='text-align:center; margin-top:10px;'> 
@@ -147,6 +152,8 @@
 
         </div>
     </div>
+    <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+    <div *ngIf="(!customers.length)" style='text-align:center; margin-top:10px;'> No data found </div> -->
     <div class="top-margin">
         <iframe *ngIf="viewReport" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
     </div>
