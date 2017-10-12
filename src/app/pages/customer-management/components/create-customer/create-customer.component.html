@@ -71,6 +71,7 @@
                     <select [disabled]="mode ===3" [(ngModel)]="customer.ChainID" (ngModelChange)="formFlagHandler()" class="form-control">
                         <option *ngFor="let chain of chains" [value]="chain.ChainId">{{chain.ChainName}}</option>
                     </select>
+                    <!-- <reddy-select [disabled]="mode ===3" [options]="chains" [(selected)]="chains.ChainId" (selectedChange)="formFlagHandler()"></reddy-select> -->
                 </div>
             </div>
             <div class="row box-top-margin">
@@ -95,11 +96,12 @@
                         <div class="row">
                             <label for="example-text-input" class="col-sm-3 col-form-label">State&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                             <div class="col-sm-9">
-                                <!-- <input [disabled]="mode ===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
-                                />  -->
+                        <!-- <input [hidden]="mode ===2 ||mode ===1 " [disabled]="mode===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
+                                />   -->
                                 <select [disabled]="mode ===3" [(ngModel)]="customer.State" (ngModelChange)="formFlagHandler()" class="form-control">
                                         <option *ngFor="let state of allStates" [value]="state.StateId">{{state.StateName}}</option>
                                     </select>
+                                    <!-- <reddy-select [disabled]="mode ===3" [options]="allStates" [(selected)]="allStates.StateId" (selectedChange)="formFlagHandler()"></reddy-select> -->
                             </div>
                         </div>
                     </div>

@@ -13,8 +13,8 @@ export class TrackerService extends SharedService {
     super(http);
   }
   
-  getTrips(userId, TripDate, branchId, IsForAll) {
-    return this.http.get(`api/trip/allfortracker?TripDate=${TripDate}&branchId=${branchId}&userId=${userId}&IsForAll=${IsForAll}`)
+  getTrips(TripDate) {
+    return this.http.get(`api/trip/allfortracker?TripDate=${TripDate}`)
     .map((res) => res.json()).map((res) => {
         return res;
     });

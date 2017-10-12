@@ -1,4 +1,4 @@
-<ba-card cardTitle="Reports - {{userSubTitle}}">
+<ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
         <div class="col-sm-4">
             <label>Start Date</label>
@@ -23,10 +23,10 @@
             <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler(filter.reportType)">
                     <!-- <option value="ED">End of Day Report</option>
                     <option value="DS">Delivery Status</option> -->
-                    <option value="DR">Deposit Report</option>
-                    <option value="RS">Route Settlement</option>
-                    <option value="SR">Sales Register Report</option>
-                    <option value="TR">Ticket List Report</option>
+                    <option value="DR">Deposit Register</option>
+                    <option value="RS">Route Settlement Report</option>
+                    <option value="SR">Sales Register</option>
+                    <option value="TR">Ticket List</option>
                     <!-- <option value="TK">Ticket Detail Report</option>
                     <option value="AS">Asset Scanning Report</option> -->
                     <!-- <option value="AS">Assets Scanning</option>
@@ -53,9 +53,9 @@
                             <label class="top-margin"><b>Paper</b></label>
                         </span>
                 </div>
-                <div class='col-sm-9 div-border'>
+                <div [ngClass]="{'col-sm-9 div-border1':!isDRReport,'col-sm-7 div-border':isDRReport}">
                     <div class="row" style="padding-top:2px;">
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" [hidden]="isDRReport">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()"
@@ -68,13 +68,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-9">
+                        <div [ngClass]="{'col-sm-9':!isDRReport,'col-sm-12':isDRReport}">
                             <div class="row">
                                 <ng-container *ngIf="filter.userType === 'internal'">
                                     <div class="col-sm-2">
                                         <label class="top-margin pull-right"><b>Branch</b></label>
                                     </div>
                                     <div class="col-sm-4">
+                                        <!-- <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)" ></reddy-select> -->
                                         <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler(filter.branch)">
                                             <option *ngFor="let branch of branches" [value]="branch.BranchID">
                                                 <span *ngIf="branch.BranchID != '1'">
@@ -93,9 +94,10 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler();getAllCustomers(filter.distributor)">
-                                                <option [value]='0'>All Distributors</option>
+                                            <option [value]='0'>All Distributors</option>
                                             <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
                                         </select>
+                                        <!-- <reddy-select [options]="distributors" [(selected)]="distributors.DistributorCopackerID" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select> -->
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'internal'">
@@ -135,11 +137,17 @@
                                 <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
                             </select>
                         </div>
+                        <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+                        <div *ngIf="(customers && !customers.length && !showSpinner) || (!customers && !showSpinner)" style='text-align:center; margin-top:10px;'> 
+                            No data found {{customers}} - {{!customers.length}} - {{!showSpinner}} - {{(!customers && !showSpinner)}}
+                        </div> -->
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
-    <iframe *ngIf="viewReport" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
+    <div class="top-margin">
+        <iframe *ngIf="viewReport" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
+    </div>
 </ba-card>
