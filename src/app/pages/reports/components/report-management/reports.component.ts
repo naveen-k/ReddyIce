@@ -233,7 +233,8 @@ export class ReportsComponent implements OnInit {
             this.drivers = res;
             // this.drivers.splice(0, 0, { 'UserName': 'All Drivers' });
             //this.sortDrivers();
-            let tempArr = []
+            let tempArr = [];
+            this.showSpinner = false;
             res.forEach(driver => {
                 tempArr.push({
                     value: driver.UserId,
