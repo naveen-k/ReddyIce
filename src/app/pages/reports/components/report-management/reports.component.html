@@ -140,12 +140,11 @@
                                 <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
                             </select> -->
                             <reddy-select [options]="customers" [(selected)]="filter.custID" ></reddy-select>
-
                         </div>
-                        <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-                        <div *ngIf="(customers && !customers.length && !showSpinner) || (!customers && !showSpinner)" style='text-align:center; margin-top:10px;'> 
-                            No data found {{customers}} - {{!customers.length}} - {{!showSpinner}} - {{(!customers && !showSpinner)}}
-                        </div> -->
+                        <div style='margin-left: 120px;'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+                        <div *ngIf="(customers.length == 0 && !showSpinner)" style='margin-left: 100px;margin-top:10px;'> 
+                            No data found
+                        </div>
                     </div>
                 </div>
             </div>

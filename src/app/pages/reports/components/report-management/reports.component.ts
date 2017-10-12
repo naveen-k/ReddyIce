@@ -34,7 +34,7 @@ export class ReportsComponent implements OnInit {
     linkRpt: SafeResourceUrl;
 
     distributors: any = [];
-    customers: any;
+    customers: any = [];
     branches: any = [];
     drivers: any = [];
     driversofDist: any = [];
@@ -305,9 +305,12 @@ export class ReportsComponent implements OnInit {
 
         }
     }
+    showSpinner: boolean = false;
     getCustomers(branchID) {
+        this.showSpinner = true;
         if (this.filter.reportType === 'TR') {
             this.reportService.getCustomersByBranchandDist(branchID, 0).subscribe((res) => {
+                this.showSpinner = false;
                 this.customers = res;
                 let tempArr = []
                 res.forEach(cust => {
@@ -321,10 +324,11 @@ export class ReportsComponent implements OnInit {
                 this.customers = tempArr;
             }, (err) => {
                 this.customers = [];
+                this.showSpinner = false;
             });
         }
     }
-
+    
     getAllCustomers(distID) {
         if (this.filter.reportType === 'TR') {
             this.reportService.getCustomersByBranchandDist(0, distID).subscribe((res) => {
