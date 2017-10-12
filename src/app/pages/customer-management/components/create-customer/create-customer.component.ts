@@ -58,6 +58,15 @@ export class CreateCustomerComponent implements OnInit {
 
         this.service.getChain().subscribe((res) => {
             this.chains = res;
+            // let tempArr = []
+            // res.forEach(chain => {
+            //     tempArr.push({
+            //         value: chain.ChainId,
+            //         label: `${chain.ChainName}`,
+            //         //date: branch,
+            //     })
+            // });
+            // this.chains = tempArr; 
         }, (err) => { });
 
 
@@ -78,7 +87,16 @@ export class CreateCustomerComponent implements OnInit {
             console.log(" this.products---------------", this.products);
         });
         this.service.getAllStates().subscribe((response) => {
-            this.allStates = response;
+           this.allStates = response;
+        //    let tempArr = []
+        //    response.forEach(state => {
+        //        tempArr.push({
+        //            value: state.StateId,
+        //            label: `${state.StateName}`,
+        //            //date: branch,
+        //        })
+        //    });
+        //    this.allStates = tempArr; 
         });
     }
     addProduct() {

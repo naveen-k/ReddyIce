@@ -97,7 +97,7 @@ export class DayEndComponent implements OnInit {
                 tempArr.push({
                     value: branch.BranchID,
                     label: `${branch.BranchCode} - ${branch.BranchName}`,
-                    date: branch
+                    date: branch,
                 })
             });
             this.branches = tempArr;            

@@ -79,6 +79,7 @@ export class ReportsComponent implements OnInit {
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
             this.branches = res;
+            // this.branches.splice(0,0,branch.BranchID=0)
             this.sortBranches();
         }, (err) => { });
     }
@@ -149,13 +150,18 @@ export class ReportsComponent implements OnInit {
             this.notification.error('Start Date cannot be greater than End Date!!!');
             this.viewReport = false;
         }
-        debugger
         if (rType) {
             if (rType === 'DR') {
                 this.isSRReport = false;
                 this.isTRReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+            } else if (rType === 'RSD') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+
             } else if (rType === 'RS') {
                 this.isSRReport = false;
                 this.isTRReport = false;
@@ -210,27 +216,27 @@ export class ReportsComponent implements OnInit {
             if (rType === 'DR') {
                 this.isSRReport = false;
                 this.isTRReport = false;
-               
+
             } else if (rType === 'RS') {
                 this.isSRReport = false;
                 this.isTRReport = false;
-                
+
             } else if (rType === 'SR') {
                 this.isSRReport = true;
                 this.isTRReport = false;
-                
+
             } else if (rType === 'TR') {
                 this.isSRReport = false;
                 this.isTRReport = true;
-               
+
 
             } else {
                 return false;
             }
-       
 
+
+        }
     }
-}
     getCustomers(branchID) {
         if (this.filter.reportType === 'TR') {
             this.reportService.getCustomersByBranchandDist(branchID, 0).subscribe((res) => {
