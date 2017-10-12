@@ -142,7 +142,7 @@ export class TicketListComponent implements OnInit {
         return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
             if (response) {
                 this.showSpinner = false;
-                if (response === 'No Record Found') {
+                if (response == 'No record found') {
                     this.allTickets = [];
                 } else {
                     this.allTickets = response;
