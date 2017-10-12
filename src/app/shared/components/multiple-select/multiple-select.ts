@@ -10,6 +10,14 @@ export class SelectComponent implements AfterViewInit {
 
     elementRef: any;
 
+    loading: true;
+
+    @Input()
+    selectAll: boolean = false
+
+    @Input()
+    position: string = 'bottom';
+
     @Input()
     disabled: boolean = false;
 
@@ -51,6 +59,8 @@ export class SelectComponent implements AfterViewInit {
             filter: true,
             single: !this.multiple,
             onClose: this.onClose.bind(this),
+            position: this.position,
+            selectAll: this.selectAll,
         });
     }
 
@@ -70,7 +80,7 @@ export class SelectComponent implements AfterViewInit {
 
     initSelect() {
         if (!this.elementRef) { setTimeout(this.initSelect.bind(this)); return; }
-        this.elementRef.empty();        
+        this.elementRef.empty();
         this.options.forEach((option) => {
             this.elementRef.append($("<option />", {
                 value: option.value,
@@ -79,6 +89,11 @@ export class SelectComponent implements AfterViewInit {
         })
         this.elementRef.multipleSelect("refresh");
         this.elementRef.multipleSelect('setSelects', this.selected);
+        // this.loader();
+    }
+
+    loader() {
+        console.log(this.elementRef, this.select)
     }
 }
 
