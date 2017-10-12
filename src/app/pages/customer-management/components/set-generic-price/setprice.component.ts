@@ -206,20 +206,31 @@ export class SetPriceComponent implements OnInit {
     }
 
     deleteProduct(productID) {
-        this.service.deleteProduct(productID).subscribe((res) => {
-            this.notification.success('Product Deleted Successfully!!!'); 
-            this.getExternalProducts();
-        }, (err) => {
-            this.notification.error('Problem Deleting Product!!!'); 
-         });
+        const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
+        });
+        activeModal.componentInstance.BUTTONS.OK = 'OK';
+        activeModal.componentInstance.showCancel = true;
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `Are you sure you want to delete the product?`;
+        activeModal.componentInstance.closeModalHandler = (() => {
+            this.service.deleteProduct(productID).subscribe((res) => {
+                    this.notification.success('Product Deleted Successfully!!!'); 
+                    this.getExternalProducts();
+                }, (err) => {
+                    this.notification.error('Problem Deleting Product!!!'); 
+                 });
+           
+        });
     }
 
-    updateProductOnTypeChange() {
+    updateProductOnTypeChange(productType) {
         this.externalProducts = this.externalProducts.filter((p) => {
-          if (this.productType === 'active') {
+          if (productType === 'active') {
             return p.IsActive;
           }
-          if (this.productType === 'inActive') {
+          if (productType === 'inActive') {
             return !p.IsActive;
           }
           return true;

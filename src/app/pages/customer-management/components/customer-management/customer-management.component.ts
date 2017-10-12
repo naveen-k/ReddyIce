@@ -2,7 +2,9 @@ import { NotificationsService } from 'angular2-notifications';
 import { CustomerManagementService } from '../../customer-management.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '../../../../shared/user.service';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 @Component({
     templateUrl: './customer-management.component.html',
     styleUrls: ['./customer-management.component.scss'],
@@ -19,6 +21,7 @@ export class CustomerManagementComponent implements OnInit {
         private route: ActivatedRoute,
         private userService: UserService,
         private notification: NotificationsService,
+        private modalService: NgbModal,
     ) { }
 
     ngOnInit() {
@@ -43,12 +46,23 @@ export class CustomerManagementComponent implements OnInit {
     }
 
     deleteCustomer(customerId) {
-        const data = [{ 'CustomerType': 2, 'CustomerId': customerId }];
-        this.service.deleteCustomer(data).subscribe((res) => {
-            this.notification.success("Deleted Succesfully!!");
-        }, (err) => {
-            this.notification.error("Error in Deleting a customer!!");
+        const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
         });
-        this.getAllCustomers();
+        activeModal.componentInstance.BUTTONS.OK = 'OK';
+        activeModal.componentInstance.showCancel = true;
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `Are you sure you want to delete the customer?`;
+        activeModal.componentInstance.closeModalHandler = (() => {
+            const data = [{ 'CustomerType': 2, 'CustomerId': customerId }];
+            this.service.deleteCustomer(data).subscribe((res) => {
+                this.notification.success('Deleted Succesfully!!');
+                this.getAllCustomers();
+            }, (err) => {
+                this.notification.error('Error in Deleting a customer!!');
+            });
+           
+        });
     }
 }

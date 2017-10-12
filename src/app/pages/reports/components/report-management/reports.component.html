@@ -24,7 +24,8 @@
                     <!-- <option value="ED">End of Day Report</option>
                     <option value="DS">Delivery Status</option> -->
                     <option value="DR">Deposit Report</option>
-                    <option value="RS">Route Settlement</option>
+                    <option value="RS">Route Settlement - Trip Report</option>
+                    <option value="RSD">Route Settlement Report</option>
                     <option value="SR">Sales Register Report</option>
                     <option value="TR">Ticket List Report</option>
                     <!-- <option value="TK">Ticket Detail Report</option>
@@ -93,9 +94,10 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler();getAllCustomers(filter.distributor)">
-                                                <option [value]='0'>All Distributors</option>
+                                            <option [value]='0'>All Distributors</option>
                                             <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
                                         </select>
+                                        <!-- <reddy-select [options]="distributors" [(selected)]="distributors.DistributorCopackerID" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select> -->
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'internal'">
