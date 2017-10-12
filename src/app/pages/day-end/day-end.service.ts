@@ -9,7 +9,10 @@ import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class DayEndService extends SharedService {
     currenttripData: any = {};
-    private _filter: any = {};
+    private _filter: any = {
+        type: 'internal',
+        userBranch: 1
+    };
 
     constructor(
         protected http: HttpService,
@@ -17,13 +20,11 @@ export class DayEndService extends SharedService {
     ) {
         super(http);
     }
-    getTrips(TripDate, branchId) {
-
-        return this.http.get(`api/trip/all?TripDate=${TripDate}&branchId=${branchId}`)
+    getTrips(TripDate) {
+        return this.http.get(`api/trip/all?TripDate=${TripDate}`)
             .map((res) => res.json()).map((res) => {
                 return res;
             });
-
     }
     getTripDetails(tripId) {
         return this.http.get(`api/trip/ticketsfortrip?TripId=${tripId}`).map((res) => res.json()).map((res) => {

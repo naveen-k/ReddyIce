@@ -49,6 +49,20 @@ export class SharedService {
         return this.http.get('api/Distributor').map((res) => res.json());
     }
 
+    getDistributors(userId, selectedDate) {
+        return this.http.get(`api/trip/listofdistributorfordate?Id=${userId}&Date=${selectedDate}`)
+            .map((res) => res.json()).map((res) => {
+                return res;
+            });
+    }
+
+    getBranchesByDate(userId, selectedDate) {
+        return this.http.get(`api/trip/listofbranchesfordate?Id=${userId}&Date=${selectedDate}`)
+            .map((res) => res.json()).map((res) => {
+                return res;
+            });
+    }
+
     formatDate(date) {
         if (!date.year) { return '' };
         let yy = date.year, mm = date.month, dd = date.day;
@@ -60,7 +74,7 @@ export class SharedService {
 
     transformOptionsReddySelect(options: Array<any>, value: string, label_1: string, label_2?: string) {
         let tmpArr: Array<IOption> = [];
-        options.forEach((option) => {            
+        options.forEach((option) => {
             tmpArr.push({
                 value: option[value],
                 label: label_2 ? `${option[label_1]} - ${option[label_2]}` : option[label_1],

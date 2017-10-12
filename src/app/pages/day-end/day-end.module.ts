@@ -1,3 +1,4 @@
+import { DayEndPipe } from './components/day-end-list/day-end-list.pipe';
 import { DayEndComponent } from './components/day-end-list/day-end.component';
 import { DayEndContainerComponent } from './components/day-end-container/day-end-container.component';
 import { DetailsComponent } from './components/day-end-details/details.component';
@@ -39,6 +40,7 @@ const routes: Routes = [
         DayEndComponent,
         DetailsComponent,
         TicketDetailsComponent,
+        DayEndPipe
     ],
     imports: [
         RouterModule.forChild(routes),

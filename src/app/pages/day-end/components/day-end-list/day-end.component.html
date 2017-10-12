@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <ba-card cardTitle="Trip List {{userSubTitle}}" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-sm-3">
                     <label><b> Select Date </b></label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="selectionchangeHandler()"
@@ -12,9 +12,20 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-md-6"  *ngIf="logedInUser.IsRIInternal">
+                <div class="col-sm-3">
+                    <label><b>Select Driver Type</b></label>
+                    <select class="form-control" [(ngModel)]="filter.type" [disabled]="logedInUser.IsDistributor">
+                        <option value="internal">RI Internal</option>
+                        <option value="distributor">Distributor</option>
+                    </select>
+                </div>
+                <div class="col-sm-4" *ngIf="filter.type === 'internal'">
                     <label><b>Select Branch</b></label>
-                    <reddy-select [options]="branches" [(selected)]="filter.userBranch" (selectedChange)="selectionchangeHandler()"></reddy-select>
+                    <reddy-select [options]="branches" [(selected)]="filter.userBranch"></reddy-select>
+                </div>
+                <div class="col-sm-4" *ngIf="filter.type === 'distributor'">
+                    <label><b>Select Distributor</b></label>
+                    <reddy-select [options]="distributors" [(selected)]="filter.userBranch"></reddy-select>
                 </div>
             </div>
             <div>
@@ -69,30 +80,21 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!--Removed sorting functionality as it was causing rendering issues  -->
-                        <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc">
-                            <td class="table-id" style="cursor: pointer">
-                                <!-- <i *ngIf="!logedInUser.IsRIInternal || logedInUser.Role.RoleID==3" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
-                                    style="margin-right: 5px">
+                    <tbody>                        
+                        <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc|dayEnd:filter.type:filter.userBranch">
+                            <td class="table-id" style="cursor: pointer">                                
+                                <i *ngIf="!logedInUser.IsRIInternal || item.isDistributor === 1" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion"
+                                    [routerLink]="['../ticket-detail', item.TripID]" style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i *ngIf="logedInUser.IsRIInternal && logedInUser.Role.RoleID == 1" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
-                                    style="margin-right: 5px">
-                                    <span class="tooltiptext">Edit</span>
-                                </i> -->
-                                <i *ngIf="!logedInUser.IsRIInternal || item.isDistributor === 1" (click)='cuurenttripData(item)' class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
-                                    style="margin-right: 5px">
-                                    <span class="tooltiptext">View</span>
-                                </i>
-                                <i *ngIf="logedInUser.IsRIInternal && item.isDistributor === 0" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
-                                    style="margin-right: 5px">
+                                <i *ngIf="logedInUser.IsRIInternal && item.isDistributor === 0" (click)='cuurenttripData(item)' class="ion-edit custom-tooltip-ion"
+                                    [routerLink]="['../detail',item.TripID]" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
                             </td>
-                           
+
                             <td *ngIf="logedInUser.IsRIInternal">{{!item.IsUnplanned?item.RouteNumber :'Unplanned'}}</td>
-                            <td  *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
+                            <td *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
                             <td class="textRightPadding">{{item.TripCode}}</td>
                             <td class="textRightPadding">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
