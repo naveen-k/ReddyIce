@@ -1,6 +1,7 @@
 /**
 * Start Override default bootstarp CSS
 */
+
 fieldset {
     border: 1px solid #5bc0de;
     padding: 0.35em 0.625em 0.75em;
@@ -14,41 +15,54 @@ legend {
     padding: 0px 5px;
     margin-bottom: 0;
 }
+
 .form-control {
     padding: 6.5px 8px;
 }
-select.form-control:not([size]):not([multiple]){
+
+select.form-control:not([size]):not([multiple]) {
     height: 32px;
 }
+
+
 /**
 * End Override default bootstarp CSS
 */
 
+
 /* You can add global styles to this file, and also import other style files */
-.padding-eater{
+
+.padding-eater {
     padding: 0;
 }
-.card-title{
-	color:#000 !important;
+
+.card-title {
+    color: #000 !important;
 }
-.app-head{
-	margin-left:60px !important;
+
+.app-head {
+    margin-left: 60px !important;
 }
+
 .ngb-dp-day.disabled {
     cursor: not-allowed !important;
 }
+
 a.collapse-menu-link {
     margin: 11px 20px 29px -27px !important;
 }
+
 .al-logo {
-	img{
-        width:150px;
+    img {
+        width: 150px;
         height: 54px;
-	}
+    }
 }
-.custom-tooltip-ion:hover .tooltiptext{
+
+.custom-tooltip-ion:hover .tooltiptext {
     visibility: visible;
 }
+
 .tooltiptext {
     visibility: hidden;
     background-color: #333;
@@ -61,55 +75,57 @@ a.collapse-menu-link {
     line-height: 15px;
     font-size: 12px;
 }
-.dayend-tabset{
-    .nav-tabs{
-   border-top: 1px solid #ef8989 !important;
-    border-left: 1px solid #ef8989;
-    border-right: 1px solid #ef8989;
+
+.dayend-tabset {
+    .nav-tabs {
+        border-top: 1px solid #ef8989 !important;
+        border-left: 1px solid #ef8989;
+        border-right: 1px solid #ef8989;
     }
-.tab-content{
-border: 1px solid #ef8989;
-    border-top: 0;
+    .tab-content {
+        border: 1px solid #ef8989;
+        border-top: 0;
+    }
+    .nav-item a:hover {
+        color: #000;
+        background-color: #f59d9d !important;
+    }
 }
-.nav-item a:hover{
-    color:#000;
-    background-color: #f59d9d !important;
 
-}
-
-}
 .dayend-card {
-     .card-body{
+    .card-body {
         min-height: 400px;
     }
-
 }
+
 .tableHeader {
-  background: #5bc0de;
-  color: black;
+    background: #5bc0de;
+    color: black;
 }
 
 //common classes
-.remove-margin{
-    margin:0px;
+.remove-margin {
+    margin: 0px;
 }
 
-.remove-margin-top{
-    margin-top:0px;
-}
-.remove-padding{
-    padding:0px;
+.remove-margin-top {
+    margin-top: 0px;
 }
 
-.remove-padding-top{
-    padding-top:0px;
+.remove-padding {
+    padding: 0px;
+}
+
+.remove-padding-top {
+    padding-top: 0px;
 }
 
 #newTicket .card-header.clearfix {
     padding-left: 33px !important;
 }
-.small-select{
-   padding: 4px 8px;
+
+.small-select {
+    padding: 4px 8px;
     margin-top: 3px;
     height: 28px !important;
 }
@@ -119,12 +135,15 @@ border: 1px solid #ef8989;
     padding-right: 12px !important;
 }
 
+
 /*
 * Override multiple-select css
 */
+
 .ms-parent {
     width: 100% !important;
 }
+
 .ms-choice {
     height: 32px;
     span {
@@ -132,5 +151,23 @@ border: 1px solid #ef8989;
     }
     div {
         top: 3px;
+    }
+}
+
+.ms-drop {
+    li {
+         :hover {
+            background-color: #5bc0de;
+        }
+        label {
+            margin: 0;
+            padding: 5px 2px;
+            input[type="radio"] {
+                display: none;
+            }
+            input[type="checkbox"] {
+                margin-right: 2px;
+            }
+        }
     }
 }
