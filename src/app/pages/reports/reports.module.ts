@@ -1,3 +1,4 @@
+import { SharedModule } from '../../shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -16,7 +17,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [ReportsComponent],
-    imports: [CommonModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule, NgbModule],
+    imports: [CommonModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule, NgbModule, SharedModule],
     providers: [ReportService],
 })
 export class ReportsModule {
