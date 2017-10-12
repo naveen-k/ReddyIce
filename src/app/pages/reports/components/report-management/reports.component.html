@@ -41,7 +41,7 @@
     <div [ngClass]="{'row top-margin':isSRReport,'row top-margin no-margin':!isSRReport}">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-3 div-border " [hidden]="!isSRReport">
+                <div class="col-sm-3 div-border " [hidden]="!isSRReport || !isASReport">
                     <span class="col-sm-4 local-padding-eater">
                             <label class="top-margin">Ticket Type</label>
                         </span>

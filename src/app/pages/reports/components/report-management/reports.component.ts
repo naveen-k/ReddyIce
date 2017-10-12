@@ -25,7 +25,7 @@ export class ReportsComponent implements OnInit {
         branch: 1,
         internalDriver: null,
         distDriver: null,
-        driver: 0,
+        driver: 1,
         custID: 0,
     };
 
@@ -41,6 +41,7 @@ export class ReportsComponent implements OnInit {
     isSRReport: boolean = false;
     isTRReport: boolean = false;
     isDRReport: boolean = true;
+    isASReport: boolean = false;
 
     viewReport: boolean = false;
     RI: boolean = false;
@@ -80,10 +81,10 @@ export class ReportsComponent implements OnInit {
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
 
-            //this.branches = this.reportService.transformOptionsReddySelect(res,);
+            // this.branches = this.reportService.transformOptionsReddySelect(res,);
             // this.branches.splice(0,0,branch.BranchID=0)
-            this.branches = res;
-            //this.sortBranches();
+            // this.branches = res;
+            // this.sortBranches();
 
             let tempArr = []
             res.forEach(branch => {
@@ -94,6 +95,7 @@ export class ReportsComponent implements OnInit {
                 })
             });
             this.branches = tempArr;
+            this.branchChangeHandler(this.filter.branch);
         }, (err) => { });
     }
 
@@ -178,26 +180,38 @@ export class ReportsComponent implements OnInit {
                 this.isSRReport = false;
                 this.isTRReport = false;
                 this.isDRReport = true;
+                this.isASReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
             } else if (rType === 'RS') {
                 this.isSRReport = false;
                 this.isTRReport = false;
                 this.isDRReport = false;
+                this.isASReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
             } else if (rType === 'SR') {
                 this.isSRReport = true;
                 this.isTRReport = false;
                 this.isDRReport = false;
+                this.isASReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
             } else if (rType === 'TR') {
                 this.isSRReport = false;
                 this.isTRReport = true;
                 this.isDRReport = false;
+                this.isASReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}`);
+
+            } else if (rType === 'AS') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                this.isDRReport = false;
+                this.isASReport = true;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
 
             } else {
                 return false;
@@ -227,7 +241,7 @@ export class ReportsComponent implements OnInit {
                     //date: branch,
                 });
             });
-            tempArr.unshift({ value: 0, label: 'All Drivers' });
+            tempArr.unshift({ value: 1, label: 'All Drivers' });
             this.drivers = tempArr;
         }, (err) => { });
 
@@ -245,7 +259,7 @@ export class ReportsComponent implements OnInit {
                     //date: branch,
                 });
             });
-            tempArr.unshift({ value: 0, label: 'All Drivers' });
+            tempArr.unshift({ value: 1, label: 'All Drivers' });
             this.driversofDist = tempArr;
             // this.driversofDist.splice(0, 0, { 'FirstName': 'All Drivers' });
         }, (err) => {
@@ -260,23 +274,30 @@ export class ReportsComponent implements OnInit {
                 this.isSRReport = false;
                 this.isTRReport = false;
                 this.isDRReport = true;
+                this.isASReport = false;
 
             } else if (rType === 'RS') {
                 this.isSRReport = false;
                 this.isTRReport = false;
                 this.isDRReport = false;
+                this.isASReport = false;
 
             } else if (rType === 'SR') {
                 this.isSRReport = true;
                 this.isTRReport = false;
                 this.isDRReport = false;
+                this.isASReport = false;
 
             } else if (rType === 'TR') {
                 this.isSRReport = false;
                 this.isTRReport = true;
                 this.isDRReport = false;
-
-
+                this.isASReport = false;
+            } else if (rType === 'AS') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                this.isDRReport = false;
+                this.isASReport = true;
             } else {
                 return false;
             }
