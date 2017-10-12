@@ -37,9 +37,7 @@ export class SelectComponent implements AfterViewInit {
     set options(value: Array<IOption>) {
         if (!value) { return; }
         this._options = value;
-        if (value.length) {
-            setTimeout(this.initSelect())
-        }
+        setTimeout(this.initSelect())
     }
 
     get options(): Array<IOption> {
@@ -72,6 +70,7 @@ export class SelectComponent implements AfterViewInit {
 
     initSelect() {
         if (!this.elementRef) { setTimeout(this.initSelect.bind(this)); return; }
+        this.elementRef.empty();        
         this.options.forEach((option) => {
             this.elementRef.append($("<option />", {
                 value: option.value,

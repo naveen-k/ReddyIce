@@ -135,6 +135,10 @@
                                 <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
                             </select>
                         </div>
+                        <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+                        <div *ngIf="(customers && !customers.length && !showSpinner) || (!customers && !showSpinner)" style='text-align:center; margin-top:10px;'> 
+                            No data found {{customers}} - {{!customers.length}} - {{!showSpinner}} - {{(!customers && !showSpinner)}}
+                        </div> -->
                     </div>
                 </div>
             </div>
