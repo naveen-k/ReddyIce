@@ -2,8 +2,10 @@
     <div class=" col-md-12">
         <ba-card cardTitle="Trip Details {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==24 || user?.IsDistributor" [disabled]="!tripData.IsClosed"
-                    (click)="submitTickets()">Approve</button>
+                <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==24 && user.IsDistributor && user.Role.RoleID == 2" [disabled]="!tripData.IsClosed"
+                    (click)="submitTickets(25)">Approve</button>
+                <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==23 && user.IsDistributor && user.Role.RoleID == 3" [disabled]="!tripData.IsClosed"
+                    (click)="submitTickets(24)">Submit</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row">
@@ -127,11 +129,11 @@
                                 <!-- <td class="textRightPadd">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td> -->
                                 <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.TotalSale + item.TaxAmount | currency:'USD':true:'1.2' }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                 <td class="textRightPadd" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
-                                <td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.IsSaleTicket ? item.TotalSale:0 | currency:'USD':true:'1.2' }}</td>
+                                <td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount"></td>
                                 <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="!user.IsRIInternal"></td>
-                                <td class="textRightPadd" [hidden]="!item.Drayage" *ngIf="!user.IsRIInternal">{{item.Drayage| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="!user.IsRIInternal"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                 <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="!user.IsRIInternal"></td>
-                                <td class="textRightPadd" [hidden]="!item.BuyBack" *ngIf="!user.IsRIInternal">{{item.BuyBack| currency:'USD':true:'1.2'}}</td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="!user.IsRIInternal"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                 <td class="text-align-center">
                                     <input type="checkbox" disabled name="riInternal" [checked]="item.CustomerSourceID===101">
                                 </td>

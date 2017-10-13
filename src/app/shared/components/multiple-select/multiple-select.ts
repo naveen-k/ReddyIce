@@ -33,7 +33,6 @@ export class SelectComponent implements AfterViewInit {
         if(this.elementRef) {
             this.elementRef.multipleSelect('setSelects', this.selected);
         }
-        
     }
 
     get selected() {
@@ -94,6 +93,7 @@ export class SelectComponent implements AfterViewInit {
         this.elementRef.multipleSelect('refresh');
         this.elementRef.multipleSelect('setSelects', this.selected);        
     }
+    
 }
 
 export interface IOption {
