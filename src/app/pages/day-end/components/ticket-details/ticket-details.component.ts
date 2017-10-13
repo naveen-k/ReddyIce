@@ -53,13 +53,14 @@ export class TicketDetailsComponent implements OnInit {
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.tripData = res.Tripdetail[0];
             this.tripData.TripTicketList.forEach(ticket => {
+                if (ticket.TicketTypeID === 30) { return; }
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
-                this.total.totalInvoice += ticket.IsSaleTicket ? ticket.TotalSale : - ticket.TotalSale || 0;
+                this.total.totalInvoice += ticket.TicketTypeID !== 27 ? ticket.TotalSale : - ticket.TotalSale || 0;
                 this.total.totalCash += ticket.CashAmount || 0;
                 this.total.totalCheck += ticket.CheckAmount || 0;
                 this.total.totalCharge += ticket.ChargeAmount || 0;
-                this.total.totalDrayage += ticket.Drayage || 0;
-                this.total.totalBuyBack += ticket.BuyBack || 0;
+                this.total.totalDrayage += ticket.TicketTypeID !== 27 ? ticket.Drayage : -ticket.Drayage || 0;
+                this.total.totalBuyBack += ticket.TicketTypeID !== 27 ? ticket.BuyBack : - ticket.BuyBack || 0;
                 this.total.totalDistAmt += ticket.DistAmt || 0;
             });
 
@@ -86,14 +87,13 @@ export class TicketDetailsComponent implements OnInit {
         return statusText;
     }
 
-    submitTickets() {
-        this.service.saveRecociliation({ TripStatusID: 25, TripID: this.tripId }).subscribe((res) => {
+    submitTickets(tripStatus) {
+        const preTripStatus = this.tripData.TripStatusID;
+        this.tripData.TripStatusID = tripStatus;
+        this.service.saveRecociliation({ TripStatusID: tripStatus, TripID: this.tripId }).subscribe((res) => {
             this.notification.success('Success', res);
-            this.tripData.TripStatusID = 25;
-            // this.router.navigate(['../list'])
         }, (err) => {
-            err = JSON.parse(err._body);
-            // this.notification.error("Error", err.Message);
+            this.tripData.TripStatusID = preTripStatus;
         });
     }
 

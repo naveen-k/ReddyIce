@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-sm-4" *ngIf="filter.type === 'distributor'">
                     <label><b>Select Distributor</b></label>
-                    <reddy-select [options]="distributors" [(selected)]="filter.userBranch"></reddy-select>
+                    <reddy-select [disabled]="logedInUser.IsDistributor" [options]="distributors" [(selected)]="filter.userBranch"></reddy-select>
                 </div>
             </div>
             <div>
@@ -51,15 +51,9 @@
                                      <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <th class="text-right">
+                            <th class="textAlignCenter">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
                                     Trip Code
-                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                </span>
-                            </th>
-                            <th class="text-right">
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
-                                    Total Received Amt
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
@@ -69,13 +63,19 @@
                                      <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
-                            <th>
+                            <th class="text-right">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
+                                    Received Amt
+                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                </span>
+                            </th>
+                            <th class="textAlignCenter">
                                 HH Day End
                             </th>
-                            <th class="text-right">
+                            <th class="textAlignCenter">
                                 # of Tickets
                             </th>
-                            <th>
+                            <th class="textAlignCenter">
                                 Status
                             </th>
                         </tr>
@@ -96,13 +96,13 @@
                             <td *ngIf="logedInUser.IsRIInternal">{{!item.IsUnplanned?item.RouteNumber :'Unplanned'}}</td>
                             <td *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
-                            <td class="textRightPadding">{{item.TripCode}}</td>
-                            <td class="textRightPadding">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
+                            <td class="textAlignCenter">{{item.TripCode}}</td>
                             <td class="textRightPadding">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
+                            <td class="textRightPadding">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
                             <td class="textAlignCenter">
                                 <input type="checkbox" name="tripHHMultiSelect" [(ngModel)]="item.IsClosed" disabled>
                             </td>
-                            <td class="textRightPadding">{{item.TripTicketList.length}}</td>
+                            <td class="textAlignCenter">{{item.TripTicketList.length}}</td>
                             <td class="textAlignCenter">
                                 <i class="custom-tooltip-ion">
                                     <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TripStatusID == 23" width="15">
