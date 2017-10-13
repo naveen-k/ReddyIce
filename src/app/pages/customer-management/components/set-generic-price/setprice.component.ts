@@ -56,7 +56,6 @@ export class SetPriceComponent implements OnInit {
         this.showSpinner = true;
         this.service.getExternalProducts().subscribe((res) => {
             this.externalProducts = res;
-            this.extProducts = res;
             this.showSpinner = false;
             this.editClicked = new Array(this.externalProducts.length);
             this.editClicked.fill(false);
@@ -228,14 +227,15 @@ export class SetPriceComponent implements OnInit {
     }
 
     updateProductOnTypeChange(productType) {
+        debugger
         this.extProducts = this.externalProducts.filter((p) => {
             if (productType === 'active') {
                 return p.IsActive;
-            }
-            if (productType === 'inActive') {
+            }else if (productType === 'inActive') {
                 return !p.IsActive;
+            }else {
+                return true;
             }
-            return true;
         });
     }
 

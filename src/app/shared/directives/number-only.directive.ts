@@ -15,7 +15,7 @@ export class NumberOnlyDirective {
                 (keyCode > 36 && keyCode < 41) ||
                 (keyCode === 8) ||
                 (keyCode === 46)) {
-                return true
+                return true;
             }
             else if (this.numberOnly && keyCode === 110) { return true } // accept decimal value 
             e.preventDefault();
