@@ -169,9 +169,9 @@ export class TrackerComponent implements OnInit {
           }
 
           this.tripFilterOption.DriverName = this.trips[0].DriverName;    // assigning in model
-          this.driverChangeHandler();
+          //this.driverChangeHandler();
           this.tripFilterOption.TripCode = this.trips[0].TripCode;        // assigning in model
-          this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
+          //this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
         } else {
           this.driverSpecTrips = [];
           this.selectedTrip = [];
@@ -238,7 +238,8 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log(this.driverOnBranch);
-    this.loadTrips();
+    this.driverChangeHandler();
+    //this.loadTrips();
   }
 
   // Fetch selected Trip
@@ -601,6 +602,7 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log(this.driverOndistributor);
+    this.driverChangeHandler();
     // this.loadTrips();
   }
 }
