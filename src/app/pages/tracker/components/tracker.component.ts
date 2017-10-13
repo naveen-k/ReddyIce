@@ -1,3 +1,4 @@
+import { User } from '../../user-management/user-management.interface';
 import { UserService } from '../../../shared/user.service';
 import { TrackerService } from '../tracker.service';
 import * as GoogleMapsLoader from 'google-maps';
@@ -44,6 +45,8 @@ export class TrackerComponent implements OnInit {
   driverSpecTrips: any = [];
   userId = localStorage.getItem('userId');
 
+  user: User;
+
   // variables for drawing route
   map: any;
   infowindow: any;
@@ -72,6 +75,9 @@ export class TrackerComponent implements OnInit {
       this.isDistributorExist = response.IsDistributor;
       this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
     });
+
+    this.user = this.userService.getUser();
+
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     this.selectedDate = this.service.formatDate({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() });
@@ -80,13 +86,14 @@ export class TrackerComponent implements OnInit {
     // get the user type: isDistributor or internal
     this.isDistributor = this.userService.getUser().IsDistributor;
 
-    if (this.isDistributor === true) {
+    if (this.isDistributor) {
       this.searchObj.userType = 'External';
       this.actual = true;
       this.planned = false;
       this.tripFilterOption.branchId = 0;
       this.tripFilterOption.isForAll = false;
       this.typeChangeHandler(); // to load distributors
+      this.tripFilterOption.DistributorMasterID = this.user.Distributor.DistributorMasterId;
     } else {
       this.tripFilterOption.branchId = 1;
       this.tripFilterOption.isForAll = true;
@@ -152,14 +159,15 @@ export class TrackerComponent implements OnInit {
               if (!tmpObj[this.trips[i].DistributorName]) {
                 distributorArr.push(
                   {
-                    DistributorName: this.trips[i].DistributorName
+                    DistributorName: this.trips[i].DistributorName,
+                    DistributorMasterID: this.trips[i].DistributorMasterID,
                   });
                 tmpObj[this.trips[i].DistributorName] = this.trips[i];
               }
             }
             this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
           }
-          
+
           this.tripFilterOption.DriverName = this.trips[0].DriverName;    // assigning in model
           this.driverChangeHandler();
           this.tripFilterOption.TripCode = this.trips[0].TripCode;        // assigning in model
@@ -172,6 +180,9 @@ export class TrackerComponent implements OnInit {
       } else {
         this.trips = [];
         this.showSpinner = false;
+      }
+      if(this.user.IsDistributor){
+        this.distributorChangeHandler();
       }
     }, (error) => {
       console.log(error);
@@ -211,18 +222,18 @@ export class TrackerComponent implements OnInit {
       // this.loadBranches();
     }
     this.loadTrips();
-    this.drawMapPath();
+    this.drawMapPath();    
   }
   driverOnBranch = [];
   // Fetch selected Branch
   branchChangeHandler() {
     console.log('tripFilterOption.branchId', this.tripFilterOption.branchId);
     this.driverOnBranch = [];
-    for (var i=0; i<this.trips.length; i++) {
+    for (var i = 0; i < this.trips.length; i++) {
       if (this.tripFilterOption.branchId == this.trips[i].BranchID) {
         this.driverOnBranch.push({
-          DriverName : this.trips[i].DriverName,
-          TripCode : this.trips[i].TripCode
+          DriverName: this.trips[i].DriverName,
+          TripCode: this.trips[i].TripCode
         });
       }
     }
@@ -579,17 +590,17 @@ export class TrackerComponent implements OnInit {
   DistributorTrips = [];
   driverOndistributor = [];
   distributorChangeHandler() {
-    console.log(this.tripFilterOption.DistributorName);
+    console.log(this.tripFilterOption.DistributorMasterID);
     this.driverOndistributor = [];
-    for (var i=0; i<this.trips.length; i++) {
-      if (this.tripFilterOption.DistributorName == this.trips[i].DistributorName) {
+    for (var i = 0; i < this.trips.length; i++) {
+      if (this.tripFilterOption.DistributorMasterID == this.trips[i].DistributorMasterID) {
         this.driverOndistributor.push({
-          DriverName : this.trips[i].DriverName,
-          TripCode : this.trips[i].TripCode
+          DriverName: this.trips[i].DriverName,
+          TripCode: this.trips[i].TripCode
         });
       }
     }
     console.log(this.driverOndistributor);
-    this.loadTrips();
+    // this.loadTrips();
   }
 }

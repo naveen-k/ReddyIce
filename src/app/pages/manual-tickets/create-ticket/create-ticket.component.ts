@@ -146,15 +146,18 @@ export class CreateTicketComponent implements OnInit {
     const activatedRouteObject = this.activatedRoute.snapshot.data;
     this.isReadOnly = activatedRouteObject['viewMode'];
     this.tripMode = activatedRouteObject['tripMode'];
-    this.branches = activatedRouteObject['branches'];
+    let branches = activatedRouteObject['branches'];
 
     if (this.tripMode) {
       this.initializeTripMode();
     }
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
-    this.branches = this.branches.filter((b) => b.BranchID !== 1);
-    this.sortBranches();
+    branches = branches.filter((b) => b.BranchID !== 1);
+    this.sortBranches(branches);
+
+    this.branches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
+
     this.ticketTypes = activatedRouteObject['ticketTypes'];
 
     if (this.user.IsDistributor || this.ticket.DistributorCopackerID) {
@@ -218,9 +221,9 @@ export class CreateTicketComponent implements OnInit {
     }
   }
 
-  sortBranches() {
+  sortBranches(branches) {
     // sort by name
-    this.branches.sort(function (a, b) {
+    branches.sort(function (a, b) {
       var nameA = a.BranchName.toUpperCase(); // ignore upper and lowercase
       var nameB = b.BranchName.toUpperCase(); // ignore upper and lowercase
       if (nameA < nameB) {
@@ -352,7 +355,7 @@ export class CreateTicketComponent implements OnInit {
 
   loadDisributors(branchId?: any) {
     this.service.getDistributerAndCopacker().subscribe(res => {
-      this.distributors = res;
+      this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
     })
   }
 
@@ -728,7 +731,7 @@ export class CreateTicketComponent implements OnInit {
     if (!this.validateTicket(this.ticket)) {
       return;
     }
-
+    this.isFormDirty = false;
     // Check if POD needs to upload
     if (this.file.Image) {
       this.uploadFile(this.file);
@@ -753,8 +756,7 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
 
-    // Save ticket    
-    this.isFormDirty = false;
+    // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('Ticket created successfully!');
       if (this.tripMode) {

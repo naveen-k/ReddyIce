@@ -131,7 +131,7 @@
                                                 </td>                                                
                                                 <td>{{item.TicketNumber }}</td>
                                                 <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
-                                                <td>{{item.CustomerID }} - {{ item.CustomerName }}</td>
+                                                <td>{{item.CustomerNumber}} - {{item.CustomerName}}</td>
                                                 <td class="text-align-right" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.TotalSale + item.TaxAmount | currency:'USD':true:'1.2' }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                                 <td class="text-align-right" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
                                                 <td class="text-align-right" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.IsSaleTicket ? item.TotalSale : 0 | currency:'USD':true:'1.2' }}</td>
