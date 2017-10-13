@@ -42,6 +42,7 @@ export class ReportsComponent implements OnInit {
     isTRReport: boolean = false;
     isDRReport: boolean = true;
     isASReport: boolean = false;
+    isDSTReport: boolean = false;
 
     viewReport: boolean = false;
     RI: boolean = false;
@@ -89,7 +90,7 @@ export class ReportsComponent implements OnInit {
             let tempArr = []
             res.forEach(branch => {
                 tempArr.push({
-                    value: branch.BranchID,
+                    value: +branch.BranchID,
                     label: `${branch.BranchName}`,
                     //date: branch,
                 })
@@ -139,7 +140,7 @@ export class ReportsComponent implements OnInit {
             let tempArr = []
             res.forEach(distributor => {
                 tempArr.push({
-                    value: distributor.DistributorCopackerID,
+                    value: +distributor.DistributorCopackerID,
                     label: `${distributor.Name}`,
                     //date: branch,
                 })
@@ -184,6 +185,7 @@ export class ReportsComponent implements OnInit {
                 this.isTRReport = false;
                 this.isDRReport = true;
                 this.isASReport = false;
+                this.isDSTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
             } else if (rType === 'RS') {
@@ -191,6 +193,7 @@ export class ReportsComponent implements OnInit {
                 this.isTRReport = false;
                 this.isDRReport = false;
                 this.isASReport = false;
+                this.isDSTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
             } else if (rType === 'SR') {
@@ -198,6 +201,7 @@ export class ReportsComponent implements OnInit {
                 this.isTRReport = false;
                 this.isDRReport = false;
                 this.isASReport = false;
+                this.isDSTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
             } else if (rType === 'TR') {
@@ -205,6 +209,7 @@ export class ReportsComponent implements OnInit {
                 this.isTRReport = true;
                 this.isDRReport = false;
                 this.isASReport = false;
+                this.isDSTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}`);
 
@@ -213,8 +218,18 @@ export class ReportsComponent implements OnInit {
                 this.isTRReport = false;
                 this.isDRReport = false;
                 this.isASReport = true;
+                this.isDSTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+
+            } else if (rType === 'DST') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                this.isDRReport = false;
+                this.isASReport = false;
+                this.isDSTReport = true;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor}&LoggedInUserID=${this.user.UserId}`);
 
             } else {
                 return false;
@@ -240,7 +255,7 @@ export class ReportsComponent implements OnInit {
             this.showSpinner = false;
             res.forEach(driver => {
                 tempArr.push({
-                    value: driver.UserId,
+                    value: +driver.UserId,
                     label: `${driver.UserName}`,
                     //date: branch,
                 });
@@ -279,29 +294,78 @@ export class ReportsComponent implements OnInit {
                 this.isTRReport = false;
                 this.isDRReport = true;
                 this.isASReport = false;
-
+                this.isDSTReport = false;
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                    this.getDistributors();
+                } else {
+                    this.filter.userType = 'internal';
+                    this.getAllBranches();
+                }
             } else if (rType === 'RS') {
                 this.isSRReport = false;
                 this.isTRReport = false;
                 this.isDRReport = false;
                 this.isASReport = false;
+                this.isDSTReport = false;
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                    this.getDistributors();
+                } else {
+                    this.filter.userType = 'internal';
+                    this.getAllBranches();
+                }
 
             } else if (rType === 'SR') {
                 this.isSRReport = true;
                 this.isTRReport = false;
                 this.isDRReport = false;
                 this.isASReport = false;
+                this.isDSTReport = false;
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                    this.getDistributors();
+                } else {
+                    this.filter.userType = 'internal';
+                    this.getAllBranches();
+                }
 
             } else if (rType === 'TR') {
                 this.isSRReport = false;
                 this.isTRReport = true;
                 this.isDRReport = false;
                 this.isASReport = false;
+                this.isDSTReport = false;
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                    this.getDistributors();
+                } else {
+                    this.filter.userType = 'internal';
+                    this.getAllBranches();
+                }
+
             } else if (rType === 'AS') {
                 this.isSRReport = false;
                 this.isTRReport = false;
                 this.isDRReport = false;
                 this.isASReport = true;
+                this.isDSTReport = false;
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                    this.getDistributors();
+                } else {
+                    this.filter.userType = 'internal';
+                    this.getAllBranches();
+                }
+
+            } else if (rType === 'DST') {
+                this.isSRReport = false;
+                this.isTRReport = false;
+                this.isDRReport = false;
+                this.isASReport = false;
+                this.isDSTReport = true;
+                this.filter.userType = 'external';
+                this.getDistributors();
             } else {
                 return false;
             }
@@ -319,7 +383,7 @@ export class ReportsComponent implements OnInit {
                 let tempArr = []
                 res.forEach(cust => {
                     tempArr.push({
-                        value: cust.CustomerId,
+                        value: +cust.CustomerId,
                         label: `${cust.CustomerName}`,
                         //date: branch,
                     });
@@ -332,7 +396,7 @@ export class ReportsComponent implements OnInit {
             });
         }
     }
-    
+
     getAllCustomers(distID) {
         if (this.filter.reportType === 'TR') {
             this.reportService.getCustomersByBranchandDist(0, distID).subscribe((res) => {
@@ -340,7 +404,7 @@ export class ReportsComponent implements OnInit {
                 let tempArr = []
                 res.forEach(cust => {
                     tempArr.push({
-                        value: cust.CustomerId,
+                        value: +cust.CustomerId,
                         label: `${cust.CustomerName}`,
                         //date: branch,
                     });

@@ -66,6 +66,7 @@ export interface Customer {
     NewAddedProducts?: MapProducts[];
     IsInternal: boolean;
     ChainID: number;
+    sChainID: string;
 }
 export interface MProducts {
     ExternalCustomerProductID: number;

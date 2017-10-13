@@ -28,6 +28,7 @@
                     <option value="SR">Sales Register</option>
                     <option value="TR">Ticket List</option>
                     <option value="AS">Asset Scanning</option>
+                    <option value="DST">Distributor Statement</option>
                     <!-- <option value="TK">Ticket Detail Report</option>
                     <option value="AS">Asset Scanning Report</option> -->
                     <!-- <option value="AS">Assets Scanning</option>
@@ -60,7 +61,7 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()"
-                                        [disabled]="user.IsDistributor">
+                                        [disabled]="user.IsDistributor||isDSTReport">
                                     <label class="top-margin"><b>RI</b></label>
                                 </div>
                                 <div class="col-sm-8">
@@ -98,7 +99,7 @@
                                             <option [value]='0'>All Distributors</option>
                                             <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
                                         </select> -->
-                                        <reddy-select [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select> 
+                                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select> 
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'internal'">
@@ -114,15 +115,15 @@
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'external'">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2" [hidden]="isDSTReport">
                                         <label class="top-margin pull-right"><b>Driver</b></label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" [hidden]="isDSTReport">
                                         <!-- <select class="form-control pull-right" [(ngModel)]="filter.driver">
                                             <option [value]='0'>All Drivers</option>
                                             <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
                                         </select> -->
-                                        <reddy-select [options]="driversofDist" [(selected)]="filter.driver" ></reddy-select>
+                                        <reddy-select  [options]="driversofDist" [(selected)]="filter.driver" ></reddy-select>
                                     </div>
                                 </ng-container>
                             </div>

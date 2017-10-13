@@ -57,22 +57,22 @@ export class CreateCustomerComponent implements OnInit {
         });
 
         this.service.getChain().subscribe((res) => {
-            this.chains = res;
-            // let tempArr = []
-            // res.forEach(chain => {
-            //     tempArr.push({
-            //         value: chain.ChainId,
-            //         label: `${chain.ChainName}`,
-            //         //date: branch,
-            //     })
-            // });
-            // this.chains = tempArr; 
+            // this.chains = res;
+            const tempArr = [];
+            res.forEach(chain => {
+                tempArr.push({
+                    value: +chain.ChainId,
+                    label: `${chain.ChainName}`,
+                });
+            });
+            this.chains = tempArr; 
         }, (err) => { });
 
 
         if (this.mode === 2 || this.mode === 3) {
             this.service.getCustomer(this.customerId).subscribe((response) => {
                 this.customer = response.CustomerDetails;
+                console.log(this.customer);
                 if (response.CustomerDetails.C_CustomerNumber_) {
                     this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
@@ -87,16 +87,16 @@ export class CreateCustomerComponent implements OnInit {
             console.log(" this.products---------------", this.products);
         });
         this.service.getAllStates().subscribe((response) => {
-           this.allStates = response;
-        //    let tempArr = []
-        //    response.forEach(state => {
-        //        tempArr.push({
-        //            value: state.StateId,
-        //            label: `${state.StateName}`,
-        //            //date: branch,
-        //        })
-        //    });
-        //    this.allStates = tempArr; 
+          // this.allStates = response;
+           let tempArr = []
+           response.forEach(state => {
+               tempArr.push({
+                   value: state.StateId,
+                   label: `${state.StateName}`,
+                   //date: branch,
+               })
+           });
+           this.allStates = tempArr; 
         });
     }
     addProduct() {

@@ -45,7 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let product of externalProducts|filter:customer.searchString; let index=index">
+                        <tr *ngFor="let product of extProducts|filter:customer.searchString; let index=index">
                             <ng-container *ngIf="product.IsActive">
                             <td>
                                 <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px; cursor:pointer" (click)="onEditClicked(product);formTouchHandler()">
@@ -71,7 +71,7 @@
                             </td>
                             <td></td>
                             <td>
-                                <input type="text" numberOnly [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" maxlength="10"
+                                <input type="text"  [numberOnly]="true" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" maxlength="10"
                                     style="padding: 5px; margin-top: 3px;text-align:right;">
                             </td>
                         </tr>
