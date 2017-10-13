@@ -13,7 +13,7 @@ export class SelectComponent implements AfterViewInit {
     loading: true;
 
     @Input()
-    selectAll: boolean = false
+    selectAll: boolean = false;
 
     @Input()
     position: string = 'bottom';
@@ -28,8 +28,9 @@ export class SelectComponent implements AfterViewInit {
     @Input()
     set selected(value: any) {
         if (!value) { return; }
-        if (!this.multiple && !(value instanceof Array)) { value = [value] };
+        if (!this.multiple && !(value instanceof Array)) { value = [value]; }
         this._selected = value;
+        this.elementRef.multipleSelect('setSelects', this.selected);
     }
 
     get selected() {
@@ -37,18 +38,18 @@ export class SelectComponent implements AfterViewInit {
     }
 
     @Output()
-    selectedChange: EventEmitter<any> = new EventEmitter()
+    selectedChange: EventEmitter<any> = new EventEmitter();
 
-    private _options: Array<IOption> = [] as Array<IOption>;
+    private _options: IOption[] = [] as IOption[];
 
     @Input()
-    set options(value: Array<IOption>) {
+    set options(value: IOption[]) {
         if (!value) { return; }
         this._options = value;
-        setTimeout(this.initSelect())
+        setTimeout(this.initSelect());
     }
 
-    get options(): Array<IOption> {
+    get options(): IOption[] {
         return this._options;
     }
 
@@ -75,25 +76,20 @@ export class SelectComponent implements AfterViewInit {
             }
             if (this.selected === selected) { return; }
             this.selectedChange.emit(selected)
-        })
+        });
     }
 
     initSelect() {
         if (!this.elementRef) { setTimeout(this.initSelect.bind(this)); return; }
         this.elementRef.empty();
         this.options.forEach((option) => {
-            this.elementRef.append($("<option />", {
+            this.elementRef.append($('<option />', {
                 value: option.value,
                 text: option.label,
-            }))
-        })
-        this.elementRef.multipleSelect("refresh");
-        this.elementRef.multipleSelect('setSelects', this.selected);
-        // this.loader();
-    }
-
-    loader() {
-        console.log(this.elementRef, this.select)
+            }));
+        });
+        this.elementRef.multipleSelect('refresh');
+        this.elementRef.multipleSelect('setSelects', this.selected);        
     }
 }
 
