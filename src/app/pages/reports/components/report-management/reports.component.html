@@ -154,6 +154,7 @@
     <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
     <div *ngIf="(!customers.length)" style='text-align:center; margin-top:10px;'> No data found </div> -->
     <div class="top-margin">
+        <div *ngIf="viewReport" style='text-align:center;position: absolute;z-index: -1;left: 50%;top: 40%;'> <a> <img src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
         <iframe *ngIf="viewReport" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
     </div>
 </ba-card>
