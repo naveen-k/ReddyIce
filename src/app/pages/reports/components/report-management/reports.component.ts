@@ -169,6 +169,7 @@ export class ReportsComponent implements OnInit {
             this.isPaperTicket = false;
         }
     }
+    
     updateLink(rType) {
         this.viewReport = true;
         setTimeout(function(){
