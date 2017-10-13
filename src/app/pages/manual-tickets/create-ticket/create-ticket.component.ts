@@ -476,18 +476,17 @@ export class CreateTicketComponent implements OnInit {
     } else if (ticketNumberLength < 4 || ticketNumberLength > 10) {       // check for ticket number length 4-10 only
       this.ticketMinMaxLength = true;
       this.containsCharacters = false;
-    } else {
-      this.invokeTicketDuplicateService();
     }
+    this.invokeTicketDuplicateService();
   }
 
   invokeTicketDuplicateService() {
     this.service.checkTicketNumber(this.ticket.TicketNumber).subscribe((res) => {
       this.ticketMinMaxLength = false;
       this.containsCharacters = false;
-      if (res.Message === 'Ticket Number already in use.') {
+      if (res == 'Ticket Number already in use.') {
         this.isTicketNumberExist = true;
-      } else if (res.Message === 'Ticket Number available for use.') {
+      } else if (res == 'Ticket Number available for use.') {
         this.isTicketNumberExist = false;
       }
     });
