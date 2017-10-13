@@ -30,7 +30,10 @@ export class SelectComponent implements AfterViewInit {
         if (!value) { return; }
         if (!this.multiple && !(value instanceof Array)) { value = [value]; }
         this._selected = value;
-        this.elementRef.multipleSelect('setSelects', this.selected);
+        if(this.elementRef) {
+            this.elementRef.multipleSelect('setSelects', this.selected);
+        }
+        
     }
 
     get selected() {

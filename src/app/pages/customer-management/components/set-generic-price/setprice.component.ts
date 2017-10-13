@@ -31,6 +31,7 @@ export class SetPriceComponent implements OnInit {
     action: string = '';
     cardTitle: string;
     productType: any = 'all';
+    extProducts: any = [];
 
 
     constructor(
@@ -55,6 +56,7 @@ export class SetPriceComponent implements OnInit {
         this.showSpinner = true;
         this.service.getExternalProducts().subscribe((res) => {
             this.externalProducts = res;
+            this.extProducts = res;
             this.showSpinner = false;
             this.editClicked = new Array(this.externalProducts.length);
             this.editClicked.fill(false);
@@ -216,25 +218,25 @@ export class SetPriceComponent implements OnInit {
         activeModal.componentInstance.modalContent = `Are you sure you want to delete the product?`;
         activeModal.componentInstance.closeModalHandler = (() => {
             this.service.deleteProduct(productID).subscribe((res) => {
-                    this.notification.success('Product Deleted Successfully!!!'); 
-                    this.getExternalProducts();
-                }, (err) => {
-                    this.notification.error('Problem Deleting Product!!!'); 
-                 });
-           
+                this.notification.success('Product Deleted Successfully!!!');
+                this.getExternalProducts();
+            }, (err) => {
+                this.notification.error('Problem Deleting Product!!!');
+            });
+
         });
     }
 
     updateProductOnTypeChange(productType) {
-        this.externalProducts = this.externalProducts.filter((p) => {
-          if (productType === 'active') {
-            return p.IsActive;
-          }
-          if (productType === 'inActive') {
-            return !p.IsActive;
-          }
-          return true;
+        this.extProducts = this.externalProducts.filter((p) => {
+            if (productType === 'active') {
+                return p.IsActive;
+            }
+            if (productType === 'inActive') {
+                return !p.IsActive;
+            }
+            return true;
         });
-      }
+    }
 
 }
