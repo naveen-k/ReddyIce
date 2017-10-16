@@ -216,7 +216,7 @@ export class SetPriceComponent implements OnInit {
         this.extProducts = this.externalProducts.filter((p) => {
             if (this.productType === 'active') {
                 return p.IsActive;
-            } if (this.productType === 'inActive') {
+            }else if (this.productType === 'inActive') {
                 return !p.IsActive;
             }
             return true;
