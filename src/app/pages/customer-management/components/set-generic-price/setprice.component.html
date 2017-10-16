@@ -7,7 +7,7 @@
                     <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
                 </div>
                 <div class="col-sm-2" [hidden]="rightCardOpen">
-                    <select class="form-control" [(ngModel)]="productType" (ngModelChange)="updateProductOnTypeChange(productType)">
+                    <select class="form-control" [(ngModel)]="productType" (ngModelChange)="updateProductOnTypeChange()">
                         <option value="active">Active</option>
                         <option value="inActive">InActive</option>
                         <option value="all">All</option>
