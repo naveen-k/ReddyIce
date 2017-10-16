@@ -30,7 +30,7 @@ export class SetPriceComponent implements OnInit {
     newProduct: any = {};
     action: string = '';
     cardTitle: string;
-    productType: any = 'all';
+    productType: any;
     extProducts: any = [];
 
 
@@ -56,6 +56,7 @@ export class SetPriceComponent implements OnInit {
         this.showSpinner = true;
         this.service.getExternalProducts().subscribe((res) => {
             this.externalProducts = res;
+            this.extProducts = res;
             this.showSpinner = false;
             this.editClicked = new Array(this.externalProducts.length);
             this.editClicked.fill(false);
@@ -84,22 +85,7 @@ export class SetPriceComponent implements OnInit {
         this.newProductList.push({ isActive: true } as MProducts);
         this.counter = this.counter + 1;
     }
-
-    isProductExist(name) {
-        this.service.isProductExist(name).subscribe((res) => {
-            // if (res === true) {
-
-            //     this.notification.error('Product Already Exist in List !!!');
-            //     this.isFormTouched = false;
-            // } else {
-            //     this.isFormTouched = true;
-            // }
-
-        },
-            (err) => {
-            });
-    }
-
+    
     editClickHandler(product, index) {
         if (product) {
             this.editClicked.fill(false);
@@ -228,13 +214,12 @@ export class SetPriceComponent implements OnInit {
 
     updateProductOnTypeChange() {
         this.extProducts = this.externalProducts.filter((p) => {
-            if (this.productType === 'Active') {
+            if (this.productType === 'active') {
                 return p.IsActive;
-            }else if (this.productType === 'InActive') {
+            } if (this.productType === 'inActive') {
                 return !p.IsActive;
-            }else {
-                return true;
             }
+            return true;
         });
     }
 

@@ -46,7 +46,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let product of extProducts|filter:customer.searchString; let index=index">
-                            <ng-container *ngIf="product.IsActive">
+                            
                             <td>
                                 <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px; cursor:pointer" (click)="onEditClicked(product);formTouchHandler()">
                                 <span class="tooltiptext">Edit</span></i>
@@ -61,7 +61,7 @@
                             <td class="td-width" [hidden]="!editClicked[index]">
                                 <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
                             </td>
-                            </ng-container>
+                            
                         </tr>
                         <tr *ngFor="let product of newProductList">
                             <td colspan="2"></td>
@@ -71,7 +71,7 @@
                             </td>
                             <td></td>
                             <td>
-                                <input type="text" [numberOnly]='true' [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" maxlength="10"
+                                <input type="text" [numberOnly]="true" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" maxlength="10"
                                     style="padding: 5px; margin-top: 3px;text-align:right;">
                             </td>
                         </tr>
@@ -87,7 +87,7 @@
         <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
             <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
             <create-product-price (formChanged)="formChangedHandler()" [product]="newProduct" [productList]="externalProducts" [isNewProduct]="isNewProduct"
-                (onSaveProduct)="onSaveProduct($event)" (onUpdateProduct)="onUpdateProduct($event)" (closeNewProduct)="showNewProduct($event)"
+                (onSaveProduct)="onSaveProduct($event)" (onUpdateProduct)="onUpdateProduct($event)"  (closeNewProduct)="showNewProduct($event)"
                 [action]='action' [mIOpen]="rightCardOpen" [formIsDirty]="formIsDirty">
             </create-product-price>
 

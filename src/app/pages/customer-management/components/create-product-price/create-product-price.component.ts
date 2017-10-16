@@ -6,6 +6,7 @@ import { any } from 'codelyzer/util/function';
 import { CustomerManagementService } from '../../customer-management.service';
 import { MapProducts } from '../../../../shared/interfaces/interfaces';
 
+
 @Component({
     templateUrl: './create-product-price.component.html',
     styleUrls: ['./create-product-price.component.scss'],
@@ -65,6 +66,8 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     @Output() formChanged = new EventEmitter();
 
     actionName: string;
+    isFormTouched = false;
+    
     
 
 
@@ -129,5 +132,20 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     isProductExist (product){
         var a = this.productList.filter(prod => prod.ProductName == product.ProductName).length >0;
         return a;
+    }
+    
+    isProductExistbyName(name) {
+        this.cmService.isProductExist(name).subscribe((res) => {
+            if (res === true) {
+
+             this.notification.error('Product Already Exist in List !!!');
+               this.isFormTouched = false;
+            } else {
+                 this.isFormTouched = true;
+             }
+
+        },
+            (err) => {
+            });
     }
 }
