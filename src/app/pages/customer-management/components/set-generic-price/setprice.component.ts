@@ -226,12 +226,11 @@ export class SetPriceComponent implements OnInit {
         });
     }
 
-    updateProductOnTypeChange(productType) {
-        debugger
+    updateProductOnTypeChange() {
         this.extProducts = this.externalProducts.filter((p) => {
-            if (productType === 'active') {
+            if (this.productType === 'Active') {
                 return p.IsActive;
-            }else if (productType === 'inActive') {
+            }else if (this.productType === 'InActive') {
                 return !p.IsActive;
             }else {
                 return true;

@@ -122,14 +122,23 @@ export class TrackerComponent implements OnInit {
     if (this.selectedTrip) {
       this.selectedTrip = [];
     }
-    this.showSpinner = true;
-    if (!this.tripFilterOption.branchId) {
-      if (this.isDistributor) {
-        this.tripFilterOption.branchId = 0;
-      } else {
-        this.tripFilterOption.branchId = 1;
-      }
+    if (this.driverSpecTrips) {
+      this.driverSpecTrips = [];
     }
+    if (this.driverOnBranch) {
+      this.driverOnBranch = [];
+    }
+    if (this.driverOndistributor) {
+      this.driverOndistributor = [];
+    }
+    this.showSpinner = true;
+    // if (!this.tripFilterOption.branchId) {
+    //   if (this.isDistributor) {
+    //     this.tripFilterOption.branchId = 0;
+    //   } else {
+    //     this.tripFilterOption.branchId = 1;
+    //   }
+    // }
     this.service.getTrips(this.selectedDate).subscribe((res) => {
       if (typeof res == 'object') {
         this.trips = res.Trips;
@@ -153,6 +162,7 @@ export class TrackerComponent implements OnInit {
               }
             }
             this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
+            
           } else if (this.searchObj.userType == 'External') {
             let tmpObj = {};
             for (var i = 0; i < this.trips.length; i++) {
@@ -167,14 +177,6 @@ export class TrackerComponent implements OnInit {
             }
             this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
           }
-
-          this.tripFilterOption.DriverName = this.trips[0].DriverName;    // assigning in model
-          //this.driverChangeHandler();
-          this.tripFilterOption.TripCode = this.trips[0].TripCode;        // assigning in model
-          //this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
-        } else {
-          this.driverSpecTrips = [];
-          this.selectedTrip = [];
         }
         this.drawMapPath();
       } else {
@@ -183,6 +185,8 @@ export class TrackerComponent implements OnInit {
       }
       if(this.user.IsDistributor){
         this.distributorChangeHandler();
+      } else {
+        this.branchChangeHandler();
       }
     }, (error) => {
       console.log(error);
@@ -206,7 +210,9 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
-    this.selectedTrip.sort(this.comparator); // sorting planned sequence
+    if (this.selectedTrip) {
+      this.selectedTrip.sort(this.comparator); // sorting planned sequence
+    }
     this.drawMapPath();
   }
 
@@ -228,17 +234,29 @@ export class TrackerComponent implements OnInit {
   // Fetch selected Branch
   branchChangeHandler() {
     console.log('tripFilterOption.branchId', this.tripFilterOption.branchId);
-    this.driverOnBranch = [];
-    for (var i = 0; i < this.trips.length; i++) {
-      if (this.tripFilterOption.branchId == this.trips[i].BranchID) {
-        this.driverOnBranch.push({
-          DriverName: this.trips[i].DriverName,
-          TripCode: this.trips[i].TripCode
-        });
+    // this.tripFilterOption.DriverName = this.trips[0].DriverName;    // assigning in model
+    // this.tripFilterOption.TripCode = this.trips[0].TripCode;        // assigning in model
+    
+    if (this.tripFilterOption.branchId) {
+      this.driverOnBranch = [];
+      for (var i = 0; i < this.trips.length; i++) {
+        if (this.tripFilterOption.branchId == this.trips[i].BranchID) {
+          this.driverOnBranch.push({
+            DriverName: this.trips[i].DriverName,
+            TripCode: this.trips[i].TripCode
+          });
+        }
       }
+      console.log(this.driverOnBranch);
+      if (this.driverOnBranch.length > 0) {
+        this.tripFilterOption.DriverName = this.driverOnBranch[0].DriverName;    // assigning in model
+        this.tripFilterOption.TripCode = this.driverOnBranch[0].TripCode;        // assigning in model
+      }
+      this.driverChangeHandler();
+    } else {
+      this.selectedTrip = [];
     }
-    console.log(this.driverOnBranch);
-    this.driverChangeHandler();
+    
     //this.loadTrips();
   }
 
@@ -255,18 +273,36 @@ export class TrackerComponent implements OnInit {
     if (this.searchObj.userType == 'Internal') {
       for (var i = 0; i < this.driverOnBranch.length; i++) {
         if (this.tripFilterOption.DriverName == this.driverOnBranch[i]['DriverName']) {
-          this.driverSpecTrips.push(this.driverOnBranch[i].TripCode);
+          //this.driverSpecTrips.push(this.driverOnBranch[i].TripCode);
+          this.driverSpecTrips.push(
+            {
+              TripCode: this.driverOnBranch[i].TripCode
+            }
+          );
         }
+      }
+      if (this.driverSpecTrips[0]) {
+        this.tripFilterOption.TripCode = this.driverSpecTrips[0].TripCode;
       }
     } else if (this.searchObj.userType == 'External') {
       for (var i = 0; i < this.driverOndistributor.length; i++) {
         if (this.tripFilterOption.DriverName == this.driverOndistributor[i]['DriverName']) {
-          this.driverSpecTrips.push(this.driverOndistributor[i].TripCode);
+          //this.driverSpecTrips.push(this.driverOndistributor[i].TripCode);
+          this.driverSpecTrips.push(
+            {
+              TripCode: this.driverOndistributor[i].TripCode
+            }
+          );
         }
       }
     }
     console.log('this.driverSpecTrips', this.driverSpecTrips);
-    this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
+    if (this.driverSpecTrips.length > 0) {
+      this.selectedTrip = [];
+      this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
+    } else {
+      this.selectedTrip = [];
+    }
   }
 
   // Filter Markers in the Google Map based on Sequence Radio Button selection
@@ -602,6 +638,10 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log(this.driverOndistributor);
+    if (this.driverOndistributor.length > 0) {
+      this.tripFilterOption.DriverName = this.driverOndistributor[0].DriverName;    // assigning in model
+      this.tripFilterOption.TripCode = this.driverOndistributor[0].TripCode;        // assigning in model
+    }
     this.driverChangeHandler();
     // this.loadTrips();
   }

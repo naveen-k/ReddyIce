@@ -23,12 +23,14 @@
             <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler(filter.reportType)">
                     <!-- <option value="ED">End of Day Report</option>
                     <option value="DS">Delivery Status</option> -->
-                    <option value="DR">Deposit Register</option>
+                    <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
                     <option value="RS">Unit Summary</option>
                     <option value="SR">Sales Register</option>
                     <option value="TR">Ticket List</option>
                     <option value="AS">Asset Scan</option>
                     <option value="DST">Distributor Statement</option>
+                    <option value="IOA">Inventory on Arrival</option>
+                    <option value="SRT">Sales</option>
                     <!-- <option value="TK">Ticket Detail Report</option>
                     <option value="AS">Asset Scanning Report</option> -->
                     <!-- <option value="AS">Assets Scanning</option>
@@ -42,7 +44,7 @@
     <div [ngClass]="{'row top-margin':isSRReport,'row top-margin no-margin':!isSRReport}">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-3 div-border " [hidden]="!isSRReport || !isASReport">
+                <div class="col-sm-3 div-border" [hidden]="!isSRReport">
                     <span class="col-sm-4 local-padding-eater">
                             <label class="top-margin">Ticket Type</label>
                         </span>

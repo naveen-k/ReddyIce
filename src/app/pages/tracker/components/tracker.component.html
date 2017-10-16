@@ -58,7 +58,7 @@
                     <label>Select Trip</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' (change)="tripChangeHandler()">
                         <option *ngFor="let trip of driverSpecTrips">
-                            {{trip}}
+                            {{trip.TripCode}}
                         </option>
                     </select>
                 </div>
