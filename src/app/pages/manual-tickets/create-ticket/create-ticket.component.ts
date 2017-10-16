@@ -595,6 +595,7 @@ export class CreateTicketComponent implements OnInit {
         this.file['Image'] = f[1];
         this.file['ImageMetaData'] = f[0];
         this.isFormDirty = true;
+        this.isDownloadable = true;        
       } else {
         const activeModal = this.modalService.open(ModalComponent, {
           size: 'sm',
@@ -627,10 +628,17 @@ export class CreateTicketComponent implements OnInit {
     });
   }
   downloadPODImage(imageID, obj) {
+    var savePod = (file) => {
+      let ext = file.ImageMetaData ? file.ImageMetaData.substring(file.ImageMetaData.indexOf('/') + 1, file.ImageMetaData.indexOf(';')) : 'png';
+      this.saveAs(file.ImageData, `${this.ticket.TicketID || 'pod'}.${ext}`)
+    }
+    if (this.file.Image) {
+      savePod({ 'ImageMetaData': this.file.ImageMetaData, 'ImageData': this.file.Image });
+      return;
+    }
     this.service.getImageByID(imageID).subscribe((res) => {
       if (res.ImageData) {
-        let ext = res.ImageMetaData ? res.ImageMetaData.substring(res.ImageMetaData.indexOf('/') + 1, res.ImageMetaData.indexOf(';')) : 'png';
-        this.saveAs(res.ImageData, `${res.ImageId}.${ext}`)
+        savePod(res);
       }
     });
   }
