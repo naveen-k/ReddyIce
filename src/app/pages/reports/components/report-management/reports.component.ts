@@ -334,6 +334,7 @@ export class ReportsComponent implements OnInit {
                 this.isDRReport = true;
                 this.isASReport = false;
                 this.isDSTReport = false;
+                this.isIOAReport = false;
                 this.isSRTReport = false;
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
@@ -348,6 +349,7 @@ export class ReportsComponent implements OnInit {
                 this.isDRReport = false;
                 this.isASReport = false;
                 this.isDSTReport = false;
+                this.isIOAReport = false;
                 this.isSRTReport = false;
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
@@ -363,6 +365,7 @@ export class ReportsComponent implements OnInit {
                 this.isDRReport = false;
                 this.isASReport = false;
                 this.isDSTReport = false;
+                this.isIOAReport = false;
                 this.isSRTReport = false;
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
@@ -378,6 +381,7 @@ export class ReportsComponent implements OnInit {
                 this.isDRReport = false;
                 this.isASReport = false;
                 this.isDSTReport = false;
+                this.isIOAReport = false;
                 this.isSRTReport = false;
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
@@ -393,6 +397,7 @@ export class ReportsComponent implements OnInit {
                 this.isDRReport = false;
                 this.isASReport = true;
                 this.isDSTReport = false;
+                this.isIOAReport = false;
                 this.isSRTReport = false;
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
@@ -408,6 +413,7 @@ export class ReportsComponent implements OnInit {
                 this.isDRReport = false;
                 this.isASReport = false;
                 this.isDSTReport = true;
+                this.isIOAReport = false;
                 this.isSRTReport = false;
                 this.filter.userType = 'external';
                 this.getDistributors();
