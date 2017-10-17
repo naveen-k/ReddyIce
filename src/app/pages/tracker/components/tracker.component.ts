@@ -538,12 +538,12 @@ export class TrackerComponent implements OnInit {
               infowindowContent += 'Customer Name : ' + '-' + '<br>';
             }
             if (this.selectedTrip[i].TotalSale) {
-              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalSale + '<br>';
+              infowindowContent += 'Total Sale : $' + this.selectedTrip[i].TotalSale + '<br>';
             } else {
               infowindowContent += 'Total Sale : ' + '-' + '<br>';
             }
             if (this.selectedTrip[i].TotalAmount) {
-              infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
+              infowindowContent += 'Total Amount : $' + this.selectedTrip[i].TotalAmount + '<br>';
             } else {
               infowindowContent += 'Total Amount : ' + '-' + '<br>';
             }

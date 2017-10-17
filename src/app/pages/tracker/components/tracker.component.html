@@ -125,7 +125,7 @@
                                                 <span class="tooltiptext">View Ticket Details</span>
                                             </i>
                                         </td>
-                                        <td [hidden]="isDistributor">{{subitem.PlannedSequence}}</td>
+                                        <td [hidden]="isDistributor || searchObj.userType == 'External'">{{subitem.PlannedSequence}}</td>
                                         <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
                                             {{subitem.ActualSequence}}
                                         </td>
