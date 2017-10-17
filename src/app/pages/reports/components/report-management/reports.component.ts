@@ -17,6 +17,7 @@ export class ReportsComponent implements OnInit {
 
     filter: any = {
         startDate: null,
+        todaysDate: null,
         endDate: null,
         reportType: 'DR',
         ticketType: 'regular',
@@ -27,6 +28,7 @@ export class ReportsComponent implements OnInit {
         distDriver: null,
         driver: 1,
         custID: 0,
+        custType: 0,
     };
 
     user: User;
@@ -45,6 +47,7 @@ export class ReportsComponent implements OnInit {
     isDSTReport: boolean = false;
     isIOAReport: boolean = false;
     isSRTReport: boolean = false;
+    isDistributor: boolean = false;
 
     viewReport: boolean = false;
     RI: boolean = false;
@@ -62,6 +65,7 @@ export class ReportsComponent implements OnInit {
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+        this.filter.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
         this.user = this.userService.getUser();
         this.userSubTitle = this.user.IsDistributor ? '-' + ' ' + this.user.Distributor.DistributorName : '';
@@ -69,13 +73,17 @@ export class ReportsComponent implements OnInit {
         // to select Distributor radio button by default if logged in with distributor
         if (this.user.IsDistributor) {
             this.filter.userType = 'external';
+            this.isDistributor = true;
+            this.filter.reportType = 'AS';
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
+            // this.getAllCustomers(this.filter.distributor);
             this.getDistributors();
             this.distributorChangeHandler();
-            if (this.user.Role.RoleID == 3) {
+            if (this.user.Role.RoleID === 3) {
                 this.filter.driver = this.user.Role.RoleID;
             }
         } else {
+            this.isDistributor = false;
             this.getAllBranches();
         }
 
@@ -85,17 +93,17 @@ export class ReportsComponent implements OnInit {
         this.reportService.getBranches().subscribe((res) => {
 
             // this.branches = this.reportService.transformOptionsReddySelect(res,);
-            // this.branches.splice(0,0,branch.BranchID=0)
+            // this.branches.splice(0, 0, branch.BranchID = 0)
             // this.branches = res;
             // this.sortBranches();
 
-            let tempArr = []
+            let tempArr = [];
             res.forEach(branch => {
                 tempArr.push({
                     value: +branch.BranchID,
                     label: `${branch.BranchName}`,
                     //date: branch,
-                })
+                });
             });
             this.branches = tempArr;
             this.branchChangeHandler(this.filter.branch);
@@ -139,13 +147,13 @@ export class ReportsComponent implements OnInit {
     getDistributors() {
         this.reportService.getDistributors().subscribe((res) => {
             this.distributors = res;
-            let tempArr = []
+            let tempArr = [];
             res.forEach(distributor => {
                 tempArr.push({
                     value: +distributor.DistributorCopackerID,
                     label: `${distributor.Name}`,
                     //date: branch,
-                })
+                });
             });
             tempArr.unshift({ value: 0, label: 'All Distributors' });
             this.distributors = tempArr;
@@ -191,7 +199,7 @@ export class ReportsComponent implements OnInit {
                 this.isDSTReport = false;
                 this.isSRTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
             } else if (rType === 'RS') {
                 this.isSRReport = false;
                 this.isTRReport = false;
@@ -200,7 +208,7 @@ export class ReportsComponent implements OnInit {
                 this.isDSTReport = false;
                 this.isSRTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
             } else if (rType === 'SR') {
                 this.isSRReport = true;
                 this.isTRReport = false;
@@ -209,7 +217,7 @@ export class ReportsComponent implements OnInit {
                 this.isDSTReport = false;
                 this.isSRTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
             } else if (rType === 'TR') {
                 this.isSRReport = false;
                 this.isTRReport = true;
@@ -218,7 +226,7 @@ export class ReportsComponent implements OnInit {
                 this.isDSTReport = false;
                 this.isSRTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}&CustType=${this.filter.custType}`);
 
             } else if (rType === 'AS') {
                 this.isSRReport = false;
@@ -228,7 +236,7 @@ export class ReportsComponent implements OnInit {
                 this.isDSTReport = false;
                 this.isSRTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
 
             } else if (rType === 'DST') {
                 this.isSRReport = false;
@@ -238,7 +246,7 @@ export class ReportsComponent implements OnInit {
                 this.isDSTReport = true;
                 this.isSRTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
 
             } else if (rType === 'IOA') {
                 this.isSRReport = false;
@@ -249,7 +257,7 @@ export class ReportsComponent implements OnInit {
                 this.isIOAReport = true;
                 this.isSRTReport = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
 
             } else if (rType === 'SRT') {
                 this.isSRReport = false;
@@ -260,7 +268,7 @@ export class ReportsComponent implements OnInit {
                 this.isIOAReport = false;
                 this.isSRTReport = true;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}`);
+                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
 
             } else {
                 return false;
@@ -436,7 +444,7 @@ export class ReportsComponent implements OnInit {
                     this.getAllBranches();
                 }
             } else {
-                return ;
+                return;
             }
 
 
@@ -445,7 +453,7 @@ export class ReportsComponent implements OnInit {
     showSpinner: boolean = false;
     getCustomers(branchID) {
         this.showSpinner = true;
-        if (this.filter.reportType === 'TR') {
+        if (this.filter.reportType === 'TR'|| this.filter.reportType === 'IOA') {
             this.reportService.getCustomersByBranchandDist(branchID, 0).subscribe((res) => {
                 this.showSpinner = false;
                 this.customers = res;
@@ -467,10 +475,12 @@ export class ReportsComponent implements OnInit {
     }
 
     getAllCustomers(distID) {
-        if (this.filter.reportType === 'TR') {
+        debugger
+        console.log(this.filter.reportType);
+        if (this.filter.reportType === 'TR' || this.filter.reportType === 'IOA') {
             this.reportService.getCustomersByBranchandDist(0, distID).subscribe((res) => {
                 this.customers = res;
-                let tempArr = []
+                let tempArr = [];
                 res.forEach(cust => {
                     tempArr.push({
                         value: +cust.CustomerId,
