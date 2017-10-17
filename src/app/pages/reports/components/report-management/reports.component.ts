@@ -76,7 +76,7 @@ export class ReportsComponent implements OnInit {
             this.isDistributor = true;
             this.filter.reportType = 'AS';
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
-            // this.getAllCustomers(this.filter.distributor);
+            //this.getAllCustomers(this.filter.distributor);
             this.getDistributors();
             this.distributorChangeHandler();
             if (this.user.Role.RoleID === 3) {
@@ -386,6 +386,7 @@ export class ReportsComponent implements OnInit {
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
                     this.getDistributors();
+                    this.getAllCustomers(this.user.Distributor.DistributorMasterId);
                 } else {
                     this.filter.userType = 'internal';
                     this.getAllBranches();
@@ -402,6 +403,7 @@ export class ReportsComponent implements OnInit {
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
                     this.getDistributors();
+                    //this.getAllCustomers(this.user.Distributor.DistributorMasterId);
                 } else {
                     this.filter.userType = 'internal';
                     this.getAllBranches();
@@ -429,6 +431,7 @@ export class ReportsComponent implements OnInit {
                 if (this.user.IsDistributor) {
                     this.filter.userType = 'external';
                     this.getDistributors();
+                    this.getAllCustomers(this.user.Distributor.DistributorMasterId);
                 } else {
                     this.filter.userType = 'internal';
                     this.getAllBranches();
@@ -496,6 +499,7 @@ export class ReportsComponent implements OnInit {
                 });
                 tempArr.unshift({ value: 0, label: 'All Customers' });
                 this.customers = tempArr;
+                return this.customers;
             }, (err) => {
 
             });

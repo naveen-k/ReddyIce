@@ -40,7 +40,7 @@
                 </select>
         </div>
         <div class="col-sm-3" [hidden]="!isDistributor">
-            <label>Select Customer Type</label>
+            <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType'>
                 <option [value]="0">All Customers</option>
                 <option [value]="101">RI Customers</option>
@@ -142,24 +142,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3" [hidden]="!isTRReport && !isIOAReport">
+                <!-- <div class="col-sm-3" [hidden]="!isTRReport && !isIOAReport">
                     <div class="row">
                         <div class="col-sm-4">
                             <label class="top-margin pull-right"><b>Customer</b></label>
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-8"> -->
                             <!-- <select class="form-control pull-right" [(ngModel)]="filter.custID">
                                 <option [value]='0'>All Customers</option>
                                 <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
                             </select> -->
-                            <reddy-select [options]="customers" [(selected)]="filter.custID" ></reddy-select>
+                            <!-- <reddy-select [options]="customers" [(selected)]="filter.custID" ></reddy-select>
                         </div>
                         <div style='margin-left: 120px;'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
                         <div *ngIf="(customers.length == 0 && !showSpinner)" style='margin-left: 100px;margin-top:10px;'> 
                             No data found
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
         </div>
