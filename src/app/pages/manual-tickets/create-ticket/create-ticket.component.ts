@@ -148,8 +148,14 @@ export class CreateTicketComponent implements OnInit {
     this.tripMode = activatedRouteObject['tripMode'];
     let branches = activatedRouteObject['branches'];
 
+    let tripTicketEditMode = activatedRouteObject['tripTicketEditMode'];
+
     if (this.tripMode) {
       this.initializeTripMode();
+    }
+
+    if (tripTicketEditMode) {
+      this.tripMode = tripTicketEditMode;
     }
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
@@ -575,7 +581,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   routeToTicketListing() {
-    this.location.back();   
+    this.location.back();
   }
 
   onFileUpload(event) {
@@ -587,7 +593,7 @@ export class CreateTicketComponent implements OnInit {
         this.file['Image'] = f[1];
         this.file['ImageMetaData'] = f[0];
         this.isFormDirty = true;
-        this.isDownloadable = true;        
+        this.isDownloadable = true;
       } else {
         const activeModal = this.modalService.open(ModalComponent, {
           size: 'sm',

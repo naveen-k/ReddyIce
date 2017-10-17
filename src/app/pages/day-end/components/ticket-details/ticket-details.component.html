@@ -118,7 +118,7 @@
                                 <td>
                                     <i class="ion-iphone custom-tooltip-ion" style="margin: 0 5px" *ngIf="!item.IsPaperTicket"><span class="tooltiptext">HH Ticket</span></i>
                                     <i class="ion-ios-book custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket"><span class="tooltiptext">Paper Ticket</span></i>
-                                    <i class="ion-edit custom-tooltip-ion custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket" [routerLink]="['../../../manual-ticket/ticket',item.ID]"><span class="tooltiptext">Edit</span></i>
+                                    <i class="ion-edit custom-tooltip-ion custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket" [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]"><span class="tooltiptext">Edit</span></i>
                                     <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.ID)" >
                                         <span class="tooltiptext">View </span>
                                     </i>
