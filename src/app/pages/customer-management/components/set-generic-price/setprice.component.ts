@@ -40,7 +40,7 @@ export class SetPriceComponent implements OnInit {
         protected route: Router,
         protected notification: NotificationsService,
         protected userService: UserService,
-        private modalService: NgbModal
+        private modalService: NgbModal,
     ) { }
 
     ngOnInit() {

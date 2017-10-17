@@ -1,15 +1,15 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-4">
+        <div [ngClass]="{'col-sm-4':!isDistributor,'col-sm-3':isDistributor}">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate" disabled>
+                <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div [ngClass]="{'col-sm-4':!isDistributor,'col-sm-3':isDistributor}">
             <label>End Date</label>
             <div class="input-group">
                 <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
@@ -18,24 +18,34 @@
                             </button>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div [ngClass]="{'col-sm-4':!isDistributor,'col-sm-3':isDistributor}">
             <label>Select Report</label>
             <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler(filter.reportType)">
-                    <!-- <option value="ED">End of Day Report</option>
-                    <option value="DS">Delivery Status</option> -->
-                    <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
+                <option value="AS">Asset Scan</option>
+                <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
+                <option value="DST">Distributor Statement</option>
+                <option value="IOA">Inventory on Arrival</option>
+                <option value="SRT">Sales</option>
+                <option value="TR">Ticket Details</option>
+                <option value="SR">Trip Details</option>
+                <option value="RS">Unit Summary</option>
+                    <!-- <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
                     <option value="RS">Unit Summary</option>
-                    <option value="SR">Sales Register</option>
-                    <option value="TR">Ticket List</option>
+                    <option value="SR">Trip Details</option>
+                    <option value="TR">Ticket Details</option>
                     <option value="AS">Asset Scan</option>
                     <option value="DST">Distributor Statement</option>
                     <option value="IOA">Inventory on Arrival</option>
-                    <option value="SRT">Sales</option>
-                    <!-- <option value="TK">Ticket Detail Report</option>
-                    <option value="AS">Asset Scanning Report</option> -->
-                    <!-- <option value="AS">Assets Scanning</option>
-                    <option value="DRA">Drayage Report</option> -->
+                    <option value="SRT">Sales</option> -->
                 </select>
+        </div>
+        <div class="col-sm-3" [hidden]="!isDistributor">
+            <label>Select Customer Type</label>
+            <select class="form-control" [(ngModel)]='filter.custType'>
+                <option [value]="0">All Customers</option>
+                <option [value]="101">RI Customers</option>
+                <option [value]="103">External Customers</option>
+            </select>
         </div>
         <div class="col-md-2 text-right head-button-container">
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
@@ -132,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3" [hidden]="isSRReport || !isTRReport">
+                <div class="col-sm-3" [hidden]="!isTRReport && !isIOAReport">
                     <div class="row">
                         <div class="col-sm-4">
                             <label class="top-margin pull-right"><b>Customer</b></label>

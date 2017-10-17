@@ -22,17 +22,6 @@
                 <div class="col-sm-3" [hidden]="isDistributor" *ngIf="searchObj.userType=='Internal'">
                     <label>Select Branch</label>
                     <reddy-select [options]="allBranches" [(selected)]="tripFilterOption.branchId" (selectedChange)="branchChangeHandler()"></reddy-select>
-
-                    <!-- <select class="form-control" [(ngModel)]='tripFilterOption.branchId' (change)="branchChangeHandler()">
-                        <option *ngFor="let obj of allBranches" [value]="obj.BranchID">                            
-                            <span *ngIf="obj.BranchID != '1'">
-                                {{obj.BranchCode}} - {{obj.BranchName}}
-                            </span>
-                            <span *ngIf="obj.BranchID == '1'">
-                                {{obj.BranchName}}
-                            </span>
-                        </option>
-                    </select> -->
                 </div>
                 <div class="col-sm-3" *ngIf="searchObj.userType=='External'">
                     <label>Dist./CoPacker</label>
@@ -74,17 +63,17 @@
                             <div class="block" style="background:yellow;"></div>
                             <span class="blockContent">Did Not Service</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor">
+                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External'">
                             <div class="block" style="background:brown;"></div>
                             <span class="blockContent">Planned Service</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor">
+                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External'">
                             <div class="block" style="background:red;"></div>
                             <span class="blockContent">Skipped Stops</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 center" [hidden]="isDistributor">
+                <div class="col-md-8 center" [hidden]="isDistributor || searchObj.userType == 'External'">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="type" checked (click)="sequenceChangeHandler(1)">
                         <span>Planned Seq</span>
@@ -106,7 +95,7 @@
                             <thead class="tableHeader">
                                 <tr>
                                     <th style="width:1%;">Actions</th>
-                                    <th style="width:1%;" [hidden]="isDistributor">
+                                    <th style="width:1%;" [hidden]="isDistributor || searchObj.userType == 'External'">
                                         <span>
                                             Planned
                                         </span>
@@ -116,12 +105,12 @@
                                             Actual
                                         </span>
                                     </th>
-                                    <th style="text-align: left;padding-left: 7px;" [hidden]="isDistributor">
+                                    <th style="text-align: left;padding-left: 7px;" *ngIf="!isDistributor && searchObj.userType != 'External'">
                                         <span>
                                             Customer#
                                         </span>
                                     </th>
-                                    <th style="text-align: left;padding-left: 7px;" [hidden]="!isDistributor">
+                                    <th style="text-align: left;padding-left: 7px;" *ngIf="isDistributor || searchObj.userType == 'External'">
                                         <span>
                                             Customer
                                         </span>
@@ -136,7 +125,7 @@
                                                 <span class="tooltiptext">View Ticket Details</span>
                                             </i>
                                         </td>
-                                        <td [hidden]="isDistributor">{{subitem.PlannedSequence}}</td>
+                                        <td [hidden]="isDistributor || searchObj.userType == 'External'">{{subitem.PlannedSequence}}</td>
                                         <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
                                             {{subitem.ActualSequence}}
                                         </td>
