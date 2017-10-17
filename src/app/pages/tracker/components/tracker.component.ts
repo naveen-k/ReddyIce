@@ -132,13 +132,6 @@ export class TrackerComponent implements OnInit {
       this.driverOndistributor = [];
     }
     this.showSpinner = true;
-    // if (!this.tripFilterOption.branchId) {
-    //   if (this.isDistributor) {
-    //     this.tripFilterOption.branchId = 0;
-    //   } else {
-    //     this.tripFilterOption.branchId = 1;
-    //   }
-    // }
     this.service.getTrips(this.selectedDate).subscribe((res) => {
       if (typeof res == 'object') {
         this.trips = res.Trips;
@@ -152,17 +145,19 @@ export class TrackerComponent implements OnInit {
             let tmpObj = {};
             for (var i = 0; i < this.trips.length; i++) {
               if (!tmpObj[this.trips[i].BranchID]) {
-                branchesArr.push(
-                  {
-                    BranchID: this.trips[i].BranchID,
-                    BranchCode: this.trips[i].BranchCode,
-                    BranchName: this.trips[i].BranchName
-                  });
-                tmpObj[this.trips[i].BranchID] = this.trips[i];
+                console.log('isDistributor: ', this.trips[i].isDistributor);
+                if (this.trips[i].isDistributor != 1) {
+                  branchesArr.push(
+                    {
+                      BranchID: this.trips[i].BranchID,
+                      BranchCode: this.trips[i].BranchCode,
+                      BranchName: this.trips[i].BranchName
+                    });
+                  tmpObj[this.trips[i].BranchID] = this.trips[i];
+                }
               }
             }
             this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
-            
           } else if (this.searchObj.userType == 'External') {
             let tmpObj = {};
             for (var i = 0; i < this.trips.length; i++) {
@@ -620,6 +615,14 @@ export class TrackerComponent implements OnInit {
 
   distributors: any = [];
   typeChangeHandler() {
+    if (this.searchObj.userType == 'External') {
+      this.actual = true;
+      this.planned = false;
+      // this.tripFilterOption.DistributorMasterID = this.user.Distributor.DistributorMasterId;
+    } else {
+      this.actual = false;
+      this.planned = true;
+    }
     this.loadTrips();
   }
 
