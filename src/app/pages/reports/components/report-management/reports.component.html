@@ -3,7 +3,7 @@
         <div [ngClass]="{'col-sm-4':!isDistributor,'col-sm-3':isDistributor}">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" [maxDate]="todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate" disabled>
+                <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
