@@ -575,15 +575,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   routeToTicketListing() {
-    if (this.tripMode) {
-      this.location.back();
-      return;
-    }
-    if (this.activatedRoute.snapshot.params.ticketId) {
-      this.route.navigate([this.urlString], { relativeTo: this.activatedRoute });
-    } else {
-      this.route.navigate(['../list'], { relativeTo: this.activatedRoute });
-    }
+    this.location.back();   
   }
 
   onFileUpload(event) {
