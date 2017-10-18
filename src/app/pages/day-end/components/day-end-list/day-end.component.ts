@@ -64,6 +64,14 @@ export class DayEndComponent implements OnInit {
             distributors.length && distributors.unshift({ value: 1, label: 'All Distributors' });
             this.distributors = distributors;
             this.branches = branches;
+
+            // Hack for displaying Distributor in case of no data return
+            if (this.logedInUser.IsDistributor && !this.distributors.length) {
+                this.distributors = [{
+                    value: this.logedInUser.Distributor.DistributorMasterId,
+                    label: this.logedInUser.Distributor.DistributorName
+                }]
+            }
         });
     }
 }
