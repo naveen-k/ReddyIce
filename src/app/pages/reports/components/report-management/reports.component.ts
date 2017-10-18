@@ -3,8 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../user-management/user-management.interface';
 import { environment } from '../../../../../environments/environment.prod';
 import { Component, OnInit } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
 import { ReportService } from '../../reports.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -22,45 +21,38 @@ export class ReportsComponent implements OnInit {
         reportType: 'DR',
         ticketType: 'regular',
         userType: 'internal',
-        distributor: 1,
-        branch: 1,
-        internalDriver: null,
-        distDriver: null,
+        distributor: 0,
+        branch: 1,        
         driver: 1,
         custID: 0,
         custType: 0,
     };
 
     user: User;
-
     linkRpt: SafeResourceUrl;
 
-    distributors: any = [];
-    customers: any = [];
-    branches: any = [];
-    drivers: any = [];
-    driversofDist: any = [];
-    isSRReport: boolean = false;
-    isTRReport: boolean = false;
-    isDRReport: boolean = true;
-    isASReport: boolean = false;
-    isDSTReport: boolean = false;
-    isIOAReport: boolean = false;
-    isSRTReport: boolean = false;
-    isDistributor: boolean = false;
+    distributors: any[] = []
+
+    allCustomers: any[] = [];
+    customers: any[] = []
+
+    drivers: any[] = []
+    driversofDist: any[] = [];
+    branches: any[] = []
 
     viewReport: boolean = false;
-    RI: boolean = false;
-    isPaperTicket: boolean = false;
-    userSubTitle: string = '';
+    showSpinner: boolean = false;
+
+    userSubTitle: string = ''
 
     constructor(
+        private userService: UserService,
+        private reportService: ReportService,
         private sanitizer: DomSanitizer,
-        protected userService: UserService,
-        protected reportService: ReportService,
         protected modalService: NgbModal,
         protected notification: NotificationsService,
     ) { }
+
     ngOnInit() {
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -68,116 +60,105 @@ export class ReportsComponent implements OnInit {
         this.filter.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
         this.user = this.userService.getUser();
-        this.userSubTitle = this.user.IsDistributor ? '-' + ' ' + this.user.Distributor.DistributorName : '';
-
-        // to select Distributor radio button by default if logged in with distributor
         if (this.user.IsDistributor) {
             this.filter.userType = 'external';
-            this.isDistributor = true;
-            this.filter.reportType = 'AS';
+            this.filter.reportType = 'DST';
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
-            //this.getAllCustomers(this.filter.distributor);
-            this.getDistributors();
-            this.distributorChangeHandler();
-            if (this.user.Role.RoleID === 3) {
-                this.filter.driver = this.user.Role.RoleID;
-            }
-        } else {
-            this.isDistributor = false;
-            this.getAllBranches();
+            this.userSubTitle = `- ${this.user.Distributor.DistributorName}`;
         }
 
+        this.userTypeChangeHandler();
+    }
+
+    reportTypeChangeHandler() {
+        this.viewReport = false;
+        switch (this.filter.reportType) {
+            case 'DST':
+                this.filter.userType = 'external';
+                break;
+            case 'IOA':
+                this.getCustomers();
+                break;
+        }
+
+        this.userTypeChangeHandler();
     }
 
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
-
-            // this.branches = this.reportService.transformOptionsReddySelect(res,);
-            // this.branches.splice(0, 0, branch.BranchID = 0)
-            // this.branches = res;
-            // this.sortBranches();
-
-            let tempArr = [];
-            res.forEach(branch => {
-                tempArr.push({
-                    value: +branch.BranchID,
-                    label: `${branch.BranchName}`,
-                    //date: branch,
-                });
-            });
-            this.branches = tempArr;
+            this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchName');
             this.branchChangeHandler(this.filter.branch);
         }, (err) => { });
     }
 
-    sortBranches() {
-        // sort by name
-        this.branches.sort(function (a, b) {
-            const nameA = a.BranchCode;
-            const nameB = b.BranchCode;
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-
-            // names must be equal
-            return 0;
-        });
-    }
-
-    sortDrivers() {
-        // sort by name
-        this.drivers.sort(function (a, b) {
-            const nameA = a.UserName.toUpperCase(); // ignore upper and lowercase
-            const nameB = b.UserName.toUpperCase(); // ignore upper and lowercase
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-
-            // names must be equal
-            return 0;
-        });
-    }
-
     getDistributors() {
         this.reportService.getDistributors().subscribe((res) => {
-            this.distributors = res;
-            let tempArr = [];
-            res.forEach(distributor => {
-                tempArr.push({
-                    value: +distributor.DistributorCopackerID,
-                    label: `${distributor.Name}`,
-                    //date: branch,
-                });
-            });
-            tempArr.unshift({ value: 0, label: 'All Distributors' });
-            this.distributors = tempArr;
-            // this.distributors.splice(0, 0, { 'id': '0', 'Name': '1 - All Distributors' });
+            res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
+            this.distributors = this.reportService.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
+            this.distributorChangeHandler();
         }, (err) => { });
     }
 
+    branchChangeHandler(branchID) {
+        this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
+            res.unshift({ UserId: 1, UserName: 'All Drivers' });
+            this.drivers = this.reportService.transformOptionsReddySelect(res, 'UserId', 'UserName');
+        }, (err) => { });
+        this.filter.custID = 0;
+        this.filter.driver = 1;
+        this.getCustomers();
+    }
+
+    distributorChangeHandler() {
+        const distributor = this.filter.distributor === 1 ? 0 : this.filter.distributor;
+        this.reportService.getDriversbyDistributors(distributor || 0).subscribe((res) => {
+            res.unshift({ UserId: 1, FirstName: 'All Drivers' });
+            this.driversofDist = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName');;
+        }, (err) => {
+        });
+        this.filter.custID = 0;
+        this.filter.driver = 1;
+        this.getCustomers();
+    }
+
+
     userTypeChangeHandler() {
         if (this.filter.userType === 'internal') {
-            this.filter.distributor = 1;
-            this.filter.driver = 1;
             this.getAllBranches();
         } else {
-            this.filter.branch = 1;
-            this.filter.driver = 1;
             this.getDistributors();
         }
-    }
-    ticketTypeChangeHandler() {
-        if (this.filter.ticketType === 'paper') {
-            this.isPaperTicket = true;
-        } else {
-            this.isPaperTicket = false;
+        if (!this.user.IsDistributor) {
+            this.filter.branch = 1;
+            this.filter.distributor = 0;
         }
+    }
+
+    getCustomers() {
+        this.showSpinner = true;
+        this.reportService.getCustomersByBranchandDist(this.filter.userType, this.filter.branch, this.filter.distributor).subscribe(res => {
+            res.unshift({
+                CustomerId: 0,
+                CustomerName: "All Customer",
+                EmailId: "",
+                IsActive: true
+            })
+            this.showSpinner = false;
+            this.allCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerId', 'CustomerName');
+            this.customers = [...this.allCustomers];
+        }, (err) => {
+            this.showSpinner = false;
+            this.customers = [];
+        })
+    }
+
+    customerTypeChange() {
+        this.customers = this.allCustomers.filter((cust) => {
+            if (+this.filter.custType === 0 || cust.value === 0) { return true }
+            else if (+this.filter.custType === 101) { return cust.IsRICustomer }
+            else if (+this.filter.custType === 103) { return !cust.IsRICustomer }
+        })
+        console.log(this.customers);
     }
 
     updateLink(rType) {
@@ -190,90 +171,46 @@ export class ReportsComponent implements OnInit {
             this.notification.error('Start Date cannot be greater than End Date!!!');
             this.viewReport = false;
         }
-        if (rType) {
-            if (rType === 'DR') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = true;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isSRTReport = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
-            } else if (rType === 'RS') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isSRTReport = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
-            } else if (rType === 'SR') {
-                this.isSRReport = true;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isSRTReport = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.isPaperTicket}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
-            } else if (rType === 'TR') {
-                this.isSRReport = false;
-                this.isTRReport = true;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isSRTReport = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}&CustType=${this.filter.custType}`);
+        const custID = this.filter.custID;
+        if (rType === 'DR') {
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+        } else if (rType === 'RS') {
 
-            } else if (rType === 'AS') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = true;
-                this.isDSTReport = false;
-                this.isSRTReport = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+        } else if (rType === 'SR') {
 
-            } else if (rType === 'DST') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = true;
-                this.isSRTReport = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+        } else if (rType === 'TR') {
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${custID}&CustType=${this.filter.custType}`);
 
-            } else if (rType === 'IOA') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = true;
-                this.isSRTReport = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
+        } else if (rType === 'AS') {
 
-            } else if (rType === 'SRT') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = false;
-                this.isSRTReport = true;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1?0:this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}`);
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
 
-            } else {
-                return false;
-            }
+        } else if (rType === 'DST') {
+
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+
+        } else if (rType === 'IOA') {
+
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+
+        } else if (rType === 'SRT') {
+
+            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                (`http://frozen.reddyice.com/NewDashboardReport/Reports/ReportData.aspx?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+
+        } else {
+            return false;
         }
+
         console.log(this.linkRpt);
     }
 
@@ -283,226 +220,5 @@ export class ReportsComponent implements OnInit {
         if (mm < 10) { mm = '0' + mm }
         if (dd < 10) { dd = '0' + dd }
         return mm + '/' + dd + '/' + yy;
-    }
-
-    branchChangeHandler(branchID) {
-        this.reportService.getDriversbyBranch(this.filter.branch).subscribe((res) => {
-            this.drivers = res;
-            // this.drivers.splice(0, 0, { 'UserName': 'All Drivers' });
-            //this.sortDrivers();
-            let tempArr = [];
-            this.showSpinner = false;
-            res.forEach(driver => {
-                tempArr.push({
-                    value: +driver.UserId,
-                    label: `${driver.UserName}`,
-                    //date: branch,
-                });
-            });
-            tempArr.unshift({ value: 1, label: 'All Drivers' });
-            this.drivers = tempArr;
-        }, (err) => { });
-
-        this.getCustomers(branchID);
-    }
-
-    distributorChangeHandler() {
-        this.reportService.getDriversbyDistributors(this.filter.distributor).subscribe((res) => {
-            this.driversofDist = res;
-            let tempArr = []
-            res.forEach(driver => {
-                tempArr.push({
-                    value: driver.UserId,
-                    label: `${driver.FirstName}`,
-                    //date: branch,
-                });
-            });
-            tempArr.unshift({ value: 1, label: 'All Drivers' });
-            this.driversofDist = tempArr;
-            // this.driversofDist.splice(0, 0, { 'FirstName': 'All Drivers' });
-        }, (err) => {
-
-        });
-
-    }
-    reportTypeChangeHandler(rType) {
-        this.viewReport = false;
-        if (rType) {
-            if (rType === 'DR') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = true;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = false;
-                this.isSRTReport = false;
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                    this.getDistributors();
-                } else {
-                    this.filter.userType = 'internal';
-                    this.getAllBranches();
-                }
-            } else if (rType === 'RS') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = false;
-                this.isSRTReport = false;
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                    this.getDistributors();
-                } else {
-                    this.filter.userType = 'internal';
-                    this.getAllBranches();
-                }
-
-            } else if (rType === 'SR') {
-                this.isSRReport = true;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = false;
-                this.isSRTReport = false;
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                    this.getDistributors();
-                } else {
-                    this.filter.userType = 'internal';
-                    this.getAllBranches();
-                }
-
-            } else if (rType === 'TR') {
-                this.isSRReport = false;
-                this.isTRReport = true;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = false;
-                this.isSRTReport = false;
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                    this.getDistributors();
-                    this.getAllCustomers(this.user.Distributor.DistributorMasterId);
-                } else {
-                    this.filter.userType = 'internal';
-                    this.getAllBranches();
-                }
-
-            } else if (rType === 'AS') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = true;
-                this.isDSTReport = false;
-                this.isIOAReport = false;
-                this.isSRTReport = false;
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                    this.getDistributors();
-                    //this.getAllCustomers(this.user.Distributor.DistributorMasterId);
-                } else {
-                    this.filter.userType = 'internal';
-                    this.getAllBranches();
-                }
-
-            } else if (rType === 'DST') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = true;
-                this.isIOAReport = false;
-                this.isSRTReport = false;
-                this.filter.userType = 'external';
-                this.getDistributors();
-
-            } else if (rType === 'IOA') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = true;
-                this.isSRTReport = false;
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                    this.getDistributors();
-                    this.getAllCustomers(this.user.Distributor.DistributorMasterId);
-                } else {
-                    this.filter.userType = 'internal';
-                    this.getAllBranches();
-                }
-
-            } else if (rType === 'SRT') {
-                this.isSRReport = false;
-                this.isTRReport = false;
-                this.isDRReport = false;
-                this.isASReport = false;
-                this.isDSTReport = false;
-                this.isIOAReport = false;
-                this.isSRTReport = true;
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                    this.getDistributors();
-                } else {
-                    this.filter.userType = 'internal';
-                    this.getAllBranches();
-                }
-            } else {
-                return;
-            }
-
-
-        }
-    }
-    showSpinner: boolean = false;
-    getCustomers(branchID) {
-        this.showSpinner = true;
-        if (this.filter.reportType === 'TR'|| this.filter.reportType === 'IOA') {
-            this.reportService.getCustomersByBranchandDist(branchID, 0).subscribe((res) => {
-                this.showSpinner = false;
-                this.customers = res;
-                let tempArr = []
-                res.forEach(cust => {
-                    tempArr.push({
-                        value: +cust.CustomerId,
-                        label: `${cust.CustomerName}`,
-                        //date: branch,
-                    });
-                });
-                tempArr.unshift({ value: 0, label: 'All Customers' });
-                this.customers = tempArr;
-            }, (err) => {
-                this.customers = [];
-                this.showSpinner = false;
-            });
-        }
-    }
-
-    getAllCustomers(distID) {
-        debugger
-        console.log(this.filter.reportType);
-        if (this.filter.reportType === 'TR' || this.filter.reportType === 'IOA') {
-            this.reportService.getCustomersByBranchandDist(0, distID).subscribe((res) => {
-                this.customers = res;
-                let tempArr = [];
-                res.forEach(cust => {
-                    tempArr.push({
-                        value: +cust.CustomerId,
-                        label: `${cust.CustomerName}`,
-                        //date: branch,
-                    });
-                });
-                tempArr.unshift({ value: 0, label: 'All Customers' });
-                this.customers = tempArr;
-                return this.customers;
-            }, (err) => {
-
-            });
-        }
     }
 }

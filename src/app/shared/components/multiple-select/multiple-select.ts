@@ -27,10 +27,11 @@ export class SelectComponent implements AfterViewInit {
     private _selected: any;
     @Input()
     set selected(value: any) {
-        if (!value) { return; }
+        //if (value === 0) { console.log(value) };
+        if (!value && value !== 0) { console.log('undefined', value); return; }
         if (!this.multiple && !(value instanceof Array)) { value = [value]; }
         this._selected = value;
-        if(this.elementRef) {
+        if (this.elementRef) {
             this.elementRef.multipleSelect('setSelects', this.selected);
         }
     }
@@ -92,9 +93,9 @@ export class SelectComponent implements AfterViewInit {
             }));
         });
         this.elementRef.multipleSelect('refresh');
-        this.elementRef.multipleSelect('setSelects', this.selected);        
+        this.elementRef.multipleSelect('setSelects', this.selected);
     }
-    
+
 }
 
 export interface IOption {

@@ -1,26 +1,27 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div [ngClass]="{'col-sm-4':!isDistributor,'col-sm-3':isDistributor}">
+        <div [ngClass]="{'col-sm-4':!user.IsDistributor,'col-sm-3':user.IsDistributor}">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate" disabled>
+                <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
+                    disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
-                            <i class="ion-calendar"></i>
-                        </button>
+                    <i class="ion-calendar"></i>
+                </button>
             </div>
         </div>
-        <div [ngClass]="{'col-sm-4':!isDistributor,'col-sm-3':isDistributor}">
+        <div [ngClass]="{'col-sm-4':!user.IsDistributor,'col-sm-3':user.IsDistributor}">
             <label>End Date</label>
             <div class="input-group">
                 <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
-                                <i class="ion-calendar"></i>
-                            </button>
+                    <i class="ion-calendar"></i>
+                </button>
             </div>
         </div>
-        <div [ngClass]="{'col-sm-4':!isDistributor,'col-sm-3':isDistributor}">
+        <div [ngClass]="{'col-sm-4':!user.IsDistributor,'col-sm-3':user.IsDistributor}">
             <label>Select Report</label>
-            <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler(filter.reportType)">
+            <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
                 <option value="AS">Asset Scan</option>
                 <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
                 <option value="DST">Distributor Statement</option>
@@ -29,19 +30,11 @@
                 <option value="TR">Ticket Details</option>
                 <option value="SR">Trip Details</option>
                 <option value="RS">Unit Summary</option>
-                    <!-- <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
-                    <option value="RS">Unit Summary</option>
-                    <option value="SR">Trip Details</option>
-                    <option value="TR">Ticket Details</option>
-                    <option value="AS">Asset Scan</option>
-                    <option value="DST">Distributor Statement</option>
-                    <option value="IOA">Inventory on Arrival</option>
-                    <option value="SRT">Sales</option> -->
-                </select>
+            </select>
         </div>
-        <div class="col-sm-3" [hidden]="!isDistributor">
+        <div class="col-sm-3" [hidden]="!user.IsDistributor">
             <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType'>
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
                 <option [value]="0">All Customers</option>
                 <option [value]="101">RI Customers</option>
                 <option [value]="103">External Customers</option>
@@ -51,122 +44,120 @@
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
         </div>
     </div>
-    <div [ngClass]="{'row top-margin':isSRReport,'row top-margin no-margin':!isSRReport}">
+    <div [ngClass]="{'row top-margin':filter.reportType === 'SR','row top-margin no-margin':filter.reportType !== 'SR'}">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-3 div-border" [hidden]="!isSRReport">
+                <div class="col-sm-3 div-border" *ngIf="filter.reportType === 'SR'">
                     <span class="col-sm-4 local-padding-eater">
-                            <label class="top-margin">Ticket Type</label>
-                        </span>
+                        <label class="top-margin">Ticket Type</label>
+                    </span>
                     <span class="col-sm-4 local-padding-eater left-margin">
-                            <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" (ngModelChange)="ticketTypeChangeHandler()" class="top-margin" checked>
-                            <label class="top-margin"><b>Regular</b></label>
-                        </span>
+                        <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" checked>
+                        <label class="top-margin">
+                            <b>Regular</b>
+                        </label>
+                    </span>
                     <span class="col-sm-4 local-padding-eater left-margin">
-                            <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" (ngModelChange)="ticketTypeChangeHandler()" class="top-margin">
-                            <label class="top-margin"><b>Paper</b></label>
-                        </span>
+                        <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin">
+                        <label class="top-margin">
+                            <b>Paper</b>
+                        </label>
+                    </span>
                 </div>
-                <div [ngClass]="{'col-sm-9 div-border1':!isDRReport,'col-sm-7 div-border':isDRReport}">
+                <div [ngClass]="{'col-sm-9 div-border1':true}">
                     <div class="row" style="padding-top:2px;">
-                        <div class="col-sm-3" [hidden]="isDRReport">
+                        <div class="col-sm-3" [hidden]="filter.reportType === 'DR'">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()"
-                                        [disabled]="user.IsDistributor||isDSTReport">
-                                    <label class="top-margin"><b>RI</b></label>
+                                        [disabled]="user.IsDistributor || filter.reportType === 'DST'">
+                                    <label class="top-margin">
+                                        <b>RI</b>
+                                    </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="radio" name="userType" value="external" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()">
-                                    <label class="top-margin"><b>Distributor</b></label>
+                                    <input type="radio" name="userType" [disabled]="filter.reportType === 'DR'" value="external" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()">
+                                    <label class="top-margin">
+                                        <b>Distributor</b>
+                                    </label>
                                 </div>
                             </div>
                         </div>
-                        <div [ngClass]="{'col-sm-9':!isDRReport,'col-sm-12':isDRReport}">
+                        <div [ngClass]="{'col-sm-9':true}">
                             <div class="row">
                                 <ng-container *ngIf="filter.userType === 'internal'">
                                     <div class="col-sm-2">
-                                        <label class="top-margin pull-right"><b>Branch</b></label>
+                                        <label class="top-margin pull-right">
+                                            <b>Branch</b>
+                                        </label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)" ></reddy-select>
-                                        <!-- <select class="form-control" [(ngModel)]='filter.branch' (ngModelChange)="branchChangeHandler(filter.branch)">
-                                            <option *ngFor="let branch of branches" [value]="branch.BranchID">
-                                                <span *ngIf="branch.BranchID != '1'">
-                                                    {{branch.BranchCode}} {{branch.BranchName}}
-                                                </span>
-                                                <span *ngIf="branch.BranchID == '1'">
-                                                    {{branch.BranchName}}
-                                                </span>
-                                            </option>
-                                        </select> -->
+                                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)"></reddy-select>
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'external'">
                                     <div class="col-sm-2">
-                                        <label class="top-margin pull-right"><b>Dist/Copacker</b></label>
+                                        <label class="top-margin pull-right">
+                                            <b>Dist/Copacker</b>
+                                        </label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <!-- <select [disabled]="user.IsDistributor" class="form-control" [(ngModel)]='filter.distributor' (ngModelChange)="distributorChangeHandler();getAllCustomers(filter.distributor)">
-                                            <option [value]='0'>All Distributors</option>
-                                            <option *ngFor="let distributor of distributors" [value]="distributor.DistributorCopackerID">{{distributor?.Name}}</option>
-                                        </select> -->
-                                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select> 
+                                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select>
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'internal'">
                                     <div class="col-sm-2">
-                                        <label class="top-margin pull-right"><b>Driver</b></label>
+                                        <label class="top-margin pull-right">
+                                            <b>Driver</b>
+                                        </label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <!-- <select class="form-control pull-right" [(ngModel)]="filter.driver">
-                                            <option [value]='0'>All Drivers</option>
-                                            <option *ngFor="let driver of drivers" [value]="driver.UserId">{{driver.UserName}}</option>
-                                        </select> -->
-                                        <reddy-select [options]="drivers" [(selected)]="filter.driver" ></reddy-select>
+                                        <reddy-select [options]="drivers" [(selected)]="filter.driver"></reddy-select>
                                     </div>
                                 </ng-container>
                                 <ng-container *ngIf="filter.userType === 'external'">
-                                    <div class="col-sm-2" [hidden]="isDSTReport">
-                                        <label class="top-margin pull-right"><b>Driver</b></label>
+                                    <div class="col-sm-2" [hidden]="filter.reportType === 'DST'">
+                                        <label class="top-margin pull-right">
+                                            <b>Driver</b>
+                                        </label>
                                     </div>
-                                    <div class="col-sm-4" [hidden]="isDSTReport">
-                                        <!-- <select class="form-control pull-right" [(ngModel)]="filter.driver">
-                                            <option [value]='0'>All Drivers</option>
-                                            <option *ngFor="let driver of driversofDist" [value]="driver.UserId">{{driver.FirstName}} {{driver.LastName}}</option>
-                                        </select> -->
-                                        <reddy-select  [options]="driversofDist" [(selected)]="filter.driver" ></reddy-select>
+                                    <div class="col-sm-4" [hidden]="filter.reportType === 'DST'">
+                                        <reddy-select [options]="driversofDist" [(selected)]="filter.driver"></reddy-select>
                                     </div>
                                 </ng-container>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-sm-3" [hidden]="!isTRReport && !isIOAReport">
-                    <div class="row">
+                <div class="col-sm-3">
+                    <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'10px 0':''}">
                         <div class="col-sm-4">
-                            <label class="top-margin pull-right"><b>Customer</b></label>
+                            <label class="top-margin pull-right">
+                                <b>Customer</b>
+                            </label>
                         </div>
-                        <div class="col-sm-8"> -->
-                            <!-- <select class="form-control pull-right" [(ngModel)]="filter.custID">
-                                <option [value]='0'>All Customers</option>
-                                <option *ngFor="let cust of customers" [value]='cust.CustomerId'>{{cust.CustomerName}}</option>
-                            </select> -->
-                            <!-- <reddy-select [options]="customers" [(selected)]="filter.custID" ></reddy-select>
+                        <div class="col-sm-8">                            
+                            <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select>
                         </div>
-                        <div style='margin-left: 120px;'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-                        <div *ngIf="(customers.length == 0 && !showSpinner)" style='margin-left: 100px;margin-top:10px;'> 
+                        <div style='margin-left: 120px;'>
+                            <a>
+                                <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+                            </a>
+                        </div>
+                        <!-- <div *ngIf="(customers.length == 0 && !showSpinner)" style='margin-left: 100px;margin-top:10px;'>
                             No data found
-                        </div>
+                        </div> -->
                     </div>
-                </div> -->
+                </div>
             </div>
 
         </div>
     </div>
-    <!-- <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-    <div *ngIf="(!customers.length)" style='text-align:center; margin-top:10px;'> No data found </div> -->
-    <div id='loader' *ngIf="viewReport" style='text-align:center;position: absolute;z-index: -1;left: 40%;top: 40%;'> <a> <img src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+    <div id='loader' *ngIf="viewReport" style='text-align:center;position: absolute;z-index: -1;left: 40%;top: 40%;'>
+        <a>
+            <img src="assets/reddyIce/spinner.gif " width='25px'>
+        </a>
+    </div>
     <div class="top-margin" style="z-index: 999">
         <iframe *ngIf="viewReport" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
     </div>

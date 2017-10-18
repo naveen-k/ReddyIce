@@ -38,9 +38,19 @@ export class ReportService extends SharedService {
             });
     }
 
-    getCustomersByBranchandDist(branchId, distributorId) {
-        return this.http.get(`api/user/getcustomerbybranchidordistributorid?branchId=${branchId}&distributorId=${distributorId}
-        `)
+    getCustomersByBranchandDist(rType, branchId, distributorId) {
+        if (rType == 'internal' && branchId === 1) {
+            return Observable.from([[]])
+        } else if (rType == 'external' && distributorId == 0) {
+            return Observable.from([[]])
+        }
+        let url = `api/user/getcustomerbybranchidordistributorid`;
+        if (rType == 'internal') {
+            url = `${url}?branchId=${branchId}`;
+        } else if (rType == 'external') {
+            url = `${url}?distributorId=${distributorId}`;
+        }
+        return this.http.get(url)
             .map((res) => res.json()).map((res) => {
                 return res;
             });
