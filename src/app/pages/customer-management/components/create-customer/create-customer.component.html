@@ -61,7 +61,7 @@
 
                 <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
                 <div class="col-sm-7 padding-eater">
-                    <input maxlength="6" [numberOnly]="true" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="text"
+                    <input maxlength="6" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="number" step="0.01"
                         class="form-control" placeholder="Tax Percentage"/>
                 </div>
             </div>
@@ -197,7 +197,7 @@
                                             </select>
                                     </td>
                                     <td class="td-width">
-                                        <input numberOnly [disabled]="!addProductCheck[k]" class="form-control right prodListElement" type="text" [(ngModel)]="mprod.ProductPrice">
+                                        <input [disabled]="!addProductCheck[k]" class="form-control right prodListElement" type="number" step="0.01" [(ngModel)]="mprod.ProductPrice">
                                     </td>
                                     <td>
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,k)">
