@@ -61,14 +61,14 @@ export class CustomerManagementComponent implements OnInit {
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.showCancel = true;
         activeModal.componentInstance.modalHeader = 'Warning!';
-        activeModal.componentInstance.modalContent = `Are you sure you want to delete the customer?`;
+        activeModal.componentInstance.modalContent = `Are you sure you want to inactive the customer?`;
         activeModal.componentInstance.closeModalHandler = (() => {
             const data = [{ 'CustomerType': 2, 'CustomerId': customerId }];
             this.service.deleteCustomer(data).subscribe((res) => {
-                this.notification.success('Deleted Succesfully!!');
+                this.notification.success('Inactivated Succesfully!!');
                 this.getAllCustomers();
             }, (err) => {
-                this.notification.error('Error in Deleting a customer!!');
+                this.notification.error('Error in Inactivating a customer!!');
             });
            
         });

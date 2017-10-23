@@ -68,13 +68,14 @@
             </thead>
             <tbody>
                 <tr *ngFor="let cust of customers| filter:customer.searchString | sort:customer.sortField:customer.isAsc">
-                    <ng-container *ngIf="cust.Active">
+                    <!-- <ng-container *ngIf="cust.Active && isRI"> -->
+                    <ng-container *ngIf="(isRI && cust.IsRICustomer)">
                         <td class="table-id text-alignment-center" style="cursor: pointer">
                             <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
                             <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
-                                    <span class="tooltiptext" >Delete</span>
+                                    <span class="tooltiptext" >Inactive</span>
                                 </i>
                             <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId]" [hidden]="!cust.IsRICustomer">
                                     <span class="tooltiptext" >View</span>
@@ -87,13 +88,13 @@
                         <td>{{cust.PrimaryContact}}</td>
                         <td class="text-alignment-center">{{cust.CustomerTypeID | customerTypeToName}}</td>
                     </ng-container>
-                    <ng-container *ngIf="!cust.Active">
+                    <ng-container *ngIf="!isRI && !cust.IsRICustomer">
                         <td class="table-id text-alignment-center" style="cursor: pointer">
                             <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
                             <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
-                                    <span class="tooltiptext" >Delete</span>
+                                    <span class="tooltiptext" >Inactive</span>
                                 </i>
                             <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId]" [hidden]="!cust.IsRICustomer">
                                     <span class="tooltiptext" >View</span>
