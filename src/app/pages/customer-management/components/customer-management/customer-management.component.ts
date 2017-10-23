@@ -33,6 +33,14 @@ export class CustomerManagementComponent implements OnInit {
         this.getAllCustomers();
     }
 
+    isRI = true;
+    sequenceChangeHandler(sequence) {
+        if (sequence == 1) {
+            this.isRI = true;
+        } else {
+            this.isRI = false;
+        }
+    }
 
     getAllCustomers() {
         this.showSpinner = true;
