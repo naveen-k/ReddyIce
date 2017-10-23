@@ -329,6 +329,9 @@ export class CreateCustomerComponent implements OnInit {
     }
     formFlagHandler() {
         this.isFromDirty = true;
+        if (!this.customer.IsTaxassble) {
+            this.customer['TaxPercentage'] = 0;
+        }
     }
     backClickHandler() {
         if (this.isFromDirty) {

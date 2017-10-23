@@ -34,7 +34,8 @@ export interface Customer {
     SecondaryContact: string;
     TicketMessage: string;
     IsTaxable: boolean;
-    TaxPercentage: boolean;
+//    TaxPercentage: boolean;
+    TaxPercentage: number;
     CustomerTypeCode: string;
     latitude: string;
     longitude: string;
