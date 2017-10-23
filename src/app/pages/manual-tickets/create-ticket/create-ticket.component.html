@@ -339,9 +339,9 @@
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td>
-                                                <input type="number" min="0" oninput="validity.valid||(value='');" [minValue]="tdetail.StartMeterReading" class="form-control prodListElement"
+                                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control prodListElement"
                                                     [(ngModel)]="tdetail.EndMeterReading" (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;"
-                                                    [disabled]="isReadOnly" [min]="tdetail.StartMeterReading">
+                                                    [disabled]="isReadOnly" min="tdetail.StartMeterReading" >
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                             <td class="textAlignCenter">
