@@ -26,6 +26,23 @@
                 <span>No</span>
             </label>
         </div>
+        <div class="col-sm-6" style="padding-top:8px;">
+            <label>
+                <span>User Type</span>
+            </label>
+            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="usertype" (click)="usertypeChangeHandler(1)">
+                <span>Active</span>
+            </label>
+            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="usertype" (click)="usertypeChangeHandler(2)">
+                <span>In-Active</span>
+            </label>
+            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <input type="radio" name="usertype" checked (click)="usertypeChangeHandler(3)">
+                <span>Both</span>
+            </label>
+        </div>
     </div>
     <div class="page-header">
         <table class="table table-striped">
@@ -69,7 +86,9 @@
             <tbody>
                 <tr *ngFor="let cust of customers| filter:customer.searchString | sort:customer.sortField:customer.isAsc">
                     <!-- <ng-container *ngIf="cust.Active && isRI"> -->
-                    <ng-container *ngIf="(isRI && cust.IsRICustomer)">
+                    <ng-container *ngIf="((isRI && cust.IsRICustomer) && (userType==3 && (cust.Active || !cust.Active))) 
+                    || ((isRI && cust.IsRICustomer) && (userType==2 && (!cust.Active)))
+                    || ((isRI && cust.IsRICustomer) && (userType==1 && (cust.Active)))">
                         <td class="table-id text-alignment-center" style="cursor: pointer">
                             <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>
@@ -88,7 +107,9 @@
                         <td>{{cust.PrimaryContact}}</td>
                         <td class="text-alignment-center">{{cust.CustomerTypeID | customerTypeToName}}</td>
                     </ng-container>
-                    <ng-container *ngIf="!isRI && !cust.IsRICustomer">
+                    <ng-container *ngIf="!isRI && !cust.IsRICustomer && (userType==3 && (cust.Active || !cust.Active))
+                    || ((!isRI && !cust.IsRICustomer) && (userType==2 && (!cust.Active)))
+                    || ((!isRI && !cust.IsRICustomer) && (userType==1 && (cust.Active)))">
                         <td class="table-id text-alignment-center" style="cursor: pointer">
                             <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>

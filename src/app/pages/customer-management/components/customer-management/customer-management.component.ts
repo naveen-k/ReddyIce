@@ -42,6 +42,11 @@ export class CustomerManagementComponent implements OnInit {
         }
     }
 
+    userType = 3;
+    usertypeChangeHandler(sequence) {
+        this.userType = sequence;
+    }
+
     getAllCustomers() {
         this.showSpinner = true;
         this.service.getAllCustomers().subscribe((res) => {
