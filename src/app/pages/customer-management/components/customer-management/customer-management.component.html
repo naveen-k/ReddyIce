@@ -63,7 +63,7 @@
                             <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
                                     <span class="tooltiptext" >Delete</span>
                                 </i>
-                            <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId]">
+                            <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId]" [hidden]="!cust.IsRICustomer">
                                     <span class="tooltiptext" >View</span>
                                 </i>
                         </td>
