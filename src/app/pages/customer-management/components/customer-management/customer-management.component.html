@@ -19,13 +19,13 @@
             <thead class="tableHeader">
                 <tr>
                     <th class="table-id">Actions</th>
-                    <th>
+                    <th class="alignLeft">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerId';customer.isAsc=!customer.isAsc;">
                             Customer #
                             <i *ngIf="(customer.sortField == 'CustomerId')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
-                    <th>
+                    <th class="alignLeft">
                         <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerName';customer.isAsc=!customer.isAsc;">
                             Customer Name
                             <i *ngIf="(customer.sortField == 'CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
@@ -36,17 +36,17 @@
                             RI Customer
                         </span>
                     </th>
-                    <th>
+                    <th class="alignLeft">
                         <span>
                             Payment Type
                         </span>
                     </th>
-                    <th>
+                    <th class="alignLeft">
                         <span>
                             Contact
                         </span>
                     </th>
-                    <th>
+                    <th style="padding-right:7px;">
                         <span>
                             Customer Type
                         </span>

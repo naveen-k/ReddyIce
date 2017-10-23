@@ -4,6 +4,10 @@
     margin: 20px 0;
 };
 
+.alignLeft {
+    padding-left: 7px;
+}
+
 select.form-control:not([size]):not([multiple]) {
     height: calc(2.25rem + -1px);
 }
