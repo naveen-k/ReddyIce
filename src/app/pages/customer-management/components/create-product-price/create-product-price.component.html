@@ -7,7 +7,7 @@
   <div class="row page-header rowContainer first-form-row">
     <div class="col-md-6  page-header">
       <label for="fname" class="control-label">Product Name</label>
-      <input  type="text" [disabled]="actionName=='edit'" class="form-control" id="pname" placeholder="Product Name"
+      <input  type="text"  class="form-control" id="pname" placeholder="Product Name"
         minlength="2" [(ngModel)]="product.ProductName" name="ProductName" #ProductName="ngModel" required (change)="changeHandler()"
         (blur)="spaceRemoverFn(product.ProductName);isProductExistbyName(product.ProductName)" maxlength="50">
       <div *ngIf="actionName=='create1' && ProductName.invalid && (ProductName.dirty || ProductName.touched)" class="error-message">
