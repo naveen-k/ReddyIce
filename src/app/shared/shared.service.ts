@@ -10,14 +10,10 @@ export class SharedService {
     protected http: HttpService;
 
     private _branches: any;
-    constructor(http: HttpService) {
-        // this.progress = Observable.create(observer => {
-        //     this.progressObserver = observer
-        // }).share();
-    }
+    constructor(http: HttpService) {}
 
     getBranches(userId): Observable<any> {
-        // if (this._branches) { return Observable.of(this._branches); }
+        if (this._branches) { return Observable.of(this._branches); }
         return this.http.get(`api/DistributorBranches?Id=${userId}`).map((res) => res.json()).map((res) => {
             // Cache branch response
             this._branches = res;

@@ -24,7 +24,7 @@
             <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
                 <option value="AS">Asset Scan</option>
                 <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
-                <option value="DST">Distributor Statement</option>
+                <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
                 <option value="IOA">Inventory on Arrival</option>
                 <option value="SRT">Sales</option>
                 <option value="TR">Ticket Details</option>

@@ -87,6 +87,8 @@ export class CreateTicketComponent implements OnInit {
   readingCheck: boolean = false;
   isDownloadable: boolean = false;
 
+  listFilter: any;
+
   file: any = {};
 
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
@@ -121,24 +123,20 @@ export class CreateTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const userId = localStorage.getItem('userId') || '';
-    this.userService.getUserDetails(userId).subscribe((response) => {
-      this.isDistributorExist = response.IsDistributor;
-      this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
-    });
     const now = new Date();
     this.date.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     // Initialize user object with current logged In user;
     this.user = this.userService.getUser();
+    this.userSubTitle = this.user.IsDistributor ? '-' + ' ' + this.user.Distributor.DistributorName : '';
 
     // Initialize properties from searched Object of List ticket page
-    const searchObject = this.service.getSearchedObject();
-    this.ticket.DeliveryDate = searchObject.CreatedDate;
-    this.ticket.BranchID = +searchObject.BranchId;
-    this.ticket.isUserTypeDistributor = searchObject.userType ? searchObject.userType !== 'Internal' : null;
-    this.ticket.UserID = searchObject.UserId ? +searchObject.UserId : 0;
-    this.ticket.DistributorCopackerID = +searchObject.DistributorID;
+    this.listFilter = this.service.getSearchedObject();
+    this.ticket.DeliveryDate = this.listFilter.CreatedDate;
+    this.ticket.BranchID = +this.listFilter.BranchId;
+    this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
+    this.ticket.UserID = this.listFilter.UserId ? +this.listFilter.UserId : 0;
+    this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
 
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
@@ -268,6 +266,9 @@ export class CreateTicketComponent implements OnInit {
 
     // Reset Selected Customer
     this.ticket.Customer = '';
+    this.ticket.PONumber = '';
+    this.file.Image = null;
+    this.isDownloadable = false;
     this.ticket.TicketProduct = [];
 
     this.resetSubTypesAndMode(selectedTicket);
@@ -320,6 +321,8 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
+
+    this.listFilter.BranchId = this.ticket.BranchID;
   }
 
   loadCustomerOfBranch(branchId, callback) {
@@ -376,6 +379,7 @@ export class CreateTicketComponent implements OnInit {
 
   distributorChangeHandler() {
     this.loadCustomers();
+    this.listFilter.DistributorID = this.ticket.DistributorCopackerID;
   }
 
   addProductRow() {
@@ -405,6 +409,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketProduct.forEach(td => {
       if (!td.ProductID) {
         td.ProductID = productdetail[0].ProductID;
+        this.productChangeHandler(td);
       }
       this.updateTicketDetailObject(td);
       if (this.ticket.CustomerType === 20) {
@@ -458,7 +463,7 @@ export class CreateTicketComponent implements OnInit {
       });
       return;
     }
-
+    product[0]['ProductSourceID'] = this.customer.productdetail.filter(pr => pr.ProductID === product[0]['ProductID'])[0]['ProductSourceID']
     this.updateTicketDetailObject(ticketDetail);
     this.unitChangeHandler(ticketDetail);     // called this method to update the amount on product change itself
   }
@@ -503,7 +508,7 @@ export class CreateTicketComponent implements OnInit {
 
   poNumberValidation() {
     const poNumberLength = this.ticket.PONumber.length;
-    const letterNumber = /^[0-9a-zA-Z]+$/;              // pattern to check for string to be alphanumeric
+    const letterNumber = /^[0-9a-zA-Z-]+$/;              // pattern to check for string to be alphanumeric
     if (poNumberLength < 4 || poNumberLength > 20) {    // check for ticket number length 4-20 only
       this.poMinMaxLength = true;
       this.poContainsCharacters = false;
@@ -869,12 +874,15 @@ export class CreateTicketComponent implements OnInit {
 
   userTypeChangeHandler() {
     this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = null;
+    this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = null;
+
     if (this.ticket.isUserTypeDistributor) {
+      this.listFilter.userType = 'External';
       this.loadDisributors();
     } else {
+      this.listFilter.userType = 'Internal';
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
-
   }
 
   /**

@@ -60,7 +60,7 @@ export class CreateCustomerComponent implements OnInit {
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
-
+        this.customer.CustType = 20;
         this.service.getChain().subscribe((res) => {
             // this.chains = res;
             const tempArr = [];

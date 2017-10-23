@@ -114,7 +114,7 @@ export class TicketListComponent implements OnInit {
             res = res || [];
             if (this.user.Role && this.user.Role.RoleID <= 2) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
-                this.searchObj.UserId = 1;
+                this.searchObj.UserId = +this.searchObj.UserId || 1;
             }
             this.drivers = res;
             this.getSearchedTickets();
