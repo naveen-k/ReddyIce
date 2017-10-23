@@ -36,7 +36,7 @@ export class CreateCustomerComponent implements OnInit {
     mode: number; // 1-Create Mode, 2-Edit Mode, 3-View Mode 
     addProductCheck: any = [];
     addNewProductCheck: any = [];
-
+    title: any = 'Create';
     constructor(protected service: CustomerManagementService,
         protected route: ActivatedRoute,
         protected router: Router,
@@ -46,6 +46,11 @@ export class CreateCustomerComponent implements OnInit {
     ) {
         this.customerId = this.route.snapshot.params['customerId'];
         this.mode = +this.route.snapshot.data['mode'];
+        if (this.customerId) {
+            this.title = 'Edit';
+        } else {
+            this.title = 'Create';
+        }
     }
 
     ngOnInit() {
