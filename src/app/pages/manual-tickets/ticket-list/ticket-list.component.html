@@ -31,7 +31,7 @@
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
             <label>Dist./CoPacker</label>            
-            <reddy-select [options]="distributors" [(selected)]="searchObj.DistributorID" (selectedChange)="userChangeHandler()"></reddy-select>
+            <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="searchObj.DistributorID" (selectedChange)="userChangeHandler()"></reddy-select>
         </div>
         <div class="col-sm-3">
             <label>Search</label>
