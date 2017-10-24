@@ -13,35 +13,47 @@
                 Add Customer
             </button>
         </div>
-        <div class="col-sm-3" style="padding-top:8px;">
-            <label>
-                <span>RI Customer?</span>
-            </label>
-            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="type" [checked]='isRI' (click)="sequenceChangeHandler(1)">
-                <span>Yes</span>
-            </label>
-            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="type" (click)="sequenceChangeHandler(2)">
-                <span>No</span>
-            </label>
+        <div class="col-sm-4" style="padding-top:8px;">
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>
+                        <span>RI Customer?</span>
+                    </label>
+                </div>
+                <div class="col-sm-8">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="type" [checked]='isRI' (click)="sequenceChangeHandler(1)">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="type" (click)="sequenceChangeHandler(2)">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-6" style="padding-top:8px;">
-            <label>
-                <span>User Type</span>
-            </label>
-            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="usertype" (click)="usertypeChangeHandler(1)">
-                <span>Active</span>
-            </label>
-            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="usertype" (click)="usertypeChangeHandler(2)">
-                <span>In-Active</span>
-            </label>
-            <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                <input type="radio" name="usertype" checked (click)="usertypeChangeHandler(3)">
-                <span>Both</span>
-            </label>
+        <div class="col-sm-5" style="padding-top:8px;">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>
+                        <span>User Type</span>
+                    </label>
+                </div>
+                <div class="col-sm-9">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="usertype" (click)="usertypeChangeHandler(1)">
+                        <span>Active</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="usertype" (click)="usertypeChangeHandler(2)">
+                        <span>Inactive</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="usertype" checked (click)="usertypeChangeHandler(3)">
+                        <span>Both</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
     <div class="page-header">
