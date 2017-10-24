@@ -88,7 +88,7 @@
             <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
             <create-product-price (formChanged)="formChangedHandler()" [product]="newProduct" [productList]="externalProducts" [isNewProduct]="isNewProduct"
                 (onSaveProduct)="onSaveProduct($event)" (onUpdateProduct)="onUpdateProduct($event)"  (closeNewProduct)="showNewProduct($event)"
-                [action]='action' [mIOpen]="rightCardOpen" [formIsDirty]="formIsDirty">
+                [action]='action' [mIOpen]="rightCardOpen" [isFormTouched]="isFormTouched" [formIsDirty]="formIsDirty">
             </create-product-price>
 
         </ba-card>

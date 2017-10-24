@@ -18,7 +18,7 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     isFormValid: boolean = true;
     isSuccess = false;
     @Input()
-    productList:MapProducts[] = [];
+    productList: MapProducts[] = [];
     @Input()
     get product(): any {
         return this._product;
@@ -32,7 +32,8 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     }
     @Input() isNewProduct: boolean;
     @Input() formIsDirty: boolean;
-   
+    @Input() isFormTouched: boolean;
+
     @Input()
     get action(): any {
         return this;
@@ -44,21 +45,23 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         if (values == 'create') {
             this.isSuccess = false;
             this.isFormValid = true;
-            
+
         }
         if (values == 'edit') {
+            this.isSuccess = false;
             this.isFormValid = true;
-           
+            this.isFormTouched = false;
+
         }
     }
 
     @Input()
     set mIOpen(val: boolean) {
-        
+
     }
 
     @Input() productDetails: any;
-    
+
     @Output() onSaveProduct: EventEmitter<any> = new EventEmitter();
     @Output() onUpdateProduct: EventEmitter<any> = new EventEmitter();
     @Output() closeNewProduct: EventEmitter<any> = new EventEmitter();
@@ -66,9 +69,9 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     @Output() formChanged = new EventEmitter();
 
     actionName: string;
-    isFormTouched = false;
-    
-    
+    //  isFormTouched = false;
+
+
 
 
     constructor(private cmService: CustomerManagementService, private notification: NotificationsService) { }
@@ -79,24 +82,24 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit() {
-       
+
     }
     onSubmit() {
         this.isSuccess = true;
         if (!this.validateProduct(this.product)) { this.isSuccess = false; return };
-        
+
         this.isNewProduct ? this.onSaveProduct.emit(this.product) : this.onUpdateProduct.emit(this.product);
-        if(!this.isNewProduct) {this.isSuccess = false;}
+        if (!this.isNewProduct) { this.isSuccess = false; }
     }
     spaceRemoverFn(value) {
         this.product.ProductName = value.replace(/^\s+|\s+$/g, '');
     }
     validateProduct(product) {
-        if(this.isProductExist(product) && this.actionName =='create') {
+        if (this.isProductExist(product) && this.actionName == 'create') {
             this.notification.error('Product Name is already exist!!!');
             return false;
         }
-        else if (!product.ProductName && this.action ==='create') {
+        else if (!product.ProductName && this.action === 'create') {
             this.notification.error('Product Name is mandatory!!!');
             return false;
         } else if (!product.ProductPrice) {
@@ -111,10 +114,11 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     }
 
     changeHandler() {
-      this.isFormValid = true;
-      this.formIsDirty = false;
-      this.isSuccess = false;
-      setTimeout(this.formChanged.emit('changed'), 1000);
+        this.isFormValid = true;
+        this.formIsDirty = false;
+        this.isSuccess = false;
+        this.isFormTouched = true;
+        setTimeout(this.formChanged.emit('changed'), 1000);
     }
 
     resetProduct() {
@@ -129,8 +133,8 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
             this.isFormValid = true;
         }
     }
-    isProductExist (product){
-        var a = this.productList.filter(prod => prod.ProductName == product.ProductName).length >0;
+    isProductExist(product) {
+        var a = this.productList.filter(prod => prod.ProductName == product.ProductName).length > 0;
         return a;
     }
 
@@ -138,11 +142,11 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         this.cmService.isProductExist(name).subscribe((res) => {
             if (res === true) {
 
-             this.notification.error('Product Already Exist in List !!!');
-               this.isFormTouched = false;
+                this.notification.error('Product Already Exist in List !!!');
+                this.isFormTouched = false;
             } else {
-                 this.isFormTouched = true;
-             }
+                this.isFormTouched = true;
+            }
 
         },
             (err) => {

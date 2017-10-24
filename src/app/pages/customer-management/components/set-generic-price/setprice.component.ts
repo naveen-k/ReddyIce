@@ -85,18 +85,19 @@ export class SetPriceComponent implements OnInit {
         this.newProductList.push({ isActive: true } as MProducts);
         this.counter = this.counter + 1;
     }
-    
+
     editClickHandler(product, index) {
         if (product) {
             this.editClicked.fill(false);
             this.editClicked[index] = true;
+            this.isFormTouched = false;
         }
     }
 
 
 
     formTouchHandler() {
-        this.isFormTouched = true;
+        this.isFormTouched = false;
     }
 
 
@@ -115,17 +116,20 @@ export class SetPriceComponent implements OnInit {
                 this.isNewProduct = false;
                 this.hideColumn = !this.hideColumn;
                 this.formIsDirty = false;
-
+                this.isFormTouched = false;
             });
 
         } else {
             this.rightCardOpen = !this.rightCardOpen;
             this.isNewProduct = false;
+            this.isFormTouched = false;
             this.hideColumn = !this.hideColumn;
         }
     }
+
     formChangedHandler() {
         this.formIsDirty = true;
+        this.isFormTouched = false;
     }
     showNewProduct(newProduct) {
         this.formIsDirty = false;
@@ -184,6 +188,7 @@ export class SetPriceComponent implements OnInit {
         this.newProduct = Object.assign({}, product);
         this.cardTitle = 'Edit Product Price';
         this.isNewProduct = false;
+        this.formIsDirty = false;
         if (!this.rightCardOpen) {
             this.rightCardOpen = !this.rightCardOpen;
             this.hideColumn = !this.hideColumn;
@@ -216,7 +221,7 @@ export class SetPriceComponent implements OnInit {
         this.extProducts = this.externalProducts.filter((p) => {
             if (this.productType === 'active') {
                 return p.IsActive;
-            }else if (this.productType === 'inActive') {
+            } else if (this.productType === 'inActive') {
                 return !p.IsActive;
             }
             return true;

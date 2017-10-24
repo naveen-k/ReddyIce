@@ -8,7 +8,7 @@
     <div class="col-md-6  page-header">
       <label for="fname" class="control-label">Product Name</label>
       <input [disabled]="product.IsInternal" type="text"  class="form-control" id="pname" placeholder="Product Name"
-        minlength="2" [(ngModel)]="product.ProductName" name="ProductName" #ProductName="ngModel" required (change)="changeHandler()"
+        minlength="2" [(ngModel)]="product.ProductName" name="ProductName" #ProductName="ngModel" required (ngModelChange)="changeHandler()"
         (blur)="spaceRemoverFn(product.ProductName);isProductExistbyName(product.ProductName)" maxlength="50">
       <div *ngIf="actionName=='create1' && ProductName.invalid && (ProductName.dirty || ProductName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -20,7 +20,7 @@
     <div class="col-md-6  page-header">
       <label for="lname" class="control-label">Product Price</label>
       <input type="number" class="form-control" id="pprice" placeholder="Price" [(ngModel)]="product.ProductPrice"
-        name="ProductPrice"  #ProductPrice="ngModel" required minlength="1" maxlength="10" (change)="changeHandler();">
+        name="ProductPrice"  #ProductPrice="ngModel" required minlength="1" maxlength="10" (ngModelChange)="changeHandler()">
       <div *ngIf="actionName=='create1' && ProductPrice.invalid && (ProductPrice.dirty || ProductPrice.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="ProductPrice.errors.required" class="custom-tooltip bottom">
