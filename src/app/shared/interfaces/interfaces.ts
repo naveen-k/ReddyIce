@@ -7,6 +7,7 @@ export interface Branch {
 
 export interface Customer {
     CustomerId: number;
+    Active: boolean;
     BranchID: number;
     BranchCode: number;
     LocationID: number;
@@ -34,7 +35,7 @@ export interface Customer {
     SecondaryContact: string;
     TicketMessage: string;
     IsTaxable: boolean;
-//    TaxPercentage: boolean;
+    //    TaxPercentage: boolean;
     TaxPercentage: number;
     CustomerTypeCode: string;
     latitude: string;
@@ -91,9 +92,9 @@ export interface MapProducts {
     ProductName: string;
     ExternalProductId: number;
     ProductPrice: number;
-    ExternalCustomerId:number;
-    IsInternal:boolean;
-    IsActive:boolean;
+    ExternalCustomerId: number;
+    IsInternal: boolean;
+    IsActive: boolean;
     cProductId: string;
 }
 
