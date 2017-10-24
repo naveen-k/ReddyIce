@@ -33,13 +33,9 @@ export class CustomerManagementComponent implements OnInit {
         this.getAllCustomers();
     }
 
-    isRI = true;
+    isRI = 3;
     sequenceChangeHandler(sequence) {
-        if (sequence == 1) {
-            this.isRI = true;
-        } else {
-            this.isRI = false;
-        }
+        this.isRI = sequence;
     }
 
     userType = 3;
