@@ -202,16 +202,10 @@
       </select>
     </div>
   </div>
-  <div class="row page-header rowContainer" *ngIf="user.IsRIInternal && user.ISeriesRouteNumber">
-    <div class="col-md-5 padding-eater first-column">
-      <label for="inputiseriesroute" class="control-label">ISeries Route</label>
-      <input type="number" class="form-control" id="iseriseroute" placeholder="ISerise Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel"
-         disabled>
-    </div>
-    <div class="col-md-2"></div>
+  <div class="row page-header rowContainer">
     <div class="col-md-5 padding-eater" *ngIf="user.IsRIInternal">
-        
-        <label for="exampleSelect1">Branch</label>
+    
+      <label for="exampleSelect1">Branch</label>
         <!--select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
           disabled>
             <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
@@ -226,9 +220,15 @@
         <div class="col-md-12" style="max-height:80px;overflow:auto;"><ul class="ulpadding"><li *ngFor="let b of user.Branch" >{{b.BranchName}}</li></ul></div>
           
     </div>
+    <div class="col-md-2"></div>
+      <div class="col-md-5 padding-eater first-column" *ngIf="user.IsRIInternal && user.ISeriesRouteNumber">
+        <label for="inputiseriesroute" class="control-label">ISeries Route</label>
+        <input type="number" class="form-control" id="iseriseroute" placeholder="ISerise Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel"
+           disabled>
+      </div>
+     
+    
   </div>
-  
-  
   
   <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row" [hidden]="userObject.IsDistributor">
     <div class="col-md-5 padding-eater">
