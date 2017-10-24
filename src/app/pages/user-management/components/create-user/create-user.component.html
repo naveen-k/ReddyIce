@@ -1,4 +1,4 @@
-<form #customerForm="ngForm" class="user-form" *ngIf="actionName != 'view'">
+<form #customerForm="ngForm" class="user-form" *ngIf="actionName != 'view'" >
   <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid ||isEmailExist||!isFormValid||!formIsDirty"
     (click)="onSubmit()">Save</button>
 
@@ -111,7 +111,25 @@
                 </select>
     </div>
 
-
+    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || user.IsSeasonal" [hidden]="userObject.IsDistributor">
+      <label for="exampleSelect1">Branch</label>
+      <!-- <select class="form-control" [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" id="branchSelection" [(ngModel)]="user.BranchID"
+        name="branch" #branch="ngModel" (ngModelChange)="changeHandler(); loadBranches();">
+                    <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
+                      <span *ngIf="_branch.BranchID != '1'">{{_branch.BranchID}} - {{_branch.BranchName}}</span>
+                      <span *ngIf="_branch.BranchID == '1'">
+                 {{_branch.BranchName}}
+              </span>
+                    </option>
+                  </select> -->
+                  
+              <br/>
+              <reddy-select [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();"></reddy-select>
+              
+              <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown--><br><br>
+                    <!--button class="btn btn-danger" (click)="onMultiSelect(optionsModel)">Fire</button -->
+ 
+    </div>
     <div *ngIf="user.IsRIInternal" class="col-md-6 page-header">
       <label for="iseriesroute" class="control-label">ISeries Route</label>
       <input type="number" class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber"
@@ -120,23 +138,13 @@
 
     <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">
       <label for="distributor">Distributor</label>
-      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
         #distributor="ngModel" (ngModelChange)="changeHandler()">
                     <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
-                  </select>
+                  </select-->
+      <reddy-select [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
     </div>
-    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || user.IsSeasonal" [hidden]="userObject.IsDistributor">
-      <label for="exampleSelect1">Branch</label>
-      <select class="form-control userMgmtSelect" [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" id="branchSelection" [(ngModel)]="user.BranchID"
-        name="branch" #branch="ngModel" (ngModelChange)="changeHandler(); loadBranches();">
-                    <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
-                      <span *ngIf="_branch.BranchID != '1'"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
-                      <span *ngIf="_branch.BranchID == '1'">
-                 {{_branch.BranchName}}
-              </span>
-                    </option>
-                  </select>
-    </div>
+   
     <div class="col-md-6 page-header">
       <label class="vertical-center"></label>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
@@ -149,8 +157,6 @@
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
         disabled="true"></ba-checkbox>
     </div>
-
-
   </div>
 </form>
 
@@ -203,40 +209,35 @@
          disabled>
     </div>
     <div class="col-md-2"></div>
-    <div class="col-md-5 padding-eater">
+    <div class="col-md-5 padding-eater" *ngIf="user.IsRIInternal">
+        
+        <label for="exampleSelect1">Branch</label>
+        <!--select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
+          disabled>
+            <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
+              <span *ngIf="_branch.BranchID != '1'">{{_branch.BranchID}} - {{_branch.BranchName}}</span>
+              <span *ngIf="_branch.BranchID == '1'">
+        {{_branch.BranchName}}
+      </span>
+          </option>
+        </select-->
+        <!--ss-multiselect-dropdown name="dd" stopScrollPropagation="true" [options]="myOptions" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="optionsModel"></ss-multiselect-dropdown><br><br-->
+        
+        <div class="col-md-12" style="max-height:80px;overflow:auto;"><ul class="ulpadding"><li *ngFor="let b of user.Branch" >{{b.BranchName}}</li></ul></div>
+          
     </div>
   </div>
   
-  <div class="checkbox active-user page-header rowContainer">
-    <div class="row">
-      <div class="col-md-5" *ngIf="user.IsRIInternal">
-        <label for="exampleSelect1">Branch</label>
-        <select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
-          disabled>
-            <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
-              <span *ngIf="_branch.BranchID != '1'"> {{_branch.BranchID}} - {{_branch.BranchName}}</span>
-              <span *ngIf="_branch.BranchID == '1'">
-         {{_branch.BranchName}}
-      </span>
-          </option>
-        </select>
-      </div>
-      <div class="col-md-2" *ngIf="user.IsRIInternal" [hidden]="!userObject.IsDistributor"></div>
-      <div class="col-md-5 (user.IsRIInternal || isDistributorAdmin)?padding-eater:''">
-        <br/><br/>
-        <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-        <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
-
-      </div>
-    </div>
-  </div>
+  
+  
   <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row" [hidden]="userObject.IsDistributor">
     <div class="col-md-5 padding-eater">
       <label for="distributor">Distributor</label>
-      <select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
         #distributor="ngModel" disabled>
           <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
-      </select>
+      </select-->
+      <reddy-select [position]="'top'" [disabled]="true" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID" ></reddy-select>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater">
@@ -245,4 +246,14 @@
       <ba-checkbox [ngModel]="user.IsSeasonal" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
     </div>
   </div>
+  <div class="checkbox active-user page-header rowContainer">
+      <div class="row">
+        <div class="col-md-2" *ngIf="user.IsRIInternal" [hidden]="!userObject.IsDistributor"></div>
+        <div class="col-md-5 (user.IsRIInternal || isDistributorAdmin)?padding-eater:''">
+          <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+          <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
+  
+        </div>
+      </div>
+    </div>
 </form>

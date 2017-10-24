@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiEndpoint: 'http://frozen.reddyice.com/myicebox_dev2',
+  apiEndpoint: 'http://frozen.reddyice.com/multiplebranch/',
   reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx',
 };

@@ -102,11 +102,11 @@
                    <span class="tooltiptext">Deactivate</span>
                 </i>
               </td>
-              <td class="userCell">{{ item.FirstName || 'NA'|cutString:true:20 }} {{ item.LastName || 'NA'|cutString:true:20 }}</td>
-              <td *ngIf="!hideColumn" class="userCell">{{ item.UserName || 'NA' | cutString:true:20 }}</td>
+              <td class="userCell">{{ item.FirstName || 'NA' }} {{ item.LastName || 'NA' }}</td>
+              <td *ngIf="!hideColumn" class="userCell">{{ item.UserName || 'NA' }}</td>
               <td class="userCell">{{ item.Role?.RoleName}}</td>
-              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName|cutString:true:20}}</td>
-              <td *ngIf="!hideColumn && !isDistributorExist" class="userCell">{{item.Branch?.BranchCode}}  {{item.Branch?.BranchName}}</td>
+              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">{{ item.Distributor?.DistributorName}}</td>
+              <td *ngIf="!hideColumn && !isDistributorExist" class="userCell"><ul class="ulpadding"><li *ngFor="let b of item.Branch | slice:0:2">{{b.BranchCode}}  {{b.BranchName}}</li></ul><span *ngIf="item.Branch?.length > 2">({{item.Branch?.length}}) <a href="javascript:void(0);" (click)="moreBranches(item.Branch)">more...</a></span><!--{{item.Branch | concat:'BranchName'}}--></td>
               <td *ngIf="!isDistributorExist" class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
               <td *ngIf="isDistributorExist && !hideColumn" class="userCell">{{item.EmailID}}</td>
               <td *ngIf="isDistributorExist" class="userCell text-in-center">{{item.Phone}}</td>

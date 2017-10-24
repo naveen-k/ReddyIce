@@ -51,6 +51,8 @@ export class UserManagementService extends SharedService {
         searchObj['SearchString'] = searchString;
         return this.http.post('api/user/searchriuser', searchObj).map((res) => res.json());
     }
+    getMultiBranches() {
+        return this.http.get('api/branch').map((res) => res.json());
+    }
 
-    
 }

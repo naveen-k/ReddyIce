@@ -20,5 +20,6 @@ export interface User {
   Role: any;
   Distributor: any;
   IsDistributor: boolean;
+  DisBranchName:string;
 }
 

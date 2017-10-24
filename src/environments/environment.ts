@@ -6,6 +6,6 @@
 // API http://frozen.reddyice.com/reddyice_dev/
 export const environment = {
   production: false,
-  apiEndpoint: 'http://frozen.reddyice.com/myicebox_dev2/',
+  apiEndpoint: 'http://frozen.reddyice.com/apiicebox/',
   reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx',
 };

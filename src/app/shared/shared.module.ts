@@ -1,4 +1,6 @@
+
 import { AlphaNumeric } from './directives/alpha-numeric.directive';
+import { ConcatStringPipe } from './pipes/concat-string.pipe';
 import { SelectComponent } from './components/multiple-select/multiple-select';
 import { CutStringPipe } from './pipes/cut-string.pipe';
 import { ListComponent } from './components/dual-list/list.component';
@@ -36,6 +38,7 @@ import { NgModule } from '@angular/core';
         CutStringPipe,
         SelectComponent,
         AlphaNumeric,
+        ConcatStringPipe
     ],
     exports: [
         GenericFilter,
@@ -53,6 +56,7 @@ import { NgModule } from '@angular/core';
         NumberOnlyDirective,
         SelectComponent,
         AlphaNumeric,
+        ConcatStringPipe
     ],
     entryComponents: [
         ModalComponent,

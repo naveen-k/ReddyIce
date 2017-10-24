@@ -1,3 +1,4 @@
+import { forEach } from '@angular/router/src/utils/collection';
 import { NotificationsService } from 'angular2-notifications';
 import { UserService } from '../../../../shared/user.service';
 import { selector } from 'rxjs/operator/multicast';
@@ -16,22 +17,64 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     private _roles: any[];
     private _user: any = {};
-
+    userBranch: any;
+    tBranches: any = [];
+    actionName: string;
+    riUserList: any = [];
+    riUserName: string = '';
+    searchedUsers: any;
+    showList: boolean = false;
+    selectedSearchUser: boolean = false;
+    timeOut: any;
+    roleList: any = [];
+    userObject: any = {};
+    roleNameAllowed: boolean = true;
+    isEmailExist: boolean = false;
+    isFormValid: boolean = true;
+    searching: boolean = false;
+    cBranches: any = [];
+    branchList: any = [];
+    addedBranches: any = [];
+    tempUserBranch:any =[];
     @Input()
     get user(): any {
         return this._user;
     }
-
     set user(val: any) {
         if (!Object.keys(val).length) {
             return;
         }
         val.RoleID = val.RoleID || this._user.RoleID;
+        
         this._user = val;
+        this.populatateRoleList();
+        this.roleChange(val.RoleID);
         this.loadBranches();
         this._user.IsSeasonal = this.isDistributorSeasonal();
-        if (val.RoleID === '1' || val.RoleID === '2') {
-            this.user.BranchID = '1';
+        if(this.tempUserBranch){this.tempUserBranch.length=0;}
+        this.tempUserBranch = [];
+        if(this.user.Branch) {
+            this.tempUserBranch = this.user.Branch.slice();
+        }
+        
+        let role = val.RoleID+'';
+        if (role === '1' || role === '2' || role === '4' || role === '5') {
+            this.user.Branch =   [{BranchCode: 1,BranchID: 1, BranchName: "1-All Branches",IsActive:true}];
+            this.userBranch =[1];
+        }
+        else {
+            this.addedBranches = this.user.Branch;
+            var  i:number=0;
+            if(this.userBranch){this.userBranch.length=0;}
+
+            this.userBranch =[];
+           
+            if(this.user.Branch){
+                for(i=0; i<this.user.Branch.length; i++)
+                if(this.user.Branch[i].IsActive === true){
+                    this.userBranch.push(this.user.Branch[i].BranchID);
+                }
+            }
         }
     }
 
@@ -57,7 +100,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.IsActive = true;
         }
         if (values == 'edit') {
-            this.isFormValid = false;
+            this.isFormValid = true;
         }
     }
 
@@ -75,25 +118,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
 
     @Output() formChanged = new EventEmitter();
-
-    actionName: string;
-    riUserList: any = [];
-    riUserName: string = '';
-    searchedUsers: any;
-    showList: boolean = false;
-    selectedSearchUser: boolean = false;
-    timeOut: any;
-    roleList: any = [];
-    userObject: any = {};
-    roleNameAllowed: boolean = true;
-    isEmailExist: boolean = false;
-    isFormValid: boolean = true;
-
-    searching: boolean = false;
-
-
+    
     constructor(private umService: UserManagementService, private userService: UserService, private notification: NotificationsService) { }
-
 
     clearInternalUserSearch() {
         this.riUserName = '';
@@ -108,7 +134,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     sortByWordLength = (a: any) => {
         return a.city.length;
-    }
+   }
     searchUserHandler(user) {
         if (this.timeOut) {
             clearTimeout(this.timeOut);
@@ -154,6 +180,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (this.userObject.IsDistributor) {
             this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
         }
+        this.onMultiSelect(this.userBranch);
         if (!this.validateUser(this.user)) { return };
         // If user is RI internal user then distributor ID should be set to empty
         if (this.userDetails.IsDistributor) {
@@ -161,10 +188,34 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         } else if (this.user.IsRIInternal) {
             this.user.DistributorMasterID = '';
         }
-        if (!this.user.IsRIInternal && !this.user.IsSeasonal) {
-            this.user.BranchID = null;
+        if (this.user.IsRIInternal || this.user.IsSeasonal) {
+         
+            if (this.addedBranches) {
+               
+                if(this.isNewUser){
+                    this.user.Branch = this.addedBranches;
+                } else {
+                   
+                    var obj:any ={} ;
+
+                    this.tempUserBranch.forEach(branch => {
+                        if(this.userBranch.indexOf(branch.BranchID+'') >-1 || this.userBranch.indexOf(branch.BranchID) >-1){
+
+                        } else {
+                            obj = branch;
+                            obj.IsActive = false;
+                            this.addedBranches.push(obj);
+                        }
+                       
+                    });
+                    
+                    this.user.Branch = this.addedBranches;
+                }
+            }
+            
+        } else {
+            this.user.Branch = [];
         }
-        //console.log("this.user ----> ",this.user);
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
 
@@ -178,31 +229,34 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 return false;
             }
         } else {
-            if (!user.BranchID) {
+            if (this.userBranch.length===0) {
                 this.notification.error('Branch is mandatory!!!');
                 return false;
-            }
+            } 
+           
         }
         return true;
     }
 
     ngAfterContentInit() {
         this.riUserName = '';
+
     }
 
     ngOnInit() {
-        this.umService.getDistributerAndCopacker().subscribe((res) => {
-            this.distributorsAndCopackers = res;
-            //console.log("------------------",res);
-        });
+        this.addedBranches = [];
+        this.addedBranches.length = 0;
+        this.getDistributor();
         this.userObject = this.userService.getUser();
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
                 this.user.DistributorMasterID = this.distributorsAndCopackers ? this.distributorsAndCopackers[0].DistributorCopackerID : '';
             }
-            this.user.BranchID = this.branches ? this.branches[0].BranchID : '';
+            this.user.Branch = this.branches ? this.branches[0] : [];
         }
+        this.transformation();     
+
     }
 
     filterRoles() {
@@ -221,16 +275,18 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     isDistributorSeasonal() {
-        if (!this.user.DistributorMasterID) { return false };
+        if (!this.user.DistributorMasterID) { return false }
         const tmp = this.distributorsAndCopackers.filter((dis) => {
-            //console.log(" dis.DistributorCopackerID === +this.user.DistributorMasterID ",dis.DistributorCopackerID," : ",this.user.DistributorMasterID);
-            return dis.DistributorCopackerID === +this.user.DistributorMasterID
+            
+            return dis.DistributorCopackerID === +this.user.DistributorMasterID;
         });
-        //console.log("--------->>>>>>.",tmp);
-        return (tmp[0])?tmp[0].IsSeasonal:false;
+        
+        return (tmp[0]) ? tmp[0].IsSeasonal : false;
     }
 
     changeHandler() {
+        console.log("this.userBranch ",this.userBranch);
+        if(this.userBranch.length>0){this.isEmailExist=false; this.isFormValid = true; this.formIsDirty=true;}
         this.user.IsSeasonal = this.isDistributorSeasonal();
         this.isAllFeildsChecked();
         if (this.user.IsRIInternal) {
@@ -264,7 +320,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         }
         setTimeout(this.formChanged.emit('changed'), 1000);
-        
+
     }
 
     resetUser() {
@@ -283,31 +339,32 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         });
     }
-    
+
     roleChange(roleID) {
-        this.user.BranchID = null;
+        roleID = roleID + '';
+        this.userBranch = [];
+    
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {
-            if (this.branches[0].BranchID != '1') {
-                this.branches.unshift({ BranchID: '1', BranchName: 'All Branches' });
-            }
-            this.user.BranchID = '1';
-            this.loadBranches();
+            this.cBranches = [];
+            this.cBranches =[{ value: '1', label: '1-All Branches', data:{ BranchID: 1, BranchCode:1, BranchName:'All Branches',IsActive:true }}];
+            this.userBranch = [1];
+           
         } else {
-            if (this.branches[0].BranchID == '1') {
-                this.branches.shift();
-            }
-            // this.distributorsAndCopackers = [];
+               
+                this.user.RoleID = roleID;
+                this.userBranch = [];
+                this.cBranches = this.tBranches;
+                if(this.cBranches[0].value == '1'){
+                    this.cBranches.shift();
+                }
         }
 
     }
 
     loadBranches() {
-        if (!this.user.BranchID) { return; }
+        if (!this.userBranch) { return; }
 
-        this.umService.getDistributerAndCopacker().subscribe((res) => {
-            this.distributorsAndCopackers = res;
-            console.log(res);
-        });
+        this.getDistributor();
     }
     spaceRemover(value) {
         this.user.LastName = value.replace(/^\s+|\s+$/g, '');
@@ -323,12 +380,36 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.EmailID = '';
         }
         else {
-            this.umService.getDistributerAndCopacker().subscribe((res) => {
-                this.distributorsAndCopackers = res;
-            });
+            
+           this.getDistributor();
         }
         this.isAllFeildsChecked();
 
+    }
+    filterDistributor(dist,role) {
+        let uRole = this.userObject.Role.RoleID
+        if (!dist || !role) { return []};
+        if (uRole === 1 && +role === 2) {
+            return dist.filter((user) => !user.IsSeasonal);
+        } else if (uRole === 2 && +role === 3) {
+            return dist.filter((user) => user.IsSeasonal);
+        }
+        return dist;       
+    }
+    getDistributor(){
+        this.umService.getDistributerAndCopacker().subscribe((res) => {
+            let dists:any = this.filterDistributor(res,this.user.RoleID);
+            let tempArr = []
+            
+            dists.forEach(distrib => {
+                tempArr.push({
+                    value: distrib.DistributorCopackerID,
+                    label: distrib.Name,
+                    date: distrib
+                    });
+            });
+            this.distributorsAndCopackers = tempArr;
+        });
     }
 
     isAllFeildsChecked() {
@@ -339,6 +420,59 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
         else {
             this.isFormValid = true;
+        }
+    }
+
+    getMultiBranches() {
+        this.umService.getMultiBranches().subscribe((res) => {
+            console.log("--- ",res);
+            this.branchList = res;
+            if(this.cBranches){this.cBranches.length=0;}
+           let tempArr = []
+            
+            res.forEach(branch => {
+                tempArr.push({
+                    value: branch.BranchID,
+                    label: `${branch.BranchCode} - ${branch.BranchName}`,
+                    date: branch
+                    });
+            });
+            
+            this.cBranches = tempArr; 
+            this.tBranches =  tempArr; 
+        }, (err) => {
+            console.log("Error");
+        });
+    }
+
+    transformation() {
+        this.getMultiBranches();
+    }
+    onMultiSelect(optionsModel) {
+        if(this.addedBranches){ this.addedBranches.length = 0; }
+        this.addedBranches = [];
+        if (optionsModel) {
+            for (let branch of this.branchList) {
+                if (optionsModel.indexOf(branch.BranchID+'') > -1 || optionsModel.indexOf(branch.BranchID) > -1) {
+                    this.addedBranches.push({ BranchID: branch.BranchID, BranchCode: branch.BranchCode, BranchName: branch.BranchName,IsActive:true });
+                }
+            }
+        }
+    }
+    populatateRoleList(){
+        if (this.user.IsRIInternal) {
+            this.roleList = this.roles;
+       } else if (!this.user.IsRIInternal) {
+            this.riUserName = '';
+            this.roleList = this.roles.reduce((accumulator, child) => {
+                if (child.ShowExternal) {
+                    return [
+                        ...accumulator,
+                        child,
+                    ];
+                }
+                return accumulator;
+            }, []);
         }
     }
 }

@@ -10,7 +10,6 @@ import { User } from '../../user-management.interface';
 import { selector } from 'rxjs/operator/multicast';
 import { any } from 'codelyzer/util/function';
 
-
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
@@ -95,6 +94,24 @@ export class UserManagementComponent implements OnInit {
       this.isNewUser = false;
       this.hideColumn = !this.hideColumn;
     }
+    this.formIsDirty = false;
+    this.action = 'create';
+   
+    this.isNewUser = true;
+   
+   
+    this.newUser = <User>{
+      FirstName: '',
+      LastName: '',
+      UserName: '',
+      EmailID: '',
+      BranchID: '',
+      Phone: '',
+      role: '',
+      IsActive: this.action === 'create' ? true : false,
+      IsSeasonal: true,
+      // IsRIInternal: false,
+    };
   }
 
   @HostListener('window:resize', ['$event'])
@@ -110,9 +127,7 @@ export class UserManagementComponent implements OnInit {
   userRoles: any[] = [];
   userBranches: any[] = [];
   distributorsAndCopackers: any[] = [];
-
   paginationData: any = [];
-
 
   toInt(num: string) {
     return +num;
@@ -123,9 +138,11 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
+    console.log("user -------------------------------- ",user);
     this.action = 'edit';
     this.newUser = Object.assign({}, user);
-    this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+    //this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+    this.newUser.Branch = user.Branch;
     this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
     this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
     this.cardTitle = 'Edit User';
@@ -138,9 +155,8 @@ export class UserManagementComponent implements OnInit {
 
   }
 
-
   onView(user) {
-    if (this.formIsDirty) {
+   if (this.formIsDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
@@ -155,18 +171,19 @@ export class UserManagementComponent implements OnInit {
         this.cardTitle = 'Edit Detail';
         this.newUser = Object.assign({}, user);
         this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+        this.newUser.Branch = user.Branch;
         this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
         this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
         this.isNewUser = false;
         this.action = 'edit';
-
 
       });
 
     } else {
       this.cardTitle = 'User Detail';
       this.newUser = Object.assign({}, user);
-      this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+      //this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
+      this.newUser.Branch = user.Branch;
       this.newUser.RoleID = user.Role ? user.Role.RoleID : '';
       this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
       this.isNewUser = false;
@@ -180,10 +197,12 @@ export class UserManagementComponent implements OnInit {
   }
 
   onSaveUser(user) {
-    console.log("user --------- ",user);
+    console.log("user --------- ", user);
     delete user.role;
-    if (!user.IsRIInternal) { delete user.UserName; }
+   delete user.BranchID;
+     if (!user.IsRIInternal) { delete user.UserName; }
     this.service.createUser(user).subscribe((res) => {
+      console.log(user);
       this.notification.success('Success', 'User created successfully');
       const savedUserlist = [...this.userTableData, res];
       console.log(res);
@@ -196,7 +215,6 @@ export class UserManagementComponent implements OnInit {
       const userId = localStorage.getItem('userId');
       this.getUserList(parseInt(userId));
 
-
     },
       (error) => {
         console.log();
@@ -206,9 +224,10 @@ export class UserManagementComponent implements OnInit {
   }
 
   onUpdateUser(user) {
+    console.log("--------------- on Updateuser ---- ",user);
     delete user.Role;
     delete user.MenuOptions;
-    delete user.Branch;
+    //delete user.Branch;
     delete user.Distributor;
     this.service.updateUser(user, user.UserId).subscribe((res) => {
       this.notification.success('Success', 'User updated successfully');
@@ -229,7 +248,6 @@ export class UserManagementComponent implements OnInit {
       this.formIsDirty = false;
       const userId = localStorage.getItem('userId');
       this.getUserList(parseInt(userId));
-
 
     },
       (error) => {
@@ -255,7 +273,6 @@ export class UserManagementComponent implements OnInit {
         this.updateUserTableOnTypeChange();
         const userId = localStorage.getItem('userId');
         this.getUserList(parseInt(userId));
-
 
         // this.userTableData = this.userTableData.filter((userObj) => userObj.UserId !== user.UserId);
       },
@@ -302,7 +319,7 @@ export class UserManagementComponent implements OnInit {
 
   updateUserTableOnTypeChange() {
     this.userTableData = this.usersList.filter((u) => {
-      if (this.userType === 'active') {
+     if (this.userType === 'active') {
         return u.IsActive;
       }
       if (this.userType === 'inActive') {
@@ -350,5 +367,27 @@ export class UserManagementComponent implements OnInit {
   changeUserTypeHandler() {
     this.updateUserTableOnTypeChange();
   }
-
+  moreBranches(branches){
+    const activeModal = this.modalService.open(ModalComponent, {
+      size: 'sm',
+      backdrop: 'static',
+    });
+    let cstring =[];
+    branches.find((val) => {
+        if (typeof val === 'object') {
+            if(val['IsActive']===true){
+              cstring.push(val['BranchCode']+'-'+val['BranchName']);
+            }
+        }
+        
+    });
+   
+    let branch = cstring.join(', ');
+    activeModal.componentInstance.showCancel = false;
+    activeModal.componentInstance.modalHeader = 'List of branch';
+    activeModal.componentInstance.modalContent = `${branch}`;
+    activeModal.componentInstance.closeModalHandler = (() => {
+      
+    });
+  }
 }

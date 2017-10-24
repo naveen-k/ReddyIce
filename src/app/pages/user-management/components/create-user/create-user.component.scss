@@ -139,3 +139,21 @@ input:focus + .error-message {
   .vertical-center{
     margin-top:15px;
   }
+.cdropdown-inline{
+  width: 100%;
+}
+.dropdown-menu{
+  ul{
+    width: 100%;
+  }
+}
+ss-multiselect-dropdown .dropdown-item a {
+  color: #292b2c !important;
+}
+.ss-button {
+  text-align: left !important;
+}
+.ulpadding {
+  padding: 0px;
+  margin-bottom: 0px;  
+}
