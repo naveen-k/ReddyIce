@@ -730,6 +730,9 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
+   if(this.ticketId){
+    this.saveTicket();
+   }else{
     this.service.checkTicketNumber(ticket).subscribe((res) => {
       this.saveTicket();
     }, err => {
@@ -749,6 +752,7 @@ export class CreateTicketComponent implements OnInit {
         this.notification.error('', 'Ticket Number already in use!!!');
       }
     });
+  }
   }
 
 
