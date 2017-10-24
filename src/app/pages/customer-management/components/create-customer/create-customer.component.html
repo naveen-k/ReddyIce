@@ -1,12 +1,12 @@
 <ba-card cardTitle="{{title}} Customer {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container">
     <div class="row">
         <div class="col-md-9"></div>
-        <div class="col-md-2 head-button-container-for-back">
-            <button [hidden]="mode==1" class="btn btn-danger pull-right" style="margin-right: -71px;margin-top: 1px;" (click)="backClickHandler()">Back</button>
-            <button [hidden]="mode!=1" class="btn btn-danger pull-right"  (click)="backClickHandler()">Back</button>
+        <div [hidden]="mode == 3" class="col-md-2 head-button-container-for-back">
+            <button class="btn btn-danger pull-right" (click)="backClickHandler()">Back</button>
         </div>
         <div class="col-md-1 head-button-container-for-save">
             <button [hidden]="mode ===3" class="btn btn-danger pull-right" (click)="save()">Save</button>
+            <button [hidden]="mode == 1 || mode == 2" class="btn btn-danger pull-right" (click)="backClickHandler()">Back</button>
         </div>
     </div>
     <div class="row">
