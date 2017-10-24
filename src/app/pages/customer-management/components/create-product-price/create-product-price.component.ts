@@ -133,7 +133,7 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         var a = this.productList.filter(prod => prod.ProductName == product.ProductName).length >0;
         return a;
     }
-    
+
     isProductExistbyName(name) {
         this.cmService.isProductExist(name).subscribe((res) => {
             if (res === true) {

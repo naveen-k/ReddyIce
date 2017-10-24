@@ -30,7 +30,7 @@ export class SetPriceComponent implements OnInit {
     newProduct: any = {};
     action: string = '';
     cardTitle: string;
-    productType: any;
+    productType: any = 'active';
     extProducts: any = [];
 
 

@@ -53,6 +53,7 @@ export class CreateCustomerComponent implements OnInit {
         }else {
             this.title = 'Create';
         }
+        this.customer['Active']=true;
     }
 
     ngOnInit() {
