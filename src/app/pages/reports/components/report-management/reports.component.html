@@ -1,6 +1,6 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div [ngClass]="{'col-sm-4':!user.IsDistributor,'col-sm-3':user.IsDistributor}">
+        <div class="col-sm-4">
             <label>Start Date</label>
             <div class="input-group">
                 <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
@@ -10,7 +10,7 @@
                 </button>
             </div>
         </div>
-        <div [ngClass]="{'col-sm-4':!user.IsDistributor,'col-sm-3':user.IsDistributor}">
+        <div class="col-sm-4">
             <label>End Date</label>
             <div class="input-group">
                 <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
@@ -19,20 +19,30 @@
                 </button>
             </div>
         </div>
-        <div [ngClass]="{'col-sm-4':!user.IsDistributor,'col-sm-3':user.IsDistributor}">
-            <label>Select Report</label>
-            <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                <option value="AS">Asset Scan</option>
-                <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
-                <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
-                <option value="IOA">Inventory on Arrival</option>
-                <option value="SRT">Sales</option>
-                <option value="TR">Ticket Details</option>
-                <option value="SR">Trip Details</option>
-                <option value="RS">Unit Summary</option>
-            </select>
+        <div class="col-sm-4 head-button-container-for-report">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="row padding">
+                        <label>Select Report</label>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
+                            <option value="AS" *ngIf="!user.IsDistributor">Asset Scan</option>
+                            <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
+                            <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
+                            <option value="IOA">Inventory on Arrival</option>
+                            <option value="SRT">Sales</option>
+                            <option value="TR">Ticket Details</option>
+                            <option value="SR">Trip Details</option>
+                            <option value="RS">Unit Summary</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-3" [hidden]="!user.IsDistributor">
+        <div class="col-sm-4" [hidden]="!user.IsDistributor">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
                 <option [value]="0">All Customers</option>
@@ -40,7 +50,7 @@
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-        <div class="col-md-2 text-right head-button-container">
+        <div class="col-md-1 text-right head-button-container">
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
         </div>
     </div>
@@ -76,7 +86,8 @@
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="radio" name="userType" [disabled]="filter.reportType === 'DR'" value="external" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()">
+                                    <input type="radio" name="userType" [disabled]="filter.reportType === 'DR'" value="external" [(ngModel)]="filter.userType"
+                                        (ngModelChange)="userTypeChangeHandler()">
                                     <label class="top-margin">
                                         <b>Distributor</b>
                                     </label>
@@ -136,7 +147,7 @@
                                 <b>Customer</b>
                             </label>
                         </div>
-                        <div class="col-sm-8">                            
+                        <div class="col-sm-8">
                             <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select>
                         </div>
                         <div style='margin-left: 120px;'>

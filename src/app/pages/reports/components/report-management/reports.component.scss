@@ -31,9 +31,19 @@
 }
 .head-button-container {
     position: absolute;
-    right: 2px;
+    right: 49px;
     top: -13px;
   }
    .no-margin{
        margin-left: 0px;
    }
+
+   .head-button-container-for-report {
+    position: absolute;
+    right: 145px;
+    top: 6px;
+  }
+ 
+  .padding{
+      padding-top: 9px;
+  }

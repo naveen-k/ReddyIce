@@ -31,19 +31,19 @@ export class ReportsComponent implements OnInit {
     user: User;
     linkRpt: SafeResourceUrl;
 
-    distributors: any[] = []
+    distributors: any[] = [];
 
     allCustomers: any[] = [];
-    customers: any[] = []
+    customers: any[] = [];
 
-    drivers: any[] = []
+    drivers: any[] = [];
     driversofDist: any[] = [];
-    branches: any[] = []
+    branches: any[] = [];
 
     viewReport: boolean = false;
     showSpinner: boolean = false;
 
-    userSubTitle: string = ''
+    userSubTitle: string = '';
 
     constructor(
         private userService: UserService,
@@ -139,17 +139,17 @@ export class ReportsComponent implements OnInit {
         this.reportService.getCustomersByBranchandDist(this.filter.userType, this.filter.branch, this.filter.distributor).subscribe(res => {
             res.unshift({
                 CustomerId: 0,
-                CustomerName: "All Customer",
-                EmailId: "",
-                IsActive: true
-            })
+                CustomerName: 'All Customer',
+                EmailId: '',
+                IsActive: true,
+            });
             this.showSpinner = false;
             this.allCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerId', 'CustomerName');
             this.customers = [...this.allCustomers];
         }, (err) => {
             this.showSpinner = false;
             this.customers = [];
-        })
+        });
     }
 
     customerTypeChange() {
@@ -157,7 +157,7 @@ export class ReportsComponent implements OnInit {
             if (+this.filter.custType === 0 || cust.value === 0) { return true }
             else if (+this.filter.custType === 101) { return cust.IsRICustomer }
             else if (+this.filter.custType === 103) { return !cust.IsRICustomer }
-        })
+        });
         console.log(this.customers);
     }
 
