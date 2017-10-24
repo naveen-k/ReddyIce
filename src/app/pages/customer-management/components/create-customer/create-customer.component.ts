@@ -77,8 +77,6 @@ export class CreateCustomerComponent implements OnInit {
 
 
         if (this.mode === 2 || this.mode === 3) {
-            debugger
-            console.log(this.customerId);
             this.service.getCustomer(this.customerId).subscribe((response) => {
                 this.customer = response.CustomerDetails;
                 console.log(this.customer);
