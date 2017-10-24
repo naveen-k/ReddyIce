@@ -94,13 +94,13 @@ export class CreateTicketComponent implements OnInit {
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
 
   // Customer input formatter
-  inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
+  inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
 
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
       return this.customers.filter((v: any) => {
-        if (!v.CustomerTypeID) { return false; }
+        if (!v.CustomerTypeID) { return false; }  
         let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
         if (flag) {
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
