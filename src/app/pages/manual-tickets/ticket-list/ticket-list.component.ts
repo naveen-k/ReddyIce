@@ -123,7 +123,7 @@ export class TicketListComponent implements OnInit {
 
     getDistributors() {
         this.service.getDistributerAndCopacker().subscribe(res => {
-            this.distributors = res;
+            this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
             this.getSearchedTickets();
         });
     }

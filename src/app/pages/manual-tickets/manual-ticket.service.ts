@@ -64,8 +64,8 @@ export class ManualTicketService extends SharedService {
       .map(res => res.json());
   }
 
-  checkTicketNumber(ticketNumber: any) {
-    return this.http.get(`api/manualticket/checkticketnumber?number=${ticketNumber}`)
+  checkTicketNumber(ticket: ManualTicket) {
+    return this.http.post(`api/manualticket/checkticketnumber`, ticket)
       .map(res => res.json());
   }
 
@@ -94,14 +94,14 @@ export class ManualTicketService extends SharedService {
 
   getImageByID(imageID): any {
     return this.http.get(`api/manualticket/getimage?imageid=${imageID}`)
-    .map(res => res.json());
+      .map(res => res.json());
   }
 
   deleteImageByID(imageID, TicketID): any {
     return this.http.delete(`api/manualticket/deleteimage?imageId=${imageID}&ticketId=${TicketID}`)
-    .map(res => res.json());
+      .map(res => res.json());
   }
-  
+
 
   /* fileUpload() {
     const fileObj = {

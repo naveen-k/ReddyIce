@@ -30,12 +30,8 @@
             </select>
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
-            <label>Dist./CoPacker</label>
-            <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.DistributorID" (ngModelChange)="userChangeHandler()">
-                <option *ngFor="let obj of distributors" [value]="obj.DistributorCopackerID">
-                    {{obj.Name}}
-                </option>
-            </select>
+            <label>Dist./CoPacker</label>            
+            <reddy-select [options]="distributors" [(selected)]="searchObj.DistributorID" (selectedChange)="userChangeHandler()"></reddy-select>
         </div>
         <div class="col-sm-3">
             <label>Search</label>

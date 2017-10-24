@@ -8,16 +8,12 @@ export class NumberOnlyDirective {
     numberOnly: boolean = false;
 
     constructor(el: ElementRef) {
-        el.nativeElement.addEventListener('keydown', (e) => {
+        el.nativeElement.addEventListener('keypress', (e) => {
             const keyCode = (e.keyCode ? e.keyCode : e.which);
-            if ((keyCode > 47 && keyCode < 58) ||
-                (keyCode > 95 && keyCode < 106) ||
-                (keyCode > 36 && keyCode < 41) || // arrow keys
-                (keyCode === 8) ||
-                (keyCode === 46)) {
+            if ((keyCode > 47 && keyCode < 58) || (keyCode === 8)) {
                 return true;
             }
-            else if (this.numberOnly && keyCode === 110) { return true } // accept decimal value 
+            else if (this.numberOnly && keyCode === 46) { return true } // accept decimal value 
             e.preventDefault();
         });
     }

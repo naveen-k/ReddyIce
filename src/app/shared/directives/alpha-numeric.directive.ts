@@ -4,17 +4,13 @@ import { Directive, ElementRef, Input } from '@angular/core';
 })
 export class AlphaNumeric {
     constructor(el: ElementRef) {
-        el.nativeElement.addEventListener('keydown', (e) => {
-            const keyCode = (e.keyCode ? e.keyCode : e.which);
-            console.log(keyCode);
-            if ((keyCode > 47 && keyCode < 58) ||
-                (keyCode > 64 && keyCode < 106) ||
-                (keyCode > 36 && keyCode < 41) ||                
-                (keyCode === 8) ||
-                (keyCode === 46)) {
+        el.nativeElement.addEventListener('keypress', (e) => {
+            const k = (e.keyCode ? e.keyCode : e.which);
+            if(((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || (k >= 48 && k <= 57))){
                 return true;
             }
-            e.preventDefault();
+            console.log(k);
+            e.preventDefault();            
         })
     }
 }

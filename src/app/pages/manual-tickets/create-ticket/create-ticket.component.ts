@@ -491,19 +491,6 @@ export class CreateTicketComponent implements OnInit {
       this.ticketMinMaxLength = true;
       this.containsCharacters = false;
     }
-    this.invokeTicketDuplicateService();
-  }
-
-  invokeTicketDuplicateService() {
-    this.service.checkTicketNumber(this.ticket.TicketNumber).subscribe((res) => {
-      this.ticketMinMaxLength = false;
-      this.containsCharacters = false;
-      if (res == 'Ticket Number already in use.') {
-        this.isTicketNumberExist = true;
-      } else if (res == 'Ticket Number available for use.') {
-        this.isTicketNumberExist = false;
-      }
-    });
   }
 
   poNumberValidation() {
@@ -619,7 +606,7 @@ export class CreateTicketComponent implements OnInit {
   uploadFile(file) {
     if (file.ImageID) {
       this.service.updateFile(file).subscribe((response) => {
-        this.notification.success('File updated');
+        this.notification.success('', 'File updated');
       });
       return;
     }
@@ -675,11 +662,11 @@ export class CreateTicketComponent implements OnInit {
         if (res) {
           this.isDownloadable = false;
           console.log("image deleted, this.isDownloadable", this.isDownloadable);
-          this.notification.success("POD Image deleted successfully");
+          this.notification.success('', "POD Image deleted successfully");
         }
       }, (error) => {
         if (error) {
-          this.notification.error('Something went wrong while deletion of POD Image');
+          this.notification.error('', 'Something went wrong while deletion of POD Image');
         }
       },
     );
@@ -696,13 +683,13 @@ export class CreateTicketComponent implements OnInit {
     this.service.deleteDraftTicket(this.ticket.TicketID).subscribe(
       (response) => {
         if (response) {
-          this.notification.success('Ticket deleted successfully');
+          this.notification.success('', 'Ticket deleted successfully');
           this.routeToTicketListing();
         }
       },
       (error) => {
         if (error) {
-          this.notification.error('Something went wrong');
+          this.notification.error('', 'Something went wrong');
         }
       },
     );
@@ -738,6 +725,34 @@ export class CreateTicketComponent implements OnInit {
     });
   }
 
+  preSaveTicket() {
+    if (!this.validateTicket(this.ticket)) {
+      return;
+    }
+    const ticket = this.modifyTicketForSave(this.ticket);
+    this.service.checkTicketNumber(ticket).subscribe((res) => {
+      this.saveTicket();
+    }, err => {
+      if (err.status === 412) {
+        const activeModal = this.modalService.open(ModalComponent, {
+          size: 'sm',
+          backdrop: 'static',
+        });
+        activeModal.componentInstance.BUTTONS.OK = 'Merge';
+        activeModal.componentInstance.showCancel = true;
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `Ticket already exist with this number. Do you want to merge?`;
+        activeModal.componentInstance.closeModalHandler = (() => {
+          this.saveTicket();
+        });
+      } else if (err.status === 409) {
+        this.notification.error('', 'Ticket Number already in use!!!');
+      }
+    });
+  }
+
+
+
   saveTicket() {
     if (!this.validateTicket(this.ticket)) {
       return;
@@ -750,26 +765,27 @@ export class CreateTicketComponent implements OnInit {
     }
 
     const ticket = this.modifyTicketForSave(this.ticket);
+
     if (this.ticketId) {
       // Update ticket
       this.isFormDirty = false;
       this.service.updateTicket(ticket).subscribe(res => {
         this.isFormDirty = false;
-        this.notification.success(res);
+        this.notification.success('', res);
 
         if (this.ticket.TicketStatusID !== 23) {
           this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
         }
       }, err => {
         this.isFormDirty = true;
-        this.notification.error(err);
+        this.notification.error('', err);
       });
       return;
     }
 
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
-      this.notification.success('Ticket created successfully!');
+      this.notification.success('', 'Ticket created successfully!');
       if (this.tripMode) {
         this.location.back();
         return;
@@ -779,7 +795,7 @@ export class CreateTicketComponent implements OnInit {
     }, (error) => {
       if (error) {
         this.isFormDirty = true;
-        this.notification.error('Error while creating ticket!');
+        this.notification.error('', 'Error while creating ticket!');
       }
     });
   }
@@ -980,61 +996,58 @@ export class CreateTicketComponent implements OnInit {
 
   validateTicket(ticket): boolean {
     if (!ticket.TicketNumber) {
-      this.notification.error('Ticket Number is mandatory!!!');
+      this.notification.error('', 'Ticket Number is mandatory!!!');
       return false;
     } else if (!this.ticket.Customer) {
-      this.notification.error('Customer is mandatory!!!');
+      this.notification.error('', 'Customer is mandatory!!!');
       return false;
     } else if (this.isPOReuquired() && !this.ticket.PONumber) {
-      this.notification.error('PO number is mandatory!!!');
+      this.notification.error('', 'PO number is mandatory!!!');
       return false;
     } else if (this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image) {
-      this.notification.error('POD is mandatory!!!');
+      this.notification.error('', 'POD is mandatory!!!');
       return false;
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
-      this.notification.error('Driver is mandatory!!!');
+      this.notification.error('', 'Driver is mandatory!!!');
       return false;
     } else if (this.checkMinMaxLength) {
-      this.notification.error('Check Number should be 5 to 20 digits long!!!');
+      this.notification.error('', 'Check Number should be 5 to 20 digits long!!!');
       return false;
     } else if (this.checkContainsCharacters) {
-      this.notification.error('Check number should be alphanumeric, cannot contain special characters!!!');
+      this.notification.error('', 'Check number should be alphanumeric, cannot contain special characters!!!');
       return false;
     } else if (this.poContainsCharacters) {
-      this.notification.error('PO number should be alphanumeric, cannot contain special characters!!!');
+      this.notification.error('', 'PO number should be alphanumeric, cannot contain special characters!!!');
       return false;
     } else if (this.poMinMaxLength) {
-      this.notification.error('PO number should be 4-20 digits long only!!!');
+      this.notification.error('', 'PO number should be 4-20 digits long only!!!');
       return false;
     } else if (this.ticketMinMaxLength) {
-      this.notification.error('Ticket number should be 4-10 digits long only!!!');
+      this.notification.error('', 'Ticket number should be 4-10 digits long only!!!');
       return false;
     } else if (this.ticket.CheckNumber && !this.ticket.CheckAmount) {
-      this.notification.error('Check Amount is required as Check Number exists!!!');
+      this.notification.error('', 'Check Amount is required as Check Number exists!!!');
       return false;
     } else if (this.ticket.CheckAmount && !this.ticket.CheckNumber) {
-      this.notification.error('Check number is required as Check Amount exists!!!');
-      return false;
-    } else if (this.isTicketNumberExist) {
-      this.notification.error('Ticket Number already in use!!!');
+      this.notification.error('', 'Check number is required as Check Amount exists!!!');
       return false;
     } else if (this.ticket.CustomerType === 21 && this.ticket.TicketProduct && this.pbsQuantityCheck() > 0) {
       this.pbsCount = 0;
-      this.notification.error('Delivered Bags for the products in the product list cannot be blank for PBS Customer type!!!');
+      this.notification.error('', 'Delivered Bags for the products in the product list cannot be blank for PBS Customer type!!!');
       return false;
     } else if (this.ticket.CustomerType === 20 && this.ticket.TicketProduct && this.dsdQuantityCheck() > 0) {
       this.dsdCount = 0;
-      this.notification.error('Quantity for the products in the product list cannot be blank for DSD Customer type!!!');
+      this.notification.error('', 'Quantity for the products in the product list cannot be blank for DSD Customer type!!!');
       return false;
     } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && !this.ticket.IsSaleTicket && this.inventoryCheck() > 0) {
       this.inventoryCount = 0;
-      this.notification.error('All fields are mandatory for the products in the product list for PBM Inventory Customer type!!!');
+      this.notification.error('', 'All fields are mandatory for the products in the product list for PBM Inventory Customer type!!!');
       return false;
     } else if (this.ticket.CashAmount && this.ticket.CashAmount.toString().includes('-')) {
-      this.notification.error('Cash Amount cannot contain -');
+      this.notification.error('', 'Cash Amount cannot contain -');
       return false;
     } else if (this.ticket.CheckAmount && this.ticket.CheckAmount.toString().includes('-')) {
-      this.notification.error('Check Amount cannot contain -');
+      this.notification.error('', 'Check Amount cannot contain -');
       return false;
     } else if (this.ticket.CustomerType === 20 && this.customer.PaymentType !== 19) {
       if (this.ticket.CashAmount || this.ticket.CashAmount === 0) {
@@ -1044,7 +1057,7 @@ export class CreateTicketComponent implements OnInit {
           return true;
         } else {
           if (this.ticket.TicketTypeID === 26) {
-            this.notification.error('Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
+            this.notification.error('', 'Either of Check Amount or Cash Amount is mandatory as Customer is of Cash type!!!');
             return false;
           } else {
             return true;
@@ -1054,10 +1067,10 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && this.ticket.IsSaleTicket) {
       if (this.mreadingCheck() > 0) {
         this.mreadingCount = 0;
-        this.notification.error('All fields are mandatory for the products in the product list for PBM Meter Reading Customer type!!!');
+        this.notification.error('', 'All fields are mandatory for the products in the product list for PBM Meter Reading Customer type!!!');
         return false;
       } else if (this.readingCheck) {
-        this.notification.error('Previous Reading cannot be greater than Current Reading!!!');
+        this.notification.error('', 'Previous Reading cannot be greater than Current Reading!!!');
         return false;
       } else {
         return true;

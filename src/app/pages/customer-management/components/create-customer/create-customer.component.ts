@@ -72,7 +72,7 @@ export class CreateCustomerComponent implements OnInit {
                     label: `${chain.ChainName}`,
                 });
             });
-            this.chains = tempArr; 
+            this.chains = tempArr;
         }, (err) => { });
 
 
@@ -94,16 +94,16 @@ export class CreateCustomerComponent implements OnInit {
             console.log(" this.products---------------", this.products);
         });
         this.service.getAllStates().subscribe((response) => {
-          // this.allStates = response;
-           let tempArr = []
-           response.forEach(state => {
-               tempArr.push({
-                   value: state.StateId,
-                   label: `${state.StateName}`,
-                   //date: branch,
-               })
-           });
-           this.allStates = tempArr; 
+            // this.allStates = response;
+            let tempArr = []
+            response.forEach(state => {
+                tempArr.push({
+                    value: state.StateId,
+                    label: `${state.StateName}`,
+                    //date: branch,
+                })
+            });
+            this.allStates = tempArr;
         });
         
     }
@@ -132,12 +132,12 @@ export class CreateCustomerComponent implements OnInit {
                 // console.log("this.customerId, this.customer ", this.customerId, " :--> ", this.customer)
                 this.service.updateCustomer(this.customerId, this.customer).subscribe((res) => {
                     if (res) {
-                        this.notification.success('Customer Edited successfully');
+                        this.notification.success('', 'Customer Edited successfully');
                         this.router.navigate(['../../list'], { relativeTo: this.route });
                     }
                 }, (err) => {
                     //console.log("err ",err);
-                    this.notification.error(err._body);
+                    this.notification.error('', err._body);
                 });
 
             } else {
@@ -147,12 +147,12 @@ export class CreateCustomerComponent implements OnInit {
                 // console.log("this.customerId ", this.customer)
                 this.service.createCustomer(this.customer).subscribe((res) => {
                     if (res) {
-                        this.notification.success('Customer Added successfully');
+                        this.notification.success('', 'Customer Added successfully');
                         this.router.navigate(['/pages/customer-management/list'], { relativeTo: this.route });
                     }
                 }, (err) => {
                     //console.log("err ",err);
-                    this.notification.error(err._body);
+                    this.notification.error('', err._body);
                 });
             }
         }
@@ -221,49 +221,49 @@ export class CreateCustomerComponent implements OnInit {
 
     validateCustomer(customer, newlyAddedproduct, addedProduct, mode): boolean {
         if (!customer.CustomerNumber) {
-            this.notification.error('Customer Number is mandatory!!!');
+            this.notification.error('', 'Customer Number is mandatory!!!');
             return false;
         } else if (!customer.CustomerName) {
-            this.notification.error('Customer Name is mandatory!!!');
+            this.notification.error('', 'Customer Name is mandatory!!!');
             return false;
         } else if (!customer.CustType) {
-            this.notification.error('Customer Type is mandatory!!!');
+            this.notification.error('', 'Customer Type is mandatory!!!');
             return false;
         } else if (!customer.PaymentType) {
-            this.notification.error('Payment Type is mandatory!!!');
+            this.notification.error('', 'Payment Type is mandatory!!!');
             return false;
         } else if (customer.IsTaxassble && !customer.TaxPercentage) {
-            this.notification.error('Tax Percentage is mandatory!!!');
+            this.notification.error('', 'Tax Percentage is mandatory!!!');
             return false;
         } else if (customer.IsDex && !customer.ChainID) {
-            this.notification.error('Chain Number is mandatory!!!');
+            this.notification.error('', 'Chain Number is mandatory!!!');
             return false;
         } else if (customer.IsDex && !customer.DUNSNumber) {
-            this.notification.error('DUNS Number is mandatory!!!');
+            this.notification.error('', 'DUNS Number is mandatory!!!');
             return false;
         } else if (!customer.Address) {
-            this.notification.error('Customer Address is mandatory!!!');
+            this.notification.error('', 'Customer Address is mandatory!!!');
             return false;
         } else if (!customer.State) {
-            this.notification.error('Customer State is mandatory!!!');
+            this.notification.error('', 'Customer State is mandatory!!!');
             return false;
         } else if (!customer.City) {
-            this.notification.error('Customer City is mandatory!!!');
+            this.notification.error('', 'Customer City is mandatory!!!');
             return false;
         } else if (!customer.ZipCode) {
-            this.notification.error('Customer ZipCode is mandatory!!!');
+            this.notification.error('', 'Customer ZipCode is mandatory!!!');
             return false;
         } else if (!customer.PrimaryContact) {
-            this.notification.error('Customer Primary Contact is mandatory!!!');
+            this.notification.error('', 'Customer Primary Contact is mandatory!!!');
             return false;
         } else if (!customer.Phone) {
-            this.notification.error('Customer Phone is mandatory!!!');
+            this.notification.error('', 'Customer Phone is mandatory!!!');
             return false;
         } else if (!customer.EmailID) {
-            this.notification.error('Customer EmailID is mandatory!!!');
+            this.notification.error('', 'Customer EmailID is mandatory!!!');
             return false;
         } else if (mode === 1 && (addedProduct.length === undefined || addedProduct.length === 0)) {
-            this.notification.error('Atleast one product is mandatory!!!');
+            this.notification.error('', 'Atleast one product is mandatory!!!');
             return false;
         } else if (mode === 1 && addedProduct.length > 0) {
             // console.log("addedProduct ----------------------", addedProduct)
@@ -276,7 +276,7 @@ export class CreateCustomerComponent implements OnInit {
                     }
                 });
                 if (!check) {
-                    this.notification.error('Product Name and its Price is mandatory!!!');
+                    this.notification.error('', 'Product Name and its Price is mandatory!!!');
                 }
                 return check;
             } else {
@@ -294,7 +294,7 @@ export class CreateCustomerComponent implements OnInit {
                     }
                 });
                 if (!check) {
-                    this.notification.error('Product Name and its Price is mandatory!!!');
+                    this.notification.error('', 'Product Name and its Price is mandatory!!!');
                 }
                 // console.log("succe0");
                 return check;
@@ -326,7 +326,7 @@ export class CreateCustomerComponent implements OnInit {
         this.service.isCustomerNumberExist(CustomerNumber).subscribe((response) => {
             this.isCustNumberExist = response;
             if (this.isCustNumberExist) {
-                this.notification.error('Customer Number Already Exist!!');
+                this.notification.error('', 'Customer Number Already Exist!!');
             }
         });
     }
@@ -351,7 +351,7 @@ export class CreateCustomerComponent implements OnInit {
                 this.router.navigate(['/pages/customer-management'], { relativeTo: this.route });
             });
         } else {
-          this.router.navigate(['/pages/customer-management'], { relativeTo: this.route });
+            this.router.navigate(['/pages/customer-management'], { relativeTo: this.route });
         }
     }
 }
