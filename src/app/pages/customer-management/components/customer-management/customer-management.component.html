@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <label>
-                        <span>RI Customer?</span>
+                        <span><b>RI Customer?</b></span>
                     </label>
                 </div>
                 <div class="col-sm-8">
@@ -29,17 +29,21 @@
                         <input type="radio" name="type" (click)="sequenceChangeHandler(2)">
                         <span>No</span>
                     </label>
+                    <!-- <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="type" (click)="sequenceChangeHandler(2)">
+                        <span>Both</span>
+                    </label> -->
                 </div>
             </div>
         </div>
         <div class="col-sm-5" style="padding-top:8px;">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>
-                        <span>User Type</span>
+                        <span><b>Status</b></span>
                     </label>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-sm-10">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="usertype" (click)="usertypeChangeHandler(1)">
                         <span>Active</span>
@@ -88,7 +92,7 @@
                             Contact
                         </span>
                     </th>
-                    <th style="padding-right:7px;">
+                    <th style="padding-right:20px;text-align:center;">
                         <span>
                             Customer Type
                         </span>
