@@ -1,45 +1,45 @@
 <ba-card cardTitle="{{title}} Customer {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container">
     <div class="row">
-        <div class="col-sm-9"></div>
-        <div class="col-sm-2 head-button-container-for-back">
+        <div class="col-md-9"></div>
+        <div class="col-md-2 head-button-container-for-back">
             <button [hidden]="mode==1" class="btn btn-danger pull-right" style="margin-right: -71px;margin-top: 1px;" (click)="backClickHandler()">Back</button>
             <button [hidden]="mode!=1" class="btn btn-danger pull-right"  (click)="backClickHandler()">Back</button>
         </div>
-        <div class="col-sm-1 head-button-container-for-save">
+        <div class="col-md-1 head-button-container-for-save">
             <button [hidden]="mode ===3" class="btn btn-danger pull-right" (click)="save()">Save</button>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4 page-header">
+        <div class="col-md-4 page-header">
             <div class="row">
-                <label for="example-text-input" class="col-sm-5 col-form-label" >Customer Number <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                <div class="col-sm-7 padding-eater">
+                <label for="example-text-input" class="col-md-12" >Customer Number <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                <div class="col-md-12">
                     <input maxlength="25" numberOnly [disabled]="mode ===3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber" class="form-control"
                         placeholder="Customer Number" (blur)="isCutomerNumberExist(customer.CustomerNumber)" (ngModelChange)="formFlagHandler()" />
                 </div>
             </div>
             <div class="row box-top-margin">
-                <label for="example-text-input" class="col-sm-5 col-form-label">Customer Name <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                <div class="col-sm-7 padding-eater">
+                <label for="example-text-input" class="col-md-12">Customer Name <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                <div class="col-md-12">
                     <input maxlength="50" [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()" class="form-control"
                         placeholder="Customer Name" />
                 </div>
             </div>
             <div class="row box-top-margin">
-                <label for="example-text-input" class="col-sm-5 col-form-label">Customer Type <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                <div class="col-sm-7 padding-eater">
+                <label for="example-text-input" class="col-md-12">Customer Type <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                <div class="col-md-12">
                     <select [disabled]="mode ===3" class="form-control" [(ngModel)]='customer.CustType' (ngModelChange)="formFlagHandler()" name="custType">
                         <option [value]='20' >DSD</option>
                         <option [value]='21' >PBS</option>
                         <option [value]='22' >PBM</option>
                     </select>
-                    <!-- <label class="col-sm-7 col-form-label" [(ngModel)]='customer.CustType' name="custType">DSD</label> -->
+                    <!-- <label class="col-md-7 col-form-label" [(ngModel)]='customer.CustType' name="custType">DSD</label> -->
                     <!-- <input disabled id="typeahead-basic" type="text" [(ngModel)]="customer.CustType" class="form-control" placeholder="DSD"/> -->
                 </div>
             </div>
             <div class="row box-top-margin">
-                <label for="example-text-input" class="col-sm-5 col-form-label">Payment Type <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                <div class="col-sm-7 padding-eater">
+                <label for="example-text-input" class="col-md-12">Payment Type <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                <div class="col-md-12">
                     <select [disabled]="mode ===3" [(ngModel)]="customer.PaymentType" (ngModelChange)="formFlagHandler()" class="form-control" name="custType">
                         <option [value]="18">Cash</option>
                         <option [value]="19">Charge</option>
@@ -47,28 +47,28 @@
                 </div>
             </div>
             <div class="row box-top-margin">
-                <label for="example-text-input" class="col-sm-5 col-form-label">IsTaxable?</label>
-                <div class="col-sm-1 padding-eater">
+                <label for="example-text-input" class="col-md-6">IsTaxable?</label>
+                <div class="col-md-6">
                     <input [disabled]="mode ===3" type="checkbox" [(ngModel)]='customer.IsTaxassble' (ngModelChange)="formFlagHandler()" class="checkbox-size" />
 
                 </div>
-                <!-- <label for="example-text-input" class="col-sm-5 col-form-label text-align-center">IsDex?</label>
-                <div class="col-sm-1 padding-eater text-alignment">
+                <!-- <label for="example-text-input" class="col-md-5 col-form-label text-align-center">IsDex?</label>
+                <div class="col-md-1 padding-eater text-alignment">
                     <input [disabled]="mode ===3" type="checkbox" [(ngModel)]='customer.IsDex' (ngModelChange)="formFlagHandler()" class="checkbox-size" />
 
                 </div> -->
             </div>
             <div class="row box-top-margin">
 
-                <label for="example-text-input" class="col-sm-5 col-form-label">Tax Percentage</label>
-                <div class="col-sm-7 padding-eater">
+                <label for="example-text-input" class="col-md-12">Tax Percentage</label>
+                <div class="col-md-12">
                     <input maxlength="6" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="number" step="0.01"
                         class="form-control" placeholder="Tax Percentage"/>
                 </div>
             </div>
             <!-- <div class="row box-top-margin">
-                <label for="example-text-input" class="col-sm-5 col-form-label">Chain</label>
-                <div class="col-sm-7 padding-eater">
+                <label for="example-text-input" class="col-md-5 col-form-label">Chain</label>
+                <div class="col-md-7 padding-eater">
                     <!-- <select [disabled]="mode ===3" [(ngModel)]="customer.ChainID" (ngModelChange)="formFlagHandler()" class="form-control">
                         <option *ngFor="let chain of chains" [value]="chain.ChainId">{{chain.ChainName}}</option>
                     </select> -->
@@ -76,27 +76,27 @@
                 </div>
             </div> -->
             <!-- <div class="row box-top-margin">
-                <label for="example-text-input" class="col-sm-5 col-form-label">DUNS Number</label>
-                <div class="col-sm-7 padding-eater">
+                <label for="example-text-input" class="col-md-5 col-form-label">DUNS Number</label>
+                <div class="col-md-7 padding-eater">
                     <input [disabled]="mode ===3" maxlength="10" type="text" numberOnly [(ngModel)]='customer.DUNSNumber' (ngModelChange)="formFlagHandler()" class="form-control" />
                 </div>
             </div> -->
 
         </div>
         <div class="col-md-8 page-header">
-            <div class="col-sm-12">
+            
                 <div class="row">
-                    <label for="example-text-input" class="col-sm-1 col-form-label">Address&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                    <div class="col-sm-11">
+                    <label for="example-text-input" class="col-md-12">Address<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                    <div class="col-md-12">
                         <input [disabled]="mode ===3" maxlength="500" [(ngModel)]='customer.Address' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="text" class="form-control" placeholder="Address"
                         />
                     </div>
                 </div>
-                <div class="row box-top-margin">
-                    <div class="col-sm-4">
-                        <div class="row">
-                            <label for="example-text-input" class="col-sm-3 col-form-label">State&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                            <div class="col-sm-9">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row box-top-margin">
+                            <label for="example-text-input" class="col-md-12">State&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                            <div class="col-md-12">
                         <!-- <input [hidden]="mode ===2 ||mode ===1 " [disabled]="mode===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
                                 />   -->
                                 <!-- <select [disabled]="mode ===3" [(ngModel)]="customer.State" (ngModelChange)="formFlagHandler()" class="form-control">
@@ -106,19 +106,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="row">
-                            <label for="example-text-input" class="col-sm-3 col-form-label">City&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                            <div class="col-sm-9">
+                    <div class="col-md-4">
+                        <div class="row box-top-margin">
+                            <label for="example-text-input" class="col-md-12">City&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                            <div class="col-md-12">
                                 <input maxlength="25" [disabled]="mode ===3" [(ngModel)]='customer.City' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="text" class="form-control" placeholder="City"
                                 />
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="row">
-                            <label for="example-text-input" class="col-sm-3 col-form-label">Zip&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                            <div class="col-sm-9">
+                    <div class="col-md-4">
+                        <div class="row box-top-margin">
+                            <label for="example-text-input" class="col-md-12">Zip&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                            <div class="col-md-12">
                                 <input maxlength="10" numberOnly [disabled]="mode ===3" [(ngModel)]='customer.ZipCode' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="text" class="form-control" placeholder="Zip"
                                 />
                             </div>
@@ -126,31 +126,30 @@
                     </div>
                 </div>
                 <div class="row box-top-margin">
-                    <div class="col-sm-6">
+                    <div class="col-md-12">
                         <div class="row">
-                            <label for="example-text-input" class="col-sm-2 col-form-label">Primary Contact&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                            <div class="col-sm-10">
+                            <label for="example-text-input" class="col-md-12">Primary Contact&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                            <div class="col-md-12">
                                 <input maxlength="50" [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="text" class="form-control"
                                     placeholder="Primary Contact" />
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <label for="example-text-input" class="col-sm-2 col-form-label">Phone&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                            <div class="col-sm-10">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row box-top-margin">
+                            <label for="example-text-input" class="col-md-12">Phone&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                            <div class="col-md-12">
                                 <input maxlength="15" numberOnly [disabled]="mode ===3" [(ngModel)]='customer.Phone' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="text" class="form-control" placeholder="Phone"
                                 />
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row box-top-margin">
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <label for="example-text-input" class="col-sm-2 col-form-label">Email&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
-                            <div class="col-sm-10">
+                    <div class="col-md-6">
+                        <div class="row box-top-margin">
+                            <label for="example-text-input" class="col-md-12">Email&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                            <div class="col-md-12">
                                 <input maxlength="50" [disabled]="mode === 3" [(ngModel)]='customer.EmailID' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="email" class="form-control" placeholder="Email"
                                 pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"/>
                             </div>
@@ -158,7 +157,7 @@
                     </div>
                 </div>
                 <div class="row box-top-margin">
-                    <div class="col-sm-12">
+                    <div class="col-md-12">
                         <table class="table table-striped">
                             <thead class="tableHeader">
                                 <th>Product <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></th>
@@ -240,7 +239,6 @@
                         </ng-template>
                         <dual-list [mappedRowTemplate]="rowTemplate" [items]="products" [(selectedItems)]="selectedProducts"></dual-list> -->
                 </div>
-            </div>
         </div>
     </div>
 </ba-card>
