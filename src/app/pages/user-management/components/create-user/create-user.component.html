@@ -217,7 +217,7 @@
         </select-->
         <!--ss-multiselect-dropdown name="dd" stopScrollPropagation="true" [options]="myOptions" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="optionsModel"></ss-multiselect-dropdown><br><br-->
         
-        <div class="col-md-12" style="max-height:80px;overflow:auto;"><ul class="ulpadding"><li *ngFor="let b of user.Branch" >{{b.BranchName}}</li></ul></div>
+        <div class="col-md-12" style="max-height:80px;overflow:auto;"><ul class="ulpadding"><li *ngFor="let b of user.Branch" >{{b.BranchCode}} - {{b.BranchName}}</li></ul></div>
           
     </div>
     <div class="col-md-2"></div>
