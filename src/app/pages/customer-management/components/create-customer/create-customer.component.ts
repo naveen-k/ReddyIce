@@ -46,9 +46,11 @@ export class CreateCustomerComponent implements OnInit {
     ) {
         this.customerId = this.route.snapshot.params['customerId'];
         this.mode = +this.route.snapshot.data['mode'];
-        if (this.customerId) {
+        if (this.mode === 2) {
             this.title = 'Edit';
-        } else {
+        }else if (this.mode === 3) {
+            this.title = 'View';
+        }else {
             this.title = 'Create';
         }
     }
@@ -103,6 +105,7 @@ export class CreateCustomerComponent implements OnInit {
            });
            this.allStates = tempArr; 
         });
+        
     }
     addProduct() {
         if (this.mode === 1) {
