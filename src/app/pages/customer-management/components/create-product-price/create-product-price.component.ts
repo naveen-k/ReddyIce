@@ -98,8 +98,10 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         if (this.isProductExist(product) && this.actionName == 'create') {
             this.notification.error('Product Name is already exist!!!');
             return false;
-        }
-        else if (!product.ProductName && this.action === 'create') {
+        } else if (this.isProductExist(product) && this.actionName == 'edit') {
+            this.notification.error('Product Name is already exist!!!');
+            return false;
+        } else if (!product.ProductName && this.action === 'create') {
             this.notification.error('Product Name is mandatory!!!');
             return false;
         } else if (!product.ProductPrice) {

@@ -7,9 +7,12 @@
  
     <div class="col-md-6  page-header">
       <label for="fname" class="control-label">Product Name</label>
+      <!-- <input [disabled]="product.IsInternal" type="text"  class="form-control" id="pname" placeholder="Product Name"
+        minlength="2" [(ngModel)]="product.ProductName" name="ProductName" #ProductName="ngModel" required (ngModelChange)="changeHandler()"
+        (blur)="spaceRemoverFn(product.ProductName);isProductExistbyName(product.ProductName)" maxlength="50"> -->
       <input [disabled]="product.IsInternal" type="text"  class="form-control" id="pname" placeholder="Product Name"
         minlength="2" [(ngModel)]="product.ProductName" name="ProductName" #ProductName="ngModel" required (ngModelChange)="changeHandler()"
-        (blur)="spaceRemoverFn(product.ProductName);isProductExistbyName(product.ProductName)" maxlength="50">
+        (blur)="spaceRemoverFn(product.ProductName);" maxlength="50">
       <div *ngIf="actionName=='create1' && ProductName.invalid && (ProductName.dirty || ProductName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="ProductName.errors.required" class="custom-tooltip bottom">Product Name is required</div>
