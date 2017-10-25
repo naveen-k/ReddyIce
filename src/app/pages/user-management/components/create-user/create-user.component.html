@@ -133,7 +133,7 @@
     <div *ngIf="user.IsRIInternal" class="col-md-6 page-header">
       <label for="iseriesroute" class="control-label">ISeries Route</label>
       <input type="number" class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber"
-        #ISeriesRouteNumber="ngModel" maxlength="10" (change)="changeHandler()" >
+        #ISeriesRouteNumber="ngModel" maxlength="10" (ngModelChange)="changeHandler()" >
     </div>
 
     <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">

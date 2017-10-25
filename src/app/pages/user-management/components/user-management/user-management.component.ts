@@ -376,7 +376,7 @@ export class UserManagementComponent implements OnInit {
     branches.find((val) => {
         if (typeof val === 'object') {
             if(val['IsActive']===true){
-              cstring.push(val['BranchCode']+'-'+val['BranchName']);
+              cstring.push(val['BranchCode']+' - '+val['BranchName']);
             }
         }
         

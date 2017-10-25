@@ -59,7 +59,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         
         let role = val.RoleID+'';
         if (role === '1' || role === '2' || role === '4' || role === '5') {
-            this.user.Branch =   [{BranchCode: 1,BranchID: 1, BranchName: "1-All Branches",IsActive:true}];
+            this.user.Branch =   [{BranchCode: 1,BranchID: 1, BranchName: "All Branches",IsActive:true}];
             this.userBranch =[1];
         }
         else {
@@ -346,7 +346,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {
             this.cBranches = [];
-            this.cBranches =[{ value: '1', label: '1-All Branches', data:{ BranchID: 1, BranchCode:1, BranchName:'All Branches',IsActive:true }}];
+            this.cBranches =[{ value: '1', label: '1 - All Branches', data:{ BranchID: 1, BranchCode:1, BranchName:'All Branches',IsActive:true }}];
             this.userBranch = [1];
            
         } else {
