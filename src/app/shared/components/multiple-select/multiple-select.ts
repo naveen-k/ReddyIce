@@ -18,8 +18,17 @@ export class SelectComponent implements AfterViewInit {
     @Input()
     position: string = 'bottom';
 
+    private _disabled: boolean = false;
+    
+    get disabled(): boolean {
+        return this._disabled;
+    }
+
     @Input()
-    disabled: boolean = false;
+    set disabled(val: boolean) {
+        this._disabled = val;
+        this.enableDisable(val);
+    }
 
     @Input()
     multiple: boolean = false;
@@ -94,6 +103,16 @@ export class SelectComponent implements AfterViewInit {
         });
         this.elementRef.multipleSelect('refresh');
         this.elementRef.multipleSelect('setSelects', this.selected);
+    }
+
+    enableDisable(disable: boolean) {
+        if (this.elementRef) {
+            if (disable) {                
+                this.elementRef.multipleSelect('disable');
+            } else {
+                this.elementRef.multipleSelect('enable');
+            }
+        }
     }
 
 }
