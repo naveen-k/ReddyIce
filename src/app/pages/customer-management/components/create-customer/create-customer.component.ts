@@ -32,7 +32,7 @@ export class CreateCustomerComponent implements OnInit {
     isDistributorExist: boolean;
     userSubTitle: string = '';
     chains: any = [];
-
+    isRI: number = 0;
     mode: number; // 1-Create Mode, 2-Edit Mode, 3-View Mode 
     addProductCheck: any = [];
     addNewProductCheck: any = [];
@@ -45,15 +45,16 @@ export class CreateCustomerComponent implements OnInit {
         protected userService: UserService,
     ) {
         this.customerId = this.route.snapshot.params['customerId'];
+        this.isRI = this.route.snapshot.params['isRI'];
         this.mode = +this.route.snapshot.data['mode'];
         if (this.mode === 2) {
             this.title = 'Edit';
-        }else if (this.mode === 3) {
+        } else if (this.mode === 3) {
             this.title = 'View';
-        }else {
+        } else {
             this.title = 'Create';
         }
-        this.customer['IsActive']=true;
+        this.customer['Active'] = true;
     }
 
     ngOnInit() {
@@ -78,7 +79,7 @@ export class CreateCustomerComponent implements OnInit {
 
 
         if (this.mode === 2 || this.mode === 3) {
-            this.service.getCustomer(this.customerId).subscribe((response) => {
+            this.service.getCustomer(this.customerId, this.isRI).subscribe((response) => {
                 this.customer = response.CustomerDetails;
                 console.log(this.customer);
                 if (response.CustomerDetails.C_CustomerNumber_) {
@@ -106,7 +107,7 @@ export class CreateCustomerComponent implements OnInit {
             });
             this.allStates = tempArr;
         });
-        
+
     }
     addProduct() {
         if (this.mode === 1) {
@@ -125,9 +126,16 @@ export class CreateCustomerComponent implements OnInit {
     save() {
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
             // console.log("sdsa ---0-----", this.customer);
+            if (this.customer.AllowReturnSameTicket) {
+                this.customer.AllowReturnSameTicket = 1;
+            } else {
+                this.customer.AllowReturnSameTicket = 0;
+            }
+            
             if (this.mode === 2) {
                 ///const mAddedProduct = this.addedProduct.concat(this.newlyAddedproduct);
                 // this.customer.MappedProducts = mAddedProduct;
+
                 this.customer.EditedProducts = this.addedProduct;
                 this.customer.NewAddedProducts = this.newlyAddedproduct;
                 // console.log("this.customerId, this.customer ", this.customerId, " :--> ", this.customer)

@@ -22,8 +22,8 @@ export class CustomerManagementService extends SharedService {
       });
 
   }
-  getCustomer(customerid) {
-    return this.http.get(`api/customer/getcustomerdetailbyid?customerid=${customerid}`)
+  getCustomer(customerid, isReddyIce=0) {
+    return this.http.get(`api/customer/getcustomerdetailbyid?customerid=${customerid}&isRI=${isReddyIce}`)
       .map((res) => res.json()).map((res) => {
         return res;
       });
@@ -67,6 +67,6 @@ export class CustomerManagementService extends SharedService {
   }
   deleteProduct(productId) {
     return this.http.delete(`api/deleteexternalproduct?productId=${productId}`)
-    .map((res) => res.json());
+      .map((res) => res.json());
   }
 }

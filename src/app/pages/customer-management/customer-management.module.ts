@@ -36,7 +36,7 @@ const routes: Routes = [
             },
         },
         {
-            path: 'view/:customerId',
+            path: 'view/:customerId/:isRI',
             component: CreateCustomerComponent,
             data: {
                 mode: 3,

@@ -29,7 +29,7 @@
                 <div class="col-sm-9">
                     <div class="row">
                         <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                            <option value="AS" *ngIf="!user.IsDistributor">Asset Scan</option>
+                            <option value="AS">Asset Scan</option>
                             <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
                             <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
                             <option value="IOA">Inventory on Arrival</option>
