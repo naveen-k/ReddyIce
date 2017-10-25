@@ -124,7 +124,7 @@
                   </select> -->
                   
               <br/>
-              <reddy-select [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();"></reddy-select>
+              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();"></reddy-select>
               
               <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown--><br><br>
                     <!--button class="btn btn-danger" (click)="onMultiSelect(optionsModel)">Fire</button -->
