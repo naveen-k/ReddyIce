@@ -78,7 +78,7 @@
 
                 <label for="example-text-input" class="col-md-12">Tax Percentage</label>
                 <div class="col-md-12">
-                    <input maxlength="6" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' (ngModelChange)="formFlagHandler()"
+                    <input maxlength="6" numberOnly="true" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' (ngModelChange)="formFlagHandler()"
                         id="typeahead-basic" type="number" step="0.01" class="form-control" placeholder="Tax Percentage" />
                 </div>
             </div>
