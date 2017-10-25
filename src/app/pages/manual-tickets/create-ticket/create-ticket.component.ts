@@ -730,29 +730,29 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
-   if(this.ticketId){
-    this.saveTicket();
-   }else{
-    this.service.checkTicketNumber(ticket).subscribe((res) => {
+    if (this.ticketId) {
       this.saveTicket();
-    }, err => {
-      if (err.status === 412) {
-        const activeModal = this.modalService.open(ModalComponent, {
-          size: 'sm',
-          backdrop: 'static',
-        });
-        activeModal.componentInstance.BUTTONS.OK = 'Merge';
-        activeModal.componentInstance.showCancel = true;
-        activeModal.componentInstance.modalHeader = 'Warning!';
-        activeModal.componentInstance.modalContent = `Ticket already exist with this number. Do you want to merge?`;
-        activeModal.componentInstance.closeModalHandler = (() => {
-          this.saveTicket();
-        });
-      } else if (err.status === 409) {
-        this.notification.error('', 'Ticket Number already in use!!!');
-      }
-    });
-  }
+    } else {
+      this.service.checkTicketNumber(ticket).subscribe((res) => {
+        this.saveTicket();
+      }, err => {
+        if (err.status === 412) {
+          const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
+          });
+          activeModal.componentInstance.BUTTONS.OK = 'Merge';
+          activeModal.componentInstance.showCancel = true;
+          activeModal.componentInstance.modalHeader = 'Warning!';
+          activeModal.componentInstance.modalContent = `Ticket already exist with this number. Do you want to merge?`;
+          activeModal.componentInstance.closeModalHandler = (() => {
+            this.saveTicket();
+          });
+        } else if (err.status === 409) {
+          this.notification.error('', 'Ticket Number already in use!!!');
+        }
+      });
+    }
   }
 
 
@@ -776,10 +776,7 @@ export class CreateTicketComponent implements OnInit {
       this.service.updateTicket(ticket).subscribe(res => {
         this.isFormDirty = false;
         this.notification.success('', res);
-
-        if (this.ticket.TicketStatusID !== 23) {
-          this.route.navigate(['../../'], { relativeTo: this.activatedRoute });
-        }
+        this.location.back();
       }, err => {
         this.isFormDirty = true;
         this.notification.error('', err);
@@ -990,12 +987,12 @@ export class CreateTicketComponent implements OnInit {
 
   isPOReuquired() {
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
-    return !!selectedCustomer.PORequired;
+    return selectedCustomer ? !!selectedCustomer.PORequired : false;
   }
 
   isPODRequired() {
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
-    return !!selectedCustomer.ChainID;
+    return selectedCustomer ? !!selectedCustomer.ChainID : false;
   }
 
   validateTicket(ticket): boolean {
