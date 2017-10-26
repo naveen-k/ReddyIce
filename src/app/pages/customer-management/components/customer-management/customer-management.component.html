@@ -84,8 +84,9 @@
                         </span>
                     </th>
                     <th class="alignLeft">
-                        <span>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'PaymentType';customer.isAsc=!customer.isAsc;">
                             Payment Type
+                            <i *ngIf="(customer.sortField == 'PaymentType')" [ngClass]="(customer.isAsc && customer.sortField == 'PaymentType' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="alignLeft">

@@ -236,6 +236,13 @@ export class CreateCustomerComponent implements OnInit {
         //console.log("this.addedProduct   -------",this.addedProduct);
     }
 
+    validateEmailID() {
+        if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.EmailID))) {  
+          return false;  
+        } 
+        return true;
+    }
+
     validateCustomer(customer, newlyAddedproduct, addedProduct, mode): boolean {
         if (!customer.CustomerNumber) {
             this.notification.error('', 'Customer Number is mandatory!!!');
@@ -278,6 +285,9 @@ export class CreateCustomerComponent implements OnInit {
             return false;
         } else if (!customer.EmailID) {
             this.notification.error('', 'Customer EmailID is mandatory!!!');
+            return false;
+        } else if (!this.validateEmailID()) {
+            this.notification.error('', 'Wrong format of Customer EmailID!!!');
             return false;
         } else if (mode === 1 && (addedProduct.length === undefined || addedProduct.length === 0)) {
             this.notification.error('', 'Atleast one product is mandatory!!!');
