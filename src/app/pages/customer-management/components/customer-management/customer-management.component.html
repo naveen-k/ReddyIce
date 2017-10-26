@@ -78,8 +78,9 @@
                         </span>
                     </th>
                     <th class="text-alignment-center">
-                        <span>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'IsRICustomer';customer.isAsc=!customer.isAsc;">
                             RI Customer
+                            <i *ngIf="(customer.sortField == 'IsRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'IsRICustomer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="alignLeft">
@@ -106,15 +107,15 @@
                     || ((isRI==1 && cust.IsRICustomer) && (userType==2 && (!cust.Active)))
                     || ((isRI==1 && cust.IsRICustomer) && (userType==1 && (cust.Active)))">
                         <td class="table-id text-alignment-center" style="cursor: pointer">
-                            <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
-                                    <span class="tooltiptext">Edit</span>
-                                </i>
-                            <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
-                                    <span class="tooltiptext" >Inactive</span>
-                                </i>
                             <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId, cust.IsRICustomer?1:0]" [hidden]="!cust.IsRICustomer">
-                                    <span class="tooltiptext" >View</span>
-                                </i>
+                                <span class="tooltiptext" >View</span>
+                            </i>
+                            <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
+                                <span class="tooltiptext">Edit</span>
+                            </i>
+                            <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
+                                <span class="tooltiptext" >Inactive</span>
+                            </i>
                         </td>
                         <td>{{ cust.CustomerNumber }} {{cust.CustomerId }}- {{cust.IsRICustomer}}</td>
                         <td>{{ cust.CustomerName }}</td>
