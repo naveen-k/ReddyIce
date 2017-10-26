@@ -205,10 +205,10 @@ export class SetPriceComponent implements OnInit {
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.showCancel = true;
         activeModal.componentInstance.modalHeader = 'Warning!';
-        activeModal.componentInstance.modalContent = `Are you sure you want to delete the product?`;
+        activeModal.componentInstance.modalContent = `Are you sure you want to inactive the product?`;
         activeModal.componentInstance.closeModalHandler = (() => {
             this.service.deleteProduct(productID).subscribe((res) => {
-                this.notification.success('Product Deleted Successfully!!!');
+                this.notification.success('Product got Inactive Successfully!!!');
                 this.getExternalProducts();
             }, (err) => {
                 this.notification.error('Problem Deleting Product!!!');
