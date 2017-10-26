@@ -28,7 +28,7 @@ export class ManualTicketService extends SharedService {
   }
 
   approveAllCheckedTickets(approveTicketsObj) {
-    return this.http.post('api/manualticket/workflow', approveTicketsObj).map((res => res.json()));
+    return this.http.put('api/manualticket/workflow', approveTicketsObj).map((res => res.json()));
   }
 
   getTicketTypes() {
