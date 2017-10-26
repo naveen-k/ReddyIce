@@ -1065,21 +1065,6 @@ export class CreateTicketComponent implements OnInit {
           }
         }
       }
-    } else if (this.ticket.CustomerType === 20 && this.customer.PaymentType == 19) {
-      if (this.ticket.CashAmount || this.ticket.CashAmount === 0) {
-        return true;
-      } else {
-        if (this.ticket.CheckAmount || this.ticket.CheckAmount === 0) {
-          return true;
-        } else {
-          if (this.ticket.TicketTypeID === 26) {
-            this.notification.error('', 'Either of Check Amount or Cash Amount is mandatory as ticket is of Sale type!!!');
-            return false;
-          } else {
-            return true;
-          }
-        }
-      }
     } else if (this.ticket.CustomerType === 22 && this.ticket.TicketProduct && this.ticket.IsSaleTicket) {
       if (this.mreadingCheck() > 0) {
         this.mreadingCount = 0;
