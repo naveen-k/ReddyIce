@@ -100,7 +100,7 @@ export class CreateCustomerComponent implements OnInit {
             let tempArr = []
             response.forEach(state => {
                 tempArr.push({
-                    value: state.StateId,
+                    value: state.StateName,
                     label: `${state.StateName}`,
                     //date: branch,
                 })
