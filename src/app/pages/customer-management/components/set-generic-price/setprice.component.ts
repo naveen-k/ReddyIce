@@ -30,7 +30,7 @@ export class SetPriceComponent implements OnInit {
     newProduct: any = {};
     action: string = '';
     cardTitle: string;
-    productType: any = 'active';
+    productType: any = 'all';
     extProducts: any = [];
 
 
@@ -158,6 +158,7 @@ export class SetPriceComponent implements OnInit {
                 this.service.getAllCustomers();
                 this.notification.success(res);
                 this.getExternalProducts();
+                this.productType = 'all';
             }, (err) => {
                 this.notification.error(err);
             });
@@ -178,6 +179,7 @@ export class SetPriceComponent implements OnInit {
                 this.service.getAllCustomers();
                 this.notification.success(res);
                 this.getExternalProducts();
+                this.productType = 'all';
             }, (err) => {
                 this.notification.error(err);
             });
