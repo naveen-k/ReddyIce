@@ -52,7 +52,7 @@ export class DayEndService extends SharedService {
     }
     
     submitTickets(data) {
-        return this.http.post('api/manualticket/workflow', data).map((res => res.json()));
+        return this.http.put('api/manualticket/workflow', data).map((res => res.json()));
     }
 
     saveRecociliation(data): Observable<any> {
