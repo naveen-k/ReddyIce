@@ -19,7 +19,7 @@ export class CreateCustomerComponent implements OnInit {
     products: any[] = [];
 
     selectedProducts: DualListItem[] = [];
-
+    deactivateClicked: boolean = false;
     addedProduct: MapProducts[] = [];
     newlyAddedproduct: MapProducts[] = [];
     isFromDirty: boolean = false;
@@ -131,7 +131,7 @@ export class CreateCustomerComponent implements OnInit {
             } else {
                 this.customer.AllowReturnSameTicket = 0;
             }
-            
+
             if (this.mode === 2) {
                 ///const mAddedProduct = this.addedProduct.concat(this.newlyAddedproduct);
                 // this.customer.MappedProducts = mAddedProduct;
@@ -169,18 +169,26 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     deactivateMappedProduct(mprod) {
-        const index = this.addedProduct.indexOf(mprod);
-        if (this.mode === 1 || index > -1) {
-            this.addedProduct.splice(index, 1);
-            this.addedProduct = this.addedProduct;
-            this.addProductCheck.splice(index, 1);
+        if (this.mode === 1) {
+            const index = this.addedProduct.indexOf(mprod);
+            if (index > -1) {
+                this.addedProduct.splice(index, 1);
+                this.addedProduct = this.addedProduct;
+                this.addProductCheck.splice(index, 1);
+            }
         }
-        const index2 = this.newlyAddedproduct.indexOf(mprod);
-        if (this.mode === 2 || index2 > -1) {
-            this.newlyAddedproduct.splice(index2, 1);
-            this.newlyAddedproduct = this.newlyAddedproduct;
-            this.addNewProductCheck.splice(index2, 1);
+        if (this.mode === 2) {
+            const index2 = this.addedProduct.indexOf(mprod);
+            if (index2 > -1) {
+                // this.newlyAddedproduct.splice(index2, 1);
+                // this.newlyAddedproduct = this.newlyAddedproduct;
+                this.addedProduct[index2].IsActive = false;
+                this.deactivateClicked = true;
+                this.addNewProductCheck.splice(index2, 1);
+            }
+            this.deactivateClicked = false;
         }
+
     }
 
     productChangeHandler(mprod) {

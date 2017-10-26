@@ -26,7 +26,7 @@
       <label for="fname" class="control-label">First Name</label>
       <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
         minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (change)="changeHandler()"
-        (blur)="spaceRemoverFn(user.FirstName)" maxlength="50">
+        (blur)="spaceRemoverFn(user.FirstName)" maxlength="45">
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="FirstName.errors.required" class="custom-tooltip bottom">First Name is required</div>
@@ -37,7 +37,7 @@
     <div class="col-md-6  page-header">
       <label for="lname" class="control-label">Last Name</label>
       <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
-        name="LastName" #LastName="ngModel" required minlength="2" maxlength="50" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
+        name="LastName" #LastName="ngModel" required minlength="2" maxlength="45" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">
@@ -69,7 +69,7 @@
     <div [ngClass]="{'col-md-12':isNewUser}" class="col-md-6 page-header">
       <label for="inputEmail3" class="control-label">Email</label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
-        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)"
+        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" maxlength="30" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)"
         (change)="changeHandler()" maxlength="50">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -94,7 +94,7 @@
 
     <div class="col-md-6 page-header">
       <label for="inputEmail3" class="control-label">Phone</label>
-      <input type="number" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
+      <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
         pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (change)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
