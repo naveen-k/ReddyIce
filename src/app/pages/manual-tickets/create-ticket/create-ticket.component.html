@@ -404,11 +404,11 @@
                                             </td>
                                             <td>
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
-                                                    [disabled]="isReadOnly">
+                                                    (ngModelChange)="isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td>
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags"
-                                                    [disabled]="isReadOnly">
+                                                    (ngModelChange)="isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                             <td class="textAlignCenter">

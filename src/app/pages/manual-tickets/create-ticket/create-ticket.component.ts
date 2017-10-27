@@ -484,23 +484,17 @@ export class CreateTicketComponent implements OnInit {
 
   ticketNumberValidation() {
     const ticketNumberLength = this.ticket.TicketNumber.toString().length;
-    if (isNaN(Number(this.ticket.TicketNumber))) {              // check for no alphabets in the ticket number
-      this.containsCharacters = true;
-      this.ticketMinMaxLength = false;
-    } else if (ticketNumberLength < 4 || ticketNumberLength > 10) {       // check for ticket number length 4-10 only
-      this.ticketMinMaxLength = true;
-      this.containsCharacters = false;
-    }
+    this.ticketMinMaxLength = !(ticketNumberLength >= 4 && ticketNumberLength <= 10);    
   }
 
   poNumberValidation() {
     const poNumberLength = this.ticket.PONumber.length;
     const letterNumber = /^[0-9a-zA-Z-]+$/;              // pattern to check for string to be alphanumeric
-    if (poNumberLength < 4 || poNumberLength > 20) {    // check for ticket number length 4-20 only
+    if (poNumberLength <= 4 || poNumberLength >= 20) {    // check for ticket number length 4-20 only
       this.poMinMaxLength = true;
       this.poContainsCharacters = false;
     } else if ((this.ticket.PONumber.match(letterNumber)) &&
-      (poNumberLength > 4 || poNumberLength < 20)) {      // check for string to be alphanumeric
+      (poNumberLength >= 4 || poNumberLength <= 20)) {      // check for string to be alphanumeric
       this.poContainsCharacters = false;
       this.poMinMaxLength = false;
     } else {
@@ -514,12 +508,12 @@ export class CreateTicketComponent implements OnInit {
   checkNumberValidation() {
     const checkNumberLength = this.ticket.CheckNumber.length;
     const letterNumber = /^[0-9a-zA-Z]+$/;  // pattern to check for string to be alphanumeric
-    if (checkNumberLength > 20 || checkNumberLength < 5) {
+    if (checkNumberLength >= 20 || checkNumberLength <= 5) {
       this.checkMinMaxLength = true;
       this.checkContainsCharacters = false;
       this.custType = false;
     } else if ((this.ticket.CheckNumber.match(letterNumber)) &&
-      (checkNumberLength > 5 || checkNumberLength < 20)) {      // check for string to be alphanumeric
+      (checkNumberLength >= 5 || checkNumberLength <= 20)) {      // check for string to be alphanumeric
       this.checkContainsCharacters = false;
       this.checkMinMaxLength = false;
       this.custType = false;
@@ -986,11 +980,13 @@ export class CreateTicketComponent implements OnInit {
   }
 
   isPOReuquired() {
+    if (this.ticket.TicketTypeID === 26) { return false; }
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
     return selectedCustomer ? !!selectedCustomer.PORequired : false;
   }
 
   isPODRequired() {
+    if (this.ticket.TicketTypeID === 26) { return false; }
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
     return selectedCustomer ? !!selectedCustomer.ChainID : false;
   }
