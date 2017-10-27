@@ -66,9 +66,9 @@
                 <tr>
                     <th class="table-id">Actions</th>
                     <th class="alignLeft">
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerId';customer.isAsc=!customer.isAsc;">
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;">
                             Customer #
-                            <i *ngIf="(customer.sortField == 'CustomerId')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerId' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                            <i *ngIf="(customer.sortField == 'CustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="alignLeft">
