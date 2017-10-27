@@ -22,7 +22,7 @@
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-md-12">Customer Name <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
-                    <input maxlength="50" [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()"
+                    <input maxlength="50" alphaNumeric [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()"
                         class="form-control" placeholder="Customer Name" />
                 </div>
             </div>
