@@ -68,8 +68,9 @@
                 </span>
               </th>
               <th *ngIf="!isDistributorExist" class="text-in-center">
-                <span>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'IsRIInternal';customer.isAsc=!customer.isAsc;">
                     RI Internal
+                    <i *ngIf="(customer.sortField === 'IsRIInternal')" [ngClass]="(customer.isAsc && customer.sortField === 'IsRIInternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th *ngIf="isDistributorExist && !hideColumn" class="allign">

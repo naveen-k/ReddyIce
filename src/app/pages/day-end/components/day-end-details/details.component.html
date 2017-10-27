@@ -78,7 +78,7 @@
                                     <table class="table table-striped">
                                         <thead class="tableHeader">
                                             <tr>
-                                                <th></th>                                                
+                                                <th>Action</th>                                                
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
                                                 Ticket Number
@@ -98,15 +98,15 @@
                                                 </span>
                                                 </th>
                                                 <th class="text-align-right">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceTotal';customer.isAsc=!customer.isAsc;">
+                                                    <span >
                                                         Total Invoice
-                                                        <i *ngIf="(customer.sortField === 'invoiceTotal')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceTotal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                        <!-- <i *ngIf="(customer.sortField === 'CheckAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'CheckAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th class="text-align-right">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'receivedTotal';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                                         Received Amount
-                                                        <i *ngIf="(customer.sortField === 'receivedTotal')" [ngClass]="(customer.isAsc && customer.sortField === 'receivedTotal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                     <!-- <i *ngIf="(customer.sortField === 'IsSaleTicket')" [ngClass]="(customer.isAsc && customer.sortField === 'IsSaleTicket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
 
@@ -140,7 +140,8 @@
                                                 <th class="text-center" colspan="9"> No data found </th>
                                             </tr>
                                             <tr>
-                                                <td class="text-align-right" colspan="4"><b>Total</b></td>
+                                                <td colspan="3"></td>
+                                                <td class="text-align-right"><b>Total</b></td>
                                                 <td class="text-align-right"><b>{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</b></td>
                                                 <td class="text-align-right"><b>{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</b></td>
                                             </tr>
@@ -163,10 +164,10 @@
                                                 <span>Pallets </span>
                                             </td>
                                             <td>
-                                                <span>Issued: </span> <input [(ngModel)]='tripData.PalletLoadQuantity' style="width:70px" type="number">
+                                                <span>Issued: </span> <input [(ngModel)]='tripData.PalletLoadQuantity' style="width:70px" type="text" [numberOnly]>
                                             </td>
                                             <td>
-                                                <span>Returned: </span> <input [(ngModel)]='tripData.PalletReturnQuantity' style="width:70px" type="number">
+                                                <span>Returned: </span> <input [(ngModel)]='tripData.PalletReturnQuantity' style="width:70px" type="text" [numberOnly]>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -184,51 +185,51 @@
                                         <thead class="tableHeader">
                                             <tr>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'product';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                                         Product
-                                                        <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                        <!-- <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'load';customer.isAsc=!customer.isAsc;">
+                                                    <span >
                                                         Load
-                                                        <i *ngIf="(customer.sortField == 'load')" [ngClass]="(customer.isAsc && customer.sortField == 'load' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                        <!-- <i *ngIf="(customer.sortField == 'load')" [ngClass]="(customer.isAsc && customer.sortField == 'load' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'return';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                                             Return
-                                                            <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                            <!-- <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'truckDamage';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                                         Truck Damage
-                                                        <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                        <!-- <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'customerDamage';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                     Customer Damage
-                                     <i *ngIf="(customer.sortField === 'customerDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'customerDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <!-- <i *ngIf="(customer.sortField === 'customerDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'customerDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                 </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'sale';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                                          Manual <br> Tickets
-                                     <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                 </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'sale';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                     Sale
-                                     <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                 </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'over';customer.isAsc=!customer.isAsc;">
+                                                    <span>
                                     Over/<br>Short
-                                     <i *ngIf="(customer.sortField === 'over')" [ngClass]="(customer.isAsc && customer.sortField === 'over' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <!-- <i *ngIf="(customer.sortField === 'over')" [ngClass]="(customer.isAsc && customer.sortField === 'over' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                 </span>
                                                 </th>
                                             </tr>
@@ -238,20 +239,20 @@
                                                 <td width="25%">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
                                                 <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.Load1Quantity' class="form-control small-input" type="number"
+                                                        [(ngModel)]='item.Load1Quantity' class="form-control small-input" type="text" [numberOnly]
                                                         (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
                                                 <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
-                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
+                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
                                                 <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.DamageQuantity' class="form-control small-input" type="number"
+                                                        [(ngModel)]='item.DamageQuantity' class="form-control small-input" type="text" [numberOnly]
                                                         (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
-                                                        type="number" (ngModelChange)="unitReconChange(item)"></td>
+                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
                                                 <td class="textAlignCenter" width="7%">{{item.OverShort}}</td>
@@ -431,19 +432,19 @@
                                                 <label>Cash($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.actualdepositcash' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Check($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Coins($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.ActualCoin' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true"  [(ngModel)]='ticketDetails?.Total.ActualCoin' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
@@ -459,7 +460,7 @@
                                                 <label>Misc($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [(ngModel)]='ticketDetails?.Total.Misc' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">
