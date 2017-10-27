@@ -78,25 +78,27 @@
                         </span>
                     </th>
                     <th class="text-alignment-center">
-                        <span>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'IsRICustomer';customer.isAsc=!customer.isAsc;">
                             RI Customer
-                            <!-- <i *ngIf="(customer.sortField == 'IsRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'IsRICustomer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> -->
+                            <i *ngIf="(customer.sortField == 'IsRICustomer')" [ngClass]="(customer.isAsc && customer.sortField == 'IsRICustomer' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="alignLeft">
-                        <span style="cursor:pointer;" (click)="customer.sortField = 'PaymentType';customer.isAsc=!customer.isAsc;">
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'PaymentTypeName';customer.isAsc=!customer.isAsc;">
                             Payment Type
-                            <i *ngIf="(customer.sortField == 'PaymentType')" [ngClass]="(customer.isAsc && customer.sortField == 'PaymentType' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                            <i *ngIf="(customer.sortField == 'PaymentTypeName')" [ngClass]="(customer.isAsc && customer.sortField == 'PaymentTypeName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="alignLeft">
-                        <span>
+                        <span style="cursor:pointer;" (click)="customer.sortField = 'PrimaryContact';customer.isAsc=!customer.isAsc;">
                             Contact
+                            <i *ngIf="(customer.sortField == 'PrimaryContact')" [ngClass]="(customer.isAsc && customer.sortField == 'PrimaryContact' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
-                    <th style="padding-right:20px;text-align:center;">
+                    <th style="cursor:pointer;padding-right:20px;text-align:center;" (click)="customer.sortField = 'CustomerTypeName';customer.isAsc=!customer.isAsc;">
                         <span>
                             Customer Type
+                            <i *ngIf="(customer.sortField == 'CustomerTypeName')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTypeName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                 </tr>
@@ -121,9 +123,9 @@
                         <td>{{ cust.CustomerNumber }}</td>
                         <td>{{ cust.CustomerName }}</td>
                         <td class="text-alignment-center"><input type="checkbox" value="" disabled [checked]=cust.IsRICustomer></td>
-                        <td><a class="email-link">{{ cust.PaymentType=='1'||cust.PaymentType=='18'?'Cash':'Charge'}}</a></td>
+                        <td><a class="email-link">{{ cust.PaymentTypeName}}</a></td>
                         <td>{{cust.PrimaryContact}}</td>
-                        <td class="text-alignment-center">{{cust.CustomerTypeID | customerTypeToName}}</td>
+                        <td class="text-alignment-center">{{cust.CustomerTypeName}}</td>
                     </ng-container>
                     <ng-container *ngIf="isRI==2 && !cust.IsRICustomer && (userType==3 && (cust.Active || !cust.Active))
                     || ((isRI==2 && !cust.IsRICustomer) && (userType==2 && (!cust.Active)))
@@ -132,7 +134,7 @@
                             <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                            <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
+                            <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer||!cust.Active" (click)="deleteCustomer(cust.CustomerId)">
                                     <span class="tooltiptext" >Inactive</span>
                                 </i>
                             <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId,cust.IsRICustomer?1:0]" [hidden]="!cust.IsRICustomer">

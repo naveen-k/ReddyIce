@@ -80,33 +80,33 @@
                                             <tr>
                                                 <th></th>                                                
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
                                                 Ticket Number
-                                                 <i *ngIf="(customer.sortField === 'ticket')" [ngClass]="(customer.isAsc && customer.sortField === 'ticket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                 <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
                                                 Ticket Type
-                                                 <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                 <i *ngIf="(customer.sortField === 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'custNumber';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerName';customer.isAsc=!customer.isAsc;">
                                                         Customer 
-                                                     <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                     <i *ngIf="(customer.sortField == 'CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                                 </span>
                                                 </th>
                                                 <th class="text-align-right">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TotalSale';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceTotal';customer.isAsc=!customer.isAsc;">
                                                         Total Invoice
-                                                        <i *ngIf="(customer.sortField === 'TotalSale')" [ngClass]="(customer.isAsc && customer.sortField === 'TotalSale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                        <i *ngIf="(customer.sortField === 'invoiceTotal')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceTotal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                                     </span>
                                                 </th>
                                                 <th class="text-align-right">
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'cash';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'receivedTotal';customer.isAsc=!customer.isAsc;">
                                                         Received Amount
-                                                        <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                                        <i *ngIf="(customer.sortField === 'receivedTotal')" [ngClass]="(customer.isAsc && customer.sortField === 'receivedTotal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                                     </span>
                                                 </th>
 
@@ -282,7 +282,7 @@
                                                         type="number"></td>
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
-                                                <td width="7%">{{item.OverShort}}
+                                                <td width="7%">{{item.OverShort?item.OverShort:0}}
                                                     <i (click)="removeProduct(i);" class="ion-trash-a remove-item"></i>
                                                 </td>
                                             </tr>
@@ -303,7 +303,7 @@
                                                 <td>{{totalUnit.TotalCustomerDamageActual}}</td>
                                                 <td>{{totalUnit.TotalManualTickets}}</td>
                                                 <td>{{totalUnit.TotalSale}}</td>
-                                                <td>{{ totalUnit.TotalOverShort}}</td>
+                                                <td>{{ totalUnit.TotalOverShort?totalUnit.TotalOverShort:0}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

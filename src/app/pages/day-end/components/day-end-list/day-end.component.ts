@@ -15,12 +15,15 @@ export class DayEndComponent implements OnInit {
     branches: Array<any> = [];
     distributors: Array<any> = [];
     logedInUser: any = {};
+    todaysDate: any;
 
     userSubTitle: string = '';
 
     constructor(private service: DayEndService, private userService: UserService) { }
 
     ngOnInit() {
+        const now = new Date();
+        this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
 

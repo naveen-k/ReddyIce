@@ -17,6 +17,7 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
     private _product: any = {};
     isFormValid: boolean = true;
     isSuccess = false;
+    productFeildTouched: boolean = false;
     @Input()
     productList: MapProducts[] = [];
     @Input()
@@ -98,7 +99,7 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         if (this.isProductExist(product) && this.actionName == 'create') {
             this.notification.error('Product Name is already exist!!!');
             return false;
-        } else if (this.isProductExist(product) && this.actionName == 'edit') {
+        } else if (this.isProductExist(product) && this.actionName == 'edit' && this.productFeildTouched) {
             this.notification.error('Product Name is already exist!!!');
             return false;
         } else if (!product.ProductName && this.action === 'create') {
@@ -120,6 +121,7 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         this.formIsDirty = false;
         this.isSuccess = false;
         this.isFormTouched = true;
+        this.productFeildTouched = true;
         setTimeout(this.formChanged.emit('changed'), 1000);
     }
 
@@ -153,5 +155,9 @@ export class CreateProductPriceComponent implements OnInit, AfterContentInit {
         },
             (err) => {
             });
+    }
+    priceHandler() {
+        this.isFormTouched = true;
+        this.productFeildTouched = false;
     }
 }

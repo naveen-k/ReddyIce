@@ -6,7 +6,7 @@
                     <label><b> Select Date </b></label>
                     <div class="input-group">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="selectionchangeHandler()"
-                            ngbDatepicker #d="ngbDatepicker" disabled>
+                        [maxDate]="todaysDate"  ngbDatepicker #d="ngbDatepicker" disabled>
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
