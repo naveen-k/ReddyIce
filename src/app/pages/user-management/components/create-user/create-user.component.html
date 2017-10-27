@@ -158,7 +158,10 @@
     </div>
 
     <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">
-      <label for="distributor">Distributor</label>
+      <label for="distributor">
+        Distributor
+        <sup style="color:red;">*</sup>
+      </label>
       <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
         #distributor="ngModel" (ngModelChange)="changeHandler()">
                     <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>

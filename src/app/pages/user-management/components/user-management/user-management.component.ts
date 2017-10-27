@@ -303,13 +303,16 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
+  // concatenatedName = [];
   getUserList(id?: number) {
     this.showSpinner = true;
     this.service.getUsers(id).subscribe((res) => {
       res.forEach((u) => {
         u = this.formatUser(u);
+        // this.concatenatedName.push(u.FirstName + ' ' + u.LastName);
       });
       this.usersList = res;
+      // console.log(this.concatenatedName);
       this.updateUserTableOnTypeChange();
       this.showSpinner = false;
     }, (error) => {
