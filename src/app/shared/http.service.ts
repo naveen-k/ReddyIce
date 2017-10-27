@@ -46,7 +46,7 @@ export class HttpService extends Http {
         // we have to pass HttpService's own instance here as `self`
         return (res: Response) => {
             console.log(res);
-            if (res.status === 401 || res.status === 403) {
+            if (res.status === 401) {
                 // if not authenticated
                 console.log(res);
                 this.router.navigate(['login']);

@@ -197,7 +197,7 @@ export class TicketListComponent implements OnInit {
             },
             (error) => {
                 if (error) {
-                    this.notificationService.error('Error', JSON.parse(error._body).Message);
+                    this.notificationService.error('Error', JSON.parse(error._body));
                 }
             },
         );
