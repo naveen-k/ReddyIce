@@ -27,7 +27,7 @@
         First Name
         <sup style="color:red;">*</sup>
       </label>
-      <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
+      <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name">
       <label for="fname" class="control-label">First Name</label>
       <input alphaNumeric [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
         minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (change)="changeHandler()"
@@ -44,7 +44,7 @@
         Last Name
         <sup style="color:red;">*</sup>
       </label>
-      <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
+      <input [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName">
       <label for="lname" class="control-label">Last Name</label>
       <input alphaNumeric [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
         name="LastName" #LastName="ngModel" required minlength="2" maxlength="45" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
