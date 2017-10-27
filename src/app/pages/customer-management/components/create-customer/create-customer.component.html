@@ -29,11 +29,10 @@
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-md-12">Customer Type <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
-                    <select [disabled]="mode ===3" class="form-control" [(ngModel)]='customer.CustType' (ngModelChange)="formFlagHandler()" name="custType">
+                    <input type="text" class="form-control" name="custType" value="DSD" disabled>
+                    <!-- <select [disabled]="mode ===3" class="form-control" [(ngModel)]='customer.CustType' (ngModelChange)="formFlagHandler()" name="custType">
                         <option [value]='20' >DSD</option>
-                        <option [value]='21' >PBS</option>
-                        <option [value]='22' >PBM</option>
-                    </select>
+                    </select> -->
                     <!-- <label class="col-md-7 col-form-label" [(ngModel)]='customer.CustType' name="custType">DSD</label> -->
                     <!-- <input disabled id="typeahead-basic" type="text" [(ngModel)]="customer.CustType" class="form-control" placeholder="DSD"/> -->
                 </div>
