@@ -29,12 +29,12 @@
                 <div class="col-sm-9">
                     <div class="row">
                         <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                            <option value="AS">Asset Scan</option>
+                            <option value="AS" *ngIf="!user.IsDistributor">Asset Scan</option>
                             <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
                             <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
-                            <option value="IOA">Inventory on Arrival</option>
+                            <option value="IOA" *ngIf="!user.IsDistributor">Inventory on Arrival</option>
                             <option value="SRT">Sales</option>
-                            <option value="TR">Ticket Details</option>
+                            <option value="TR" *ngIf="!user.IsDistributor">Ticket Details</option>
                             <option value="SR">Trip Details</option>
                             <option value="RS">Unit Summary</option>
                         </select>
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" [hidden]="!user.IsDistributor">
+        <div class="col-sm-4" [hidden]="!user.IsDistributor||filter.reportType==='SRT'||filter.reportType==='DST'">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
                 <option [value]="0">All Customers</option>
@@ -140,7 +140,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'">
                     <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'10px 0':''}">
                         <div class="col-sm-4">
                             <label class="top-margin pull-right">
