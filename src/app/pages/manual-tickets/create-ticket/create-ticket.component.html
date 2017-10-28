@@ -78,7 +78,7 @@
                         <sup style="color:red;">*</sup>
                     </label>
                     <div class="col-sm-7">
-                        <select class="form-control" name="customer" [(ngModel)]="ticket.UserID" [disabled]="isReadOnly" (ngModelChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true">
+                        <select [disabled]="ticketId" class="form-control" name="customer" [(ngModel)]="ticket.UserID" [disabled]="isReadOnly" (ngModelChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true">
                             <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
                         </select>
                     </div>
