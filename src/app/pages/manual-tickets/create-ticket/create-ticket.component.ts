@@ -789,8 +789,12 @@ export class CreateTicketComponent implements OnInit {
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     }, (error) => {
       if (error) {
+        if (error.status == 304) {
+          this.notification.error('', 'Please add a product to create ticket');
+        } else {
+          this.notification.error('', 'Error while creating ticket!');
+        }
         this.isFormDirty = true;
-        this.notification.error('', 'Error while creating ticket!');
       }
     });
   }

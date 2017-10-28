@@ -399,15 +399,15 @@
                                             </td>
                                             <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                             <td>
-                                                <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags"
+                                                <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags"
                                                     (ngModelChange)="bagsChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td>
-                                                <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
+                                                <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
                                                     (ngModelChange)="isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td>
-                                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags"
+                                                <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags"
                                                     (ngModelChange)="isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
@@ -466,11 +466,11 @@
                                             </td>
                                             <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                             <td>
-                                                <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
+                                                <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td>
-                                                <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity"
+                                                <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
