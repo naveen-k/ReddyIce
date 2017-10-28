@@ -198,7 +198,7 @@
                     <sup style="color:red;">*</sup>
                 </label>
                 <div class="col-sm-7">
-                    <input type="text" numberOnly oninput="validity.valid||(value='');" onKeyPress="if(this.value.length==10) return false;"
+                    <input type="text" [disabled]="ticketId" numberOnly oninput="validity.valid||(value='');" onKeyPress="if(this.value.length==10) return false;"
                         class="form-control" [(ngModel)]="ticket.TicketNumber" id="TicketNumber" placeholder="Ticket Number"
                         (blur)="ticketNumberChangeHandler()" name="TicketNumber" (ngModelChange)="isFormDirty=true;" #TicketNumber="ngModel"
                         required [disabled]="isReadOnly">

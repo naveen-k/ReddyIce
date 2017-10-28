@@ -1007,7 +1007,7 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.isPOReuquired() && !this.ticket.PONumber) {
       this.notification.error('', 'PO number is mandatory!!!');
       return false;
-    } else if (this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image) {
+    } else if (this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) {
       this.notification.error('', 'POD is mandatory!!!');
       return false;
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
