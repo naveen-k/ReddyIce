@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" [hidden]="!user.IsDistributor||filter.reportType==='SRT'||filter.reportType==='DST'">
+        <div class="col-sm-4" [hidden]="!user.IsDistributor||filter.reportType==='SRT'||filter.reportType==='DST'||filter.reportType==='RS'">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
                 <option [value]="0">All Customers</option>
@@ -76,7 +76,7 @@
                 </div>
                 <div [ngClass]="{'col-sm-9 div-border1':true}">
                     <div class="row" style="padding-top:2px;">
-                        <div class="col-sm-3" [hidden]="filter.reportType === 'DR'">
+                        <div class="col-sm-3" [hidden]="filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'">
                             <div class="row">
                                 <div class="col-sm-4">
                                     <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()"
