@@ -789,8 +789,12 @@ export class CreateTicketComponent implements OnInit {
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     }, (error) => {
       if (error) {
+        if (error.status == 304) {
+          this.notification.error('', 'Please add a product to create ticket');
+        } else {
+          this.notification.error('', 'Error while creating ticket!');
+        }
         this.isFormDirty = true;
-        this.notification.error('', 'Error while creating ticket!');
       }
     });
   }
@@ -867,7 +871,9 @@ export class CreateTicketComponent implements OnInit {
   calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
     if (!ticket.IsSaleTicket) {
       this.resetCashAndCheck();
-      ticket.TicketTypeID = null;
+      if(ticket.CustomerType === 21){
+        ticket.TicketTypeID = null;
+      }
     }
     ticket.TotalAmount = (ticket.CheckAmount || 0) + (ticket.CashAmount + 0);
   }
@@ -980,13 +986,13 @@ export class CreateTicketComponent implements OnInit {
   }
 
   isPOReuquired() {
-    if (this.ticket.TicketTypeID === 26) { return false; }
+    if (this.ticket.CustomerType === 21) { return false; }
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
     return selectedCustomer ? !!selectedCustomer.PORequired : false;
   }
 
   isPODRequired() {
-    if (this.ticket.TicketTypeID === 26) { return false; }
+    if (this.ticket.CustomerType === 21) { return false; }
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
     return selectedCustomer ? !!selectedCustomer.ChainID : false;
   }
