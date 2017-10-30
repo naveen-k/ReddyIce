@@ -1,6 +1,6 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <label>Start Date</label>
             <div class="input-group">
                 <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
@@ -10,13 +10,62 @@
                 </button>
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <label>End Date</label>
             <div class="input-group">
                 <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
+            </div>
+        </div>
+        <div class="col-sm-2" [hidden]="filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>User Type</label>
+                </div>
+                <div class="col-sm-4">
+                    <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()"
+                        [disabled]="user.IsDistributor || filter.reportType === 'DST'">
+                    <label class="top-margin">
+                        <b>RI</b>
+                    </label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="radio" name="userType" [disabled]="filter.reportType === 'DR'" value="external" [(ngModel)]="filter.userType"
+                        (ngModelChange)="userTypeChangeHandler()">
+                    <label class="top-margin">
+                        <b>Distributor</b>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="row">
+                <ng-container *ngIf="filter.userType === 'internal'">
+                    <div class="col-sm-6">
+                        <label>Branch</label>
+                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)"></reddy-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="filter.userType === 'external'">
+                    <div class="col-sm-6">
+                        <label>Dist/Copacker</label>
+                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="filter.userType === 'internal'">
+                    <div class="col-sm-6">
+                        <label>Driver</label>
+                        <reddy-select [options]="drivers" [(selected)]="filter.driver"></reddy-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="filter.userType === 'external'">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'DST'">
+                        <label>Driver</label>
+                        <reddy-select [options]="driversofDist" [(selected)]="filter.driver"></reddy-select>
+                    </div>
+                </ng-container>
             </div>
         </div>
         <div class="col-sm-4 head-button-container-for-report">
@@ -42,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" [hidden]="!user.IsDistributor||filter.reportType==='SRT'||filter.reportType==='DST'||filter.reportType==='RS'">
+        <div class="col-sm-2" [hidden]="!user.IsDistributor||filter.reportType==='SRT'||filter.reportType==='DST'||filter.reportType==='RS'">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
                 <option [value]="0">All Customers</option>
@@ -53,115 +102,37 @@
         <div class="col-md-1 text-right head-button-container">
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
         </div>
-    </div>
-    <div [ngClass]="{'row top-margin':filter.reportType === 'SR','row top-margin no-margin':filter.reportType !== 'SR'}">
-        <div class="col-sm-12">
-            <div class="row">
-                <div class="col-sm-3 div-border" *ngIf="filter.reportType === 'SR'">
-                    <span class="col-sm-4 local-padding-eater">
-                        <label class="top-margin">Ticket Type</label>
-                    </span>
-                    <span class="col-sm-4 local-padding-eater left-margin">
-                        <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" checked>
-                        <label class="top-margin">
-                            <b>Regular</b>
-                        </label>
-                    </span>
-                    <span class="col-sm-4 local-padding-eater left-margin">
-                        <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin">
-                        <label class="top-margin">
-                            <b>Paper</b>
-                        </label>
-                    </span>
+        <div class="col-sm-2" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'">
+            <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
+                <div class="col-sm-12">
+                    <label>Customer</label>
+                    <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select>
                 </div>
-                <div [ngClass]="{'col-sm-9 div-border1':true}">
-                    <div class="row" style="padding-top:2px;">
-                        <div class="col-sm-3" [hidden]="filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="userTypeChangeHandler()"
-                                        [disabled]="user.IsDistributor || filter.reportType === 'DST'">
-                                    <label class="top-margin">
-                                        <b>RI</b>
-                                    </label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="radio" name="userType" [disabled]="filter.reportType === 'DR'" value="external" [(ngModel)]="filter.userType"
-                                        (ngModelChange)="userTypeChangeHandler()">
-                                    <label class="top-margin">
-                                        <b>Distributor</b>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div [ngClass]="{'col-sm-9':true}">
-                            <div class="row">
-                                <ng-container *ngIf="filter.userType === 'internal'">
-                                    <div class="col-sm-2">
-                                        <label class="top-margin pull-right">
-                                            <b>Branch</b>
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)"></reddy-select>
-                                    </div>
-                                </ng-container>
-                                <ng-container *ngIf="filter.userType === 'external'">
-                                    <div class="col-sm-2">
-                                        <label class="top-margin pull-right">
-                                            <b>Dist/Copacker</b>
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select>
-                                    </div>
-                                </ng-container>
-                                <ng-container *ngIf="filter.userType === 'internal'">
-                                    <div class="col-sm-2">
-                                        <label class="top-margin pull-right">
-                                            <b>Driver</b>
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <reddy-select [options]="drivers" [(selected)]="filter.driver"></reddy-select>
-                                    </div>
-                                </ng-container>
-                                <ng-container *ngIf="filter.userType === 'external'">
-                                    <div class="col-sm-2" [hidden]="filter.reportType === 'DST'">
-                                        <label class="top-margin pull-right">
-                                            <b>Driver</b>
-                                        </label>
-                                    </div>
-                                    <div class="col-sm-4" [hidden]="filter.reportType === 'DST'">
-                                        <reddy-select [options]="driversofDist" [(selected)]="filter.driver"></reddy-select>
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'">
-                    <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'10px 0':''}">
-                        <div class="col-sm-4">
-                            <label class="top-margin pull-right">
-                                <b>Customer</b>
-                            </label>
-                        </div>
-                        <div class="col-sm-8">
-                            <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select>
-                        </div>
-                        <div style='margin-left: 120px;'>
-                            <a>
-                                <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
-                            </a>
-                        </div>
-                        <!-- <div *ngIf="(customers.length == 0 && !showSpinner)" style='margin-left: 100px;margin-top:10px;'>
-                            No data found
-                        </div> -->
-                    </div>
+                <div style='margin-left: 100px;'>
+                    <a>
+                        <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+                    </a>
                 </div>
             </div>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3" *ngIf="filter.reportType === 'SR'">
+            <span class="col-sm-4 local-padding-eater">
+                <label class="top-margin">Ticket Type</label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>Regular</b>
+                </label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin">
+                <label class="top-margin">
+                    <b>Paper</b>
+                </label>
+            </span>
         </div>
     </div>
     <div id='loader' *ngIf="viewReport" style='text-align:center;position: absolute;z-index: -1;left: 40%;top: 40%;'>
