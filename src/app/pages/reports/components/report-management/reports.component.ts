@@ -179,7 +179,8 @@ export class ReportsComponent implements OnInit {
     }
 
     updateLink(rType) {
-        this.filter.custID = this.filter.customer.CustomerId;
+
+        this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
         this.viewReport = true;
         setTimeout(function () {
             $('#loader').hide();
