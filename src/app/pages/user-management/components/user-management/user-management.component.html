@@ -89,8 +89,8 @@
           </thead>
           <tbody>
 
-            <!--Removed sorting functionality as it was causing rendering issues  -->
-            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc|filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone']:userTableData">
+            <!--Removed sorting functionality as it was causing rendering issues paginationData usersList -->
+            <tr *ngFor="let item of usersList | sort:customer.sortField:customer.isAsc|filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone']:userTableData">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
                    <span class="tooltiptext">View</span>
