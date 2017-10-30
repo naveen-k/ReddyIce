@@ -110,7 +110,7 @@
                 </tr>
             </thead>
             <tbody>                
-                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID )  | sort:customer.sortField:customer.isAsc | filter:searchString:['TicketNumber', 'UserName', 'Customer.CustomerName', 'Customer.CustomerID', 'CashAmount', 'TotalSale']:allTickets">
+                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID )  | sort:customer.sortField:customer.isAsc | filter:searchString:['TicketNumber', 'UserName', 'Customer.CustomerName', 'Customer.CustomerID', 'CashAmount', 'TotalSale', 'ticketType']:allTickets">
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
@@ -134,7 +134,8 @@
                         </i>
                     </td>
                     <td>{{ item.TicketNumber }}</td>
-                    <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td>
+                    <!-- <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td> -->
+                    <td>{{ item.ticketType }}</td>
                     <td><span [title]="item.Customer.CustomerID + ' - ' +item.Customer.CustomerName">{{item.Customer.CustomerID }} - {{item.Customer.CustomerName | cutString:true:15 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>

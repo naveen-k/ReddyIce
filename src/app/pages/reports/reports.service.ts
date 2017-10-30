@@ -55,4 +55,8 @@ export class ReportService extends SharedService {
                 return res;
             });
     }
+
+    getCustomerSearch(searchString: string): Observable<any[]> {
+        return this.http.get(`api/user/getcustomerbybranchidordistributorid?branchId=1&serachstring=${searchString}`).map(res => res.json().slice(0,10));
+    }
 }

@@ -27,7 +27,7 @@
         </select>
         </div>
         <div [ngClass]="{'col-sm-6':!rightCardOpen, 'col-sm-8':rightCardOpen}" style="padding-right: 30px;">
-          <pagination [tableData]="userTableData" [(currentPage)]="paginationData" style="float: right;" [showPages]="false"></pagination>
+          <pagination [tableData]="userTableData | filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone']" [(currentPage)]="paginationData" style="float: right;" [showPages]="false"></pagination>
         </div>
       </div>
       <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->

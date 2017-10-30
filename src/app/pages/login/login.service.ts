@@ -12,10 +12,10 @@ export class LoginService {
     constructor(private http: Http, private userService: UserService) { }
     userInfo: any;
     login(data: any): Observable<any> {
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        const options = new RequestOptions({ 'headers': headers });
-        return this.http.post(`${this.API_ENDPOINT}api/token`, data, options).map((res) => res.json()).map((res) => {
+        // const headers = new Headers();
+        // headers.append('Content-Type', 'application/json');
+        // const options = new RequestOptions({ 'headers': headers });
+        return this.http.post(`${this.API_ENDPOINT}api/token`, data).map((res) => res.json()).map((res) => {
             this.userInfo = res;
             localStorage.setItem('auth_token', res.access_token);
             localStorage.setItem('userId', res.UserID);

@@ -79,4 +79,30 @@ export class SharedService {
         })
         return tmpArr;
     }
+
+    getTicketType(isSaleTicket: boolean, customer: any, ticketTypeId: number) {
+        if (ticketTypeId === 29) {
+            return 'DNS'
+        } else if (ticketTypeId === 27) {
+            return 'Credit Sale'
+        } else if (ticketTypeId === 28) {
+            return 'Payment Only'
+        } else if (ticketTypeId === 30) {
+            return 'Void'
+        } else if (customer.CustomerType === 20) {
+            if (isSaleTicket) {
+                return 'Sale';
+            } else {
+                return 'Credit';
+            }
+        } else if (customer.CustomerType === 22) {
+            if (isSaleTicket) {
+                return 'PBM - Sale';
+            } else {
+                return 'PBM - Cons';
+            }
+        } else {
+            return 'PBS - Cons';
+        }
+    }
 }

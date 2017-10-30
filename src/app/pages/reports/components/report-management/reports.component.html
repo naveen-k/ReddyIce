@@ -106,11 +106,16 @@
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
-                    <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select>
+                    <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
+                    <ng-template #rt let-r="result" let-t="term">
+                        {{ r.CustomerName}}
+                    </ng-template>
+                    <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
+                        placeholder="Search Customer" [inputFormatter]="inputFormatter" [editable]="false" />
                 </div>
                 <div style='margin-left: 100px;'>
                     <a>
-                        <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+                        <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
                     </a>
                 </div>
             </div>

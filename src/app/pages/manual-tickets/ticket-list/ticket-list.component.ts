@@ -145,6 +145,9 @@ export class TicketListComponent implements OnInit {
                 if (response == 'No record found') {
                     this.allTickets = [];
                 } else {
+                    response.forEach(element => {
+                        element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
+                    });
                     this.allTickets = response;
                 }
             }

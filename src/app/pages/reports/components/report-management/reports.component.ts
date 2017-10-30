@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Rx';
 import { NotificationsService } from 'angular2-notifications';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../user-management/user-management.interface';
@@ -28,6 +29,20 @@ export class ReportsComponent implements OnInit {
         custType: 0,
     };
 
+    inputFormatter = (res => `${res.CustomerName}`);
+
+    search = (text$: Observable<any>) => text$.debounceTime(300)
+        .distinctUntilChanged()
+        .do(() => this.searching = true)
+        .switchMap(term => term.length < 3 ? [] :
+            this.reportService.getCustomerSearch(term)
+                .do(() => this.searching = false)
+                .catch(() => {
+                    this.searching = true;
+                    return Observable.of([]);
+                })
+        )
+
     user: User;
     linkRpt: SafeResourceUrl;
 
@@ -42,7 +57,7 @@ export class ReportsComponent implements OnInit {
     yesFlag: boolean = false;
 
     viewReport: boolean = false;
-    showSpinner: boolean = false;
+    searching: boolean = false;
 
     userSubTitle: string = '';
 
@@ -142,21 +157,21 @@ export class ReportsComponent implements OnInit {
     }
 
     getCustomers() {
-        this.showSpinner = true;
-        this.reportService.getCustomersByBranchandDist(this.filter.userType, this.filter.branch, this.filter.distributor).subscribe(res => {
-            res.unshift({
-                CustomerId: 0,
-                CustomerName: 'All Customer',
-                EmailId: '',
-                IsActive: true,
-            });
-            this.showSpinner = false;
-            this.allCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerId', 'CustomerName');
-            this.customers = [...this.allCustomers];
-        }, (err) => {
-            this.showSpinner = false;
-            this.customers = [];
-        });
+        // this.showSpinner = true;
+        // this.reportService.getCustomersByBranchandDist(this.filter.userType, this.filter.branch, this.filter.distributor).subscribe(res => {
+        //     res.unshift({
+        //         CustomerId: 0,
+        //         CustomerName: 'All Customer',
+        //         EmailId: '',
+        //         IsActive: true,
+        //     });
+        //     this.showSpinner = false;
+        //     this.allCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerId', 'CustomerName');
+        //     this.customers = [...this.allCustomers];
+        // }, (err) => {
+        //     this.showSpinner = false;
+        //     this.customers = [];
+        // });
     }
 
     customerTypeChange() {
@@ -169,6 +184,7 @@ export class ReportsComponent implements OnInit {
     }
 
     updateLink(rType) {
+        this.filter.custID = this.filter.customer.CustomerId;
         this.viewReport = true;
         setTimeout(function () {
             $('#loader').hide();
