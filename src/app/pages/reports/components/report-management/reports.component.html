@@ -32,7 +32,7 @@
                     </label>
                 </div>
                 <div class="col-sm-8">
-                    <input type="radio" name="userType" [disabled]="filter.reportType === 'DR'" value="external" [(ngModel)]="filter.userType"
+                    <input type="radio" name="userType" [disabled]="filter.reportType === 'DR' || isRIDriver" value="external" [(ngModel)]="filter.userType"
                         (ngModelChange)="userTypeChangeHandler()">
                     <label class="top-margin">
                         <b>Distributor</b>
