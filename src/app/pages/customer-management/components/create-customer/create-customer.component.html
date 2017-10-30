@@ -5,21 +5,21 @@
             <button class="btn btn-danger pull-right" (click)="backClickHandler()">Back</button>
         </div>
         <div class="col-md-1 head-button-container-for-save">
-            <button [hidden]="mode ===3" class="btn btn-danger pull-right" (click)="save()">Save</button>
+            <button [hidden]="mode ===3" [disabled]="!isFromDirty" class="btn btn-danger pull-right" (click)="save()">Save</button>
             <button [hidden]="mode == 1 || mode == 2" class="btn btn-danger pull-right" (click)="backClickHandler()">Back</button>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4 page-header">
-            <div class="row">
+            <div class="row" [hidden]="mode===1">
                 <label for="example-text-input" class="col-md-12">Customer Number <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
                     <input maxlength="8" numberOnly [disabled]="mode ===3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber"
-                        class="form-control" placeholder="Customer Number" (blur)="isCutomerNumberExist(customer.CustomerNumber)"
+                        class="form-control" placeholder="Customer Number"
                         (ngModelChange)="formFlagHandler()" />
                 </div>
             </div>
-            <div class="row box-top-margin">
+            <div class= "row box-top-margin">
                 <label for="example-text-input" class="col-md-12">Customer Name <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
                     <input maxlength="50" alphaNumeric [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()"
@@ -134,7 +134,7 @@
                     <div class="row box-top-margin">
                         <label for="example-text-input" class="col-md-12">City&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="25" [disabled]="mode ===3" [(ngModel)]='customer.City' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                            <input maxlength="25" alphaNumeric [disabled]="mode ===3" [(ngModel)]='customer.City' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
                                 type="text" class="form-control" placeholder="City" />
                         </div>
                     </div>
@@ -154,7 +154,7 @@
                     <div class="row">
                         <label for="example-text-input" class="col-md-12">Primary Contact&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="50" [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                            <input maxlength="50" alphaNumeric [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()" id="typeahead-basic"
                                 type="text" class="form-control" placeholder="Primary Contact" />
                         </div>
                     </div>
@@ -197,6 +197,7 @@
                             </thead> -->
                         <tbody *ngIf="mode === 3|| mode === 2" >
                             <tr *ngFor="let mprod of addedProduct; let j=index">
+                                <ng-container *ngIf="mprod.IsActive">
                                 <td class="text-align-left">
                                     {{mprod.DisplayName}}
                                     <!-- <select [disabled]="!addNewProductCheck[j]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
@@ -217,6 +218,7 @@
                                             <span class="tooltiptext">Deactivate</span>
                                         </i>
                                 </td>
+                                </ng-container>
                             </tr>
                         </tbody>
                         <tbody *ngIf="mode === 1">

@@ -13,7 +13,7 @@
         <div class="col-sm-2">
             <label>End Date</label>
             <div class="input-group">
-                <input class="form-control" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
+                <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
