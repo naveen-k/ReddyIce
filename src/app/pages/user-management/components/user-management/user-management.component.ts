@@ -96,10 +96,10 @@ export class UserManagementComponent implements OnInit {
     }
     this.formIsDirty = false;
     this.action = 'create';
-   
+
     this.isNewUser = true;
-   
-   
+
+
     this.newUser = <User>{
       FirstName: '',
       LastName: '',
@@ -138,7 +138,24 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
-    console.log("user -------------------------------- ",user);
+    debugger
+    if (this.rightCardOpen && this.formIsDirty) {
+      if (this.formIsDirty) {
+        const activeModal = this.modalService.open(ModalComponent, {
+          size: 'sm',
+          backdrop: 'static',
+        });
+        activeModal.componentInstance.BUTTONS.OK = 'Discard';
+        activeModal.componentInstance.showCancel = true;
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+        activeModal.componentInstance.closeModalHandler = (() => {
+          this.formIsDirty = false;
+          this.rightCardOpen = !this.rightCardOpen;
+        });
+      }
+    }
+    console.log("user -------------------------------- ", user);
     this.action = 'edit';
     this.newUser = Object.assign({}, user);
     //this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
@@ -156,7 +173,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onView(user) {
-   if (this.formIsDirty) {
+    if (this.formIsDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
@@ -199,8 +216,8 @@ export class UserManagementComponent implements OnInit {
   onSaveUser(user) {
     console.log("user --------- ", user);
     delete user.role;
-   delete user.BranchID;
-     if (!user.IsRIInternal) { delete user.UserName; }
+    delete user.BranchID;
+    if (!user.IsRIInternal) { delete user.UserName; }
     this.service.createUser(user).subscribe((res) => {
       console.log(user);
       this.notification.success('Success', 'User created successfully');
@@ -224,7 +241,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   onUpdateUser(user) {
-    console.log("--------------- on Updateuser ---- ",user);
+    console.log("--------------- on Updateuser ---- ", user);
     delete user.Role;
     delete user.MenuOptions;
     //delete user.Branch;
@@ -319,7 +336,7 @@ export class UserManagementComponent implements OnInit {
 
   updateUserTableOnTypeChange() {
     this.userTableData = this.usersList.filter((u) => {
-     if (this.userType === 'active') {
+      if (this.userType === 'active') {
         return u.IsActive;
       }
       if (this.userType === 'inActive') {
@@ -367,27 +384,27 @@ export class UserManagementComponent implements OnInit {
   changeUserTypeHandler() {
     this.updateUserTableOnTypeChange();
   }
-  moreBranches(branches){
+  moreBranches(branches) {
     const activeModal = this.modalService.open(ModalComponent, {
       size: 'sm',
       backdrop: 'static',
     });
-    let cstring =[];
+    let cstring = [];
     branches.find((val) => {
-        if (typeof val === 'object') {
-            if(val['IsActive']===true){
-              cstring.push(val['BranchCode']+' - '+val['BranchName']);
-            }
+      if (typeof val === 'object') {
+        if (val['IsActive'] === true) {
+          cstring.push(val['BranchCode'] + ' - ' + val['BranchName']);
         }
-        
+      }
+
     });
-   
+
     let branch = cstring.join(', ');
     activeModal.componentInstance.showCancel = false;
     activeModal.componentInstance.modalHeader = 'List of branch';
     activeModal.componentInstance.modalContent = `${branch}`;
     activeModal.componentInstance.closeModalHandler = (() => {
-      
+
     });
   }
 }

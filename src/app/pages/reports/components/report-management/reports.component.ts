@@ -69,6 +69,7 @@ export class ReportsComponent implements OnInit {
         protected notification: NotificationsService,
     ) { }
 
+    isRIDriver = false;
     ngOnInit() {
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -76,6 +77,9 @@ export class ReportsComponent implements OnInit {
         this.filter.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
         this.user = this.userService.getUser();
+        if (this.user.Role.RoleName == 'Driver') {
+            this.isRIDriver = true;
+        }
         if (this.user.IsDistributor) {
             this.filter.userType = 'external';
             this.filter.reportType = 'DST';
@@ -108,6 +112,8 @@ export class ReportsComponent implements OnInit {
 
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
+            //res.shift();
+            //res.unshift({ BranchID: 1, BranchName: 'All Branches' });
             this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchName');
             this.branchChangeHandler(this.filter.branch);
         }, (err) => { });

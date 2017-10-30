@@ -157,6 +157,7 @@ export class TrackerComponent implements OnInit {
                 }
               }
             }
+            this.sortBranches(branchesArr);
             this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
           } else if (this.searchObj.userType == 'External') {
             let tmpObj = {};

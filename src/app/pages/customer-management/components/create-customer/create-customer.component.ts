@@ -24,6 +24,7 @@ export class CreateCustomerComponent implements OnInit {
     newlyAddedproduct: MapProducts[] = [];
     isFromDirty: boolean = false;
     keepSorted = true;
+    isView: boolean = false;
     // action: string = 'create';
 
     customerId: string;
@@ -49,10 +50,13 @@ export class CreateCustomerComponent implements OnInit {
         this.mode = +this.route.snapshot.data['mode'];
         if (this.mode === 2) {
             this.title = 'Edit';
+            this.isView = true;
         } else if (this.mode === 3) {
             this.title = 'View';
+            this.isView = true;
         } else {
             this.title = 'Create';
+            this.isView = false;
         }
         this.customer['Active'] = true;
     }
@@ -170,6 +174,7 @@ export class CreateCustomerComponent implements OnInit {
 
     deactivateMappedProduct(mprod) {
         if (this.mode === 1) {
+            this.isFromDirty = true;
             const index = this.addedProduct.indexOf(mprod);
             if (index > -1) {
                 this.addedProduct.splice(index, 1);
@@ -178,6 +183,7 @@ export class CreateCustomerComponent implements OnInit {
             }
         }
         if (this.mode === 2) {
+            this.isFromDirty = true;
             const index2 = this.addedProduct.indexOf(mprod);
             if (index2 > -1) {
                 // this.newlyAddedproduct.splice(index2, 1);
@@ -237,17 +243,18 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     validateEmailID() {
-        if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.EmailID))) {  
-          return false;  
-        } 
+        if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.EmailID))) {
+            return false;
+        }
         return true;
     }
 
     validateCustomer(customer, newlyAddedproduct, addedProduct, mode): boolean {
-        if (!customer.CustomerNumber) {
-            this.notification.error('', 'Customer Number is mandatory!!!');
-            return false;
-        } else if (!customer.CustomerName) {
+        // if (!customer.CustomerNumber) {
+        //     this.notification.error('', 'Customer Number is mandatory!!!');
+        //     return false;
+        // } else 
+        if (!customer.CustomerName) {
             this.notification.error('', 'Customer Name is mandatory!!!');
             return false;
         } else if (!customer.CustType) {
@@ -335,6 +342,7 @@ export class CreateCustomerComponent implements OnInit {
         }
     }
     editProductPrice(mode, index) {
+        this.isFromDirty = true;
         // console.log("mode ----- ", mode, " index---", index);
         if (mode === 1) {
             this.addProductCheck.fill(false);

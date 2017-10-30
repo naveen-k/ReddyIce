@@ -28,7 +28,7 @@
         <sup style="color:red;">*</sup>
       </label>
       <input alphaNumeric [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
-        minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (change)="changeHandler()"
+        minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (ngModelChange)="changeHandler()"
         (blur)="spaceRemoverFn(user.FirstName)" maxlength="45">
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -43,7 +43,7 @@
         <sup style="color:red;">*</sup>
       </label>
       <input alphaNumeric [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
-        name="LastName" #LastName="ngModel" required minlength="2" maxlength="45" (change)="changeHandler();" (blur)="spaceRemover(user.LastName)">
+        name="LastName" #LastName="ngModel" required minlength="2" maxlength="45" (ngModelChange)="changeHandler();" (blur)="spaceRemover(user.LastName)">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">
@@ -58,8 +58,9 @@
 
     <div *ngIf="!isNewUser" class="col-md-6 page-header">
       <label for="username" class="control-label">Username</label>
+      <sup style="color:red;">*</sup>
       <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="user.UserName" name="UserName"
-        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (change)="changeHandler()" [disabled]="true"
+        #UserName="ngModel" required minlength="4" [readOnly]="user.IsRIInternal" (ngModelChange)="changeHandler()" [disabled]="true"
         [disabled]="!isNewUser">
       <div *ngIf="UserName.invalid && (UserName.dirty || UserName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -79,7 +80,7 @@
       </label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
         required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" maxlength="30" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)"
-        (change)="changeHandler()" maxlength="50">
+        (ngModelChange)="changeHandler()" maxlength="50">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">
@@ -106,7 +107,7 @@
         Phone
       </label>
       <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-      maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (change)="changeHandler()">
+      maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (ngModelChange)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
@@ -153,7 +154,7 @@
         #ISeriesRouteNumber="ngModel" maxlength="10" (ngModelChange)="changeHandler()" >
     </div>
 
-    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">
+    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header" >
       <label for="distributor">
         Distributor
         <sup style="color:red;">*</sup>
@@ -162,7 +163,7 @@
         #distributor="ngModel" (ngModelChange)="changeHandler()">
                     <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
                   </select-->
-      <reddy-select [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
+      <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
     </div>
    
     <div class="col-md-6 page-header">
