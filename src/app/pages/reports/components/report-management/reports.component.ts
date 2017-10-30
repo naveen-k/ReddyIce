@@ -30,18 +30,21 @@ export class ReportsComponent implements OnInit {
     };
 
     inputFormatter = (res => `${res.CustomerName}`);
+    hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
     search = (text$: Observable<any>) => text$.debounceTime(300)
         .distinctUntilChanged()
-        .do(() => this.searching = true)
+        .do((term) => this.searching = term.length > 2)
         .switchMap(term => term.length < 3 ? [] :
-            this.reportService.getCustomerSearch(term)
+            this.reportService.getCustomerSearch(term.replace('#','%23','g'))
                 .do(() => this.searching = false)
                 .catch(() => {
                     this.searching = true;
                     return Observable.of([]);
                 })
         )
+        .do(() => this.searching = false)
+        .merge(this.hideSearchingWhenUnsubscribed);
 
     user: User;
     linkRpt: SafeResourceUrl;
@@ -101,7 +104,7 @@ export class ReportsComponent implements OnInit {
                 this.filter.userType = 'external';
                 break;
             case 'IOA':
-                this.getCustomers();
+                // this.getCustomers();
                 break;
         }
         if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {
@@ -134,7 +137,7 @@ export class ReportsComponent implements OnInit {
         }, (err) => { });
         this.filter.custID = 0;
         this.filter.driver = 1;
-        this.getCustomers();
+        // this.getCustomers();
     }
 
     distributorChangeHandler() {
@@ -146,7 +149,7 @@ export class ReportsComponent implements OnInit {
         });
         this.filter.custID = 0;
         this.filter.driver = 1;
-        this.getCustomers();
+        // this.getCustomers();
     }
 
 
@@ -162,22 +165,8 @@ export class ReportsComponent implements OnInit {
         }
     }
 
-    getCustomers() {
-        // this.showSpinner = true;
-        // this.reportService.getCustomersByBranchandDist(this.filter.userType, this.filter.branch, this.filter.distributor).subscribe(res => {
-        //     res.unshift({
-        //         CustomerId: 0,
-        //         CustomerName: 'All Customer',
-        //         EmailId: '',
-        //         IsActive: true,
-        //     });
-        //     this.showSpinner = false;
-        //     this.allCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerId', 'CustomerName');
-        //     this.customers = [...this.allCustomers];
-        // }, (err) => {
-        //     this.showSpinner = false;
-        //     this.customers = [];
-        // });
+    focuOutCustomer() {
+        debugger
     }
 
     customerTypeChange() {
