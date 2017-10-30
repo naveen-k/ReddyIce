@@ -14,12 +14,13 @@
             <div class="row" [hidden]="mode===1">
                 <label for="example-text-input" class="col-md-12">Customer Number <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
-                    <input maxlength="8" numberOnly [disabled]="mode ===3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber"
+                    <input maxlength="8" numberOnly [disabled]="mode ===3||mode ===2" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber"
                         class="form-control" placeholder="Customer Number"
                         (ngModelChange)="formFlagHandler()" />
                 </div>
             </div>
-            <div class= "row box-top-margin">
+            <!-- [ngClass]="{box-top-margin:,box-top-margin:}" -->
+            <div class= "row" [ngClass]="{'box-top-margin':!isView,'box-top-margin':isView}">
                 <label for="example-text-input" class="col-md-12">Customer Name <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
                     <input maxlength="50" alphaNumeric [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()"

@@ -24,6 +24,7 @@ export class CreateCustomerComponent implements OnInit {
     newlyAddedproduct: MapProducts[] = [];
     isFromDirty: boolean = false;
     keepSorted = true;
+    isView: boolean = false;
     // action: string = 'create';
 
     customerId: string;
@@ -49,10 +50,13 @@ export class CreateCustomerComponent implements OnInit {
         this.mode = +this.route.snapshot.data['mode'];
         if (this.mode === 2) {
             this.title = 'Edit';
+            this.isView = true;
         } else if (this.mode === 3) {
             this.title = 'View';
+            this.isView = true;
         } else {
             this.title = 'Create';
+            this.isView = false;
         }
         this.customer['Active'] = true;
     }
