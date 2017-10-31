@@ -96,7 +96,7 @@
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date:</label>
                 <div class="col-sm-7 input-group">
-                    <input class="form-control" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
+                    <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
                         disabled (ngModelChange)="isFormDirty=true" [maxDate]="date.maxDate" [minDate]="date.minDate">
                     <button class="input-group-addon" (click)="d.toggle()" type="button" [disabled]="isReadOnly">
                         <i class="ion-calendar"></i>

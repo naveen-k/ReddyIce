@@ -3,7 +3,7 @@
         <div class="col-sm-2">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
+                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
                     disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
@@ -13,7 +13,7 @@
         <div class="col-sm-2">
             <label>End Date</label>
             <div class="input-group">
-                <input class="form-control" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
+                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
@@ -83,7 +83,7 @@
                             <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
                             <option value="IOA" *ngIf="!user.IsDistributor">Inventory on Arrival</option>
                             <option value="SRT">Sales</option>
-                            <option value="TR" *ngIf="!user.IsDistributor">Ticket Details</option>
+                            <option value="TR" *ngIf="user.Role.RoleID===1||user.Role.RoleID===2">Invoice List</option>
                             <option value="SR">Trip Details</option>
                             <option value="RS">Unit Summary</option>
                         </select>

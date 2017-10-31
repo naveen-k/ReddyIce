@@ -5,7 +5,7 @@
                 <div class="col-sm-2">
                     <label>Select Date</label>
                     <div class="input-group">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tripFilterOption.tripDate" [maxDate]="todaysDate"
+                        <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tripFilterOption.tripDate" [maxDate]="todaysDate"
                             (ngModelChange)="dateChangeHandler()" ngbDatepicker #d="ngbDatepicker" disabled>
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
