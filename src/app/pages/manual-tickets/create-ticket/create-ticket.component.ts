@@ -715,7 +715,7 @@ export class CreateTicketComponent implements OnInit {
         this.loadDriversOfBranch(this.ticket.BranchID);
       }
 
-      this.loadCustomerDetail(this.ticket.CustomerID);
+      this.loadCustomerDetail(this.ticket.CustomerID, this.ticket.CustomerSourceID == 101);
     });
   }
 
