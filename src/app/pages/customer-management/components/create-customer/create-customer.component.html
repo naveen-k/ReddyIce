@@ -23,8 +23,8 @@
             <div class= "row" [ngClass]="{'box-top-margin':!isView,'box-top-margin':isView}">
                 <label for="example-text-input" class="col-md-12">Customer Name <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
-                    <input maxlength="50" alphaNumeric [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()"
-                        class="form-control" placeholder="Customer Name" />
+                    <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()"
+                       (blur)="spaceRemoverFn(customer.CustomerName)" class="form-control" placeholder="Customer Name" />
                 </div>
             </div>
             <div class="row box-top-margin">
@@ -136,8 +136,8 @@
                     <div class="row box-top-margin">
                         <label for="example-text-input" class="col-md-12">City&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="25" alphaNumeric [disabled]="mode ===3" [(ngModel)]='customer.City' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
-                                type="text" class="form-control" placeholder="City" />
+                            <input maxlength="25" alphaNumeric [acceptSpace]="true" [disabled]="mode ===3" [(ngModel)]='customer.City' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                            (blur)="spaceRemoverFnforCity(customer.City)" type="text" class="form-control" placeholder="City" />
                         </div>
                     </div>
                 </div>
@@ -156,8 +156,8 @@
                     <div class="row">
                         <label for="example-text-input" class="col-md-12">Primary Contact&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="50" alphaNumeric [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()" id="typeahead-basic"
-                                type="text" class="form-control" placeholder="Primary Contact" />
+                            <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                            (blur)="spaceRemoverFnforPrimaryContact(customer.PrimaryContact)" type="text" class="form-control" placeholder="Primary Contact" />
                         </div>
                     </div>
                 </div>

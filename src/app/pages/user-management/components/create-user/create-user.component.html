@@ -27,7 +27,7 @@
         First Name
         <sup style="color:red;">*</sup>
       </label>
-      <input alphaNumeric [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
+      <input alphaNumeric [acceptSpace]="true" [disabled]="user.IsRIInternal" type="text" class="form-control" id="fname" placeholder="First Name"
         minlength="2" [(ngModel)]="user.FirstName" name="FirstName" #FirstName="ngModel" required (ngModelChange)="changeHandler()"
         (blur)="spaceRemoverFn(user.FirstName)" maxlength="45">
       <div *ngIf="FirstName.invalid && (FirstName.dirty || FirstName.touched)" class="error-message">
@@ -42,7 +42,7 @@
         Last Name
         <sup style="color:red;">*</sup>
       </label>
-      <input alphaNumeric [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
+      <input alphaNumeric [acceptSpace]="true" [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
         name="LastName" #LastName="ngModel" required minlength="2" maxlength="45" (ngModelChange)="changeHandler();" (blur)="spaceRemover(user.LastName)">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -148,7 +148,7 @@
                     <!--button class="btn btn-danger" (click)="onMultiSelect(optionsModel)">Fire</button -->
  
     </div>
-    <div *ngIf="user.IsRIInternal" class="col-md-6 page-header">
+    <div *ngIf="user.IsRIInternal||showIseries" class="col-md-6 page-header">
       <label for="iseriesroute" class="control-label">ISeries Route</label>
       <input type="text" [numberOnly] class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber"
         #ISeriesRouteNumber="ngModel" maxlength="10" (ngModelChange)="changeHandler()" >
@@ -224,7 +224,7 @@
     </div>
   </div>
   <div class="row page-header rowContainer">
-    <div class="col-md-5 padding-eater" *ngIf="user.IsRIInternal">
+    <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal">
     
       <label for="exampleSelect1">Branch</label>
         <!--select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
@@ -241,8 +241,8 @@
         <div class="col-md-12" style="max-height:80px;overflow:auto;"><ul class="ulpadding"><li *ngFor="let b of user.Branch" >{{b.BranchCode}} - {{b.BranchName}}</li></ul></div>
           
     </div>
-    <div class="col-md-2"></div>
-      <div class="col-md-5 padding-eater first-column" *ngIf="user.IsRIInternal && user.ISeriesRouteNumber">
+    <div class="col-md-1" [hidden]="!user.IsRIInternal"></div>
+      <div class="col-md-5 padding-eater first-column" *ngIf="user.ISeriesRouteNumber">
         <label for="inputiseriesroute" class="control-label">ISeries Route</label>
         <input type="number" class="form-control" id="iseriseroute" placeholder="ISerise Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel"
            disabled>

@@ -24,6 +24,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     riUserName: string = '';
     searchedUsers: any;
     showList: boolean = false;
+    showIseries: boolean = false;
     selectedSearchUser: boolean = false;
     timeOut: any;
     roleList: any = [];
@@ -345,12 +346,15 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.userBranch = [];
 
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {
+            if (roleID === '2') {
+                this.showIseries = true;
+            }
             this.cBranches = [];
             this.cBranches = [{ value: '1', label: '1 - All Branches', data: { BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true } }];
             this.userBranch = [1];
 
         } else {
-
+            this.showIseries = false;
             this.user.RoleID = roleID;
             this.userBranch = [];
             this.cBranches = this.tBranches;

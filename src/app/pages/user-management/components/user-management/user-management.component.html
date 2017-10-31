@@ -106,7 +106,7 @@
               <td class="userCell"><span [title]="item.FirstName + ' - ' + item.LastName">{{ item.FirstName || 'NA'|cutString:true:15 }} {{ item.LastName || 'NA'|cutString:true:15 }}</span></td>
               <td *ngIf="!hideColumn" class="userCell"><span [title]="item.UserName ">{{ item.UserName || 'NA' |cutString:true:30}}</span></td>
               <td class="userCell"><span [title]="item.Role?.RoleName">{{ item.Role?.RoleName}}</span></td>
-              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell"><span [title]="item.Distributor?.DistributorName">{{ item.Distributor?.DistributorName|cutString:true:30}}</span></td>
+              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell"><span [title]="item.Distributor?.DistributorName">{{ item.IsDistributor?item.Distributor.DistributorName:''|cutString:true:30}}</span></td>
               <td *ngIf="!hideColumn && !isDistributorExist" class="userCell"><ul class="ulpadding"><li *ngFor="let b of item.Branch | slice:0:2"><span [title]="b.BranchCode+'-'+b.BranchName">{{b.BranchCode}} - {{b.BranchName|cutString:true:30}}</span></li></ul><span *ngIf="item.Branch?.length > 2">({{item.Branch?.length}}) <a href="javascript:void(0);" (click)="moreBranches(item.Branch)">more...</a></span><!--{{item.Branch | concat:'BranchName'}}--></td>
               <td *ngIf="!isDistributorExist" class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
               <td *ngIf="isDistributorExist && !hideColumn" class="userCell"><span [title]="item.EmailID">{{item.EmailID|cutString:true:30}}</span></td>

@@ -389,5 +389,15 @@ export class CreateCustomerComponent implements OnInit {
             this.router.navigate(['/pages/customer-management'], { relativeTo: this.route });
         }
     }
+    spaceRemoverFn(value) {
+        this.customer.CustomerName = value.replace(/^\s+|\s+$/g, '');
+    }
+    spaceRemoverFnforPrimaryContact(value) {
+        this.customer.PrimaryContact = value.replace(/^\s+|\s+$/g, '');
+
+    }
+    spaceRemoverFnforCity(value) {
+        this.customer.City = value.replace(/^\s+|\s+$/g, '');
+    }
 }
 
