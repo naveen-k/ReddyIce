@@ -41,7 +41,7 @@ export class ReportService extends SharedService {
     getCustomersByBranchandDist(rType, branchId, distributorId) {
         if (rType == 'internal' && branchId === 1) {
             return Observable.from([[]])
-        } else if (rType == 'external' && distributorId == 0) {
+        } else if (rType == 'external' && distributorId === 0) {
             return Observable.from([[]])
         }
         let url = `api/user/getcustomerbybranchidordistributorid`;
@@ -56,7 +56,26 @@ export class ReportService extends SharedService {
             });
     }
 
-    getCustomerSearch(searchString: string): Observable<any[]> {
-        return this.http.get(`api/user/getcustomerbybranchidordistributorid?branchId=1&serachstring=${searchString}`).map(res => res.json().slice(0,10));
+    getCustomerSearch(
+        searchString: string,
+        userType: string,
+        branchId?: number,
+        distributorId?: number,
+        customerSourceId?: number,
+    ): Observable<any[]> {
+        let url = `api/user/getcustomerbybranchidordistributorid?serachstring=${searchString}`;
+        if (userType === 'internal') {
+            url = `${url}&branchId=${branchId}`;
+        } else {
+            url = `${url}&distributorId=${distributorId || 1}&customerSourceId=${customerSourceId || 1}`;
+        }
+        return this.http.get(url).map(res => res.json().slice(0, 10));
+    }
+
+    getCustomersonTicketReport(TicketNumber) {
+        return this.http.get(`api/report/customerticketdetails?TicketNumber=${TicketNumber}`)
+            .map((res) => res.json()).map((res) => {
+                return res;
+            });
     }
 }

@@ -27,6 +27,11 @@ export class ReportsComponent implements OnInit {
         driver: 1,
         custID: 0,
         custType: 0,
+        ticketNumber: 0,
+        custName: 'All Customers',
+        showCustomerDropdown: false,
+        ticketID : '',
+        custNameforTicket:''
     };
 
     inputFormatter = (res => `${res.CustomerName}`);
@@ -36,15 +41,20 @@ export class ReportsComponent implements OnInit {
         .distinctUntilChanged()
         .do((term) => this.searching = term.length > 2)
         .switchMap(term => term.length < 3 ? [] :
-            this.reportService.getCustomerSearch(term.replace('#','%23','g'))
+            this.reportService.getCustomerSearch(
+                term.replace('#', '%23', 'g'),
+                this.filter.userType, this.filter.branch,
+                this.filter.distributor,
+                this.filter.custType,
+            )
                 .do(() => this.searching = false)
                 .catch(() => {
                     this.searching = true;
                     return Observable.of([]);
-                })
-        )
+                }),
+    )
         .do(() => this.searching = false)
-        .merge(this.hideSearchingWhenUnsubscribed);
+        .merge(this.hideSearchingWhenUnsubscribed)
 
     user: User;
     linkRpt: SafeResourceUrl;
@@ -53,12 +63,13 @@ export class ReportsComponent implements OnInit {
 
     allCustomers: any[] = [];
     customers: any[] = [];
+    customersByTicketNumber: any[];
 
     drivers: any[] = [];
     driversofDist: any[] = [];
     branches: any[] = [];
     yesFlag: boolean = false;
-
+    IsTIR: boolean = false;
     viewReport: boolean = false;
     searching: boolean = false;
 
@@ -94,8 +105,10 @@ export class ReportsComponent implements OnInit {
     }
 
     reportTypeChangeHandler() {
+        this.IsTIR = false;
         this.yesFlag = false;
         this.viewReport = false;
+        this.filter.customer = null;
         if (this.user.IsRIInternal) {
             this.filter.userType = 'internal';
         }
@@ -105,6 +118,12 @@ export class ReportsComponent implements OnInit {
                 break;
             case 'IOA':
                 // this.getCustomers();
+                break;
+            case 'TIR':
+                this.IsTIR = true;
+                break;
+            default:
+                this.IsTIR = false;
                 break;
         }
         if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {
@@ -177,57 +196,87 @@ export class ReportsComponent implements OnInit {
         });
         console.log(this.customers);
     }
-
-    updateLink(rType) {
-
-        this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-        this.viewReport = true;
-        setTimeout(function () {
-            $('#loader').hide();
-        }, 5000);
-        // hack to check if start date is not greater than end date
-        if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
-            this.notification.error('Start Date cannot be greater than End Date!!!');
-            this.viewReport = false;
+    getCustomersbyTicketNumber(ticketNumber) {
+        if (ticketNumber) {
+            this.reportService.getCustomersonTicketReport(ticketNumber).subscribe((res) => {
+                const tempArr = [];
+                res.forEach(cust => {
+                    tempArr.push({
+                        value: +cust.TicketId,
+                        label: `${cust.CustomerName}`,
+                    });
+                });
+                this.customersByTicketNumber = tempArr;
+            }, (err) => { });
         }
-        const custID = this.filter.custID;
-        if (rType === 'DR') {
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
-        } else if (rType === 'RS') {
+    }
+    updateLink(rType) {
+        if (rType !== 'TIR') {
+            this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+            this.viewReport = true;
+            setTimeout(function () {
+                $('#loader').hide();
+            }, 5000);
+            // hack to check if start date is not greater than end date
+            if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
+                this.notification.error('Start Date cannot be greater than End Date!!!');
+                this.viewReport = false;
+            }
+            const custID = this.filter.custID;
+            if (rType === 'DR') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+            } else if (rType === 'RS') {
 
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
-        } else if (rType === 'SR') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+            } else if (rType === 'SR') {
 
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
-        } else if (rType === 'TR') {
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${custID}&CustType=${this.filter.custType}`);
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+            } else if (rType === 'TR') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${custID}&CustType=${this.filter.custType}`);
 
-        } else if (rType === 'AS') {
+            } else if (rType === 'AS') {
 
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
 
-        } else if (rType === 'DST') {
+            } else if (rType === 'DST') {
 
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
 
-        } else if (rType === 'IOA') {
+            } else if (rType === 'IOA') {
 
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
 
-        } else if (rType === 'SRT') {
+            } else if (rType === 'SRT') {
 
-            this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
 
-        } else {
-            return false;
+            } else {
+                return false;
+            }
+        }
+
+        if (rType === 'TIR') {
+            if (this.customersByTicketNumber.length  > 1) {
+                this.filter.showCustomerDropdown = true;
+            } else {
+                this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+                this.viewReport = true;
+                setTimeout(function () {
+                    $('#loader').hide();
+                }, 5000);
+                this.filter.showCustomerDropdown = false;
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+
+            }
+
         }
 
         console.log(this.linkRpt);
@@ -240,4 +289,5 @@ export class ReportsComponent implements OnInit {
         if (dd < 10) { dd = '0' + dd }
         return mm + '/' + dd + '/' + yy;
     }
+    
 }
