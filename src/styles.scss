@@ -155,6 +155,7 @@ a.collapse-menu-link {
 }
 
 .ms-drop {
+    min-width: 200px !important;
     li {
          :hover {
             background-color: #5bc0de;
