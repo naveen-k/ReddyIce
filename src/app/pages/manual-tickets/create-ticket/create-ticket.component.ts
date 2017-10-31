@@ -484,7 +484,7 @@ export class CreateTicketComponent implements OnInit {
 
   ticketNumberValidation() {
     const ticketNumberLength = this.ticket.TicketNumber.toString().length;
-    this.ticketMinMaxLength = !(ticketNumberLength >= 4 && ticketNumberLength <= 10);    
+    this.ticketMinMaxLength = !(ticketNumberLength >= 4 && ticketNumberLength <= 10);
   }
 
   poNumberValidation() {
@@ -871,7 +871,7 @@ export class CreateTicketComponent implements OnInit {
   calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
     if (!ticket.IsSaleTicket) {
       this.resetCashAndCheck();
-      if(ticket.CustomerType === 21){
+      if (ticket.CustomerType === 21) {
         ticket.TicketTypeID = null;
       }
     }

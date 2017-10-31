@@ -204,23 +204,7 @@
                     <input type="text" [disabled]="ticketId" numberOnly oninput="validity.valid||(value='');" onKeyPress="if(this.value.length==10) return false;"
                         class="form-control" [(ngModel)]="ticket.TicketNumber" id="TicketNumber" placeholder="Ticket Number"
                         (blur)="ticketNumberChangeHandler()" name="TicketNumber" (ngModelChange)="isFormDirty=true;" #TicketNumber="ngModel"
-                        required [disabled]="isReadOnly">
-                    <!-- <div *ngIf="TicketNumber.invalid && (TicketNumber.dirty || TicketNumber.touched)" class="error-message">
-                        <i class="ion-android-alert showError"></i>
-                        <div *ngIf="TicketNumber.errors.required" class="custom-tooltip bottom">Ticket number is required</div>
-                    </div>
-                    <div *ngIf="isTicketNumberExist" class="error-message">
-                        <i class="ion-android-alert showError"></i>
-                        <div class="custom-tooltip bottom">Ticket Number already in use</div>
-                    </div>
-                    <div *ngIf="containsCharacters" class="error-message">
-                        <i class="ion-android-alert showError"></i>
-                        <div class="custom-tooltip bottom">Ticket number cannot contain characters</div>
-                    </div>
-                    <div *ngIf="ticketMinMaxLength" class="error-message">
-                        <i class="ion-android-alert showError"></i>
-                        <div class="custom-tooltip bottom">Ticket number should be 4-10 digits long only</div>
-                    </div> -->
+                        required [disabled]="isReadOnly">                    
                 </div>
             </div>
             <div class="row" [hidden]="ticket.CustomerType==21">
@@ -336,17 +320,18 @@
                                                         {{pdetail.DisplayName}} </option>
                                                 </select>
                                             </td>
-                                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2'}}</td>
+                                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
                                             <td>
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading"
-                                                    (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
+                                                    (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" 
+                                                    (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)" [disabled]="isReadOnly">
                                             </td>
                                             <td>
-                                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading"
-                                                    (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly"
-                                                    min="tdetail.StartMeterReading">
+                                                <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading" 
+                                                    (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)"
+                                                    (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
                                             <td class="textAlignCenter">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
                                                     <i class="ion-trash-a"></i>
