@@ -51,11 +51,10 @@
             <div class="row box-top-margin">
                 <div class="col-md-4">
                     <div class="row">
-                        <label for="example-text-input" class="col-md-6">IsTaxable</label>
-                        <div class="col-md-6">
+                        <label for="example-text-input" class="col-sm-7">IsTaxable</label>
+                        <div class="col-sm-5">
                             <input [disabled]="mode ===3" type="checkbox" [(ngModel)]='customer.IsTaxassble' (ngModelChange)="formFlagHandler()" class="checkbox-size"
                             />
-
                         </div>
                     </div>
                 </div>
@@ -65,22 +64,24 @@
 
                 </div> -->
                 <div class="col-md-4">
-                        <div class="row">
-                            <label for="example-text-input" class="col-md-6">IsActive</label>
-                            <div class="col-md-6">
-                                <input type="checkbox" [disabled]="mode===3 || mode ===1" [(ngModel)]='customer.Active' (ngModelChange)="formFlagHandler()" class="checkbox-size"
-                                />
-                            </div>
+                    <div class="row">
+                        <label for="example-text-input" class="col-sm-7">IsActive</label>
+                        <div class="col-md-5">
+                            <input type="checkbox" [disabled]="mode===3 || mode ===1" [(ngModel)]='customer.Active' (ngModelChange)="formFlagHandler()" class="checkbox-size"
+                            />
                         </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                        <div class="row">
-                            <label for="example-text-input" class="col-md-6">Allow Return Ticket</label>
-                            <div class="col-md-6">
-                                <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnSameTicket' (ngModelChange)="formFlagHandler()" class="checkbox-size"
-                                />
-                            </div>
+            </div>
+            <div class="row box-top-margin">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <label for="example-text-input" class="col-sm-5">Allow Return Ticket</label>
+                        <div class="col-sm-7">
+                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnSameTicket' (ngModelChange)="formFlagHandler()" class="checkbox-size"
+                            />
                         </div>
+                    </div>
                 </div>
             </div>
             <div class="row box-top-margin">
