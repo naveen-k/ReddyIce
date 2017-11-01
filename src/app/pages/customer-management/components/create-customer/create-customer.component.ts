@@ -93,7 +93,7 @@ export class CreateCustomerComponent implements OnInit {
                     element.ProductPrice = element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.0` : element.ProductPrice;
                 });
                 this.addedProduct = response.ProductDetail;
-                // console.log("this.addedProduct ------ ",this.addedProduct);
+                console.log("this.addedProduct ------ ",this.addedProduct);
                 this.addProductCheck = new Array(this.addedProduct.length);
                 this.addProductCheck.fill(false);
             });
