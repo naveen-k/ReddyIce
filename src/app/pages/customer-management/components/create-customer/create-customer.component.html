@@ -96,7 +96,7 @@
             <!-- <div class="row box-top-margin">
                 <label for="example-text-input" class="col-md-5 col-form-label">Chain</label>
                 <div class="col-md-7 padding-eater">
-                    <!-- <select [disabled]="mode ===3" [(ngModel)]="customer.ChainID" (ngModelChange)="formFlagHandler()" class="form-control">
+                    <select [disabled]="mode ===3" [(ngModel)]="customer.ChainID" (ngModelChange)="formFlagHandler()" class="form-control">
                         <option *ngFor="let chain of chains" [value]="chain.ChainId">{{chain.ChainName}}</option>
                     </select> -->
             <!-- <reddy-select [disabled]="mode===3" [options]="chains" [(selected)]="customer.ChainID" (selectedChange)="formFlagHandler()"></reddy-select>
@@ -211,21 +211,12 @@
                                             {{prod.DisplayName}}
                                         </option>
                                     </select> -->
-<<<<<<< Updated upstream
                                 </td>
                                 <td class="td-width right">
                                     <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
                                 </td>
                                 <td>
                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
-=======
-                                    </td>
-                                    <td class="td-width right">
-                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="number" [(ngModel)]="mprod.ProductPrice">
-                                    </td>
-                                    <td>
-                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
->>>>>>> Stashed changes
                                             <span class="tooltiptext">Edit</span>
                                         </i>
                                         <i class="ion-trash-a custom-tooltip-ion" (click)="deactivateMappedProduct(mprod)" style="margin-right: 5px" [hidden]="mode===3||deactivateClicked">
@@ -241,7 +232,7 @@
                                     <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="cProductId" [(ngModel)]="mprod.cProductId"
                                         (ngModelChange)="productChangeHandler(mprod)">
                                                 <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
-                                                    {{prod.IsActive?prod.DisplayName:0}}  
+                                                    {{prod.DisplayName}}  
                                                 </option>
                                             </select>
                                 </td>

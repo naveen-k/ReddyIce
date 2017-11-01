@@ -96,8 +96,8 @@ export class CreateCustomerComponent implements OnInit {
             });
         }
         this.service.getExternalProducts().subscribe((response) => {
-            this.products = response;
-            console.log(" this.products---------------", this.products);
+            this.products = response.filter(pr => pr.IsActive);
+
         });
         this.service.getAllStates().subscribe((response) => {
             // this.allStates = response;
