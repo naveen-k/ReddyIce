@@ -15,16 +15,16 @@
                 <label for="example-text-input" class="col-md-12">Customer Number <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
                     <input maxlength="8" numberOnly [disabled]="mode ===3||mode ===2" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber"
-                        class="form-control" placeholder="Customer Number"
-                        (ngModelChange)="formFlagHandler()" />
+                        class="form-control" placeholder="Customer Number" (ngModelChange)="formFlagHandler()" />
                 </div>
             </div>
             <!-- [ngClass]="{box-top-margin:,box-top-margin:}" -->
-            <div class= "row" [ngClass]="{'box-top-margin':!isView,'box-top-margin':isView}">
+            <div class="row" [ngClass]="{'box-top-margin':!isView,'box-top-margin':isView}">
                 <label for="example-text-input" class="col-md-12">Customer Name <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
-                    <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName" (ngModelChange)="formFlagHandler()"
-                       (blur)="spaceRemoverFn(customer.CustomerName)" class="form-control" placeholder="Customer Name" />
+                    <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerName"
+                        (ngModelChange)="formFlagHandler()" (blur)="spaceRemoverFn(customer.CustomerName)" class="form-control"
+                        placeholder="Customer Name" />
                 </div>
             </div>
             <div class="row box-top-margin">
@@ -67,8 +67,8 @@
                     <div class="row">
                         <label for="example-text-input" class="col-sm-7">IsActive</label>
                         <div class="col-md-5">
-                            <input type="checkbox" [disabled]="mode===3 || mode ===1" [(ngModel)]='customer.Active' (ngModelChange)="formFlagHandler()" class="checkbox-size"
-                            />
+                            <input type="checkbox" [disabled]="mode===3 || mode ===1" [(ngModel)]='customer.Active' (ngModelChange)="formFlagHandler()"
+                                class="checkbox-size" />
                         </div>
                     </div>
                 </div>
@@ -78,8 +78,8 @@
                     <div class="row">
                         <label for="example-text-input" class="col-sm-5">Allow ReturnTicket</label>
                         <div class="col-sm-7">
-                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnSameTicket' (ngModelChange)="formFlagHandler()" class="checkbox-size"
-                            />
+                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnSameTicket' (ngModelChange)="formFlagHandler()"
+                                class="checkbox-size" />
                         </div>
                     </div>
                 </div>
@@ -88,8 +88,9 @@
 
                 <label for="example-text-input" class="col-md-12">Tax Percentage</label>
                 <div class="col-md-12">
-                    <input maxlength="6" numberOnly="true" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage' (ngModelChange)="formFlagHandler()"
-                        id="typeahead-basic" type="number" step="0.01" class="form-control" placeholder="Tax Percentage" />
+                    <input maxlength="6" numberOnly="true" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage'
+                        (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="number" step="0.01" class="form-control"
+                        placeholder="Tax Percentage" />
                 </div>
             </div>
             <!-- <div class="row box-top-margin">
@@ -136,8 +137,9 @@
                     <div class="row box-top-margin">
                         <label for="example-text-input" class="col-md-12">City&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="25" alphaNumeric [acceptSpace]="true" [disabled]="mode ===3" [(ngModel)]='customer.City' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
-                            (blur)="spaceRemoverFnforCity(customer.City)" type="text" class="form-control" placeholder="City" />
+                            <input maxlength="25" alphaNumeric [acceptSpace]="true" [disabled]="mode ===3" [(ngModel)]='customer.City' (ngModelChange)="formFlagHandler()"
+                                id="typeahead-basic" (blur)="spaceRemoverFnforCity(customer.City)" type="text" class="form-control"
+                                placeholder="City" />
                         </div>
                     </div>
                 </div>
@@ -156,8 +158,9 @@
                     <div class="row">
                         <label for="example-text-input" class="col-md-12">Primary Contact&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()" id="typeahead-basic"
-                            (blur)="spaceRemoverFnforPrimaryContact(customer.PrimaryContact)" type="text" class="form-control" placeholder="Primary Contact" />
+                            <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()"
+                                id="typeahead-basic" (blur)="spaceRemoverFnforPrimaryContact(customer.PrimaryContact)" type="text"
+                                class="form-control" placeholder="Primary Contact" />
                         </div>
                     </div>
                 </div>
@@ -197,29 +200,38 @@
                                 <th>Price $</th>
                                 <th></th>
                             </thead> -->
-                        <tbody *ngIf="mode === 3|| mode === 2" >
+                        <tbody *ngIf="mode === 3|| mode === 2">
                             <tr *ngFor="let mprod of addedProduct; let j=index">
                                 <ng-container *ngIf="mprod.IsActive">
-                                <td class="text-align-left">
-                                    {{mprod.DisplayName}}
-                                    <!-- <select [disabled]="!addNewProductCheck[j]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
+                                    <td class="text-align-left">
+                                        {{mprod.DisplayName}}
+                                        <!-- <select [disabled]="!addNewProductCheck[j]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
                                     (ngModelChange)="productChangeHandler(mprod)">
                                         <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                             {{prod.DisplayName}}
                                         </option>
                                     </select> -->
+<<<<<<< Updated upstream
                                 </td>
                                 <td class="td-width right">
                                     <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
                                 </td>
                                 <td>
                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
+=======
+                                    </td>
+                                    <td class="td-width right">
+                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="number" [(ngModel)]="mprod.ProductPrice">
+                                    </td>
+                                    <td>
+                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
+>>>>>>> Stashed changes
                                             <span class="tooltiptext">Edit</span>
                                         </i>
-                                    <i class="ion-trash-a custom-tooltip-ion" (click)="deactivateMappedProduct(mprod)" style="margin-right: 5px" [hidden]="mode===3||deactivateClicked">
+                                        <i class="ion-trash-a custom-tooltip-ion" (click)="deactivateMappedProduct(mprod)" style="margin-right: 5px" [hidden]="mode===3||deactivateClicked">
                                             <span class="tooltiptext">Deactivate</span>
                                         </i>
-                                </td>
+                                    </td>
                                 </ng-container>
                             </tr>
                         </tbody>
@@ -229,7 +241,7 @@
                                     <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="cProductId" [(ngModel)]="mprod.cProductId"
                                         (ngModelChange)="productChangeHandler(mprod)">
                                                 <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
-                                                    {{prod.DisplayName}}  
+                                                    {{prod.IsActive?prod.DisplayName:0}}  
                                                 </option>
                                             </select>
                                 </td>
@@ -248,25 +260,25 @@
                         </tbody>
                         <tbody *ngIf="mode === 2 ">
                             <tr *ngFor="let mprod of newlyAddedproduct; let i=index">
-                                <td class="text-align-left">
-                                    <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
-                                        (ngModelChange)="productChangeHandler(mprod)">
+                                    <td class="text-align-left">
+                                        <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
+                                            (ngModelChange)="productChangeHandler(mprod)">
                                             <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                 {{prod.DisplayName}}
                                             </option>
                                         </select>
-                                </td>
-                                <td class="td-width">
-                                    <input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="number" [(ngModel)]="mprod.ProductPrice">
-                                </td>
-                                <td style="padding-top:3px;">
-                                    <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
+                                    </td>
+                                    <td class="td-width">
+                                        <input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="number" [(ngModel)]="mprod.ProductPrice">
+                                    </td>
+                                    <td style="padding-top:3px;">
+                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
-                                    <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod)">
+                                        <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod)">
                                             <span class="tooltiptext">Deactivate</span>
                                         </i>
-                                </td>
+                                    </td>
                             </tr>
                         </tbody>
 
