@@ -30,8 +30,8 @@ export class ReportsComponent implements OnInit {
         ticketNumber: 0,
         custName: 'All Customers',
         showCustomerDropdown: false,
-        ticketID : '',
-        custNameforTicket:''
+        ticketID: 0,
+        custNameforTicket: ''
     };
 
     inputFormatter = (res => `${res.CustomerName}`);
@@ -185,7 +185,7 @@ export class ReportsComponent implements OnInit {
     }
 
     focuOutCustomer() {
-        debugger
+
     }
 
     customerTypeChange() {
@@ -196,7 +196,11 @@ export class ReportsComponent implements OnInit {
         });
         console.log(this.customers);
     }
+
     getCustomersbyTicketNumber(ticketNumber) {
+        this.filter.ticketID='';
+        this.filter.showCustomerDropdown = false;
+        this.viewReport = false;
         if (ticketNumber) {
             this.reportService.getCustomersonTicketReport(ticketNumber).subscribe((res) => {
                 const tempArr = [];
@@ -207,6 +211,9 @@ export class ReportsComponent implements OnInit {
                     });
                 });
                 this.customersByTicketNumber = tempArr;
+                if (this.customersByTicketNumber.length === 1) {
+                    this.filter.ticketID = this.customersByTicketNumber[0].value;
+                }
             }, (err) => { });
         }
     }
@@ -264,9 +271,20 @@ export class ReportsComponent implements OnInit {
         }
 
         if (rType === 'TIR') {
-            if (this.customersByTicketNumber.length  > 1) {
+            if (this.customersByTicketNumber.length > 1) {
                 this.filter.showCustomerDropdown = true;
+                if (this.filter.ticketID) {
+                    console.log(this.filter.ticketID);
+                    this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+                    this.viewReport = true;
+                    setTimeout(function () {
+                        $('#loader').hide();
+                    }, 5000);
+                    this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+                }
             } else {
+                this.filter.showCustomerDropdown = false;
+                // console.log(this.customersByTicketNumber[0].TicketId);
                 this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                 this.viewReport = true;
                 setTimeout(function () {
@@ -289,5 +307,5 @@ export class ReportsComponent implements OnInit {
         if (dd < 10) { dd = '0' + dd }
         return mm + '/' + dd + '/' + yy;
     }
-    
+
 }

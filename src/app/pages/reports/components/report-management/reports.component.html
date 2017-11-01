@@ -85,7 +85,7 @@
                             <option value="TR" *ngIf="user.Role.RoleID===1||user.Role.RoleID===2">Invoice List</option>
                             <option value="SRT">Sales</option>
                             <option value="SR">Trip Details</option>
-                            <!-- <option value="TIR">Ticket Number Report</option> -->
+                            <option value="TIR">Ticket Number Report</option>
                             <option value="RS">Unit Summary</option>
                         </select>
                     </div>
@@ -141,7 +141,7 @@
             </span>
         </div>
     </div>
-    <!-- <div class="row" [hidden]="!IsTIR">
+    <div class="row" [hidden]="!IsTIR">
         <div class="col-sm-12">
             <div class="row">
                 <div class="col-sm-2">
@@ -160,8 +160,8 @@
                                 </ng-template>
                                 <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
                                     placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" /> -->
-                                    <!-- <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" (selectedChange)="formFlagHandler()"></reddy-select> -->
-                            <!-- </div>
+                                    <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" ></reddy-select>
+                            </div> 
                             <div style='margin-left: 100px;'>
                                 <a>
                                     <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
@@ -171,7 +171,7 @@
                     </div>
             </div>
         </div>
-    </div> -->
+    </div>
     <div id='loader' *ngIf="viewReport" style='text-align:center;position: absolute;z-index: -1;left: 40%;top: 40%;'>
         <a>
             <img src="assets/reddyIce/spinner.gif " width='25px'>
