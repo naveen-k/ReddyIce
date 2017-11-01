@@ -211,21 +211,12 @@
                                             {{prod.DisplayName}}
                                         </option>
                                     </select> -->
-<<<<<<< Updated upstream
                                 </td>
                                 <td class="td-width right">
                                     <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
                                 </td>
                                 <td>
                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
-=======
-                                    </td>
-                                    <td class="td-width right">
-                                        <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="number" [(ngModel)]="mprod.ProductPrice">
-                                    </td>
-                                    <td>
-                                        <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
->>>>>>> Stashed changes
                                             <span class="tooltiptext">Edit</span>
                                         </i>
                                         <i class="ion-trash-a custom-tooltip-ion" (click)="deactivateMappedProduct(mprod)" style="margin-right: 5px" [hidden]="mode===3||deactivateClicked">
@@ -241,7 +232,7 @@
                                     <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="cProductId" [(ngModel)]="mprod.cProductId"
                                         (ngModelChange)="productChangeHandler(mprod)">
                                                 <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
-                                                    {{prod.IsActive?prod.DisplayName:0}}  
+                                                    {{prod.DisplayName}}  
                                                 </option>
                                             </select>
                                 </td>
@@ -269,7 +260,7 @@
                                         </select>
                                     </td>
                                     <td class="td-width">
-                                        <input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="number" [(ngModel)]="mprod.ProductPrice">
+                                        <input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
                                     </td>
                                     <td style="padding-top:3px;">
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
