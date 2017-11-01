@@ -83,9 +83,7 @@ export class SharedService {
     getTicketType(isSaleTicket: boolean, customer: any, ticketTypeId: number) {
         if (ticketTypeId === 29) {
             return 'DNS'
-        } else if (ticketTypeId === 27) {
-            return 'Credit Sale'
-        } else if (ticketTypeId === 28) {
+        }  else if (ticketTypeId === 28) {
             return 'Payment Only'
         } else if (ticketTypeId === 30) {
             return 'Void'

@@ -154,12 +154,12 @@
                 <div class="row" [hidden]="!modes || !modes.length">
                     <label for="example-text-input" class="col-sm-4 col-form-label">Mode:</label>
                     <div class="col-sm-8">
-                        <label [hidden]="isReadOnly" *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input type="radio" name="mode" [value]="mType.ID" [(ngModel)]="ticket.IsSaleTicket" (ngModelChange)="resetCashAndCheck();isFormDirty=true;">
+                        <label [hidden]="isReadOnly || ticket.TicketID" *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                            <input type="radio" name="mode" [value]="mType.ID" [(ngModel)]="ticket.IsSaleTicket" (ngModelChange)="modeChangeHandler(); isFormDirty=true;">
                             <span>{{mType.Value}}</span>
                         </label>
 
-                        <label [hidden]="!isReadOnly" *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <label [hidden]="!isReadOnly && !ticket.TicketID" *ngFor="let mType of modes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                             <input type="radio" name="mode1" [value]="mType.ID" [(ngModel)]="ticket.IsSaleTicket" [disabled]="true">
                             <span>{{mType.Value}}</span>
                         </label>

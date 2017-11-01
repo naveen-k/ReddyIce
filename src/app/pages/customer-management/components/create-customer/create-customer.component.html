@@ -260,7 +260,7 @@
                                         </select>
                                     </td>
                                     <td class="td-width">
-                                        <input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="number" [(ngModel)]="mprod.ProductPrice">
+                                        <input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
                                     </td>
                                     <td style="padding-top:3px;">
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
