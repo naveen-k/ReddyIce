@@ -303,7 +303,7 @@ export class CreateTicketComponent implements OnInit {
 
   resetSubTypesAndMode(selectedTicket) {
     this.ticketSubTypes = selectedTicket['category'];
-    if (this.ticket.TicketTypeID !== 26) {
+    if (this.ticket.Customer.CustomerType !== 22) {
       this.ticket.Mode = null;
       return;
     }
@@ -540,6 +540,13 @@ export class CreateTicketComponent implements OnInit {
 
   typeChangeHandler() {
     this.resetCashAndCheck();
+  }
+
+  modeChangeHandler() {
+    this.resetCashAndCheck();
+    if (!this.ticket.IsSaleTicket) {
+      this.ticket.TicketTypeID = null;
+    }
   }
 
   resetCashAndCheck() {
