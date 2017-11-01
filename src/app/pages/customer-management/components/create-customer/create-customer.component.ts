@@ -89,6 +89,9 @@ export class CreateCustomerComponent implements OnInit {
                 if (response.CustomerDetails.C_CustomerNumber_) {
                     this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
+                response.ProductDetail.forEach(element => {
+                    element.ProductPrice = element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.0` : element.ProductPrice;
+                });
                 this.addedProduct = response.ProductDetail;
                 // console.log("this.addedProduct ------ ",this.addedProduct);
                 this.addProductCheck = new Array(this.addedProduct.length);
@@ -97,7 +100,6 @@ export class CreateCustomerComponent implements OnInit {
         }
         this.service.getExternalProducts().subscribe((response) => {
             this.products = response.filter(pr => pr.IsActive);
-
         });
         this.service.getAllStates().subscribe((response) => {
             // this.allStates = response;

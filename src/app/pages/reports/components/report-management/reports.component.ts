@@ -213,8 +213,12 @@ export class ReportsComponent implements OnInit {
                 this.customersByTicketNumber = tempArr;
                 if (this.customersByTicketNumber.length === 1) {
                     this.filter.ticketID = this.customersByTicketNumber[0].value;
+                }else {
+                    this.viewReport = false;
+                   // this.notification.error('No Customer Found!!!');
                 }
-            }, (err) => { });
+            }, (err) => { 
+            });
         }
     }
     updateLink(rType) {
@@ -281,6 +285,8 @@ export class ReportsComponent implements OnInit {
                         $('#loader').hide();
                     }, 5000);
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+                }else {
+                    this.viewReport = false;
                 }
             } else {
                 this.filter.showCustomerDropdown = false;
