@@ -5,11 +5,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TicketTypePipe implements PipeTransform {
     transform(value: number, customer: any, ticketTypeId: number) {
         if (ticketTypeId === 29) {
-            return 'DNS'
+            return 'DNS';
         } else if (ticketTypeId === 28) {
-            return 'Payment Only'
+            return 'Payment Only';
         } else if (ticketTypeId === 30) {
-            return 'Void'
+            return 'Void';
+        } else if (ticketTypeId === 110) {
+            return 'Credit & Sale';
         } else if (customer.CustomerType === 20) {
             if (value) {
                 return 'Sale';
