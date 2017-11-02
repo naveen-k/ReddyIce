@@ -40,7 +40,7 @@ export class ReportsComponent implements OnInit {
     search = (text$: Observable<any>) => text$.debounceTime(300)
         .distinctUntilChanged()
         .do((term) => this.searching = term.length > 2)
-        .switchMap(term => term.length < 3 ? [] :
+        .switchMap(term =>
             this.reportService.getCustomerSearch(
                 term.replace('#', '%23', 'g'),
                 this.filter.userType, this.filter.branch,
@@ -225,12 +225,14 @@ export class ReportsComponent implements OnInit {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
+    
         if (rType !== 'TIR') {
             this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
             this.viewReport = true;
             setTimeout(function () {
                 $('#loader').hide();
             }, 5000);
+            
             // hack to check if start date is not greater than end date
             if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
                 this.notification.error('Start Date cannot be greater than End Date!!!');
