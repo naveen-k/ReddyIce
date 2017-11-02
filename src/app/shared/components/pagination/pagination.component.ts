@@ -39,6 +39,7 @@ export class PaginationComponent {
         if (!data) { return; }
         this._tableData = data;
         this.setPagination();
+        this.currentPageIndex = 1;
         this.pageChangeHandler(this.currentPageIndex);
     }
 

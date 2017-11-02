@@ -63,6 +63,7 @@ export class ReportService extends SharedService {
         distributorId?: number,
         customerSourceId?: number,
     ): Observable<any[]> {
+
         let url = `api/user/getcustomerbybranchidordistributorid?serachstring=${searchString}`;
         if (userType === 'internal') {
             url = `${url}&branchId=${branchId}`;

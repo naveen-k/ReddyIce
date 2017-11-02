@@ -134,8 +134,8 @@ export class ReportsComponent implements OnInit {
 
     getAllBranches() {
         this.reportService.getBranches().subscribe((res) => {
-            //res.shift();
-            //res.unshift({ BranchID: 1, BranchName: 'All Branches' });
+            // res.shift();
+            // res.unshift({ BranchID: 1, BranchName: 'All Branches' });
             this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchName');
             this.branchChangeHandler(this.filter.branch);
         }, (err) => { });
