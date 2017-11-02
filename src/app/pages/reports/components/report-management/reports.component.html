@@ -85,7 +85,7 @@
                             <option value="TR" *ngIf="user.Role.RoleID===1||user.Role.RoleID===2">Invoice List</option>
                             <option value="SRT">Sales</option>
                             <option value="SR">Trip Details</option>
-                            <option value="TIR">Ticket Number Report</option>
+                            <option value="TIR">Ticket Number</option>
                             <option value="RS">Unit Summary</option>
                         </select>
                     </div>
@@ -160,7 +160,7 @@
                                 </ng-template>
                                 <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
                                     placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" /> -->
-                                    <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" ></reddy-select>
+                                    <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" (selectedChange)="customerChangeHandler()"></reddy-select>
                             </div> 
                             <div style='margin-left: 100px;'>
                                 <a>

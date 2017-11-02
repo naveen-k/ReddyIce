@@ -198,7 +198,7 @@ export class ReportsComponent implements OnInit {
     }
 
     getCustomersbyTicketNumber(ticketNumber) {
-        this.filter.ticketID='';
+        this.filter.ticketID = '';
         this.filter.showCustomerDropdown = false;
         this.viewReport = false;
         if (ticketNumber) {
@@ -213,13 +213,16 @@ export class ReportsComponent implements OnInit {
                 this.customersByTicketNumber = tempArr;
                 if (this.customersByTicketNumber.length === 1) {
                     this.filter.ticketID = this.customersByTicketNumber[0].value;
-                }else {
+                } else {
                     this.viewReport = false;
-                   // this.notification.error('No Customer Found!!!');
+                    // this.notification.error('No Customer Found!!!');
                 }
-            }, (err) => { 
+            }, (err) => {
             });
         }
+    }
+    customerChangeHandler() {
+        this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
         if (rType !== 'TIR') {
@@ -285,14 +288,20 @@ export class ReportsComponent implements OnInit {
                         $('#loader').hide();
                     }, 5000);
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-                }else {
+                } else {
                     this.viewReport = false;
                 }
             } else {
                 this.filter.showCustomerDropdown = false;
                 // console.log(this.customersByTicketNumber[0].TicketId);
                 this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-                this.viewReport = true;
+                if (this.customersByTicketNumber.length > 0) {
+                    this.viewReport = true;
+                } else {
+                    this.viewReport = false;
+                    this.notification.error('Ticket Number Not Found!!');
+                }
+
                 setTimeout(function () {
                     $('#loader').hide();
                 }, 5000);
