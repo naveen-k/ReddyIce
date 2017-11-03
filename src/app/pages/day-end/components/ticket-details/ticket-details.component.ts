@@ -59,8 +59,8 @@ export class TicketDetailsComponent implements OnInit {
                 this.total.totalCash += ticket.CashAmount || 0;
                 this.total.totalCheck += ticket.CheckAmount || 0;
                 this.total.totalCharge += ticket.ChargeAmount || 0;
-                this.total.totalDrayage += ticket.TicketTypeID !== 27 ? ticket.Drayage : -ticket.Drayage || 0;
-                this.total.totalBuyBack += ticket.TicketTypeID !== 27 ? ticket.BuyBack : - ticket.BuyBack || 0;
+                this.total.totalDrayage += ticket.TicketTypeID !== 27 ? ticket.Drayage : ticket.Drayage || 0;
+                this.total.totalBuyBack += ticket.TicketTypeID !== 27 ? ticket.BuyBack : ticket.BuyBack || 0;
                 this.total.totalDistAmt += ticket.DistAmt || 0;
             });
 
@@ -99,7 +99,7 @@ export class TicketDetailsComponent implements OnInit {
 
     viewTicket(ticketID) {
         if (ticketID) {
-            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600");
+            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700");
         } else {
             this.notification.error("Ticket preview unavailable!!");
         }
