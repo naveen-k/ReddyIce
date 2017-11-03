@@ -90,7 +90,7 @@ export class CreateCustomerComponent implements OnInit {
                     this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
                 response.ProductDetail.forEach(element => {
-                    element.ProductPrice = element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.0` : element.ProductPrice;
+                    element.ProductPrice = element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.00` : element.ProductPrice;
                 });
                 this.addedProduct = response.ProductDetail;
                 console.log("this.addedProduct ------ ",this.addedProduct);
