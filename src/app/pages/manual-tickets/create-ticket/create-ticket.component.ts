@@ -308,6 +308,9 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     this.modes = selectedTicket.Mode;
+    if (this.ticket.TicketTypeID === 27) {
+      this.ticket.IsSaleTicket = true;
+    }
   }
 
   branchChangeHandler() {
