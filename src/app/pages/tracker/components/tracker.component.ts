@@ -104,8 +104,8 @@ export class TrackerComponent implements OnInit {
   sortBranches(branches) {
     // sort by name
     branches.sort(function (a, b) {
-      const nameA = a.BranchCode;
-      const nameB = b.BranchCode;
+      const nameA = a.BranchName;
+      const nameB = b.BranchName;
       if (nameA < nameB) {
         return -1;
       }

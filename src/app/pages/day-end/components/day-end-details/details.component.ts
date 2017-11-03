@@ -103,6 +103,7 @@ export class DetailsComponent implements OnInit {
             this.ticketDetails = res;
             this.tripData = res.Tripdetail[0];
             this.tripData.TripTicketList.forEach(ticket => {
+                ticket.TicketNumber = +ticket.TicketNumber;
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
             });
             this.calculateTotalTicketAmount();

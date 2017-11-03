@@ -268,17 +268,17 @@
                                                     </select>
                                                 </td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
-                                                <td width="9%"><input [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.Load1Quantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input" type="number"></td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
-                                                <td width="9%"><input [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.ReturnQuantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
                                                         type="number"></td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
-                                                <td width="9%"><input [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.DamageQuantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input" type="number"></td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
-                                                <td width="9%"><input [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.CustomerDamageDRV' (ngModelChange)="unitReconChange(item)" class="form-control small-input"
                                                         type="number"></td>
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
