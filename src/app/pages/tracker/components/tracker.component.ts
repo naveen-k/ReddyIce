@@ -158,7 +158,9 @@ export class TrackerComponent implements OnInit {
               }
             }
             this.sortBranches(branchesArr);
+            console.log('branchesArr', branchesArr);
             this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
+            
           } else if (this.searchObj.userType == 'External') {
             let tmpObj = {};
             for (var i = 0; i < this.trips.length; i++) {
@@ -608,7 +610,7 @@ export class TrackerComponent implements OnInit {
   viewTicket(ticketID) {
     // ticketID = 3212;
     if (ticketID) {
-      window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700");
+      window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600,resizable=yes,scrollbars=1");
     } else {
       this.notification.error("Ticket preview unavailable!!");
     }

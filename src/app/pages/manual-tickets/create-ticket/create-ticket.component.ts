@@ -511,12 +511,12 @@ export class CreateTicketComponent implements OnInit {
   checkNumberValidation() {
     const checkNumberLength = this.ticket.CheckNumber.length;
     const letterNumber = /^[0-9a-zA-Z]+$/;  // pattern to check for string to be alphanumeric
-    if (checkNumberLength >= 20 || checkNumberLength <= 5) {
+    if (checkNumberLength > 20 || checkNumberLength < 5) {
       this.checkMinMaxLength = true;
       this.checkContainsCharacters = false;
       this.custType = false;
     } else if ((this.ticket.CheckNumber.match(letterNumber)) &&
-      (checkNumberLength >= 5 || checkNumberLength <= 20)) {      // check for string to be alphanumeric
+      (checkNumberLength > 5 || checkNumberLength < 20)) {      // check for string to be alphanumeric
       this.checkContainsCharacters = false;
       this.checkMinMaxLength = false;
       this.custType = false;

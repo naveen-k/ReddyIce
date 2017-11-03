@@ -309,7 +309,7 @@
                                         <th>Previous Reading</th>
                                         <th>Current Reading</th>
                                         <th>Amount</th>
-                                        <th class="textAlignCenter">Action</th>
+                                        <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
                                     <tbody>
                                         <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct">
@@ -332,7 +332,7 @@
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
-                                            <td class="textAlignCenter">
+                                            <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
@@ -374,7 +374,7 @@
                                         <th>Current Inventory</th>
                                         <th>Damaged Bags</th>
                                         <th>Amount</th>
-                                        <th class="textAlignCenter">Action</th>
+                                        <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
                                     <tbody>
                                         <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct">
@@ -399,7 +399,7 @@
                                                     (ngModelChange)="isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                                            <td class="textAlignCenter">
+                                            <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
@@ -441,7 +441,7 @@
                                         <th>Current Inventory</th>
                                         <th>Delivered Bags</th>
                                         <th>Amount</th>
-                                        <th class="textAlignCenter">Action</th>
+                                        <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
                                     <tbody>
                                         <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct">
@@ -462,7 +462,7 @@
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
-                                            <td class="textAlignCenter">
+                                            <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
@@ -508,23 +508,23 @@
                 <label for="example-text-input" class="col-form-label">Check#</label>
                 <input type="text" class="form-control" alphaNumeric [(ngModel)]="ticket.CheckNumber" placeholder="Check Number" (blur)="checkNumberChangeHandler()"
                     (ngModelChange)="isFormDirty=true;" name="CheckNumber" #CheckNumber="ngModel" required [disabled]="ticket.TicketTypeID == 27 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly">
-                <div *ngIf="ticket.CheckAmount && !ticket.CheckNumber && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
+                <!-- <div *ngIf="ticket.CheckAmount && !ticket.CheckNumber && (CheckNumber.dirty || CheckNumber.touched)" class="error-message">
                     <i class="ion-android-alert showError"></i>
                     <div *ngIf="ticket.CheckAmount && !ticket.CheckNumber" class="custom-tooltip bottom">Check number is required as Check Amount exists</div>
-                </div>
-                <div *ngIf="checkMinMaxLength" class="error-message">
+                </div> -->
+                <!-- <div *ngIf="checkMinMaxLength" class="error-message">
                     <i class="ion-android-alert showError"></i>
                     <div class="custom-tooltip bottom">Should be 5 to 20 digits long</div>
-                </div>                
+                </div>                 -->
             </div>
             <div id="checkAmount" class="padding">
                 <label for="example-text-input" class="col-form-label">Check Amount($)</label>
                 <input type="text" [numberOnly]="true" min="0" class="form-control" [(ngModel)]="ticket.CheckAmount" placeholder="Check Amount" [disabled]="ticket.TicketTypeID == 27 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
                     name="CheckAmount" #CheckAmount="ngModel" required (blur)="checkAmountChangeHandler()" (ngModelChange)="isFormDirty=true;">
-                <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount && (CheckAmount.dirty || CheckAmount.touched)" class="error-message">
+                <!-- <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount && (CheckAmount.dirty || CheckAmount.touched)" class="error-message">
                     <i class="ion-android-alert showError"></i>
                     <div *ngIf="ticket.CheckNumber && !ticket.CheckAmount" class="custom-tooltip bottom">Check Amount is required as Check Number exists</div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
