@@ -150,7 +150,7 @@
                     </label>
                     <input type="text" class="form-control" [numberOnly]="true" [(ngModel)]="filter.ticketNumber" (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
                 </div>
-                <div class="col-sm-2" *ngIf="filter.showCustomerDropdown">
+                <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">
                                 <label>Customer</label>
