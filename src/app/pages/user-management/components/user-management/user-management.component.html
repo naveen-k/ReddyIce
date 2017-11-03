@@ -27,7 +27,7 @@
         </select>
         </div>
         <div [ngClass]="{'col-sm-6':!rightCardOpen, 'col-sm-8':rightCardOpen}" style="padding-right: 30px;">
-          <pagination [tableData]="userTableData | filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone']" [(currentPage)]="paginationData" style="float: right;" [showPages]="false"></pagination>
+          <pagination [tableData]="userTableData |filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone']" [(currentPage)]="paginationData" style="float: right;" [showPages]="false"></pagination>
         </div>
       </div>
       <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
@@ -91,7 +91,7 @@
 
             <!--Removed sorting functionality as it was causing rendering issues paginationData usersList -->
             <!-- Removed |filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone']:userTableData from pagination as it was already provided in pagination -->
-            <tr *ngFor="let item of paginationData | sort:customer.sortField:customer.isAsc">
+            <tr *ngFor="let item of paginationData| sort:customer.sortField:customer.isAsc ">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
                    <span class="tooltiptext">View</span>

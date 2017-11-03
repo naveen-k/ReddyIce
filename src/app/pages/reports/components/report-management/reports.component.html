@@ -92,7 +92,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||IsTIR">
+        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
                 <option [value]="0">All Customers</option>
@@ -103,7 +103,7 @@
         <div class="col-md-1 text-right head-button-container">
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'||IsTIR">
+        <div class="col-sm-2" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'||IsTIR||filter.reportType==='SR'">
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
