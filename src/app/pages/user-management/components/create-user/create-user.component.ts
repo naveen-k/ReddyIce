@@ -45,11 +45,14 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (!Object.keys(val).length) {
             return;
         }
-        val.RoleID = val.RoleID || this._user.RoleID;
-
+        // to empty the role field if discard or back button is clicked without saving data.
+        if (this.action == 'edit') {
+            val.RoleID = val.RoleID || this._user.RoleID;
+            this.roleChange(val.RoleID);
+        }
         this._user = val;
         this.populatateRoleList();
-        this.roleChange(val.RoleID);
+       
         this.loadBranches();
         this._user.IsSeasonal = this.isDistributorSeasonal();
         if (this.tempUserBranch) { this.tempUserBranch.length = 0; }

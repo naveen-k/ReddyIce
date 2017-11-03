@@ -173,6 +173,7 @@ export class ReportsComponent implements OnInit {
 
 
     userTypeChangeHandler() {
+        this.filter.customer = null;
         if (this.filter.userType === 'internal') {
             this.getAllBranches();
         } else {
@@ -215,6 +216,7 @@ export class ReportsComponent implements OnInit {
                     this.filter.ticketID = this.customersByTicketNumber[0].value;
                 } else {
                     this.viewReport = false;
+                    this.filter.ticketID = '';
                     // this.notification.error('No Customer Found!!!');
                 }
             }, (err) => {
@@ -280,8 +282,10 @@ export class ReportsComponent implements OnInit {
         }
 
         if (rType === 'TIR') {
+            this.viewReport = false;
             if (this.customersByTicketNumber.length > 1) {
                 this.filter.showCustomerDropdown = true;
+                console.log(this.filter.ticketID);
                 if (this.filter.ticketID) {
                     console.log(this.filter.ticketID);
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
