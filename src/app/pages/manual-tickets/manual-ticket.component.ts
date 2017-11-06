@@ -13,6 +13,7 @@ export class ManualTicketComponent {
     let searchObject = manualTicketService.getSearchedObject();
     searchObject.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     searchObject.userType = userService.getUser().IsDistributor ? 'External' : 'Internal';
+    searchObject.UserId = userService.getUser().UserId;
     searchObject.BranchId = null;
     searchObject.DistributorID = null;
   }
