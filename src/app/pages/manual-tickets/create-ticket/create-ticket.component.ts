@@ -547,9 +547,9 @@ export class CreateTicketComponent implements OnInit {
 
   modeChangeHandler() {
     this.resetCashAndCheck();
-    if (!this.ticket.IsSaleTicket) {
+    /**if (!this.ticket.IsSaleTicket) {
       this.ticket.TicketTypeID = null;
-    }
+    }**/
   }
 
   resetCashAndCheck() {
@@ -881,11 +881,14 @@ export class CreateTicketComponent implements OnInit {
   calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
     if (!ticket.IsSaleTicket) {
       this.resetCashAndCheck();
-      if (ticket.CustomerType === 21) {
+     /** if (ticket.CustomerType === 21) {
         ticket.TicketTypeID = null;
-      }
+      }**/
     }
-    ticket.TotalAmount = (ticket.CheckAmount || 0) + (ticket.CashAmount + 0);
+    ticket.TotalAmount = (Number.parseFloat(ticket.CheckAmount.toString())||0) + (Number.parseFloat(ticket.CashAmount.toString() )+0);
+    console.info(ticket.CashAmount);
+    console.info(ticket.CheckAmount);
+    console.info(ticket.TotalAmount);
   }
 
   convertToDate(date: string): any {
