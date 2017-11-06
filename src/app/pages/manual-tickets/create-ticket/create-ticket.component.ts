@@ -511,12 +511,12 @@ export class CreateTicketComponent implements OnInit {
   checkNumberValidation() {
     const checkNumberLength = this.ticket.CheckNumber.length;
     const letterNumber = /^[0-9a-zA-Z]+$/;  // pattern to check for string to be alphanumeric
-    if (checkNumberLength > 20 || checkNumberLength < 5) {
+    if (checkNumberLength > 20 || checkNumberLength < 3) {
       this.checkMinMaxLength = true;
       this.checkContainsCharacters = false;
       this.custType = false;
     } else if ((this.ticket.CheckNumber.match(letterNumber)) &&
-      (checkNumberLength > 5 || checkNumberLength < 20)) {      // check for string to be alphanumeric
+      (checkNumberLength > 3 || checkNumberLength < 20)) {      // check for string to be alphanumeric
       this.checkContainsCharacters = false;
       this.checkMinMaxLength = false;
       this.custType = false;
@@ -1027,7 +1027,7 @@ export class CreateTicketComponent implements OnInit {
       this.notification.error('', 'Driver is mandatory!!!');
       return false;
     } else if (this.checkMinMaxLength) {
-      this.notification.error('', 'Check Number should be 5 to 20 digits long!!!');
+      this.notification.error('', 'Check Number should be 3 to 20 digits long!!!');
       return false;
     } else if (this.checkContainsCharacters) {
       this.notification.error('', 'Check number should be alphanumeric, cannot contain special characters!!!');
