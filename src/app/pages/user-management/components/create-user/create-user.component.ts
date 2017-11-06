@@ -45,14 +45,15 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (!Object.keys(val).length) {
             return;
         }
+        debugger;
         // to empty the role field if discard or back button is clicked without saving data.
+        this._user = val;
+        this.populatateRoleList();
         if (this.action == 'edit') {
             val.RoleID = val.RoleID || this._user.RoleID;
             this.roleChange(val.RoleID);
         }
-        this._user = val;
-        this.populatateRoleList();
-       
+        
         this.loadBranches();
         this._user.IsSeasonal = this.isDistributorSeasonal();
         if (this.tempUserBranch) { this.tempUserBranch.length = 0; }
@@ -252,6 +253,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.addedBranches.length = 0;
         this.getDistributor();
         this.userObject = this.userService.getUser();
+        
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
@@ -365,6 +367,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.cBranches.shift();
             }
         }
+        this.getDistributor();
 
     }
 
