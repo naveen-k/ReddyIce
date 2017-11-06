@@ -885,7 +885,7 @@ export class CreateTicketComponent implements OnInit {
         ticket.TicketTypeID = null;
       }**/
     }
-    ticket.TotalAmount = (Number.parseFloat(ticket.CheckAmount.toString())||0) + (Number.parseFloat(ticket.CashAmount.toString() )+0);
+    ticket.TotalAmount = (Number.parseFloat((ticket.CheckAmount)?ticket.CheckAmount.toString():'0')||0) + (Number.parseFloat((ticket.CashAmount)?ticket.CashAmount.toString():'0' )+0);
     console.info(ticket.CashAmount);
     console.info(ticket.CheckAmount);
     console.info(ticket.TotalAmount);
