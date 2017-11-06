@@ -30,7 +30,7 @@ export class PaginationComponent {
 
     currentPageIndex: number = 1;
     _tableData = [];
-
+    _sortingOrder = false; 
     @Input()
     showPages: boolean = true;
 
@@ -45,6 +45,16 @@ export class PaginationComponent {
 
     get tableData(): any[] {
         return this._tableData;
+    }
+    @Input()
+    set sortingOrder(data){
+        this._sortingOrder = data;
+        this.setPagination();
+        this.currentPageIndex = 1;
+        this.pageChangeHandler(this.currentPageIndex);
+    }
+    get sortingOrder():any{
+        return this._sortingOrder;
     }
 
     @Input()
