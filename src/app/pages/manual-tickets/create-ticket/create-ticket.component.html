@@ -171,9 +171,12 @@
             <div class="row" [hidden]="ticket.CustomerType==21">
                 <label for="example-text-input" class="col-sm-3 col-form-label">POD:</label>
                 <div [hidden]="isReadOnly" class="col-sm-9" *ngIf="!isDownloadable" style="padding-top:5px;">
-                    <a href="javscript:void();" onclick="document.getElementById('file').click()">
+                    <!-- <a href="javscript:void();" onclick="document.getElementById('file').click()">
                         <span>Upload</span>
-                    </a>
+                    </a> -->
+                    <div class="btn btn-link uploadLink" onclick="document.getElementById('file').value = '';document.getElementById('file').click();">
+                        <span>Upload</span>
+                    </div>
                 </div>
                 <div [hidden]="!isReadOnly" class="col-sm-9" *ngIf="!isDownloadable" style="padding-top:5px;">
                     <span>NA</span>

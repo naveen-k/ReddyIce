@@ -211,3 +211,11 @@ label {
 .textAlignCenter {
   text-align: center;
 }
+
+.uploadLink {
+  line-height:2px;
+}
+.uploadLink:hover {
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
