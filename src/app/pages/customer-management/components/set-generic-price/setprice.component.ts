@@ -199,7 +199,7 @@ export class SetPriceComponent implements OnInit {
 
     }
 
-    deleteProduct(productID) {
+    deleteProduct(productID, status) {
         const activeModal = this.modalService.open(ModalComponent, {
             size: 'sm',
             backdrop: 'static',
@@ -209,11 +209,31 @@ export class SetPriceComponent implements OnInit {
         activeModal.componentInstance.modalHeader = 'Warning!';
         activeModal.componentInstance.modalContent = `Are you sure you want to inactive the product?`;
         activeModal.componentInstance.closeModalHandler = (() => {
-            this.service.deleteProduct(productID).subscribe((res) => {
+            this.service.deleteProduct(productID, status).subscribe((res) => {
                 this.notification.success('Product got Inactive Successfully!!!');
                 this.getExternalProducts();
             }, (err) => {
                 this.notification.error('Problem Deleting Product!!!');
+            });
+
+        });
+    }
+
+    reActivateProduct(productID, status) {
+        const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
+        });
+        activeModal.componentInstance.BUTTONS.OK = 'OK';
+        activeModal.componentInstance.showCancel = true;
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `Are you sure you want to Re-active the product?`;
+        activeModal.componentInstance.closeModalHandler = (() => {
+            this.service.deleteProduct(productID, status).subscribe((res) => {
+                this.notification.success('Product got Re-active Successfully!!!');
+                this.getExternalProducts();
+            }, (err) => {
+                this.notification.error('Problem Reactivating Product!!!');
             });
 
         });

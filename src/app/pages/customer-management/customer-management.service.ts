@@ -65,8 +65,8 @@ export class CustomerManagementService extends SharedService {
     return this.http.get(`api/customer/getchain`)
       .map((res) => res.json());
   }
-  deleteProduct(productId) {
-    return this.http.delete(`api/deleteexternalproduct?productId=${productId}`)
+  deleteProduct(productId, status) {
+    return this.http.delete(`api/deleteexternalproduct?productId=${productId}&status=${status}`)
       .map((res) => res.json());
   }
 }

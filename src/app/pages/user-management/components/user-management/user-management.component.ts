@@ -138,7 +138,6 @@ export class UserManagementComponent implements OnInit {
   }
 
   onEditClicked(user) {
-    debugger
     if (this.rightCardOpen && this.formIsDirty) {
       if (this.formIsDirty) {
         const activeModal = this.modalService.open(ModalComponent, {
