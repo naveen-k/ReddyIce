@@ -316,7 +316,6 @@ export class CreateTicketComponent implements OnInit {
   branchChangeHandler() {
     this.ticket.Customer = '';
     this.ticket.DistributorCopackerID = null;
-    this.ticket.UserID = null;
     this.ticket.TicketProduct = [];
     this.loadCustomers();
     if (this.ticket.isUserTypeDistributor) {
@@ -324,7 +323,9 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
-
+    if(this.drivers && this.drivers.length>1){
+      this.ticket.UserID = null;
+    }     
     this.listFilter.BranchId = this.ticket.BranchID;
   }
 
