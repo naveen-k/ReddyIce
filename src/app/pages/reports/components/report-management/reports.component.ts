@@ -100,6 +100,10 @@ export class ReportsComponent implements OnInit {
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
             this.userSubTitle = `- ${this.user.Distributor.DistributorName}`;
         }
+        
+         if (this.user.Role.RoleName === 'Driver') {
+            this.filter.driver = this.user.UserId;
+         }
 
         this.userTypeChangeHandler();
     }
@@ -227,14 +231,14 @@ export class ReportsComponent implements OnInit {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
-    
+
         if (rType !== 'TIR') {
             this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
             this.viewReport = true;
             setTimeout(function () {
                 $('#loader').hide();
             }, 5000);
-            
+
             // hack to check if start date is not greater than end date
             if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
                 this.notification.error('Start Date cannot be greater than End Date!!!');

@@ -7,6 +7,8 @@ export interface Branch {
 
 export interface Customer {
     CustomerId: number;
+    PaymentTypeID: number;
+    PrimayContact: string;
     Active: boolean;
     BranchID: number;
     BranchCode: number;
@@ -41,7 +43,7 @@ export interface Customer {
     latitude: string;
     longitude: string;
     //AllowReturnsameticket: string;
-    AllowReturnSameTicket: any; 
+    AllowReturnSameTicket: any;
     FreightCodePriceFile: string;
     MobileIn: boolean;
     SoldBy: string;
