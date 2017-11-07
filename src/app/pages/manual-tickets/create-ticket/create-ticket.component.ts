@@ -548,6 +548,7 @@ export class CreateTicketComponent implements OnInit {
   modeChangeHandler() {
     this.resetCashAndCheck();
     // Please do not revert changes, it is required
+
     if (!this.ticket.IsSaleTicket) {
       this.ticket.TicketTypeID = null;
     }

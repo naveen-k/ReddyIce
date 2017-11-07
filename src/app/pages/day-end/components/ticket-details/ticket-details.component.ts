@@ -53,8 +53,12 @@ export class TicketDetailsComponent implements OnInit {
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.tripData = res.Tripdetail[0];
             this.tripData.TripTicketList.forEach(ticket => {
-                if (ticket.TicketTypeID === 30) { return; }
+               
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
+                ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
+                ticket.amount = ticket.TotalSale + ticket.TaxAmount;
+                ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
+                if (ticket.TicketTypeID === 30) { return; }
                 this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
                 this.total.totalCash += ticket.CashAmount || 0;
                 this.total.totalCheck += ticket.CheckAmount || 0;

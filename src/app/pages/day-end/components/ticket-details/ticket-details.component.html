@@ -72,33 +72,33 @@
                             <tr>
                                 <th></th>                                
                                 <th class="text-align-left">
-                                    <span style="cursor:pointer;" (click)="customer.sortField = 'ticket';customer.isAsc=!customer.isAsc;">
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
                                         Ticket #
-                                         <i *ngIf="(customer.sortField === 'ticket')" [ngClass]="(customer.isAsc && customer.sortField === 'ticket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                         <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
                                 <th>
-                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'ticketType';customer.isAsc=!customer.isAsc;">
                                         Ticket Type
-                                         <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                         <i *ngIf="(customer.sortField === 'ticketType')" [ngClass]="(customer.isAsc && customer.sortField === 'ticketType' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
                                 <th>
-                                    <span style="cursor:pointer;" (click)="customer.sortField = 'custNumber';customer.isAsc=!customer.isAsc;">
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;">
                                         Customer 
-                                        <i *ngIf="(customer.sortField == 'custNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'custNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                        <i *ngIf="(customer.sortField == 'CustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
                                 <th class="textRightPadd">
-                                    <span style="cursor:pointer;" (click)="customer.sortField = 'invoiceAmount';customer.isAsc=!customer.isAsc;">
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'amount';customer.isAsc=!customer.isAsc;">
                                         Total Invoice
-                                        <i *ngIf="(customer.sortField === 'invoiceAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'invoiceAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                        <i *ngIf="(customer.sortField === 'amount')" [ngClass]="(customer.isAsc && customer.sortField === 'amount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
                                 <th class="textRightPadd">
-                                    <span style="cursor:pointer;" (click)="customer.sortField = 'cash';customer.isAsc=!customer.isAsc;">
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'checkCashAmount';customer.isAsc=!customer.isAsc;">
                                         Received Amt
-                                        <i *ngIf="(customer.sortField === 'cash')" [ngClass]="(customer.isAsc && customer.sortField === 'cash' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                        <i *ngIf="(customer.sortField === 'checkCashAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'checkCashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
                                 <th class="textRightPadd" *ngIf="!user.IsRIInternal">
@@ -124,10 +124,10 @@
                                     </i>
                                 </td>
                                 <td class="text-align-left">{{item.TicketNumber }}</td>
-                                <td>{{item.IsSaleTicket | ticketType: item.Customer:item.TicketTypeID}}</td>                                
+                                <td>{{item.ticketType}}</td>                                
                                 <td><span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:20 }}</span></td>                                
-                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.TotalSale + item.TaxAmount | currency:'USD':true:'1.2' }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
-                                <td class="textRightPadd" ><span *ngIf="item.CashAmount || item.CheckAmount" [hidden]="item.TicketTypeID == 30">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</span><span *ngIf="item.TicketTypeID == 30">$0.00</span></td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currency:'USD':true:'1.2' }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                <td class="textRightPadd" ><span *ngIf="item.CashAmount || item.CheckAmount" [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currency:'USD':true:'1.2' }}</span><span *ngIf="item.TicketTypeID == 30">$0.00</span></td>
                                 <!--td class="textRightPadd" ></td-->                                
                                 <!--td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount"></td-->
                                 <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="!user.IsRIInternal"></td>

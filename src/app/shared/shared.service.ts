@@ -87,6 +87,8 @@ export class SharedService {
             return 'Payment Only'
         } else if (ticketTypeId === 30) {
             return 'Void'
+        } else if (ticketTypeId === 110) {
+            return 'Credit & Sale';
         } else if (customer.CustomerType === 20) {
             if (isSaleTicket) {
                 return 'Sale';
