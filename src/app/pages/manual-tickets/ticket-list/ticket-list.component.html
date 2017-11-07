@@ -140,7 +140,7 @@
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
-                    <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                    <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.TotalAmount | currency:'USD':true:'1.2' }}</td>
                     <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currency:'USD':true:'1.2' }}</td>
                     <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.BuyBack | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignCenter">
