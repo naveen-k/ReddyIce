@@ -547,6 +547,7 @@ export class CreateTicketComponent implements OnInit {
 
   modeChangeHandler() {
     this.resetCashAndCheck();
+    // Please do not revert changes, it is required
     if (!this.ticket.IsSaleTicket) {
       this.ticket.TicketTypeID = null;
     }
@@ -881,6 +882,7 @@ export class CreateTicketComponent implements OnInit {
   calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
     if (!ticket.IsSaleTicket) {
       this.resetCashAndCheck();
+      // Please do not revert changes, it is required
       if (ticket.CustomerType === 21) {
         ticket.TicketTypeID = null;
       }
