@@ -41,7 +41,7 @@
             <div class="row box-top-margin">
                 <label for="example-text-input" class="col-md-12">Payment Type <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
-                    <select [disabled]="mode ===3" [(ngModel)]="customer.PaymentType" (ngModelChange)="formFlagHandler()" class="form-control"
+                    <select [disabled]="mode ===3" [(ngModel)]="customer.PaymentTypeID" (ngModelChange)="formFlagHandler()" class="form-control"
                         name="custType">
                         <option [value]="18">Cash</option>
                         <option [value]="19">Charge</option>
@@ -158,7 +158,7 @@
                     <div class="row">
                         <label for="example-text-input" class="col-md-12">Primary Contact&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" [(ngModel)]="customer.PrimaryContact" (ngModelChange)="formFlagHandler()"
+                            <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" [(ngModel)]="customer.PrimayContact" (ngModelChange)="formFlagHandler()"
                                 id="typeahead-basic" (blur)="spaceRemoverFnforPrimaryContact(customer.PrimaryContact)" type="text"
                                 class="form-control" placeholder="Primary Contact" />
                         </div>
@@ -179,7 +179,7 @@
                     <div class="row box-top-margin">
                         <label for="example-text-input" class="col-md-12">Email&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <input maxlength="50" [disabled]="mode === 3" [(ngModel)]='customer.EmailID' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                            <input maxlength="50" [disabled]="mode === 3" [(ngModel)]='customer.Email' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
                                 type="email" class="form-control" placeholder="Email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                             />
                         </div>
