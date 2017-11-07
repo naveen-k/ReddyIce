@@ -70,6 +70,7 @@ export class ReportsComponent implements OnInit {
     branches: any[] = [];
     yesFlag: boolean = false;
     IsTIR: boolean = false;
+    isDriver: boolean = false;
     viewReport: boolean = false;
     searching: boolean = false;
 
@@ -100,10 +101,13 @@ export class ReportsComponent implements OnInit {
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
             this.userSubTitle = `- ${this.user.Distributor.DistributorName}`;
         }
-        
-         if (this.user.Role.RoleName === 'Driver') {
+
+        if (this.user.Role.RoleName === 'Driver') {
+            this.isDriver = true;
             this.filter.driver = this.user.UserId;
-         }
+        } else {
+            this.isDriver = false;
+        }
 
         this.userTypeChangeHandler();
     }
@@ -159,7 +163,12 @@ export class ReportsComponent implements OnInit {
             this.drivers = this.reportService.transformOptionsReddySelect(res, 'UserId', 'UserName');
         }, (err) => { });
         this.filter.custID = 0;
-        this.filter.driver = 1;
+        if (this.user.Role.RoleName === 'Driver') {
+            this.filter.driver = this.user.UserId;
+        } else {
+            this.filter.driver = 1;
+        }
+
         // this.getCustomers();
     }
 
@@ -171,7 +180,11 @@ export class ReportsComponent implements OnInit {
         }, (err) => {
         });
         this.filter.custID = 0;
-        this.filter.driver = 1;
+        if (this.user.Role.RoleName === 'Driver') {
+            this.filter.driver = this.user.UserId;
+        } else {
+            this.filter.driver = 1;
+        }
         // this.getCustomers();
     }
 

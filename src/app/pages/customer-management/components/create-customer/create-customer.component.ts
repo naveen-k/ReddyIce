@@ -245,7 +245,7 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     validateEmailID() {
-        if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.EmailID))) {
+        if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.Email))) {
             return false;
         }
         return true;
@@ -262,7 +262,7 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!customer.CustType) {
             this.notification.error('', 'Customer Type is mandatory!!!');
             return false;
-        } else if (!customer.PaymentType) {
+        } else if (!customer.PaymentTypeID) {
             this.notification.error('', 'Payment Type is mandatory!!!');
             return false;
         } else if (customer.IsTaxassble && !customer.TaxPercentage) {
@@ -286,13 +286,13 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!customer.ZipCode) {
             this.notification.error('', 'Customer ZipCode is mandatory!!!');
             return false;
-        } else if (!customer.PrimaryContact) {
+        } else if (!customer.PrimayContact) {
             this.notification.error('', 'Customer Primary Contact is mandatory!!!');
             return false;
         } else if (!customer.Phone) {
             this.notification.error('', 'Customer Phone is mandatory!!!');
             return false;
-        } else if (!customer.EmailID) {
+        } else if (!customer.Email) {
             this.notification.error('', 'Customer EmailID is mandatory!!!');
             return false;
         } else if (!this.validateEmailID()) {

@@ -57,13 +57,13 @@
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
                         <label>Driver</label>
-                        <reddy-select [options]="drivers" [(selected)]="filter.driver"></reddy-select>
+                        <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
                     <div class="col-sm-6" [hidden]="filter.reportType === 'DST'">
                         <label>Driver</label>
-                        <reddy-select [options]="driversofDist" [(selected)]="filter.driver"></reddy-select>
+                        <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver"></reddy-select>
                     </div>
                 </ng-container>
             </div>
@@ -78,10 +78,10 @@
                 <div class="col-sm-9">
                     <div class="row">
                         <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                            <option value="AS" *ngIf="!user.IsDistributor">Asset Scan</option>
+                            <option value="AS" *ngIf="user.Role.RoleID < 3">Asset Scan</option>
                             <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
                             <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
-                            <option value="IOA" *ngIf="!user.IsDistributor">Inventory on Arrival</option>
+                            <option value="IOA" *ngIf="user.Role.RoleID < 3">Inventory on Arrival</option>
                             <option value="TR" *ngIf="user.Role.RoleID===1||user.Role.RoleID===2">Invoice List</option>
                             <option value="SRT">Sales</option>
                             <option value="SR">Trip Details</option>
