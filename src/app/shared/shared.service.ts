@@ -10,7 +10,7 @@ export class SharedService {
     protected http: HttpService;
 
     private _branches: any;
-    constructor(http: HttpService) {}
+    constructor(http: HttpService) { }
 
     getBranches(userId): Observable<any> {
         // if (this._branches) { return Observable.of(this._branches); }
@@ -83,21 +83,23 @@ export class SharedService {
     getTicketType(isSaleTicket: boolean, customer: any, ticketTypeId: number) {
         if (ticketTypeId === 29) {
             return 'DNS'
-        }  else if (ticketTypeId === 28) {
+        } else if (ticketTypeId === 28) {
             return 'Payment Only'
         } else if (ticketTypeId === 30) {
             return 'Void'
         } else if (ticketTypeId === 110) {
             return 'Credit & Sale';
         } else if (customer.CustomerType === 20) {
-            if (isSaleTicket) {
+            if (ticketTypeId === 26) {
                 return 'Sale';
             } else {
                 return 'Credit';
             }
         } else if (customer.CustomerType === 22) {
-            if (isSaleTicket) {
+            if (isSaleTicket && ticketTypeId === 26) {
                 return 'PBM - Sale';
+            } else if (isSaleTicket && ticketTypeId === 27) {
+                return 'PBM - Credit';
             } else {
                 return 'PBM - Cons';
             }

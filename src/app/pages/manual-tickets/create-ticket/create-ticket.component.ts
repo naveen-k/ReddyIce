@@ -548,11 +548,17 @@ export class CreateTicketComponent implements OnInit {
 
   modeChangeHandler() {
     this.resetCashAndCheck();
+<<<<<<< Updated upstream
     // Please do not revert changes, it is required
 
     if (!this.ticket.IsSaleTicket) {
       this.ticket.TicketTypeID = null;
     }
+=======
+    // if (!this.ticket.IsSaleTicket) {
+    //   this.ticket.TicketTypeID = null;
+    // }
+>>>>>>> Stashed changes
   }
 
   resetCashAndCheck() {
@@ -874,20 +880,26 @@ export class CreateTicketComponent implements OnInit {
   }
 
   setSaleTicketType(ticket) {
-    if (ticket.TicketTypeID === 26) {
-      ticket.IsSaleTicket = true;
-    } else if (ticket.TicketTypeID === 27) {
-      ticket.IsSaleTicket = false;
-    }
+    // if (ticket.TicketTypeID === 26) {
+    //   ticket.IsSaleTicket = true;
+    // } else if (ticket.TicketTypeID === 27) {
+    //   ticket.IsSaleTicket = false;
+    // }
   }
 
   calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
     if (!ticket.IsSaleTicket) {
       this.resetCashAndCheck();
+<<<<<<< Updated upstream
       // Please do not revert changes, it is required
       if (ticket.CustomerType === 21) {
         ticket.TicketTypeID = null;
       }
+=======
+      // if (ticket.CustomerType === 21) {
+      //   ticket.TicketTypeID = null;
+      // }
+>>>>>>> Stashed changes
     }
     ticket.TotalAmount = (Number.parseFloat((ticket.CheckAmount)?ticket.CheckAmount.toString():'0')||0) + (Number.parseFloat((ticket.CashAmount)?ticket.CashAmount.toString():'0' )+0);
     console.info(ticket.CashAmount);
