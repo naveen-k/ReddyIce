@@ -175,8 +175,8 @@ export class ReportsComponent implements OnInit {
     distributorChangeHandler() {
         const distributor = this.filter.distributor === 1 ? 0 : this.filter.distributor;
         this.reportService.getDriversbyDistributors(distributor || 0).subscribe((res) => {
-            res.unshift({ UserId: 1, FirstName: 'All Drivers' });
-            this.driversofDist = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName');
+            res.unshift({ UserId: 1, FirstName: 'All Drivers', LastName: '' });
+            this.driversofDist = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
         }, (err) => {
         });
         this.filter.custID = 0;

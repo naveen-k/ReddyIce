@@ -68,12 +68,12 @@ export class SharedService {
 
     }
 
-    transformOptionsReddySelect(options: Array<any>, value: string, label_1: string, label_2?: string) {
+    transformOptionsReddySelect(options: Array<any>, value: string, label_1: string, label_2?: string, delimitter: string= '-') {
         let tmpArr: Array<IOption> = [];
         options.forEach((option) => {
             tmpArr.push({
                 value: option[value],
-                label: label_2 ? `${option[label_1]} - ${option[label_2]}` : option[label_1],
+                label: label_2 ? `${option[label_1]} ${delimitter} ${option[label_2]}` : option[label_1],
                 data: option
             })
         })
