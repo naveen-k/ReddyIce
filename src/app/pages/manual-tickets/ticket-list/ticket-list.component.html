@@ -161,6 +161,6 @@
             </tbody>
         </table>
         <div class='marginTopCenter'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-        <div *ngIf="!allTickets.length && !showSpinner" class='marginTopCenter'> No data found </div>
+        <div *ngIf="(!allTickets.length && !showSpinner) || (allTickets.length==0 && !showSpinner)" class='marginTopCenter'> No data found </div>
     </div>
 </ba-card>
