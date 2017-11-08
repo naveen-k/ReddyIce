@@ -207,7 +207,7 @@ export class SetPriceComponent implements OnInit {
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.showCancel = true;
         activeModal.componentInstance.modalHeader = 'Warning!';
-        activeModal.componentInstance.modalContent = `Are you sure you want to inactive the product?`;
+        activeModal.componentInstance.modalContent = `This Product may possibly mapped to a customer,Are you sure you still want to inactive the product?`;
         activeModal.componentInstance.closeModalHandler = (() => {
             this.service.deleteProduct(productID, status).subscribe((res) => {
                 this.notification.success('Product got Inactive Successfully!!!');
