@@ -315,7 +315,7 @@ export class CreateTicketComponent implements OnInit {
 
   branchChangeHandler() {
     this.ticket.Customer = '';
-    this.ticket.DistributorCopackerID = null;
+    this.ticket.DistributorCopackerID = null;    
     this.ticket.TicketProduct = [];
     this.loadCustomers();
     if (this.ticket.isUserTypeDistributor) {
@@ -323,9 +323,10 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
-    if(this.drivers && this.drivers.length>1){
+    if (this.drivers && this.drivers.length > 1) {
       this.ticket.UserID = null;
-    }     
+    }
+
     this.listFilter.BranchId = this.ticket.BranchID;
   }
 
@@ -548,17 +549,6 @@ export class CreateTicketComponent implements OnInit {
 
   modeChangeHandler() {
     this.resetCashAndCheck();
-<<<<<<< Updated upstream
-    // Please do not revert changes, it is required
-
-    if (!this.ticket.IsSaleTicket) {
-      this.ticket.TicketTypeID = null;
-    }
-=======
-    // if (!this.ticket.IsSaleTicket) {
-    //   this.ticket.TicketTypeID = null;
-    // }
->>>>>>> Stashed changes
   }
 
   resetCashAndCheck() {
@@ -874,34 +864,14 @@ export class CreateTicketComponent implements OnInit {
     clonedObject.IsPaperTicket = true;
     clonedObject.CustomerSourceID = clonedObject.CustomerSourceID ? clonedObject.CustomerSourceID : 101;
 
-    this.setSaleTicketType(clonedObject);
-
     return clonedObject;
-  }
-
-  setSaleTicketType(ticket) {
-    // if (ticket.TicketTypeID === 26) {
-    //   ticket.IsSaleTicket = true;
-    // } else if (ticket.TicketTypeID === 27) {
-    //   ticket.IsSaleTicket = false;
-    // }
   }
 
   calculateCashCheckAndTotalAmount(ticket: ManualTicket) {
     if (!ticket.IsSaleTicket) {
       this.resetCashAndCheck();
-<<<<<<< Updated upstream
-      // Please do not revert changes, it is required
-      if (ticket.CustomerType === 21) {
-        ticket.TicketTypeID = null;
-      }
-=======
-      // if (ticket.CustomerType === 21) {
-      //   ticket.TicketTypeID = null;
-      // }
->>>>>>> Stashed changes
     }
-    ticket.TotalAmount = (Number.parseFloat((ticket.CheckAmount)?ticket.CheckAmount.toString():'0')||0) + (Number.parseFloat((ticket.CashAmount)?ticket.CashAmount.toString():'0' )+0);
+    ticket.TotalAmount = (Number.parseFloat((ticket.CheckAmount) ? ticket.CheckAmount.toString() : '0') || 0) + (Number.parseFloat((ticket.CashAmount) ? ticket.CashAmount.toString() : '0') + 0);
     console.info(ticket.CashAmount);
     console.info(ticket.CheckAmount);
     console.info(ticket.TotalAmount);
