@@ -43,6 +43,7 @@ export class DayEndComponent implements OnInit {
 
     loadFilteredTrips() {
         this.showSpinner = true;
+        this.trips = [];
         this.service.getTrips(this.service.formatDate(this.filter.selectedDate)).subscribe((res) => {
             let distributors = [],
                 branches = [];

@@ -119,7 +119,7 @@
                             </td>
                         </tr>
                         <tr *ngIf="!trips.length || (filter.type === 'internal' && !branches.length) ||
-                        (filter.type === 'distributor' && !distributors.length)">
+                        (filter.type === 'distributor' && !distributors.length)" [hidden]="showSpinner">
                             <th class="text-center" colspan="10"> No data found </th>
                         </tr>
                     </tbody>
