@@ -23,3 +23,10 @@
 .textAlignCenter {
     text-align: center;
 }
+.spinnerContainer{
+    text-align: center;
+    position: absolute;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+    margin: auto;
+}

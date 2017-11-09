@@ -3,6 +3,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { DayEndService } from '../../day-end.service';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../shared/user.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
     templateUrl: './day-end.component.html',
@@ -18,8 +19,9 @@ export class DayEndComponent implements OnInit {
     todaysDate: any;
 
     userSubTitle: string = '';
-
-    constructor(private service: DayEndService, private userService: UserService) { }
+    showSpinner: boolean = false;
+    constructor(private service: DayEndService, private userService: UserService,
+        protected notification: NotificationsService) { }
 
     ngOnInit() {
         const now = new Date();
@@ -40,6 +42,7 @@ export class DayEndComponent implements OnInit {
     }
 
     loadFilteredTrips() {
+        this.showSpinner = true;
         this.service.getTrips(this.service.formatDate(this.filter.selectedDate)).subscribe((res) => {
             let distributors = [],
                 branches = [];
@@ -75,6 +78,14 @@ export class DayEndComponent implements OnInit {
                     label: this.logedInUser.Distributor.DistributorName
                 }]
             }
-        });
+            this.showSpinner = false;
+        },
+        (error) => {
+            this.showSpinner = false;
+            if (error) {
+                
+              this.notification.error('', 'Something went wrong while fetching data');
+            }
+          },);
     }
 }
