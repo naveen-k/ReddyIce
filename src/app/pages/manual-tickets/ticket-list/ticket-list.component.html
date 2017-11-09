@@ -159,7 +159,8 @@
                     </td>
                 </tr>
                 <tr *ngIf="(allTickets.length && allTickets.length>0)">
-                    <td colspan="5"><b>Total</b></td>                                
+                    <td colspan="6" [hidden]="user.IsDistributor"><b>Total</b></td> 
+                    <td style="text-align: center;" colspan="5" [hidden]="!user.IsDistributor"><b>Total</b></td>                                
                     <td class="textRightPadd"><b>{{total.totalInvoice | currency:'USD':true:'1.2'}}</b></td>
                     <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currency:'USD':true:'1.2'}}</b></td>
                     <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
