@@ -37,7 +37,15 @@ export class TicketListComponent implements OnInit {
     searchString: any;
     isDistributorExist: boolean;
     userSubTitle: string = '';
-
+    total: any = {
+        totalInvoice: 0,
+        totalCash: 0,
+        totalCheck: 0,
+        totalCharge: 0,
+        totalDrayage: 0,
+        totalBuyBack: 0,
+        totalDistAmt: 0,
+    };
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
 
     constructor(
@@ -149,6 +157,21 @@ export class TicketListComponent implements OnInit {
                         element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
                     });
                     this.allTickets = response;
+                    this.allTickets.forEach(ticket => {
+                        
+                        //  ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
+                        //  ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
+                        //  ticket.amount = ticket.TotalSale + ticket.TaxAmount;
+                        //  ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
+                         if (ticket.TicketTypeID === 30) { return; }
+                         this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+                         this.total.totalCash += ticket.CashAmount || 0;
+                         this.total.totalCheck += ticket.CheckAmount || 0;
+                         this.total.totalCharge += ticket.ChargeAmount || 0;
+                         this.total.totalDrayage += ticket.Drayage || 0;
+                         this.total.totalBuyBack += ticket.BuyBack || 0;
+                         this.total.totalDistAmt += ticket.DistAmt || 0;
+                     });
                 }
             }
         },
