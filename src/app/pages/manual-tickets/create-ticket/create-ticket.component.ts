@@ -73,6 +73,7 @@ export class CreateTicketComponent implements OnInit {
   checkContainsCharacters: boolean = false;
 
   custType: boolean = false;
+  hideSave: boolean = false;
 
   urlString = '../../list';
 
@@ -153,7 +154,11 @@ export class CreateTicketComponent implements OnInit {
     }
 
     if (tripTicketEditMode) {
+     
       this.tripMode = tripTicketEditMode;
+      
+    }else {
+      this.hideSave = false;
     }
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
@@ -191,6 +196,9 @@ export class CreateTicketComponent implements OnInit {
     if (this.ticketId) {
       this.pageTitle = 'Edit Ticket Details';
       this.loadTicket(this.ticketId);
+      this.hideSave = true;
+    }else {
+      this.hideSave = false;
     }
 
     if (this.isReadOnly) {
@@ -315,7 +323,7 @@ export class CreateTicketComponent implements OnInit {
 
   branchChangeHandler() {
     this.ticket.Customer = '';
-    this.ticket.DistributorCopackerID = null;    
+    this.ticket.DistributorCopackerID = null;
     this.ticket.TicketProduct = [];
     this.loadCustomers();
     if (this.ticket.isUserTypeDistributor) {

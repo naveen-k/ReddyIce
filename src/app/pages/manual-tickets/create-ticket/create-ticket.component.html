@@ -19,7 +19,7 @@
                 </button> -->
                 <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png,image/jpeg,application/pdf"
                 />
-                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket()" [hidden]="isReadOnly" [disabled]="!isFormDirty">
+                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket()" [hidden]="isReadOnly || hideSave" [disabled]="!isFormDirty">
                     Save
                 </button>
                 <button class="btn btn-danger buttonMargin" [hidden]="tripMode || ticket.TicketStatusID !== 23" [disabled]="ticket.TicketStatusID !== 23"
