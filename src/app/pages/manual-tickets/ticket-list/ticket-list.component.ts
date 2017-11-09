@@ -144,7 +144,15 @@ export class TicketListComponent implements OnInit {
         // Cloned search object
         const searchObj = JSON.parse(JSON.stringify(this.searchObj));
         const dt = `${searchObj.CreatedDate.month}-${searchObj.CreatedDate.day}-${searchObj.CreatedDate.year}`;
-
+        this.total = {
+            totalInvoice: 0,
+            totalCash: 0,
+            totalCheck: 0,
+            totalCharge: 0,
+            totalDrayage: 0,
+            totalBuyBack: 0,
+            totalDistAmt: 0,
+        };
         this.showSpinner = true;
         if (searchObj.userType == 'External') { searchObj.BranchId = null; }
         return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
@@ -157,15 +165,7 @@ export class TicketListComponent implements OnInit {
                         element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
                     });
                     this.allTickets = response;
-                    this.total = {
-                        totalInvoice: 0,
-                        totalCash: 0,
-                        totalCheck: 0,
-                        totalCharge: 0,
-                        totalDrayage: 0,
-                        totalBuyBack: 0,
-                        totalDistAmt: 0,
-                    };
+                    
                     this.allTickets.forEach(ticket => {
                         
                         //  ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
