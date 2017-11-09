@@ -63,7 +63,7 @@
                     <h3>Ticket Details</h3>
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
+                    <button class="btn btn-danger pull-right" *ngIf='tripData.TripStatusID == 23 || tripData.TripStatusID == 24' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
                         [queryParams]="{branchId:tripData.BranchID, driverId:tripData.UserID, isDistributor:tripData.DistributorMasterID, sdate:tripData.TripStartDate, edate:tripData.TripEndDate}">Create Ticket</button>
                 </div>
                 <div class="col-sm-12 page-header">
