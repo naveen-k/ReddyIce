@@ -39,8 +39,8 @@ export class ReportsComponent implements OnInit {
 
     search = (text$: Observable<any>) => text$.debounceTime(300)
         .distinctUntilChanged()
-        .do((term) => this.searching = term.length > 2)
-        .switchMap(term => term.length < 3 ? [] :
+        .do((term) => this.searching = true)
+        .switchMap(term => 
             this.reportService.getCustomerSearch(
                 term.replace('#', '%23', 'g'),
                 this.filter.userType, this.filter.branch,
