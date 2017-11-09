@@ -808,7 +808,9 @@ export class CreateTicketComponent implements OnInit {
       if (error) {
         if (error.status == 304) {
           this.notification.error('', 'Please add a product to create ticket');
-        } else {
+        }if (error.status == 409) {
+          this.notification.error('', 'No User exists for this Distributor. Please add a user to this distributor first.');
+        }  else {
           this.notification.error('', 'Error while creating ticket!');
         }
         this.isFormDirty = true;
