@@ -247,10 +247,11 @@ export class ReportsComponent implements OnInit {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
-
+        debugger;
+        this.selectedCustomerType = this.filter.custType;
         if (rType !== 'TIR') {
             this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-            this.selectedCustomerType = this.filter.customer.IsRICustomer ? 101 : 103;
+            this.selectedCustomerType = ((!this.filter.customer) ? this.filter.custType:this.filter.customer.IsRICustomer) ? 101 : 103;
 
             this.viewReport = true;
             setTimeout(function () {
@@ -311,7 +312,7 @@ export class ReportsComponent implements OnInit {
                 if (this.filter.ticketID) {
                     console.log(this.filter.ticketID);
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-                    this.selectedCustomerType = this.filter.customer.IsRICustomer ? 101 : 103;
+                    this.selectedCustomerType = ((!this.filter.customer) ? this.filter.custType:this.filter.customer.IsRICustomer) ? 101 : 103;
                     this.viewReport = true;
                     setTimeout(function () {
                         $('#loader').hide();
@@ -324,7 +325,7 @@ export class ReportsComponent implements OnInit {
                 this.filter.showCustomerDropdown = false;
                 // console.log(this.customersByTicketNumber[0].TicketId);
                 this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-                this.selectedCustomerType = this.filter.customer.IsRICustomer ? 101 : 103;
+                this.selectedCustomerType = ((!this.filter.customer) ? this.filter.custType:this.filter.customer.IsRICustomer) ? 101 : 103;
                 if (this.customersByTicketNumber.length > 0) {
                     this.viewReport = true;
                 } else {
