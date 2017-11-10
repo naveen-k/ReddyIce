@@ -247,7 +247,7 @@ export class ReportsComponent implements OnInit {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
-        debugger;
+       
         this.selectedCustomerType = this.filter.custType;
         if (rType !== 'TIR') {
             this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
