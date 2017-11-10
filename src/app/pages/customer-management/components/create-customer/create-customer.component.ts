@@ -1,3 +1,4 @@
+import { concat } from 'rxjs/observable/concat';
 import { UserService } from '../../../../shared/user.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -86,7 +87,7 @@ export class CreateCustomerComponent implements OnInit {
             this.service.getCustomer(this.customerId, this.isRI).subscribe((response) => {
                 this.customer = response.CustomerDetails;
                 if (this.mode === 3 && this.isRI) {
-                    this.customer.Address = this.customer.Address1 +' '+ this.customer.Address2;
+                    this.customer.Address = this.customer.Address1 + ' ' + this.customer.Address2;
                 }
                 console.log(this.customer);
                 if (response.CustomerDetails.C_CustomerNumber_) {
@@ -96,7 +97,7 @@ export class CreateCustomerComponent implements OnInit {
                     element.ProductPrice = element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.00` : element.ProductPrice;
                 });
                 this.addedProduct = response.ProductDetail;
-                console.log("this.addedProduct ------ ",this.addedProduct);
+                console.log("this.addedProduct ------ ", this.addedProduct);
                 this.addProductCheck = new Array(this.addedProduct.length);
                 this.addProductCheck.fill(false);
             });
@@ -177,7 +178,7 @@ export class CreateCustomerComponent implements OnInit {
 
     }
 
-    deactivateMappedProduct(mprod) {
+    deactivateMappedProduct(mprod, added) {
         if (this.mode === 1) {
             this.isFromDirty = true;
             const index = this.addedProduct.indexOf(mprod);
@@ -189,15 +190,32 @@ export class CreateCustomerComponent implements OnInit {
         }
         if (this.mode === 2) {
             this.isFromDirty = true;
-            const index2 = this.addedProduct.indexOf(mprod);
-            if (index2 > -1) {
-                // this.newlyAddedproduct.splice(index2, 1);
-                // this.newlyAddedproduct = this.newlyAddedproduct;
-                this.addedProduct[index2].IsActive = false;
-                this.deactivateClicked = true;
-                this.addNewProductCheck.splice(index2, 1);
+            var index2 = null;
+            if (added === 1) {
+                index2 = this.addedProduct.indexOf(mprod);
+            } else {
+                index2 = this.newlyAddedproduct.indexOf(mprod);
             }
-            this.deactivateClicked = false;
+            if (index2 > -1) {
+                try {
+                    if (added === 0) {
+                        this.newlyAddedproduct.splice(index2, 1);
+                        this.addNewProductCheck.splice(index2, 1);
+                    } else {
+                        this.addedProduct[index2].IsActive = false;
+                        this.addProductCheck.splice(index2, 1);
+                    }
+                    // this.newlyAddedproduct = this.newlyAddedproduct;
+
+                    //this.deactivateClicked = true;
+
+                } catch (e) {
+                    console.log('e------>', e);
+                }
+            } else {
+                //this.deactivateClicked = false;
+            }
+
         }
 
     }

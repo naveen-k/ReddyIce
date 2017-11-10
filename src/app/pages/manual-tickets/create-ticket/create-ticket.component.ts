@@ -95,7 +95,7 @@ export class CreateTicketComponent implements OnInit {
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
 
   // Customer input formatter
-  inputFormatter = (res => `${res.CustomerId || res.CustomerID} - ${res.CustomerName}`);
+  inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
 
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()

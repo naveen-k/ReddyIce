@@ -144,7 +144,7 @@
                     <td>{{ item.TicketNumber }}</td>
                     <!-- <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td> -->
                     <td>{{ item.ticketType }}</td>
-                    <td><span [title]="item.Customer.CustomerID + ' - ' +item.Customer.CustomerName">{{item.Customer.CustomerID }} - {{item.Customer.CustomerName | cutString:true:15 }}</span></td>
+                    <td><span [title]="item.Customer.CustomerNumber + ' - ' +item.Customer.CustomerName">{{item.Customer.CustomerNumber }} - {{item.Customer.CustomerName | cutString:true:15 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>

@@ -14,7 +14,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
     styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
-
+    selectedCustomerType: number = 0;
     filter: any = {
         startDate: null,
         todaysDate: null,
@@ -31,7 +31,8 @@ export class ReportsComponent implements OnInit {
         custName: 'All Customers',
         showCustomerDropdown: false,
         ticketID: 0,
-        custNameforTicket: ''
+        custNameforTicket: '',
+        customer: ''
     };
 
     inputFormatter = (res => `${res.CustomerName}`);
@@ -40,7 +41,7 @@ export class ReportsComponent implements OnInit {
     search = (text$: Observable<any>) => text$.debounceTime(300)
         .distinctUntilChanged()
         .do((term) => this.searching = true)
-        .switchMap(term =>
+        .switchMap(term => !term.length ? [] :
             this.reportService.getCustomerSearch(
                 term.replace('#', '%23', 'g'),
                 this.filter.userType, this.filter.branch,
@@ -208,6 +209,7 @@ export class ReportsComponent implements OnInit {
     }
 
     customerTypeChange() {
+        this.filter.customer = null;
         this.customers = this.allCustomers.filter((cust) => {
             if (+this.filter.custType === 0 || cust.value === 0) { return true }
             else if (+this.filter.custType === 101) { return cust.IsRICustomer }
@@ -248,6 +250,8 @@ export class ReportsComponent implements OnInit {
 
         if (rType !== 'TIR') {
             this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+            this.selectedCustomerType = this.filter.customer.IsRICustomer ? 101 : 103;
+
             this.viewReport = true;
             setTimeout(function () {
                 $('#loader').hide();
@@ -277,7 +281,7 @@ export class ReportsComponent implements OnInit {
             } else if (rType === 'AS') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${custID}`);
 
             } else if (rType === 'DST') {
 
@@ -307,6 +311,7 @@ export class ReportsComponent implements OnInit {
                 if (this.filter.ticketID) {
                     console.log(this.filter.ticketID);
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+                    this.selectedCustomerType = this.filter.customer.IsRICustomer ? 101 : 103;
                     this.viewReport = true;
                     setTimeout(function () {
                         $('#loader').hide();
@@ -319,6 +324,7 @@ export class ReportsComponent implements OnInit {
                 this.filter.showCustomerDropdown = false;
                 // console.log(this.customersByTicketNumber[0].TicketId);
                 this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+                this.selectedCustomerType = this.filter.customer.IsRICustomer ? 101 : 103;
                 if (this.customersByTicketNumber.length > 0) {
                     this.viewReport = true;
                 } else {

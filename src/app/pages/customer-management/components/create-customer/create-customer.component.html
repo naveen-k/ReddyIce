@@ -219,7 +219,7 @@
                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
-                                        <i class="ion-trash-a custom-tooltip-ion" (click)="deactivateMappedProduct(mprod)" style="margin-right: 5px" [hidden]="mode===3||deactivateClicked">
+                                        <i class="ion-trash-a custom-tooltip-ion" (click)="deactivateMappedProduct(mprod,1)" style="margin-right: 5px" [hidden]="mode===3||deactivateClicked">
                                             <span class="tooltiptext">Deactivate</span>
                                         </i>
                                     </td>
@@ -243,7 +243,7 @@
                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,k)">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
-                                    <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod)">
+                                    <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod,1)">
                                             <span class="tooltiptext">Inactive</span>
                                         </i>
                                 </td>
@@ -266,7 +266,7 @@
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
-                                        <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod)">
+                                        <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" (click)="deactivateMappedProduct(mprod,0)">
                                             <span class="tooltiptext">Deactivate</span>
                                         </i>
                                     </td>
