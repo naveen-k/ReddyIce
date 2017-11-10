@@ -134,6 +134,7 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     save() {
+        debugger;
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
             // console.log("sdsa ---0-----", this.customer);
             if (this.customer.AllowReturnSameTicket) {
@@ -373,6 +374,8 @@ export class CreateCustomerComponent implements OnInit {
             }
             if (!check) {
                 this.notification.error('', 'Product Name and its Price is mandatory!!!');
+            } else {
+                return true;
             }
 
         } else {
