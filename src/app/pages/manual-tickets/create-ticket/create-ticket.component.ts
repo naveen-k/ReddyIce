@@ -503,11 +503,11 @@ export class CreateTicketComponent implements OnInit {
   poNumberValidation() {
     const poNumberLength = this.ticket.PONumber.length;
     const letterNumber = /^[0-9a-zA-Z-]+$/;              // pattern to check for string to be alphanumeric
-    if (poNumberLength <= 4 || poNumberLength >= 20) {    // check for ticket number length 4-20 only
+    if (poNumberLength < 4 || poNumberLength > 20) {    // check for ticket number length 4-20 only
       this.poMinMaxLength = true;
       this.poContainsCharacters = false;
     } else if ((this.ticket.PONumber.match(letterNumber)) &&
-      (poNumberLength >= 4 || poNumberLength <= 20)) {      // check for string to be alphanumeric
+      (poNumberLength > 4 || poNumberLength < 20)) {      // check for string to be alphanumeric
       this.poContainsCharacters = false;
       this.poMinMaxLength = false;
     } else {

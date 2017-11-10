@@ -52,7 +52,7 @@
                             Approve
                         </button>
                     </th>
-                    <th class="table-id thVerticalAlign actionAlignCenter" style="width:90px;">Actions</th>
+                    <th class="table-id thVerticalAlign actionAlignCenter" style="width:91px;">Actions</th>
                     <th class="thVerticalAlign table-text-align">
                         <span class="cursorPointer" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
                           Ticket #
@@ -124,12 +124,20 @@
                                 <span class="tooltiptext">View</span>
                             </i>
                         </a>
-                        <a [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID!=23">
+                        <!-- <a [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID!=23">
                             <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
                         <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID!==23" (click)="deleteTicket(item.TicketID)">
+                            <span class="tooltiptext">Delete</span>
+                        </i> -->
+                        <a [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID==25">
+                            <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                                <span class="tooltiptext">Edit</span>
+                            </i>
+                        </a>
+                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="deleteTicket(item.TicketID)">
                             <span class="tooltiptext">Delete</span>
                         </i>
                     </td>

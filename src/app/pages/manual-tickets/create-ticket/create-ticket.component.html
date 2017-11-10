@@ -1,32 +1,35 @@
 <ba-card cardTitle="{{pageTitle}} {{userSubTitle}}" id="newTicket">
-    <img src="assets/reddyIce/draftTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 23"
-        width="15" class="newTicketTitleStatusIcon">
-    <img src="assets/reddyIce/submitTicket.png" *ngIf="ticket.TicketStatusID == 24" width="18" class="newTicketTitleStatusIcon">
+    <!-- <img src="assets/reddyIce/draftTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 23"
+        width="15" class="newTicketTitleStatusIcon"> -->
+    <img src="assets/reddyIce/submitTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 24 || ticket.TicketStatusID == 23" width="18" class="newTicketTitleStatusIcon">
     <img src="assets/reddyIce/approveTicket.png" *ngIf="ticket.TicketStatusID == 25" width="15" class="newTicketTitleStatusIcon">
 
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
                 <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back</button>
-                <button class="btn btn-danger" (click)="approveTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
+                <button class="btn btn-danger" style="margin-left:10px;" (click)="approveTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
                     Approve
                 </button>
-                <button class="btn btn-danger" (click)="editTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
+                <!-- <button class="btn btn-danger" (click)="editTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
                     Back to Draft
-                </button>
+                </button> -->
                 <!-- <button class="btn btn-danger buttonMargin" onclick="document.getElementById('file').click()" [hidden]="isReadOnly">
                     Upload POD
                 </button> -->
                 <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png,image/jpeg,application/pdf"
                 />
-                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket()" [hidden]="isReadOnly || hideSave" [disabled]="!isFormDirty">
+                <!-- <button class="btn btn-danger buttonMargin" (click)="preSaveTicket()" [hidden]="isReadOnly || hideSave" [disabled]="!isFormDirty">
                     Save
-                </button>
+                </button> -->
                 <button class="btn btn-danger buttonMargin" [hidden]="tripMode || ticket.TicketStatusID !== 23" [disabled]="ticket.TicketStatusID !== 23"
                     (click)="deleteTicket()">
                     Delete
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly || tripMode" [disabled]="ticket.TicketStatusID != 23">
+                <!-- <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly || tripMode" [disabled]="ticket.TicketStatusID != 23">
+                    Submit
+                </button> -->
+                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket()" [hidden]="isReadOnly || tripMode" [disabled]="!isFormDirty">
                     Submit
                 </button>
             </div>
@@ -218,14 +221,14 @@
                 <div class="col-sm-7">
                     <input type="text" class="form-control" [(ngModel)]="ticket.PONumber" [disabled]="isReadOnly" placeholder="PO Number" (blur)="poNumberChangeHandler()"
                         name="PONumber" #PONumber="ngModel" required (ngModelChange)="isFormDirty=true;">
-                    <div *ngIf="poContainsCharacters" class="error-message">
+                    <!-- <div *ngIf="poContainsCharacters" class="error-message">
                         <i class="ion-android-alert showError"></i>
                         <div class="custom-tooltip bottom">PO number should be alphanumeric</div>
                     </div>
                     <div *ngIf="poMinMaxLength" class="error-message">
                         <i class="ion-android-alert showError"></i>
                         <div class="custom-tooltip bottom">PO number should be 4-20 digits long only</div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
