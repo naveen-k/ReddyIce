@@ -154,10 +154,10 @@ export class CreateTicketComponent implements OnInit {
     }
 
     if (tripTicketEditMode) {
-     
+
       this.tripMode = tripTicketEditMode;
-      
-    }else {
+
+    } else {
       this.hideSave = false;
     }
 
@@ -197,7 +197,7 @@ export class CreateTicketComponent implements OnInit {
       this.pageTitle = 'Edit Ticket Details';
       this.loadTicket(this.ticketId);
       this.hideSave = true;
-    }else {
+    } else {
       this.hideSave = false;
     }
 
@@ -217,7 +217,7 @@ export class CreateTicketComponent implements OnInit {
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
     const sdate = new Date(queryParams.sdate);
-    const edate = (queryParams.edate!=="null")?new Date(queryParams.edate):new Date();
+    const edate = (queryParams.edate !== "null") ? new Date(queryParams.edate) : new Date();
 
     this.date.minDate = { year: sdate.getFullYear(), month: sdate.getMonth() + 1, day: sdate.getDate() };
     this.date.maxDate = { year: edate.getFullYear(), month: edate.getMonth() + 1, day: edate.getDate() }
@@ -808,9 +808,9 @@ export class CreateTicketComponent implements OnInit {
       if (error) {
         if (error.status == 304) {
           this.notification.error('', 'Please add a product to create ticket');
-        }if (error.status == 409) {
+        } if (error.status == 409) {
           this.notification.error('', 'No User exists for this Distributor. Please add a user to this distributor first.');
-        }  else {
+        } else {
           this.notification.error('', 'Error while creating ticket!');
         }
         this.isFormDirty = true;

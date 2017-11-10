@@ -295,7 +295,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{(ticket.TotalSale + ticket.TaxAmount) | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
