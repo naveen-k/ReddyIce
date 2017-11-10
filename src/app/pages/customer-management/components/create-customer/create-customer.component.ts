@@ -94,7 +94,7 @@ export class CreateCustomerComponent implements OnInit {
                     this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
                 response.ProductDetail.forEach(element => {
-                    element.ProductPrice = element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.00` : element.ProductPrice;
+                    element.ProductPrice = (element.ProductPrice === null) ? 0 : element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.00` : element.ProductPrice;
                 });
                 this.addedProduct = response.ProductDetail;
                 console.log("this.addedProduct ------ ", this.addedProduct);
@@ -319,6 +319,10 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!this.validateEmailID()) {
             this.notification.error('', 'Wrong format of Customer EmailID!!!');
             return false;
+        } else if (mode === 2 && (this.addProductCheck.length === undefined || this.addProductCheck.length === 0)
+            && (newlyAddedproduct.length === undefined || newlyAddedproduct.length === 0)) {
+            this.notification.error('', 'Atleast one product is mandatory!!!');
+            return false;
         } else if (mode === 1 && (addedProduct.length === undefined || addedProduct.length === 0)) {
             this.notification.error('', 'Atleast one product is mandatory!!!');
             return false;
@@ -341,22 +345,34 @@ export class CreateCustomerComponent implements OnInit {
                 return true;
             }
 
-        } else if (mode === 2 && newlyAddedproduct.length > 0) {
-            if (newlyAddedproduct) {
-                var check = true;
+        } else if (mode === 2 && (newlyAddedproduct === undefined || newlyAddedproduct.length > 0 || addedProduct.length > 0)) {
+            var check = true;
+            if (newlyAddedproduct && newlyAddedproduct.length > 0) {
                 newlyAddedproduct.forEach(element => {
                     if (!element.cProductId || !element.ProductPrice) {
 
                         check = false;
                     }
                 });
-                if (!check) {
-                    this.notification.error('', 'Product Name and its Price is mandatory!!!');
-                }
+              
                 // console.log("succe0");
-                return check;
+               // return check;
+            }
+            if (addedProduct && addedProduct.length > 0) {
+                addedProduct.forEach(element => {
+                    if (!element.ProductPrice) {
+
+                        check = false;
+                    }
+                });
+               
+                // console.log("succe0");
+               // return check;
             } else {
                 return true;
+            }
+            if (!check) {
+                this.notification.error('', 'Product Name and its Price is mandatory!!!');
             }
 
         } else {
