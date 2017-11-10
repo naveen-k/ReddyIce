@@ -40,7 +40,7 @@ export class ReportsComponent implements OnInit {
     search = (text$: Observable<any>) => text$.debounceTime(300)
         .distinctUntilChanged()
         .do((term) => this.searching = true)
-        .switchMap(term => 
+        .switchMap(term =>
             this.reportService.getCustomerSearch(
                 term.replace('#', '%23', 'g'),
                 this.filter.userType, this.filter.branch,
@@ -103,6 +103,7 @@ export class ReportsComponent implements OnInit {
         }
 
         if (this.user.Role.RoleName === 'Driver') {
+            this.filter.reportType = 'SRT';
             this.isDriver = true;
             this.filter.driver = this.user.UserId;
         } else {

@@ -137,7 +137,7 @@
                             <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer||!cust.Active" (click)="deleteCustomer(cust.CustomerId)">
                                     <span class="tooltiptext" >Inactive</span>
                                 </i>
-                            <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId,cust.IsRICustomer?1:0]" [hidden]="!cust.IsRICustomer">
+                            <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId,cust.IsRICustomer?1:0]" *ngIf="cust.IsRICustomer||(!cust.IsRICustomer && !cust.Active)">
                                     <span class="tooltiptext" >View</span>
                                 </i>
                         </td>
@@ -155,10 +155,10 @@
                             <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
-                            <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
+                            <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer || !cust.Active" (click)="deleteCustomer(cust.CustomerId)">
                                     <span class="tooltiptext" >Inactive</span>
                                 </i>
-                            <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId, cust.IsRICustomer?1:0]" [hidden]="!cust.IsRICustomer">
+                            <i class="ion-eye custom-tooltip-ion" [routerLink]="['../view', cust.CustomerId, cust.IsRICustomer?1:0]" *ngIf="cust.IsRICustomer||(!cust.IsRICustomer && !cust.Active)">
                                     <span class="tooltiptext" >View</span>
                                 </i>
                         </td>
