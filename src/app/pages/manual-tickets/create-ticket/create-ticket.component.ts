@@ -947,7 +947,7 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.TotalSale += +t['totalAmount'] || 0;
     });
     this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
-    this.ticket.TaxAmount =  (this.ticket.TotalSale * this.customer.Tax) / 100;
+    this.ticket.TaxAmount = this.ticket.TaxAmount ? this.ticket.TaxAmount : (this.ticket.TotalSale * this.customer.Tax) / 100;
     this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
   }
 
