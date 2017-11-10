@@ -87,7 +87,7 @@ export class CreateCustomerComponent implements OnInit {
             this.service.getCustomer(this.customerId, this.isRI).subscribe((response) => {
                 this.customer = response.CustomerDetails;
                 if (this.mode === 3 && this.isRI) {
-                    this.customer.Address = this.customer.Address1 + ' ' + this.customer.Address2;
+                    this.customer.Address = (this.customer.Address) ? this.customer.Address : this.customer.Address1 + ' ' + this.customer.Address2;
                 }
                 console.log(this.customer);
                 if (response.CustomerDetails.C_CustomerNumber_) {
@@ -354,9 +354,9 @@ export class CreateCustomerComponent implements OnInit {
                         check = false;
                     }
                 });
-              
+
                 // console.log("succe0");
-               // return check;
+                // return check;
             }
             if (addedProduct && addedProduct.length > 0) {
                 addedProduct.forEach(element => {
@@ -365,9 +365,9 @@ export class CreateCustomerComponent implements OnInit {
                         check = false;
                     }
                 });
-               
+
                 // console.log("succe0");
-               // return check;
+                // return check;
             } else {
                 return true;
             }
