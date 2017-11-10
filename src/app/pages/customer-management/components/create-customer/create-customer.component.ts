@@ -134,7 +134,7 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     save() {
-        debugger;
+        
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
             // console.log("sdsa ---0-----", this.customer);
             if (this.customer.AllowReturnSameTicket) {
