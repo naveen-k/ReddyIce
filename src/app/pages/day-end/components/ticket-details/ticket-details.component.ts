@@ -103,7 +103,7 @@ export class TicketDetailsComponent implements OnInit {
 
     viewTicket(ticketID) {
         if (ticketID) {
-            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700");
+            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
         } else {
             this.notification.error("Ticket preview unavailable!!");
         }

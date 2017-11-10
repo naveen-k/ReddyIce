@@ -217,7 +217,7 @@ export class CreateTicketComponent implements OnInit {
     const queryParams = this.activatedRoute.snapshot.queryParams;
 
     const sdate = new Date(queryParams.sdate);
-    const edate = new Date(queryParams.edate);
+    const edate = (queryParams.edate!=="null")?new Date(queryParams.edate):new Date();
 
     this.date.minDate = { year: sdate.getFullYear(), month: sdate.getMonth() + 1, day: sdate.getDate() };
     this.date.maxDate = { year: edate.getFullYear(), month: edate.getMonth() + 1, day: edate.getDate() }
