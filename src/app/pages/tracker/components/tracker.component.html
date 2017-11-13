@@ -30,17 +30,13 @@
                 <div class="col-sm-2" *ngIf="searchObj.userType=='Internal'">
                     <label>Select Driver</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
-                        <option *ngFor="let driver of driverOnBranch | unique">
-                            {{driver.DriverName}}
-                        </option>
+                        <option *ngFor="let driver of driverOnBranch | unique">{{driver.DriverName}}</option>
                     </select>
                 </div>
                 <div class="col-sm-2" *ngIf="searchObj.userType=='External'">
                     <label>Select Driver</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
-                        <option *ngFor="let driver of driverOndistributor | unique">
-                            {{driver.DriverName}}
-                        </option>
+                        <option *ngFor="let driver of driverOndistributor | unique">{{driver.DriverName}}</option>
                     </select>
                 </div>
                 <div class="col-sm-3">

@@ -184,7 +184,10 @@ export class TrackerComponent implements OnInit {
       if(this.user.IsDistributor){
         this.distributorChangeHandler();
       } else {
-        this.branchChangeHandler();
+        if(this.allBranches && this.allBranches.length>0)
+        {
+          this.branchChangeHandler();
+        }
       }
     }, (error) => {
       console.log(error);
@@ -246,11 +249,12 @@ export class TrackerComponent implements OnInit {
         }
       }
       console.log(this.driverOnBranch);
-      if (this.driverOnBranch.length > 0) {
+      if (this.driverOnBranch && this.driverOnBranch.length > 0) {
         this.tripFilterOption.DriverName = this.driverOnBranch[0].DriverName;    // assigning in model
         this.tripFilterOption.TripCode = this.driverOnBranch[0].TripCode;        // assigning in model
+        this.driverChangeHandler();
       }
-      this.driverChangeHandler();
+      
     } else {
       this.selectedTrip = [];
     }
