@@ -7,6 +7,7 @@ import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TripProduct } from '../../dayend.interfaces';
+import { Route } from '@angular/router/src/config';
 
 @Component({
     templateUrl: './details.component.html',
@@ -53,6 +54,7 @@ export class DetailsComponent implements OnInit {
         private userService: UserService,
         private notification: NotificationsService,
         private modalService: NgbModal,
+        protected router:Router,
     ) { }
 
     tripStatus(statusCode) {
@@ -163,6 +165,9 @@ export class DetailsComponent implements OnInit {
 
         this.service.saveUnitReconciliation(this.unitReconciliation.concat(this.newlyAddedProduct)).subscribe((res) => {
             this.notification.success("Success", res);
+            if(statusId === 25){
+                this.router.navigate(['/pages/day-end/list']);
+            }
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);

@@ -1,13 +1,13 @@
 <div class="row">
     <div class=" col-md-12">
         <ba-card cardTitle="  Trip Detail {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
-            <img src="assets/reddyIce/draftTicket.png" *ngIf="tripData.TripStatusID == 23"
-            width="15" class="newTicketTitleStatusIcon">
-            <img src="assets/reddyIce/submitTicket.png" *ngIf="tripData.TripStatusID == 24" width="18" class="newTicketTitleStatusIcon">
+            <!-- <img src="assets/reddyIce/draftTicket.png" *ngIf="tripData.TripStatusID == 23"
+            width="15" class="newTicketTitleStatusIcon"> -->
+            <img src="assets/reddyIce/submitTicket.png" *ngIf="tripData.TripStatusID == 23 || tripData.TripStatusID == 24" width="18" class="newTicketTitleStatusIcon">
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" *ngIf='tripData.TripStatusID == 24' (click)="saveReconciliation(25)">Approve</button>
-                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
+                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
                 <!-- <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                     (click)="saveReconciliation(23)">Save</button> -->
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
@@ -125,7 +125,7 @@
                                                     <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket" [routerLink]="['../../../manual-ticket/view',item.ID]">
                                                         <span class="tooltiptext">View</span>
                                                     </i>
-                                                    <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket" [routerLink]="['../../../manual-ticket/ticket',item.ID]">
+                                                    <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket && tripData.TripStatusID !== 25" [routerLink]="['../../../manual-ticket/ticket',item.ID]">
                                                         <span class="tooltiptext">Edit</span>
                                                     </i>
                                                 </td>                                                
@@ -238,19 +238,19 @@
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
                                                 <td width="25%">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.Load1Quantity' class="form-control small-input" type="text" [numberOnly]
                                                         (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.DamageQuantity' class="form-control small-input" type="text" [numberOnly]
                                                         (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)"></td>
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
@@ -268,17 +268,17 @@
                                                     </select>
                                                 </td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.Load1Quantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input" type="number"></td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.ReturnQuantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
                                                         type="number"></td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.DamageQuantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input" type="number"></td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.CustomerDamageDRV' (ngModelChange)="unitReconChange(item)" class="form-control small-input"
                                                         type="number"></td>
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
@@ -432,19 +432,19 @@
                                                 <label>Cash($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' [disabled]='tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Check($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' [disabled]='tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Coins($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true"  [(ngModel)]='ticketDetails?.Total.ActualCoin' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true"  [(ngModel)]='ticketDetails?.Total.ActualCoin' [disabled]='tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
@@ -460,7 +460,7 @@
                                                 <label>Misc($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' [disabled]='tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">
