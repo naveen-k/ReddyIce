@@ -308,18 +308,18 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!customer.ZipCode) {
             this.notification.error('', 'Customer ZipCode is mandatory!!!');
             return false;
-        } else if (!customer.PrimayContact) {
-            this.notification.error('', 'Customer Primary Contact is mandatory!!!');
-            return false;
-        } else if (!customer.Phone) {
-            this.notification.error('', 'Customer Phone is mandatory!!!');
-            return false;
-        } else if (!customer.Email) {
-            this.notification.error('', 'Customer EmailID is mandatory!!!');
-            return false;
-        } else if (!this.validateEmailID()) {
-            this.notification.error('', 'Wrong format of Customer EmailID!!!');
-            return false;
+        // } else if (!customer.PrimayContact) {
+        //     this.notification.error('', 'Customer Primary Contact is mandatory!!!');
+        //     return false;
+        // } else if (!customer.Phone) {
+        //     this.notification.error('', 'Customer Phone is mandatory!!!');
+        //     return false;
+        // } else if (!customer.Email) {
+        //     this.notification.error('', 'Customer EmailID is mandatory!!!');
+        //     return false;
+        //  } else if (!this.validateEmailID()) {
+        //     this.notification.error('', 'Wrong format of Customer EmailID!!!');
+        //     return false;
         } else if (mode === 2 && (this.addProductCheck.length === undefined || this.addProductCheck.length === 0)
             && (newlyAddedproduct.length === undefined || newlyAddedproduct.length === 0)) {
             this.notification.error('', 'Atleast one product is mandatory!!!');

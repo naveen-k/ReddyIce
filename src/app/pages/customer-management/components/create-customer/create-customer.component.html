@@ -156,7 +156,7 @@
             <div class="row box-top-margin">
                 <div class="col-md-12">
                     <div class="row">
-                        <label for="example-text-input" class="col-md-12">Primary Contact&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                        <label for="example-text-input" class="col-md-12">Primary Contact</label>
                         <div class="col-md-12">
                             <input maxlength="50" alphaNumeric [acceptSpace]="true" [disabled]="mode === 3" [(ngModel)]="customer.PrimayContact" (ngModelChange)="formFlagHandler()"
                                 id="typeahead-basic" (blur)="spaceRemoverFnforPrimaryContact(customer.PrimaryContact)" type="text"
@@ -168,7 +168,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="row box-top-margin">
-                        <label for="example-text-input" class="col-md-12">Phone&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                        <label for="example-text-input" class="col-md-12">Phone</label>
                         <div class="col-md-12">
                             <input maxlength="15" numberOnly [disabled]="mode ===3" [(ngModel)]='customer.Phone' (ngModelChange)="formFlagHandler()"
                                 id="typeahead-basic" type="text" class="form-control" placeholder="Phone" />
@@ -177,11 +177,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="row box-top-margin">
-                        <label for="example-text-input" class="col-md-12">Email&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
+                        <label for="example-text-input" class="col-md-12">Email</label>
                         <div class="col-md-12">
                             <input maxlength="50" [disabled]="mode === 3" [(ngModel)]='customer.Email' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
                                 type="email" class="form-control" placeholder="Email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
-                            />
+                            email />
                         </div>
                     </div>
                 </div>
