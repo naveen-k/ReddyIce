@@ -3,8 +3,8 @@
         <div class="col-sm-2" [hidden]="IsTIR">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
-                    disabled>
+                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker"
+                    [(ngModel)]="filter.startDate" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
@@ -13,7 +13,8 @@
         <div class="col-sm-2" [hidden]="IsTIR">
             <label>End Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
+                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker"
+                    [(ngModel)]="filter.endDate" disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
@@ -77,7 +78,7 @@
                 </div>
                 <div class="col-sm-9">
                     <div class="row">
-                        <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
+                        <!-- <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
                             <option value="AS" *ngIf="user.Role.RoleID < 3">Asset Scan</option>
                             <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
                             <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
@@ -87,6 +88,17 @@
                             <option value="SR">Trip Details</option>
                             <option value="TIR">Ticket Number</option>
                             <option value="RS">Unit Summary</option>
+                        </select> -->
+                        <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
+                            <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option>
+                            <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
+                            <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
+                            <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
+                            <option value="TR" *ngIf="isITAdmin||isInternalAdmin">Invoice List</option>
+                            <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
+                            <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
+                            <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
+                            <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
                         </select>
                     </div>
                 </div>
@@ -109,10 +121,10 @@
                     <label>Customer</label>
                     <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
                     <ng-template #rt let-r="result" let-t="term">
-                            {{ r.CustomerNumber}} - {{ r.CustomerName}}
+                        {{ r.CustomerNumber}} - {{ r.CustomerName}}
                     </ng-template>
                     <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
-                         placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" />
+                        placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" />
                 </div>
                 <div style='margin-left: 100px;'>
                     <a>
@@ -151,24 +163,25 @@
                     <input type="text" class="form-control" [numberOnly]="true" [(ngModel)]="filter.ticketNumber" (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
-                        <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
-                            <div class="col-sm-12">
-                                <label>Customer</label>
-                                <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
-                                <!-- <ng-template #rt let-r="result" let-t="term">
+                    <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
+                        <div class="col-sm-12">
+                            <label>Customer</label>
+                            <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
+                            <!-- <ng-template #rt let-r="result" let-t="term">
                                     {{ r.CustomerName}}
                                 </ng-template>
                                 <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
                                     placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" /> -->
-                                    <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" (selectedChange)="customerChangeHandler()" item-width="10px"></reddy-select>
-                            </div> 
-                            <div style='margin-left: 100px;'>
-                                <a>
-                                    <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
-                                </a>
-                            </div>
+                            <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" (selectedChange)="customerChangeHandler()"
+                                item-width="10px"></reddy-select>
+                        </div>
+                        <div style='margin-left: 100px;'>
+                            <a>
+                                <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
+                            </a>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>

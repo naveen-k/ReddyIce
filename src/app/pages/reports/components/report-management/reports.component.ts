@@ -15,6 +15,11 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
 })
 export class ReportsComponent implements OnInit {
     selectedCustomerType: number = 0;
+    isITAdmin: boolean = false;
+    isInternalAdmin: boolean = false;
+    isExternalAdmin: boolean = false;
+    isInternalDriver: boolean = false;
+    isExternalDriver: boolean = false;
     filter: any = {
         startDate: null,
         todaysDate: null,
@@ -109,6 +114,18 @@ export class ReportsComponent implements OnInit {
             this.filter.driver = this.user.UserId;
         } else {
             this.isDriver = false;
+        }
+
+        if(this.user.Role.RoleName==="ITAdmin" && this.user.IsRIInternal){
+            this.isITAdmin=true;
+        }else if(this.user.Role.RoleName==="Admin" && this.user.IsRIInternal){
+            this.isInternalAdmin=true;
+        }else if(this.user.Role.RoleName==="Admin" && !this.user.IsRIInternal){
+            this.isExternalAdmin=true;
+        }else if(this.user.Role.RoleName==="Driver" && this.user.IsRIInternal){
+            this.isInternalDriver=true;
+        }else if(this.user.Role.RoleName==="Driver" && !this.user.IsRIInternal){
+            this.isExternalDriver=true;
         }
 
         this.userTypeChangeHandler();
@@ -247,10 +264,10 @@ export class ReportsComponent implements OnInit {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
-        
+
         if (rType !== 'TIR') {
             this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-            this.selectedCustomerType = (this.filter.customer) ? ((this.filter.customer.IsRICustomer) ? 101 : 103): this.filter.custType;
+            this.selectedCustomerType = (this.filter.customer) ? ((this.filter.customer.IsRICustomer) ? 101 : 103) : this.filter.custType;
 
             this.viewReport = true;
             setTimeout(function () {
@@ -311,7 +328,7 @@ export class ReportsComponent implements OnInit {
                 if (this.filter.ticketID) {
                     console.log(this.filter.ticketID);
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-                    this.selectedCustomerType = (this.filter.customer) ? ((this.filter.customer.IsRICustomer) ? 101 : 103): this.filter.custType;
+                    this.selectedCustomerType = (this.filter.customer) ? ((this.filter.customer.IsRICustomer) ? 101 : 103) : this.filter.custType;
                     this.viewReport = true;
                     setTimeout(function () {
                         $('#loader').hide();
@@ -324,7 +341,7 @@ export class ReportsComponent implements OnInit {
                 this.filter.showCustomerDropdown = false;
                 // console.log(this.customersByTicketNumber[0].TicketId);
                 this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-                this.selectedCustomerType = (this.filter.customer) ? ((this.filter.customer.IsRICustomer) ? 101 : 103): this.filter.custType;
+                this.selectedCustomerType = (this.filter.customer) ? ((this.filter.customer.IsRICustomer) ? 101 : 103) : this.filter.custType;
                 if (this.customersByTicketNumber.length > 0) {
                     this.viewReport = true;
                 } else {
