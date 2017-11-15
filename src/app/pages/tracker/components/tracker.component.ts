@@ -564,9 +564,12 @@ export class TrackerComponent implements OnInit {
             if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined
               || this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
                 var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
+                if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+                  totalInvoice = totalInvoice + ".00";
+                }
               infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
             } else {
-              infowindowContent += 'Total Invoice : ' + '-' + '<br>';
+              infowindowContent += 'Total Invoice : $' + '0.00' + '<br>';
             }
             // if (this.selectedTrip[i].TotalAmount) {
             //   infowindowContent += 'Total Amount : $' + this.selectedTrip[i].TotalAmount + '<br>';
@@ -576,9 +579,12 @@ export class TrackerComponent implements OnInit {
             if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
             || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
               var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
+              if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
+                receivedAmt = receivedAmt + ".00";
+              }
               infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
             } else {
-              infowindowContent += 'Total Received Amount : ' + '-' + '<br>';
+              infowindowContent += 'Total Received Amount : $' + '0.00' + '<br>';
             }
             return () => {
               this.infowindow.setContent(infowindowContent);
@@ -596,16 +602,22 @@ export class TrackerComponent implements OnInit {
             if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined ||
               this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
                 var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-              infowindowContent += 'Total Invoice : ' + totalInvoice + '<br>';
+                if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+                  totalInvoice = totalInvoice + ".00";
+                }
+              infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
             } else {
-              infowindowContent += 'Total Invoice : ' + '-' + '<br>';
+              infowindowContent += 'Total Invoice : $' + '0' + '<br>';
             }
             if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
             || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
               var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
+              if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
+                receivedAmt = receivedAmt + ".00";
+              }
               infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
             } else {
-              infowindowContent += 'Total Received Amount : ' + '-' + '<br>';
+              infowindowContent += 'Total Received Amount : $' + '0' + '<br>';
             }
             // if (this.selectedTrip[i].TotalAmount) {
             //   infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
@@ -627,16 +639,22 @@ export class TrackerComponent implements OnInit {
             if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined ||
               this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
                 var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-              infowindowContent += 'Total Invoice : ' + totalInvoice + '<br>';
+                if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+                  totalInvoice = totalInvoice + ".00";
+                }
+              infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
             } else {
-              infowindowContent += 'Total Invoice : ' + '-' + '<br>';
+              infowindowContent += 'Total Invoice : $' + '0' + '<br>';
             }
             if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
             || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
               var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
+              if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
+                receivedAmt = receivedAmt + ".00";
+              }
               infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
             } else {
-              infowindowContent += 'Total Received Amount : ' + '-' + '<br>';
+              infowindowContent += 'Total Received Amount : $' + '0' + '<br>';
             }
             return () => {
               this.infowindow.setContent(infowindowContent);
