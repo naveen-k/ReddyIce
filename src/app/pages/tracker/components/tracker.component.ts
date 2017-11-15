@@ -371,6 +371,7 @@ export class TrackerComponent implements OnInit {
     return a["PlannedSequence"] - b["PlannedSequence"];
   }
 
+  pinTextColor = '';
   // function to draw the polyline on map
   drawPolyline(google, sequence) {
     if (this.selectedTrip && this.selectedTrip.length >= 1) {
@@ -379,25 +380,41 @@ export class TrackerComponent implements OnInit {
         // changing color of the marker icon based on condition
         if (this.selectedTrip[i].TktType === 29) {
           this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
+          this.pinTextColor = '000';
         } else if (this.selectedTrip[i].OrderID == null) {
           this.pinColor = '0000ff';   // blue color for Unplanned Service
+          this.pinTextColor = 'fff';
         } else if (this.selectedTrip[i].OrderID != null) {
           this.pinColor = 'A52A2A';   // brown color for Planned Service
+          this.pinTextColor = 'fff';
         } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber == null) {
           this.pinColor = 'ff0000';   // red color for Skipped stops
+          this.pinTextColor = 'fff';
         }
 
         // customising the marker icon here
         if (sequence === 2) {
+          // if (this.selectedTrip[i].ActualSequence != null) {
+          //   this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|fff",
+          //     new google.maps.Size(21, 34),
+          //     new google.maps.Point(0, 0),
+          //     new google.maps.Point(10, 34));
+          // }
           if (this.selectedTrip[i].ActualSequence != null) {
-            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
+            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
               new google.maps.Size(21, 34),
               new google.maps.Point(0, 0),
               new google.maps.Point(10, 34));
           }
         } else if (sequence === 1) {
+          // if (this.selectedTrip[i].PlannedSequence != null) {
+          //   this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|fff",
+          //     new google.maps.Size(21, 34),
+          //     new google.maps.Point(0, 0),
+          //     new google.maps.Point(10, 34));
+          // }
           if (this.selectedTrip[i].PlannedSequence != null) {
-            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|000",
+            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
               new google.maps.Size(21, 34),
               new google.maps.Point(0, 0),
               new google.maps.Point(10, 34));
