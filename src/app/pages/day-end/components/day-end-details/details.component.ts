@@ -27,6 +27,7 @@ export class DetailsComponent implements OnInit {
     selectedProduct: object;
     isDistributorExist: boolean;
     userSubTitle: string = '';
+    userRoleId: number; 
 
     totalUnit: any = {
         TotalLoad: 0,
@@ -78,6 +79,7 @@ export class DetailsComponent implements OnInit {
     ngOnInit() {
         const userId = localStorage.getItem('userId') || '';
         this.userService.getUserDetails(userId).subscribe((response) => {
+            this.userRoleId = response.Role.RoleID;
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
@@ -165,13 +167,17 @@ export class DetailsComponent implements OnInit {
 
         this.service.saveUnitReconciliation(this.unitReconciliation.concat(this.newlyAddedProduct)).subscribe((res) => {
             this.notification.success("Success", res);
-            if(statusId === 25){
-                this.router.navigate(['/pages/day-end/list']);
-            }
+            
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
+
+        if(statusId === 25){
+            this.router.navigate(['/pages/day-end/list']);
+        } else {
+            this.tripData.TripStatusID = statusId;
+        }
     }
 
     submitApproveReconciliation() {
