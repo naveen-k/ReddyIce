@@ -562,14 +562,21 @@ export class TrackerComponent implements OnInit {
               infowindowContent += 'Customer Name : ' + '-' + '<br>';
             }
             if (this.selectedTrip[i].TotalSale) {
-              infowindowContent += 'Total Sale : $' + this.selectedTrip[i].TotalSale + '<br>';
+              infowindowContent += 'Total Invoice : $' + this.selectedTrip[i].TotalSale + '<br>';
             } else {
-              infowindowContent += 'Total Sale : ' + '-' + '<br>';
+              infowindowContent += 'Total Invoice : ' + '-' + '<br>';
             }
-            if (this.selectedTrip[i].TotalAmount) {
-              infowindowContent += 'Total Amount : $' + this.selectedTrip[i].TotalAmount + '<br>';
+            // if (this.selectedTrip[i].TotalAmount) {
+            //   infowindowContent += 'Total Amount : $' + this.selectedTrip[i].TotalAmount + '<br>';
+            // } else {
+            //   infowindowContent += 'Total Amount : ' + '-' + '<br>';
+            // }
+            if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
+            || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
+              var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
+              infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
             } else {
-              infowindowContent += 'Total Amount : ' + '-' + '<br>';
+              infowindowContent += 'Total Received Amount : ' + '-' + '<br>';
             }
             return () => {
               this.infowindow.setContent(infowindowContent);
