@@ -79,4 +79,11 @@ export class ReportService extends SharedService {
                 return res;
             });
     }
+
+    getCustomerDropDownList(branch,userID,startDate,endDate,distributor){
+        return this.http.get(`api/report/customerswithfilters?BranchId=${branch}&UserId=${userID}&TripStartDate=${startDate}&TripEndDate=${endDate}&DistributorId=${distributor}`)
+        .map((res)=>res.json()).map((res)=>{
+            return res;
+        })
+    }
 }

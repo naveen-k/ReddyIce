@@ -37,7 +37,9 @@ export class ReportsComponent implements OnInit {
         showCustomerDropdown: false,
         ticketID: 0,
         custNameforTicket: '',
-        customer: ''
+        customer: '',
+        paymentType: 0,
+        tripStatus: 2,
     };
 
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
@@ -66,11 +68,13 @@ export class ReportsComponent implements OnInit {
     linkRpt: SafeResourceUrl;
 
     distributors: any[] = [];
-
+    modifiedStartDate: any;
+    modifiedEndDate: any;
     allCustomers: any[] = [];
     customers: any[] = [];
+    cutommers: any = [];
     customersByTicketNumber: any[];
-
+    dropDownCustomers: any = [];
     drivers: any[] = [];
     driversofDist: any[] = [];
     branches: any[] = [];
@@ -116,19 +120,20 @@ export class ReportsComponent implements OnInit {
             this.isDriver = false;
         }
 
-        if(this.user.Role.RoleName==="ITAdmin" && this.user.IsRIInternal){
-            this.isITAdmin=true;
-        }else if(this.user.Role.RoleName==="Admin" && this.user.IsRIInternal){
-            this.isInternalAdmin=true;
-        }else if(this.user.Role.RoleName==="Admin" && !this.user.IsRIInternal){
-            this.isExternalAdmin=true;
-        }else if(this.user.Role.RoleName==="Driver" && this.user.IsRIInternal){
-            this.isInternalDriver=true;
-        }else if(this.user.Role.RoleName==="Driver" && !this.user.IsRIInternal){
-            this.isExternalDriver=true;
+        if (this.user.Role.RoleName === "ITAdmin" && this.user.IsRIInternal) {
+            this.isITAdmin = true;
+        } else if (this.user.Role.RoleName === "Admin" && this.user.IsRIInternal) {
+            this.isInternalAdmin = true;
+        } else if (this.user.Role.RoleName === "Admin" && !this.user.IsRIInternal) {
+            this.isExternalAdmin = true;
+        } else if (this.user.Role.RoleName === "Driver" && this.user.IsRIInternal) {
+            this.isInternalDriver = true;
+        } else if (this.user.Role.RoleName === "Driver" && !this.user.IsRIInternal) {
+            this.isExternalDriver = true;
         }
 
         this.userTypeChangeHandler();
+        this.getCustomers();
     }
 
     reportTypeChangeHandler() {
@@ -232,7 +237,6 @@ export class ReportsComponent implements OnInit {
             else if (+this.filter.custType === 101) { return cust.IsRICustomer }
             else if (+this.filter.custType === 103) { return !cust.IsRICustomer }
         });
-        console.log(this.customers);
     }
 
     getCustomersbyTicketNumber(ticketNumber) {
@@ -264,9 +268,8 @@ export class ReportsComponent implements OnInit {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
-
         if (rType !== 'TIR') {
-            this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+            //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
             this.selectedCustomerType = (this.filter.customer) ? ((this.filter.customer.IsRICustomer) ? 101 : 103) : this.filter.custType;
 
             this.viewReport = true;
@@ -282,38 +285,38 @@ export class ReportsComponent implements OnInit {
             const custID = this.filter.custID;
             if (rType === 'DR') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=true&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}`);
             } else if (rType === 'RS') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}`);
             } else if (rType === 'SR') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}&TripStatus=${this.filter.tripStatus}`);
             } else if (rType === 'TR') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${custID}&CustType=${this.selectedCustomerType}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}&CustType=${this.selectedCustomerType}&PaymentType=${this.filter.paymentType}`);
 
             } else if (rType === 'AS') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}`);
 
             } else if (rType === 'DST') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${this.filter.custID}`);
 
             } else if (rType === 'IOA') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}`);
 
             } else if (rType === 'SRT') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${custID}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}`);
 
             } else {
                 return false;
@@ -369,5 +372,50 @@ export class ReportsComponent implements OnInit {
         if (dd < 10) { dd = '0' + dd }
         return mm + '/' + dd + '/' + yy;
     }
+    modifyDate(modifyDate) {
+        if (!modifyDate.year) { return ''; }
+        let yy = modifyDate.year, mm = modifyDate.month, dd = modifyDate.day;
+        if (mm < 10) { mm = '0' + mm }
+        if (dd < 10) { dd = '0' + dd }
+        return yy + '/' + mm + '/' + dd;
+    }
+    getCustomers() {
+        this.viewReport=false;
+        this.modifiedStartDate = this.modifyDate(this.filter.startDate);
+        this.modifiedEndDate = this.modifyDate(this.filter.endDate);
+        this.reportService
+            .getCustomerDropDownList(this.filter.branch, this.user.UserId, this.modifiedStartDate, this.modifiedEndDate, this.filter.distributor)
+            .subscribe((res) => {
+                //this.dropDownCustomers=res;
+                const tempArr = [];
+                res.forEach(cus => {
+                    tempArr.push({
+                        value: cus.CustomerID,
+                        label: `${cus.CustomerName}`,
+                        data: cus,
+                    });
+                });
+                tempArr.unshift({ value: 0, label: 'All Customers', data: {} });
+                this.dropDownCustomers = tempArr;
+                console.log(this.dropDownCustomers);
+                this.filterCustomers();
+            }, (err) => { })
+    }
 
+    filterCustomers() {
+        this.viewReport=false;
+        this.cutommers = [];
+        this.cutommers = this.dropDownCustomers.filter((p) => {
+            if (+this.filter.custType === 0) {
+                return true;
+            }
+            if (+this.filter.custType === p.data.CustomerSourceID || p.value === 0) {
+                return true;
+            }
+            return false;
+        });
+    }
+    selectedCustomerChange(){
+        this.viewReport=false;
+    }
 }

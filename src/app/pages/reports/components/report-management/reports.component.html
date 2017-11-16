@@ -4,7 +4,7 @@
             <label>Start Date</label>
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker"
-                    [(ngModel)]="filter.startDate" disabled>
+                    [(ngModel)]="filter.startDate" (ngModelChange)="getCustomers()" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
@@ -14,7 +14,7 @@
             <label>End Date</label>
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker"
-                    [(ngModel)]="filter.endDate" disabled>
+                    [(ngModel)]="filter.endDate" (ngModelChange)="getCustomers()" disabled>
                 <button class="input-group-addon" (click)="d1.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
@@ -46,13 +46,13 @@
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
                         <label>Branch</label>
-                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)"></reddy-select>
+                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch);getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
                     <div class="col-sm-6">
                         <label>Dist/Copacker</label>
-                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select>
+                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor);getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
@@ -94,7 +94,7 @@
                             <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
                             <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
                             <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
-                            <option value="TR" *ngIf="isITAdmin||isInternalAdmin">Invoice List</option>
+                            <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>
                             <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
                             <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
                             <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
@@ -106,10 +106,26 @@
         </div>
         <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
             <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange();filterCustomers()">
                 <option [value]="0">All Customers</option>
                 <option [value]="101">RI Customers</option>
                 <option [value]="103">External Customers</option>
+            </select>
+        </div>
+        <div class="col-sm-2" [hidden]="filter.reportType!='TR'">
+            <label>Payment Type</label>
+            <select class="form-control" [(ngModel)]='filter.paymentType'>
+                <option [value]="0">All</option>
+                <option [value]="18">Cash</option>
+                <option [value]="19">Charge</option>
+            </select>
+        </div>
+        <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
+            <label>Trip Status</label>
+            <select class="form-control" [(ngModel)]='filter.tripStatus'>
+                <option [value]="2">All Trips</option>
+                <option [value]="1">Closed Trips</option>
+                <option [value]="0">Open Trips</option>
             </select>
         </div>
         <div class="col-md-1 text-right head-button-container">
@@ -119,12 +135,12 @@
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
-                    <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
-                    <ng-template #rt let-r="result" let-t="term">
+                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange()"></reddy-select>
+                    <!-- <ng-template #rt let-r="result" let-t="term">
                         {{ r.CustomerNumber}} - {{ r.CustomerName}}
                     </ng-template>
                     <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
-                        placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" />
+                        placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" /> -->
                 </div>
                 <div style='margin-left: 100px;'>
                     <a>
