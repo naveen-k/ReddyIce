@@ -378,9 +378,10 @@ export class TrackerComponent implements OnInit {
       for (var i = 0; i < this.selectedTrip.length; i++) {
 
         // changing color of the marker icon based on condition
-        if (this.selectedTrip[i].TktType === 'R') {
+        if (this.selectedTrip[i].TicketTypeID === 29) {
           this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
           this.pinTextColor = '000';
+          console.log("here : ", i);
         } else if (this.selectedTrip[i].OrderID == null) {
           this.pinColor = '0000ff';   // blue color for Unplanned Service
           this.pinTextColor = 'fff';
