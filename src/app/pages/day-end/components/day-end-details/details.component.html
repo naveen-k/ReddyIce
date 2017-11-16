@@ -6,7 +6,7 @@
             <img src="assets/reddyIce/submitTicket.png" *ngIf="tripData.TripStatusID == 24" width="18" class="newTicketTitleStatusIcon">
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" *ngIf='(tripData.TripStatusID == 23 || tripData.TripStatusID == 24) && userRoleId ==3' (click)="saveReconciliation(25)">Approve</button>
+                <button class="btn btn-danger pull-right" *ngIf='(tripData.TripStatusID == 23 || tripData.TripStatusID == 24) && userRoleId ==3' (click)="saveReconciliation(25);">Approve</button>
                 <button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
                 <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                     (click)="saveReconciliation(23)">Save</button>-->
@@ -122,10 +122,10 @@
                                                     <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket" >
                                                         <span class="tooltiptext">Paper Ticket</span>
                                                     </i>
-                                                    <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket" [routerLink]="['../../../manual-ticket/view',item.ID]">
+                                                    <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket" (click)="viewTicket(item.ID)">
                                                         <span class="tooltiptext">View</span>
                                                     </i>
-                                                    <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket && tripData.TripStatusID !== 25" [routerLink]="['../../../manual-ticket/ticket',item.ID]">
+                                                    <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket && tripData.TripStatusID !== 25" [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]">
                                                         <span class="tooltiptext">Edit</span>
                                                     </i>
                                                 </td>                                                

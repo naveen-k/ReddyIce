@@ -8,6 +8,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TripProduct } from '../../dayend.interfaces';
 import { Route } from '@angular/router/src/config';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     templateUrl: './details.component.html',
@@ -157,26 +158,31 @@ export class DetailsComponent implements OnInit {
             Misc: total.Misc,
             TripStatusID: statusId,
         };
-
         this.service.saveRecociliation(cashRecon).subscribe((res) => {
             //  this.notification.success("Success", res);
+            if(this.userRoleId ===3){
+                if(statusId === 25){
+                    this.notification.success("Success", "Trip has been approved successfully.");
+                    this.router.navigate(['/pages/day-end/list']);
+                } 
+            }
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
+        if(this.userRoleId !==3) {
+            this.service.saveUnitReconciliation(this.unitReconciliation.concat(this.newlyAddedProduct)).subscribe((res) => {
 
-        this.service.saveUnitReconciliation(this.unitReconciliation.concat(this.newlyAddedProduct)).subscribe((res) => {
-            this.notification.success("Success", res);
-            
-        }, (err) => {
-            err = JSON.parse(err._body);
-            this.notification.error("Error", err.Message);
-        });
-
-        if(statusId === 25){
-            this.router.navigate(['/pages/day-end/list']);
-        } else {
-            this.tripData.TripStatusID = statusId;
+                this.notification.success("Success", res);
+                if(statusId === 25){
+                    this.router.navigate(['/pages/day-end/list']);
+                } else {
+                    this.tripData.TripStatusID = statusId;
+                }
+            }, (err) => {
+                err = JSON.parse(err._body);
+                this.notification.error("Error", err.Message);
+            });
         }
     }
 
@@ -274,6 +280,14 @@ export class DetailsComponent implements OnInit {
                 this.ticketTotal.receivedTotal += (!t.CheckAmount && !t.CashAmount) ? t.TotalSale : t.CheckAmount + t.CashAmount;
             }
         });
+    }
+    viewTicket(ticketID) {
+        if (ticketID) {
+            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
+        } else {
+            this.notification.error("Ticket preview unavailable!!");
+        }
+
     }
 }
 

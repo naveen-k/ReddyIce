@@ -8,7 +8,7 @@
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
                 <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back</button>
-                <button class="btn btn-danger" style="margin-left:10px;" (click)="approveTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
+                <button class="btn btn-danger" style="margin-left:10px;" (click)="approveTicket()" [hidden]="(!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25) || tripMode === true">
                     Approve
                 </button>
                 <!-- <button class="btn btn-danger" (click)="editTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
