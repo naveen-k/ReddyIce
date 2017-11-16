@@ -436,16 +436,24 @@ export class TrackerComponent implements OnInit {
 
         // start point of straight line
         if (sequence === 1) {
-          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null) {
+          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
+            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
+            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
             var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
           }
         } else if (sequence === 2) {
-          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
+          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
+            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
+            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
             var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
           }
         } else {
           if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-          && this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null) {
+            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
+            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0"
+          && this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
+          && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
+          && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
             var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
             var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
           }
@@ -455,19 +463,35 @@ export class TrackerComponent implements OnInit {
         if (sequence === 1) {
           // adding check here to avoid 'undefined' condition
           if (this.selectedTrip[i + 1]) {
-            var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+            if (this.selectedTrip[i+1].PlannedLatitude != null && this.selectedTrip[i+1].PlannedLongitude != null
+              && this.selectedTrip[i+1].PlannedLatitude != "" && this.selectedTrip[i+1].PlannedLongitude != ""
+              && this.selectedTrip[i+1].PlannedLatitude != "0.0" && this.selectedTrip[i+1].PlannedLongitude != "0.0") {
+              var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+            }
           }
         } else if (sequence === 2) {
           // adding check here to avoid 'undefined' condition
           if (this.selectedTrip[i + 1]) {
-            var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+            if (this.selectedTrip[i+1].ActualLatitude != null && this.selectedTrip[i+1].ActualLongitude != null
+              && this.selectedTrip[i+1].ActualLatitude != "" && this.selectedTrip[i+1].ActualLongitude != ""
+              && this.selectedTrip[i+1].ActualLatitude != "0.0" && this.selectedTrip[i+1].ActualLongitude != "0.0") {
+              var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+            }
           }
         } else {
           if (this.selectedTrip[i + 1]) {
-            var endPtP = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+            if (this.selectedTrip[i+1].PlannedLatitude != null && this.selectedTrip[i+1].PlannedLongitude != null
+              && this.selectedTrip[i+1].PlannedLatitude != "" && this.selectedTrip[i+1].PlannedLongitude != ""
+              && this.selectedTrip[i+1].PlannedLatitude != "0.0" && this.selectedTrip[i+1].PlannedLongitude != "0.0") {
+              var endPtP = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
+            }
           }
           if (this.selectedTrip[i + 1]) {
-            var endPtA = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+            if (this.selectedTrip[i+1].ActualLatitude != null && this.selectedTrip[i+1].ActualLongitude != null
+              && this.selectedTrip[i+1].ActualLatitude != "" && this.selectedTrip[i+1].ActualLongitude != ""
+              && this.selectedTrip[i+1].ActualLatitude != "0.0" && this.selectedTrip[i+1].ActualLongitude != "0.0") {
+              var endPtA = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
+            }
           }
         }
 
@@ -525,18 +549,26 @@ export class TrackerComponent implements OnInit {
         let positionLongitude1: any;
         let positionLongitude2: any;
         if (sequence === 1) {
-          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null) {
+          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
+            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
+            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
             positionLatitude = this.selectedTrip[i].PlannedLatitude;
             positionLongitude = this.selectedTrip[i].PlannedLongitude;
           }
         } else if (sequence === 2) {
-          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
+          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
+          && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
+          && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
             positionLatitude = this.selectedTrip[i].ActualLatitude;
             positionLongitude = this.selectedTrip[i].ActualLongitude;
           }
         } else {
           if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
-          && this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
+            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
+            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0"
+          && this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
+          && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
+          && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
             positionLatitude1 = this.selectedTrip[i].PlannedLatitude;
             positionLongitude1 = this.selectedTrip[i].PlannedLongitude;
             positionLatitude2 = this.selectedTrip[i].ActualLatitude;
