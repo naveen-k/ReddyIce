@@ -438,7 +438,9 @@ export class TrackerComponent implements OnInit {
         if (sequence === 1) {
           var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
         } else if (sequence === 2) {
-          var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
+          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
+            var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
+          }
         } else {
           var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
           var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
@@ -521,8 +523,10 @@ export class TrackerComponent implements OnInit {
           positionLatitude = this.selectedTrip[i].PlannedLatitude;
           positionLongitude = this.selectedTrip[i].PlannedLongitude;
         } else if (sequence === 2) {
-          positionLatitude = this.selectedTrip[i].ActualLatitude;
-          positionLongitude = this.selectedTrip[i].ActualLongitude;
+          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
+            positionLatitude = this.selectedTrip[i].ActualLatitude;
+            positionLongitude = this.selectedTrip[i].ActualLongitude;
+          }
         } else {
           positionLatitude1 = this.selectedTrip[i].PlannedLatitude;
           positionLongitude1 = this.selectedTrip[i].PlannedLongitude;
