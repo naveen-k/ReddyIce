@@ -436,14 +436,19 @@ export class TrackerComponent implements OnInit {
 
         // start point of straight line
         if (sequence === 1) {
-          var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
+          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null) {
+            var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
+          }
         } else if (sequence === 2) {
           if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
             var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
           }
         } else {
-          var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
-          var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
+          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
+          && this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null) {
+            var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
+            var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
+          }
         }
 
         // end point fo straight line
@@ -520,18 +525,23 @@ export class TrackerComponent implements OnInit {
         let positionLongitude1: any;
         let positionLongitude2: any;
         if (sequence === 1) {
-          positionLatitude = this.selectedTrip[i].PlannedLatitude;
-          positionLongitude = this.selectedTrip[i].PlannedLongitude;
+          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null) {
+            positionLatitude = this.selectedTrip[i].PlannedLatitude;
+            positionLongitude = this.selectedTrip[i].PlannedLongitude;
+          }
         } else if (sequence === 2) {
           if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
             positionLatitude = this.selectedTrip[i].ActualLatitude;
             positionLongitude = this.selectedTrip[i].ActualLongitude;
           }
         } else {
-          positionLatitude1 = this.selectedTrip[i].PlannedLatitude;
-          positionLongitude1 = this.selectedTrip[i].PlannedLongitude;
-          positionLatitude2 = this.selectedTrip[i].ActualLatitude;
-          positionLongitude2 = this.selectedTrip[i].ActualLongitude;
+          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
+          && this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null) {
+            positionLatitude1 = this.selectedTrip[i].PlannedLatitude;
+            positionLongitude1 = this.selectedTrip[i].PlannedLongitude;
+            positionLatitude2 = this.selectedTrip[i].ActualLatitude;
+            positionLongitude2 = this.selectedTrip[i].ActualLongitude;
+          }
         }
         if (sequence != 3) {
           var marker = new google.maps.Marker({
