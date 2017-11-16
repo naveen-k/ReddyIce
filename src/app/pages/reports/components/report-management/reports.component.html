@@ -113,7 +113,7 @@
             </select>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='TR'">
-            <label>Payment Type</label>
+            <label>Customer Type</label>
             <select class="form-control" [(ngModel)]='filter.paymentType'>
                 <option [value]="0">All</option>
                 <option [value]="18">Cash</option>
@@ -151,7 +151,7 @@
         </div>
     </div>
     <div class="row" [hidden]="IsTIR">
-        <div class="col-sm-3" *ngIf="filter.reportType === 'SR'">
+        <div class="col-sm-4" *ngIf="filter.reportType === 'SR'">
             <span class="col-sm-4 local-padding-eater">
                 <label class="top-margin">Ticket Type</label>
             </span>
@@ -164,7 +164,7 @@
             <span class="col-sm-4 local-padding-eater left-margin">
                 <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin">
                 <label class="top-margin">
-                    <b>Paper</b>
+                    <b>Office Manual Ticket</b>
                 </label>
             </span>
         </div>
@@ -176,7 +176,7 @@
                     <label class="control-label">
                         Enter Ticket Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="true" [(ngModel)]="filter.ticketNumber" (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
+                    <input type="text" class="form-control" [numberOnly]="true" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number" (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
                     <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
