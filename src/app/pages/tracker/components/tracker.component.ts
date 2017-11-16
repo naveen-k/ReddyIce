@@ -211,7 +211,7 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
-    if (this.selectedTrip) {
+    if (this.selectedTrip && this.planned) {
       this.selectedTrip.sort(this.comparator); // sorting planned sequence
     }
     this.drawMapPath();
@@ -378,7 +378,7 @@ export class TrackerComponent implements OnInit {
       for (var i = 0; i < this.selectedTrip.length; i++) {
 
         // changing color of the marker icon based on condition
-        if (this.selectedTrip[i].TktType === 29) {
+        if (this.selectedTrip[i].TktType === 'R') {
           this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
           this.pinTextColor = '000';
         } else if (this.selectedTrip[i].OrderID == null) {
@@ -421,13 +421,13 @@ export class TrackerComponent implements OnInit {
           }
         } else {
           if (this.selectedTrip[i].ActualSequence != null) {
-            this.pinImage2 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|000",
+            this.pinImage2 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
               new google.maps.Size(21, 34),
               new google.maps.Point(0, 0),
               new google.maps.Point(10, 34));
           }
           if (this.selectedTrip[i].PlannedSequence != null) {
-            this.pinImage1 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|000",
+            this.pinImage1 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
               new google.maps.Size(21, 34),
               new google.maps.Point(0, 0),
               new google.maps.Point(10, 34));

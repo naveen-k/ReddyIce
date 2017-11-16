@@ -125,8 +125,8 @@
                                         <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
                                             {{subitem.ActualSequence}}
                                         </td>
-                                        <td title="{{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
-                                            {{subitem.CustomerNumber}}
+                                        <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
+                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}
                                         </td>
                                         <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
                                             {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}
