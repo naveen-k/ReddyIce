@@ -28,7 +28,6 @@ export class DayEndComponent implements OnInit {
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
-
         if (this.logedInUser.IsDistributor) {
             this.userSubTitle = ` - ${this.logedInUser.Distributor.DistributorName}`;
             this.filter.type = 'distributor';
@@ -76,7 +75,7 @@ export class DayEndComponent implements OnInit {
             if (this.logedInUser.IsDistributor && !this.distributors.length) {
                 this.distributors = [{
                     value: this.logedInUser.Distributor.DistributorMasterId,
-                    label: this.logedInUser.Distributor.DistributorName
+                    label: this.logedInUser.Distributor.DistributorNumber +' - '+this.logedInUser.Distributor.DistributorName
                 }]
             }
             this.showSpinner = false;
