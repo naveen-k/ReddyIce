@@ -38,7 +38,7 @@ export class ReportsComponent implements OnInit {
         ticketID: 0,
         custNameforTicket: '',
         customer: '',
-        paymentType: '18',
+        paymentType: '0',
         tripState: 0,
         tripStatus:0
     };
