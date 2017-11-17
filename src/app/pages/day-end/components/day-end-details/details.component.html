@@ -78,10 +78,10 @@
                                     <table class="table table-striped">
                                         <thead class="tableHeader">
                                             <tr>
-                                                <th>Action</th>                                                
+                                                <th></th>                                                
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
-                                                Ticket Number
+                                                Ticket #
                                                  <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                             </span>
                                                 </th>
@@ -105,7 +105,7 @@
                                                 </th>
                                                 <th class="text-align-right">
                                                     <span>
-                                                        Received Amount
+                                                        Received Amt
                                                      <!-- <i *ngIf="(customer.sortField === 'IsSaleTicket')" [ngClass]="(customer.isAsc && customer.sortField === 'IsSaleTicket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
@@ -122,12 +122,12 @@
                                                     <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket" >
                                                         <span class="tooltiptext">Paper Ticket</span>
                                                     </i>
-                                                    <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket" (click)="viewTicket(item.ID)">
-                                                        <span class="tooltiptext">View</span>
-                                                    </i>
                                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket && tripData.TripStatusID !== 25" [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]">
                                                         <span class="tooltiptext">Edit</span>
                                                     </i>
+                                                    <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket" (click)="viewTicket(item.ID)">
+                                                            <span class="tooltiptext">View</span>
+                                                        </i>
                                                 </td>                                                
                                                 <td>{{item.TicketNumber }}</td>
                                                 <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
