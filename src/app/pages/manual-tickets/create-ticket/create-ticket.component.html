@@ -328,13 +328,21 @@
                                     </thead>
                                     <tbody>
                                         <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct">
-                                            <td>
+                                            <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
                                                 </select>
                                             </td>
+                                            <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
+                                                    
+                                                    <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                    [disabled]="true">
+                                                        <option [ngValue]="tdetail.ProductID" >
+                                                            {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
+                                                    </select>
+                                                </td>
                                             <td> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
                                             <td>
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading"
@@ -393,13 +401,21 @@
                                     </thead>
                                     <tbody>
                                         <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct">
-                                            <td>
+                                            <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
                                                 </select>
                                             </td>
+                                            <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
+                                                    
+                                                    <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                    [disabled]="true">
+                                                        <option [ngValue]="tdetail.ProductID" >
+                                                            {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
+                                                    </select>
+                                                </td>
                                             <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags"
@@ -460,13 +476,21 @@
                                     </thead>
                                     <tbody>
                                         <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct">
-                                            <td>
+                                            <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
                                                 </select>
                                             </td>
+                                            <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
+                                                    
+                                                    <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                    [disabled]="true">
+                                                        <option [ngValue]="tdetail.ProductID" >
+                                                            {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
+                                                    </select>
+                                                </td>
                                             <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
