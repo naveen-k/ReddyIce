@@ -141,6 +141,12 @@
                 <label class="top-margin">Customer Type</label>
             </span>
             <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="paymentType" value="0" [(ngModel)]="filter.paymentType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>All</b>
+                </label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
                 <input type="radio" name="paymentType" value="18" [(ngModel)]="filter.paymentType" class="top-margin" checked>
                 <label class="top-margin">
                     <b>Cash</b>
