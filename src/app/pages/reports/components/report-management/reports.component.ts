@@ -32,7 +32,7 @@ export class ReportsComponent implements OnInit {
         driver: 1,
         custID: 0,
         custType: 0,
-        ticketNumber: 0,
+        //ticketNumber: 0,
         custName: 'All Customers',
         showCustomerDropdown: false,
         ticketID: 0,
