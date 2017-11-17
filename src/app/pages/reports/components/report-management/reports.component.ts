@@ -139,6 +139,7 @@ export class ReportsComponent implements OnInit {
     }
 
     reportTypeChangeHandler() {
+        this.filter.tripState=0;
         this.disableTrippState=false;
         this.filter.ticketType='regular';
         this.IsTIR = false;
@@ -431,6 +432,7 @@ export class ReportsComponent implements OnInit {
         this.disableTrippState=false;
     }
     driverChange(){
+       
         this.viewReport=false;
     }
 }
