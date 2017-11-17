@@ -38,8 +38,8 @@ export class ReportsComponent implements OnInit {
         ticketID: 0,
         custNameforTicket: '',
         customer: '',
-        paymentType: 0,
-        tripState: 2,
+        paymentType: '18',
+        tripState: 1,
         tripStatus:0
     };
 
@@ -84,6 +84,7 @@ export class ReportsComponent implements OnInit {
     isDriver: boolean = false;
     viewReport: boolean = false;
     searching: boolean = false;
+    disableTrippState:boolean=false;
 
     userSubTitle: string = '';
 
@@ -138,6 +139,8 @@ export class ReportsComponent implements OnInit {
     }
 
     reportTypeChangeHandler() {
+        this.disableTrippState=false;
+        this.filter.ticketType='regular';
         this.IsTIR = false;
         this.yesFlag = false;
         this.viewReport = false;
@@ -417,5 +420,13 @@ export class ReportsComponent implements OnInit {
     }
     selectedCustomerChange(){
         this.viewReport=false;
+    }
+    disableTripState(){
+        this.filter.tripState=1;
+        this.disableTrippState=true;
+    }
+    enableTripState(){
+        this.filter.tripState=1;
+        this.disableTrippState=false;
     }
 }

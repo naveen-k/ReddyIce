@@ -112,34 +112,6 @@
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType!='TR'">
-            <label>Customer Type</label>
-            <select class="form-control" [(ngModel)]='filter.paymentType'>
-                <option [value]="0">All</option>
-                <option [value]="18">Cash</option>
-                <option [value]="19">Charge</option>
-            </select>
-        </div>
-        <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
-            <label>Trip State</label>
-            <select class="form-control" [(ngModel)]='filter.tripState'>
-                <option [value]="2">All Trips</option>
-                <option [value]="1">Closed Trips</option>
-                <option [value]="0">Open Trips</option>
-            </select>
-        </div>
-        <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
-            <label>Trip Status</label>
-            <select class="form-control" [(ngModel)]='filter.tripStatus'>
-                <option [value]="0">All Trips</option>
-                <option [value]="23">Draft</option>
-                <option [value]="24">Submitted</option>
-                <option [value]="25">Approved</option>
-            </select>
-        </div>
-        <div class="col-md-1 text-right head-button-container">
-            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
-        </div>
         <div class="col-sm-2" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'||IsTIR||filter.reportType==='SR'">
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
@@ -158,6 +130,50 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
+            <!-- <label>Customer Type</label> -->
+            <!-- <select class="form-control" [(ngModel)]='filter.paymentType'>
+                <option [value]="0">All</option>
+                <option [value]="18">Cash</option>
+                <option [value]="19">Charge</option>
+            </select> -->
+            <span class="col-sm-4 local-padding-eater">
+                <label class="top-margin">Customer Type</label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="paymentType" value="18" [(ngModel)]="filter.paymentType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>Cash</b>
+                </label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="paymentType" value="19" [(ngModel)]="filter.paymentType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>Charge</b>
+                </label>
+            </span>
+        </div>
+        <div class="col-sm-2" [hidden]="filter.reportType!='SR'" >
+            <label>Trip State</label>
+            <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState">
+                <option [value]="1">All Trips</option>
+                <option [value]="2">HH Day End Only</option>
+                <option [value]="3">Trip Fully Approved</option>
+            </select>
+        </div>
+        <!-- <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
+            <label>Trip Status</label>
+            <select class="form-control" [(ngModel)]='filter.tripStatus'>
+                <option [value]="0">All Trips</option>
+                <option [value]="23">Draft</option>
+                <option [value]="24">Submitted</option>
+                <option [value]="25">Approved</option>
+            </select>
+        </div> -->
+        <div class="col-md-1 text-right head-button-container">
+            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
+        </div>
+       
     </div>
     <div class="row" [hidden]="IsTIR">
         <div class="col-sm-4" *ngIf="filter.reportType === 'SR'">
@@ -165,13 +181,13 @@
                 <label class="top-margin">Ticket Type</label>
             </span>
             <span class="col-sm-4 local-padding-eater left-margin">
-                <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" checked>
+                <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" (click)="enableTripState()" checked>
                 <label class="top-margin">
                     <b>Regular</b>
                 </label>
             </span>
             <span class="col-sm-4 local-padding-eater left-margin">
-                <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin">
+                <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin" (click)="disableTripState()">
                 <label class="top-margin">
                     <b>Office Manual Ticket</b>
                 </label>
