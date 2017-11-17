@@ -154,10 +154,11 @@
             </span>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='SR'" >
-            <label>Trip State</label>
+            <label>Trip Status</label>
             <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState">
-                <option [value]="1">All Trips</option>
-                <option [value]="2">HH Day End Only</option>
+                <option [value]="0">All Trips</option>
+                <option [value]="1">HH Day End Not Done</option>
+                <option [value]="2">HH Day End Done-Not Approved</option>
                 <option [value]="3">Trip Fully Approved</option>
             </select>
         </div>
