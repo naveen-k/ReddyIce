@@ -58,13 +58,13 @@
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
                         <label>Driver</label>
-                        <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver"></reddy-select>
+                        <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
                     <div class="col-sm-6" [hidden]="filter.reportType === 'DST'">
                         <label>Driver</label>
-                        <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver"></reddy-select>
+                        <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>
             </div>
@@ -155,7 +155,7 @@
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='SR'" >
             <label>Trip Status</label>
-            <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState">
+            <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
                 <option [value]="0">All Trips</option>
                 <option [value]="1">HH Day End Not Done</option>
                 <option [value]="2">HH Day End Done-Not Approved</option>

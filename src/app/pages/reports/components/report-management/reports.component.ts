@@ -32,7 +32,7 @@ export class ReportsComponent implements OnInit {
         driver: 1,
         custID: 0,
         custType: 0,
-        ticketNumber: 0,
+        ticketNumber: null,
         custName: 'All Customers',
         showCustomerDropdown: false,
         ticketID: 0,
@@ -218,6 +218,7 @@ export class ReportsComponent implements OnInit {
 
 
     userTypeChangeHandler() {
+        this.viewReport=false;
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
             this.getAllBranches();
@@ -428,5 +429,8 @@ export class ReportsComponent implements OnInit {
     enableTripState(){
         this.filter.tripState=0;
         this.disableTrippState=false;
+    }
+    driverChange(){
+        this.viewReport=false;
     }
 }
