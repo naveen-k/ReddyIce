@@ -64,7 +64,7 @@ export class TicketListComponent implements OnInit {
 
 
         this.searchObj = this.service.getSearchedObject();
-
+        this.searchObj.BranchId = 1;
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
@@ -88,7 +88,6 @@ export class TicketListComponent implements OnInit {
         if (this.user.Distributor && this.user.Distributor.DistributorMasterId && !this.searchObj.DistributorID) {
             this.searchObj.DistributorID = this.user.Distributor.DistributorMasterId;
         }
-
         // Set first branch default selected
         if (this.searchObj.BranchId) {
             this.branchChangeHandler();

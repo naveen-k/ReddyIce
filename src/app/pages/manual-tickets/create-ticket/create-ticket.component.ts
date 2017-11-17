@@ -162,6 +162,7 @@ export class CreateTicketComponent implements OnInit {
     }
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
+    
     branches = branches.filter((b) => b.BranchID !== 1);
     this.sortBranches(branches);
 
@@ -184,7 +185,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.ticket.BranchID || this.ticket.DistributorCopackerID) {
       this.loadCustomers();
     }
-
+   
     // load driver or distributor
     if (this.ticket.BranchID && this.ticket.isUserTypeDistributor) {
       this.loadDisributors(this.ticket.BranchID);
