@@ -32,14 +32,15 @@ export class ReportsComponent implements OnInit {
         driver: 1,
         custID: 0,
         custType: 0,
-        //ticketNumber: 0,
+        ticketNumber: 0,
         custName: 'All Customers',
         showCustomerDropdown: false,
         ticketID: 0,
         custNameforTicket: '',
         customer: '',
         paymentType: 0,
-        tripStatus: 2,
+        tripState: 2,
+        tripStatus:0
     };
 
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
@@ -293,7 +294,7 @@ export class ReportsComponent implements OnInit {
             } else if (rType === 'SR') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}&TripStatus=${this.filter.tripStatus}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custID}&TripStatus=${this.filter.tripStatus}&TripState=${this.filter.tripState}`);
             } else if (rType === 'TR') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custID}&CustType=${this.selectedCustomerType}&PaymentType=${this.filter.paymentType}`);
@@ -404,7 +405,6 @@ export class ReportsComponent implements OnInit {
 
     filterCustomers() {
         this.viewReport=false;
-        this.cutommers = [];
         this.cutommers = this.dropDownCustomers.filter((p) => {
             if (+this.filter.custType === 0) {
                 return true;

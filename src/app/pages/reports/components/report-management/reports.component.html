@@ -121,11 +121,20 @@
             </select>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
-            <label>Trip Status</label>
-            <select class="form-control" [(ngModel)]='filter.tripStatus'>
+            <label>Trip State</label>
+            <select class="form-control" [(ngModel)]='filter.tripState'>
                 <option [value]="2">All Trips</option>
                 <option [value]="1">Closed Trips</option>
                 <option [value]="0">Open Trips</option>
+            </select>
+        </div>
+        <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
+            <label>Trip Status</label>
+            <select class="form-control" [(ngModel)]='filter.tripStatus'>
+                <option [value]="0">All Trips</option>
+                <option [value]="23">Draft</option>
+                <option [value]="24">Submitted</option>
+                <option [value]="25">Approved</option>
             </select>
         </div>
         <div class="col-md-1 text-right head-button-container">
