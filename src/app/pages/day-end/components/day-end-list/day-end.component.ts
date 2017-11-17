@@ -75,7 +75,7 @@ export class DayEndComponent implements OnInit {
             if (this.logedInUser.IsDistributor && !this.distributors.length) {
                 this.distributors = [{
                     value: this.logedInUser.Distributor.DistributorMasterId,
-                    label: this.logedInUser.Distributor.DistributorNumber +' - '+this.logedInUser.Distributor.DistributorName
+                    label: this.logedInUser.Distributor.DistributorNumber +'-'+this.logedInUser.Distributor.DistributorName
                 }]
             }
             this.showSpinner = false;

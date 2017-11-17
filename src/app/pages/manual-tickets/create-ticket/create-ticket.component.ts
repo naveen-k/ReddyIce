@@ -916,7 +916,13 @@ export class CreateTicketComponent implements OnInit {
    * Calculation 
    */
   updateTicketDetailObject(ticketDetail) {
-    ticketDetail['productSelected'] = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+    var prodDetail = {};
+    prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+    if(!prodDetail){
+      //ticketDetail.Price = ticketDetail.Rate;
+      prodDetail = {Price:ticketDetail.Rate};
+    }
+    ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
   }

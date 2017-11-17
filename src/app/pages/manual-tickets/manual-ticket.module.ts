@@ -1,3 +1,4 @@
+import { IsExistFilter } from './pipes/filter-isexist.pipe';
 import { TicketFilter } from './pipes/filter-ticket.pipe';
 import { BranchResolver, TicketTypesResolver } from './manual-ticket.resolver';
 import { TicketStatusPipe } from './pipes/ticket-status.pipe';
@@ -32,6 +33,7 @@ import { CreateTicketComponent } from './create-ticket/create-ticket.component';
     TicketStatusPipe,
     CreateTicketComponent,
     TicketFilter,
+    IsExistFilter,
   ],
   providers: [
     ManualTicketService,
