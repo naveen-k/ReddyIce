@@ -834,6 +834,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
+
     const clonedObject: ManualTicket = JSON.parse(JSON.stringify(ticket));
 
     // removing all the unwanted properties.
