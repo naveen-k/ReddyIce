@@ -106,7 +106,7 @@
         </div>
         <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
             <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange();filterCustomers()">
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);filterCustomers()">
                 <option [value]="0">All Customers</option>
                 <option [value]="101">RI Customers</option>
                 <option [value]="103">External Customers</option>
@@ -116,7 +116,7 @@
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
-                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange()"></reddy-select>
+                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)" ></reddy-select>
                     <!-- <ng-template #rt let-r="result" let-t="term">
                         {{ r.CustomerNumber}} - {{ r.CustomerName}}
                     </ng-template>
