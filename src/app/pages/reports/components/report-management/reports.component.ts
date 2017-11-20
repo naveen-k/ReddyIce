@@ -48,24 +48,24 @@ export class ReportsComponent implements OnInit {
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
     hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
-    search = (text$: Observable<any>) => text$.debounceTime(300)
-        .distinctUntilChanged()
-        .do((term) => this.searching = true)
-        .switchMap(term => !term.length ? [] :
-            this.reportService.getCustomerSearch(
-                term.replace('#', '%23', 'g'),
-                this.filter.userType, this.filter.branch,
-                this.filter.distributor,
-                this.filter.custType,
-            )
-                .do(() => this.searching = false)
-                .catch(() => {
-                    this.searching = true;
-                    return Observable.of([]);
-                }),
-    )
-        .do(() => this.searching = false)
-        .merge(this.hideSearchingWhenUnsubscribed)
+    // search = (text$: Observable<any>) => text$.debounceTime(300)
+    //     .distinctUntilChanged()
+    //     .do((term) => this.searching = true)
+    //     .switchMap(term => !term.length ? [] :
+    //         this.reportService.getCustomerSearch(
+    //             term.replace('#', '%23', 'g'),
+    //             this.filter.userType, this.filter.branch,
+    //             this.filter.distributor,
+    //             this.filter.custType,
+    //         )
+    //             .do(() => this.searching = false)
+    //             .catch(() => {
+    //                 this.searching = true;
+    //                 return Observable.of([]);
+    //             }),
+    // )
+    //     .do(() => this.searching = false)
+    //     .merge(this.hideSearchingWhenUnsubscribed)
 
     user: User;
     linkRpt: SafeResourceUrl;
@@ -432,7 +432,7 @@ export class ReportsComponent implements OnInit {
                         this.customerstatus = this.cutommers[i].data.CustomerSourceID;
                     }
                 }else {
-                    this.customerstatus = 0;
+                    this.customerstatus = this.customerstatus;
                 }
             }
         }
