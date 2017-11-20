@@ -3,7 +3,7 @@
         <div class="col-sm-2">
             <label>Select Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets();'
+                <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets("bydate");'
                     [maxDate]="todaysDate" ngbDatepicker #d="ngbDatepicker" disabled>
                 <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
@@ -66,9 +66,9 @@
                         </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'Customer.CustomerName';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerTitle';customer.isAsc=!customer.isAsc;">
                           Customer
-                          <i *ngIf="(customer.sortField == 'Customer.CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'Customer.CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                          <i *ngIf="(customer.sortField == 'CustomerTitle')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTitle' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th class="thVerticalAlign table-text-align" [hidden]="searchObj.userType!='Internal'">
@@ -78,9 +78,9 @@
                         </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TotalSale';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TotalSaleWithTax';customer.isAsc=!customer.isAsc;">
                             Total Sale
-                            <i *ngIf="(customer.sortField == 'TotalSale')" [ngClass]="(customer.isAsc && customer.sortField == 'TotalSale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'TotalSaleWithTax')" [ngClass]="(customer.isAsc && customer.sortField == 'TotalSaleWithTax' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
@@ -110,7 +110,7 @@
                 </tr>
             </thead>
             <tbody>                
-                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:searchObj.userType === 'Internal'?searchObj.UserId:searchObj.DistributorID )  | sort:customer.sortField:customer.isAsc | filter:searchString:['TicketNumber', 'UserName', 'Customer.CustomerName', 'Customer.CustomerID', 'CashAmount', 'TotalSale', 'ticketType']:allTickets">
+                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:(searchObj.userType === 'Internal')?searchObj.UserId:searchObj.DistributorID ) | filter:searchString:['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType'] | sort:customer.sortField:customer.isAsc">
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
@@ -144,9 +144,9 @@
                     <td>{{ item.TicketNumber }}</td>
                     <!-- <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td> -->
                     <td>{{ item.ticketType }}</td>
-                    <td><span [title]="item.Customer.CustomerNumber + ' - ' +item.Customer.CustomerName">{{item.Customer.CustomerNumber }} - {{item.Customer.CustomerName | cutString:true:15 }}</span></td>
+                    <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:15 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
-                    <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSale | currency:'USD':true:'1.2' }}</td>
+                    <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
                     <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currency:'USD':true:'1.2' }}</td>
                     <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currency:'USD':true:'1.2' }}</td>

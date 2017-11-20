@@ -798,7 +798,14 @@ export class CreateTicketComponent implements OnInit {
 
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
+      console.log("ticket ", ticket)
       this.notification.success('', 'Ticket created successfully!');
+      let d:any[] = ticket.DeliveryDate.split('-');
+      if(d.length && d.length == 3){ 
+        this.listFilter.CreatedDate.month = +d[0];
+        this.listFilter.CreatedDate.day = +d[1];
+        this.listFilter.CreatedDate.year = +d[2];
+      }
       if (this.tripMode) {
         this.location.back();
         return;

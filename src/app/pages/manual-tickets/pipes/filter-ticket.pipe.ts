@@ -11,13 +11,13 @@ export class TicketFilter implements PipeTransform {
         }
         value = +value;
         return array.filter((ticket: ManualTicket) => {
-            if (filterField === 'Internal') {
+            if (filterField === 'Internal' && ticket.IsRIInternal) {
                 if (value === 1) {
                     return ticket.UserID > 0;
                 }
                 return ticket.UserID === value;
             }
-            return ticket.DistributorCopackerID === value;
+            return ticket.DistributorCopackerID === value;           
         });
     }
 }
