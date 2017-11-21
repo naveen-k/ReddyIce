@@ -3,7 +3,7 @@
         <div class="col-sm-2">
             <label>Select Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets("bydate");'
+                <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets("bydate");dateChangeHandler();'
                     [maxDate]="todaysDate" ngbDatepicker #d="ngbDatepicker" disabled>
                 <button class="input-group-addon" (click)="d.toggle();$event.stopPropagation()" (document:click)="d.close()" type="button">
                     <i class="ion-calendar"></i>
@@ -110,7 +110,7 @@
                 </tr>
             </thead>
             <tbody>                
-                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:(searchObj.userType === 'Internal')?searchObj.UserId:searchObj.DistributorID ) | filter:searchString:['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType'] | sort:customer.sortField:customer.isAsc">
+                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:(searchObj.userType === 'Internal')?searchObj.UserId:searchObj.DistributorID ) | filter:searchString:['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType'] | sort:customer.sortField:customer.isAsc; let i=index">
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">

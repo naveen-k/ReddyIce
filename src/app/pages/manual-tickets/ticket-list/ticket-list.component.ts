@@ -137,9 +137,12 @@ export class TicketListComponent implements OnInit {
     }
 
     branchChangeHandler(byType: any = '') {
+        //this.searchObj.UserId = null;
         this.getDrivers(byType);
     }
-
+    dateChangeHandler(){
+        this.searchObj.UserId = null;
+    }
     getSearchedTickets(byType: any = '') {
         // Cloned search object
         const searchObj = JSON.parse(JSON.stringify(this.searchObj));
@@ -162,6 +165,7 @@ export class TicketListComponent implements OnInit {
                     this.showSpinner = false;
                     if (response == 'No record found') {
                         this.allTickets = [];
+                        this.allTicketsTemp = [];
                     } else {
                         response.forEach(element => {
                             element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
@@ -262,7 +266,7 @@ export class TicketListComponent implements OnInit {
         //     return;
         // }
         if (this.searchObj.userType === 'External') {
-            this.searchObj.BranchId = null;
+            this.searchObj.BranchId = 1;
             this.searchObj.UserId = null;
             this.getDistributors();
         } else {
