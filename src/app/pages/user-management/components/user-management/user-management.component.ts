@@ -345,8 +345,22 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  formatUser(user: any) {
+  
+  formatUser(user: any = '') {
     user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BranchName : 'NA')}`;
+    if (user.Branch) {
+      user.concatBranch = user.Branch.map(function(elem){
+          return elem.BranchName;
+      }).join(",");
+
+      user.concatCode = user.Branch.map(function(elem){
+          return elem.BranchCode;
+      }).join(",");
+
+      user.concatBranchCode =  user.Branch.map(function(elem){
+          return elem.BranchCode + ' - ' + elem.BranchName;
+      }).join(",");
+    }
     user['tmp_role'] = `${(user.Role ? user.Role.RoleName : '')}`;
     user['tmp_distributor'] = `${(user.Distributor ? user.Distributor.DistributorName : '')}`;
     return user;
