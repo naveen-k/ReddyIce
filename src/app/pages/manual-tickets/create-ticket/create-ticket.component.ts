@@ -1076,6 +1076,9 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.ticket.CheckAmount && this.ticket.CheckAmount.toString().includes('-')) {
       this.notification.error('', 'Check Amount cannot contain -');
       return false;
+    } else if (ticket.TicketProduct && ticket.TicketProduct.length < 1) {
+      this.notification.error('', 'Product is mandatory for creating/ approving the ticket');
+      return false;
     } else if (this.ticket.CustomerType === 20 && this.customer.PaymentType !== 19) {
       if (this.ticket.CashAmount || this.ticket.CashAmount === 0) {
         return true;
