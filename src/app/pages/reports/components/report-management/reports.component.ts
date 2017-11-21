@@ -430,6 +430,7 @@ export class ReportsComponent implements OnInit {
                 if (this.cutommers[i].data.CustomerID) {
                     if (id === this.cutommers[i].data.CustomerID) {
                         this.customerstatus = this.cutommers[i].data.CustomerSourceID;
+                        break;
                     }
                 }else {
                     if(this.filter.custType === 0){
