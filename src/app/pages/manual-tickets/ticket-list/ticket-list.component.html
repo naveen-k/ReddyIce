@@ -19,7 +19,7 @@
         </div>
         <div class="col-sm-3" *ngIf="!user.IsDistributor" [hidden]="searchObj.userType=='External'">
             <label>Select Branch</label>
-            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler()"></reddy-select>            
+            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler('bybranch')"></reddy-select>            
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>
