@@ -5,7 +5,7 @@
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker"
                     [(ngModel)]="filter.startDate" (ngModelChange)="getCustomers()" disabled>
-                <button class="input-group-addon" (click)="d.toggle();$event.stopPropagation()" (document:click)="d.close()" type="button">
+                <button class="input-group-addon" (click)="d.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
             </div>
@@ -15,7 +15,7 @@
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker"
                     [(ngModel)]="filter.endDate" (ngModelChange)="getCustomers()" disabled>
-                <button class="input-group-addon" (click)="d1.toggle();$event.stopPropagation()" (document:click)="d1.close()" type="button">
+                <button class="input-group-addon" (click)="d1.toggle()" type="button">
                     <i class="ion-calendar"></i>
                 </button>
             </div>
@@ -106,7 +106,7 @@
         </div>
         <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
             <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);filterCustomers()">
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
                 <option [value]="0">All Customers</option>
                 <option [value]="101">RI Customers</option>
                 <option [value]="103">External Customers</option>
