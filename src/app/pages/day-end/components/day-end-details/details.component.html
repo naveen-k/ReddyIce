@@ -432,19 +432,22 @@
                                                 <label>Cash($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash'
+                                                (ngModelChange)="cashReconChange(ticketDetails)" [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Check($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck'
+                                                (ngModelChange)="cashReconChange(ticketDetails)" [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Coins($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true"  [(ngModel)]='ticketDetails?.Total.ActualCoin' [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true"  [(ngModel)]='ticketDetails?.Total.ActualCoin'
+                                                (ngModelChange)="cashReconChange(ticketDetails)" [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
@@ -460,7 +463,8 @@
                                                 <label>Misc($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc'
+                                                (ngModelChange)="cashReconChange(ticketDetails)" [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">
@@ -469,29 +473,13 @@
                                                 <label>Total Deposit:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{
-                                                    (ticketDetails?.Total.actualdepositcheck || 0) + 
-                                                    (ticketDetails?.Total.actualdepositcash || 0 )+  
-                                                    (ticketDetails?.Total.actualdepositmisc || 0 + 
-                                                    ticketDetails?.Total.actualdepositcoin || 0) 
-                                                    |currency:'USD':true:'1.2'}}</b></span>
+                                                <span><b>{{totalDeposit|currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Over/Short:</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <span><b>{{
-                                                        ticketDetails?.Total.TotalManualCash +  
-                                                        ticketDetails?.Total.TotalHHCash + 
-                                                        ticketDetails?.Total.TotalHHCheck + 
-                                                        ticketDetails?.Total.TotalManualCheck + 
-                                                        ticketDetails?.Total.TotalHHCreditCard + 
-                                                        ticketDetails?.Total.TotalManualCreditCard 
-                                                        - (ticketDetails?.Total.actualdepositcheck || 0)
-                                                        - (ticketDetails?.Total.actualdepositcash || 0) 
-                                                        - (ticketDetails?.Total.actualdepositmisc || 0)
-                                                        - (ticketDetails?.Total.actualdepositcoin || 0)
-                                                        | currency:'USD':true:'1.2'}}</b></span>
+                                                <span><b>{{ totalOverShort | currency:'USD':true:'1.2'}}</b></span>
                                             </div>
                                         </div>
                                     </div>

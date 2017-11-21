@@ -87,13 +87,8 @@ export class DetailsComponent implements OnInit {
 
         this.logedInUser = this.userService.getUser();
         this.tripId = +this.route.snapshot.params['tripId'];
-
         this.loadTripData();
-
         this.loadTripDetailByDate();
-
-
-
         this.loadUnitReconciliation();
     }
 
@@ -112,6 +107,7 @@ export class DetailsComponent implements OnInit {
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
             });
             this.calculateTotalTicketAmount();
+            this.cashReconChange(this.ticketDetails);
         }, (err) => {
 
         });
@@ -141,8 +137,27 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconChange(item) {
-        item.OverShort = (item.ReturnQuantity + item.DamageQuantity + item.CustomerDamageDRV + item.ManualTicket + item.Sale) - item.Load1Quantity;
+        item.OverShort = (+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale) - (+item.Load1Quantity);
         this.calculateTotalUnitReconcilation();
+    }
+
+    totalDeposit: any = 0;
+    totalOverShort: any = 0;
+    cashReconChange(ticketDetails) {
+        if (ticketDetails) {
+            this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0) + 
+            (+ticketDetails.Total.actualdepositcheck || 0) + 
+            (+ticketDetails.Total.Misc || 0) + 
+            (+ticketDetails.Total.ActualCoin || 0)
+
+            this.totalOverShort = ((+ticketDetails.Total.TotalManualCash) + 
+            (+ticketDetails.Total.TotalHHCash) +
+            (+ticketDetails.Total.TotalHHCheck) +
+            (+ticketDetails.Total.TotalManualCheck) +
+            (+ticketDetails.Total.TotalHHCreditCard) +
+            (+ticketDetails.Total.TotalManualCreditCard)) - this.totalDeposit;
+        }
+        console.log('this.totalDeposit:', this.totalDeposit);
     }
 
     saveReconciliation(statusId) {
