@@ -118,9 +118,12 @@ export class TicketListComponent implements OnInit {
     }
 
     getDrivers(byType: any = '') {
+        if(this.searchObj.BranchId === null){
+            return;
+        }
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
-            if (this.user.Role && this.user.Role.RoleID <= 3) {
+            if (this.user.Role && (this.user.Role.RoleID <= 3 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
                 this.searchObj.UserId = +this.searchObj.UserId || 1;
             }
@@ -268,7 +271,7 @@ export class TicketListComponent implements OnInit {
         this.searchObj.UserId = null;
         this.searchObj.DistributorID = 0;
         if (this.searchObj.userType === 'External') {
-            this.searchObj.BranchId = 1;
+            this.searchObj.BranchId = null;
             this.getDistributors(byType);
         } else {
             

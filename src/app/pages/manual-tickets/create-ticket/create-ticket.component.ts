@@ -332,9 +332,7 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
-    if (this.drivers && this.drivers.length > 1) {
-      this.ticket.UserID = null;
-    }
+    
 
     this.listFilter.BranchId = this.ticket.BranchID;
   }
@@ -373,6 +371,15 @@ export class CreateTicketComponent implements OnInit {
 
     this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
       this.drivers = res;
+      var that = this;
+      if (this.drivers && this.drivers.length > 1) {
+        var newArray = this.drivers.filter(function (el) {
+          return el.UserId === that.ticket.UserID;
+        });
+        if(newArray.length===0){
+          this.ticket.UserID = null;
+        }
+      }
     });
   }
 
@@ -795,10 +802,10 @@ export class CreateTicketComponent implements OnInit {
       });
       return;
     }
-
+    console.log("ticket ----- ",ticket);
+    
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
-      console.log("ticket ", ticket)
       this.notification.success('', 'Ticket created successfully!');
       let d:any[] = ticket.DeliveryDate.split('-');
       if(d.length && d.length == 3){ 
