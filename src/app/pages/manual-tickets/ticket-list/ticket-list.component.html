@@ -3,7 +3,7 @@
         <div class="col-sm-2">
             <label>Select Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets("bydate");dateChangeHandler();'
+                <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets();dateChangeHandler();'
                     [maxDate]="todaysDate" ngbDatepicker #d="ngbDatepicker" disabled>
                 <button class="input-group-addon" (click)="d.toggle()"  type="button">
                     <i class="ion-calendar"></i>
@@ -19,11 +19,11 @@
         </div>
         <div class="col-sm-3" *ngIf="!user.IsDistributor" [hidden]="searchObj.userType=='External'">
             <label>Select Branch</label>
-            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler('bybranch')"></reddy-select>            
+            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler()"></reddy-select>            
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>
-            <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler()">
+            <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler('byuser')">
                 <option *ngFor="let obj of drivers" [value]="obj.UserId">
                     {{obj.FirstName}} {{obj.LastName}}
                 </option>
