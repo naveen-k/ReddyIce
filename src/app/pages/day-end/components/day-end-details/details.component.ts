@@ -46,7 +46,13 @@ export class DetailsComponent implements OnInit {
 
     ticketTotal: any = {
         invoiceTotal: 0,
-        receivedTotal: 0
+        receivedTotal: 0,
+        totalCash:0,
+        totalCheck:0,
+        totalCharge:0,
+        totalDrayage: 0,
+        totalBuyBack: 0,
+        totalDistAmt:0
     };
 
 
@@ -97,7 +103,7 @@ export class DetailsComponent implements OnInit {
             this.driverDetails = res = res || [];
         });
     }
-
+    //total : any;
     loadTripDetailByDate() {
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.ticketDetails = res;
@@ -105,8 +111,20 @@ export class DetailsComponent implements OnInit {
             this.tripData.TripTicketList.forEach(ticket => {
                 ticket.TicketNumber = +ticket.TicketNumber;
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
+                ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
+                ticket.amount = ticket.TotalSale + ticket.TaxAmount;
+                ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
+                if (ticket.TicketTypeID === 30) { return; }
+                this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+                this.ticketTotal.totalCash += ticket.CashAmount || 0;
+                this.ticketTotal.totalCheck += ticket.CheckAmount || 0;
+                this.ticketTotal.totalCharge += ticket.ChargeAmount || 0;
+                this.ticketTotal.totalDrayage += ticket.Drayage || 0;
+                this.ticketTotal.totalBuyBack += ticket.BuyBack || 0;
+                this.ticketTotal.totalDistAmt += ticket.DistAmt || 0;
+                this.ticketTotal.receivedTotal += (ticket.checkCashAmount==0) ? ticket.amount : ticket.checkCashAmount;
             });
-            this.calculateTotalTicketAmount();
+            //this.calculateTotalTicketAmount();
             this.cashReconChange(this.ticketDetails);
         }, (err) => {
 
