@@ -279,8 +279,8 @@ export class TicketListComponent implements OnInit {
         }
     }
 
-    userChangeHandler() {
-        this.getSearchedTickets();
+    userChangeHandler(byType: any = '') {
+        this.getSearchedTickets(byType);
     }
 
     // delete ticket in the draft state
