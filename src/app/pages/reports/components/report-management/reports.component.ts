@@ -249,6 +249,7 @@ export class ReportsComponent implements OnInit {
         
        }
        this.filter.custID = 0;
+       this.filter.custtID = 0;
        this.filterCustomers();
     }
 
@@ -431,6 +432,7 @@ export class ReportsComponent implements OnInit {
     selectedCustomerChange(id) {
         if(id ==undefined || id == '' || id=="0"){
             this.filter.custtID = 0;
+            this.customerstatus = this.filter.custType;
             return;
         }
         let custTemp:string[] = id.split('-');
