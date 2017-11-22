@@ -176,7 +176,7 @@
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
        <label class="vertical-center"></label>
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
-        disabled="true"></ba-checkbox>
+        [disabled]="true"></ba-checkbox>
     </div>
   </div>
 </form>

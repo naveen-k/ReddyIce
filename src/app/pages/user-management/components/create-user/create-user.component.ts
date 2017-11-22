@@ -231,7 +231,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             if (!user.DistributorMasterID) {
                 this.notification.error('Distributor is mandatory!!!');
                 return false;
-            } else if (user.IsSeasonal && !user.BranchID) {
+            } else if (user.IsSeasonal && !this.userBranch) {
                 this.notification.error('Branch is mandatory!!!');
                 return false;
             }
@@ -285,11 +285,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     isDistributorSeasonal() {
         if (!this.user.DistributorMasterID) { return false }
         const tmp = this.distributorsAndCopackers.filter((dis) => {
-
-            return dis.DistributorCopackerID === +this.user.DistributorMasterID;
+            return dis.data.DistributorCopackerID === +this.user.DistributorMasterID;
         });
 
-        return (tmp[0]) ? tmp[0].IsSeasonal : false;
+        return (tmp[0]) ? tmp[0].data.IsSeasonal : false;
     }
 
     changeHandler() {
@@ -409,6 +408,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         return dist;
     }
     getDistributor() {
+        debugger
         this.umService.getDistributerAndCopacker().subscribe((res) => {
             let dists: any = this.filterDistributor(res, this.user.RoleID);
             let tempArr = []
@@ -417,7 +417,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 tempArr.push({
                     value: distrib.DistributorCopackerID,
                     label: distrib.Name,
-                    date: distrib
+                    data: distrib
                 });
             });
             this.distributorsAndCopackers = tempArr;
