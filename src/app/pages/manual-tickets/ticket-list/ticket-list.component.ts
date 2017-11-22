@@ -91,12 +91,12 @@ export class TicketListComponent implements OnInit {
 
         // Set first branch default selected
         if (this.searchObj.BranchId) {
-            this.branchChangeHandler('bydate');
+            this.branchChangeHandler();
         } else if (this.searchObj.DistributorID) {
-            this.getDistributors('bydate');
+            this.getDistributors();
             // this.getSearchedTickets();
         } else {
-            this.getSearchedTickets('bydate');
+            this.getSearchedTickets();
         }
     }
 
@@ -158,7 +158,7 @@ export class TicketListComponent implements OnInit {
         };
         this.showSpinner = true;
         if (searchObj.userType == 'External') { searchObj.BranchId = null; }
-        if (byType == 'bydate' || byType == 'bybranch') {
+        if (byType !== 'byuser') {
             return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
                 //debugger;
                 if (response) {
@@ -261,17 +261,18 @@ export class TicketListComponent implements OnInit {
         );
     }
 
-    typeChangeHandler() {
+    typeChangeHandler(byType: any = '') {
         // if (!this.searchObj.BranchId) {
         //     return;
         // }
+        this.searchObj.UserId = null;
+        this.searchObj.DistributorID = 0;
         if (this.searchObj.userType === 'External') {
             this.searchObj.BranchId = 1;
-            this.searchObj.UserId = null;
-            this.getDistributors();
+            this.getDistributors(byType);
         } else {
-            this.searchObj.DistributorID = null;
-            this.getDrivers();
+            
+            this.getDrivers(byType);
         }
     }
 
