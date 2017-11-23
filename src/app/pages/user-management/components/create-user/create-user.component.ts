@@ -37,6 +37,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     branchList: any = [];
     addedBranches: any = [];
     tempUserBranch: any = [];
+    distributorsAndCopackers: any =[];
+    //cacheDistributor: any = [];
     @Input()
     get user(): any {
         return this._user;
@@ -118,7 +120,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     @Input() branches: any;
     @Input() userDetails: any;
-    @Input() distributorsAndCopackers: any;
+    @Input() cacheDistributor: any;
     @Input() isDistributorAdmin: boolean;
     @Output() onSaveUser: EventEmitter<any> = new EventEmitter();
     @Output() onUpdateUser: EventEmitter<any> = new EventEmitter();
@@ -247,10 +249,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     ngAfterContentInit() {
         this.riUserName = '';
-
-    }
-
-    ngOnInit() {
         this.addedBranches = [];
         this.addedBranches.length = 0;
         this.getDistributor();
@@ -265,6 +263,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
         this.transformation();
 
+    }
+
+    ngOnInit() {
+       
     }
 
     filterRoles() {
@@ -349,6 +351,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     roleChange(roleID) {
         roleID = roleID + '';
+        this.user.DistributorMasterID = 0;
         this.userBranch = [];
 
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {
@@ -373,7 +376,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     loadBranches() {
-        if (!this.userBranch) { return; }
+        //if (!this.userBranch) { return; }
 
         this.getDistributor();
     }
@@ -400,16 +403,17 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     filterDistributor(dist, role) {
         let uRole = this.userObject.Role.RoleID
         if (!dist || !role) { return [] };
-        if (uRole === 1 && +role === 2) {
-            return dist.filter((user) => !user.IsSeasonal);
-        } else if (uRole === 2 && +role === 3) {
+        // if (uRole === 1 && +role === 2) {
+        //     return dist.filter((user) => user.IsSeasonal);
+        // } else 
+        if (uRole === 2 && +role === 3) {
             return dist.filter((user) => user.IsSeasonal);
         }
         return dist;
     }
     getDistributor() {
-        this.umService.getDistributerAndCopacker().subscribe((res) => {
-            let dists: any = this.filterDistributor(res, this.user.RoleID);
+        if(this.cacheDistributor && this.cacheDistributor.length>0){
+            let dists: any = this.filterDistributor(this.cacheDistributor, this.user.RoleID);
             let tempArr = []
 
             dists.forEach(distrib => {
@@ -420,7 +424,22 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 });
             });
             this.distributorsAndCopackers = tempArr;
-        });
+        } else {
+            this.umService.getDistributerAndCopacker().subscribe((res) => {
+                let dists: any = this.filterDistributor(res, this.user.RoleID);
+                let tempArr = []
+                this.cacheDistributor = res;
+                dists.forEach(distrib => {
+                    tempArr.push({
+                        value: distrib.DistributorCopackerID,
+                        label: distrib.Name,
+                        data: distrib
+                    });
+                });
+                this.distributorsAndCopackers = tempArr;
+            });
+        }
+        
     }
 
     isAllFeildsChecked() {

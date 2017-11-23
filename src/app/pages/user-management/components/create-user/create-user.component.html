@@ -224,7 +224,7 @@
     </div>
   </div>
   <div class="row page-header rowContainer">
-    <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal">
+    <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.Role.RoleID===3)">
     
       <label for="exampleSelect1">Branch</label>
         <!--select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"

@@ -316,6 +316,7 @@ export class UserManagementComponent implements OnInit {
   getDistributors() {
     this.service.getDistributerAndCopacker().subscribe((response) => {
       this.distributorsAndCopackers = response;
+      this.getUserList(parseInt(this.logUserID, 10));
     });
   }
 
@@ -365,11 +366,12 @@ export class UserManagementComponent implements OnInit {
     user['tmp_distributor'] = `${(user.Distributor ? user.Distributor.DistributorName : '')}`;
     return user;
   }
-
+  logUserID:any;
   ngOnInit() {
     this.userObject = this.userService.getUser();
     // console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
+    this.logUserID = userId;
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.idDataLoaded = true;
       this.userDetails = response;
@@ -377,9 +379,10 @@ export class UserManagementComponent implements OnInit {
       this.userRoles = response.RoleList;
       // console.log(this.userRoles);
       if (!response.IsDistributor) {
-        this.getUserList(parseInt(userId, 10));
+        
         this.getBranches();
         this.getDistributors();
+        
       } else if (response.IsDistributor) {
         this.getBranches();
         this.isDistributorAdmin = true;

@@ -129,7 +129,7 @@
   <div [hidden]="!rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
     <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
-      <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)"
+      <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" [cacheDistributor] ="distributorsAndCopackers"
         (onUpdateUser)="onUpdateUser($event)" (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches"
         [isDistributorAdmin]="isDistributorAdmin" [userDetails]="userDetails" [action]='action' [mIOpen]="rightCardOpen" [formIsDirty]="formIsDirty">
       </create-user>
