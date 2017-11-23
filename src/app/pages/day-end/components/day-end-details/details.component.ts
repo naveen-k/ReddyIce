@@ -123,14 +123,56 @@ export class DetailsComponent implements OnInit {
                 this.ticketTotal.totalBuyBack += ticket.BuyBack || 0;
                 this.ticketTotal.totalDistAmt += ticket.DistAmt || 0;
                 this.ticketTotal.receivedTotal += (ticket.checkCashAmount==0) ? ticket.amount : ticket.checkCashAmount;
+                this.cashReconciliationTotal(ticket);
             });
             //this.calculateTotalTicketAmount();
+            this.cashReconciliationSubTotal();
             this.cashReconChange(this.ticketDetails);
         }, (err) => {
 
         });
     }
+    TotalCashReconciliation:any = {
+        TotalManualSale: 0,
+        TotalManualCash: 0,
+        TotalManualCheck:0,
+        TotalManualCreditCard:0,
+        TotalManualCharge:0,
+        TotalHHSale: 0,
+        TotalHHCash: 0,
+        TotalHHCheck:0,
+        TotalHHCreditCard:0,
+        TotalHHCharge:0
+    };
+    cashReconciliationTotal(ticket){
 
+        if (ticket.TicketTypeID === 30) { return; }
+        if(ticket.IsPaperTicket){
+            this.TotalCashReconciliation.TotalManualSale += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+            this.TotalCashReconciliation.TotalManualCash += ticket.CashAmount || 0;
+            this.TotalCashReconciliation.TotalManualCheck += ticket.CheckAmount || 0;
+            this.TotalCashReconciliation.TotalManualCreditCard += ticket.CreditCardAmount || 0;
+            this.TotalCashReconciliation.TotalManualCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0)?ticket.ChargeAmount:0) || 0;
+        } else {
+            this.TotalCashReconciliation.TotalHHSale += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+            this.TotalCashReconciliation.TotalHHCash += ticket.CashAmount || 0;
+            this.TotalCashReconciliation.TotalHHCheck += ticket.CheckAmount || 0;
+            this.TotalCashReconciliation.TotalHHCreditCard += ticket.CreditCardAmount || 0;
+            this.TotalCashReconciliation.TotalHHCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0)?ticket.ChargeAmount:0) || 0;
+        }
+    }
+    cashReconciliationSubTotal(){
+        this.ticketDetails.Total.TotalManualSale =  this.TotalCashReconciliation.TotalManualSale;
+        this.ticketDetails.Total.TotalManualCash = this.TotalCashReconciliation.TotalManualCash;
+        this.ticketDetails.Total.TotalManualCheck = this.TotalCashReconciliation.TotalManualCheck;
+        this.ticketDetails.Total.TotalManualCreditCard = (this.ticketDetails.IsClosed)?this.TotalCashReconciliation.TotalManualCreditCard:0;
+        this.ticketDetails.Total.TotalManualCharge = this.TotalCashReconciliation.TotalManualCharge;
+        this.ticketDetails.Total.TotalHHSale = this.TotalCashReconciliation.TotalHHSale
+        this.ticketDetails.Total.TotalHHCash = this.TotalCashReconciliation.TotalHHCash
+        this.ticketDetails.Total.TotalHHCheck = this.TotalCashReconciliation.TotalHHCheck
+        this.ticketDetails.Total.TotalHHCreditCard =  (this.ticketDetails.IsClosed)?this.TotalCashReconciliation.TotalHHCreditCard:0;
+        this.ticketDetails.Total.TotalHHCharge = this.TotalCashReconciliation.TotalHHCharge;
+    }
     sortByWordLength = (a: any) => {
         return a.location.length;
     }
