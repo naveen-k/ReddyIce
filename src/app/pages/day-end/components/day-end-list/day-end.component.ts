@@ -32,6 +32,8 @@ export class DayEndComponent implements OnInit {
             this.userSubTitle = ` - ${this.logedInUser.Distributor.DistributorName}`;
             this.filter.type = 'distributor';
             this.filter.userBranch = this.logedInUser.Distributor.DistributorMasterId || this.logedInUser.Distributor.DistributorMasterID;
+        } else {
+            this.filter.type = 'internal';
         }
         this.selectionchangeHandler();
     }

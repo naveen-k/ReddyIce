@@ -408,7 +408,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         return dist;
     }
     getDistributor() {
-        debugger
         this.umService.getDistributerAndCopacker().subscribe((res) => {
             let dists: any = this.filterDistributor(res, this.user.RoleID);
             let tempArr = []
