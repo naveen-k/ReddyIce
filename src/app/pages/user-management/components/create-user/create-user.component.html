@@ -126,7 +126,7 @@
                 </select>
     </div>
 
-    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || user.IsSeasonal" [hidden]="userObject.IsDistributor">
+    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.RoleID==='3')" [hidden]="userObject.IsDistributor">
       <label for="exampleSelect1">
         Branch
         <sup style="color:red;">*</sup>
@@ -224,7 +224,7 @@
     </div>
   </div>
   <div class="row page-header rowContainer">
-    <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.Role.RoleID===3)">
+    <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal || user.IsSeasonal">
     
       <label for="exampleSelect1">Branch</label>
         <!--select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"

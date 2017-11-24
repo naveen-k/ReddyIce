@@ -253,6 +253,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.addedBranches.length = 0;
         this.getDistributor();
         this.userObject = this.userService.getUser();
+        //console.log(this.userObject);
         
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
