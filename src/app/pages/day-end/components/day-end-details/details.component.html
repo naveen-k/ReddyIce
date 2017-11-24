@@ -109,7 +109,7 @@
                                                         <!-- <i *ngIf="(customer.sortField === 'IsSaleTicket')" [ngClass]="(customer.isAsc && customer.sortField === 'IsSaleTicket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
-                                                <th class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'">
+                                               <!-- <th class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'">
                                                     Drayage
                                                 </th>
                                                 <th class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'">
@@ -117,7 +117,7 @@
                                                 </th>
                                                 <th class="text-align-center">
                                                     RI Internal
-                                                </th>
+                                                </th>-->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -138,25 +138,25 @@
                                                 <td class="textRightPadd" ><span [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currency:'USD':true:'1.2' }}</span><span *ngIf="item.TicketTypeID == 30">$0.00</span></td>
                                                 <!--td class="textRightPadd" ></td-->                                
                                                 <!--td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount"></td-->
-                                                <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"></td>
+                                               <!-- <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"></td>
                                                 <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                                 <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="logedInUser.Role.RoleID!='3'"></td>
                                                 <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                                 <td class="text-align-center">
                                                     <input type="checkbox" disabled name="riInternal" [checked]="item.CustomerSourceID===101">
-                                                </td>
+                                                </td>-->
                                             </tr>
                                             <tr *ngIf="!tripData?.TripTicketList?.length">
-                                                <th class="text-center" colspan="9"> No data found </th>
+                                                <th class="text-center" colspan="6"> No data found </th>
                                             </tr>
                                             <tr>
                                                 <td colspan="4"><b>Total</b></td>                                
                                                 <td class="textRightPadd"><b>{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</b></td>
-                                                <td class="textRightPadd"><b>{{ticketTotal.totalCash + ticketTotal.totalCheck | currency:'USD':true:'1.2'}}</b></td>
-                                                <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'" ><b>{{ticketTotal.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
-                                                <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'"><b>{{ticketTotal.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
+                                                <td class="textRightPadd"><b>{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</b></td>
+                                               <!-- <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'" ><b>{{ticketTotal.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
+                                                <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'"><b>{{ticketTotal.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>-->
                                                 <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td> -->
-                                                <td></td>
+                                               <!-- <td></td>-->
                                             </tr>
                                         </tbody>
                                     </table>
@@ -193,7 +193,7 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <button class="btn btn-danger pull-right" (click)=addProductRow() [hidden]='tripData.TripStatusID == 25 || userRoleId ==3'>Add Product</button>
+                                <button class="btn btn-danger pull-right" (click)=addProductRow() [hidden]='true || tripData.TripStatusID == 25 || userRoleId ==3'>Add Product</button>
                             </div>
                             <div class="col-md-12 page-header">
 
@@ -201,7 +201,7 @@
                                     <table class="table table-bordered">
                                         <thead class="tableHeader">
                                             <tr>
-                                                <th>
+                                                <th class="text-align-left">
                                                     <span>
                                                         Product
                                                         <!-- <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
@@ -221,14 +221,21 @@
                                                 </th>
                                                 <th colspan="2" class="text-center">
                                                     <span>
-                                                        Truck Damage
+                                                        Truck Junk
                                                         <!-- <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
-                                                <th colspan="2" class="text-center">
+                                                <th>
                                                     <span>
-                                                        Customer Damage
-                                                        <!-- <i *ngIf="(customer.sortField === 'customerDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'customerDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        Sales
+                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
+                                                </th>
+                                               
+                                                <th>
+                                                    <span>
+                                                        Sales <br> Credits
+                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th>
@@ -238,10 +245,10 @@
                                                         <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
-                                                <th>
+                                                <th colspan="2" class="text-center">
                                                     <span>
-                                                        Sale
-                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        Inv Junk
+                                                        <!-- <i *ngIf="(customer.sortField === 'customerDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'customerDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th>
@@ -272,13 +279,16 @@
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25' [(ngModel)]='item.DamageQuantity'
                                                         class="form-control small-input" type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
+                                                
+                                               
+                                                <td width="7%">{{item.Sale?item.Sale:0}}</td>
+                                                <td width="7%">{{item.SaleCredits?item.SaleCredits:0}}</td>
+                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25' [(ngModel)]='item.CustomerDamageDRV'
                                                         class="form-control small-input" type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
-                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
-                                                <td width="7%">{{item.Sale?item.Sale:0}}</td>
                                                 <td class="textAlignCenter" width="7%">{{item.OverShort}}</td>
                                             </tr>
                                         </tbody>
@@ -309,14 +319,18 @@
                                                         [(ngModel)]='item.DamageQuantity' (ngModelChange)="unitReconChange(item)"
                                                         class="form-control small-input" type="number">
                                                 </td>
+                                                
+                                                
+                                                
+                                                <td width="7%">{{item.Sale?item.Sale:0}}</td>
+                                                <td width="7%">{{item.SaleCredits?item.SaleCredits:0}}</td>
+                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
                                                     <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25'
                                                         [(ngModel)]='item.CustomerDamageDRV' (ngModelChange)="unitReconChange(item)"
                                                         class="form-control small-input" type="number">
                                                 </td>
-                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
-                                                <td width="7%">{{item.Sale?item.Sale:0}}</td>
                                                 <td width="7%">{{item.OverShort?item.OverShort:0}}
                                                     <i (click)="removeProduct(i);" class="ion-trash-a remove-item"></i>
                                                 </td>
@@ -336,10 +350,11 @@
                                                 <td>{{totalUnit.TotalReturnActual}}</td>
                                                 <td>{{totalUnit.TotalTruckDamage}}</td>
                                                 <td>{{totalUnit.TotalTruckDamageActual}}</td>
+                                                <td>{{totalUnit?.TotalSaleCredits}}</td>
+                                                <td>{{totalUnit.TotalSale}}</td>
+                                                <td>{{totalUnit.TotalManualTickets}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamage}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamageActual}}</td>
-                                                <td>{{totalUnit.TotalManualTickets}}</td>
-                                                <td>{{totalUnit.TotalSale}}</td>
                                                 <td>{{ totalUnit.TotalOverShort?totalUnit.TotalOverShort:0}}</td>
                                             </tr>
                                         </tbody>
@@ -457,7 +472,7 @@
                                             </div>
                                             <div class="col-sm-4 text-align-right">
                                                 <span>
-                                                    <b>{{ticketDetails?.Total.TotalManualSale + ticketDetails?.Total.TotalHHSale
+                                                    <b>{{ticketDetails?.Total.TotalManualSale + ticketDetails?.Total.TotalHHSale + ticketDetails?.Total.TotalHHCharge + ticketDetails?.Total.TotalManualCharge
                                                         | currency:'USD':true:'1.2'}}</b>
                                                 </span>
                                             </div>
@@ -475,21 +490,21 @@
                                             </div>
                                             <div class="col-sm-4 text-align-right">
                                                 <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25' placeholder="0.00">
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Check($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
                                                 <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25' placeholder="0.00">
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Coins($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
                                                 <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.ActualCoin' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25' placeholder="0.00">
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
@@ -498,15 +513,15 @@
                                                 <label>Credit Card($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [value]='ticketDetails?.Total.TotalManualCreditCard + ticketDetails?.Total.TotalHHCreditCard'
-                                                    disabled>
+                                                <input type="text" [numberOnly]="true" min="0" [value]='ticketDetails?.Total.CreditCardAmountTotal'
+                                                    disabled placeholder="0.00">
                                             </div>
                                             <div class="col-sm-8">
                                                 <label>Misc($):</label>
                                             </div>
                                             <div class="col-sm-4 text-align-right">
                                                 <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                 min="0"  [disabled]='userRoleId==3 || tripData.TripStatusID == 25'>
+                                                 min="0"  [disabled]='userRoleId==3 || tripData.TripStatusID == 25' placeholder="0.00">
                                             </div>
                                             <div class="col-sm-12">
                                                 <hr style="margin: 2px 0">

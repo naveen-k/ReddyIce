@@ -81,7 +81,7 @@
                         <sup style="color:red;">*</sup>
                     </label>
                     <div class="col-sm-7">
-                        <select [disabled]="ticketId" class="form-control" name="customer" [(ngModel)]="ticket.UserID" [disabled]="isReadOnly" (ngModelChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true">
+                        <select [disabled]="ticketId" class="form-control" name="customer" [(ngModel)]="ticket.UserID" [disabled]="isReadOnly || tripMode" (ngModelChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true">
                             <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
                         </select>
                     </div>
@@ -101,7 +101,7 @@
                 <div class="col-sm-7 input-group">
                     <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
                         disabled (ngModelChange)="isFormDirty=true" [maxDate]="date.maxDate" [minDate]="date.minDate">
-                    <button class="input-group-addon" (click)="d.toggle();"  type="button" [disabled]="isReadOnly">
+                    <button class="input-group-addon" (click)="d.toggle();"  type="button" [disabled]="isReadOnly || tripMode">
                         <i class="ion-calendar"></i>
                     </button>
                 </div>

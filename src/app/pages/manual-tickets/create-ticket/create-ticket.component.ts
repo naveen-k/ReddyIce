@@ -154,7 +154,6 @@ export class CreateTicketComponent implements OnInit {
     }
 
     if (tripTicketEditMode) {
-
       this.tripMode = tripTicketEditMode;
 
     } else {

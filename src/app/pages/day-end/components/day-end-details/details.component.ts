@@ -41,7 +41,8 @@ export class DetailsComponent implements OnInit {
         TotalCustomerDamageActual: 0,
         TotalManualTickets: 0,
         TotalSale: 0,
-        TotalOverShort: 0
+        TotalOverShort: 0,
+        TotalSaleCredits:0
     };
 
     ticketTotal: any = {
@@ -113,16 +114,19 @@ export class DetailsComponent implements OnInit {
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
                 ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
                 ticket.amount = ticket.TotalSale + ticket.TaxAmount;
-                ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
+                var cardAmount = (ticket.IsClosed)?ticket.CreditCardAmount:0;
+                ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount + cardAmount;
+                //ticket.amount = (ticket.IsClosed)?ticket.amount + (ticket.checkCashAmount - ticket.amount):ticket.amount;
                 if (ticket.TicketTypeID === 30) { return; }
-                this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+                ticket.ChargeAmount = (ticket.checkCashAmount===0 && ticket.PaymentTypeID===19)?ticket.amount:ticket.ChargeAmount;
+                this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
                 this.ticketTotal.totalCash += ticket.CashAmount || 0;
                 this.ticketTotal.totalCheck += ticket.CheckAmount || 0;
                 this.ticketTotal.totalCharge += ticket.ChargeAmount || 0;
                 this.ticketTotal.totalDrayage += ticket.Drayage || 0;
                 this.ticketTotal.totalBuyBack += ticket.BuyBack || 0;
                 this.ticketTotal.totalDistAmt += ticket.DistAmt || 0;
-                this.ticketTotal.receivedTotal += (ticket.checkCashAmount==0) ? ticket.amount : ticket.checkCashAmount;
+                this.ticketTotal.receivedTotal += (ticket.checkCashAmount==0) ? ticket.amount : (ticket.checkCashAmount);
                 this.cashReconciliationTotal(ticket);
             });
             //this.calculateTotalTicketAmount();
@@ -145,7 +149,6 @@ export class DetailsComponent implements OnInit {
         TotalHHCharge:0
     };
     cashReconciliationTotal(ticket){
-
         if (ticket.TicketTypeID === 30) { return; }
         if(ticket.IsPaperTicket){
             this.TotalCashReconciliation.TotalManualSale += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
@@ -165,13 +168,20 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.TotalManualSale =  this.TotalCashReconciliation.TotalManualSale;
         this.ticketDetails.Total.TotalManualCash = this.TotalCashReconciliation.TotalManualCash;
         this.ticketDetails.Total.TotalManualCheck = this.TotalCashReconciliation.TotalManualCheck;
-        this.ticketDetails.Total.TotalManualCreditCard = (this.ticketDetails.IsClosed)?this.TotalCashReconciliation.TotalManualCreditCard:0;
+        this.ticketDetails.Total.TotalManualCreditCard = (this.tripData.IsClosed)?this.TotalCashReconciliation.TotalManualCreditCard:0.00;
         this.ticketDetails.Total.TotalManualCharge = this.TotalCashReconciliation.TotalManualCharge;
         this.ticketDetails.Total.TotalHHSale = this.TotalCashReconciliation.TotalHHSale
         this.ticketDetails.Total.TotalHHCash = this.TotalCashReconciliation.TotalHHCash
         this.ticketDetails.Total.TotalHHCheck = this.TotalCashReconciliation.TotalHHCheck
-        this.ticketDetails.Total.TotalHHCreditCard =  (this.ticketDetails.IsClosed)?this.TotalCashReconciliation.TotalHHCreditCard:0;
+        this.ticketDetails.Total.TotalHHCreditCard =  (this.tripData.IsClosed)?this.TotalCashReconciliation.TotalHHCreditCard:0.00;
         this.ticketDetails.Total.TotalHHCharge = this.TotalCashReconciliation.TotalHHCharge;
+        this.ticketDetails.Total.actualdepositcash = (this.ticketDetails.Total.actualdepositcash===null)?`0.00`:this.ticketDetails.Total.actualdepositcash.toString().indexOf('.')<0?`${this.ticketDetails.Total.actualdepositcash}.00`:this.ticketDetails.Total.actualdepositcash;
+        this.ticketDetails.Total.actualdepositcheck = (this.ticketDetails.Total.actualdepositcheck===null)?`0.00`:this.ticketDetails.Total.actualdepositcheck.toString().indexOf('.')<0?`${this.ticketDetails.Total.actualdepositcheck}.00`:this.ticketDetails.Total.actualdepositcheck;
+        this.ticketDetails.Total.ActualCoin = (this.ticketDetails.Total.ActualCoin===null)?`0.00`:this.ticketDetails.Total.ActualCoin.toString().indexOf('.')<0?`${this.ticketDetails.Total.ActualCoin}.00`:this.ticketDetails.Total.ActualCoin;
+        this.ticketDetails.Total.Misc = (this.ticketDetails.Total.Misc===null)?`0.00`:this.ticketDetails.Total.Misc.toString().indexOf('.')<0?`${this.ticketDetails.Total.Misc}.00`:this.ticketDetails.Total.Misc;
+        var CTotal = this.ticketDetails.Total.TotalManualCreditCard + this.ticketDetails.Total.TotalHHCreditCard;
+        this.ticketDetails.Total.CreditCardAmountTotal = (CTotal===null)?`0.00`:CTotal.toString().indexOf('.')<0?`${CTotal}.00`:CTotal;
+        
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
@@ -208,14 +218,14 @@ export class DetailsComponent implements OnInit {
             this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0) + 
             (+ticketDetails.Total.actualdepositcheck || 0) + 
             (+ticketDetails.Total.Misc || 0) + 
-            (+ticketDetails.Total.ActualCoin || 0)
-
-            this.totalOverShort = ((+ticketDetails.Total.TotalManualCash) + 
-            (+ticketDetails.Total.TotalHHCash) +
-            (+ticketDetails.Total.TotalHHCheck) +
             (+ticketDetails.Total.TotalManualCheck) +
             (+ticketDetails.Total.TotalHHCreditCard) +
-            (+ticketDetails.Total.TotalManualCreditCard)) - this.totalDeposit;
+            (+ticketDetails.Total.ActualCoin || 0)
+
+            this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) + 
+            (+ticketDetails.Total.TotalHHCash) +
+            (+ticketDetails.Total.TotalHHCheck) +
+            (+ticketDetails.Total.TotalManualCreditCard));
         }
         console.log('this.totalDeposit:', this.totalDeposit);
     }
@@ -342,6 +352,9 @@ export class DetailsComponent implements OnInit {
             this.totalUnit.TotalCustomerDamageActual += +u.CustomerDamageDRV || 0;
             this.totalUnit.TotalManualTickets += +u.ManualTicket;
             this.totalUnit.TotalSale += +u.Sale;
+            if(u.SaleCredits){
+                this.totalUnit.TotalSaleCredits += +u.SaleCredits;
+            }
             this.totalUnit.TotalOverShort += +u.OverShort;
         });
     }
