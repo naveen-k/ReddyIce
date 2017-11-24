@@ -354,9 +354,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.user.DistributorMasterID = 0;
         this.userBranch = [];
 
-        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {
+        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5'||roleID==='7') {
             if (roleID === '2') {
                 this.showIseries = true;
+            }else if(roleID === '4' || roleID === '5'||roleID === '6'||roleID==='7'){
+                this.showIseries = false;
             }
             this.cBranches = [];
             this.cBranches = [{ value: '1', label: '1 - All Branches', data: { BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true } }];
