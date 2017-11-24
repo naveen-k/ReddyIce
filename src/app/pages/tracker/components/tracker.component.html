@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-sm-2">
                     <label>Select Driver Type</label>
-                    <select [disabled]="isDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+                    <select [disabled]="isDistributor || user.Role.RoleID===3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                         <option [value]="'Internal'">RI Driver</option>
                         <option [value]="'External'">Dist./CoPacker</option>
                     </select>
