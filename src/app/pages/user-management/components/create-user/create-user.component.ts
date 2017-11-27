@@ -19,6 +19,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     private _user: any = {};
     userBranch: any;
     tBranches: any = [];
+    selectedBranch: any = [];
     actionName: string;
     riUserList: any = [];
     riUserName: string = '';
@@ -37,7 +38,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     branchList: any = [];
     addedBranches: any = [];
     tempUserBranch: any = [];
-    distributorsAndCopackers: any =[];
+    distributorsAndCopackers: any = [];
     //cacheDistributor: any = [];
     @Input()
     get user(): any {
@@ -54,7 +55,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             val.RoleID = val.RoleID || this._user.RoleID;
             this.roleChange(val.RoleID);
         } else {
-            if(!this.user.RoleID){
+            if (!this.user.RoleID) {
                 this.user.RoleID = '';
             }
         }
@@ -72,6 +73,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.userBranch = [1];
         }
         else {
+   
             this.addedBranches = this.user.Branch;
             var i: number = 0;
             if (this.userBranch) { this.userBranch.length = 0; }
@@ -79,12 +81,15 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.userBranch = [];
 
             if (this.user.Branch) {
-                for (i = 0; i < this.user.Branch.length; i++)
+                for (i = 0; i < this.user.Branch.length; i++) {
                     if (this.user.Branch[i].IsActive === true) {
                         this.userBranch.push(this.user.Branch[i].BranchID);
                     }
+                }
+
             }
         }
+        this.pushBranches();
     }
 
     @Input() isNewUser: boolean;
@@ -254,7 +259,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.getDistributor();
         this.userObject = this.userService.getUser();
         //console.log(this.userObject);
-        
+
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
@@ -267,7 +272,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     ngOnInit() {
-       
+
     }
 
     filterRoles() {
@@ -355,10 +360,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.user.DistributorMasterID = 0;
         this.userBranch = [];
 
-        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5'||roleID==='7') {
+        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5' || roleID === '7') {
             if (roleID === '2') {
                 this.showIseries = true;
-            }else if(roleID === '4' || roleID === '5'||roleID === '6'||roleID==='7'){
+            } else if (roleID === '4' || roleID === '5' || roleID === '6' || roleID === '7') {
                 this.showIseries = false;
             }
             this.cBranches = [];
@@ -374,6 +379,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.cBranches.shift();
             }
         }
+        this.transformation();
+        this.pushBranches();
         this.getDistributor();
 
     }
@@ -382,6 +389,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         //if (!this.userBranch) { return; }
 
         this.getDistributor();
+
     }
     spaceRemover(value) {
         this.user.LastName = value.replace(/^\s+|\s+$/g, '');
@@ -415,7 +423,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         return dist;
     }
     getDistributor() {
-        if(this.cacheDistributor && this.cacheDistributor.length>0){
+        if (this.cacheDistributor && this.cacheDistributor.length > 0) {
             let dists: any = this.filterDistributor(this.cacheDistributor, this.user.RoleID);
             let tempArr = []
 
@@ -442,7 +450,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.distributorsAndCopackers = tempArr;
             });
         }
-        
+
     }
 
     isAllFeildsChecked() {
@@ -476,10 +484,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }, (err) => {
             console.log("Error");
         });
+
     }
 
     transformation() {
         this.getMultiBranches();
+        //this.pushBranches(this.userBranch);
     }
     onMultiSelect(optionsModel) {
         if (this.addedBranches) { this.addedBranches.length = 0; }
@@ -508,4 +518,43 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }, []);
         }
     }
+    pushBranches() {
+
+        // console.log(this.userBranch);
+        this.selectedBranch.length = 0;
+        this.selectedBranch = [];
+
+        this.selectedBranch = this.userBranch.map((branch) => {
+            return this.cBranches[this.cBranches.findIndex((cb) => +cb.value === +branch)];
+        })
+
+        //      if (this.userBranch && this.userBranch.length) {
+
+        //         for (let i = 0; i < this.userBranch.length; i++) {
+        //             for (let j = 0; j < this.cBranches.length; j++)
+        //                 if (+this.userBranch[i] == this.cBranches[j].value) {
+        //                     this.selectedBranch.push({ "ID": this.cBranches[j].value, "Name": this.cBranches[j].label });
+        //                     break;
+        //                 }
+        //         }
+        //         console.log(this.selectedBranch);
+        //         console.log(this.userBranch);
+        //     // debugger
+        //     // var ind = 0;
+        //     // this.selectedBranch = this.cBranches.filter((e)=>{
+        //     //     ind = this.userBranch.indexOf(""+e.value);
+
+        //     //     (ind > -1);
+        //     // })
+        //     //  }
+          console.log(this.selectedBranch);
+          console.log(this.userBranch);
+
+        // }
+    }
+    removeBranch(branch) {
+        this.userBranch = this.userBranch.filter((u) => +u !== +branch.value);
+        this.pushBranches();
+    }
+
 }

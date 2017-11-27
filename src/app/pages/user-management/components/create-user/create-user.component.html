@@ -142,8 +142,17 @@
                   </select> -->
                   
               <br/>
-              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();"></reddy-select>
-              
+              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
+              <br/>
+              <div style="width:100%;margin-top: 10px;max-height:80px;overflow:auto;">
+                <ul style="padding-left: 15px;">
+                   <li *ngFor="let brannch of selectedBranch" >
+                      {{brannch.label}} <i class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
+                      <span class="tooltiptext">Remove</span>
+                   </i>
+                 </li>
+                 </ul>
+               </div>
               <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown--><br><br>
                     <!--button class="btn btn-danger" (click)="onMultiSelect(optionsModel)">Fire</button -->
  
@@ -178,6 +187,7 @@
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
         [disabled]="true"></ba-checkbox>
     </div>
+    
   </div>
 </form>
 
