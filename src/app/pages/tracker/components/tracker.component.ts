@@ -449,14 +449,15 @@ export class TrackerComponent implements OnInit {
             var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
           }
         } else {
-          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
-            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0"
-          && this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
+          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
           && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
           && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
             var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
-            var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
+          }
+          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
+            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
+            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
+              var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
           }
         }
 

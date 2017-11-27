@@ -133,7 +133,7 @@
                                                 </td>
                                                 <td class="text-align-left">{{item.TicketNumber }}</td>
                                                 <td>{{item.ticketType}}</td> 
-                                                <td><span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:20 }}</span></td>                                
+                                                <td><span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:false:20 }}</span></td>                                
                                                 <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currency:'USD':true:'1.2' }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                                 <td class="textRightPadd" ><span [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currency:'USD':true:'1.2' }}</span><span *ngIf="item.TicketTypeID == 30">$0.00</span></td>
                                                 <!--td class="textRightPadd" ></td-->                                
