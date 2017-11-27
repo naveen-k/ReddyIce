@@ -568,14 +568,16 @@ export class TrackerComponent implements OnInit {
           if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
             && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
             && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0"
-          && this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-          && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
-          && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
+          ) {
             positionLatitude1 = this.selectedTrip[i].PlannedLatitude;
             positionLongitude1 = this.selectedTrip[i].PlannedLongitude;
-            positionLatitude2 = this.selectedTrip[i].ActualLatitude;
-            positionLongitude2 = this.selectedTrip[i].ActualLongitude;
           }
+          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
+            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
+            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
+              positionLatitude2 = this.selectedTrip[i].ActualLatitude;
+              positionLongitude2 = this.selectedTrip[i].ActualLongitude;
+            }
         }
         if (sequence != 3) {
           var marker = new google.maps.Marker({
