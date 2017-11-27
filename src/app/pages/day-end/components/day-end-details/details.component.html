@@ -262,7 +262,7 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
-                                                <td width="25%">{{item.ProductName}}</td>
+                                                <td width="25%" style="text-align:left;">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
                                                 <td width="9%">
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25' [(ngModel)]='item.Load1Quantity'
@@ -355,7 +355,7 @@
                                                 <td>{{totalUnit.TotalManualTickets}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamage}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamageActual}}</td>
-                                                <td>{{ totalUnit.TotalOverShort?totalUnit.TotalOverShort:0}}</td>
+                                                <td style="text-align:center">{{ totalUnit.TotalOverShort?totalUnit.TotalOverShort:0}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
