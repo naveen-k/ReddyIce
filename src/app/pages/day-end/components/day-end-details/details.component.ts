@@ -247,7 +247,7 @@ export class DetailsComponent implements OnInit {
             //  this.notification.success("Success", res);
             if(this.userRoleId ===3){
                 if(statusId === 25){
-                    this.notification.success("Success", "Trip has been approved successfully.");
+                    this.notification.success("Success", "Trip has been approved successfully");
                     this.router.navigate(['/pages/day-end/list']);
                 } 
             }
@@ -258,7 +258,8 @@ export class DetailsComponent implements OnInit {
         if(this.userRoleId !==3) {
             this.service.saveUnitReconciliation(this.unitReconciliation.concat(this.newlyAddedProduct)).subscribe((res) => {
 
-                this.notification.success("Success", res);
+                // this.notification.success("Success", res);
+                this.notification.success("Success", "Trip details updated successfully");
                 if(statusId === 25){
                     this.router.navigate(['/pages/day-end/list']);
                 } else {
