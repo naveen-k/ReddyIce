@@ -134,6 +134,7 @@ export class CreateTicketComponent implements OnInit {
     // Initialize properties from searched Object of List ticket page
     this.listFilter = this.service.getSearchedObject();
     this.ticket.DeliveryDate = this.listFilter.CreatedDate;
+    debugger;
     this.ticket.BranchID = +this.listFilter.BranchId;
     this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
     this.ticket.UserID = this.listFilter.UserId ? +this.listFilter.UserId : 0;
@@ -161,8 +162,7 @@ export class CreateTicketComponent implements OnInit {
     }
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
-    
-    branches = branches.filter((b) => b.BranchID !== 1);
+    branches = branches.filter((b) => b != null && b.BranchID !== 1);
     this.sortBranches(branches);
 
     this.branches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');

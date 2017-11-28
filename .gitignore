@@ -42,3 +42,4 @@ testem.log
 .DS_Store
 Thumbs.db
 /dist.zip
+.vscode/launch.json

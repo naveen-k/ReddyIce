@@ -75,10 +75,13 @@ export class TicketListComponent implements OnInit {
         // load all branches
         let branches = this.activatedRoute.snapshot.data['branches'];
         // Remove 'All branch' object
-        if (branches.length && branches[0].value === 1) {
-            branches.shift();
-            this.sortBranches(branches);
+        if (branches && branches.length && this.user.Role.RoleID === 3){
+            if ((branches.length > 0) && (branches[0] === null  || branches[0].BranchID === 1)) {
+                branches.shift();
+                this.sortBranches(branches);
+            }
         }
+        
         this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
         if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
