@@ -134,7 +134,6 @@ export class CreateTicketComponent implements OnInit {
     // Initialize properties from searched Object of List ticket page
     this.listFilter = this.service.getSearchedObject();
     this.ticket.DeliveryDate = this.listFilter.CreatedDate;
-    debugger;
     this.ticket.BranchID = +this.listFilter.BranchId;
     this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
     this.ticket.UserID = this.listFilter.UserId ? +this.listFilter.UserId : 0;
@@ -169,6 +168,9 @@ export class CreateTicketComponent implements OnInit {
 
     this.ticketTypes = activatedRouteObject['ticketTypes'];
 
+    if (this.user.Role.RoleID == 1) {
+      this.loadDisributors();
+    }
     if (this.user.IsDistributor || this.ticket.DistributorCopackerID) {
       // this.loadCustomers();
       this.loadDisributors();
