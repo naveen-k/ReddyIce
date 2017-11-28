@@ -224,7 +224,7 @@ export class DetailsComponent implements OnInit {
 
             this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) + 
             (+ticketDetails.Total.TotalHHCash) +
-            (+ticketDetails.Total.TotalHHCheck) +
+            (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
             (+ticketDetails.Total.TotalManualCreditCard));
         }
         console.log('this.totalDeposit:', this.totalDeposit);
