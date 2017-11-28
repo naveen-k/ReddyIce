@@ -117,7 +117,7 @@
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr>
                                         <td>
-                                            <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
+                                            <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
                                                 <span class="tooltiptext">View Ticket Details</span>
                                             </i>
                                         </td>
