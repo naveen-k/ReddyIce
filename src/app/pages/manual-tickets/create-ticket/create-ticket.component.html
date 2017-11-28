@@ -283,7 +283,7 @@
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
-                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
+                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
                                             </td>
@@ -356,7 +356,7 @@
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
-                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
+                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
                                             </td>
@@ -431,7 +431,7 @@
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
-                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
+                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
                                             </td>
@@ -502,7 +502,7 @@
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
-                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail)">
+                                                <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
                                             </td>
