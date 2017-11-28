@@ -25,6 +25,7 @@ export class UserManagementComponent implements OnInit {
   isDistributorAdmin: boolean = false;
   cardTitle: string;
   userDetails: UserDetails;
+  IsSesonalTrue:boolean=false;
   formIsDirty: boolean = false;
   isDistributorExist: boolean = false;
   isEditClicked: boolean = false;
@@ -369,12 +370,18 @@ export class UserManagementComponent implements OnInit {
   logUserID:any;
   ngOnInit() {
     this.userObject = this.userService.getUser();
-    // console.log(this.userObject.Role.RoleName);
+    console.log(this.userObject);
     const userId = localStorage.getItem('userId') || '';
     this.logUserID = userId;
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.idDataLoaded = true;
       this.userDetails = response;
+      if(this.userDetails.IsSeasonal){
+        this.IsSesonalTrue=true;
+      }else{
+        this.IsSesonalTrue=false;
+      }
+      console.log(this.userDetails.IsSeasonal);
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
       // console.log(this.userRoles);
