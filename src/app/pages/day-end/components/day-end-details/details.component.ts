@@ -114,7 +114,7 @@ export class DetailsComponent implements OnInit {
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
                 ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
                 ticket.amount = ticket.TotalSale + ticket.TaxAmount;
-                var cardAmount = (ticket.IsClosed)?ticket.CreditCardAmount:0;
+                var cardAmount = (this.tripData.IsClosed)?ticket.CreditCardAmount:0;
                 ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount + cardAmount;
                 //ticket.amount = (ticket.IsClosed)?ticket.amount + (ticket.checkCashAmount - ticket.amount):ticket.amount;
                 if (ticket.TicketTypeID === 30) { return; }
