@@ -198,7 +198,9 @@ export class TrackerComponent implements OnInit {
 
   // funtion to retrieve the time
   sliceTime(str) {
-    return str.slice(11, 16);
+    if (str) {
+      return str.slice(11, 16);
+    }
   }
 
   // Filter TicketDetails based on the Trip selected
