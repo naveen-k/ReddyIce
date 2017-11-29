@@ -511,7 +511,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <textarea rows="5" style="width:100%;border:0px;resize: none;" [(ngModel)]="tripData.Comments"></textarea>
+                                                    <textarea rows="5" style="width:100%;border:0px;resize: none;" [(ngModel)]="ticketDetails.Total.Comments" [disabled]="userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed"></textarea>
 
                                                 </div>
 

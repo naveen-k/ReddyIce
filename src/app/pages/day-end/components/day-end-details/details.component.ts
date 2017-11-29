@@ -253,7 +253,7 @@ export class DetailsComponent implements OnInit {
             ActualCoin: total.ActualCoin,
             Misc: total.Misc,
             TripStatusID: statusId,
-            Comments: this.tripData.Comments
+            Comments: total.Comments
         };
         this.service.saveRecociliation(cashRecon).subscribe((res) => {
             //  this.notification.success("Success", res);
