@@ -43,3 +43,4 @@ testem.log
 Thumbs.db
 /dist.zip
 .vscode/launch.json
+npm-debug.log.720443702

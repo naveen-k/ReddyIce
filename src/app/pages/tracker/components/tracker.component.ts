@@ -391,7 +391,7 @@ export class TrackerComponent implements OnInit {
         } else if (this.selectedTrip[i].OrderID == null) {
           this.pinColor = '0000ff';   // blue color for Unplanned Service
           this.pinTextColor = 'fff';
-        } else if (this.selectedTrip[i].OrderID != null) {
+        } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber !== null) {
           this.pinColor = 'A52A2A';   // brown color for Planned Service
           this.pinTextColor = 'fff';
         } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber == null) {
