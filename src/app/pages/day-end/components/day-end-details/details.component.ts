@@ -118,7 +118,7 @@ export class DetailsComponent implements OnInit {
                 ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount + cardAmount;
                 //ticket.amount = (ticket.IsClosed)?ticket.amount + (ticket.checkCashAmount - ticket.amount):ticket.amount;
                 if (ticket.TicketTypeID === 30) { return; }
-                ticket.ChargeAmount = (ticket.checkCashAmount===0 && ticket.PaymentTypeID===19)?ticket.amount:ticket.ChargeAmount;
+                ticket.ChargeAmount = (ticket.checkCashAmount===0 && ticket.PaymentTypeID===19)?ticket.amount:(ticket.ChargeAmount)||0;
                 this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
                 this.ticketTotal.totalCash += ticket.CashAmount || 0;
                 this.ticketTotal.totalCheck += ticket.CheckAmount || 0;
@@ -126,7 +126,7 @@ export class DetailsComponent implements OnInit {
                 this.ticketTotal.totalDrayage += ticket.Drayage || 0;
                 this.ticketTotal.totalBuyBack += ticket.BuyBack || 0;
                 this.ticketTotal.totalDistAmt += ticket.DistAmt || 0;
-                this.ticketTotal.receivedTotal += (ticket.checkCashAmount==0) ? ticket.amount : (ticket.checkCashAmount);
+                this.ticketTotal.receivedTotal += ticket.checkCashAmount || 0;
                 this.cashReconciliationTotal(ticket);
             });
             //this.calculateTotalTicketAmount();
@@ -146,22 +146,31 @@ export class DetailsComponent implements OnInit {
         TotalHHCash: 0,
         TotalHHCheck:0,
         TotalHHCreditCard:0,
-        TotalHHCharge:0
+        TotalHHCharge:0,
+        TotalManualCashCustomer:0,
+        TotalHHCashCustomer:0,
+        TotalManualChargeCustomer:0,
+        TotalHHChargeCustomer:0
+
     };
     cashReconciliationTotal(ticket){
         if (ticket.TicketTypeID === 30) { return; }
-        if(ticket.IsPaperTicket){
+         if(ticket.IsPaperTicket){
             this.TotalCashReconciliation.TotalManualSale += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
             this.TotalCashReconciliation.TotalManualCash += ticket.CashAmount || 0;
             this.TotalCashReconciliation.TotalManualCheck += ticket.CheckAmount || 0;
             this.TotalCashReconciliation.TotalManualCreditCard += ticket.CreditCardAmount || 0;
             this.TotalCashReconciliation.TotalManualCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0)?ticket.ChargeAmount:0) || 0;
+            if(ticket.PaymentTypeID===18) { this.TotalCashReconciliation.TotalManualCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            if(ticket.PaymentTypeID===19) { this.TotalCashReconciliation.TotalManualChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
         } else {
-            this.TotalCashReconciliation.TotalHHSale += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+            this.TotalCashReconciliation.TotalHHSale += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
             this.TotalCashReconciliation.TotalHHCash += ticket.CashAmount || 0;
             this.TotalCashReconciliation.TotalHHCheck += ticket.CheckAmount || 0;
             this.TotalCashReconciliation.TotalHHCreditCard += ticket.CreditCardAmount || 0;
             this.TotalCashReconciliation.TotalHHCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0)?ticket.ChargeAmount:0) || 0;
+            if(ticket.PaymentTypeID===18) { this.TotalCashReconciliation.TotalHHCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            if(ticket.PaymentTypeID===19) { this.TotalCashReconciliation.TotalHHChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
         }
     }
     cashReconciliationSubTotal(){
@@ -181,6 +190,8 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.Misc = (this.ticketDetails.Total.Misc===null)?`0.00`:this.ticketDetails.Total.Misc.toString().indexOf('.')<0?`${this.ticketDetails.Total.Misc}.00`:this.ticketDetails.Total.Misc;
         var CTotal = this.ticketDetails.Total.TotalManualCreditCard + this.ticketDetails.Total.TotalHHCreditCard;
         this.ticketDetails.Total.CreditCardAmountTotal = (CTotal===null)?`0.00`:CTotal.toString().indexOf('.')<0?`${CTotal}.00`:CTotal;
+        this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
+        this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
         
     }
     sortByWordLength = (a: any) => {
@@ -218,12 +229,12 @@ export class DetailsComponent implements OnInit {
             this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0) + 
             (+ticketDetails.Total.actualdepositcheck || 0) + 
             (+ticketDetails.Total.Misc || 0) + 
-            (+ticketDetails.Total.TotalManualCheck) +
             (+ticketDetails.Total.TotalHHCreditCard) +
+            (+ticketDetails.Total.TotalManualCreditCard) +
             (+ticketDetails.Total.ActualCoin || 0)
 
             this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) + 
-            (+ticketDetails.Total.TotalHHCash) +
+            (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
             (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
             (+ticketDetails.Total.TotalManualCreditCard));
         }
@@ -242,6 +253,7 @@ export class DetailsComponent implements OnInit {
             ActualCoin: total.ActualCoin,
             Misc: total.Misc,
             TripStatusID: statusId,
+            Comments: this.tripData.Comments
         };
         this.service.saveRecociliation(cashRecon).subscribe((res) => {
             //  this.notification.success("Success", res);
