@@ -601,7 +601,8 @@ export class CreateTicketComponent implements OnInit {
     fileReader.addEventListener('load', (e) => {
       let f = fileReader.result.split(','),
         accepted = this.acceptedPodFormat.filter(format => f[0].indexOf(format) > 0).length;
-      if (accepted) {
+        let fileSize = event.target.files[0].size <= (2*1024*1024);
+      if (accepted && fileSize) {
         this.file['Image'] = f[1];
         this.file['ImageMetaData'] = f[0];
         this.isFormDirty = true;
@@ -611,9 +612,12 @@ export class CreateTicketComponent implements OnInit {
           size: 'sm',
           backdrop: 'static',
         });
+        if (!fileSize) {
+          var msg= 'File size should be less then 2MB';
+        }
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.modalHeader = 'Warning!';
-        activeModal.componentInstance.modalContent = `Format not supported !!!`;
+        activeModal.componentInstance.modalContent = `${msg}`;
       }
     });
 
