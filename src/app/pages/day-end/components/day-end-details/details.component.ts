@@ -184,6 +184,7 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.TotalHHCheck = this.TotalCashReconciliation.TotalHHCheck
         this.ticketDetails.Total.TotalHHCreditCard =  (this.tripData.IsClosed)?this.TotalCashReconciliation.TotalHHCreditCard:0.00;
         this.ticketDetails.Total.TotalHHCharge = this.TotalCashReconciliation.TotalHHCharge;
+        this.ticketDetails.Total.TotalPreDiposit = (+this.ticketDetails.Total.actualdepositcash || 0) + (+this.ticketDetails.Total.actualdepositcheck||0) + (+this.ticketDetails.Total.ActualCoin||0);
         this.ticketDetails.Total.actualdepositcash = (this.ticketDetails.Total.actualdepositcash===null)?`0.00`:this.ticketDetails.Total.actualdepositcash.toString().indexOf('.')<0?`${this.ticketDetails.Total.actualdepositcash}.00`:this.ticketDetails.Total.actualdepositcash;
         this.ticketDetails.Total.actualdepositcheck = (this.ticketDetails.Total.actualdepositcheck===null)?`0.00`:this.ticketDetails.Total.actualdepositcheck.toString().indexOf('.')<0?`${this.ticketDetails.Total.actualdepositcheck}.00`:this.ticketDetails.Total.actualdepositcheck;
         this.ticketDetails.Total.ActualCoin = (this.ticketDetails.Total.ActualCoin===null)?`0.00`:this.ticketDetails.Total.ActualCoin.toString().indexOf('.')<0?`${this.ticketDetails.Total.ActualCoin}.00`:this.ticketDetails.Total.ActualCoin;
@@ -192,6 +193,7 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.CreditCardAmountTotal = (CTotal===null)?`0.00`:CTotal.toString().indexOf('.')<0?`${CTotal}.00`:CTotal;
         this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
+        debugger;
         
     }
     sortByWordLength = (a: any) => {
@@ -237,6 +239,7 @@ export class DetailsComponent implements OnInit {
             (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
             (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
             (+ticketDetails.Total.TotalManualCreditCard));
+            ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0) + (+ticketDetails.Total.actualdepositcheck||0) + (+ticketDetails.Total.ActualCoin||0);
         }
         console.log('this.totalDeposit:', this.totalDeposit);
     }
