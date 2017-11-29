@@ -1,4 +1,4 @@
-
+import { ModelPopupComponent } from './components/model-popup/model-popup.component';
 import { AlphaNumeric } from './directives/alpha-numeric.directive';
 import { ConcatStringPipe } from './pipes/concat-string.pipe';
 import { SelectComponent } from './components/multiple-select/multiple-select';
@@ -38,7 +38,8 @@ import { NgModule } from '@angular/core';
         CutStringPipe,
         SelectComponent,
         AlphaNumeric,
-        ConcatStringPipe
+        ConcatStringPipe,
+        ModelPopupComponent,
     ],
     exports: [
         GenericFilter,
@@ -56,10 +57,12 @@ import { NgModule } from '@angular/core';
         NumberOnlyDirective,
         SelectComponent,
         AlphaNumeric,
-        ConcatStringPipe
+        ConcatStringPipe,
+        ModelPopupComponent
     ],
     entryComponents: [
         ModalComponent,
+        ModelPopupComponent
     ],
     imports: [CommonModule, NgbModalModule],
     providers: [HttpService, UserService, SharedService],

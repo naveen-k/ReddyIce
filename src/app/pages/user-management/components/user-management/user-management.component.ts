@@ -9,7 +9,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { User } from '../../user-management.interface';
 import { selector } from 'rxjs/operator/multicast';
 import { any } from 'codelyzer/util/function';
-
+import { ModelPopupComponent } from '../../../../shared/components/model-popup/model-popup.component';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
@@ -407,8 +407,8 @@ export class UserManagementComponent implements OnInit {
   changeUserTypeHandler() {
     this.updateUserTableOnTypeChange();
   }
-  moreBranches(branches) {
-    const activeModal = this.modalService.open(ModalComponent, {
+  moreBranches(branches,username) {
+    const activeModal = this.modalService.open(ModelPopupComponent, {
       size: 'sm',
       backdrop: 'static',
     });
@@ -422,10 +422,10 @@ export class UserManagementComponent implements OnInit {
 
     });
 
-    let branch = cstring.join(', ');
+    let branch = cstring;
     activeModal.componentInstance.showCancel = false;
-    activeModal.componentInstance.modalHeader = 'List of branch';
-    activeModal.componentInstance.modalContent = `${branch}`;
+    activeModal.componentInstance.modalHeader = `Selected branches of ${username}`;
+    activeModal.componentInstance.modalContent = branch;
     activeModal.componentInstance.closeModalHandler = (() => {
 
     });
