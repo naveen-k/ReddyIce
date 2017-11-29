@@ -137,6 +137,7 @@ export class TrackerComponent implements OnInit {
         this.trips = res.Trips;
         var branchesArr = [];
         console.log('this.trips', this.trips.length);
+        
         this.showSpinner = false;
         this.allBranches = [];
         var distributorArr = [];
@@ -204,10 +205,13 @@ export class TrackerComponent implements OnInit {
   }
 
   // Filter TicketDetails based on the Trip selected
+  IsUnplanned: boolean; // check if a trip is planned or unplanned
   fetchTicketDetailsByTrip(TripCode) {
     for (var i = 0; i < this.trips.length; i++) {
       if (parseInt(TripCode) === this.trips[i].TripCode &&
         this.tripFilterOption.DriverName == this.trips[i].DriverName) {
+        console.log('isUnplanned', this.trips[i].IsUnplanned);
+        this.IsUnplanned = this.trips[i].IsUnplanned;
         this.selectedTrip = this.trips[i].TripTicketList; // creating array based on driver and tripcode selected
         this.tripStartDate = this.trips[i].TripStartDate
       }
