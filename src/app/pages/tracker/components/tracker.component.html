@@ -121,12 +121,14 @@
                                                 <span class="tooltiptext">View Ticket Details</span>
                                             </i>
                                         </td>
-                                        <td [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">{{subitem.PlannedSequence}}</td>
+                                        <td style="text-align:center;" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                                            {{subitem.PlannedSequence}}
+                                        </td>
                                         <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
                                             {{subitem.ActualSequence}}
                                         </td>
                                         <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
-                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}
+                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:2}}
                                         </td>
                                         <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
                                             {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}
