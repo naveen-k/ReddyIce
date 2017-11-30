@@ -575,13 +575,13 @@
                                             <label>Tolls($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.TollsAmountTotal' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.Tolls' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Money Order Fee($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.MoneyOrderFeeAmountTotal' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.MoneyOrderFee' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Misc($):</label>
