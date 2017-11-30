@@ -14,7 +14,13 @@
     border-top-left-radius: .3rem;
     border-top-right-radius: .3rem;
     background: #5bc0de;
-    color: #fff;
+    .modal-title{
+      font-weight: 400;
+      //font-size: 16px;
+      //text-transform: uppercase;
+      opacity: 0.9;
+      color: #000;
+    }
     .close {
       padding: 11px;
       margin: -25px -22px -15px auto;
