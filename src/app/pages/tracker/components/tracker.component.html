@@ -126,7 +126,7 @@
                                             {{subitem.ActualSequence}}
                                         </td>
                                         <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
-                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}
+                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:2}}
                                         </td>
                                         <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
                                             {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}
