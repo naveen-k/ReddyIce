@@ -613,7 +613,7 @@ export class CreateTicketComponent implements OnInit {
           backdrop: 'static',
         });
         if (!fileSize) {
-          var msg= 'File size should be less then 2MB';
+          var msg= 'File size can\'t be greater then 2MB';
         }
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.modalHeader = 'Warning!';

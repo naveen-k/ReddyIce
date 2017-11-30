@@ -1,14 +1,8 @@
 <div class="modal-content">
     <div class="modal-header">
       <h4 class="modal-title">{{modalHeader}}</h4>
-      <!-- <div class="modal-control">
-            <div class="close" (click)="closeModal()">X</div>
-        </div> -->
-      <!-- <button class="close" aria-label="Close" (click)="closeModal()">
-        <span aria-hidden="true">&times;</span>
-      </button> -->
       <button type="button" class="close" aria-label="Close" (click)="closeModal()">
-            <span aria-hidden="true">x</span>
+            <span aria-hidden="true">&times;</span>
           </button>    
     </div>
     <div class="modal-body">
@@ -16,6 +10,7 @@
         <span>{{(i+1)}}) </span> {{branch}}
       </div>
     </div>
+    <div class="modal-footer"></div>    
     
   </div>
   
