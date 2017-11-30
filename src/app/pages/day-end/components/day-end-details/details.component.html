@@ -531,14 +531,14 @@
                                             <label>Checks/Money Orders($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' (ngModelChange)="cashReconChange(ticketDetails)"
+                                            <input type="text" numberDecimal [(ngModel)]='ticketDetails?.Total.actualdepositcheck' (ngModelChange)="cashReconChange(ticketDetails)"
                                                 min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Cash($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' (ngModelChange)="cashReconChange(ticketDetails)"
+                                            <input type="text" [numberDecimal]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' (ngModelChange)="cashReconChange(ticketDetails)"
                                                 min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         
@@ -546,7 +546,7 @@
                                             <label>Coins($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.ActualCoin' (ngModelChange)="cashReconChange(ticketDetails)"
+                                            <input type="text" [numberDecimal]="true" [(ngModel)]='ticketDetails?.Total.ActualCoin' (ngModelChange)="cashReconChange(ticketDetails)"
                                                 min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         <div class="col-sm-12">
@@ -569,25 +569,25 @@
                                             <label>Credit Card($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" min="0" [value]='ticketDetails?.Total.CreditCardAmountTotal' disabled placeholder="0.00">
+                                            <input type="text" [numberDecimal]="true" min="0" [value]='ticketDetails?.Total.CreditCardAmountTotal' disabled placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Tolls($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.TollsAmountTotal' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                            <input type="text" [numberDecimal]="true" min="0" [(ngModel)]='ticketDetails?.Total.TollsAmountTotal' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Money Order Fee($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.MoneyOrderFeeAmountTotal' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                            <input type="text" [numberDecimal]="true" min="0" [(ngModel)]='ticketDetails?.Total.MoneyOrderFeeAmountTotal' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Misc($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
-                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' (ngModelChange)="cashReconChange(ticketDetails)"
+                                            <input type="text" [numberDecimal]="true" [(ngModel)]='ticketDetails?.Total.Misc' (ngModelChange)="cashReconChange(ticketDetails)"
                                                 min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         <div class="col-sm-12">

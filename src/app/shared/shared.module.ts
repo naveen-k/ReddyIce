@@ -18,7 +18,7 @@ import { HttpService } from './http.service';
 import { CommonModule } from '@angular/common';
 import { AccordionGroupComponent, AccordionComponent } from './components/accordion/accordion.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
-
+import { NumberDecimalDirective } from './directives/number-decimal.directive';
 import { GenericFilter } from './pipes/generic-filter.pipe';
 import { NgModule } from '@angular/core';
 @NgModule({
@@ -31,6 +31,7 @@ import { NgModule } from '@angular/core';
         PaginationComponent,
         MinValueValidatorDirective,
         NumberOnlyDirective,
+        NumberDecimalDirective,
         TicketTypePipe,
         Select2Component,
         DualListComponent,
@@ -55,6 +56,7 @@ import { NgModule } from '@angular/core';
         ListComponent,
         CutStringPipe,
         NumberOnlyDirective,
+        NumberDecimalDirective,
         SelectComponent,
         AlphaNumeric,
         ConcatStringPipe,
