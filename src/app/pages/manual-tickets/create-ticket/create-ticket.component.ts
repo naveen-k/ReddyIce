@@ -697,7 +697,6 @@ export class CreateTicketComponent implements OnInit {
   }
   deleteProductHandler(tdetail) {
     const index = this.ticket.TicketProduct.findIndex((t) => t.ProductID === tdetail.ProductID);
-    this.ticket.TicketProduct[index]['IsActive'] = false;
     this.ticket.TicketProduct.splice(index, 1);
 
     // update total amount and total count
