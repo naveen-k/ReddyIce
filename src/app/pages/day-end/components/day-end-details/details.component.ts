@@ -193,8 +193,8 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.CreditCardAmountTotal = (CTotal===null)?`0.00`:CTotal.toString().indexOf('.')<0?`${CTotal}.00`:CTotal;
         this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
-        debugger;
-        
+        this.ticketDetails.Total.TollsAmountTotal = (this.ticketDetails.Total.TollsAmountTotal === undefined || this.ticketDetails.Total.TollsAmountTotal === null)?`0.00`:this.ticketDetails.Total.TollsAmountTotal;
+        this.ticketDetails.Total.MoneyOrderFeeAmountTotal = (this.ticketDetails.Total.MoneyOrderFeeAmountTotal === undefined || this.ticketDetails.Total.MoneyOrderFeeAmountTotal === null)?`0.00`:this.ticketDetails.Total.MoneyOrderFeeAmountTotal;
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
@@ -233,7 +233,9 @@ export class DetailsComponent implements OnInit {
             (+ticketDetails.Total.Misc || 0) + 
             (+ticketDetails.Total.TotalHHCreditCard) +
             (+ticketDetails.Total.TotalManualCreditCard) +
-            (+ticketDetails.Total.ActualCoin || 0)
+            (+ticketDetails.Total.ActualCoin || 0) + 
+            (+ticketDetails.Total.TollsAmountTotal || 0) + 
+            (+ticketDetails.Total.MoneyOrderFeeAmountTotal || 0)
 
             this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) + 
             (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
