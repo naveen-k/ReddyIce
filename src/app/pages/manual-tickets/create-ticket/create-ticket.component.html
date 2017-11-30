@@ -304,10 +304,20 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ticket.TotalSale + ticket.TaxAmount  | currency:'USD':true:'1.2'}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
+                                        <!-- <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                                <td colspan="2"></td>
+                                                <td class="textAlignRight">
+                                                    <b>Total Sale</b>
+                                                </td>
+                                                <td class="textAlignRight">
+                                                    <b>{{ticket.TotalSale + ticket.TaxAmount | currency:'USD':true:'1.2'}}</b>
+                                                </td>
+                                                <td [hidden]="isReadOnly"></td>
+                                            </tr> -->
                                     </tbody>
                                 </table>
                             </div>
@@ -526,6 +536,16 @@
                                                 <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
+                                        </tr>
+                                        <tr [hidden]="!ticket.TicketProduct || !ticket.TicketProduct.length">
+                                                <td colspan="2"></td>
+                                                <td class="textAlignRight">
+                                                    <b>Total Sale</b>
+                                                </td>
+                                                <td class="textAlignRight">
+                                                    <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
+                                                </td>
+                                                <td [hidden]="isReadOnly"></td>
                                         </tr>
                                     </tbody>
                                 </table>

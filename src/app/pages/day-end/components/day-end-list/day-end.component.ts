@@ -81,6 +81,8 @@ export class DayEndComponent implements OnInit {
                 }]
             }
             this.showSpinner = false;
+           // for(let i=0;i<this.trips.length)
+            //if()
         },
         (error) => {
             this.showSpinner = false;
