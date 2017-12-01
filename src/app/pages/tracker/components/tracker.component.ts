@@ -212,6 +212,10 @@ export class TrackerComponent implements OnInit {
         this.tripFilterOption.DriverName == this.trips[i].DriverName) {
         console.log('isUnplanned', this.trips[i].IsUnplanned);
         this.IsUnplanned = this.trips[i].IsUnplanned;
+        if (this.IsUnplanned) { // if unplanned trip, map according 'Actual' scenario
+          this.actual = true;
+          this.planned = false;
+        }
         this.selectedTrip = this.trips[i].TripTicketList; // creating array based on driver and tripcode selected
         this.tripStartDate = this.trips[i].TripStartDate
       }
