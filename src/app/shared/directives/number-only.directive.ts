@@ -38,7 +38,7 @@ export class NumberOnlyDirective {
       }      
       
       @HostListener("focus", ["$event.target.value"])
-      onFocus(value) {
+      focus(value) {
             if(!this.numberOnly){
                 return;
             }
