@@ -179,12 +179,15 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     userSelected(_user) {
         this.riUserName = '';
         this.showList = false;
+        console.log(_user);
         const user = this.searchedUsers[_user];
+        console.log(user);
         if (!user) { return; }
         this.user.FirstName = user.displayname||'';    //[0].split(' ')[0] || '';
         this.user.LastName = user.displayname||''; //? user.displayname[0].split(' ')[1] : '';
         this.user.UserName = user.cn||''; //[0] || '';
         this.user.EmailID = user.mail ? user.mail:''; //[0] : '';
+        this.user.Phone=user.phone ? user.phone : '';
         this.riUserName = _user;
         this.selectedSearchUser = true;
         this.isFormValid = true;

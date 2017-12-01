@@ -107,7 +107,7 @@
         Phone
       </label>
       <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-      maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (ngModelChange)="changeHandler()">
+      maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal || !isNewUser" (ngModelChange)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
@@ -126,7 +126,7 @@
                 </select>
     </div>
 
-    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.RoleID==='3')" [hidden]="userObject.IsDistributor">
+    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.RoleID==='3')||(user.IsSeasonal && actionName=='edit')" [hidden]="userObject.IsDistributor">
       <label for="exampleSelect1">
         Branch
         <sup style="color:red;">*</sup>
