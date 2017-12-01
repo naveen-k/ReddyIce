@@ -17,6 +17,7 @@ export class DayEndComponent implements OnInit {
     distributors: Array<any> = [];
     logedInUser: any = {};
     todaysDate: any;
+    totalCreditAmount:any=0;
 
     userSubTitle: string = '';
     showSpinner: boolean = false;
@@ -36,6 +37,7 @@ export class DayEndComponent implements OnInit {
             this.filter.type = 'internal';
         }
         this.selectionchangeHandler();
+        //for(let i=0;i<this.trips.length;i++)
     }
 
     selectionchangeHandler() {
@@ -43,6 +45,7 @@ export class DayEndComponent implements OnInit {
     }
 
     loadFilteredTrips() {
+        this.totalCreditAmount=0;
         this.showSpinner = true;
         this.trips = [];
         this.service.getTrips(this.service.formatDate(this.filter.selectedDate)).subscribe((res) => {
@@ -81,8 +84,18 @@ export class DayEndComponent implements OnInit {
                 }]
             }
             this.showSpinner = false;
-           // for(let i=0;i<this.trips.length)
-            //if()
+            // console.log(this.trips);
+            // for(let i=0;i<this.trips.length;i++){
+            //     if(this.trips[i].IsClosed==false ){
+            //         for(let j=0;j<this.trips[i].TripTicketList.length;j++){
+            //             if(this.trips[i].TripTicketList[j].CreditCardAmount){
+            //                 this.totalCreditAmount = this.totalCreditAmount + this.trips[i].TripTicketList[j].CreditCardAmount;
+            //                 this.trips[i].TripTotalAmount=this.trips[i].TripTotalAmount-this.totalCreditAmount;
+            //             }
+            //         }
+            //     }
+                
+            // }
         },
         (error) => {
             this.showSpinner = false;
