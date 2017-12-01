@@ -10,11 +10,19 @@ export class NumberOnlyDirective {
     constructor(el: ElementRef) {
         el.nativeElement.addEventListener('keypress', (e) => {
             const keyCode = (e.keyCode ? e.keyCode : e.which);
-            if ((keyCode > 47 && keyCode < 58) || (keyCode === 8)) {
+            if (this.numberOnly && keyCode === 46 && e.target.value.indexOf(".") < 0) { // check for decimal
                 return true;
             }
-            else if (this.numberOnly && keyCode === 46) { return true } // accept decimal value 
+            else if ((keyCode > 47 && keyCode < 58) || (keyCode === 8)) {
+                return true;
+            }
             e.preventDefault();
         });
+
+        el.nativeElement.addEventListener('keyup', (e) => {
+            if (this.numberOnly && e.target.value.indexOf(".") >= 0 && e.target.value.split(".")[1].length > 2) {
+                e.target.value = e.target.value.substring(0, e.target.value.indexOf(".") + 3);
+            }
+        })
     }
 }
