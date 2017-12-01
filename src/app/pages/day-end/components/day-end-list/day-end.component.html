@@ -98,7 +98,7 @@
                             <td>{{item.DriverName}}</td>
                             <td class="textAlignCenter">{{item.TripCode}}</td>
                             <td class="textRightPadding">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
-                            <td class="textRightPadding">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
+                            <td class="textRightPadding">{{item.TripTotalAmount| currency:'USD':true:'1.2'}}</td>
                             <td class="textAlignCenter">
                                 <input type="checkbox" name="tripHHMultiSelect" [(ngModel)]="item.IsClosed" disabled>
                             </td>
