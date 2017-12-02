@@ -276,12 +276,12 @@
                                                 </select>
                                             </td>
                                             
-                                            <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
+                                            <td class="textAlignRight"> {{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
@@ -294,7 +294,7 @@
                                                 <b>Total Tax</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TaxAmount | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ticket.TaxAmount | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -304,7 +304,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale + ticket.TaxAmount  | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ticket.TotalSale + ticket.TaxAmount  | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -314,7 +314,7 @@
                                                     <b>Total Sale</b>
                                                 </td>
                                                 <td class="textAlignRight">
-                                                    <b>{{ticket.TotalSale + ticket.TaxAmount | currency:'USD':true:'1.2'}}</b>
+                                                    <b>{{ticket.TotalSale + ticket.TaxAmount | currencyFormatter}}</b>
                                                 </td>
                                                 <td [hidden]="isReadOnly"></td>
                                             </tr> -->
@@ -353,7 +353,7 @@
                                                             {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                     </select>
                                                 </td>
-                                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'1.2'}}</td>
+                                            <td> {{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td>
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading"
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" 
@@ -364,7 +364,7 @@
                                                     (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)"
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'1.2'}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
@@ -377,7 +377,7 @@
                                                 <b>Total Tax</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{tempModels.totalTax | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -387,7 +387,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ticket.TotalSale | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -452,7 +452,7 @@
                                                 <b>Total Tax</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{tempModels.totalTax | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -462,7 +462,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ticket.TotalSale | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -523,7 +523,7 @@
                                                 <b>Total Tax</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{tempModels.totalTax | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{tempModels.totalTax | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -533,7 +533,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ticket.TotalSale | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -543,7 +543,7 @@
                                                     <b>Total Sale</b>
                                                 </td>
                                                 <td class="textAlignRight">
-                                                    <b>{{ticket.TotalSale | currency:'USD':true:'1.2'}}</b>
+                                                    <b>{{ticket.TotalSale | currencyFormatter}}</b>
                                                 </td>
                                                 <td [hidden]="isReadOnly"></td>
                                         </tr>

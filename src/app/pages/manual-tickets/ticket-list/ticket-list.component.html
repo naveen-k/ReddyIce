@@ -146,7 +146,7 @@
                     <td>{{ item.ticketType }}</td>
                     <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:15 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
-                    <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currency:'USD':true:'1.2' }}</td>
+                    <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currencyFormatter }}</td>
                     <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currencyFormatter }}</td>
@@ -169,10 +169,10 @@
                 <!--<tr *ngIf="(allTickets.length && allTickets.length>0)">
                     <td colspan="6" [hidden]="user.IsDistributor"><b>Total({{allTickets.length}})</b></td> 
                     <td style="text-align: center;" colspan="5" [hidden]="!user.IsDistributor"><b>Total</b></td>                                
-                    <td class="textRightPadd"><b>{{total.totalInvoice | currency:'USD':true:'1.2'}}</b></td>
-                    <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currency:'USD':true:'1.2'}}</b></td>
-                    <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
-                    <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
+                    <td class="textRightPadd"><b>{{total.totalInvoice | currencyFormatter}}</b></td>
+                    <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currencyFormatter}}</b></td>
+                    <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currencyFormatter}}</b></td>
+                    <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currencyFormatter}}</b></td>
                     <td></td>
                 </tr>-->
             </tbody>
