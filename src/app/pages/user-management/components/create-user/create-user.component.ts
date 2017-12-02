@@ -359,6 +359,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     roleChange(roleID) {
+        debugger
         roleID = roleID + '';
         this.user.DistributorMasterID = 0;
         this.userBranch = [];
@@ -378,7 +379,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.RoleID = roleID;
             this.userBranch = [];
             this.cBranches = this.tBranches;
-            if (this.cBranches[0].value == '1') {
+            console.log(this.cBranches);
+            if (this.cBranches[0].value === 1) {
                 this.cBranches.shift();
             }
         }

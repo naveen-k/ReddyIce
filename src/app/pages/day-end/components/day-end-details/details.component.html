@@ -416,6 +416,14 @@
                                             <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCreditCard | currency:'USD':true:'1.2'}}</td>
                                             <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCharge | currency:'USD':true:'1.2'}}</td>
                                         </tr>
+                                        <tr>
+                                            <td><b>Total</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualSale + ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</b></td>
+                                            <td class="text-align-right"><b>{{ ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCheck + ticketDetails?.Total.TotalHHCheck | currency:'USD':true:'1.2'}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCreditCard+ ticketDetails?.Total.TotalHHCreditCard | currency:'USD':true:'1.2'}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCharge + ticketDetails?.Total.TotalHHCharge | currency:'USD':true:'1.2'}}</b></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
