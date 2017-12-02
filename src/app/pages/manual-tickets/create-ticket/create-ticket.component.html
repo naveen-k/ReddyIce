@@ -426,7 +426,7 @@
                                                             {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                     </select>
                                                 </td>
-                                            <td class="textAlignRight"> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                            <td class="textAlignRight"> {{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags"
                                                     (ngModelChange)="bagsChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
@@ -439,7 +439,7 @@
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DamagedBags"
                                                     (ngModelChange)="isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
@@ -501,7 +501,7 @@
                                                             {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                     </select>
                                                 </td>
-                                            <td> {{tdetail.productSelected?.Price | currency:'USD':true:'2.2-4'}}</td>
+                                            <td> {{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
@@ -510,7 +510,7 @@
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount | currency:'USD':true:'2.2-4'}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>

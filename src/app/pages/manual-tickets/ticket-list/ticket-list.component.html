@@ -101,6 +101,12 @@
                             <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                         </span>
                     </th>
+                    <th class="thVerticalAlign table-text-align">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerTitle';customer.isAsc=!customer.isAsc;">
+                          Delivery Date
+                          <i *ngIf="(customer.sortField == 'CustomerTitle')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTitle' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                      </span>
+                    </th>
                     <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
                         <span class="cursorPointer">
                           Status
@@ -144,13 +150,14 @@
                     <td>{{ item.TicketNumber }}</td>
                     <!-- <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td> -->
                     <td>{{ item.ticketType }}</td>
-                    <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:15 }}</span></td>
+                    <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:10 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currencyFormatter }}</td>
                     <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currencyFormatter }}</td>
                     <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.BuyBack | currencyFormatter }}</td>
+                    <td>{{item.DeliveryDate|date}}</td>
                     <td class="textAlignCenter">
                         <i class="custom-tooltip-ion">
                             <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TicketStatusID == 23" width="15">
