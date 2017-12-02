@@ -147,10 +147,10 @@
                     <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:15 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currency:'USD':true:'1.2' }}</td>
-                    <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
-                    <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currency:'USD':true:'1.2' }}</td>
-                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currency:'USD':true:'1.2' }}</td>
-                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.BuyBack | currency:'USD':true:'1.2' }}</td>
+                    <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currencyFormatter }}</td>
+                    <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currencyFormatter }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currencyFormatter }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.BuyBack | currencyFormatter }}</td>
                     <td class="textAlignCenter">
                         <i class="custom-tooltip-ion">
                             <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TicketStatusID == 23" width="15">

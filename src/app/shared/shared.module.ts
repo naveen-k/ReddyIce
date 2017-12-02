@@ -1,3 +1,4 @@
+import { CurrencyFormatter } from './pipes/currency-pipe';
 import { ModelPopupComponent } from './components/model-popup/model-popup.component';
 import { AlphaNumeric } from './directives/alpha-numeric.directive';
 import { ConcatStringPipe } from './pipes/concat-string.pipe';
@@ -41,6 +42,7 @@ import { NgModule } from '@angular/core';
         AlphaNumeric,
         ConcatStringPipe,
         ModelPopupComponent,
+        CurrencyFormatter
     ],
     exports: [
         GenericFilter,
@@ -60,7 +62,8 @@ import { NgModule } from '@angular/core';
         SelectComponent,
         AlphaNumeric,
         ConcatStringPipe,
-        ModelPopupComponent
+        ModelPopupComponent,
+        CurrencyFormatter
     ],
     entryComponents: [
         ModalComponent,
