@@ -59,7 +59,7 @@
                             <td>{{product.ProductCode}}</td>
                             <td>{{product.ProductName}}</td>
                             <td class="center"><input type="checkbox" value="" disabled [checked]=product.IsInternal></td>
-                            <td class="td-width text-alignment tdpadding" [hidden]="editClicked[index]">{{product.ProductPrice|currency:'USD':true:'1.2'}}</td>
+                            <td class="td-width text-alignment tdpadding" [hidden]="editClicked[index]">{{product.ProductPrice|currencyFormatter}}</td>
                             <td class="td-width" [hidden]="!editClicked[index]">
                                 <input type="number" [(ngModel)]='product.ProductPrice' class="form-control" id="price" placeholder="Price" style="padding: 5px; margin-top: 3px;">
                             </td>

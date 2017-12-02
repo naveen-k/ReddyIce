@@ -144,19 +144,19 @@
                                                     <span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:false:20 }}</span>
                                                 </td>
                                                 <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">
-                                                    <span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currency:'USD':true:'1.2' }}
+                                                    <span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currencyFormatter }}
                                                     <span *ngIf="item.TicketTypeID === 27">)</span>
                                                 </td>
                                                 <td class="textRightPadd">
-                                                    <span [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currency:'USD':true:'1.2' }}</span>
+                                                    <span [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currencyFormatter }}</span>
                                                     <span *ngIf="item.TicketTypeID == 30">$0.00</span>
                                                 </td>
                                                 <!--td class="textRightPadd" ></td-->
                                                 <!--td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount"></td-->
                                                 <!-- <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"></td>
-                                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                                 <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="logedInUser.Role.RoleID!='3'"></td>
-                                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                                 <td class="text-align-center">
                                                     <input type="checkbox" disabled name="riInternal" [checked]="item.CustomerSourceID===101">
                                                 </td>-->
@@ -169,14 +169,14 @@
                                                     <b>Total</b>
                                                 </td>
                                                 <td class="textRightPadd">
-                                                    <b>{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</b>
+                                                    <b>{{ticketTotal.invoiceTotal | currencyFormatter}}</b>
                                                 </td>
                                                 <td class="textRightPadd">
-                                                    <b>{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</b>
+                                                    <b>{{ticketTotal.receivedTotal | currencyFormatter}}</b>
                                                 </td>
-                                                <!-- <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'" ><b>{{ticketTotal.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
-                                                <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'"><b>{{ticketTotal.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>-->
-                                                <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td> -->
+                                                <!-- <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'" ><b>{{ticketTotal.totalDrayage | currencyFormatter}}</b></td>
+                                                <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'"><b>{{ticketTotal.totalBuyBack | currencyFormatter}}</b></td>-->
+                                                <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currencyFormatter}}</b></td> -->
                                                 <!-- <td></td>-->
                                             </tr>
                                         </tbody>
@@ -425,27 +425,27 @@
                                     <tbody>
                                         <tr>
                                             <td>Manual Tickets</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualSale | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCash | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCheck | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCreditCard | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCharge | currency:'USD':true:'1.2'}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualSale | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCash | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCheck | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCreditCard | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCharge | currencyFormatter}}</td>
                                         </tr>
                                         <tr>
                                             <td>HH Tickets</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCheck | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCreditCard | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCharge | currency:'USD':true:'1.2'}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHSale | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCash | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCheck | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCreditCard | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCharge | currencyFormatter}}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Total</b></td>
-                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualSale + ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</b></td>
-                                            <td class="text-align-right"><b>{{ ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</b></td>
-                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCheck + ticketDetails?.Total.TotalHHCheck | currency:'USD':true:'1.2'}}</b></td>
-                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCreditCard+ ticketDetails?.Total.TotalHHCreditCard | currency:'USD':true:'1.2'}}</b></td>
-                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCharge + ticketDetails?.Total.TotalHHCharge | currency:'USD':true:'1.2'}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualSale + ticketDetails?.Total.TotalHHSale | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCheck + ticketDetails?.Total.TotalHHCheck | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCreditCard+ ticketDetails?.Total.TotalHHCreditCard | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCharge + ticketDetails?.Total.TotalHHCharge | currencyFormatter}}</b></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -467,21 +467,21 @@
                                                 </div>
                                                 <div class="col-sm-4 text-align-right">
                                                     <span>{{ ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash
-                                                        | currency:'USD':true:'1.2'}}</span>
+                                                        | currencyFormatter}}</span>
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <label>Check:</label>
                                                 </div>
                                                 <div class="col-sm-4 text-align-right">
                                                     <span>{{ ticketDetails?.Total.TotalHHCheck + ticketDetails?.Total.TotalManualCheck
-                                                        | currency:'USD':true:'1.2'}}</span>
+                                                        | currencyFormatter}}</span>
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <label>Credit Card:</label>
                                                 </div>
                                                 <div class="col-sm-4 text-align-right">
                                                     <span>{{ ticketDetails?.Total.TotalHHCreditCard + ticketDetails?.Total.TotalManualCreditCard
-                                                        | currency:'USD':true:'1.2'}}</span>
+                                                        | currencyFormatter}}</span>
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <hr style="margin: 2px 0">
@@ -494,7 +494,7 @@
                                                         <b>{{ ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash
                                                             + ticketDetails?.Total.TotalHHCheck + ticketDetails?.Total.TotalManualCheck
                                                             + ticketDetails?.Total.TotalHHCreditCard + ticketDetails?.Total.TotalManualCreditCard
-                                                            | currency:'USD':true:'1.2'}}</b>
+                                                            | currencyFormatter}}</b>
                                                     </span>
                                                 </div>
                                             </div>
@@ -510,13 +510,13 @@
                                                     <label>Cash:</label>
                                                 </div>
                                                 <div class="col-sm-4 text-align-right">
-                                                    <span> {{ ticketDetails?.Total.TotalCashCustomer | currency:'USD':true:'1.2'}}</span>
+                                                    <span> {{ ticketDetails?.Total.TotalCashCustomer | currencyFormatter}}</span>
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <label>Charge:</label>
                                                 </div>
                                                 <div class="col-sm-4 text-align-right">
-                                                    <span>{{ ticketDetails?.Total.TotalChargeCustomer | currency:'USD':true:'1.2'}}</span>
+                                                    <span>{{ ticketDetails?.Total.TotalChargeCustomer | currencyFormatter}}</span>
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <hr style="margin: 2px 0">
@@ -527,7 +527,7 @@
                                                 <div class="col-sm-4 text-align-right">
                                                     <span>
                                                         <b>{{ticketDetails?.Total.TotalCashCustomer + ticketDetails?.Total.TotalChargeCustomer
-                                                            | currency:'USD':true:'1.2'}}</b>
+                                                            | currencyFormatter}}</b>
                                                     </span>
                                                 </div>
                                             </div>
@@ -589,7 +589,7 @@
                                         <div class="col-sm-4 text-align-right">
                                             <span>
                                                 <b>
-                                                    {{ticketDetails.Total.TotalPreDiposit|currency:'USD':true:'1.2'}}
+                                                    {{ticketDetails.Total.TotalPreDiposit|currencyFormatter}}
                                                 </b>
                                             </span>
                                         </div>
@@ -631,7 +631,7 @@
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <span>
-                                                <b>{{totalDeposit|currency:'USD':true:'1.2'}}</b>
+                                                <b>{{totalDeposit|currencyFormatter}}</b>
                                             </span>
                                         </div>
                                         <div class="col-sm-8">
@@ -639,7 +639,7 @@
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <span>
-                                                <b>{{ totalOverShort | currency:'USD':true:'1.2'}}</b>
+                                                <b>{{ totalOverShort | currencyFormatter}}</b>
                                             </span>
                                         </div>
                                     </div>
