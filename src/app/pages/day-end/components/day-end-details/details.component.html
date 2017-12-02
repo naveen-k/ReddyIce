@@ -267,6 +267,13 @@
                                                         <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
+                                                <th>
+                                                    <span>
+                                                        Good
+                                                        <br> Returns
+                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
+                                                </th>
                                                 <th colspan="2" class="text-center">
                                                     <span>
                                                         Inv Junk
@@ -283,6 +290,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <tr style="background: #5bc0de;" class="tableHeader">
+                                                <td width="25%" style="text-align:left;"></td>
+                                                <td width="6%">HH</td>
+                                                <td width="9%"></td>
+                                                <td width="6%">HH</td>
+                                                <td width="9%"></td>
+                                                <td width="5%">HH</td>
+                                                <td width="9%"></td>
+                                                <td width="7%"></td>
+                                                <td width="7%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="6%">HH</td>
+                                                <td width="9%"></td>
+                                                <td class="textAlignCenter" width="7%"></td>
+                                            </tr>
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
                                                 <td width="25%" style="text-align:left;">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
@@ -300,11 +323,10 @@
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
-
-
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
                                                 <td width="7%">{{item.SaleReturnQty?item.SaleReturnQty:0}}</td>
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
+                                                <td width="5%">{{item.ReturnQuantity?item.ReturnQuantity:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
@@ -374,6 +396,7 @@
                                                 <td>{{totalUnit.TotalSale}}</td>
                                                 <td>{{totalUnit.TotalSaleCredits}}</td>
                                                 <td>{{totalUnit.TotalManualTickets}}</td>
+                                                <td>{{totalUnit.TotalGoodReturns}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamage}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamageActual}}</td>
                                                 <td style="text-align:center">{{ totalUnit.TotalOverShort?totalUnit.TotalOverShort:0}}</td>
