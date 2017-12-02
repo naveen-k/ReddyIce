@@ -370,7 +370,7 @@ export class DetailsComponent implements OnInit {
             this.totalUnit.TotalCustomerDamage += +u.CustomerDamage;
             this.totalUnit.TotalCustomerDamageActual += +u.CustomerDamageDRV || 0;
             this.totalUnit.TotalManualTickets += +u.ManualTicket;
-            this.totalUnit.TotalGoodReturns += +u.ReturnQuantity;
+            this.totalUnit.TotalGoodReturns += +u.Returns;
             this.totalUnit.TotalSale += +u.Sale;
             if(u.SaleReturnQty){
                 this.totalUnit.TotalSaleCredits += +u.SaleReturnQty;
