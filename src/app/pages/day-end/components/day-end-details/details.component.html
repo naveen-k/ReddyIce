@@ -291,13 +291,13 @@
                                         </thead>
                                         <tbody>
                                             <tr style="background: #5bc0de;" class="tableHeader">
-                                                <td width="25%" style="text-align:left;"></td>
+                                                <td width="21%" style="text-align:left;"></td>
                                                 <td width="6%">HH</td>
-                                                <td width="9%"></td>
+                                                <td width="8%"></td>
                                                 <td width="6%">HH</td>
-                                                <td width="9%"></td>
+                                                <td width="8%"></td>
                                                 <td width="5%">HH</td>
-                                                <td width="9%"></td>
+                                                <td width="8%"></td>
                                                 <td width="7%"></td>
                                                 <td width="7%"></td>
                                                 <td width="5%"></td>
@@ -307,19 +307,19 @@
                                                 <td class="textAlignCenter" width="7%"></td>
                                             </tr>
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
-                                                <td width="25%" style="text-align:left;">{{item.ProductName}}</td>
+                                                <td width="21%" style="text-align:left;">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
-                                                <td width="9%">
+                                                <td width="8%">
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
-                                                <td width="9%">
+                                                <td width="8%">
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
-                                                <td width="9%">
+                                                <td width="8%">
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
@@ -337,7 +337,7 @@
                                         </tbody>
                                         <tbody *ngIf="isNewlyAdded" class="add-border">
                                             <tr *ngFor="let item of newlyAddedProduct; let i = index">
-                                                <td width="25%">
+                                                <td width="21%">
                                                     <select class="form-control small-select" [(ngModel)]='item.ProductID' (ngModelChange)="productChangeHandler(item, i)">
                                                         <option *ngFor="let product of productList;" [ngValue]='product.ProductID'>
                                                             {{product.ProductName}}
@@ -345,19 +345,19 @@
                                                     </select>
                                                 </td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
-                                                <td width="9%">
+                                                <td width="8%">
                                                     <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.Load1Quantity'
                                                         (ngModelChange)="unitReconChange(item)" class="form-control small-input"
                                                         type="number">
                                                 </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
-                                                <td width="9%">
+                                                <td width="8%">
                                                     <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.ReturnQuantity'
                                                         (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
                                                         type="number">
                                                 </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
-                                                <td width="9%">
+                                                <td width="8%">
                                                     <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.DamageQuantity'
                                                         (ngModelChange)="unitReconChange(item)" class="form-control small-input"
                                                         type="number">
