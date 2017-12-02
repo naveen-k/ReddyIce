@@ -5,8 +5,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CurrencyFormatter implements PipeTransform {
     transform(value: any) {
-        if (!value) { value = 0 };
-        value = `$${value}`;
+        if (!value) { value = 0 }
+        if (value < 0) {
+            value = `-$${-value}`;
+         }
+        else {
+            value = `$${value}`;
+        }
 
         if (value.indexOf(".") == -1) {
             return `${value}.00`;

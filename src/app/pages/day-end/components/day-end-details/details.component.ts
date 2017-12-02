@@ -28,7 +28,7 @@ export class DetailsComponent implements OnInit {
     selectedProduct: object;
     isDistributorExist: boolean;
     userSubTitle: string = '';
-    userRoleId: number; 
+    userRoleId: number;
 
     totalUnit: any = {
         TotalLoad: 0,
@@ -43,18 +43,18 @@ export class DetailsComponent implements OnInit {
         TotalGoodReturns: 0,
         TotalSale: 0,
         TotalOverShort: 0,
-        TotalSaleCredits:0
+        TotalSaleCredits: 0
     };
 
     ticketTotal: any = {
         invoiceTotal: 0,
         receivedTotal: 0,
-        totalCash:0,
-        totalCheck:0,
-        totalCharge:0,
+        totalCash: 0,
+        totalCheck: 0,
+        totalCharge: 0,
         totalDrayage: 0,
         totalBuyBack: 0,
-        totalDistAmt:0
+        totalDistAmt: 0
     };
 
 
@@ -64,7 +64,7 @@ export class DetailsComponent implements OnInit {
         private userService: UserService,
         private notification: NotificationsService,
         private modalService: NgbModal,
-        protected router:Router,
+        protected router: Router,
     ) { }
 
     tripStatus(statusCode) {
@@ -115,11 +115,11 @@ export class DetailsComponent implements OnInit {
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
                 ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
                 ticket.amount = ticket.TotalSale + ticket.TaxAmount;
-                var cardAmount = (this.tripData.IsClosed)?ticket.CreditCardAmount:0;
-                ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount + cardAmount;
+                var cardAmount = (this.tripData.IsClosed) ? ticket.CreditCardAmount : 0;
+                ticket.checkCashAmount = (ticket.TicketTypeID === 30) ? 0 : ticket.CheckAmount + ticket.CashAmount + cardAmount;
                 //ticket.amount = (ticket.IsClosed)?ticket.amount + (ticket.checkCashAmount - ticket.amount):ticket.amount;
                 if (ticket.TicketTypeID === 30) { return; }
-                ticket.ChargeAmount = (ticket.checkCashAmount===0 && ticket.PaymentTypeID===19)?ticket.amount:(ticket.ChargeAmount)||0;
+                ticket.ChargeAmount = (ticket.checkCashAmount === 0 && ticket.PaymentTypeID === 19) ? ticket.amount : (ticket.ChargeAmount) || 0;
                 this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
                 this.ticketTotal.totalCash += ticket.CashAmount || 0;
                 this.ticketTotal.totalCheck += ticket.CheckAmount || 0;
@@ -137,65 +137,65 @@ export class DetailsComponent implements OnInit {
 
         });
     }
-    TotalCashReconciliation:any = {
+    TotalCashReconciliation: any = {
         TotalManualSale: 0,
         TotalManualCash: 0,
-        TotalManualCheck:0,
-        TotalManualCreditCard:0,
-        TotalManualCharge:0,
+        TotalManualCheck: 0,
+        TotalManualCreditCard: 0,
+        TotalManualCharge: 0,
         TotalHHSale: 0,
         TotalHHCash: 0,
-        TotalHHCheck:0,
-        TotalHHCreditCard:0,
-        TotalHHCharge:0,
-        TotalManualCashCustomer:0,
-        TotalHHCashCustomer:0,
-        TotalManualChargeCustomer:0,
-        TotalHHChargeCustomer:0
+        TotalHHCheck: 0,
+        TotalHHCreditCard: 0,
+        TotalHHCharge: 0,
+        TotalManualCashCustomer: 0,
+        TotalHHCashCustomer: 0,
+        TotalManualChargeCustomer: 0,
+        TotalHHChargeCustomer: 0
 
     };
-    cashReconciliationTotal(ticket){
+    cashReconciliationTotal(ticket) {
         if (ticket.TicketTypeID === 30) { return; }
-         if(ticket.IsPaperTicket){
+        if (ticket.IsPaperTicket) {
             this.TotalCashReconciliation.TotalManualSale += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
             this.TotalCashReconciliation.TotalManualCash += ticket.CashAmount || 0;
             this.TotalCashReconciliation.TotalManualCheck += ticket.CheckAmount || 0;
             this.TotalCashReconciliation.TotalManualCreditCard += ticket.CreditCardAmount || 0;
-            this.TotalCashReconciliation.TotalManualCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0)?ticket.ChargeAmount:0) || 0;
-            if(ticket.PaymentTypeID===18) { this.TotalCashReconciliation.TotalManualCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
-            if(ticket.PaymentTypeID===19) { this.TotalCashReconciliation.TotalManualChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            this.TotalCashReconciliation.TotalManualCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0) ? ticket.ChargeAmount : 0) || 0;
+            if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalManualCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalManualChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
         } else {
             this.TotalCashReconciliation.TotalHHSale += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
             this.TotalCashReconciliation.TotalHHCash += ticket.CashAmount || 0;
             this.TotalCashReconciliation.TotalHHCheck += ticket.CheckAmount || 0;
             this.TotalCashReconciliation.TotalHHCreditCard += ticket.CreditCardAmount || 0;
-            this.TotalCashReconciliation.TotalHHCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0)?ticket.ChargeAmount:0) || 0;
-            if(ticket.PaymentTypeID===18) { this.TotalCashReconciliation.TotalHHCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
-            if(ticket.PaymentTypeID===19) { this.TotalCashReconciliation.TotalHHChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            this.TotalCashReconciliation.TotalHHCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0) ? ticket.ChargeAmount : 0) || 0;
+            if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalHHCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalHHChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
         }
     }
-    cashReconciliationSubTotal(){
-        this.ticketDetails.Total.TotalManualSale =  this.TotalCashReconciliation.TotalManualSale;
+    cashReconciliationSubTotal() {
+        this.ticketDetails.Total.TotalManualSale = this.TotalCashReconciliation.TotalManualSale;
         this.ticketDetails.Total.TotalManualCash = this.TotalCashReconciliation.TotalManualCash;
         this.ticketDetails.Total.TotalManualCheck = this.TotalCashReconciliation.TotalManualCheck;
-        this.ticketDetails.Total.TotalManualCreditCard = (this.tripData.IsClosed)?this.TotalCashReconciliation.TotalManualCreditCard:0.00;
+        this.ticketDetails.Total.TotalManualCreditCard = (this.tripData.IsClosed) ? this.TotalCashReconciliation.TotalManualCreditCard : 0.00;
         this.ticketDetails.Total.TotalManualCharge = this.TotalCashReconciliation.TotalManualCharge;
         this.ticketDetails.Total.TotalHHSale = this.TotalCashReconciliation.TotalHHSale
         this.ticketDetails.Total.TotalHHCash = this.TotalCashReconciliation.TotalHHCash
         this.ticketDetails.Total.TotalHHCheck = this.TotalCashReconciliation.TotalHHCheck
-        this.ticketDetails.Total.TotalHHCreditCard =  (this.tripData.IsClosed)?this.TotalCashReconciliation.TotalHHCreditCard:0.00;
+        this.ticketDetails.Total.TotalHHCreditCard = (this.tripData.IsClosed) ? this.TotalCashReconciliation.TotalHHCreditCard : 0.00;
         this.ticketDetails.Total.TotalHHCharge = this.TotalCashReconciliation.TotalHHCharge;
-        this.ticketDetails.Total.TotalPreDiposit = (+this.ticketDetails.Total.actualdepositcash || 0) + (+this.ticketDetails.Total.actualdepositcheck||0) + (+this.ticketDetails.Total.ActualCoin||0);
-        this.ticketDetails.Total.actualdepositcash = (this.ticketDetails.Total.actualdepositcash===null)?`0.00`:this.ticketDetails.Total.actualdepositcash.toString().indexOf('.')<0?`${this.ticketDetails.Total.actualdepositcash}.00`:this.ticketDetails.Total.actualdepositcash;
-        this.ticketDetails.Total.actualdepositcheck = (this.ticketDetails.Total.actualdepositcheck===null)?`0.00`:this.ticketDetails.Total.actualdepositcheck.toString().indexOf('.')<0?`${this.ticketDetails.Total.actualdepositcheck}.00`:this.ticketDetails.Total.actualdepositcheck;
-        this.ticketDetails.Total.ActualCoin = (this.ticketDetails.Total.ActualCoin===null)?`0.00`:this.ticketDetails.Total.ActualCoin.toString().indexOf('.')<0?`${this.ticketDetails.Total.ActualCoin}.00`:this.ticketDetails.Total.ActualCoin;
-        this.ticketDetails.Total.Misc = (this.ticketDetails.Total.Misc===null)?`0.00`:this.ticketDetails.Total.Misc.toString().indexOf('.')<0?`${this.ticketDetails.Total.Misc}.00`:this.ticketDetails.Total.Misc;
+        this.ticketDetails.Total.TotalPreDiposit = (+this.ticketDetails.Total.actualdepositcash || 0) + (+this.ticketDetails.Total.actualdepositcheck || 0) + (+this.ticketDetails.Total.ActualCoin || 0);
+        this.ticketDetails.Total.actualdepositcash = (this.ticketDetails.Total.actualdepositcash === null) ? `0.00` : this.ticketDetails.Total.actualdepositcash.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.actualdepositcash}.00` : this.ticketDetails.Total.actualdepositcash;
+        this.ticketDetails.Total.actualdepositcheck = (this.ticketDetails.Total.actualdepositcheck === null) ? `0.00` : this.ticketDetails.Total.actualdepositcheck.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.actualdepositcheck}.00` : this.ticketDetails.Total.actualdepositcheck;
+        this.ticketDetails.Total.ActualCoin = (this.ticketDetails.Total.ActualCoin === null) ? `0.00` : this.ticketDetails.Total.ActualCoin.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.ActualCoin}.00` : this.ticketDetails.Total.ActualCoin;
+        this.ticketDetails.Total.Misc = (this.ticketDetails.Total.Misc === null) ? `0.00` : this.ticketDetails.Total.Misc.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Misc}.00` : this.ticketDetails.Total.Misc;
         var CTotal = this.ticketDetails.Total.TotalManualCreditCard + this.ticketDetails.Total.TotalHHCreditCard;
-        this.ticketDetails.Total.CreditCardAmountTotal = (CTotal===null)?`0.00`:CTotal.toString().indexOf('.')<0?`${CTotal}.00`:CTotal;
+        this.ticketDetails.Total.CreditCardAmountTotal = (CTotal === null) ? `0.00` : CTotal.toString().indexOf('.') < 0 ? `${CTotal}.00` : CTotal;
         this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
-        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null)?`0.00`:this.ticketDetails.Total.Tolls;
-        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null)?`0.00`:this.ticketDetails.Total.MoneyOrderFee;
+        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null) ? `0.00` : this.ticketDetails.Total.Tolls;
+        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null) ? `0.00` : this.ticketDetails.Total.MoneyOrderFee;
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
@@ -229,20 +229,20 @@ export class DetailsComponent implements OnInit {
     totalOverShort: any = 0;
     cashReconChange(ticketDetails) {
         if (ticketDetails) {
-            this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0) + 
-            (+ticketDetails.Total.actualdepositcheck || 0) + 
-            (+ticketDetails.Total.Misc || 0) + 
-            (+ticketDetails.Total.TotalHHCreditCard) +
-            (+ticketDetails.Total.TotalManualCreditCard) +
-            (+ticketDetails.Total.ActualCoin || 0) + 
-            (+ticketDetails.Total.Tolls || 0) + 
-            (+ticketDetails.Total.MoneyOrderFee || 0)
+            this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0) +
+                (+ticketDetails.Total.actualdepositcheck || 0) +
+                (+ticketDetails.Total.Misc || 0) +
+                (+ticketDetails.Total.TotalHHCreditCard) +
+                (+ticketDetails.Total.TotalManualCreditCard) +
+                (+ticketDetails.Total.ActualCoin || 0) +
+                (+ticketDetails.Total.Tolls || 0) +
+                (+ticketDetails.Total.MoneyOrderFee || 0)
 
-            this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) + 
-            (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
-            (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
-            (+ticketDetails.Total.TotalManualCreditCard));
-            ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0) + (+ticketDetails.Total.actualdepositcheck||0) + (+ticketDetails.Total.ActualCoin||0);
+            this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) +
+                (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
+                (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
+                (+ticketDetails.Total.TotalManualCreditCard));
+            ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0) + (+ticketDetails.Total.actualdepositcheck || 0) + (+ticketDetails.Total.ActualCoin || 0);
         }
         console.log('this.totalDeposit:', this.totalDeposit);
     }
@@ -263,22 +263,28 @@ export class DetailsComponent implements OnInit {
         };
         this.service.saveRecociliation(cashRecon).subscribe((res) => {
             //  this.notification.success("Success", res);
-            if(this.userRoleId ===3){
-                if(statusId === 25){
+            if (this.userRoleId === 3) {
+                if (statusId === 25) {
                     this.notification.success("Success", "Trip has been approved successfully");
                     this.router.navigate(['/pages/day-end/list']);
-                } 
+                }
             }
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
-        if(this.userRoleId !==3) {
-            this.service.saveUnitReconciliation(this.unitReconciliation.concat(this.newlyAddedProduct)).subscribe((res) => {
+        if (this.userRoleId !== 3) {
+            let objToSave = {
+                TripId: this.tripId,
+                PalletLoadQuantity: this.tripData.PalletLoadQuantity,
+                PalletReturnQuantity: this.tripData.PalletReturnQuantity,
+                LoadReturnDamageModel: this.unitReconciliation.concat(this.newlyAddedProduct)
+            }            
+            this.service.saveUnitReconciliation(objToSave).subscribe((res) => {
 
                 // this.notification.success("Success", res);
                 this.notification.success("Success", "Trip details updated successfully");
-                if(statusId === 25){
+                if (statusId === 25) {
                     this.router.navigate(['/pages/day-end/list']);
                 } else {
                     this.tripData.TripStatusID = statusId;
@@ -372,7 +378,7 @@ export class DetailsComponent implements OnInit {
             this.totalUnit.TotalManualTickets += +u.ManualTicket;
             this.totalUnit.TotalGoodReturns += +u.Returns;
             this.totalUnit.TotalSale += +u.Sale;
-            if(u.SaleReturnQty){
+            if (u.SaleReturnQty) {
                 this.totalUnit.TotalSaleCredits += +u.SaleReturnQty;
             }
             this.totalUnit.TotalOverShort += +u.OverShort;
