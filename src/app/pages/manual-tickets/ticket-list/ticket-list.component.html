@@ -102,9 +102,9 @@
                         </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerTitle';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'DeliveryDate';customer.isAsc=!customer.isAsc;">
                           Delivery Date
-                          <i *ngIf="(customer.sortField == 'CustomerTitle')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTitle' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                          <i *ngIf="(customer.sortField == 'DeliveryDate')" [ngClass]="(customer.isAsc && customer.sortField == 'DeliveryDate' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                       </span>
                     </th>
                     <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
