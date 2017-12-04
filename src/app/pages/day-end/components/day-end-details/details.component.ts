@@ -194,8 +194,8 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.CreditCardAmountTotal = (CTotal === null) ? `0.00` : CTotal.toString().indexOf('.') < 0 ? `${CTotal}.00` : CTotal;
         this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
-        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null) ? `0.00` : this.ticketDetails.Total.Tolls;
-        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null) ? `0.00` : this.ticketDetails.Total.MoneyOrderFee;
+        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null||this.ticketDetails.Total.Tolls===0) ? `0.00` : this.ticketDetails.Total.Tolls;
+        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null||this.ticketDetails.Total.MoneyOrderFee===0) ? `0.00` : this.ticketDetails.Total.MoneyOrderFee;
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
