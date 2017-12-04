@@ -963,7 +963,9 @@ export class CreateTicketComponent implements OnInit {
     q = q || 0;
     p = p || 0;
     var temp = 10;
-    return ((q * temp) * (p * temp)/ (temp * temp)); // handling float point precision
+    //return ((+q * temp) * (+p * temp)/ (temp * temp)); // handling float point precision
+    return (+parseFloat((q * temp).toString()).toPrecision(4)) * (+parseFloat((p * temp).toString()).toPrecision(4))/ (temp * temp);
+    //parseFloat((p * temp).toString()).toPrecision(4)
   }
 
   calculateTotalSale() {
