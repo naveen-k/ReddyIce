@@ -281,7 +281,7 @@
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount}} - {{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
