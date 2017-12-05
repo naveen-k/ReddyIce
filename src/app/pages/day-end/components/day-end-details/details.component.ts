@@ -365,7 +365,7 @@ export class DetailsComponent implements OnInit {
     // Calclation total unit reconciliation 
     calculateTotalUnitReconcilation() {
         const u = this.totalUnit;
-        u.TotalLoad = u.TotalLoadActual = u.TotalReturn = u.TotalReturnActual = u.TotalTruckDamage = u.TotalTruckDamageActual = u.TotalCustomerDamage = u.TotalCustomerDamageActual = u.TotalManualTickets = u.TotalSale = u.TotalOverShort = u.TotalSaleCredits = 0;
+        u.TotalLoad = u.TotalLoadActual = u.TotalReturn = u.TotalReturnActual = u.TotalTruckDamage = u.TotalTruckDamageActual = u.TotalCustomerDamage = u.TotalCustomerDamageActual = u.TotalManualTickets = u.TotalSale = u.TotalOverShort = u.TotalSaleCredits =u.TotalGoodReturns = 0;
         this.unitReconciliation.concat(this.newlyAddedProduct).forEach(u => {
             this.totalUnit.TotalLoad += +u.Load;
             this.totalUnit.TotalLoadActual += +u.Load1Quantity || 0;
@@ -376,7 +376,7 @@ export class DetailsComponent implements OnInit {
             this.totalUnit.TotalCustomerDamage += +u.CustomerDamage;
             this.totalUnit.TotalCustomerDamageActual += +u.CustomerDamageDRV || 0;
             this.totalUnit.TotalManualTickets += +u.ManualTicket;
-            this.totalUnit.TotalGoodReturns += +u.Returns;
+            this.totalUnit.TotalGoodReturns += +u.GoodReturns || 0;
             this.totalUnit.TotalSale += +u.Sale;
             if (u.SaleReturnQty) {
                 this.totalUnit.TotalSaleCredits += +u.SaleReturnQty;
