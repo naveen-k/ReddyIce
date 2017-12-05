@@ -14,7 +14,8 @@ export class TrackerService extends SharedService {
   }
   
   getTrips(TripDate) {
-    return this.http.get(`api/trip/allfortracker?TripDate=${TripDate}`)
+    // return this.http.get(`api/trip/allfortracker?TripDate=${TripDate}`)
+    return this.http.get(`api/trip/openallfortracker?TripDate=${TripDate}`)
     .map((res) => res.json()).map((res) => {
         return res;
     });
