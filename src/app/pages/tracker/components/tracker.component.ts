@@ -70,17 +70,18 @@ export class TrackerComponent implements OnInit {
   }
 
   ngOnInit() {
-    const userId = localStorage.getItem('userId') || '';
-    this.userService.getUserDetails(userId).subscribe((response) => {
-      this.isDistributorExist = response.IsDistributor;
-      this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
-    });
+    const userId = localStorage.getItem('userId') || '1';
+    // this.userService.getUserDetails(userId).subscribe((response) => {
+    //   this.isDistributorExist = response.IsDistributor;
+    //   this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
+    // });
 
     this.user = this.userService.getUser();
 
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     this.selectedDate = this.service.formatDate({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() });
+    this.selectedDate = "2017-11-09";
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     // get the user type: isDistributor or internal
