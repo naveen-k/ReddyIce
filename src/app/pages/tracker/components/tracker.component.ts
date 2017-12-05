@@ -215,6 +215,9 @@ export class TrackerComponent implements OnInit {
         if (this.IsUnplanned) { // if unplanned trip, map according 'Actual' scenario
           this.actual = true;
           this.planned = false;
+        } else {
+          this.actual = false;
+          this.planned = true;
         }
         this.selectedTrip = this.trips[i].TripTicketList; // creating array based on driver and tripcode selected
         this.tripStartDate = this.trips[i].TripStartDate
@@ -396,8 +399,8 @@ export class TrackerComponent implements OnInit {
           this.pinColor = '0000ff';   // blue color for Unplanned Service
           this.pinTextColor = 'fff';
         } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber !== null) {
-          this.pinColor = 'A52A2A';   // brown color for Planned Service
-          this.pinTextColor = 'fff';
+          this.pinColor = '90EE90';   // lightgreen color for Planned Service
+          this.pinTextColor = '000';
         } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber == null) {
           this.pinColor = 'ff0000';   // red color for Skipped stops
           this.pinTextColor = 'fff';
