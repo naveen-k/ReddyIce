@@ -1,0 +1,182 @@
+<div class="row">
+        <div class=" col-md-12">
+            <ba-card cardTitle="  Load Detail {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
+                <div class="head-button-container">
+                    <button class="btn btn-danger pull-right" (click)="saveLoad()">Submit</button>
+                    <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='loadData.TripStatusID == 24 || loadData.TripStatusID == 25'
+                        (click)="saveReconciliation(23)">Save</button>-->
+                    <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../']">Back</button>
+                </div>
+                <div class="row add-margin-bottom">
+    
+                    <div class=" col-md-12">
+                        <div class="row page-header bold-head">
+                            <div class="col-md-6">
+                                <span>Branch:</span>
+                                <label>{{loadData.BranchCode}} - {{loadData.BranchName}}</label>
+                            </div>
+                            <div class="col-md-6">
+                                <span>Delivery Date:</span>
+                                <label>{{loadData.TripStartDate|date}}</label>
+                            </div>
+                        </div>
+                        <div class="row page-header bold-head">
+                            <div class="col-md-6">
+                                <span>Driver:</span>
+                                <label>{{loadData.DriverName}}</label>
+                            </div>
+                            <div class="col-md-6">
+                                <span>Trip:</span>
+                                <label>{{loadData.TruckID}}</label>
+                            </div>
+                           
+                           
+                        </div>
+                    </div>
+                </div>
+                <ngb-tabset class='dayend-tabset'>
+                    <ngb-tab title="Load">
+                        <ng-template ngbTabContent>
+                            <div class="row page-header">
+                                <div class="col-sm-6">
+                                    <table class="pallets">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span>Pallets </span>
+                                                </td>
+                                                <td>
+                                                    <span>Issued: </span>
+                                                    <input [(ngModel)]='loadData.PalletLoadQuantity' style="width:70px"
+                                                        type="text" [numberOnly]>
+                                                </td>
+                                                <td>
+                                                    <span>Truck Number: </span>
+                                                    <input [(ngModel)]='loadData.TruckNumber'  style="width:70px"
+                                                        type="text" [numberOnly]>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+    
+                                </div>
+    
+                                <div class="col-sm-6">
+                                    <button class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
+                                </div>
+                                <div class="col-md-12 page-header">
+    
+                                    <div class="overflow">
+                                        <table class="table table-bordered">
+                                            <thead class="tableHeader">
+                                                <tr>
+                                                    <th class="text-align-left">
+                                                        <span>
+                                                            Product
+                                                            <!-- <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        </span>
+                                                    </th>
+                                                    <th class="text-center">
+                                                        <span>
+                                                            Load 1
+                                                            <!-- <i *ngIf="(customer.sortField == 'load')" [ngClass]="(customer.isAsc && customer.sortField == 'load' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        </span>
+                                                    </th>
+                                                    <th class="text-center">
+                                                        <span>
+                                                            Load 2
+                                                            <!-- <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        </span>
+                                                    </th>
+                                                    <th  class="text-center">
+                                                        <span>
+                                                            Load 3
+                                                            <!-- <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        </span>
+                                                    </th>
+                                                    <th class="text-center">
+                                                        <span>
+                                                            Load 4
+                                                            <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        </span>
+                                                    </th>
+                                                       
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                              
+                                                <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
+                                                   
+                                                    <td >
+                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
+                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                    </td>
+                                                   
+                                                    <td >
+                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load2Quantity' class="form-control small-input dollar-input"
+                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                    </td>
+                                                   
+                                                    <td >
+                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load3Quantity' class="form-control small-input"
+                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                    </td>
+                                                    <td >
+                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load3Quantity' class="form-control small-input"
+                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                    </td>
+                                                   
+                                                </tr>
+                                            </tbody>
+                                            <tbody *ngIf="isNewlyAdded" class="add-border">
+                                                    <tr *ngFor="let item of newlyAddedProduct; let i = index">
+                                                        <td >
+                                                            <select class="form-control small-select" [(ngModel)]='item.ProductID' (ngModelChange)="productChangeHandler(item, i)">
+                                                                <option *ngFor="let product of productList;" [ngValue]='product.ProductID'>
+                                                                    {{product.ProductName}}
+                                                                </option>
+                                                            </select>
+                                                        </td>
+                                                        
+                                                        <td >
+                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.Load1Quantity'
+                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                                type="number">
+                                                        </td>
+                                                      
+                                                        <td >
+                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.ReturnQuantity'
+                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
+                                                                type="number">
+                                                        </td>
+                                                       
+                                                        <td >
+                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.DamageQuantity'
+                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                                type="number">
+                                                        </td>
+        
+        
+                                                        <td >
+                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.CustomerDamageDRV'
+                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                                type="number">
+                                                        </td>
+                                                        
+                                                    </tr>
+                                                    <tr *ngIf="!unitReconciliation.length && !newlyAddedProduct.length">
+                                                        <th class="text-center" colspan="12"> No data found </th>
+                                                    </tr>
+                                                </tbody>
+                                        
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                        
+                </ngb-tabset>
+            </ba-card>
+        </div>
+    </div>
