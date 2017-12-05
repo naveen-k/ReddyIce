@@ -14,7 +14,11 @@ export class CurrencyFormatter implements PipeTransform {
         }
 
         if (value.indexOf(".") == -1) {
+            if(symbol){
             return `${value}.00`;
+            } else {
+                return `${value.replace('$','')}.00`;
+            }
         }
         value = value + '00';
         if(symbol){

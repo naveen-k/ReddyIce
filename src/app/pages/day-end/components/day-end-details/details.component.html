@@ -535,7 +535,7 @@
                                     </div>
                                 </div>
                                 <div class="row cash-recon-container">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <div class="border">
                                             <div class="row padding">
                                                 <h5 class="frameHeading">Comments</h5>
@@ -548,6 +548,56 @@
 
                                             </div>
 
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="border">
+                                            <div class="row padding">
+                                                <h5 class="frameHeading frameHeadingLong">HH Record Deposit</h5>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <label>Cash($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHCashRecived | currencyFormatter:false' 
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>Misc($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHMiscExpense | currencyFormatter:false' 
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <label>Check($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHCheckReceived | currencyFormatter:false'
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>Deposited($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHAmountDeposited | currencyFormatter:false'
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12" style="padding-top:5px;" *ngIf="ticketDetails?.Total.DriverApproval !==null">
+                                                    
+                                                    <label>Driver Approval:</label>
+                                                    <textarea rows="2" style="width:100%;border:1px;resize: none;" [value]="ticketDetails?.Total.DriverApproval" readonly></textarea>
+
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
