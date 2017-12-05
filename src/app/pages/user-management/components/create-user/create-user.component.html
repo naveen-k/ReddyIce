@@ -174,7 +174,6 @@
                   </select-->
       <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
     </div>
-   
     <div class="col-md-6 page-header">
       <label class="vertical-center"></label>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
@@ -187,7 +186,11 @@
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
         [disabled]="true"></ba-checkbox>
     </div>
-    
+    <div *ngIf="user.IsRIInternal && !isDistributorAdmin && user.RoleID == 3" class="col-md-6 page-header">
+      <label class="vertical-center"></label>
+      <ba-checkbox [(ngModel)]="user.IsChecker" (ngModelChange)="changeHandler()" [label]="'Is Checker?'"
+        [ngModelOptions]="{standalone: true}"></ba-checkbox>
+    </div>    
   </div>
 </form>
 
