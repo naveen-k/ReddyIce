@@ -26,6 +26,8 @@ export class DetailsComponent implements OnInit {
     newlyAddedProduct: any = [];
     loadDetails:any = [];
     loadList: any[] = [];
+    deliveryDate:any = '';
+    currentTripCode:number = 0;
     constructor(
         private service: LoadService,
         private route: ActivatedRoute,
@@ -44,13 +46,18 @@ export class DetailsComponent implements OnInit {
 
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
-        debugger;
+        this.deliveryDate = this.service.formatDate(this.filter.selectedDate);
+        this.currentTripCode = this.filter.tripCode + 1;
         this.loadId = +this.route.snapshot.params['loadId'];
-        this.loadLoadData();
-        this.loadLoadsDetails();
+        const activatedRouteObject = this.route.snapshot.data
+        this.loadProduct();
+        if(activatedRouteObject['LoadMode']){
+            this.loadLoadsDetails();
+        }
+        
     }
     loadLoadsDetails() {
-        this.service.getLoads(this.filter.selectedDate,this.filter.userBranch,this.filter.userDriver,false).subscribe((res) => {
+        this.service.getLoadDetails(this.loadId).subscribe((res) => {
             this.loadList = res = res || [];
             this.loadLoadData();
         });

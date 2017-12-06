@@ -31,7 +31,12 @@ export class LoadService extends SharedService {
                 return res;
             });
     }
-      
+    getLoadDetails(loadId){
+        return this.http.get(`api/loadreturndamage/getloaddataforloadid?loadid=${loadId}`)
+        .map((res) => res.json()).map((res) => {
+            return res;
+        });
+    }  
     saveLoadDetails(id,data): Observable<any> {
 
         return this.http.put(`api/loadreturndamage/editload?id=${id}`, data).map((res => res.json()));

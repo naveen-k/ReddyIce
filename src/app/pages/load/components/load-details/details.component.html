@@ -17,7 +17,7 @@
                             </div>
                             <div class="col-md-6">
                                 <span>Delivery Date:</span>
-                                <label>{{filter.selectedDate[0]}}-{{filter.selectedDate[1]}}-{{filter.selectedDate[2]}}</label>
+                                <label>{{deliveryDate}}</label>
                             </div>
                         </div>
                         <div class="row page-header bold-head">
@@ -27,7 +27,7 @@
                             </div>
                             <div class="col-md-6">
                                 <span>Trip:</span>
-                                <label>{{filter.tripCode}}</label>
+                                <label>{{currentTripCode}}</label>
                             </div>
                            
                            
@@ -164,7 +164,7 @@
                                                         </td>
                                                         
                                                     </tr>
-                                                    <tr *ngIf="!unitReconciliation.length && !newlyAddedProduct.length">
+                                                    <tr *ngIf="!newlyAddedProduct.length">
                                                         <th class="text-center" colspan="12"> No data found </th>
                                                     </tr>
                                                 </tbody>
