@@ -34,7 +34,7 @@ export class TrackerComponent implements OnInit {
     DistributorName: '',
     DistributorCopackerID: 0
   };
-  seasonalDriver: boolean = false;
+  showBranchDropdown: boolean = false;
   planned: boolean = true;
   actual: boolean = false;
   both: boolean = false;
@@ -74,7 +74,19 @@ export class TrackerComponent implements OnInit {
   ngOnInit() {
     const userId = localStorage.getItem('userId') || '';
 
-    this.user = this.userService.getUser();
+    if (this.router.url === '/opentracker') {
+      this.user = {} as User;
+      this.isDistributor = false;
+    } else {
+      this.user = this.userService.getUser();
+
+      if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
+        this.user.IsRIInternal = true;
+        this.user.IsDistributor = false;
+      }
+      // get the user type: isDistributor or internal
+      this.isDistributor = this.user.IsDistributor;
+    }
     console.log(this.user);
     this.isDistributorExist = this.user.IsDistributor;
     this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
@@ -82,11 +94,9 @@ export class TrackerComponent implements OnInit {
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     this.selectedDate = this.service.formatDate({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() });
-    this.selectedDate = "2017-11-09";
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
-    // get the user type: isDistributor or internal
-    this.isDistributor = this.userService.getUser().IsDistributor;
+
 
     if (this.isDistributor) {
       this.searchObj.userType = 'External';
@@ -100,15 +110,7 @@ export class TrackerComponent implements OnInit {
       this.tripFilterOption.branchId = 1;
       this.tripFilterOption.isForAll = true;
     }
-    if (!this.user.IsRIInternal) {
-      if (this.user.Role.RoleID === 3) {
-        if (this.user.IsSeasonal) {
-          this.seasonalDriver = true;
-        } else {
-          this.seasonalDriver = false;
-        }
-      }
-    }
+
 
     this.loadTrips();
   }
@@ -157,6 +159,16 @@ export class TrackerComponent implements OnInit {
           if (this.searchObj.userType == 'Internal') {
             let tmpObj = {};
             for (var i = 0; i < this.trips.length; i++) {
+              if (this.user.Role && this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
+                branchesArr.push(
+                  {
+                    BranchID: this.trips[i].BranchID,
+                    BranchCode: this.trips[i].BranchCode,
+                    BranchName: this.trips[i].BranchName
+                  });
+                tmpObj[this.trips[i].BranchID] = this.trips[i];
+                continue;
+              }
               if (!tmpObj[this.trips[i].BranchID]) {
                 console.log('isDistributor: ', this.trips[i].isDistributor);
                 if (this.trips[i].isDistributor != 1) {
