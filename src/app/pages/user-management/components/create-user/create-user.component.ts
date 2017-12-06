@@ -303,9 +303,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     changeHandler() {
-        console.log("this.userBranch ", this.userBranch);
         if (this.userBranch.length > 0) { this.isEmailExist = false; this.isFormValid = true; this.formIsDirty = true; }
         this.user.IsSeasonal = this.isDistributorSeasonal();
+        this.user.IsChecker = this.user.IsChecker || false;
         this.isAllFeildsChecked();
         if (this.user.IsRIInternal) {
             this.roleList = this.roles;
@@ -332,6 +332,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                     IsActive: true,
                     IsSeasonal: true,
                     IsRIInternal: false,
+                    IsChecker: false,
                 };
                 this.selectedSearchUser = false;
             }
@@ -359,7 +360,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     roleChange(roleID) {
-        debugger
         roleID = roleID + '';
         this.user.DistributorMasterID = 0;
         this.userBranch = [];

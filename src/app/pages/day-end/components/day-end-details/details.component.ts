@@ -93,11 +93,10 @@ export class DetailsComponent implements OnInit {
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
 
-        this.logedInUser = this.userService.getUser();                
+        this.logedInUser = this.userService.getUser();
         this.tripId = +this.route.snapshot.params['tripId'];
         this.loadTripData();
         this.loadTripDetailByDate();
-        this.loadUnitReconciliation();
     }
 
     loadTripData() {
@@ -108,8 +107,9 @@ export class DetailsComponent implements OnInit {
     //total : any;
     loadTripDetailByDate() {
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
+            this.loadUnitReconciliation();
             this.ticketDetails = res;
-            this.tripData = res.Tripdetail[0];
+            this.tripData = res.Tripdetail[0];            
             this.tripData.TripTicketList.forEach(ticket => {
                 ticket.TicketNumber = +ticket.TicketNumber;
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
@@ -194,8 +194,8 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.CreditCardAmountTotal = (CTotal === null) ? `0.00` : CTotal.toString().indexOf('.') < 0 ? `${CTotal}.00` : CTotal;
         this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
-        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null||this.ticketDetails.Total.Tolls===0) ? `0.00` : this.ticketDetails.Total.Tolls;
-        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null||this.ticketDetails.Total.MoneyOrderFee===0) ? `0.00` : this.ticketDetails.Total.MoneyOrderFee;
+        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00` : this.ticketDetails.Total.Tolls;
+        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00` : this.ticketDetails.Total.MoneyOrderFee;
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
@@ -206,7 +206,7 @@ export class DetailsComponent implements OnInit {
             if (Array.isArray(res)) {
                 this.unitReconciliation = res;
                 this.unitReconciliation.forEach(element => {
-                    element['Load1Quantity'] = element['Load1Quantity'] || element['Load'];
+                    element['Load1Quantity'] = this.tripData.TripStatusID !== 25 ? element['LoaderLoad'] : element['Load1Quantity'] || element['Load'];
                     element['ReturnQuantity'] = element['ReturnQuantity'] || element['Returns'];
                     element['DamageQuantity'] = element['DamageQuantity'] || element['TruckDamage'];
                     element['CustomerDamageDRV'] = element['CustomerDamageDRV'] || element['CustomerDamage'];
@@ -273,27 +273,27 @@ export class DetailsComponent implements OnInit {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
-        if (this.userRoleId !== 3) {
-            let objToSave = {
-                TripId: this.tripId,
-                PalletLoadQuantity: this.tripData.PalletLoadQuantity,
-                PalletReturnQuantity: this.tripData.PalletReturnQuantity,
-                LoadReturnDamageModel: this.unitReconciliation.concat(this.newlyAddedProduct)
-            }            
-            this.service.saveUnitReconciliation(objToSave).subscribe((res) => {
 
-                // this.notification.success("Success", res);
-                this.notification.success("Success", "Trip details updated successfully");
-                if (statusId === 25) {
-                    this.router.navigate(['/pages/day-end/list']);
-                } else {
-                    this.tripData.TripStatusID = statusId;
-                }
-            }, (err) => {
-                err = JSON.parse(err._body);
-                this.notification.error("Error", err.Message);
-            });
+        let objToSave = {
+            TripId: this.tripId,
+            PalletLoadQuantity: this.tripData.PalletLoadQuantity,
+            PalletReturnQuantity: this.tripData.PalletReturnQuantity,
+            LoadReturnDamageModel: this.unitReconciliation.concat(this.newlyAddedProduct)
         }
+        this.service.saveUnitReconciliation(objToSave).subscribe((res) => {
+
+            // this.notification.success("Success", res);
+            this.notification.success("Success", "Trip details updated successfully");
+            if (statusId === 25) {
+                this.router.navigate(['/pages/day-end/list']);
+            } else {
+                this.tripData.TripStatusID = statusId;
+            }
+        }, (err) => {
+            err = JSON.parse(err._body);
+            this.notification.error("Error", err.Message);
+        });
+
     }
 
     submitApproveReconciliation() {
@@ -365,7 +365,7 @@ export class DetailsComponent implements OnInit {
     // Calclation total unit reconciliation 
     calculateTotalUnitReconcilation() {
         const u = this.totalUnit;
-        u.TotalLoad = u.TotalLoadActual = u.TotalReturn = u.TotalReturnActual = u.TotalTruckDamage = u.TotalTruckDamageActual = u.TotalCustomerDamage = u.TotalCustomerDamageActual = u.TotalManualTickets = u.TotalSale = u.TotalOverShort = u.TotalSaleCredits =u.TotalGoodReturns = 0;
+        u.TotalLoad = u.TotalLoadActual = u.TotalReturn = u.TotalReturnActual = u.TotalTruckDamage = u.TotalTruckDamageActual = u.TotalCustomerDamage = u.TotalCustomerDamageActual = u.TotalManualTickets = u.TotalSale = u.TotalOverShort = u.TotalSaleCredits = u.TotalGoodReturns = 0;
         this.unitReconciliation.concat(this.newlyAddedProduct).forEach(u => {
             this.totalUnit.TotalLoad += +u.Load;
             this.totalUnit.TotalLoadActual += +u.Load1Quantity || 0;
