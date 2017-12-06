@@ -80,19 +80,19 @@ export class LoadComponent implements OnInit {
         this.getDrivers(byType);
     }
     userChangeHandler() {
-        let b:any = this.getBranchName();
-        let d:any = this.getDriverName();
-        this.filter.userBranchName = b.BranchCode +' - '+b.BranchName;
-        this.filter.userDriverName = d.label;
+        this.getBranchName();
+        this.getDriverName();
+       
+        
         this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
     }
     getBranchName(){
         let b = this.branches.filter((b)=>b.BranchID === this.filter.userBranch);
-        return b[0];
+        this.filter.userBranchName = b[0].BranchCode +' - '+b[0].BranchName;
     }
     getDriverName(){
         let d = this.drivers.filter((d)=>d.value === this.filter.userDriver);
-        return d[0];
+        this.filter.userDriverName = d[0].label;
     }
     getLoadsFromList(branchID, driverID) {
 

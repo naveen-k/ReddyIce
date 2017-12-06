@@ -47,13 +47,13 @@
                                                 </td>
                                                 <td>
                                                     <span>Issued: </span>
-                                                    <input [(ngModel)]='loadData.PalletLoadQuantity' style="width:70px"
-                                                        type="text" [numberOnly]>
+                                                    <input [(ngModel)]='loadData.PalletsIssued' style="width:70px"
+                                                        type="text" numberOnly>
                                                 </td>
                                                 <td>
                                                     <span>Truck Number: </span>
                                                     <input [(ngModel)]='loadData.TruckNumber'  style="width:70px"
-                                                        type="text" [numberOnly]>
+                                                        type="text" numberOnly>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -105,25 +105,26 @@
                                             </thead>
                                             <tbody>
                                               
-                                                <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
-                                                   
+                                                <tr *ngFor="let item of loadList">
+                                                   <td> {{item.ProductName}}</td>
                                                     <td >
-                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
-                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                        <input [disabled]='item.Load1 !==null' [(ngModel)]='item.Load1' class="form-control small-input"
+                                                            type="text" numberOnly >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load2Quantity' class="form-control small-input dollar-input"
-                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                        <input [disabled]='item.Load2 !=null' [(ngModel)]='item.Load2' class="form-control small-input dollar-input"
+                                                            type="text" numberOnly >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load3Quantity' class="form-control small-input"
-                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                        <input [disabled]='item.Load3 !=null' [(ngModel)]='item.Load3' class="form-control small-input"
+                                                            type="text" numberOnly >
                                                     </td>
                                                     <td >
-                                                        <input [disabled]='userRoleId==3 || loadData.TripStatusID == 25 || !loadData.IsClosed' [(ngModel)]='item.Load3Quantity' class="form-control small-input"
-                                                            type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                        <input [disabled]='item.Load4 !=null' [(ngModel)]='item.Load4' class="form-control small-input"
+                                                            type="text" numberOnly >
+                                                            
                                                     </td>
                                                    
                                                 </tr>
@@ -139,28 +140,29 @@
                                                         </td>
                                                         
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.Load1Quantity'
-                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load1'
+                                                                class="form-control small-input"
                                                                 type="number">
                                                         </td>
                                                       
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.ReturnQuantity'
-                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
+                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load2'
+                                                                 class="form-control small-input dollar-input"
                                                                 type="number">
                                                         </td>
                                                        
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.DamageQuantity'
-                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load3'
+                                                                 class="form-control small-input"
                                                                 type="number">
                                                         </td>
         
         
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductName' [(ngModel)]='item.CustomerDamageDRV'
-                                                                (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load4'
+                                                                 class="form-control small-input"
                                                                 type="number">
+                                                                <input type="hidden" [(ngModel)]="item.LoadID" [value]="loadId">
                                                         </td>
                                                         
                                                     </tr>
