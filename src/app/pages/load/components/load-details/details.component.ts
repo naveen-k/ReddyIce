@@ -9,6 +9,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoadModel } from '../../load.interfaces';
 import { Route } from '@angular/router/src/config';
 import { environment } from '../../../../../environments/environment';
+import { debug } from 'util';
 
 @Component({
     templateUrl: './details.component.html',
@@ -43,6 +44,7 @@ export class DetailsComponent implements OnInit {
 
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
+        debugger;
         this.loadId = +this.route.snapshot.params['loadId'];
         this.loadLoadData();
         this.loadLoadsDetails();

@@ -44,13 +44,13 @@ export class LoadComponent implements OnInit {
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
-        let branches = this.activatedRoute.snapshot.data['branches'];
-        if (branches && branches.length) {
-            if ((branches.length > 0) && (branches[0] === null || branches[0].BranchID === 1)) {
-                branches.shift();
+        this.branches = this.activatedRoute.snapshot.data['branches'];
+        if (this.branches && this.branches.length) {
+            if ((this.branches.length > 0) && (this.branches[0] === null || this.branches[0].BranchID === 1)) {
+                this.branches.shift();
             }
         }
-        this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
+        this.allBranches = this.service.transformOptionsReddySelect(this.branches, 'BranchID', 'BranchCode', 'BranchName');
         this.dateChangeHandler();
     }
     getDrivers(byType: any = '') {
@@ -73,8 +73,21 @@ export class LoadComponent implements OnInit {
         this.getDrivers(byType);
     }
     userChangeHandler() {
-
+        let b:any = this.getBranchName();
+        let d:any = this.getDriverName();
+        this.filter.userBranchName = b.BranchCode +' - '+b.BranchName;
+        this.filter.userDriverName = d.label;
+        debugger
         this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
+    }
+    getBranchName(){
+        let b = this.branches.filter((b)=>b.BranchID === this.filter.userBranch);
+        return b[0];
+    }
+    getDriverName(){
+        let d = this.drivers.filter((d)=>d.value === this.filter.userDriver);
+        debugger
+        return d[0];
     }
     getLoadsFromList(branchID, driverID) {
 
@@ -87,6 +100,7 @@ export class LoadComponent implements OnInit {
                     fLoad.push(load);
                 //}
             });
+            this.filter.tripCode = fLoad.length;
         }
         this.filteredLoads = fLoad;
     }
@@ -95,8 +109,10 @@ export class LoadComponent implements OnInit {
             this.loads = res;
             this.showSpinner = false;
             this.filteredLoads = [];
-            if (this.filter.userBranch > 0 && this.filter.userDriver > 0)
+            if (this.filter.userBranch > 0 && this.filter.userDriver > 0){
                 this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
+            }
+               
         },
             (error) => {
                 this.showSpinner = false;
@@ -114,10 +130,6 @@ export class LoadComponent implements OnInit {
        // this.filter.userBranch = 0;
        // this.filter.userDriver = 0;
         this.getLoads();
-
-    }
-    driverChangeHandler() {
-        console.log('DriverName', this.loadFilterOption.DriverName);
 
     }
 

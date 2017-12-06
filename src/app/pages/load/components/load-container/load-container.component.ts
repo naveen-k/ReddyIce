@@ -11,5 +11,6 @@ export class LoadContainerComponent {
         
         filter.selectedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         filter.userBranch = user.getUser().Branch ? user.getUser().Branch.BranchID : null;
+        filter.userDriver = localStorage.getItem('userId') || '';
     }
 }

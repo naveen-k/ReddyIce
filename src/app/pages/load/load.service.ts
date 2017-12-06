@@ -11,7 +11,11 @@ export class LoadService extends SharedService {
     currentLoadData: any = {};
     private _filter: any = {
         userBranch: 0,
-        userDriver:1
+        userDriver:1,
+        userBranchName: '',
+        userDriverName:'',
+        tripCode:0,
+        selectedDate: '',
     };
 
     constructor(
