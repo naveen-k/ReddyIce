@@ -59,6 +59,7 @@ export class LoadComponent implements OnInit {
         
     }
     getDrivers(byType: any = '') {
+        this.logedInUser.Role.RoleID === 3 && (this.filter.userDriver = this.logedInUser.UserId);
         if (this.filter.userBranch === null) {
             return;
         }
@@ -72,8 +73,9 @@ export class LoadComponent implements OnInit {
     }
     branchChangeHandler(byType: any = '') {
         //this.searchObj.UserId = null;
-        this.drivers = [];
+        this.logedInUser.Role.RoleID != 3 && (this.drivers = []);
         this.filteredLoads = [];
+        this.filter.userDriver = 0
         this.filter.userDriver = 0;
         this.getDrivers(byType);
     }
