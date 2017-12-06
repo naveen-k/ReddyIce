@@ -4,6 +4,7 @@ import { LoadService } from '../../load.service';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     templateUrl: './load.component.html',
@@ -13,8 +14,9 @@ export class LoadComponent implements OnInit {
     filter: any = {};
 
     loads: any = [];
-    selectedLoad: any[];
+    filteredLoads: any = [];
     branches: Array<any> = [];
+    allBranches: Array<any> = [];
     drivers: Array<any> = [];
     distributors: Array<any> = [];
     logedInUser: any = {};
@@ -34,32 +36,67 @@ export class LoadComponent implements OnInit {
         DriverID: ''
     };
     constructor(private service: LoadService, private userService: UserService,
-        protected notification: NotificationsService) { }
+        protected notification: NotificationsService,
+        protected activatedRoute: ActivatedRoute, ) { }
 
     ngOnInit() {
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
-        this.getLoads();
+        let branches = this.activatedRoute.snapshot.data['branches'];
+        if (branches && branches.length) {
+            if ((branches.length > 0) && (branches[0] === null || branches[0].BranchID === 1)) {
+                branches.shift();
+            }
+        }
+        this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
+        this.dateChangeHandler();
     }
-    
-    getLoads() {
-        this.service.getLoads(this.service.formatDate(this.filter.selectedDate),null,null,false).subscribe((res) => {
-            this.loads = res.Loads;
-            let tmpBranch = {}, branches = [];
-            this.loads.forEach((load) => {
-                if (tmpBranch[load.BranchID]) { return; }
-                branches.push({
-                    value: load.BranchID,
-                    label: load.BranchName,
-                    branchcode: load.BranchCode
-                })
-                tmpBranch[load.BranchID] = load.BranchID
-            })
-            this.branches = branches;
+    getDrivers(byType: any = '') {
+        if (this.filter.userBranch === null) {
+            return;
+        }
+        this.service.getDriverByBranch(this.filter.userBranch, true).subscribe(res => {
+            let objDriver = [];
+            res = res || [];
+            objDriver = this.service.transformOptionsReddySelect(res, 'UserId', 'UserName');
 
+            this.drivers = objDriver;
+        });
+    }
+    branchChangeHandler(byType: any = '') {
+        //this.searchObj.UserId = null;
+        this.drivers = [];
+        this.filteredLoads = [];
+        this.filter.userDriver = 0;
+        this.getDrivers(byType);
+    }
+    userChangeHandler() {
+
+        this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
+    }
+    getLoadsFromList(branchID, driverID) {
+
+        this.filteredLoads = [];
+        let tempLoad = [];
+        let fLoad = [];
+        if (this.loads.length && this.loads.length > 0) {
+            this.loads.forEach((load) => {
+                //if (branchID === load.BranchID && driverID === load.DriverID) {
+                    fLoad.push(load);
+                //}
+            });
+        }
+        this.filteredLoads = fLoad;
+    }
+    getLoads() {
+        this.service.getLoads(this.service.formatDate(this.filter.selectedDate), null, null, false).subscribe((res) => {
+            this.loads = res;
             this.showSpinner = false;
+            this.filteredLoads = [];
+            if (this.filter.userBranch > 0 && this.filter.userDriver > 0)
+                this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
         },
             (error) => {
                 this.showSpinner = false;
@@ -72,46 +109,16 @@ export class LoadComponent implements OnInit {
     }
 
     dateChangeHandler() {
+        this.showSpinner = true;
         this.selectedDate = this.service.formatDate(this.filter.selectedDate);
-        this.branches = [];
-        this.filter.userBranch = 0;
-        this.filter.userDriver = 0;
-        this.selectedLoad = [];
+       // this.filter.userBranch = 0;
+       // this.filter.userDriver = 0;
         this.getLoads();
 
-    }
-    // Fetch selected Branch
-    branchChangeHandler() {
-        console.log('tripFilterOption.branchId', this.filter.userBranch);
-        if (this.filter.userBranch) {
-            this.drivers = [];
-            for (var i = 0; i < this.loads.length; i++) {
-                if (this.filter.userBranch == this.loads[i].BranchID) {
-                    this.drivers.push({
-                        DriverName: this.loads[i].DriverName,
-                        DriverID: this.loads[i].DriverID,
-                        TripCode: this.loads[i].TripCode
-                    });
-                }
-            }
-            console.log(this.drivers);
-            if (this.drivers && this.drivers.length > 0) {
-                this.loadFilterOption.DriverName = this.drivers[0].DriverName;    // assigning in model
-                this.loadFilterOption.DriverID = this.drivers[0].DriverID; 
-                this.loadFilterOption.TripCode = this.drivers[0].TripCode;        // assigning in model
-                this.driverChangeHandler();
-            }
-
-        } else {
-            this.selectedLoad = [];
-        }
-
-        //this.loadTrips();
     }
     driverChangeHandler() {
         console.log('DriverName', this.loadFilterOption.DriverName);
 
     }
-
 
 }

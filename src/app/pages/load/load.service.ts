@@ -22,7 +22,7 @@ export class LoadService extends SharedService {
     }
     getLoads(LoadDate,BranchId,userId,isForAll) {
        
-        return this.http.get(`api/loadreturndamage/allload?tripDate=${LoadDate}&branchId=${BranchId}&userId=${userId}&isForAll=${isForAll}`)
+        return this.http.get(`api/loadreturndamage/allload?tripDate=${LoadDate}`)
             .map((res) => res.json()).map((res) => {
                 return res;
             });

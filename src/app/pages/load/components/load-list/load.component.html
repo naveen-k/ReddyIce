@@ -2,13 +2,13 @@
     <div class="col-md-12">
         <ba-card cardTitle="Loads" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="head-button-container">
-                    <button class="btn btn-danger pull-right" [routerLink]="['../../load/detail']" >Add Load</button>
+                    <button [disabled]="!filter.userBranch  || !filter.userDriver || filteredLoads.length >=5" class="btn btn-danger pull-right" [routerLink]="['../../load/detail']" >Add Load</button>
             </div>
             <div class="row">
                 <div class="col-sm-3">
                     <label><b> Select Date </b></label>
                     <div class="input-group">
-                        <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="selectionchangeHandler()"
+                        <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="dateChangeHandler()"
                         [maxDate]="todaysDate"  ngbDatepicker #d="ngbDatepicker">
                         <button class="input-group-addon" (click)="d.toggle()"  type="button">
                             <i class="ion-calendar"></i>
@@ -18,11 +18,11 @@
                 
                 <div class="col-sm-4">
                     <label><b>Select Branch</b></label>
-                    <reddy-select [options]="branches" [(selected)]="filter.userBranch"></reddy-select>
+                    <reddy-select [options]="allBranches" [(selected)]="filter.userBranch" (selectedChange)="branchChangeHandler()"></reddy-select>
                 </div>
                 <div class="col-sm-3">
                     <label><b>Select Driver</b></label>
-                    <reddy-select [options]="drivers" [(selected)]="filter.userDriver"></reddy-select>
+                    <reddy-select [options]="drivers" [(selected)]="filter.userDriver" (selectedChange)="userChangeHandler();"></reddy-select>
                 </div>
             </div>
             <div>
@@ -52,47 +52,24 @@
                         </tr>
                     </thead>
                     <tbody>                        
-                       <!-- <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc|dayEnd:filter.type:filter.userBranch">
+                    <tr *ngFor="let item of filteredLoads">
                             <td class="table-id" style="cursor: pointer">                                
-                                <i *ngIf="!logedInUser.IsRIInternal || item.isDistributor === 1" class="ion-eye custom-tooltip-ion"
-                                    [routerLink]="['../ticket-detail', item.TripID]" style="margin-right: 5px">
-                                    <span class="tooltiptext">View</span>
-                                </i>
-                                <i *ngIf="logedInUser.IsRIInternal && item.isDistributor === 0" class="ion-edit custom-tooltip-ion"
-                                    [routerLink]="['../detail',item.TripID]" style="margin-right: 5px">
+                              
+                                <i class="ion-edit custom-tooltip-ion"
+                                    [routerLink]="['../../load/detail',item.LoadID]" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
                             </td>
 
-                            <td *ngIf="logedInUser.IsRIInternal">{{!item.IsUnplanned?item.RouteNumber :'Unplanned'}}</td>
-                            <td *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
+                           
+                            <td>{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
                             <td class="textAlignCenter">{{item.TripCode}}</td>
-                            <td class="textRightPadding">{{item.TripTotalSale | currencyFormatter}}</td>
-                            <td class="textRightPadding">{{item.TripTotalAmount| currencyFormatter}}</td>
-                            <td class="textAlignCenter">
-                                <input type="checkbox" name="tripHHMultiSelect" [(ngModel)]="item.IsClosed" disabled>
-                            </td>
-                            <td class="textAlignCenter">{{item.TripTicketList.length}}</td>
-                            <td class="textAlignCenter">
-                                <i class="custom-tooltip-ion">
-                                    <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TripStatusID == 23" width="15">
-                                    <span class="tooltiptext">Draft</span>
-                                </i>
-                                <i class="custom-tooltip-ion">
-                                    <img src="assets/reddyIce/submitTicket.png" *ngIf="item.TripStatusID == 24" width="18">
-                                    <span class="tooltiptext">Submitted</span>
-                                </i>
-                                <i class="custom-tooltip-ion">
-                                    <img src="assets/reddyIce/approveTicket.png" *ngIf="item.TripStatusID == 25" width="15">
-                                    <span class="tooltiptext">Approved</span>
-                                </i>
-                            </td>
+                            
                         </tr>
-                        <tr *ngIf="!trips.length || (filter.type === 'internal' && !branches.length) ||
-                        (filter.type === 'distributor' && !distributors.length)" [hidden]="showSpinner">
-                            <th class="text-center" colspan="10"> No data found </th>
-                        </tr>-->
+                        <tr *ngIf="filteredLoads.length===0 || allBranches.length === 0  || drivers.length ===0" [hidden]="showSpinner">
+                            <th class="text-center" colspan="4"> No data found </th>
+                        </tr>
                     </tbody>
                 </table>
 

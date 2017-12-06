@@ -1,3 +1,4 @@
+import { BranchResolver} from './Load.resolver';
 import { LoadPipe } from './components/load-list/load-list.pipe';
 import { LoadComponent } from './components/load-list/load.component';
 import { LoadContainerComponent } from './components/load-container/load-container.component';
@@ -18,6 +19,9 @@ const routes: Routes = [
         children: [{
             path: 'list',
             component: LoadComponent,
+            resolve: {
+                branches: BranchResolver,
+              },
         },
         {
             path: 'detail',
@@ -55,7 +59,7 @@ const routes: Routes = [
         NgbModule,
         SharedModule,
     ],
-    providers: [LoadService],
+    providers: [LoadService,BranchResolver],
 })
 export class LoadModule {
     

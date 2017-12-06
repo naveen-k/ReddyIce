@@ -44,6 +44,7 @@ export class DetailsComponent implements OnInit {
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
         this.loadId = +this.route.snapshot.params['loadId'];
+        this.loadLoadData();
         this.loadLoadsDetails();
     }
     loadLoadsDetails() {

@@ -7,6 +7,6 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://frozen.reddyice.com/Iceboxapisqldev/',
+  apiEndpoint: 'http://frozen.reddyice.com/iceboxapiforloader/',
   reportEndpoint: 'http://frozen.reddyice.com/IceboxReportsqldev/Reports/ReportData.aspx',
 };
