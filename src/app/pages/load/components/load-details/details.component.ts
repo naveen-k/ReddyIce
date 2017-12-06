@@ -31,6 +31,8 @@ export class DetailsComponent implements OnInit {
     currentTripCode: number = 0;
     activatedRouteObject :any;
     checkValidity =false;
+    hideAddProduct = false;
+    back: string;
     constructor(
         private service: LoadService,
         private route: ActivatedRoute,
@@ -61,7 +63,7 @@ export class DetailsComponent implements OnInit {
             if (this.activatedRouteObject['LoadMode']) {
                 this.loadLoadsDetails();
                 this.checkValidity =true;
-    
+                this.activatedRouteObject['LoadMode'] ? '["../list"]' : '["../../list"]'
             } else {
                 this.currentTripCode = this.filter.tripCode + 1;
             }
@@ -83,7 +85,7 @@ export class DetailsComponent implements OnInit {
             this.loadData.PalletsIssued = res.PalletsIssued;
             this.loadData.TruckNumber = res.TruckNumber;
             this.currentTripCode = res.TripCode;
-            //this.loadLoadData();
+            this.loadLoadData();
         });
     }
     loadLoadData() {
@@ -93,6 +95,7 @@ export class DetailsComponent implements OnInit {
     }
     addProductRow() {
         this.isNewlyAdded = true;
+        this.hideAddProduct = true;
         if (!this.newlyAddedProduct) { return; }
         this.newlyAddedProduct.push({} as LoadProduct);
     }
@@ -131,9 +134,11 @@ export class DetailsComponent implements OnInit {
         const productIndex = this.productList.filter((o) => o.ProductID === product.ProductID)[0]; // .indexOf(product.ProductID);
         this.newlyAddedProduct[arrayIndex] = productIndex; // this.productList[productIndex].ProductID;
         this.checkValidity = true;
+        this.hideAddProduct = false;
         //this.resetField(arrayIndex);
     }
     saveLoad() {
+        this.checkValidity = false;
         
         if (!this.activatedRouteObject['LoadMode']) {
             this.loadData.loaddetails = this.newlyAddedProduct;
@@ -143,6 +148,7 @@ export class DetailsComponent implements OnInit {
                 this.router.navigate(['/pages/load/list']);
                 console.log(this.loadData);
             }, (err) => {
+                this.checkValidity = true;
                 err = JSON.parse(err._body);
                 this.notification.error("Error", err.Message);
             });
@@ -155,11 +161,12 @@ export class DetailsComponent implements OnInit {
                 this.router.navigate(['/pages/load/list']);
                 console.log(this.loadData);
             }, (err) => {
+                this.checkValidity = true;
                 err = JSON.parse(err._body);
                 this.notification.error("Error", err.Message);
             });
         }
-
+        
     }
     resetField(index) {
         this.newlyAddedProduct[index].ProductID = 0;
@@ -190,6 +197,9 @@ export class DetailsComponent implements OnInit {
                 }
             }
         );
+    }
+    backToList(){
+        this.router.navigate(['/pages/load/list']);
     }
 }
 

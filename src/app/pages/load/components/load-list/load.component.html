@@ -30,29 +30,29 @@
                     <thead class="tableHeader">
                         <tr>
                             <th>Actions</th>
-                            <th *ngIf="logedInUser.IsRIInternal">
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
+                            <th >
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'BranchName';customer.isAsc=!customer.isAsc;">
                                     Branch
-                                     <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <i *ngIf="(customer.sortField === 'BranchName')" [ngClass]="(customer.isAsc && customer.sortField === 'BranchName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                             <th>
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'driver';customer.isAsc=!customer.isAsc;">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'DriverName';customer.isAsc=!customer.isAsc;">
                                     Driver
-                                     <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <i *ngIf="(customer.sortField === 'DriverName')" [ngClass]="(customer.isAsc && customer.sortField === 'DriverName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                             <th class="textAlignCenter">
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'TripCode';customer.isAsc=!customer.isAsc;">
                                     Trip #
-                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                     <i *ngIf="(customer.sortField === 'TripCode')" [ngClass]="(customer.isAsc && customer.sortField === 'TripCode' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                 </span>
                             </th>
                            
                         </tr>
                     </thead>
                     <tbody>                        
-                    <tr *ngFor="let item of filteredLoads">
+                    <tr *ngFor="let item of filteredLoads|sort:customer.sortField:customer.isAsc">
                             <td class="table-id" style="cursor: pointer">                                
                               
                                 <i class="ion-edit custom-tooltip-ion"
