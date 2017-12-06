@@ -5,10 +5,11 @@
             <img src="assets/reddyIce/submitTicket.png" *ngIf="tripData.TripStatusID == 24" width="18" class="newTicketTitleStatusIcon">
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" *ngIf='(tripData.TripStatusID == 23 || tripData.TripStatusID == 24) && userRoleId ==3'
+                <button class="btn btn-danger pull-right" 
+                *ngIf='((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24)'
                     (click)="saveReconciliation(25);">Approve</button>
-                <button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
-                <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                <!--<button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
+                <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
                     (click)="saveReconciliation(23)">Save</button>-->
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
@@ -199,12 +200,12 @@
                                             </td>
                                             <td>
                                                 <span>Issued: </span>
-                                                <input [(ngModel)]='tripData.PalletLoadQuantity' [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' style="width:70px"
+                                                <input [(ngModel)]='tripData.PalletLoadQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' style="width:70px"
                                                     type="text" [numberOnly]>
                                             </td>
                                             <td>
                                                 <span>Returned: </span>
-                                                <input [(ngModel)]='tripData.PalletReturnQuantity' [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' style="width:70px"
+                                                <input [(ngModel)]='tripData.PalletReturnQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' style="width:70px"
                                                     type="text" [numberOnly]>
                                             </td>
                                         </tr>
@@ -310,17 +311,17 @@
                                                 <td width="21%" style="text-align:left;">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker)|| tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
@@ -329,7 +330,7 @@
                                                 <td width="5%">{{item.GoodReturns?item.GoodReturns:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
-                                                    <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td class="textAlignCenter" width="7%">{{item.OverShort}}</td>
@@ -542,7 +543,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <textarea rows="7" style="width:100%;border:0px;resize: none;" [(ngModel)]="ticketDetails.Total.Comments" [disabled]="userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed"></textarea>
+                                                    <textarea rows="7" style="width:100%;border:0px;resize: none;" [(ngModel)]="ticketDetails.Total.Comments" [disabled]="(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed"></textarea>
 
                                                 </div>
 
@@ -613,14 +614,14 @@
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Cash($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         
                                         <div class="col-sm-8">
@@ -628,7 +629,7 @@
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.ActualCoin' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         <div class="col-sm-12">
                                             <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
@@ -657,21 +658,21 @@
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.Tolls'
-                                            [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                            [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Money Order Fee($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.MoneyOrderFee'
-                                            [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                            [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
                                         </div>
                                         <div class="col-sm-8">
                                             <label>Misc($):</label>
                                         </div>
                                         <div class="col-sm-4 text-align-right">
                                             <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' (ngModelChange)="cashReconChange(ticketDetails)"
-                                                min="0" [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' placeholder="0.00">
                                         </div>
                                         <div class="col-sm-12">
                                             <hr style="margin: 2px 0">

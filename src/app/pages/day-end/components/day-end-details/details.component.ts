@@ -93,7 +93,7 @@ export class DetailsComponent implements OnInit {
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
 
-        this.logedInUser = this.userService.getUser();
+        this.logedInUser = this.userService.getUser();                
         this.tripId = +this.route.snapshot.params['tripId'];
         this.loadTripData();
         this.loadTripDetailByDate();
