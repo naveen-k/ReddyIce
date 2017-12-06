@@ -12,25 +12,29 @@ export class TrackerService extends SharedService {
   constructor(protected http: HttpService) {
     super(http);
   }
-  
-  getTrips(TripDate) {
-    return this.http.get(`api/trip/allfortracker?TripDate=${TripDate}`)
-    .map((res) => res.json()).map((res) => {
+
+  getTrips(TripDate, open) {
+    let url = `api/trip/allfortracker?TripDate=${TripDate}`;
+    if (open) {
+      url = `api/trip/openallfortracker?TripDate=${TripDate}`;
+    }
+    return this.http.get(url)
+      .map((res) => res.json()).map((res) => {
         return res;
-    });
+      });
   }
 
   getDistributors(userId, selectedDate) {
     return this.http.get(`api/trip/listofdistributorfordate?Id=${userId}&Date=${selectedDate}`)
-    .map((res) => res.json()).map((res) => {
+      .map((res) => res.json()).map((res) => {
         return res;
-    });
+      });
   }
 
   getBranchesByDate(userId, selectedDate) {
     return this.http.get(`api/trip/listofbranchesfordate?Id=${userId}&Date=${selectedDate}`)
-    .map((res) => res.json()).map((res) => {
+      .map((res) => res.json()).map((res) => {
         return res;
-    });
+      });
   }
 }

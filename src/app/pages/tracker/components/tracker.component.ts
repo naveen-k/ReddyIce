@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../user-management/user-management.interface';
 import { UserService } from '../../../shared/user.service';
 import { TrackerService } from '../tracker.service';
@@ -66,17 +67,16 @@ export class TrackerComponent implements OnInit {
     private service: TrackerService,
     private userService: UserService,
     private notification: NotificationsService,
+    private router: Router,
   ) {
   }
 
   ngOnInit() {
     const userId = localStorage.getItem('userId') || '';
-    this.userService.getUserDetails(userId).subscribe((response) => {
-      this.isDistributorExist = response.IsDistributor;
-      this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
-    });
 
     this.user = this.userService.getUser();
+    this.isDistributorExist = this.user.IsDistributor;
+    this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
 
     const now = new Date();
     this.tripFilterOption['tripDate'] = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -132,12 +132,12 @@ export class TrackerComponent implements OnInit {
       this.driverOndistributor = [];
     }
     this.showSpinner = true;
-    this.service.getTrips(this.selectedDate).subscribe((res) => {
+    this.service.getTrips(this.selectedDate, this.router.url === '/opentracker').subscribe((res) => {
       if (typeof res == 'object') {
         this.trips = res.Trips;
         var branchesArr = [];
         console.log('this.trips', this.trips.length);
-        
+
         this.showSpinner = false;
         this.allBranches = [];
         var distributorArr = [];
@@ -161,7 +161,7 @@ export class TrackerComponent implements OnInit {
             this.sortBranches(branchesArr);
             console.log('branchesArr', branchesArr);
             this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
-            
+
           } else if (this.searchObj.userType == 'External') {
             let tmpObj = {};
             for (var i = 0; i < this.trips.length; i++) {
@@ -182,11 +182,10 @@ export class TrackerComponent implements OnInit {
         this.trips = [];
         this.showSpinner = false;
       }
-      if(this.user.IsDistributor){
+      if (this.user.IsDistributor) {
         this.distributorChangeHandler();
       } else {
-        if(this.allBranches && this.allBranches.length>0)
-        {
+        if (this.allBranches && this.allBranches.length > 0) {
           this.branchChangeHandler();
         }
       }
@@ -242,7 +241,7 @@ export class TrackerComponent implements OnInit {
       // this.loadBranches();
     }
     this.loadTrips();
-    this.drawMapPath();    
+    this.drawMapPath();
   }
   driverOnBranch = [];
   // Fetch selected Branch
@@ -250,7 +249,7 @@ export class TrackerComponent implements OnInit {
     console.log('tripFilterOption.branchId', this.tripFilterOption.branchId);
     // this.tripFilterOption.DriverName = this.trips[0].DriverName;    // assigning in model
     // this.tripFilterOption.TripCode = this.trips[0].TripCode;        // assigning in model
-    
+
     if (this.tripFilterOption.branchId) {
       this.driverOnBranch = [];
       for (var i = 0; i < this.trips.length; i++) {
@@ -267,11 +266,11 @@ export class TrackerComponent implements OnInit {
         this.tripFilterOption.TripCode = this.driverOnBranch[0].TripCode;        // assigning in model
         this.driverChangeHandler();
       }
-      
+
     } else {
       this.selectedTrip = [];
     }
-    
+
     //this.loadTrips();
   }
 
@@ -463,14 +462,14 @@ export class TrackerComponent implements OnInit {
           }
         } else {
           if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
-          && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
-          && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
+            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
+            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
             var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
           }
           if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
             && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
             && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
-              var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
+            var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
           }
         }
 
@@ -478,33 +477,33 @@ export class TrackerComponent implements OnInit {
         if (sequence === 1) {
           // adding check here to avoid 'undefined' condition
           if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i+1].PlannedLatitude != null && this.selectedTrip[i+1].PlannedLongitude != null
-              && this.selectedTrip[i+1].PlannedLatitude != "" && this.selectedTrip[i+1].PlannedLongitude != ""
-              && this.selectedTrip[i+1].PlannedLatitude != "0.0" && this.selectedTrip[i+1].PlannedLongitude != "0.0") {
+            if (this.selectedTrip[i + 1].PlannedLatitude != null && this.selectedTrip[i + 1].PlannedLongitude != null
+              && this.selectedTrip[i + 1].PlannedLatitude != "" && this.selectedTrip[i + 1].PlannedLongitude != ""
+              && this.selectedTrip[i + 1].PlannedLatitude != "0.0" && this.selectedTrip[i + 1].PlannedLongitude != "0.0") {
               var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
             }
           }
         } else if (sequence === 2) {
           // adding check here to avoid 'undefined' condition
           if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i+1].ActualLatitude != null && this.selectedTrip[i+1].ActualLongitude != null
-              && this.selectedTrip[i+1].ActualLatitude != "" && this.selectedTrip[i+1].ActualLongitude != ""
-              && this.selectedTrip[i+1].ActualLatitude != "0.0" && this.selectedTrip[i+1].ActualLongitude != "0.0") {
+            if (this.selectedTrip[i + 1].ActualLatitude != null && this.selectedTrip[i + 1].ActualLongitude != null
+              && this.selectedTrip[i + 1].ActualLatitude != "" && this.selectedTrip[i + 1].ActualLongitude != ""
+              && this.selectedTrip[i + 1].ActualLatitude != "0.0" && this.selectedTrip[i + 1].ActualLongitude != "0.0") {
               var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
             }
           }
         } else {
           if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i+1].PlannedLatitude != null && this.selectedTrip[i+1].PlannedLongitude != null
-              && this.selectedTrip[i+1].PlannedLatitude != "" && this.selectedTrip[i+1].PlannedLongitude != ""
-              && this.selectedTrip[i+1].PlannedLatitude != "0.0" && this.selectedTrip[i+1].PlannedLongitude != "0.0") {
+            if (this.selectedTrip[i + 1].PlannedLatitude != null && this.selectedTrip[i + 1].PlannedLongitude != null
+              && this.selectedTrip[i + 1].PlannedLatitude != "" && this.selectedTrip[i + 1].PlannedLongitude != ""
+              && this.selectedTrip[i + 1].PlannedLatitude != "0.0" && this.selectedTrip[i + 1].PlannedLongitude != "0.0") {
               var endPtP = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
             }
           }
           if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i+1].ActualLatitude != null && this.selectedTrip[i+1].ActualLongitude != null
-              && this.selectedTrip[i+1].ActualLatitude != "" && this.selectedTrip[i+1].ActualLongitude != ""
-              && this.selectedTrip[i+1].ActualLatitude != "0.0" && this.selectedTrip[i+1].ActualLongitude != "0.0") {
+            if (this.selectedTrip[i + 1].ActualLatitude != null && this.selectedTrip[i + 1].ActualLongitude != null
+              && this.selectedTrip[i + 1].ActualLatitude != "" && this.selectedTrip[i + 1].ActualLongitude != ""
+              && this.selectedTrip[i + 1].ActualLatitude != "0.0" && this.selectedTrip[i + 1].ActualLongitude != "0.0") {
               var endPtA = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
             }
           }
@@ -572,8 +571,8 @@ export class TrackerComponent implements OnInit {
           }
         } else if (sequence === 2) {
           if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-          && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
-          && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
+            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
+            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
             positionLatitude = this.selectedTrip[i].ActualLatitude;
             positionLongitude = this.selectedTrip[i].ActualLongitude;
           }
@@ -588,9 +587,9 @@ export class TrackerComponent implements OnInit {
           if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
             && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
             && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
-              positionLatitude2 = this.selectedTrip[i].ActualLatitude;
-              positionLongitude2 = this.selectedTrip[i].ActualLongitude;
-            }
+            positionLatitude2 = this.selectedTrip[i].ActualLatitude;
+            positionLongitude2 = this.selectedTrip[i].ActualLongitude;
+          }
         }
         if (sequence != 3) {
           var marker = new google.maps.Marker({
@@ -626,10 +625,10 @@ export class TrackerComponent implements OnInit {
             }
             if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined
               || this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
-                var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-                if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
-                  totalInvoice = totalInvoice + ".00";
-                }
+              var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
+              if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+                totalInvoice = totalInvoice + ".00";
+              }
               infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
             } else {
               infowindowContent += 'Total Invoice : $' + '0.00' + '<br>';
@@ -640,7 +639,7 @@ export class TrackerComponent implements OnInit {
             //   infowindowContent += 'Total Amount : ' + '-' + '<br>';
             // }
             if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
-            || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
+              || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
               var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
               if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
                 receivedAmt = receivedAmt + ".00";
@@ -664,16 +663,16 @@ export class TrackerComponent implements OnInit {
             }
             if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined ||
               this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
-                var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-                if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
-                  totalInvoice = totalInvoice + ".00";
-                }
+              var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
+              if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+                totalInvoice = totalInvoice + ".00";
+              }
               infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
             } else {
               infowindowContent += 'Total Invoice : $' + '0' + '<br>';
             }
             if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
-            || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
+              || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
               var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
               if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
                 receivedAmt = receivedAmt + ".00";
@@ -701,16 +700,16 @@ export class TrackerComponent implements OnInit {
             }
             if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined ||
               this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
-                var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-                if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
-                  totalInvoice = totalInvoice + ".00";
-                }
+              var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
+              if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+                totalInvoice = totalInvoice + ".00";
+              }
               infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
             } else {
               infowindowContent += 'Total Invoice : $' + '0' + '<br>';
             }
             if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
-            || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
+              || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
               var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
               if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
                 receivedAmt = receivedAmt + ".00";
