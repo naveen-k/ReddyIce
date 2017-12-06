@@ -5,7 +5,7 @@
                     <button [disabled]="!checkValidity" class="btn btn-danger pull-right" (click)="saveLoad()">Submit</button>
                     <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='loadData.TripStatusID == 24 || loadData.TripStatusID == 25'
                         (click)="saveReconciliation(23)">Save</button>-->
-                    <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../']">Back</button>
+                    <button class="btn btn-danger pull-right add-margin-right" (click)="backToList()">Back</button>
                 </div>
                 <div class="row add-margin-bottom">
     
@@ -62,7 +62,7 @@
                                 </div>
     
                                 <div class="col-sm-6">
-                                    <button class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
+                                    <button [disabled]="hideAddProduct" class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
                                 </div>
                                 <div class="col-md-12 page-header">
     
@@ -140,28 +140,28 @@
                                                         </td>
                                                         
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load1'
+                                                            <input [disabled]='!item.ProductID' [(ngModel)]='item.Load1'
                                                                 class="form-control small-input"
-                                                                type="number">
+                                                                type="text" numberOnly>
                                                         </td>
                                                       
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load2'
+                                                            <input [disabled]='!item.ProductID' [(ngModel)]='item.Load2'
                                                                  class="form-control small-input dollar-input"
-                                                                type="number">
+                                                                 type="text" numberOnly>
                                                         </td>
                                                        
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load3'
+                                                            <input [disabled]='!item.ProductID' [(ngModel)]='item.Load3'
                                                                  class="form-control small-input"
-                                                                type="number">
+                                                                 type="text" numberOnly>
                                                         </td>
         
         
                                                         <td >
-                                                            <input numberOnly [disabled]='!item.ProductID' [(ngModel)]='item.Load4'
+                                                            <input [disabled]='!item.ProductID' [(ngModel)]='item.Load4'
                                                                  class="form-control small-input"
-                                                                type="number">
+                                                                 type="text" numberOnly>
                                                                 <input type="hidden" [(ngModel)]="item.LoadID" [value]="loadId">
                                                         </td>
                                                         
