@@ -19,11 +19,11 @@
                         <option value="distributor">Distributor</option>
                     </select>
                 </div>
-                <div class="col-sm-4" *ngIf="filter.type === 'internal'">
+                <div class="col-sm-4" *ngIf="filter.type === 'internal'||showBranchDropdown">
                     <label><b>Select Branch</b></label>
                     <reddy-select [options]="branches" [(selected)]="filter.userBranch"></reddy-select>
                 </div>
-                <div class="col-sm-4" *ngIf="filter.type === 'distributor'">
+                <div class="col-sm-4" *ngIf="filter.type === 'distributor' && !showBranchDropdown">
                     <label><b>Select Distributor</b></label>
                     <reddy-select [disabled]="logedInUser.IsDistributor" [options]="distributors" [(selected)]="filter.userBranch"></reddy-select>
                 </div>
