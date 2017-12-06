@@ -77,7 +77,6 @@ export class LoadComponent implements OnInit {
         let d:any = this.getDriverName();
         this.filter.userBranchName = b.BranchCode +' - '+b.BranchName;
         this.filter.userDriverName = d.label;
-        debugger
         this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
     }
     getBranchName(){
@@ -86,7 +85,6 @@ export class LoadComponent implements OnInit {
     }
     getDriverName(){
         let d = this.drivers.filter((d)=>d.value === this.filter.userDriver);
-        debugger
         return d[0];
     }
     getLoadsFromList(branchID, driverID) {
