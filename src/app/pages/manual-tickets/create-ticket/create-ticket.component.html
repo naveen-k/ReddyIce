@@ -560,7 +560,7 @@
             <div class="padding">
                 <label for="example-text-input" class="col-form-label">Cash Amount($)</label>
                 <input type="text" [numberOnly]="true" id="number" min="0" class="form-control" [(ngModel)]="ticket.CashAmount" placeholder="Cash Amount" (blur)="cashAmountChangeHandler()"
-                    [disabled]="ticket.TicketTypeID == 27 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly"
+                    [disabled]="ticket.TicketTypeID == 27 || ticket.CustomerType == 21 || !ticket.IsSaleTicket || isReadOnly" [value]="ticket.CashAmount"
                     (ngModelChange)="isFormDirty=true;">
             </div>
             <div id="checkNumber" class="padding">

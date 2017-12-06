@@ -326,7 +326,7 @@
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
                                                 <td width="7%">{{item.SaleReturnQty?item.SaleReturnQty:0}}</td>
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
-                                                <td width="5%">{{item.ReturnQuantity?item.GoodReturns:0}}</td>
+                                                <td width="5%">{{item.GoodReturns?item.GoodReturns:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
                                                     <input [disabled]='userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
