@@ -6,7 +6,7 @@
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" 
-                *ngIf='((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24)'
+                *ngIf='((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || logedInUser.Role.RoleID == 2 || logedInUser.Role.RoleID == 1)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24)'
                     (click)="saveReconciliation(25);">Approve</button>
                 <!--<button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
                 <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
