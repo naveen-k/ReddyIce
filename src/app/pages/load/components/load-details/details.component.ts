@@ -25,7 +25,7 @@ export class DetailsComponent implements OnInit {
     loadId: number;
     isNewlyAdded: boolean = false;
     newlyAddedProduct: any = [];
-    loadDetails: LoadProduct[] = [];
+    loadDetails: any[] = [];
     loadList: any[] = [];
     deliveryDate: any = '';
     currentTripCode: number = 0;
@@ -41,25 +41,31 @@ export class DetailsComponent implements OnInit {
 
 
     ngOnInit() {
-        const userId = localStorage.getItem('userId') || '';
-        this.userService.getUserDetails(userId).subscribe((response) => {
-            this.userRoleId = response.Role.RoleID;
-        });
-
-        this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
-        this.deliveryDate = this.service.formatDate(this.filter.selectedDate);
-        this.currentTripCode = this.filter.tripCode;
-        this.loadId = +this.route.snapshot.params['loadId'];
-        this.activatedRouteObject = this.route.snapshot.data;
-        this.loadProduct();
-        if (this.activatedRouteObject['LoadMode']) {
-            this.getLoads(this.loadId);
-
+        if(!this.filter.userBranch || !this.filter.userDriver || !this.filter.selectedDate){
+            this.router.navigate(['/pages/load/list']);
         } else {
-            this.currentTripCode = this.filter.tripCode + 1;
+            const userId = localStorage.getItem('userId') || '';
+            this.userService.getUserDetails(userId).subscribe((response) => {
+                this.userRoleId = response.Role.RoleID;
+            });
+    
+            this.logedInUser = this.userService.getUser();
+           
+            this.deliveryDate = this.service.formatDate(this.filter.selectedDate);
+            this.currentTripCode = this.filter.tripCode;
+            this.loadId = +this.route.snapshot.params['loadId'];
+            this.activatedRouteObject = this.route.snapshot.data;
+            this.loadProduct();
+            if (this.activatedRouteObject['LoadMode']) {
+                this.getLoads(this.loadId);
+    
+            } else {
+                this.currentTripCode = this.filter.tripCode + 1;
+            }
+            this.populateLoadData();
         }
-        this.populateLoadData();
+        
 
     }
     populateLoadData() {
@@ -94,10 +100,10 @@ export class DetailsComponent implements OnInit {
     loadProduct() {
         this.service.getProductList(this.filter.userBranch).subscribe((res) => {
             // Filterout already listed products
-            /* this.productList = res.filter((product) => {
+             this.productList = res.filter((product) => {
                  return this.loadList.findIndex(pr => pr.ProductID === product.ProductID) < 0;
-             });*/
-            this.productList = res;
+             });
+            //this.productList = res;
         }, (err) => {
 
         });
