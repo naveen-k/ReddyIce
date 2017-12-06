@@ -30,6 +30,7 @@ export class DetailsComponent implements OnInit {
     deliveryDate: any = '';
     currentTripCode: number = 0;
     activatedRouteObject :any;
+    checkValidity =false;
     constructor(
         private service: LoadService,
         private route: ActivatedRoute,
@@ -58,7 +59,8 @@ export class DetailsComponent implements OnInit {
             this.activatedRouteObject = this.route.snapshot.data;
             this.loadProduct();
             if (this.activatedRouteObject['LoadMode']) {
-                this.getLoads(this.loadId);
+                this.loadLoadsDetails();
+                this.checkValidity =true;
     
             } else {
                 this.currentTripCode = this.filter.tripCode + 1;
@@ -76,18 +78,16 @@ export class DetailsComponent implements OnInit {
     }
     loadLoadsDetails() {
         this.service.getLoadDetails(this.loadId).subscribe((res) => {
-            this.loadList = res = res || [];
-            this.loadLoadData();
+            res = res || [];
+            this.loadList = res.LoadDetails;
+            this.loadData.PalletsIssued = res.PalletsIssued;
+            this.loadData.TruckNumber = res.TruckNumber;
+            this.currentTripCode = res.TripCode;
+            //this.loadLoadData();
         });
     }
     loadLoadData() {
 
-        this.loadList.forEach(element => {
-            element['Load1Quantity'] = element['Load1Quantity'] || element['Load'];
-            element['ReturnQuantity'] = element['ReturnQuantity'] || element['Returns'];
-            element['DamageQuantity'] = element['DamageQuantity'] || element['TruckDamage'];
-            element['CustomerDamageDRV'] = element['CustomerDamageDRV'] || element['CustomerDamage'];
-        });
         this.loadProduct();
 
     }
@@ -130,6 +130,7 @@ export class DetailsComponent implements OnInit {
         }
         const productIndex = this.productList.filter((o) => o.ProductID === product.ProductID)[0]; // .indexOf(product.ProductID);
         this.newlyAddedProduct[arrayIndex] = productIndex; // this.productList[productIndex].ProductID;
+        this.checkValidity = true;
         //this.resetField(arrayIndex);
     }
     saveLoad() {

@@ -1,8 +1,8 @@
 <div class="row">
         <div class=" col-md-12">
-            <ba-card cardTitle="  Load Detail {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
+            <ba-card cardTitle="Load Detail" baCardClass="with-scroll" class="smart-table-container" #customer>
                 <div class="head-button-container">
-                    <button class="btn btn-danger pull-right" (click)="saveLoad()">Submit</button>
+                    <button [disabled]="!checkValidity" class="btn btn-danger pull-right" (click)="saveLoad()">Submit</button>
                     <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='loadData.TripStatusID == 24 || loadData.TripStatusID == 25'
                         (click)="saveReconciliation(23)">Save</button>-->
                     <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../']">Back</button>
