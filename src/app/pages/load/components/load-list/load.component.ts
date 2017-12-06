@@ -51,7 +51,12 @@ export class LoadComponent implements OnInit {
             }
         }
         this.allBranches = this.service.transformOptionsReddySelect(this.branches, 'BranchID', 'BranchCode', 'BranchName');
+        if(this.filter.userBranch && this.filter.userBranch>0){
+            this.getDrivers();
+        }
+        
         this.dateChangeHandler();
+        
     }
     getDrivers(byType: any = '') {
         if (this.filter.userBranch === null) {
@@ -92,7 +97,8 @@ export class LoadComponent implements OnInit {
         this.filteredLoads = [];
         let tempLoad = [];
         let fLoad = [];
-        if (this.loads.length && this.loads.length > 0) {
+        if (typeof this.loads === 'object' && this.loads && this.loads.length && this.loads.length > 0) {
+            
             this.loads.forEach((load) => {
                 //if (branchID === load.BranchID && driverID === load.DriverID) {
                     fLoad.push(load);
