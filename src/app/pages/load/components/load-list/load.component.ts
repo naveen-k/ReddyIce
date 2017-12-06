@@ -59,10 +59,13 @@ export class LoadComponent implements OnInit {
         
     }
     getDrivers(byType: any = '') {
-        this.logedInUser.Role.RoleID === 3 && (this.filter.userDriver = this.logedInUser.UserId);
         if (this.filter.userBranch === null) {
             return;
         }
+        if(this.logedInUser.Role.RoleID === 3){
+            this.filter.userDriver = this.logedInUser.UserId;
+            this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
+        }        
         this.service.getDriverByBranch(this.filter.userBranch, true).subscribe(res => {
             let objDriver = [];
             res = res || [];
@@ -102,9 +105,9 @@ export class LoadComponent implements OnInit {
         if (typeof this.loads === 'object' && this.loads && this.loads.length && this.loads.length > 0) {
             
             this.loads.forEach((load) => {
-                //if (branchID === load.BranchID && driverID === load.DriverID) {
+                if (branchID === load.BranchID && driverID === load.DriverID) {
                     fLoad.push(load);
-                //}
+                }
             });
             this.filter.tripCode = fLoad.length;
         }
