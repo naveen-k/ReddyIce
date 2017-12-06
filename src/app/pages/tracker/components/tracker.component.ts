@@ -34,7 +34,7 @@ export class TrackerComponent implements OnInit {
     DistributorName: '',
     DistributorCopackerID: 0
   };
-  showBranchDropdown: boolean = false;
+  seasonalDriver: boolean = false;
   planned: boolean = true;
   actual: boolean = false;
   both: boolean = false;
@@ -108,9 +108,9 @@ export class TrackerComponent implements OnInit {
     if (!this.user.IsRIInternal) {
       if (this.user.Role && this.user.Role.RoleID === 3) {
         if (this.user.IsSeasonal) {
-          this.showBranchDropdown = true;
+          this.seasonalDriver = true;
         } else {
-          this.showBranchDropdown = false;
+          this.seasonalDriver = false;
         }
       }
     }
