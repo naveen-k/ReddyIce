@@ -39,7 +39,7 @@ export class DayEndComponent implements OnInit {
             this.filter.type = 'internal';
         }
 
-        
+
         //Check if LogedIn User is Seasonal Distributor or not 
 
         if (!this.logedInUser.IsRIInternal) {
@@ -69,10 +69,11 @@ export class DayEndComponent implements OnInit {
             let distributors = [],
                 branches = [];
             this.trips = res.Trips || [];
+            console.log(this.trips);
             let tmpDist = {};
             let tmpBranch = {};
             this.trips.forEach((trip) => {
-                if (trip.isDistributor) {
+                if (trip.isDistributor && !this.showBranchDropdown) {
                     if (tmpDist[trip.DistributorMasterID]) { return; }
                     distributors.push({
                         value: trip.DistributorMasterID,
@@ -86,12 +87,16 @@ export class DayEndComponent implements OnInit {
                     value: trip.BranchID,
                     label: trip.BranchName
                 })
-                tmpBranch[trip.BranchID] = trip.BranchID
+                tmpBranch[trip.BranchID] = trip.BranchID;
             })
-            branches.length && branches.unshift({ value: 1, label: 'All Branches' });
+            
+            branches.length > -1 && branches.unshift({ value: 1, label: 'All Branches' });
             distributors.length && distributors.unshift({ value: 1, label: 'All Distributors' });
             this.distributors = distributors;
             this.branches = branches;
+            if (this.filter) {
+                this.filter.userBranch = 1;
+            }
 
             // Hack for displaying Distributor in case of no data return
             if (this.logedInUser.IsDistributor && !this.distributors.length) {

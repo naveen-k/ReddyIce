@@ -74,14 +74,7 @@ export class TrackerComponent implements OnInit {
   ngOnInit() {
     const userId = localStorage.getItem('userId') || '';
 
-    if (this.router.url === '/opentracker') {
-      this.user = {} as User;
-      this.isDistributor = false;
-    } else {
-      this.user = this.userService.getUser();
-      // get the user type: isDistributor or internal
-      this.isDistributor = this.userService.getUser().IsDistributor;
-    }
+    this.user = this.userService.getUser();
     console.log(this.user);
     this.isDistributorExist = this.user.IsDistributor;
     this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
@@ -92,7 +85,8 @@ export class TrackerComponent implements OnInit {
     this.selectedDate = "2017-11-09";
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
-
+    // get the user type: isDistributor or internal
+    this.isDistributor = this.userService.getUser().IsDistributor;
 
     if (this.isDistributor) {
       this.searchObj.userType = 'External';
@@ -107,7 +101,7 @@ export class TrackerComponent implements OnInit {
       this.tripFilterOption.isForAll = true;
     }
     if (!this.user.IsRIInternal) {
-      if (this.user.Role && this.user.Role.RoleID === 3) {
+      if (this.user.Role.RoleID === 3) {
         if (this.user.IsSeasonal) {
           this.seasonalDriver = true;
         } else {
