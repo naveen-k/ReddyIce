@@ -17,7 +17,8 @@ export class DayEndComponent implements OnInit {
     distributors: Array<any> = [];
     logedInUser: any = {};
     todaysDate: any;
-    totalCreditAmount:any=0;
+    totalCreditAmount: any = 0;
+    showBranchDropdown: boolean = false;
 
     userSubTitle: string = '';
     showSpinner: boolean = false;
@@ -28,6 +29,7 @@ export class DayEndComponent implements OnInit {
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
+        console.log(this.logedInUser);
         this.filter = this.service.getFilter();
         if (this.logedInUser.IsDistributor) {
             this.userSubTitle = ` - ${this.logedInUser.Distributor.DistributorName}`;
@@ -36,6 +38,21 @@ export class DayEndComponent implements OnInit {
         } else {
             this.filter.type = 'internal';
         }
+
+        
+        //Check if LogedIn User is Seasonal Distributor or not 
+
+        if (!this.logedInUser.IsRIInternal) {
+            if (this.logedInUser.Role.RoleID === 3) {
+                if (this.logedInUser.IsSeasonal) {
+                    this.showBranchDropdown = true;
+                } else {
+                    this.showBranchDropdown = false;
+                }
+            }
+        }
+
+
         this.selectionchangeHandler();
         //for(let i=0;i<this.trips.length;i++)
     }
@@ -45,7 +62,7 @@ export class DayEndComponent implements OnInit {
     }
 
     loadFilteredTrips() {
-        this.totalCreditAmount=0;
+        this.totalCreditAmount = 0;
         this.showSpinner = true;
         this.trips = [];
         this.service.getTrips(this.service.formatDate(this.filter.selectedDate)).subscribe((res) => {
@@ -80,7 +97,7 @@ export class DayEndComponent implements OnInit {
             if (this.logedInUser.IsDistributor && !this.distributors.length) {
                 this.distributors = [{
                     value: this.logedInUser.Distributor.DistributorMasterId,
-                    label: this.logedInUser.Distributor.DistributorNumber +'-'+this.logedInUser.Distributor.DistributorName
+                    label: this.logedInUser.Distributor.DistributorNumber + '-' + this.logedInUser.Distributor.DistributorName
                 }]
             }
             this.showSpinner = false;
@@ -94,15 +111,15 @@ export class DayEndComponent implements OnInit {
             //             }
             //         }
             //     }
-                
+
             // }
         },
-        (error) => {
-            this.showSpinner = false;
-            if (error) {
-                
-              this.notification.error('', 'Something went wrong while fetching data');
-            }
-          },);
+            (error) => {
+                this.showSpinner = false;
+                if (error) {
+
+                    this.notification.error('', 'Something went wrong while fetching data');
+                }
+            }, );
     }
 }

@@ -34,7 +34,7 @@ export class TrackerComponent implements OnInit {
     DistributorName: '',
     DistributorCopackerID: 0
   };
-
+  showBranchDropdown: boolean = false;
   planned: boolean = true;
   actual: boolean = false;
   both: boolean = false;
@@ -75,6 +75,7 @@ export class TrackerComponent implements OnInit {
     const userId = localStorage.getItem('userId') || '';
 
     this.user = this.userService.getUser();
+    console.log(this.user);
     this.isDistributorExist = this.user.IsDistributor;
     this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
 
@@ -98,6 +99,16 @@ export class TrackerComponent implements OnInit {
       this.tripFilterOption.branchId = 1;
       this.tripFilterOption.isForAll = true;
     }
+    if (!this.user.IsRIInternal) {
+      if (this.user.Role.RoleID === 3) {
+        if (this.user.IsSeasonal) {
+          this.showBranchDropdown = true;
+        } else {
+          this.showBranchDropdown = false;
+        }
+      }
+    }
+
     this.loadTrips();
   }
 
