@@ -100,6 +100,18 @@ export const PAGES_MENU = [
         },
       },
       {
+        path: 'load',
+        data: {
+          menu: {
+            title: 'Load',
+            icon: 'ion-clipboard',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
+      {
         path: 'dashboard',
         data: {
           menu: {

@@ -38,6 +38,7 @@ export const routes: Routes = [
       { path: 'manual-ticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },
       { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
       { path: 'tracker', loadChildren: './tracker/tracker.module#TrackerModule' },
+      { path: 'load', loadChildren: './load/load.module#LoadModule' },
     ],
   },
 ];
