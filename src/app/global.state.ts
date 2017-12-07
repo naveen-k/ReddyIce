@@ -1,5 +1,6 @@
+// import * as global from 'global';
 import { Injectable } from '@angular/core';
-import { Subject }    from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class GlobalState {
@@ -40,4 +41,29 @@ export class GlobalState {
       callback.call(null, data['data']);
     });
   }
+}
+
+/*
+ * We are creating a common method to perform the arithmetic calculation precisely
+ */
+declare global {
+  interface Number {
+    /**
+     * Returns a number representing output of operation being performed.
+     * @param op represents the operation being performed on the operands
+     * @param x represents second operand
+     */
+    fpArithmetic(op: string, x: number): number;
+  }
+}
+
+Number.prototype.fpArithmetic = function (op, x): number {
+  var n = {
+    '*': this * x,
+    '-': this - x,
+    '+': this + x,
+    '/': this / x
+  }[op];
+
+  return Math.round(n * 100) / 100;
 }

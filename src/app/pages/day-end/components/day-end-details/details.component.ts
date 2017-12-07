@@ -29,7 +29,7 @@ export class DetailsComponent implements OnInit {
     isDistributorExist: boolean;
     userSubTitle: string = '';
     userRoleId: number;
-    isSeasonalDriver:boolean=false;
+    isSeasonalDriver: boolean = false;
 
     totalUnit: any = {
         TotalLoad: 0,
@@ -86,38 +86,29 @@ export class DetailsComponent implements OnInit {
         return statusText;
     }
 
-    fpArithmetic = function (op, x, y) {
-        var n = {
-                '*': x * y,
-                '-': x - y,
-                '+': x + y,
-                '/': x / y
-            }[op];        
-    
-        return Math.round(n * 100)/100;
-    };
-
     ngOnInit() {
         const userId = localStorage.getItem('userId') || '';
         this.logedInUser = this.userService.getUser();
         this.userRoleId = this.logedInUser.Role.RoleID;
         this.isDistributorExist = this.logedInUser.IsDistributor;
         this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.logedInUser.Distributor.DistributorName : '';
-        
+
         this.tripId = +this.route.snapshot.params['tripId'];
         this.loadTripData();
         this.loadTripDetailByDate();
 
         if (!this.logedInUser.IsRIInternal) {
-                if (this.logedInUser.Role.RoleID === 3) {
-                    if (this.logedInUser.IsSeasonal) {
-                        this.isSeasonalDriver = true;
-                    } else {
-                        this.isSeasonalDriver = false;
-                    }
+            if (this.logedInUser.Role.RoleID === 3) {
+                if (this.logedInUser.IsSeasonal) {
+                    this.isSeasonalDriver = true;
+                } else {
+                    this.isSeasonalDriver = false;
                 }
             }
+        }
     }
+
+
 
     loadTripData() {
         this.service.getTripDetails(this.tripId).subscribe((res) => {
@@ -129,7 +120,7 @@ export class DetailsComponent implements OnInit {
         this.service.getTripDetailByDate(this.tripId).subscribe((res) => {
             this.loadUnitReconciliation();
             this.ticketDetails = res;
-            this.tripData = res.Tripdetail[0];            
+            this.tripData = res.Tripdetail[0];
             this.tripData.TripTicketList.forEach(ticket => {
                 ticket.TicketNumber = +ticket.TicketNumber;
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
@@ -141,11 +132,8 @@ export class DetailsComponent implements OnInit {
                 if (ticket.TicketTypeID === 30) { return; }
                 ticket.ChargeAmount = (ticket.checkCashAmount === 0 && ticket.PaymentTypeID === 19) ? ticket.amount : (ticket.ChargeAmount) || 0;
                 // this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
-                if (ticket.TicketTypeID !== 27) {
-                    this.ticketTotal.invoiceTotal = this.fpArithmetic('+', this.ticketTotal.invoiceTotal, ticket.amount);
-                } else {
-                    this.ticketTotal.invoiceTotal = this.fpArithmetic('+', this.ticketTotal.invoiceTotal, ticket.amount || 0);
-                }
+                
+                this.ticketTotal.invoiceTotal = +this.ticketTotal.invoiceTotal.fpArithmetic("+", ticket.amount || 0)
                 this.ticketTotal.totalCash += ticket.CashAmount || 0;
                 this.ticketTotal.totalCheck += ticket.CheckAmount || 0;
                 this.ticketTotal.totalCharge += ticket.ChargeAmount || 0;
@@ -247,7 +235,7 @@ export class DetailsComponent implements OnInit {
 
     unitReconChange(item) {
         //item.OverShort = (+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale + +item.GoodReturns) - (+item.Load1Quantity);
-        item.OverShort =   (+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale )-(+item.Load1Quantity + +item.GoodReturns + + item.SaleReturnQty);
+        item.OverShort = (+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale) - (+item.Load1Quantity + +item.GoodReturns + + item.SaleReturnQty);
         this.calculateTotalUnitReconcilation();
     }
 
