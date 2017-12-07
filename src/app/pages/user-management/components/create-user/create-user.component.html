@@ -147,7 +147,7 @@
               <div style="width:100%;margin-top: 10px;max-height:80px;overflow:auto;">
                 <ul style="padding-left: 15px;">
                    <li *ngFor="let brannch of selectedBranch" >
-                      {{brannch.label}} <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' ||user.RoleID == '6')" class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
+                      {{brannch.label}} <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' ||user.RoleID == '5')" class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
                       <span class="tooltiptext">Remove</span>
                    </i>
                  </li>

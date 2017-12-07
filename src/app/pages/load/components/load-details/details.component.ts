@@ -172,10 +172,8 @@ export class DetailsComponent implements OnInit {
         if (!this.activatedRouteObject['LoadMode']) {
             this.loadData.loaddetails = this.newlyAddedProduct;
             this.service.createLoadData(this.loadData).subscribe((res) => {
-
                 this.notification.success("Success", "Load created successfully");
                 this.router.navigate(['/pages/load/list']);
-                console.log(this.loadData);
             }, (err) => {
                 this.checkValidity = true;
                 err = JSON.parse(err._body);
@@ -185,10 +183,8 @@ export class DetailsComponent implements OnInit {
             let newLoadList = this.loadList.concat(this.newlyAddedProduct);
             this.loadData.loaddetails = newLoadList;
             this.service.saveLoadDetails(this.loadId, this.loadData).subscribe((res) => {
-
                 this.notification.success("Success", "Load updated successfully");
                 this.router.navigate(['/pages/load/list']);
-                console.log(this.loadData);
             }, (err) => {
                 this.checkValidity = true;
                 err = JSON.parse(err._body);

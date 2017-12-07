@@ -40,6 +40,44 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     tempUserBranch: any = [];
     distributorsAndCopackers: any = [];
     //cacheDistributor: any = [];
+    
+
+    @Input() isNewUser: boolean;
+    @Input() formIsDirty: boolean;
+    @Input()
+    get roles(): any {
+        return this._roles;
+    }
+    set roles(values) {
+        if (!values) { return; }
+        this._roles = values;
+        this.filterRoles();
+    }
+    @Input()
+    get action(): any {
+        return this;
+    }
+    set action(values) {
+        if (values === '') { return; }
+        this.actionName = values;
+        if (values == 'create') {
+            this.user.IsActive = true;
+        }
+        if (values == 'edit') {
+            this.isFormValid = true;
+        }
+    }
+
+    @Input()
+    set mIOpen(val: boolean) {
+        if (!val) { this.clearInternalUserSearch(); }
+    }
+
+    @Input() branches: any;
+    @Input() userDetails: any;
+    @Input() cacheDistributor: any;
+    @Input() isDistributorAdmin: boolean;
+
     @Input()
     get user(): any {
         return this._user;
@@ -51,7 +89,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         // to empty the role field if discard or back button is clicked without saving data.
         this._user = val;
         this.populatateRoleList();
-        if (this.action == 'edit') {
+        if (this.actionName == 'edit') {
             val.RoleID = val.RoleID || this._user.RoleID;
             this.roleChange(val.RoleID);
         } else {
@@ -91,42 +129,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
         this.pushBranches();
     }
-
-    @Input() isNewUser: boolean;
-    @Input() formIsDirty: boolean;
-    @Input()
-    get roles(): any {
-        return this._roles;
-    }
-    set roles(values) {
-        if (!values) { return; }
-        this._roles = values;
-        this.filterRoles();
-    }
-    @Input()
-    get action(): any {
-        return this;
-    }
-    set action(values) {
-        if (values === '') { return; }
-        this.actionName = values;
-        if (values == 'create') {
-            this.user.IsActive = true;
-        }
-        if (values == 'edit') {
-            this.isFormValid = true;
-        }
-    }
-
-    @Input()
-    set mIOpen(val: boolean) {
-        if (!val) { this.clearInternalUserSearch(); }
-    }
-
-    @Input() branches: any;
-    @Input() userDetails: any;
-    @Input() cacheDistributor: any;
-    @Input() isDistributorAdmin: boolean;
     @Output() onSaveUser: EventEmitter<any> = new EventEmitter();
     @Output() onUpdateUser: EventEmitter<any> = new EventEmitter();
     @Output() closeNewUser: EventEmitter<any> = new EventEmitter();
@@ -386,7 +388,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
         }
        // if (this.action == 'edit') {
-            this.transformation();
+        //    this.transformation();
        // }
         this.pushBranches();
         this.getDistributor();
