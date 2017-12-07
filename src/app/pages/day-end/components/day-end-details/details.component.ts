@@ -86,6 +86,17 @@ export class DetailsComponent implements OnInit {
         return statusText;
     }
 
+    fpArithmetic = function (op, x, y) {
+        var n = {
+                '*': x * y,
+                '-': x - y,
+                '+': x + y,
+                '/': x / y
+            }[op];        
+    
+        return Math.round(n * 100)/100;
+    };
+
     ngOnInit() {
         const userId = localStorage.getItem('userId') || '';
         this.logedInUser = this.userService.getUser();
@@ -129,7 +140,12 @@ export class DetailsComponent implements OnInit {
                 //ticket.amount = (ticket.IsClosed)?ticket.amount + (ticket.checkCashAmount - ticket.amount):ticket.amount;
                 if (ticket.TicketTypeID === 30) { return; }
                 ticket.ChargeAmount = (ticket.checkCashAmount === 0 && ticket.PaymentTypeID === 19) ? ticket.amount : (ticket.ChargeAmount) || 0;
-                this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
+                // this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
+                if (ticket.TicketTypeID !== 27) {
+                    this.ticketTotal.invoiceTotal = this.fpArithmetic('+', this.ticketTotal.invoiceTotal, ticket.amount);
+                } else {
+                    this.ticketTotal.invoiceTotal = this.fpArithmetic('+', this.ticketTotal.invoiceTotal, ticket.amount || 0);
+                }
                 this.ticketTotal.totalCash += ticket.CashAmount || 0;
                 this.ticketTotal.totalCheck += ticket.CheckAmount || 0;
                 this.ticketTotal.totalCharge += ticket.ChargeAmount || 0;
