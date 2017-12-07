@@ -62,17 +62,18 @@ export class LoadComponent implements OnInit {
         if (this.filter.userBranch === null) {
             return;
         }
-        if(this.logedInUser.Role.RoleID === 3){
-            this.filter.userDriver = this.logedInUser.UserId;
-            this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
-        }        
+         
         this.service.getDriverByBranch(this.filter.userBranch, true).subscribe(res => {
             let objDriver = [];
             res = res || [];
             objDriver = this.service.transformOptionsReddySelect(res, 'UserId', 'UserName');
-
             this.drivers = objDriver;
+            if(this.logedInUser.Role.RoleID === 3){
+                this.filter.userDriver = this.logedInUser.UserId;
+                this.userChangeHandler();
+            }      
         });
+        
     }
     branchChangeHandler(byType: any = '') {
         //this.searchObj.UserId = null;
@@ -85,8 +86,6 @@ export class LoadComponent implements OnInit {
     userChangeHandler() {
         this.getBranchName();
         this.getDriverName();
-       
-        
         this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
     }
     getBranchName(){
@@ -111,6 +110,9 @@ export class LoadComponent implements OnInit {
                 }
             });
             this.filter.tripCode = fLoad.length;
+        }else{
+        
+            this.filter.tripCode = 0;
         }
         this.filteredLoads = fLoad;
     }
@@ -154,6 +156,7 @@ export class LoadComponent implements OnInit {
     }
     
     goToDetails(loadID){ 
+        debugger;
         if(loadID!==''){
             this.filter.LoadID = loadID;
             this.retainFilters('');
