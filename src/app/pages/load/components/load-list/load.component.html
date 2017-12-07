@@ -2,26 +2,33 @@
     <div class="col-md-12">
         <ba-card cardTitle="Loads" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="head-button-container">
-                    <button [disabled]="!filter.userBranch  || !filter.userDriver || filteredLoads.length >=5" class="btn btn-danger pull-right" (click)="goToDetails('');" >Add Load</button>
+                <button [disabled]="!filter.userBranch  || !filter.userDriver || filteredLoads.length >=5" class="btn btn-danger pull-right"
+                    (click)="goToDetails('');">Add Load</button>
             </div>
             <div class="row">
                 <div class="col-sm-3">
-                    <label><b> Select Date </b></label>
+                    <label>
+                        <b> Select Date </b>
+                    </label>
                     <div class="input-group">
                         <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="dateChangeHandler()"
-                        [maxDate]="todaysDate"  ngbDatepicker #d="ngbDatepicker" disabled>
-                        <button class="input-group-addon" (click)="d.toggle()"  type="button">
+                            [maxDate]="todaysDate" ngbDatepicker #d="ngbDatepicker" disabled>
+                        <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-4">
-                    <label><b>Select Branch</b></label>
+                    <label>
+                        <b>Select Branch</b>
+                    </label>
                     <reddy-select [options]="allBranches" [(selected)]="filter.userBranch" (selectedChange)="branchChangeHandler()"></reddy-select>
                 </div>
                 <div class="col-sm-3">
-                    <label><b>Select Driver</b></label>
+                    <label>
+                        <b>Select Driver</b>
+                    </label>
                     <reddy-select [options]="drivers" [(selected)]="filter.userDriver" (selectedChange)="userChangeHandler();"></reddy-select>
                 </div>
             </div>
@@ -29,52 +36,80 @@
                 <table class="table table-striped">
                     <thead class="tableHeader">
                         <tr>
-                            <th>Actions</th>
-                            <th >
+                            <th width="5%">Actions</th>
+                            <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'BranchName';customer.isAsc=!customer.isAsc;">
                                     Branch
-                                     <i *ngIf="(customer.sortField === 'BranchName')" [ngClass]="(customer.isAsc && customer.sortField === 'BranchName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'BranchName')" [ngClass]="(customer.isAsc && customer.sortField === 'BranchName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'DriverName';customer.isAsc=!customer.isAsc;">
                                     Driver
-                                     <i *ngIf="(customer.sortField === 'DriverName')" [ngClass]="(customer.isAsc && customer.sortField === 'DriverName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'DriverName')" [ngClass]="(customer.isAsc && customer.sortField === 'DriverName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
-                            <th class="textAlignCenter">
+                            <th width="10%" class="textAlignCenter">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'TripCode';customer.isAsc=!customer.isAsc;">
                                     Trip #
-                                     <i *ngIf="(customer.sortField === 'TripCode')" [ngClass]="(customer.isAsc && customer.sortField === 'TripCode' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'TripCode')" [ngClass]="(customer.isAsc && customer.sortField === 'TripCode' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
-                           
+                            <th width="10%" class="textAlignCenter">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'TripID';customer.isAsc=!customer.isAsc;">
+                                    Trip Code
+                                    <i *ngIf="(customer.sortField === 'TripID')" [ngClass]="(customer.isAsc && customer.sortField === 'TripID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                </span>
+                            </th>
+                            <th width="10%" class="textAlignCenter">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'TripStatus';customer.isAsc=!customer.isAsc;">
+                                    Trip Status
+                                    <i *ngIf="(customer.sortField === 'TripStatus')" [ngClass]="(customer.isAsc && customer.sortField === 'TripStatus' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                </span>
+                            </th>
+
                         </tr>
                     </thead>
-                    <tbody>                        
-                    <tr *ngFor="let item of filteredLoads|sort:customer.sortField:customer.isAsc">
-                            <td class="table-id" style="cursor: pointer">                                
-                              
-                                <i class="ion-edit custom-tooltip-ion"
-                                    (click)="goToDetails(item.LoadID);" style="margin-right: 5px">
+                    <tbody>
+                        <tr *ngFor="let item of filteredLoads|sort:customer.sortField:customer.isAsc">
+                            <td class="table-id" style="cursor: pointer">
+
+                                <i class="ion-edit custom-tooltip-ion" *ngIf="!item.TripStatus" (click)="goToDetails(item.LoadID);" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
+                                </i>
+                                <i *ngIf="item.TripStatus" class="ion-eye custom-tooltip-ion" (click)="goToDetails(item.LoadID);"
+                                    style="margin-right: 5px">
+                                    <span class="tooltiptext">View</span>
                                 </i>
                             </td>
 
-                           
+
                             <td>{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
                             <td class="textAlignCenter">{{item.TripCode}}</td>
-                            
+                            <td class="textAlignCenter">
+                                <span *ngIf="item.TripID!==null">{{item.TripID}}</span>
+                            </td>
+                            <td class="textAlignCenter">
+                                <span *ngIf="item.TripID!==null">
+                                    <span *ngIf="item.TripStatus">Closed</span>
+                                    <span *ngIf="!item.TripStatus">Open</span>
+                                </span>
+                            </td>
+
                         </tr>
                         <tr *ngIf="filteredLoads.length===0 || allBranches.length === 0  || drivers.length ===0" [hidden]="showSpinner">
-                            <th class="text-center" colspan="4"> No data found </th>
+                            <th class="text-center" colspan="6"> No data found </th>
                         </tr>
                     </tbody>
                 </table>
 
             </div>
-            <div class='spinnerContainer' [hidden]='!showSpinner'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+            <div class='spinnerContainer' [hidden]='!showSpinner'>
+                <a>
+                    <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+                </a>
+            </div>
         </ba-card>
     </div>
 </div>
