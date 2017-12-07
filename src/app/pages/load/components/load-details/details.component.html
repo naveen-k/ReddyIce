@@ -108,21 +108,21 @@
                                                 <tr *ngFor="let item of loadList">
                                                    <td> {{item.ProductName}}</td>
                                                     <td >
-                                                        <input [disabled]='item.Load1 !==null' [(ngModel)]='item.Load1' class="form-control small-input"
+                                                        <input [disabled]="item.disabled['Load1']" [(ngModel)]='item.Load1' class="form-control small-input"
                                                             type="text" numberOnly >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]='item.Load2 !=null' [(ngModel)]='item.Load2' class="form-control small-input dollar-input"
+                                                        <input [disabled]="item.disabled['Load2']" [(ngModel)]='item.Load2' class="form-control small-input dollar-input"
                                                             type="text" numberOnly >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]='item.Load3 !=null' [(ngModel)]='item.Load3' class="form-control small-input"
+                                                        <input [disabled]="item.disabled['Load3']" [(ngModel)]='item.Load3' class="form-control small-input"
                                                             type="text" numberOnly >
                                                     </td>
                                                     <td >
-                                                        <input [disabled]='item.Load4 !=null' [(ngModel)]='item.Load4' class="form-control small-input"
+                                                        <input [disabled]="item.disabled['Load4']" [(ngModel)]='item.Load4' class="form-control small-input"
                                                             type="text" numberOnly >
                                                             
                                                     </td>
