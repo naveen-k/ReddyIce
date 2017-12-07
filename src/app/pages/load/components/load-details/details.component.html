@@ -1,11 +1,14 @@
 <div class="row">
         <div class=" col-md-12">
             <ba-card cardTitle="Load Detail" baCardClass="with-scroll" class="smart-table-container" #customer>
-                <div class="head-button-container">
+                <div class="head-button-container" *ngIf="!loadData?.TripStatus">
                     <button [disabled]="!checkValidity" class="btn btn-danger pull-right" (click)="saveLoad()">Submit</button>
                     <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='loadData.TripStatusID == 24 || loadData.TripStatusID == 25'
                         (click)="saveReconciliation(23)">Save</button>-->
                     <button class="btn btn-danger pull-right add-margin-right" (click)="backToList()">Back</button>
+                </div>
+                <div class="head-button-container" *ngIf="loadData?.TripStatus">
+                    <button class="btn btn-danger pull-right" (click)="backToList()">Back</button>
                 </div>
                 <div class="row add-margin-bottom">
     
@@ -47,12 +50,12 @@
                                                 </td>
                                                 <td>
                                                     <span>Issued: </span>
-                                                    <input [(ngModel)]='loadData.PalletsIssued' style="width:70px"
+                                                    <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.PalletsIssued' style="width:70px"
                                                         type="text" numberOnly>
                                                 </td>
                                                 <td>
                                                     <span>Truck Number: </span>
-                                                    <input [(ngModel)]='loadData.TruckNumber'  style="width:70px"
+                                                    <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.TruckNumber'  style="width:70px"
                                                         type="text" numberOnly>
                                                 </td>
                                             </tr>
@@ -62,7 +65,7 @@
                                 </div>
     
                                 <div class="col-sm-6">
-                                    <button [disabled]="hideAddProduct" class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
+                                    <button *ngIf="!loadData?.TripStatus" [disabled]="hideAddProduct" class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
                                 </div>
                                 <div class="col-md-12 page-header">
     
@@ -108,21 +111,21 @@
                                                 <tr *ngFor="let item of loadList">
                                                    <td> {{item.ProductName}}</td>
                                                     <td >
-                                                        <input [disabled]="item.disabled['Load1']" [(ngModel)]='item.Load1' class="form-control small-input"
+                                                        <input [disabled]="item.disabled['Load1'] || loadData?.TripStatus" [(ngModel)]='item.Load1' class="form-control small-input"
                                                             type="text" numberOnly >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]="item.disabled['Load2']" [(ngModel)]='item.Load2' class="form-control small-input dollar-input"
+                                                        <input [disabled]="item.disabled['Load2'] || loadData?.TripStatus" [(ngModel)]='item.Load2' class="form-control small-input dollar-input"
                                                             type="text" numberOnly >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]="item.disabled['Load3']" [(ngModel)]='item.Load3' class="form-control small-input"
+                                                        <input [disabled]="item.disabled['Load3'] || loadData?.TripStatus" [(ngModel)]='item.Load3' class="form-control small-input"
                                                             type="text" numberOnly >
                                                     </td>
                                                     <td >
-                                                        <input [disabled]="item.disabled['Load4']" [(ngModel)]='item.Load4' class="form-control small-input"
+                                                        <input [disabled]="item.disabled['Load4'] || loadData?.TripStatus" [(ngModel)]='item.Load4' class="form-control small-input"
                                                             type="text" numberOnly >
                                                             
                                                     </td>
