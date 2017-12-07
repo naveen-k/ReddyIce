@@ -2,7 +2,7 @@
         <div class=" col-md-12">
             <ba-card cardTitle="Load Detail" baCardClass="with-scroll" class="smart-table-container" #customer>
                 <div class="head-button-container" *ngIf="!loadData?.TripStatus">
-                    <button [disabled]="!checkValidity" class="btn btn-danger pull-right" (click)="saveLoad()">Submit</button>
+                    <button [disabled]="!checkValidity || hideAddProduct" class="btn btn-danger pull-right" (click)="saveLoad()">Submit</button>
                     <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='loadData.TripStatusID == 24 || loadData.TripStatusID == 25'
                         (click)="saveReconciliation(23)">Save</button>-->
                     <button class="btn btn-danger pull-right add-margin-right" (click)="backToList()">Back</button>

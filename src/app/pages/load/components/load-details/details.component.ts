@@ -111,7 +111,16 @@ export class DetailsComponent implements OnInit {
     removeProduct(index) {
         let filter= this.newlyAddedProduct.filter((item,i)=>i != index);
         this.newlyAddedProduct=filter;
-        this.hideAddProduct = false;
+        let count=0;
+        if(this.newlyAddedProduct.length > 0){
+            this.newlyAddedProduct.map(item=>{
+                if(Object.keys(item).length <=0 ){
+                    count+=1;
+                }
+            });
+        }
+        this.hideAddProduct = count > 0 ? true : false;
+        (this.loadList.length <=0 && this.newlyAddedProduct.length <=0) && (this.checkValidity = false);
     }
     addProductRow() {
         this.isNewlyAdded = true;
