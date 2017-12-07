@@ -73,7 +73,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.userBranch = [1];
         }
         else {
-   
+
             this.addedBranches = this.user.Branch;
             var i: number = 0;
             if (this.userBranch) { this.userBranch.length = 0; }
@@ -183,11 +183,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         const user = this.searchedUsers[_user];
         console.log(user);
         if (!user) { return; }
-        this.user.FirstName = user.displayname||'';    //[0].split(' ')[0] || '';
-        this.user.LastName = user.displayname||''; //? user.displayname[0].split(' ')[1] : '';
-        this.user.UserName = user.cn||''; //[0] || '';
-        this.user.EmailID = user.mail ? user.mail:''; //[0] : '';
-        this.user.Phone=user.phone ? user.phone : '';
+        this.user.FirstName = user.displayname || '';    //[0].split(' ')[0] || '';
+        this.user.LastName = user.displayname || ''; //? user.displayname[0].split(' ')[1] : '';
+        this.user.UserName = user.cn || ''; //[0] || '';
+        this.user.EmailID = user.mail ? user.mail : ''; //[0] : '';
+        this.user.Phone = user.phone ? user.phone : '';
         this.riUserName = _user;
         this.selectedSearchUser = true;
         this.isFormValid = true;
@@ -362,14 +362,15 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     roleChange(roleID) {
         roleID = roleID + '';
         this.user.DistributorMasterID = 0;
-        this.userBranch = [];
-
+        this.userBranch = [];        
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5' || roleID === '7') {
             if (roleID === '2') {
                 this.showIseries = true;
             } else if (roleID === '4' || roleID === '5' || roleID === '6' || roleID === '7') {
                 this.showIseries = false;
             }
+        }
+        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5') {
             this.cBranches = [];
             this.cBranches = [{ value: '1', label: '1 - All Branches', data: { BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true } }];
             this.userBranch = [1];
@@ -384,7 +385,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.cBranches.shift();
             }
         }
-        this.transformation();
+       // if (this.action == 'edit') {
+            this.transformation();
+       // }
         this.pushBranches();
         this.getDistributor();
 
@@ -552,8 +555,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         //     //     (ind > -1);
         //     // })
         //     //  }
-          console.log(this.selectedBranch);
-          console.log(this.userBranch);
+        console.log(this.selectedBranch);
+        console.log(this.userBranch);
 
         // }
     }

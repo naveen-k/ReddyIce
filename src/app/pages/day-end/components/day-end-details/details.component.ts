@@ -219,7 +219,7 @@ export class DetailsComponent implements OnInit {
             if (Array.isArray(res)) {
                 this.unitReconciliation = res;
                 this.unitReconciliation.forEach(element => {
-                    element['Load1Quantity'] = this.tripData.TripStatusID !== 25 ? element['LoaderLoad'] : element['Load1Quantity'] || element['Load'];
+                    element['Load1Quantity'] = element['Load1Quantity'] || element['Load'];
                     element['ReturnQuantity'] = element['ReturnQuantity'] || element['Returns'];
                     element['DamageQuantity'] = element['DamageQuantity'] || element['TruckDamage'];
                     element['CustomerDamageDRV'] = element['CustomerDamageDRV'] || element['CustomerDamage'];
