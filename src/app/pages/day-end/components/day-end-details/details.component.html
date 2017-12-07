@@ -9,8 +9,9 @@
                 *ngIf='((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || logedInUser.Role.RoleID == 2 || logedInUser.Role.RoleID == 1)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24)'
                     (click)="saveReconciliation(25);">Approve</button>
                <!-- <button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>-->
-                <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                    (click)="saveReconciliation(23)">Save</button>
+               <!-- Save button is not needed anymore, as trip will submit from HH-->
+                <!-- <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
+                    (click)="saveReconciliation(23)">Save</button> -->
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row add-margin-bottom">
@@ -71,7 +72,7 @@
                             <div class="col-md-6 padding-eater">
                             </div>
                             <div class="col-md-6 pull-right">
-                                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
+                                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25||isSeasonalDriver' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
                                     [queryParams]="{branchId:tripData.BranchID, driverId:tripData.UserID, isDistributor:tripData.DistributorMasterID, sdate:tripData.TripStartDate, edate:tripData.TripEndDate}">Create Ticket</button>
                             </div>
                             <div class="col-md-12 page-header">

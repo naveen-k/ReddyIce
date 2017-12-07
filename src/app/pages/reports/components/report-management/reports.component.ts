@@ -138,6 +138,13 @@ export class ReportsComponent implements OnInit {
             this.isExternalDriver = true;
         }
 
+        if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
+            this.filter.userType='internal';
+            this.isInternalDriver = true;
+            this.user.IsRIInternal = true;
+            this.user.IsDistributor = false;
+          }
+    
         this.userTypeChangeHandler();
         this.getCustomers();
     }
