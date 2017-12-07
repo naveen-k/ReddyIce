@@ -96,6 +96,7 @@ export class DetailsComponent implements OnInit {
             this.loadData.PalletsIssued = res.PalletsIssued;
             this.loadData.TruckNumber = res.TruckNumber;
             this.currentTripCode = res.TripCode;
+            this.loadData.TripStatus = res.TripStatus;
             this.loadLoadData();
         });
     }
@@ -103,6 +104,11 @@ export class DetailsComponent implements OnInit {
 
         this.loadProduct();
 
+    }
+    removeProduct(index) {
+        let filter= this.newlyAddedProduct.filter((item,i)=>i != index);
+        this.newlyAddedProduct=filter;
+        this.hideAddProduct = false;
     }
     addProductRow() {
         this.isNewlyAdded = true;
@@ -194,6 +200,7 @@ export class DetailsComponent implements OnInit {
                     if (this.filter.userBranch === load.BranchID && this.filter.userDriver === load.DriverID && load.LoadID === loadId) {
                         this.loadData.PalletsIssued = load.PalletsIssued;
                         this.loadData.TruckNumber = load.TruckNumber;
+                        this.loadData.TripStatus = load.TripStatus;
                         this.currentTripCode = load.TripCode;
                     }
                 });

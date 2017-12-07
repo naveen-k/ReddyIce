@@ -46,17 +46,17 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <span>Pallets </span>
+                                                    <span><b>Pallets</b> </span>
                                                 </td>
                                                 <td>
                                                     <span>Issued: </span>
-                                                    <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.PalletsIssued' style="width:70px"
-                                                        type="text" numberOnly>
+                                                    <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.PalletsIssued' style="width:70px;text-align:right;"
+                                                    type="number" min="0">
                                                 </td>
                                                 <td>
                                                     <span>Truck Number: </span>
-                                                    <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.TruckNumber'  style="width:70px"
-                                                        type="text" numberOnly>
+                                                    <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.TruckNumber'  style="width:70px;text-align:right;"
+                                                    type="number" min="0">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -97,13 +97,12 @@
                                                             <!-- <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                         </span>
                                                     </th>
-                                                    <th class="text-center">
+                                                    <th class="text-center" colspan="2">
                                                         <span>
                                                             Load 4
                                                             <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                         </span>
                                                     </th>
-                                                       
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -111,27 +110,28 @@
                                                 <tr *ngFor="let item of loadList">
                                                    <td> {{item.ProductName}}</td>
                                                     <td >
-                                                        <input [disabled]="item.disabled['Load1'] || loadData?.TripStatus" [(ngModel)]='item.Load1' class="form-control small-input"
-                                                            type="text" numberOnly >
+                                                        <input [disabled]="item.disabled['Load1'] || loadData?.TripStatus" [(ngModel)]='item.Load1' class="form-control small-input text-align-right"
+                                                         type="number" min="0" >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]="item.disabled['Load2'] || loadData?.TripStatus" [(ngModel)]='item.Load2' class="form-control small-input dollar-input"
-                                                            type="text" numberOnly >
+                                                        <input [disabled]="item.disabled['Load2'] || loadData?.TripStatus" [(ngModel)]='item.Load2' class="form-control small-input dollar-input text-align-right"
+                                                        type="number" min="0" >
                                                     </td>
                                                    
                                                     <td >
-                                                        <input [disabled]="item.disabled['Load3'] || loadData?.TripStatus" [(ngModel)]='item.Load3' class="form-control small-input"
-                                                            type="text" numberOnly >
+                                                        <input [disabled]="item.disabled['Load3'] || loadData?.TripStatus" [(ngModel)]='item.Load3' class="form-control small-input text-align-right"
+                                                        type="number" min="0" >
                                                     </td>
-                                                    <td >
-                                                        <input [disabled]="item.disabled['Load4'] || loadData?.TripStatus" [(ngModel)]='item.Load4' class="form-control small-input"
-                                                            type="text" numberOnly >
+                                                    <td colspan="2">
+                                                        <input [disabled]="item.disabled['Load4'] || loadData?.TripStatus" [(ngModel)]='item.Load4' class="form-control small-input text-align-right"
+                                                            type="number" min="0" >
                                                             
                                                     </td>
                                                    
                                                 </tr>
                                             </tbody>
+
                                             <tbody *ngIf="isNewlyAdded" class="add-border">
                                                     <tr *ngFor="let item of newlyAddedProduct; let i = index">
                                                         <td >
@@ -144,36 +144,41 @@
                                                         
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load1'
-                                                                class="form-control small-input"
-                                                                type="text" numberOnly>
+                                                                class="form-control small-input text-align-right"
+                                                                type="number" min="0">
                                                         </td>
                                                       
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load2'
-                                                                 class="form-control small-input dollar-input"
-                                                                 type="text" numberOnly>
+                                                                 class="form-control small-input dollar-input text-align-right"
+                                                                 type="number" min="0">
                                                         </td>
                                                        
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load3'
-                                                                 class="form-control small-input"
-                                                                 type="text" numberOnly>
+                                                                 class="form-control small-input text-align-right"
+                                                                 type="number" min="0">
                                                         </td>
         
         
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load4'
-                                                                 class="form-control small-input"
-                                                                 type="text" numberOnly>
-                                                                <input type="hidden" [(ngModel)]="item.LoadID" [value]="loadId">
+                                                                 class="form-control small-input text-align-right"
+                                                                 type="number" min="0">
+                                                                
                                                         </td>
-                                                        
-                                                    </tr>
-                                                    <tr *ngIf="!newlyAddedProduct.length">
-                                                        <th class="text-center" colspan="12"> No data found </th>
+                                                        <td width="0%">
+                                                                <i class="ion-trash-a custom-tooltip-ion" (click)="removeProduct(i)">
+                                                                        <span class="tooltiptext">Delete</span>
+                                                                </i>
+                                                                </td>
                                                     </tr>
                                                 </tbody>
-                                        
+                                        <tbody>
+                                            <tr *ngIf="!newlyAddedProduct.length && !loadList.length">
+                                                <th class="text-center" colspan="13"> No data found </th>
+                                            </tr>
+                                        </tbody>
                                         </table>
                                     </div>
                                 </div>
