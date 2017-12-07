@@ -20,7 +20,7 @@ export class ReportService extends SharedService {
             });
     }
     getBranches() {
-        return this.http.get(`api/branch`)
+        return this.http.get(`api/reportbranch`)
             .map((res) => res.json()).map((res) => {
                 return res;
             });

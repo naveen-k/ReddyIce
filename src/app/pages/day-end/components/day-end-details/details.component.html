@@ -312,17 +312,17 @@
                                                 <td width="21%" style="text-align:left;">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || !item.IsEditable' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
                                                         type="number" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker)|| tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker)|| tripData.TripStatusID == 25 || !tripData.IsClosed || !item.IsEditable' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
                                                         type="number" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || !item.IsEditable' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
                                                         type="number" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
@@ -331,7 +331,7 @@
                                                 <td width="5%">{{item.GoodReturns?item.GoodReturns:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 ||!tripData.IsClosed || !item.IsEditable' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
                                                         type="number" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td class="textAlignCenter" width="7%">{{item.OverShort}}</td>

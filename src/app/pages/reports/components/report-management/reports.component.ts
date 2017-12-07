@@ -181,6 +181,7 @@ export class ReportsComponent implements OnInit {
     }
 
     getAllBranches() {
+        debugger
         this.reportService.getBranches().subscribe((res) => {
             // res.shift();
             // res.unshift({ BranchID: 1, BranchName: 'All Branches' });
@@ -296,7 +297,7 @@ export class ReportsComponent implements OnInit {
             this.viewReport = true;
             setTimeout(function () {
                 $('#loader').hide();
-            }, 5000);
+            }, 10000);
 
             // hack to check if start date is not greater than end date
             if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
