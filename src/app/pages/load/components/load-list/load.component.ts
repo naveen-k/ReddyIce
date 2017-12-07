@@ -4,7 +4,8 @@ import { LoadService } from '../../load.service';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
+
 
 @Component({
     templateUrl: './load.component.html',
@@ -18,12 +19,9 @@ export class LoadComponent implements OnInit {
     branches: Array<any> = [];
     allBranches: Array<any> = [];
     drivers: Array<any> = [];
-    distributors: Array<any> = [];
     logedInUser: any = {};
     todaysDate: any;
-    totalCreditAmount: any = 0;
     selectedDate: any;
-    userSubTitle: string = '';
     showSpinner: boolean = false;
     loadFilterOption: any = {
         uId: '0',
@@ -37,9 +35,10 @@ export class LoadComponent implements OnInit {
     };
     constructor(private service: LoadService, private userService: UserService,
         protected notification: NotificationsService,
-        protected activatedRoute: ActivatedRoute, ) { }
+        protected activatedRoute: ActivatedRoute,protected router: Router ) { }
 
     ngOnInit() {
+        this.retainFilters('reset');
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
@@ -136,10 +135,34 @@ export class LoadComponent implements OnInit {
     dateChangeHandler() {
         this.showSpinner = true;
         this.selectedDate = this.service.formatDate(this.filter.selectedDate);
-       // this.filter.userBranch = 0;
-       // this.filter.userDriver = 0;
         this.getLoads();
 
+    }
+    retainFilters(reset:any =''){
+        if(reset!==''){
+            if(sessionStorage.getItem("LoadFilter")){
+                sessionStorage.removeItem("LoadFilter");
+            }
+            
+        } else {
+            sessionStorage.setItem("LoadFilter",JSON.stringify(this.filter));
+            
+        }
+       
+    }
+    
+    goToDetails(loadID){ 
+        if(loadID!==''){
+            this.filter.LoadID = loadID;
+            this.retainFilters('');
+            this.router.navigate(['/pages/load/detail',loadID]);
+        } else{
+            this.retainFilters('');
+            this.router.navigate(['/pages/load/detail']);
+        }
+       
+       
+        
     }
 
 }
