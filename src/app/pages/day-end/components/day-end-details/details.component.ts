@@ -207,8 +207,8 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.CreditCardAmountTotal = (CTotal === null) ? `0.00` : CTotal.toString().indexOf('.') < 0 ? `${CTotal}.00` : CTotal;
         this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
-        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00` : this.ticketDetails.Total.Tolls;
-        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00` : this.ticketDetails.Total.MoneyOrderFee;
+        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00`:this.ticketDetails.Total.Tolls.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Tolls}.00` : this.ticketDetails.Total.Tolls;
+        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00`: this.ticketDetails.Total.MoneyOrderFee.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.MoneyOrderFee}.00` : this.ticketDetails.Total.MoneyOrderFee;
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
@@ -266,6 +266,7 @@ export class DetailsComponent implements OnInit {
         console.log(this.newlyAddedProduct);
         // return false;
         const total = this.ticketDetails.Total;
+
         const cashRecon = {
             TripID: this.tripId,
             ActualCash: total.actualdepositcash,
@@ -273,7 +274,9 @@ export class DetailsComponent implements OnInit {
             ActualCoin: total.ActualCoin,
             Misc: total.Misc,
             TripStatusID: statusId,
-            Comments: total.Comments
+            Comments: total.Comments,
+            Tolls:total.Tolls,
+            MoneyOrderFee:total.MoneyOrderFee,
         };
         this.service.saveRecociliation(cashRecon).subscribe((res) => {
             //  this.notification.success("Success", res);
