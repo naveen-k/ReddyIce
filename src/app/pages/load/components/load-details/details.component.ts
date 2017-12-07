@@ -29,8 +29,8 @@ export class DetailsComponent implements OnInit {
     loadList: any[] = [];
     deliveryDate: any = '';
     currentTripCode: number = 0;
-    activatedRouteObject :any;
-    checkValidity =false;
+    activatedRouteObject: any;
+    checkValidity = false;
     hideAddProduct = false;
     back: string;
     constructor(
@@ -40,37 +40,38 @@ export class DetailsComponent implements OnInit {
         private notification: NotificationsService,
         private modalService: NgbModal,
         protected router: Router,
-    ) { }
+    ) { 
+        
+    }
 
 
     ngOnInit() {
-        this.filter = this.service.getFilter();
-        if(!this.filter.userBranch || !this.filter.userDriver || !this.filter.selectedDate){
-            this.router.navigate(['/pages/load/list']);
-        } else {
-            const userId = localStorage.getItem('userId') || '';
-            this.userService.getUserDetails(userId).subscribe((response) => {
-                this.userRoleId = response.Role.RoleID;
-            });
-    
-            this.logedInUser = this.userService.getUser();
-           
-            this.deliveryDate = this.service.formatDate(this.filter.selectedDate);
-            this.currentTripCode = this.filter.tripCode;
-            this.loadId = +this.route.snapshot.params['loadId'];
-            this.activatedRouteObject = this.route.snapshot.data;
-            this.loadProduct();
-            if (this.activatedRouteObject['LoadMode']) {
-                this.loadLoadsDetails();
-                this.checkValidity =true;
-                this.activatedRouteObject['LoadMode'] ? '["../list"]' : '["../../list"]'
+        this.getFilters(function(){
+            if (!this.filter || !this.filter.userBranch || !this.filter.userDriver || !this.filter.selectedDate) {
+                this.router.navigate(['/pages/load/list']);
             } else {
-                this.currentTripCode = this.filter.tripCode + 1;
+                const userId = localStorage.getItem('userId') || '';
+                this.userService.getUserDetails(userId).subscribe((response) => {
+                    this.userRoleId = response.Role.RoleID;
+                });
+    
+                this.logedInUser = this.userService.getUser();
+    
+                this.deliveryDate = this.service.formatDate(this.filter.selectedDate);
+                this.currentTripCode = this.filter.tripCode;
+                this.loadId = this.filter.LoadID;//+this.route.snapshot.params['loadId'];
+                this.activatedRouteObject = this.route.snapshot.data;
+                this.loadProduct();
+                if (this.activatedRouteObject['LoadMode']) {
+                    this.loadLoadsDetails();
+                    this.checkValidity = true;
+                } else {
+                    this.currentTripCode = this.filter.tripCode + 1;
+                }
+                this.populateLoadData();
             }
-            this.populateLoadData();
-        }
+        });//this.service.getFilter();
         
-
     }
     populateLoadData() {
         this.loadData.BranchID = this.filter.userBranch;
@@ -82,6 +83,16 @@ export class DetailsComponent implements OnInit {
         this.service.getLoadDetails(this.loadId).subscribe((res) => {
             res = res || [];
             this.loadList = res.LoadDetails;
+            this.loadList = this.loadList.map(item => {
+                return Object.assign({
+                    disabled: {
+                        Load1: item.Load1 == null ? false : true,
+                        Load2: item.Load2 == null ? false : true,
+                        Load3: item.Load3 == null ? false : true,
+                        Load4: item.Load4 == null ? false : true
+                    }
+                }, item);
+            });
             this.loadData.PalletsIssued = res.PalletsIssued;
             this.loadData.TruckNumber = res.TruckNumber;
             this.currentTripCode = res.TripCode;
@@ -103,9 +114,9 @@ export class DetailsComponent implements OnInit {
     loadProduct() {
         this.service.getProductList(this.filter.userBranch).subscribe((res) => {
             // Filterout already listed products
-             this.productList = res.filter((product) => {
-                 return this.loadList.findIndex(pr => pr.ProductID === product.ProductID) < 0;
-             });
+            this.productList = res.filter((product) => {
+                return this.loadList.findIndex(pr => pr.ProductID === product.ProductID) < 0;
+            });
             //this.productList = res;
         }, (err) => {
 
@@ -139,7 +150,7 @@ export class DetailsComponent implements OnInit {
     }
     saveLoad() {
         this.checkValidity = false;
-        
+
         if (!this.activatedRouteObject['LoadMode']) {
             this.loadData.loaddetails = this.newlyAddedProduct;
             this.service.createLoadData(this.loadData).subscribe((res) => {
@@ -155,8 +166,8 @@ export class DetailsComponent implements OnInit {
         } else {
             let newLoadList = this.loadList.concat(this.newlyAddedProduct);
             this.loadData.loaddetails = newLoadList;
-            this.service.saveLoadDetails(this.loadId,this.loadData).subscribe((res) => {
-                
+            this.service.saveLoadDetails(this.loadId, this.loadData).subscribe((res) => {
+
                 this.notification.success("Success", "Load updated successfully");
                 this.router.navigate(['/pages/load/list']);
                 console.log(this.loadData);
@@ -166,7 +177,7 @@ export class DetailsComponent implements OnInit {
                 this.notification.error("Error", err.Message);
             });
         }
-        
+
     }
     resetField(index) {
         this.newlyAddedProduct[index].ProductID = 0;
@@ -198,8 +209,12 @@ export class DetailsComponent implements OnInit {
             }
         );
     }
-    backToList(){
+    backToList() {
         this.router.navigate(['/pages/load/list']);
+    }
+    getFilters(callback){
+        this.filter = JSON.parse(sessionStorage.getItem("LoadFilter"));
+        callback.call(this);
     }
 }
 
