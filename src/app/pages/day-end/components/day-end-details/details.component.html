@@ -71,7 +71,7 @@
                             <div class="col-md-6 padding-eater">
                             </div>
                             <div class="col-md-6 pull-right">
-                                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
+                                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25||isSeasonalDriver' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
                                     [queryParams]="{branchId:tripData.BranchID, driverId:tripData.UserID, isDistributor:tripData.DistributorMasterID, sdate:tripData.TripStartDate, edate:tripData.TripEndDate}">Create Ticket</button>
                             </div>
                             <div class="col-md-12 page-header">

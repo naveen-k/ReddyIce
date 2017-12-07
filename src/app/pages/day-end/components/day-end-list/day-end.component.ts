@@ -39,18 +39,22 @@ export class DayEndComponent implements OnInit {
             this.filter.type = 'internal';
         }
 
-
+        if (this.logedInUser.Role.RoleID === 3 && this.logedInUser.IsSeasonal) {
+            this.filter.type = 'internal';
+            this.logedInUser.IsRIInternal = true;
+            this.logedInUser.IsDistributor = false;
+        }
         //Check if LogedIn User is Seasonal Distributor or not 
 
-        if (!this.logedInUser.IsRIInternal) {
-            if (this.logedInUser.Role.RoleID === 3) {
-                if (this.logedInUser.IsSeasonal) {
-                    this.showBranchDropdown = true;
-                } else {
-                    this.showBranchDropdown = false;
-                }
-            }
-        }
+        // if (!this.logedInUser.IsRIInternal) {
+        //     if (this.logedInUser.Role.RoleID === 3) {
+        //         if (this.logedInUser.IsSeasonal) {
+        //             this.showBranchDropdown = true;
+        //         } else {
+        //             this.showBranchDropdown = false;
+        //         }
+        //     }
+        // }
 
 
         this.selectionchangeHandler();
@@ -73,7 +77,10 @@ export class DayEndComponent implements OnInit {
             let tmpDist = {};
             let tmpBranch = {};
             this.trips.forEach((trip) => {
-                if (trip.isDistributor && !this.showBranchDropdown) {
+                if (this.logedInUser && this.logedInUser.IsSeasonal && this.logedInUser.Role.RoleID === 3) {
+                    trip.isDistributor = 0;
+                }
+                if (trip.isDistributor) {
                     if (tmpDist[trip.DistributorMasterID]) { return; }
                     distributors.push({
                         value: trip.DistributorMasterID,
@@ -89,14 +96,14 @@ export class DayEndComponent implements OnInit {
                 })
                 tmpBranch[trip.BranchID] = trip.BranchID;
             })
-            
-            branches.length > -1 && branches.unshift({ value: 1, label: 'All Branches' });
+
+            branches.unshift({ value: 1, label: 'All Branches' });
             distributors.length && distributors.unshift({ value: 1, label: 'All Distributors' });
             this.distributors = distributors;
             this.branches = branches;
-            if (this.filter) {
-                this.filter.userBranch = 1;
-            }
+            // if (this.filter.userBranch) {
+            //     this.filter.userBranch = 1;
+            // }
 
             // Hack for displaying Distributor in case of no data return
             if (this.logedInUser.IsDistributor && !this.distributors.length) {

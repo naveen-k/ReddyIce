@@ -29,6 +29,7 @@ export class DetailsComponent implements OnInit {
     isDistributorExist: boolean;
     userSubTitle: string = '';
     userRoleId: number;
+    isSeasonalDriver:boolean=false;
 
     totalUnit: any = {
         TotalLoad: 0,
@@ -97,6 +98,16 @@ export class DetailsComponent implements OnInit {
         this.tripId = +this.route.snapshot.params['tripId'];
         this.loadTripData();
         this.loadTripDetailByDate();
+
+        if (!this.logedInUser.IsRIInternal) {
+                if (this.logedInUser.Role.RoleID === 3) {
+                    if (this.logedInUser.IsSeasonal) {
+                        this.isSeasonalDriver = true;
+                    } else {
+                        this.isSeasonalDriver = false;
+                    }
+                }
+            }
     }
 
     loadTripData() {
