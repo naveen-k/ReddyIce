@@ -33,6 +33,7 @@ export class DetailsComponent implements OnInit {
     checkValidity = false;
     hideAddProduct = false;
     back: string;
+    showSpinner: boolean = false;
     constructor(
         private service: LoadService,
         private route: ActivatedRoute,
@@ -63,6 +64,7 @@ export class DetailsComponent implements OnInit {
                 this.activatedRouteObject = this.route.snapshot.data;
                 this.loadProduct();
                 if (this.activatedRouteObject['LoadMode']) {
+                    this.showSpinner = true;
                     this.loadLoadsDetails();
                     this.checkValidity = true;
                 } else {
@@ -98,6 +100,7 @@ export class DetailsComponent implements OnInit {
             this.currentTripCode = res.TripCode;
             this.loadData.TripStatus = res.TripStatus;
             this.loadLoadData();
+            this.showSpinner = false;
         });
     }
     loadLoadData() {
@@ -217,6 +220,7 @@ export class DetailsComponent implements OnInit {
         );
     }
     backToList() {
+        this.showSpinner = true;
         this.router.navigate(['/pages/load/list']);
     }
     getFilters(callback){

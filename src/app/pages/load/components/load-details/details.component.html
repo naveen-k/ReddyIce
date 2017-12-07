@@ -63,12 +63,17 @@
                                     </table>
     
                                 </div>
-    
+                                
                                 <div class="col-sm-6">
+                                       
                                     <button *ngIf="!loadData?.TripStatus" [disabled]="hideAddProduct" class="btn btn-danger pull-right" (click)=addProductRow()>Add Product</button>
                                 </div>
                                 <div class="col-md-12 page-header">
-    
+                                        <div class='spinnerContainer' [hidden]='!showSpinner'>
+                                                <a>
+                                                    <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+                                                </a>
+                                            </div>
                                     <div class="overflow">
                                         <table class="table table-bordered">
                                             <thead class="tableHeader">
@@ -182,11 +187,14 @@
                                         </table>
                                     </div>
                                 </div>
+                                
                             </div>
                         </ng-template>
                     </ngb-tab>
                         
                 </ngb-tabset>
+
             </ba-card>
+            
         </div>
     </div>
