@@ -88,13 +88,11 @@ export class DetailsComponent implements OnInit {
 
     ngOnInit() {
         const userId = localStorage.getItem('userId') || '';
-        this.userService.getUserDetails(userId).subscribe((response) => {
-            this.userRoleId = response.Role.RoleID;
-            this.isDistributorExist = response.IsDistributor;
-            this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
-        });
-
         this.logedInUser = this.userService.getUser();
+        this.userRoleId = this.logedInUser.Role.RoleID;
+        this.isDistributorExist = this.logedInUser.IsDistributor;
+        this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.logedInUser.Distributor.DistributorName : '';
+        
         this.tripId = +this.route.snapshot.params['tripId'];
         this.loadTripData();
         this.loadTripDetailByDate();
