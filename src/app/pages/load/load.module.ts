@@ -1,5 +1,4 @@
 import { BranchResolver} from './Load.resolver';
-import { LoadPipe } from './components/load-list/load-list.pipe';
 import { LoadComponent } from './components/load-list/load.component';
 import { LoadContainerComponent } from './components/load-container/load-container.component';
 import { DetailsComponent } from './components/load-details/details.component';
@@ -49,7 +48,6 @@ const routes: Routes = [
     declarations: [LoadContainerComponent,
         LoadComponent,
         DetailsComponent,
-        LoadPipe,
     ],
     imports: [
         RouterModule.forChild(routes),
