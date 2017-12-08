@@ -67,7 +67,7 @@
                             <div class="block" style="background:#ff0000;"></div>
                             <span class="blockContent">Skipped Stops</span>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6"  [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
                             <div class="block" style="background:#999900;"></div>
                             <span class="blockContent">Planned Sequence</span>
                         </div>
