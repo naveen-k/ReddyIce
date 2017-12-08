@@ -247,6 +247,7 @@ export class TrackerComponent implements OnInit {
       }
     }
     console.log('this.selectedTrip', this.selectedTrip);
+
     if (this.selectedTrip && this.planned) {
       this.selectedTrip.sort(this.comparator); // sorting planned sequence
     }
@@ -415,10 +416,10 @@ export class TrackerComponent implements OnInit {
 
   drawRoute(google: any, sequence: number, trips: any[]) {
     if (!trips || !trips.length) { return false };
-    //trips = trips.slice(0);
-    // if (sequence === 2) {
-    //   trips.sort((a, b) => { return b.ActualSequence || 0 - a.ActualSequence || 0 })
-    // }
+    trips = trips.slice(0);
+    if (sequence === 2) {
+      trips.sort((a, b) => { return b.ActualSequence || 0 - a.ActualSequence || 0 })
+    }
     for (let i = 0; i < trips.length; i++) {
       // changing color of the marker icon based on condition
       if (trips[i].TicketTypeID === 29) {
@@ -443,7 +444,7 @@ export class TrackerComponent implements OnInit {
 
       // customising the marker icon here
       if (sequence === 2) {
-        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence || i + 1).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
           new google.maps.Size(21, 34),
           new google.maps.Point(0, 0),
           new google.maps.Point(10, 34));
@@ -512,15 +513,15 @@ export class TrackerComponent implements OnInit {
             trips[i + 1].PlannedLongitude != "0.0") {
             var endPt = new google.maps.LatLng(trips[i + 1].PlannedLatitude, trips[i + 1].PlannedLongitude);
           }
-          
+
         }
       }
 
       var strokeColour = '';
       if (sequence == 2) {
-        strokeColour = 'blue'
-      } else {
         strokeColour = 'brown'
+      } else {
+        strokeColour = '#999900'
       }
       if (startPt && endPt) {
         var polyline = new google.maps.Polyline({
@@ -557,7 +558,7 @@ export class TrackerComponent implements OnInit {
         } else {
           infowindowContent += 'Total Invoice : $' + '0.00' + '<br>';
         }
-       
+
         if (trips[i].CashAmount != null || trips[i].CashAmount != undefined
           || trips[i].CheckAmount != null || trips[i].CheckAmount != undefined) {
           var receivedAmt = trips[i].CashAmount + trips[i].CheckAmount;
@@ -580,7 +581,7 @@ export class TrackerComponent implements OnInit {
     }
   }
 
-   
+
 
   viewTicket(ticketID) {
     // ticketID = 3212;
