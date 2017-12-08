@@ -119,6 +119,13 @@
                         type="text" class="form-control" placeholder="Address" />
                 </div>
             </div>
+            <div class="row box-top-margin">
+                <label for="example-text-input" class="col-md-12">Notes for Memo (It will print on Invoice)</label>
+                <div class="col-md-12">
+                    <input [disabled]="mode ===3" maxlength="500" [(ngModel)]='customer.NotesForMemo' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                        type="text" class="form-control" placeholder="Notes for Memo" />
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="row box-top-margin">
