@@ -72,6 +72,7 @@ export interface Customer {
     IsInternal: boolean;
     ChainID: number;
     sChainID: string;
+    NotesForMemo: any;
 }
 export interface MProducts {
     ExternalCustomerProductID: number;
