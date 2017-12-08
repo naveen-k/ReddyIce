@@ -87,7 +87,7 @@
                                     [routerLink]="['../ticket-detail', item.TripID]" style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i *ngIf="logedInUser.IsRIInternal && item.isDistributor === 0||item.IsSeasonal" class="ion-edit custom-tooltip-ion"
+                                <i *ngIf="(logedInUser.IsRIInternal && item.isDistributor === 0) || (item.IsSeasonal)&&(logedInUser.IsRIInternal)" class="ion-edit custom-tooltip-ion"
                                     [routerLink]="['../detail',item.TripID]" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
