@@ -186,7 +186,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.ticket.BranchID || this.ticket.DistributorCopackerID) {
       this.loadCustomers();
     }
-   
+
     // load driver or distributor
     if (this.ticket.BranchID && this.ticket.isUserTypeDistributor) {
       this.loadDisributors(this.ticket.BranchID);
@@ -333,7 +333,7 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
-    
+
 
     this.listFilter.BranchId = this.ticket.BranchID;
   }
@@ -377,7 +377,7 @@ export class CreateTicketComponent implements OnInit {
         var newArray = this.drivers.filter(function (el) {
           return el.UserId === that.ticket.UserID;
         });
-        if(newArray.length===0){
+        if (newArray.length === 0) {
           this.ticket.UserID = null;
         }
       }
@@ -601,7 +601,7 @@ export class CreateTicketComponent implements OnInit {
     fileReader.addEventListener('load', (e) => {
       let f = fileReader.result.split(','),
         accepted = this.acceptedPodFormat.filter(format => f[0].indexOf(format) > 0).length;
-        let fileSize = event.target.files[0].size <= (2*1024*1024);
+      let fileSize = event.target.files[0].size <= (2 * 1024 * 1024);
       if (accepted && fileSize) {
         this.file['Image'] = f[1];
         this.file['ImageMetaData'] = f[0];
@@ -613,7 +613,7 @@ export class CreateTicketComponent implements OnInit {
           backdrop: 'static',
         });
         if (!fileSize) {
-          var msg= 'File size cannot be greater than 2MB';
+          var msg = 'File size cannot be greater than 2MB';
         }
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.modalHeader = 'Warning!';
@@ -807,13 +807,13 @@ export class CreateTicketComponent implements OnInit {
       });
       return;
     }
-    console.log("ticket ----- ",ticket);
-    
+    console.log("ticket ----- ", ticket);
+
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('', 'Ticket created successfully!');
-      let d:any[] = ticket.DeliveryDate.split('-');
-      if(d.length && d.length == 3){ 
+      let d: any[] = ticket.DeliveryDate.split('-');
+      if (d.length && d.length == 3) {
         this.listFilter.CreatedDate.month = +d[0];
         this.listFilter.CreatedDate.day = +d[1];
         this.listFilter.CreatedDate.year = +d[2];
@@ -915,7 +915,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   readingChangeHandler(tdetail) {
-    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.EndMeterReading - tdetail.StartMeterReading, tdetail.productSelected.Price);
+    tdetail.totalAmount = this.calculateProductTotalAmount((tdetail.StartMeterReading && this.ticket.TicketTypeID === 26) ? tdetail.EndMeterReading - tdetail.StartMeterReading : tdetail.EndMeterReading, tdetail.productSelected.Price);
     this.calculateTotalSale();
   }
 
@@ -939,9 +939,9 @@ export class CreateTicketComponent implements OnInit {
   updateTicketDetailObject(ticketDetail) {
     var prodDetail = {};
     prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
-    if(!prodDetail){
+    if (!prodDetail) {
       //ticketDetail.Price = ticketDetail.Rate;
-      prodDetail = {Price:ticketDetail.Rate};
+      prodDetail = { Price: ticketDetail.Rate };
     }
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
@@ -955,6 +955,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   bagsChangeHandler(tdetail) {
+    // This canculation made  hardcoded 0 due to charge requirment on 8/12/2017 
     tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.DeliveredBags, tdetail.productSelected.Price);
     this.calculateTotalSale();
   }
@@ -964,7 +965,7 @@ export class CreateTicketComponent implements OnInit {
     p = p || 0;
     var temp = 10;
     //return ((+q * temp) * (+p * temp)/ (temp * temp)); // handling float point precision
-    return (+parseFloat((q * temp).toString()).toPrecision(4)) * (+parseFloat((p * temp).toString()).toPrecision(4))/ (temp * temp);
+    return (+parseFloat((q * temp).toString()).toPrecision(4)) * (+parseFloat((p * temp).toString()).toPrecision(4)) / (temp * temp);
     //parseFloat((p * temp).toString()).toPrecision(4)
   }
 
@@ -978,6 +979,9 @@ export class CreateTicketComponent implements OnInit {
     });
     this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
     this.ticket.TaxAmount = (this.ticket.TotalSale * this.customer.Tax) / 100;
+    if(this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket){
+      this.ticket.TotalSale = 0;
+    }
     //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
   }
 
@@ -1012,11 +1016,15 @@ export class CreateTicketComponent implements OnInit {
 
   mreadingCheck() {
     for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
-      if ((!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) &&
-        (this.ticket.TicketProduct[i].StartMeterReading !== 0 && this.ticket.TicketProduct[i]['EndMeterReading'] !== 0)) {
-        this.mreadingCount += 1;
-      } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
-        this.readingCheck = true;
+      if (this.ticket.TicketTypeID == 26) {
+        if ((!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) &&
+          (this.ticket.TicketProduct[i].StartMeterReading !== 0 && this.ticket.TicketProduct[i]['EndMeterReading'] !== 0)) {
+          this.mreadingCount += 1;
+        } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
+          this.readingCheck = true;
+        } else {
+          this.readingCheck = false;
+        }
       } else {
         this.readingCheck = false;
       }

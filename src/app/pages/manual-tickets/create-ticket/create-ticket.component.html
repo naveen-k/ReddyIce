@@ -331,8 +331,9 @@
                                     <thead class="mttableHeader">
                                         <th>Machine</th>
                                         <th>Price</th>
-                                        <th>Previous Reading</th>
-                                        <th>Current Reading</th>
+                                        <th *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==26">Previous Reading</th>
+                                        <th *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==26">Current Reading</th>
+                                        <th *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==27">Quantity</th>
                                         <th>Amount</th>
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
@@ -354,7 +355,7 @@
                                                     </select>
                                                 </td>
                                             <td> {{tdetail.productSelected?.Price | currencyFormatter}}</td>
-                                            <td>
+                                            <td *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==26">
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading"
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" 
                                                     (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)" [disabled]="isReadOnly">
