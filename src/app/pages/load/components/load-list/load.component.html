@@ -57,8 +57,8 @@
                             </th>
                             <th width="10%" class="textAlignCenter">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'TripID';customer.isAsc=!customer.isAsc;">
-                                    Trip Code
-                                    <i *ngIf="(customer.sortField === 'TripID')" [ngClass]="(customer.isAsc && customer.sortField === 'TripID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                    Route No
+                                    <i *ngIf="(customer.sortField === 'TripID')" [ngClass]="(customer.isAsc && customer.sortField === 'RouteNo' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th width="10%" class="textAlignCenter">
@@ -88,7 +88,7 @@
                             <td>{{item.DriverName}}</td>
                             <td class="textAlignCenter">{{item.TripCode}}</td>
                             <td class="textAlignCenter">
-                                <span *ngIf="item.TripID!==null">{{item.TripID}}</span>
+                                <span *ngIf="item.TripID!==null">{{item.RouteNo}}</span>
                             </td>
                             <td class="textAlignCenter">
                                 <span *ngIf="item.TripID!==null">
