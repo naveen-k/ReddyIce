@@ -393,11 +393,15 @@ export class TrackerComponent implements OnInit {
 
       // If Planned Sequence Radio button is selected
       if (this.planned) {
-        this.drawPolyline(google, 1);
+        // this.drawPolyline(google, 1);
+        this.drawRoute(google, 1, this.selectedTrip);
       } else if (this.actual) {
-        this.drawPolyline(google, 2);
+        //this.drawPolyline(google, 2);
+        this.drawRoute(google, 2, this.selectedTrip);
       } else {
-        this.drawPolyline(google, 3);
+        //this.drawPolyline(google, 3);
+        this.drawRoute(google, 1, this.selectedTrip);
+        this.drawRoute(google, 2, this.selectedTrip);
       }
     });
   }
@@ -408,351 +412,175 @@ export class TrackerComponent implements OnInit {
   }
 
   pinTextColor = '';
-  // function to draw the polyline on map
-  drawPolyline(google, sequence) {
-    if (this.selectedTrip && this.selectedTrip.length >= 1) {
-      for (var i = 0; i < this.selectedTrip.length; i++) {
 
-        // changing color of the marker icon based on condition
-        if (this.selectedTrip[i].TicketTypeID === 29) {
-          this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
-          this.pinTextColor = '000';
-          console.log("here : ", i);
-        } else if (this.selectedTrip[i].OrderID == null) {
-          this.pinColor = '0000ff';   // blue color for Unplanned Service
-          this.pinTextColor = 'fff';
-        } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber !== null) {
-          this.pinColor = '90EE90';   // lightgreen color for Planned Service
-          this.pinTextColor = '000';
-        } else if (this.selectedTrip[i].OrderID != null && this.selectedTrip[i].TicketNumber == null) {
-          this.pinColor = 'ff0000';   // red color for Skipped stops
-          this.pinTextColor = 'fff';
-        }
+  drawRoute(google: any, sequence: number, trips: any[]) {
+    if (!trips || !trips.length) { return false };
+    //trips = trips.slice(0);
+    // if (sequence === 2) {
+    //   trips.sort((a, b) => { return b.ActualSequence || 0 - a.ActualSequence || 0 })
+    // }
+    for (let i = 0; i < trips.length; i++) {
+      // changing color of the marker icon based on condition
+      if (trips[i].TicketTypeID === 29) {
+        this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
+        this.pinTextColor = '000';
+        console.log("here : ", i);
+      } else if (trips[i].OrderID == null) {
+        this.pinColor = '0000ff';   // blue color for Unplanned Service
+        this.pinTextColor = 'fff';
+      } else if (trips[i].OrderID != null && trips[i].TicketNumber !== null) {
+        this.pinColor = '90EE90';   // lightgreen color for Planned Service
+        this.pinTextColor = '000';
+      } else if (trips[i].OrderID != null && trips[i].TicketNumber == null) {
+        this.pinColor = 'ff0000';   // red color for Skipped stops
+        this.pinTextColor = 'fff';
+      }
+      if (sequence === 1) {
+        this.pinColor = '999900';   // red color for Skipped stops
+        this.pinTextColor = 'fff';
+      }
 
-        // customising the marker icon here
-        if (sequence === 2) {
-          // if (this.selectedTrip[i].ActualSequence != null) {
-          //   this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|fff",
-          //     new google.maps.Size(21, 34),
-          //     new google.maps.Point(0, 0),
-          //     new google.maps.Point(10, 34));
-          // }
-          if (this.selectedTrip[i].ActualSequence != null) {
-            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
-              new google.maps.Size(21, 34),
-              new google.maps.Point(0, 0),
-              new google.maps.Point(10, 34));
-          }
-        } else if (sequence === 1) {
-          // if (this.selectedTrip[i].PlannedSequence != null) {
-          //   this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|fff",
-          //     new google.maps.Size(21, 34),
-          //     new google.maps.Point(0, 0),
-          //     new google.maps.Point(10, 34));
-          // }
-          if (this.selectedTrip[i].PlannedSequence != null) {
-            this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
-              new google.maps.Size(21, 34),
-              new google.maps.Point(0, 0),
-              new google.maps.Point(10, 34));
-          }
-        } else {
-          if (this.selectedTrip[i].ActualSequence != null) {
-            this.pinImage2 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].ActualSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
-              new google.maps.Size(21, 34),
-              new google.maps.Point(0, 0),
-              new google.maps.Point(10, 34));
-          }
-          if (this.selectedTrip[i].PlannedSequence != null) {
-            this.pinImage1 = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (this.selectedTrip[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
-              new google.maps.Size(21, 34),
-              new google.maps.Point(0, 0),
-              new google.maps.Point(10, 34));
-          }
-        }
 
-        // start point of straight line
-        if (sequence === 1) {
-          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
-            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
-            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
-            var startPt = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
-          }
-        } else if (sequence === 2) {
-          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
-            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
-            var startPt = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
-          }
-        } else {
-          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
-            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
-            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
-            var startPtP = new google.maps.LatLng(this.selectedTrip[i].PlannedLatitude, this.selectedTrip[i].PlannedLongitude);
-          }
-          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
-            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
-            var startPtA = new google.maps.LatLng(this.selectedTrip[i].ActualLatitude, this.selectedTrip[i].ActualLongitude);
-          }
-        }
-
-        // end point fo straight line
-        if (sequence === 1) {
-          // adding check here to avoid 'undefined' condition
-          if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i + 1].PlannedLatitude != null && this.selectedTrip[i + 1].PlannedLongitude != null
-              && this.selectedTrip[i + 1].PlannedLatitude != "" && this.selectedTrip[i + 1].PlannedLongitude != ""
-              && this.selectedTrip[i + 1].PlannedLatitude != "0.0" && this.selectedTrip[i + 1].PlannedLongitude != "0.0") {
-              var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
-            }
-          }
-        } else if (sequence === 2) {
-          // adding check here to avoid 'undefined' condition
-          if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i + 1].ActualLatitude != null && this.selectedTrip[i + 1].ActualLongitude != null
-              && this.selectedTrip[i + 1].ActualLatitude != "" && this.selectedTrip[i + 1].ActualLongitude != ""
-              && this.selectedTrip[i + 1].ActualLatitude != "0.0" && this.selectedTrip[i + 1].ActualLongitude != "0.0") {
-              var endPt = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
-            }
-          }
-        } else {
-          if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i + 1].PlannedLatitude != null && this.selectedTrip[i + 1].PlannedLongitude != null
-              && this.selectedTrip[i + 1].PlannedLatitude != "" && this.selectedTrip[i + 1].PlannedLongitude != ""
-              && this.selectedTrip[i + 1].PlannedLatitude != "0.0" && this.selectedTrip[i + 1].PlannedLongitude != "0.0") {
-              var endPtP = new google.maps.LatLng(this.selectedTrip[i + 1].PlannedLatitude, this.selectedTrip[i + 1].PlannedLongitude);
-            }
-          }
-          if (this.selectedTrip[i + 1]) {
-            if (this.selectedTrip[i + 1].ActualLatitude != null && this.selectedTrip[i + 1].ActualLongitude != null
-              && this.selectedTrip[i + 1].ActualLatitude != "" && this.selectedTrip[i + 1].ActualLongitude != ""
-              && this.selectedTrip[i + 1].ActualLatitude != "0.0" && this.selectedTrip[i + 1].ActualLongitude != "0.0") {
-              var endPtA = new google.maps.LatLng(this.selectedTrip[i + 1].ActualLatitude, this.selectedTrip[i + 1].ActualLongitude);
-            }
-          }
-        }
-
-        // this will draw straight line between multiple points
-        if (sequence != 3) {
-          var strokeColour = '';
-          if (sequence == 2) {
-            strokeColour = 'blue'
-          } else {
-            strokeColour = 'brown'
-          }
-          if (startPt && endPt) {
-            var polyline = new google.maps.Polyline({
-              path: [startPt, endPt],
-              strokeColor: strokeColour,
-              strokeWeight: 2,
-              strokeOpacity: 1
-            });
-            polyline.setMap(this.map);
-            this.bounds.extend(startPt);
-            this.bounds.extend(endPt);
-          }
-        } else {
-          if (startPtA && endPtA) {
-            var polyline2 = new google.maps.Polyline({
-              path: [startPtA, endPtA],
-              strokeColor: 'blue',
-              strokeWeight: 2,
-              strokeOpacity: 1
-            });
-            polyline2.setMap(this.map);
-            this.bounds.extend(startPtA);
-            this.bounds.extend(endPtA);
-          }
-
-          if (startPtP && endPtP) {
-            var polyline1 = new google.maps.Polyline({
-              path: [startPtP, endPtP],
-              strokeColor: 'brown',
-              strokeWeight: 2,
-              strokeOpacity: 1
-            });
-            polyline1.setMap(this.map);
-            this.bounds.extend(startPtP);
-            this.bounds.extend(endPtP);
-          }
-        }
-
-        // adding pushpin marker logic here
-        let positionLatitude: any;
-        let positionLongitude: any;
-
-        let positionLatitude1: any;
-        let positionLatitude2: any;
-        let positionLongitude1: any;
-        let positionLongitude2: any;
-        if (sequence === 1) {
-          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
-            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
-            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0") {
-            positionLatitude = this.selectedTrip[i].PlannedLatitude;
-            positionLongitude = this.selectedTrip[i].PlannedLongitude;
-          }
-        } else if (sequence === 2) {
-          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
-            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
-            positionLatitude = this.selectedTrip[i].ActualLatitude;
-            positionLongitude = this.selectedTrip[i].ActualLongitude;
-          }
-        } else {
-          if (this.selectedTrip[i].PlannedLatitude != null && this.selectedTrip[i].PlannedLongitude != null
-            && this.selectedTrip[i].PlannedLatitude != "" && this.selectedTrip[i].PlannedLongitude != ""
-            && this.selectedTrip[i].PlannedLatitude != "0.0" && this.selectedTrip[i].PlannedLongitude != "0.0"
-          ) {
-            positionLatitude1 = this.selectedTrip[i].PlannedLatitude;
-            positionLongitude1 = this.selectedTrip[i].PlannedLongitude;
-          }
-          if (this.selectedTrip[i].ActualLatitude != null && this.selectedTrip[i].ActualLongitude != null
-            && this.selectedTrip[i].ActualLatitude != "" && this.selectedTrip[i].ActualLongitude != ""
-            && this.selectedTrip[i].ActualLatitude != "0.0" && this.selectedTrip[i].ActualLongitude != "0.0") {
-            positionLatitude2 = this.selectedTrip[i].ActualLatitude;
-            positionLongitude2 = this.selectedTrip[i].ActualLongitude;
-          }
-        }
-        if (sequence != 3) {
-          var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(positionLatitude, positionLongitude),
-            map: this.map,
-            icon: this.pinImage,
-            title: (i + 1).toString(),
-            // label: (i+1).toString()
-          });
-        } else {
-          var marker1 = new google.maps.Marker({
-            position: new google.maps.LatLng(positionLatitude1, positionLongitude1),
-            map: this.map,
-            icon: this.pinImage1,
-            title: (i + 1).toString(),
-          });
-          var marker2 = new google.maps.Marker({
-            position: new google.maps.LatLng(positionLatitude2, positionLongitude2),
-            map: this.map,
-            icon: this.pinImage2,
-            title: (i + 1).toString(),
-          });
-        }
-
-        // snippet for showing info window on marker click
-        if (sequence != 3) {
-          google.maps.event.addListener(marker, 'click', ((marker, i) => {
-            let infowindowContent = '';
-            if (this.selectedTrip[i].CustomerName) {
-              infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
-            } else {
-              infowindowContent += 'Customer Name : ' + '-' + '<br>';
-            }
-            if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined
-              || this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
-              var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-              if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
-                totalInvoice = totalInvoice + ".00";
-              }
-              infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
-            } else {
-              infowindowContent += 'Total Invoice : $' + '0.00' + '<br>';
-            }
-            // if (this.selectedTrip[i].TotalAmount) {
-            //   infowindowContent += 'Total Amount : $' + this.selectedTrip[i].TotalAmount + '<br>';
-            // } else {
-            //   infowindowContent += 'Total Amount : ' + '-' + '<br>';
-            // }
-            if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
-              || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
-              var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
-              if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
-                receivedAmt = receivedAmt + ".00";
-              }
-              infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
-            } else {
-              infowindowContent += 'Total Received Amount : $' + '0.00' + '<br>';
-            }
-            return () => {
-              this.infowindow.setContent(infowindowContent);
-              this.infowindow.open(this.map, marker);
-            }
-          })(marker, i));
-        } else {
-          google.maps.event.addListener(marker1, 'click', ((marker1, i) => {
-            let infowindowContent = '';
-            if (this.selectedTrip[i].CustomerName) {
-              infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
-            } else {
-              infowindowContent += 'Customer Name : ' + '-' + '<br>';
-            }
-            if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined ||
-              this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
-              var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-              if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
-                totalInvoice = totalInvoice + ".00";
-              }
-              infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
-            } else {
-              infowindowContent += 'Total Invoice : $' + '0' + '<br>';
-            }
-            if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
-              || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
-              var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
-              if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
-                receivedAmt = receivedAmt + ".00";
-              }
-              infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
-            } else {
-              infowindowContent += 'Total Received Amount : $' + '0' + '<br>';
-            }
-            // if (this.selectedTrip[i].TotalAmount) {
-            //   infowindowContent += 'Total Sale : ' + this.selectedTrip[i].TotalAmount + '<br>';
-            // } else {
-            //   infowindowContent += 'Total Amount : ' + '-' + '<br>';
-            // }
-            return () => {
-              this.infowindow.setContent(infowindowContent);
-              this.infowindow.open(this.map, marker1);
-            }
-          })(marker1, i));
-          google.maps.event.addListener(marker2, 'click', ((marker2, i) => {
-            let infowindowContent = '';
-            if (this.selectedTrip[i].CustomerName) {
-              infowindowContent += 'Customer Name : ' + this.selectedTrip[i].CustomerName + '<br>';
-            } else {
-              infowindowContent += 'Customer Name : ' + '-' + '<br>';
-            }
-            if (this.selectedTrip[i].TotalSale != null || this.selectedTrip[i].TotalSale != undefined ||
-              this.selectedTrip[i].TaxAmount != null || this.selectedTrip[i].TaxAmount != undefined) {
-              var totalInvoice = this.selectedTrip[i].TotalSale + this.selectedTrip[i].TaxAmount;
-              if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
-                totalInvoice = totalInvoice + ".00";
-              }
-              infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
-            } else {
-              infowindowContent += 'Total Invoice : $' + '0' + '<br>';
-            }
-            if (this.selectedTrip[i].CashAmount != null || this.selectedTrip[i].CashAmount != undefined
-              || this.selectedTrip[i].CheckAmount != null || this.selectedTrip[i].CheckAmount != undefined) {
-              var receivedAmt = this.selectedTrip[i].CashAmount + this.selectedTrip[i].CheckAmount;
-              if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
-                receivedAmt = receivedAmt + ".00";
-              }
-              infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
-            } else {
-              infowindowContent += 'Total Received Amount : $' + '0' + '<br>';
-            }
-            return () => {
-              this.infowindow.setContent(infowindowContent);
-              this.infowindow.open(this.map, marker2);
-            }
-          })(marker2, i));
+      // customising the marker icon here
+      if (sequence === 2) {
+        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+          new google.maps.Size(21, 34),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34));
+      } else if (sequence === 1) {
+        if (trips[i].PlannedSequence != null) {
+          this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(10, 34));
         }
       }
+
+      // adding pushpin marker logic here
+      let positionLatitude: any;
+      let positionLongitude: any;
+
+      // start point of straight line
+      if (sequence === 1) {
+        if (trips[i].PlannedLatitude != null && trips[i].PlannedLongitude != null
+          && trips[i].PlannedLatitude != "" && trips[i].PlannedLongitude != ""
+          && trips[i].PlannedLatitude != "0.0" && trips[i].PlannedLongitude != "0.0") {
+          var startPt = new google.maps.LatLng(trips[i].PlannedLatitude, trips[i].PlannedLongitude);
+          positionLatitude = trips[i].PlannedLatitude;
+          positionLongitude = trips[i].PlannedLongitude;
+        }
+      } else if (sequence === 2) {
+        if (trips[i].ActualLatitude &&
+          trips[i].ActualLongitude &&
+          trips[i].ActualLatitude != "0.0" &&
+          trips[i].ActualLongitude != "0.0") {
+          var startPt = new google.maps.LatLng(trips[i].ActualLatitude, trips[i].ActualLongitude);
+          positionLatitude = trips[i].ActualLatitude;
+          positionLongitude = trips[i].ActualLongitude;
+        } else if (trips[i].PlannedLatitude &&
+          trips[i].PlannedLongitude &&
+          trips[i].PlannedLatitude != "0.0" &&
+          trips[i].PlannedLongitude != "0.0") {
+          var startPt = new google.maps.LatLng(trips[i].PlannedLatitude, trips[i].PlannedLongitude);
+          positionLatitude = trips[i].PlannedLatitude;
+          positionLongitude = trips[i].PlannedLongitude;
+        }
+      }
+
+
+      // end point fo straight line
+      if (sequence === 1) {
+        // adding check here to avoid 'undefined' condition
+        if (trips[i + 1]) {
+          if (trips[i + 1].PlannedLatitude != null && trips[i + 1].PlannedLongitude != null
+            && trips[i + 1].PlannedLatitude != "" && trips[i + 1].PlannedLongitude != ""
+            && trips[i + 1].PlannedLatitude != "0.0" && trips[i + 1].PlannedLongitude != "0.0") {
+            var endPt = new google.maps.LatLng(trips[i + 1].PlannedLatitude, trips[i + 1].PlannedLongitude);
+          }
+        }
+      } else if (sequence === 2) {
+        // adding check here to avoid 'undefined' condition
+        if (trips[i + 1]) {
+          if (trips[i + 1].ActualLatitude &&
+            trips[i + 1].ActualLongitude &&
+            trips[i + 1].ActualLatitude != "0.0" &&
+            trips[i + 1].ActualLongitude != "0.0") {
+            var endPt = new google.maps.LatLng(trips[i + 1].ActualLatitude, trips[i + 1].ActualLongitude);
+          } else if (trips[i + 1].PlannedLatitude &&
+            trips[i + 1].PlannedLongitude &&
+            trips[i + 1].PlannedLatitude != "0.0" &&
+            trips[i + 1].PlannedLongitude != "0.0") {
+            var endPt = new google.maps.LatLng(trips[i + 1].PlannedLatitude, trips[i + 1].PlannedLongitude);
+          }
+          
+        }
+      }
+
+      var strokeColour = '';
+      if (sequence == 2) {
+        strokeColour = 'blue'
+      } else {
+        strokeColour = 'brown'
+      }
+      if (startPt && endPt) {
+        var polyline = new google.maps.Polyline({
+          path: [startPt, endPt],
+          strokeColor: strokeColour,
+          strokeWeight: 2,
+          strokeOpacity: 1
+        });
+        polyline.setMap(this.map);
+        this.bounds.extend(startPt);
+        this.bounds.extend(endPt);
+      }
+
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(positionLatitude, positionLongitude),
+        map: this.map,
+        icon: this.pinImage
+      });
+
+      google.maps.event.addListener(marker, 'click', ((marker, i) => {
+        let infowindowContent = '';
+        if (trips[i].CustomerName) {
+          infowindowContent += 'Customer Name : ' + trips[i].CustomerName + '<br>';
+        } else {
+          infowindowContent += 'Customer Name : ' + '-' + '<br>';
+        }
+        if (trips[i].TotalSale != null || trips[i].TotalSale != undefined
+          || trips[i].TaxAmount != null || trips[i].TaxAmount != undefined) {
+          var totalInvoice = trips[i].TotalSale + trips[i].TaxAmount;
+          if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+            totalInvoice = totalInvoice + ".00";
+          }
+          infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
+        } else {
+          infowindowContent += 'Total Invoice : $' + '0.00' + '<br>';
+        }
+       
+        if (trips[i].CashAmount != null || trips[i].CashAmount != undefined
+          || trips[i].CheckAmount != null || trips[i].CheckAmount != undefined) {
+          var receivedAmt = trips[i].CashAmount + trips[i].CheckAmount;
+          if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
+            receivedAmt = receivedAmt + ".00";
+          }
+          infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
+        } else {
+          infowindowContent += 'Total Received Amount : $' + '0.00' + '<br>';
+        }
+        return () => {
+          this.infowindow.setContent(infowindowContent);
+          this.infowindow.open(this.map, marker);
+        }
+      })(marker, i));
+
+
       this.map.fitBounds(this.bounds);      // auto-zoom
       this.map.panToBounds(this.bounds);    // auto-center
     }
   }
+
+   
 
   viewTicket(ticketID) {
     // ticketID = 3212;
