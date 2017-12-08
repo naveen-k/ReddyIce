@@ -416,10 +416,10 @@ export class TrackerComponent implements OnInit {
 
   drawRoute(google: any, sequence: number, trips: any[]) {
     if (!trips || !trips.length) { return false };
-    trips = trips.slice(0);
-    if (sequence === 2) {
-      trips.sort((a, b) => { return b.ActualSequence || 0 - a.ActualSequence || 0 })
-    }
+    // trips = trips.slice(0);
+    // if (sequence === 2) {
+    //   trips.sort((a, b) => { return b.ActualSequence || 0 - a.ActualSequence || 0 })
+    // }
     for (let i = 0; i < trips.length; i++) {
       // changing color of the marker icon based on condition
       if (trips[i].TicketTypeID === 29) {
@@ -444,13 +444,13 @@ export class TrackerComponent implements OnInit {
 
       // customising the marker icon here
       if (sequence === 2) {
-        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence || i + 1).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence || i + 1).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
           new google.maps.Size(21, 34),
           new google.maps.Point(0, 0),
           new google.maps.Point(10, 34));
       } else if (sequence === 1) {
         if (trips[i].PlannedSequence != null) {
-          this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+          this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence || i + 1).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
             new google.maps.Size(21, 34),
             new google.maps.Point(0, 0),
             new google.maps.Point(10, 34));
