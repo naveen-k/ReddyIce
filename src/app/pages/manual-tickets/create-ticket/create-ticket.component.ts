@@ -101,7 +101,7 @@ export class CreateTicketComponent implements OnInit {
     .distinctUntilChanged()
     .map(term => {
       return this.customers.filter((v: any) => {
-        if (!v.CustomerTypeID) { return false; }
+        if (!v.CustomerTypeID || !v.Active) { return false; }
         let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
         if (flag) {
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
