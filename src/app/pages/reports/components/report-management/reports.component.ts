@@ -136,6 +136,8 @@ export class ReportsComponent implements OnInit {
             this.isInternalDriver = true;
         } else if (this.user.Role.RoleName === "Driver" && !this.user.IsRIInternal) {
             this.isExternalDriver = true;
+        } else if (this.user.Role.RoleName === "Manager" && this.user.IsRIInternal) {
+            this.isInternalAdmin = true;
         }
 
         if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
