@@ -205,9 +205,9 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
         this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00`:this.ticketDetails.Total.Tolls.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Tolls}.00` : this.ticketDetails.Total.Tolls;
         this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00`: this.ticketDetails.Total.MoneyOrderFee.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.MoneyOrderFee}.00` : this.ticketDetails.Total.MoneyOrderFee;
-        this.ticketDetails.Total.MCHHC = +this.ticketDetails.Total.TotalManualCheck.fpArithmetic("+", this.ticketDetails.Total.TotalHHCheck || 0)
-        this.ticketDetails.Total.MCHHCash = +this.ticketDetails.Total.TotalManualCash.fpArithmetic("+", this.ticketDetails.Total.TotalHHCash || 0)
-        this.ticketDetails.Total.MCCHHC = +this.ticketDetails.Total.TotalManualCreditCard.fpArithmetic("+", this.ticketDetails.Total.TotalHHCreditCard || 0)
+        this.ticketDetails.Total.MCHHC = +this.ticketDetails.Total.TotalManualCheck.fpArithmetic("+", this.ticketDetails.Total.TotalHHCheck || 0);
+        this.ticketDetails.Total.MCHHCash = +this.ticketDetails.Total.TotalManualCash.fpArithmetic("+", this.ticketDetails.Total.TotalHHCash || 0);
+        this.ticketDetails.Total.MCCHHC = +this.ticketDetails.Total.TotalManualCreditCard.fpArithmetic("+", this.ticketDetails.Total.TotalHHCreditCard || 0);
         this.ticketDetails.Total.CCC = this.ticketDetails.Total.MCHHCash + this.ticketDetails.Total.MCHHC + this.ticketDetails.Total.MCCHHC;
     }
     sortByWordLength = (a: any) => {
