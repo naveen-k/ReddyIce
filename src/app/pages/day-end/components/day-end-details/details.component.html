@@ -444,9 +444,9 @@
                                         <tr>
                                             <td><b>Total</b></td>
                                             <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualSale + ticketDetails?.Total.TotalHHSale | currencyFormatter}}</b></td>
-                                            <td class="text-align-right"><b>{{ ticketDetails?.Total.TotalManualCash + ticketDetails?.Total.TotalHHCash | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ ticketDetails?.Total.MCHHCash | currencyFormatter}}</b></td>
                                             <td class="text-align-right"><b>{{ticketDetails?.Total.MCHHC | currencyFormatter}}</b></td>
-                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCreditCard+ ticketDetails?.Total.TotalHHCreditCard | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.MCCHHC | currencyFormatter}}</b></td>
                                             <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCharge + ticketDetails?.Total.TotalHHCharge | currencyFormatter}}</b></td>
                                         </tr>
                                     </tbody>
