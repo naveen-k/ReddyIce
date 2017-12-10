@@ -75,6 +75,7 @@ export class SelectComponent implements AfterViewInit {
             position: this.position,
             selectAll: this.selectAll,
             allSelected: false,
+            onClick: this.onClose.bind(this)
         });
     }
 
