@@ -854,7 +854,9 @@ export class CreateTicketComponent implements OnInit {
   }
 
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
-
+    if(ticket.CustomerType == 22 && !ticket.IsSaleTicket){
+      ticket.TktType = 'C';
+    }
     const clonedObject: ManualTicket = JSON.parse(JSON.stringify(ticket));
 
     // removing all the unwanted properties.
