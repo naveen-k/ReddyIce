@@ -116,7 +116,13 @@ export class DetailsComponent implements OnInit {
                 ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
                 ticket.amount = ticket.TotalSale + ticket.TaxAmount;
                 var cardAmount = (this.tripData.IsClosed) ? ticket.CreditCardAmount : 0;
-                ticket.checkCashAmount = (ticket.TicketTypeID === 30) ? 0 : ticket.CheckAmount + ticket.CashAmount + cardAmount;
+                // ticket.checkCashAmount = (ticket.TicketTypeID === 30) ? 0 : ticket.CheckAmount + ticket.CashAmount + cardAmount;
+                if (ticket.TicketTypeID === 30) {
+                    ticket.checkCashAmount = 0;
+                } else {
+                    ticket.checkCashAmount = +ticket.CheckAmount.fpArithmetic("+", +ticket.CashAmount || 0);
+                    ticket.checkCashAmount = +ticket.checkCashAmount.fpArithmetic("+", +cardAmount || 0);
+                }
                 //ticket.amount = (ticket.IsClosed)?ticket.amount + (ticket.checkCashAmount - ticket.amount):ticket.amount;
                 if (ticket.TicketTypeID === 30) { return; }
                 ticket.ChargeAmount = (ticket.checkCashAmount === 0 && ticket.PaymentTypeID === 19) ? ticket.amount : (ticket.ChargeAmount) || 0;
@@ -129,7 +135,8 @@ export class DetailsComponent implements OnInit {
                 this.ticketTotal.totalDrayage += ticket.Drayage || 0;
                 this.ticketTotal.totalBuyBack += ticket.BuyBack || 0;
                 this.ticketTotal.totalDistAmt += ticket.DistAmt || 0;
-                this.ticketTotal.receivedTotal += ticket.checkCashAmount || 0;
+                // this.ticketTotal.receivedTotal += ticket.checkCashAmount || 0;
+                this.ticketTotal.receivedTotal = +this.ticketTotal.receivedTotal.fpArithmetic("+", ticket.checkCashAmount || 0)
                 this.cashReconciliationTotal(ticket);
             });
             //this.calculateTotalTicketAmount();
@@ -198,6 +205,10 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
         this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00`:this.ticketDetails.Total.Tolls.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Tolls}.00` : this.ticketDetails.Total.Tolls;
         this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00`: this.ticketDetails.Total.MoneyOrderFee.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.MoneyOrderFee}.00` : this.ticketDetails.Total.MoneyOrderFee;
+        this.ticketDetails.Total.MCHHC = +this.ticketDetails.Total.TotalManualCheck.fpArithmetic("+", this.ticketDetails.Total.TotalHHCheck || 0)
+        this.ticketDetails.Total.MCHHCash = +this.ticketDetails.Total.TotalManualCash.fpArithmetic("+", this.ticketDetails.Total.TotalHHCash || 0)
+        this.ticketDetails.Total.MCCHHC = +this.ticketDetails.Total.TotalManualCreditCard.fpArithmetic("+", this.ticketDetails.Total.TotalHHCreditCard || 0)
+        this.ticketDetails.Total.CCC = this.ticketDetails.Total.MCHHCash + this.ticketDetails.Total.MCHHC + this.ticketDetails.Total.MCCHHC;
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
