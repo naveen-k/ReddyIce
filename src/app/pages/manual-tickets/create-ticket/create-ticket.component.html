@@ -110,12 +110,12 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type:</label>
                 <div class="col-sm-7">
                     <label [hidden]="isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="typeChangeHandler();isFormDirty=true;">
+                        <input [disabled]="ticket.CustomerType == 22 && !!ticket.TicketID" type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="typeChangeHandler();isFormDirty=true;">
                         <span>{{sType.Value}}</span>
                     </label>
                     <!--Hack for displaying disabled in case of read only mode-->
                     <label [hidden]="!isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type1" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" [disabled]="true">
+                        <input [disabled]="ticket.CustomerType == 22 && !!ticket.TicketID" type="radio" name="type1" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" [disabled]="true">
                         <span>{{sType.Value}}</span>
                     </label>
                 </div>
@@ -360,10 +360,14 @@
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" 
                                                     (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)" [disabled]="isReadOnly">
                                             </td>
-                                            <td>
+                                            <td *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==26">
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.EndMeterReading" 
                                                     (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)"
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
+                                            </td>
+                                            <td *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==27">
+                                                <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
+                                                (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly">

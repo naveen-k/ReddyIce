@@ -529,8 +529,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
     }
     pushBranches() {
-
-        // console.log(this.userBranch);
+         console.log(this.userBranch);
         this.selectedBranch.length = 0;
         this.selectedBranch = [];
 

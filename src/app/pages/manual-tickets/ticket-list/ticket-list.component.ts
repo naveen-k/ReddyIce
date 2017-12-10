@@ -12,7 +12,7 @@ import { environment } from '../../../../environments/environment';
     styleUrls: ['./ticket-list.component.scss'],
 })
 export class TicketListComponent implements OnInit {
-
+    newWindow:any;
     showSpinner: boolean = false;
 
     // allbranches related to loggen in usr
@@ -306,7 +306,10 @@ export class TicketListComponent implements OnInit {
     viewTicket(ticketID) {
         // ticketID = 3212;
         if (ticketID) {
-            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
+            if(this.newWindow){
+                this.newWindow.close();
+            }
+            this.newWindow =  window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
         } else {
             this.notificationService.error("Ticket preview unavailable!!");
         }

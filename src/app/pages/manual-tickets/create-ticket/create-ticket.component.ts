@@ -434,7 +434,7 @@ export class CreateTicketComponent implements OnInit {
         this.productChangeHandler(td);
       }
       this.updateTicketDetailObject(td);
-      if (this.ticket.CustomerType === 20) {
+      if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID ==27)) {
         // Ticket Type is DSD
         td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
       } else if (this.ticket.CustomerType === 21) {
@@ -915,7 +915,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   readingChangeHandler(tdetail) {
-    tdetail.totalAmount = this.calculateProductTotalAmount((tdetail.StartMeterReading && this.ticket.TicketTypeID === 26) ? tdetail.EndMeterReading - tdetail.StartMeterReading : tdetail.EndMeterReading, tdetail.productSelected.Price);
+    tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.EndMeterReading - tdetail.StartMeterReading, tdetail.productSelected.Price);
     this.calculateTotalSale();
   }
 
