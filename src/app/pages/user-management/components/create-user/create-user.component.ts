@@ -562,6 +562,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         // }
     }
     removeBranch(branch) {
+        this.formIsDirty = true;
+        setTimeout(this.formChanged.emit('changed'), 1000);
         this.userBranch = this.userBranch.filter((u) => +u !== +branch.value);
         this.pushBranches();
     }
