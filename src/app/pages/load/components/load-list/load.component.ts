@@ -156,7 +156,6 @@ export class LoadComponent implements OnInit {
     }
     
     goToDetails(loadID){ 
-        debugger;
         if(loadID!==''){
             this.filter.LoadID = loadID;
             this.retainFilters('');
