@@ -91,7 +91,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.populatateRoleList();
         if (this.actionName == 'edit') {
             val.RoleID = val.RoleID || this._user.RoleID;
-            this.roleChange(val.RoleID);
+            this.roleChange(val.RoleID,'retainDist');
         } else {
             if (!this.user.RoleID) {
                 this.user.RoleID = '';
@@ -361,9 +361,13 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         });
     }
 
-    roleChange(roleID) {
+    roleChange(roleID,retainDist:any ='') {
         roleID = roleID + '';
-        this.user.DistributorMasterID = 0;
+        if(retainDist===''){
+            this.user.DistributorMasterID = 0;
+        }
+        
+
         this.userBranch = [];        
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5' || roleID === '7') {
             if (roleID === '2') {
