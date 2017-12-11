@@ -6,6 +6,7 @@
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" 
+                [disabled]="!tripData.UnitApprovedBy"
                 *ngIf='tripData.IsClosed && (((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || logedInUser.Role.RoleID == 2 || logedInUser.Role.RoleID == 1 ||logedInUser.Role.RoleID == 6)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24))'
                     (click)="approveTrip(25);">Approve</button>
                <!-- <button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>-->
@@ -14,7 +15,7 @@
                     (click)="saveReconciliation(23)">Save</button> -->
                     <!-- <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker == true )' (click)="saveReconciliation(24)">Submit</button> -->
                     <!-- Save button is not needed anymore, as trip will submit from HH-->
-                     <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker != true )' (click)="saveReconciliation(24)">Save</button>                       
+                     <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker != true )' (click)="saveReconciliation(24)">Save</button>-->
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row add-margin-bottom">
@@ -204,18 +205,24 @@
                                             </td>
                                             <td>
                                                 <span>Issued: </span>
-                                                <input [(ngModel)]='tripData.PalletLoadQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
+                                                <input [(ngModel)]='tripData.PalletLoadQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
                                                     type="text" [numberOnly]>
                                             </td>
                                             <td>
                                                 <span>Returned: </span>
-                                                <input [(ngModel)]='tripData.PalletReturnQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
+                                                <input [(ngModel)]='tripData.PalletReturnQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
                                                     type="text" [numberOnly]>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
 
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-danger pull-right"
+                                [disabled]="tripData.TripStatusID == 23" 
+                                [hidden]="(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy" 
+                                (click)="handlerUnitReconSubmit()">Submit</button>
                             </div>
 
                             <div class="col-sm-6">
@@ -315,17 +322,17 @@
                                                 <td width="21%" style="text-align:left;">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || tripData.UnitApprovedBy || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker)|| tripData.TripStatusID == 25 || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker)|| tripData.TripStatusID == 25 || tripData.UnitApprovedBy || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
                                                 <td width="8%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || tripData.UnitApprovedBy || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
@@ -334,7 +341,7 @@
                                                 <td width="5%">{{item.GoodReturns?item.GoodReturns:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
-                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 ||!tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || tripData.UnitApprovedBy ||!tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
                                                         type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
                                                 </td>
                                                 <td class="textAlignCenter" width="7%">{{item.OverShort}}</td>
@@ -351,19 +358,19 @@
                                                 </td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
                                                 <td width="8%">
-                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.Load1Quantity'
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.Load1Quantity'
                                                         (ngModelChange)="unitReconChange(item)" class="form-control small-input"
                                                         type="text">
                                                 </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
                                                 <td width="8%">
-                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.ReturnQuantity'
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.ReturnQuantity'
                                                         (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
                                                         type="text">
                                                 </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
                                                 <td width="8%">
-                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.DamageQuantity'
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.DamageQuantity'
                                                         (ngModelChange)="unitReconChange(item)" class="form-control small-input"
                                                         type="text">
                                                 </td>
@@ -375,7 +382,7 @@
                                                 <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
                                                 <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
                                                 <td width="9%">
-                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.CustomerDamageDRV'
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.CustomerDamageDRV'
                                                         (ngModelChange)="unitReconChange(item)" class="form-control small-input"
                                                         type="number">
                                                 </td>

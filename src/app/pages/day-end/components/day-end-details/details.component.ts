@@ -28,7 +28,7 @@ export class DetailsComponent implements OnInit {
     selectedProduct: object;
     isDistributorExist: boolean;
     userSubTitle: string = '';
-    userRoleId: number;    
+    userRoleId: number;
 
     totalUnit: any = {
         TotalLoad: 0,
@@ -94,7 +94,7 @@ export class DetailsComponent implements OnInit {
 
         this.tripId = +this.route.snapshot.params['tripId'];
         this.loadTripData();
-        this.loadTripDetailByDate();    
+        this.loadTripDetailByDate();
     }
 
 
@@ -127,7 +127,7 @@ export class DetailsComponent implements OnInit {
                 if (ticket.TicketTypeID === 30) { return; }
                 ticket.ChargeAmount = (ticket.checkCashAmount === 0 && ticket.PaymentTypeID === 19) ? ticket.amount : (ticket.ChargeAmount) || 0;
                 // this.ticketTotal.invoiceTotal += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
-                
+
                 this.ticketTotal.invoiceTotal = +this.ticketTotal.invoiceTotal.fpArithmetic("+", ticket.amount || 0)
                 this.ticketTotal.totalCash += ticket.CashAmount || 0;
                 this.ticketTotal.totalCheck += ticket.CheckAmount || 0;
@@ -208,8 +208,8 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.TotalCashCustomer = (+this.TotalCashReconciliation.TotalManualCashCustomer || 0).fpArithmetic("+", +this.TotalCashReconciliation.TotalHHCashCustomer || 0);
         this.ticketDetails.Total.TotalChargeCustomer = (+this.TotalCashReconciliation.TotalManualChargeCustomer || 0).fpArithmetic("+", +this.TotalCashReconciliation.TotalHHChargeCustomer || 0);
         this.ticketDetails.Total.totalSales = (+this.ticketDetails.Total.TotalCashCustomer || 0).fpArithmetic("+", +this.ticketDetails.Total.TotalChargeCustomer || 0);
-        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00`:this.ticketDetails.Total.Tolls.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Tolls}.00` : this.ticketDetails.Total.Tolls;
-        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00`: this.ticketDetails.Total.MoneyOrderFee.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.MoneyOrderFee}.00` : this.ticketDetails.Total.MoneyOrderFee;
+        this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00` : this.ticketDetails.Total.Tolls.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Tolls}.00` : this.ticketDetails.Total.Tolls;
+        this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00` : this.ticketDetails.Total.MoneyOrderFee.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.MoneyOrderFee}.00` : this.ticketDetails.Total.MoneyOrderFee;
         this.ticketDetails.Total.MCHHC = +this.ticketDetails.Total.TotalManualCheck.fpArithmetic("+", this.ticketDetails.Total.TotalHHCheck || 0);
         this.ticketDetails.Total.MCHHCash = +this.ticketDetails.Total.TotalManualCash.fpArithmetic("+", this.ticketDetails.Total.TotalHHCash || 0);
         this.ticketDetails.Total.MCCHHC = +this.ticketDetails.Total.TotalManualCreditCard.fpArithmetic("+", this.ticketDetails.Total.TotalHHCreditCard || 0);
@@ -266,25 +266,53 @@ export class DetailsComponent implements OnInit {
         }
         console.log('this.totalDeposit:', this.totalDeposit);
     }
-    approveTrip(status){
+    approveTrip(status) {
         const activeModal = this.modalService.open(ModalComponent, {
             size: 'sm',
             backdrop: 'static',
-          });
-          activeModal.componentInstance.BUTTONS.OK = 'OK';
-          activeModal.componentInstance.showCancel = true;
-          activeModal.componentInstance.modalHeader = 'Warning!';
-          activeModal.componentInstance.modalContent = `Once you will approve the trip, you will not able to edit Unit Reconcilation & Cash Reconcilation.`;
-          activeModal.componentInstance.closeModalHandler = (() => {
+        });
+        activeModal.componentInstance.BUTTONS.OK = 'OK';
+        activeModal.componentInstance.showCancel = true;
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `Once you will approve the trip, you will not be able to edit Cash Reconcilation.`;
+        activeModal.componentInstance.closeModalHandler = (() => {
             this.saveReconciliation(status);
-          });
+        });
 
     }
+
+    handlerUnitReconSubmit() {
+        const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
+        });
+        activeModal.componentInstance.BUTTONS.OK = 'OK';
+        activeModal.componentInstance.showCancel = true;
+        activeModal.componentInstance.modalHeader = 'Warning!';
+        activeModal.componentInstance.modalContent = `Once you submit the Unit Reconciliation, you will not be able to edit Unit Reconcilation`;
+        activeModal.componentInstance.closeModalHandler = (() => {
+            this.unitReconcileSubmit();
+        });
+    }
+
+    unitReconcileSubmit() {
+        let objToSave = {
+            TripId: this.tripId,
+            PalletLoadQuantity: this.tripData.PalletLoadQuantity,
+            PalletReturnQuantity: this.tripData.PalletReturnQuantity,
+            LoadReturnDamageModel: this.unitReconciliation.concat(this.newlyAddedProduct)
+        }
+        this.service.saveUnitReconciliation(objToSave).subscribe((res) => {
+            this.notification.success("Success", "Trip details updated successfully");
+            this.tripData.UnitApprovedBy = 1; // Alok - Hack for enabling Approve Button and hiding Submit button
+        }, (err) => {
+            err = JSON.parse(err._body);
+            this.notification.error("Error", err.Message);
+        });
+    }
+
     saveReconciliation(statusId) {
-
-        
         const total = this.ticketDetails.Total;
-
         const cashRecon = {
             TripID: this.tripId,
             ActualCash: total.actualdepositcash,
@@ -293,42 +321,18 @@ export class DetailsComponent implements OnInit {
             Misc: total.Misc,
             TripStatusID: statusId,
             Comments: total.Comments,
-            Tolls:total.Tolls,
-            MoneyOrderFee:total.MoneyOrderFee,
+            Tolls: total.Tolls,
+            MoneyOrderFee: total.MoneyOrderFee,
         };
         this.service.saveRecociliation(cashRecon).subscribe((res) => {
-            //  this.notification.success("Success", res);
-            if (this.userRoleId === 3) {
-                if (statusId === 25) {
-                    this.notification.success("Success", "Trip has been approved successfully");
-                    this.router.navigate(['/pages/day-end/list']);
-                }
-            }
-        }, (err) => {
-            err = JSON.parse(err._body);
-            this.notification.error("Error", err.Message);
-        });
-
-        let objToSave = {
-            TripId: this.tripId,
-            PalletLoadQuantity: this.tripData.PalletLoadQuantity,
-            PalletReturnQuantity: this.tripData.PalletReturnQuantity,
-            LoadReturnDamageModel: this.unitReconciliation.concat(this.newlyAddedProduct)
-        }
-        this.service.saveUnitReconciliation(objToSave).subscribe((res) => {
-
-            // this.notification.success("Success", res);
-            this.notification.success("Success", "Trip details updated successfully");
             if (statusId === 25) {
+                this.notification.success("Success", "Trip has been approved successfully");
                 this.router.navigate(['/pages/day-end/list']);
-            } else {
-                this.tripData.TripStatusID = statusId;
             }
         }, (err) => {
             err = JSON.parse(err._body);
             this.notification.error("Error", err.Message);
         });
-
     }
 
     submitApproveReconciliation() {
