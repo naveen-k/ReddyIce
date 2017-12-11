@@ -276,14 +276,13 @@ export class DetailsComponent implements OnInit {
           activeModal.componentInstance.modalHeader = 'Warning!';
           activeModal.componentInstance.modalContent = `Once you will approve the trip, you will not able to edit Unit Reconcilation & Cash Reconcilation.`;
           activeModal.componentInstance.closeModalHandler = (() => {
-            //this.saveReconciliation(status);
+            this.saveReconciliation(status);
           });
 
     }
     saveReconciliation(statusId) {
 
-        console.log(this.newlyAddedProduct);
-        // return false;
+        
         const total = this.ticketDetails.Total;
 
         const cashRecon = {
