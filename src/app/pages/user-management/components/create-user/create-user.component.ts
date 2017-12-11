@@ -390,6 +390,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             if (this.cBranches[0].value === 1) {
                 this.cBranches.shift();
             }
+
+            // Alok- show ISeries for Drive
+            if(roleID === "3"){
+                this.showIseries = true;
+            }
         }
        // if (this.action == 'edit') {
         //    this.transformation();
