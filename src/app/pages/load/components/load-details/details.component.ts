@@ -176,8 +176,16 @@ export class DetailsComponent implements OnInit {
                 this.router.navigate(['/pages/load/list']);
             }, (err) => {
                 this.checkValidity = true;
-                err = JSON.parse(err._body);
-                this.notification.error("Error", err.Message);
+                let error = JSON.parse(err._body);console.log(err,'err');
+                let custom_error = err.status == 406 && error.Message ? `Trip is already closed till Trip # ${parseInt(error.Message)}. Now load will create for Trip # ${parseInt(error.Message)+1} just click on Submit.` : error.Message;
+                let custom_error_msg = err.status == 406 && error.Message ? "Notification" : "Error"
+                this.notification.error(custom_error_msg, custom_error);
+                if(err.status == 406 && error.Message && error.Message != null && error.Message != ""){
+                    let count=parseInt(error.Message)+1;
+                    this.currentTripCode = count;
+                    this.loadData.TripCode = count;
+                    this.filter.TripCode = count;
+                }
             });
         } else {
             let newLoadList = this.loadList.concat(this.newlyAddedProduct);
