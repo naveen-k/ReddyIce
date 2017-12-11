@@ -15,6 +15,7 @@ export class LoadComponent implements OnInit {
     filter: any = {};
 
     loads: any = [];
+    maxTripCode: any =0;
     filteredLoads: any = [];
     branches: Array<any> = [];
     allBranches: Array<any> = [];
@@ -109,17 +110,34 @@ export class LoadComponent implements OnInit {
                     fLoad.push(load);
                 }
             });
-            this.filter.tripCode = fLoad.length;
+
+            this.filter.tripCode = this.getHighestTripCode(fLoad);
         }else{
         
             this.filter.tripCode = 0;
         }
+        this.maxTripCode= this.getHighestTripCode(fLoad);
         this.filteredLoads = fLoad;
+    }
+    getHighestTripCode(fLoad) {
+        let arr=[];
+        fLoad.forEach(function(item){
+            arr.push(item.TripCode);
+        })
+        if(arr.length > 0){
+        var max = arr.reduce(function(a, b) {
+            return Math.max(a, b);
+        });
+        } else {
+            max = 0;
+        }
+        return max;
     }
     getLoads() {
         this.service.getLoads(this.service.formatDate(this.filter.selectedDate), null, null, false).subscribe((res) => {
             this.loads = res;
             this.showSpinner = false;
+            this.maxTripCode = 0;
             this.filteredLoads = [];
             if (this.filter.userBranch > 0 && this.filter.userDriver > 0){
                 this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
