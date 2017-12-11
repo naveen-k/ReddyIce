@@ -857,9 +857,10 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketStatusID = 23;
     this.saveTicket();
   }
+  
 
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
-    if(ticket.CustomerType == 22 && !ticket.IsSaleTicket){
+    if((ticket.CustomerType == 22 ||ticket.CustomerType == 21) && !ticket.IsSaleTicket){
       ticket.TktType = 'C';
     }
     const clonedObject: ManualTicket = JSON.parse(JSON.stringify(ticket));
