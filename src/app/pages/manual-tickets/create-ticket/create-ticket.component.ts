@@ -572,6 +572,9 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.CashAmount = null;
     this.ticket.CheckAmount = null;
     this.ticket.CheckNumber = null;
+    if(this.ticket.CustomerType === 22){
+      this.ticket.TicketTypeID = 26;
+    } 
   }
 
   onCancelClick() {
@@ -729,7 +732,9 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
 
       this.ticket.CustomerType = this.ticket.Customer.CustomerType;
-
+      if(this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false){
+        this.ticket.TicketTypeID = 26;
+      }
       // Initialize to check/uncheck POD Received
       this.tempModels.podReceived = !!this.ticket.PODImageID;
       if (this.ticket.PODImageID) {
