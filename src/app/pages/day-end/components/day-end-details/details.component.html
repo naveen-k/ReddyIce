@@ -12,7 +12,7 @@
                <!-- Save button is not needed anymore, as trip will submit from HH-->
                 <!-- <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed'
                     (click)="saveReconciliation(23)">Save</button> -->
-                    <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker == true )' (click)="saveReconciliation(24)">Submit</button>
+                    <!-- <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker == true )' (click)="saveReconciliation(24)">Submit</button> -->
                     <!-- Save button is not needed anymore, as trip will submit from HH-->
                      <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker != true )' (click)="saveReconciliation(23)">Save</button>                       
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
