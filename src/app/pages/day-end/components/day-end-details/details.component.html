@@ -6,12 +6,12 @@
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" 
-                *ngIf='((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || logedInUser.Role.RoleID == 2 || logedInUser.Role.RoleID == 1)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24)'
-                    (click)="saveReconciliation(25);">Approve</button>
+                *ngIf='tripData.IsClosed && (((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || logedInUser.Role.RoleID == 2 || logedInUser.Role.RoleID == 1)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24))'
+                    (click)="approveTrip(25);">Approve</button>
                <!-- <button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>-->
                <!-- Save button is not needed anymore, as trip will submit from HH-->
-                <!-- <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                    (click)="saveReconciliation(23)">Save</button> -->
+                <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed'
+                    (click)="saveReconciliation(23)">Save</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row add-margin-bottom">

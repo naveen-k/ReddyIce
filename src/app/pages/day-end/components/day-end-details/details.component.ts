@@ -260,7 +260,20 @@ export class DetailsComponent implements OnInit {
         }
         console.log('this.totalDeposit:', this.totalDeposit);
     }
+    approveTrip(status){
+        const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
+          });
+          activeModal.componentInstance.BUTTONS.OK = 'OK';
+          activeModal.componentInstance.showCancel = true;
+          activeModal.componentInstance.modalHeader = 'Warning!';
+          activeModal.componentInstance.modalContent = `Once you will approve the trip, you will not able to edit Unit Reconcilation & Cash Reconcilation.`;
+          activeModal.componentInstance.closeModalHandler = (() => {
+            //this.saveReconciliation(status);
+          });
 
+    }
     saveReconciliation(statusId) {
 
         console.log(this.newlyAddedProduct);
