@@ -194,15 +194,20 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.TotalHHCheck = this.TotalCashReconciliation.TotalHHCheck
         this.ticketDetails.Total.TotalHHCreditCard = (this.tripData.IsClosed) ? this.TotalCashReconciliation.TotalHHCreditCard : 0.00;
         this.ticketDetails.Total.TotalHHCharge = this.TotalCashReconciliation.TotalHHCharge;
-        this.ticketDetails.Total.TotalPreDiposit = (+this.ticketDetails.Total.actualdepositcash || 0) + (+this.ticketDetails.Total.actualdepositcheck || 0) + (+this.ticketDetails.Total.ActualCoin || 0);
+        // this.ticketDetails.Total.TotalPreDiposit = (+this.ticketDetails.Total.actualdepositcash || 0) + (+this.ticketDetails.Total.actualdepositcheck || 0) + (+this.ticketDetails.Total.ActualCoin || 0);
+        this.ticketDetails.Total.TotalPreDiposit = (+this.ticketDetails.Total.actualdepositcash || 0).fpArithmetic("+", +this.ticketDetails.Total.actualdepositcheck || 0);
+        this.ticketDetails.Total.TotalPreDiposit = (+this.ticketDetails.Total.TotalPreDiposit || 0).fpArithmetic("+", +this.ticketDetails.Total.ActualCoin || 0);
         this.ticketDetails.Total.actualdepositcash = (this.ticketDetails.Total.actualdepositcash === null) ? `0.00` : this.ticketDetails.Total.actualdepositcash.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.actualdepositcash}.00` : this.ticketDetails.Total.actualdepositcash;
         this.ticketDetails.Total.actualdepositcheck = (this.ticketDetails.Total.actualdepositcheck === null) ? `0.00` : this.ticketDetails.Total.actualdepositcheck.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.actualdepositcheck}.00` : this.ticketDetails.Total.actualdepositcheck;
         this.ticketDetails.Total.ActualCoin = (this.ticketDetails.Total.ActualCoin === null) ? `0.00` : this.ticketDetails.Total.ActualCoin.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.ActualCoin}.00` : this.ticketDetails.Total.ActualCoin;
         this.ticketDetails.Total.Misc = (this.ticketDetails.Total.Misc === null) ? `0.00` : this.ticketDetails.Total.Misc.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Misc}.00` : this.ticketDetails.Total.Misc;
         var CTotal = this.ticketDetails.Total.TotalManualCreditCard + this.ticketDetails.Total.TotalHHCreditCard;
         this.ticketDetails.Total.CreditCardAmountTotal = (CTotal === null) ? `0.00` : CTotal.toString().indexOf('.') < 0 ? `${CTotal}.00` : CTotal;
-        this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
-        this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
+        // this.ticketDetails.Total.TotalCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer + this.TotalCashReconciliation.TotalHHCashCustomer;
+        // this.ticketDetails.Total.TotalChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer + this.TotalCashReconciliation.TotalHHChargeCustomer;
+        this.ticketDetails.Total.TotalCashCustomer = (+this.TotalCashReconciliation.TotalManualCashCustomer || 0).fpArithmetic("+", +this.TotalCashReconciliation.TotalHHCashCustomer || 0);
+        this.ticketDetails.Total.TotalChargeCustomer = (+this.TotalCashReconciliation.TotalManualChargeCustomer || 0).fpArithmetic("+", +this.TotalCashReconciliation.TotalHHChargeCustomer || 0);
+        this.ticketDetails.Total.totalSales = (+this.ticketDetails.Total.TotalCashCustomer || 0).fpArithmetic("+", +this.ticketDetails.Total.TotalChargeCustomer || 0);
         this.ticketDetails.Total.Tolls = (this.ticketDetails.Total.Tolls === undefined || this.ticketDetails.Total.Tolls === null || this.ticketDetails.Total.Tolls === 0) ? `0.00`:this.ticketDetails.Total.Tolls.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.Tolls}.00` : this.ticketDetails.Total.Tolls;
         this.ticketDetails.Total.MoneyOrderFee = (this.ticketDetails.Total.MoneyOrderFee === undefined || this.ticketDetails.Total.MoneyOrderFee === null || this.ticketDetails.Total.MoneyOrderFee === 0) ? `0.00`: this.ticketDetails.Total.MoneyOrderFee.toString().indexOf('.') < 0 ? `${this.ticketDetails.Total.MoneyOrderFee}.00` : this.ticketDetails.Total.MoneyOrderFee;
         this.ticketDetails.Total.MCHHC = +this.ticketDetails.Total.TotalManualCheck.fpArithmetic("+", this.ticketDetails.Total.TotalHHCheck || 0);
@@ -252,15 +257,29 @@ export class DetailsComponent implements OnInit {
                 (+ticketDetails.Total.Tolls || 0) +
                 (+ticketDetails.Total.MoneyOrderFee || 0)
 
-            this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) +
-                (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
-                (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
-                (+ticketDetails.Total.TotalManualCreditCard));
+            // this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) +
+            //     (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
+            //     (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
+            //     (+ticketDetails.Total.TotalManualCreditCard));
+            this.totalOverShort = (+this.totalDeposit || 0).fpArithmetic("-", (+ticketDetails.Total.MCHHC + +ticketDetails.Total.MCHHCash + +ticketDetails.Total.MCCHHC) || 0);
             ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0) + (+ticketDetails.Total.actualdepositcheck || 0) + (+ticketDetails.Total.ActualCoin || 0);
         }
         console.log('this.totalDeposit:', this.totalDeposit);
     }
+    approveTrip(status){
+        const activeModal = this.modalService.open(ModalComponent, {
+            size: 'sm',
+            backdrop: 'static',
+          });
+          activeModal.componentInstance.BUTTONS.OK = 'OK';
+          activeModal.componentInstance.showCancel = true;
+          activeModal.componentInstance.modalHeader = 'Warning!';
+          activeModal.componentInstance.modalContent = `Once you will approve the trip, you will not able to edit Unit Reconcilation & Cash Reconcilation.`;
+          activeModal.componentInstance.closeModalHandler = (() => {
+            //this.saveReconciliation(status);
+          });
 
+    }
     saveReconciliation(statusId) {
 
         console.log(this.newlyAddedProduct);
