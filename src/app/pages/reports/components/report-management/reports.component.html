@@ -1,6 +1,6 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-2" [hidden]="IsTIR">
+        <div class="col-sm-2" [hidden]="IsTIR" (mouseleave)="d.close()">
             <label>Start Date</label>
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker"
@@ -10,7 +10,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR">
+        <div class="col-sm-2" [hidden]="IsTIR" (mouseleave)="d1.close()">
             <label>End Date</label>
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker"

@@ -183,7 +183,6 @@ export class ReportsComponent implements OnInit {
     }
 
     getAllBranches() {
-        debugger
         this.reportService.getBranches().subscribe((res) => {
             // res.shift();
             // res.unshift({ BranchID: 1, BranchName: 'All Branches' });

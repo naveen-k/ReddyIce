@@ -1,6 +1,6 @@
 <ba-card cardTitle="Manual Ticket List {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-2" (mouseleave)="d.close()">
             <label>Select Date</label>
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="searchObj.CreatedDate" placeholder="yyyy-mm-dd" name="dp" (ngModelChange)='getSearchedTickets();dateChangeHandler();'
