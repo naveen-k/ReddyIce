@@ -29,7 +29,7 @@
                 <!-- <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly || tripMode" [disabled]="ticket.TicketStatusID != 23">
                     Submit
                 </button> -->
-                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="!isFormDirty">
+                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="!isFormDirty || isSubmited">
                     Submit
                 </button>
             </div>

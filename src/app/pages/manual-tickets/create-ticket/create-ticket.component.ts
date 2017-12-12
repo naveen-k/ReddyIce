@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-ticket.component.scss'],
 })
 export class CreateTicketComponent implements OnInit {
-
+  isSubmited:boolean =false;
   pageTitle: string = 'New Manual Ticket';
 
   ticket: ManualTicket = {} as ManualTicket;
@@ -378,7 +378,7 @@ export class CreateTicketComponent implements OnInit {
           return el.UserId === that.ticket.UserID;
         });
         if (newArray.length === 0) {
-          this.ticket.UserID = null;
+          this.ticket.UserID = (this.drivers.length>0)?this.drivers[0].UserId:null;
         }
       }
     });
@@ -631,9 +631,11 @@ export class CreateTicketComponent implements OnInit {
   }
 
   uploadFile(file) {
+   
     if (file.ImageID) {
       this.service.updateFile(file).subscribe((response) => {
         this.notification.success('', 'File updated');
+        this.isSubmited = false;
       });
       return;
     }
@@ -755,7 +757,9 @@ export class CreateTicketComponent implements OnInit {
   }
 
   preSaveTicket() {
+    this.isSubmited = true;
     if (!this.validateTicket(this.ticket)) {
+      this.isSubmited = false;
       return;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
@@ -788,9 +792,10 @@ export class CreateTicketComponent implements OnInit {
 
   saveTicket() {
     if (!this.validateTicket(this.ticket)) {
+      this.isFormDirty = false;
       return;
     }
-    this.isFormDirty = false;
+    this.isFormDirty = true;
     // Check if POD needs to upload
     if (this.file.Image) {
       this.uploadFile(this.file);
@@ -801,13 +806,14 @@ export class CreateTicketComponent implements OnInit {
 
     if (this.ticketId) {
       // Update ticket
-      this.isFormDirty = false;
+     
       this.service.updateTicket(ticket).subscribe(res => {
-        this.isFormDirty = false;
+       
         this.notification.success('', res);
         this.location.back();
       }, err => {
         this.isFormDirty = true;
+        this.isSubmited = false;
         this.notification.error('', err);
       });
       return;
@@ -817,6 +823,7 @@ export class CreateTicketComponent implements OnInit {
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('', 'Ticket created successfully!');
+     
       let d: any[] = ticket.DeliveryDate.split('-');
       if (d.length && d.length == 3) {
         this.listFilter.CreatedDate.month = +d[0];
@@ -827,6 +834,7 @@ export class CreateTicketComponent implements OnInit {
         this.location.back();
         return;
       }
+      this.isSubmited = false;
       this.isFormDirty = false;
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     }, (error) => {
@@ -840,6 +848,7 @@ export class CreateTicketComponent implements OnInit {
         }
         this.isFormDirty = true;
       }
+      this.isSubmited = false;
     });
   }
 
