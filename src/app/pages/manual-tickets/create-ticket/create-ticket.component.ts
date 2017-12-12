@@ -572,7 +572,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.CashAmount = null;
     this.ticket.CheckAmount = null;
     this.ticket.CheckNumber = null;
-    if(this.ticket.CustomerType === 22){
+    if(this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false){
       this.ticket.TicketTypeID = 26;
     } 
   }
