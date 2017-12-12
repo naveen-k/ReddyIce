@@ -4,6 +4,11 @@ declare var $: any;
 @Component({
     selector: 'reddy-select',
     template: `<select #select [disabled]="disabled"></select>`,
+    styles :[
+        `:host{
+            width: 100%;
+        }`
+    ]
 })
 export class SelectComponent implements AfterViewInit {
     @ViewChild('select') select: ElementRef;
