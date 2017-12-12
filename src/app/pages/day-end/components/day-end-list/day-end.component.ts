@@ -6,7 +6,7 @@ import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
-    templateUrl: './day-end.component.html',
+    templateUrl: './mobile-day-end.component.html',
     styleUrls: ['./day-end.component.scss'],
 })
 export class DayEndComponent implements OnInit {
