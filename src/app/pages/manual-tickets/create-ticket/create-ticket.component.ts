@@ -686,7 +686,7 @@ export class CreateTicketComponent implements OnInit {
       });
     }
   }
-  
+
   deletePODImage(imageID, TicketID) {
     console.log("imageID---TODO", imageID, TicketID);
     this.service.deleteImageByID(imageID, TicketID).subscribe(
