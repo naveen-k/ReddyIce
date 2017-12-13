@@ -143,7 +143,7 @@ export class DetailsComponent implements OnInit {
     productChangeHandler(product: any, arrayIndex: any): void {
         const products = this.newlyAddedProduct.filter(t => t.ProductID === product.ProductID);
         if (products.length === 2) {
-            // product.ProductID = '';
+            product.ProductID = '';
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',
                 backdrop: 'static',
@@ -151,17 +151,18 @@ export class DetailsComponent implements OnInit {
             activeModal.componentInstance.BUTTONS.OK = 'OK';
             // activeModal.componentInstance.showCancel = true;
             activeModal.componentInstance.modalHeader = 'Warning!';
-            activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
+            activeModal.componentInstance.modalContent = `Product already selected. You cannot select same product again. If product is duplicate then you cannot submit`;
             activeModal.componentInstance.closeModalHandler = (() => {
+                this.hideAddProduct = true;
             });
-            setTimeout(() => {
-                this.newlyAddedProduct.splice(arrayIndex, 1, {})
-            })
+           // setTimeout(() => {
+            //    this.newlyAddedProduct.splice(arrayIndex, 1, {})
+           // })
 
             return;
         }
-        const productIndex = this.productList.filter((o) => o.ProductID === product.ProductID)[0]; // .indexOf(product.ProductID);
-        this.newlyAddedProduct[arrayIndex] = productIndex; // this.productList[productIndex].ProductID;
+        products[0]['ProductSourceID'] = this.productList.filter((o) => o.ProductID === products[0]['ProductID'])[0]['ProductSourceID']; // .indexOf(product.ProductID);
+        //this.newlyAddedProduct[arrayIndex] = productIndex; // this.productList[productIndex].ProductID;
         this.checkValidity = true;
         this.hideAddProduct = false;
         //this.resetField(arrayIndex);
