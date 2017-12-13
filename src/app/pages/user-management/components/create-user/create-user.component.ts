@@ -196,7 +196,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     onSubmit() { 
-        debugger
         if (this.userObject.IsDistributor) {
             this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
         }
@@ -240,11 +239,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     validateUser(user) {
-        if (!user.IsRIInternal) {
+        if (!user.IsRIInternal || !user.IsRIInternal===undefined) {
             if (!user.DistributorMasterID) {
                 this.notification.error('Distributor is mandatory!!!');
                 return false;
-            } else if (user.IsSeasonal && !this.userBranch) {
+            } else if (user.IsSeasonal && (!this.userBranch || this.userBranch.length===0)) {
                 this.notification.error('Branch is mandatory!!!');
                 return false;
             }
@@ -438,9 +437,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         //     return dist.filter((user) => user.IsSeasonal);
         // } else 
         // debugger;
-        // if (uRole === 2 && +role === 3) {
-        //     return dist.filter((user) => user.IsSeasonal);
-        // }
+        if (uRole === 2 && +role === 3) {
+            return dist.filter((user) => user.IsSeasonal);
+        }
         return dist;
     }
     getDistributor() {
