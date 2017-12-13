@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-ticket.component.scss'],
 })
 export class CreateTicketComponent implements OnInit {
-  isSubmited:boolean =false;
+  isSubmited: boolean = false;
   pageTitle: string = 'New Manual Ticket';
 
   ticket: ManualTicket = {} as ManualTicket;
@@ -378,7 +378,7 @@ export class CreateTicketComponent implements OnInit {
           return el.UserId === that.ticket.UserID;
         });
         if (newArray.length === 0) {
-          this.ticket.UserID = (this.drivers.length>0)?this.drivers[0].UserId:null;
+          this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].UserId : null;
         }
       }
     });
@@ -434,7 +434,7 @@ export class CreateTicketComponent implements OnInit {
         this.productChangeHandler(td);
       }
       this.updateTicketDetailObject(td);
-      if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID ==27)) {
+      if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID == 27)) {
         // Ticket Type is DSD
         td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
       } else if (this.ticket.CustomerType === 21) {
@@ -572,9 +572,9 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.CashAmount = null;
     this.ticket.CheckAmount = null;
     this.ticket.CheckNumber = null;
-    if(this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false){
+    if (this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false) {
       this.ticket.TicketTypeID = 26;
-    } 
+    }
   }
 
   onCancelClick() {
@@ -631,7 +631,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   uploadFile(file) {
-   
+
     if (file.ImageID) {
       this.service.updateFile(file).subscribe((response) => {
         this.notification.success('', 'File updated');
@@ -647,6 +647,7 @@ export class CreateTicketComponent implements OnInit {
     });
   }
   downloadPODImage(imageID, obj) {
+
     var savePod = (file) => {
       let ext = file.ImageMetaData ? file.ImageMetaData.substring(file.ImageMetaData.indexOf('/') + 1, file.ImageMetaData.indexOf(';')) : 'png';
       this.saveAs(file.ImageData, `${this.ticket.TicketID || 'pod'}.${ext}`)
@@ -669,21 +670,23 @@ export class CreateTicketComponent implements OnInit {
     }
     var byteArray = new Uint8Array(byteNumbers);
     var blob = new Blob([byteArray], { type: 'application/octet-stream' });
-    var url = window.URL.createObjectURL(blob);
-
-    var anchorElem = document.createElement("a");
-    anchorElem.style.display = "none";
-    anchorElem.href = url;
-    anchorElem.download = fileName;
-
-    document.body.appendChild(anchorElem);
-    anchorElem.click();
-
-    document.body.removeChild(anchorElem);
-    setTimeout(function () {
-      window.URL.revokeObjectURL(url);
-    });
+    if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+      window.navigator.msSaveBlob(blob, fileName);
+    } else {
+      var url = window.URL.createObjectURL(blob);
+      var anchorElem = document.createElement("a");
+      anchorElem.style.display = "none";
+      anchorElem.href = url;
+      anchorElem.download = fileName;
+      document.body.appendChild(anchorElem);
+      anchorElem.click();
+      document.body.removeChild(anchorElem);
+      setTimeout(function () {
+        window.URL.revokeObjectURL(url);
+      });
+    }
   }
+  
   deletePODImage(imageID, TicketID) {
     console.log("imageID---TODO", imageID, TicketID);
     this.service.deleteImageByID(imageID, TicketID).subscribe(
@@ -734,7 +737,7 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
 
       this.ticket.CustomerType = this.ticket.Customer.CustomerType;
-      if(this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false){
+      if (this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false) {
         this.ticket.TicketTypeID = 26;
       }
       // Initialize to check/uncheck POD Received
@@ -806,9 +809,9 @@ export class CreateTicketComponent implements OnInit {
 
     if (this.ticketId) {
       // Update ticket
-     
+
       this.service.updateTicket(ticket).subscribe(res => {
-       
+
         this.notification.success('', res);
         this.location.back();
       }, err => {
@@ -823,7 +826,7 @@ export class CreateTicketComponent implements OnInit {
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('', 'Ticket created successfully!');
-     
+
       let d: any[] = ticket.DeliveryDate.split('-');
       if (d.length && d.length == 3) {
         this.listFilter.CreatedDate.month = +d[0];
@@ -866,10 +869,10 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketStatusID = 23;
     this.saveTicket();
   }
-  
+
 
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
-    if((ticket.CustomerType == 22 ||ticket.CustomerType == 21) && !ticket.IsSaleTicket){
+    if ((ticket.CustomerType == 22 || ticket.CustomerType == 21) && !ticket.IsSaleTicket) {
       ticket.TktType = 'C';
     }
     const clonedObject: ManualTicket = JSON.parse(JSON.stringify(ticket));
@@ -996,7 +999,7 @@ export class CreateTicketComponent implements OnInit {
     });
     this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
     this.ticket.TaxAmount = (this.ticket.TotalSale * this.customer.Tax) / 100;
-    if(this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket){
+    if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }
     //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;

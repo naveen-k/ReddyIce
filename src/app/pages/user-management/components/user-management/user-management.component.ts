@@ -218,6 +218,9 @@ export class UserManagementComponent implements OnInit {
     delete user.role;
     delete user.BranchID;
     if (!user.IsRIInternal) { delete user.UserName; }
+    // if(user.Branch.length>0){
+      
+    // }
     this.service.createUser(user).subscribe((res) => {
       console.log(user);
       this.notification.success('Success', 'User created successfully');
