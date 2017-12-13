@@ -17,7 +17,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     private _roles: any[];
     private _user: any = {};
-    userBranch: any;
+    userBranch: any = [];
     tBranches: any = [];
     selectedBranch: any = [];
     actionName: string;
@@ -40,7 +40,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     tempUserBranch: any = [];
     distributorsAndCopackers: any = [];
     //cacheDistributor: any = [];
-    
+
 
     @Input() isNewUser: boolean;
     @Input() formIsDirty: boolean;
@@ -91,7 +91,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.populatateRoleList();
         if (this.actionName == 'edit') {
             val.RoleID = val.RoleID || this._user.RoleID;
-            this.roleChange(val.RoleID,'retainDist');
+            this.roleChange(val.RoleID, 'retainDist');
         } else {
             if (!this.user.RoleID) {
                 this.user.RoleID = '';
@@ -195,7 +195,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.isFormValid = true;
     }
 
-    onSubmit() { 
+    onSubmit() {
         if (this.userObject.IsDistributor) {
             this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
         }
@@ -239,11 +239,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     validateUser(user) {
-        if (!user.IsRIInternal || !user.IsRIInternal===undefined) {
+        if (!user.IsRIInternal || !user.IsRIInternal === undefined) {
             if (!user.DistributorMasterID) {
                 this.notification.error('Distributor is mandatory!!!');
                 return false;
-            } else if (user.IsSeasonal && (!this.userBranch || this.userBranch.length===0)) {
+            } else if (user.IsSeasonal && (!this.userBranch || this.userBranch.length === 0)) {
                 this.notification.error('Branch is mandatory!!!');
                 return false;
             }
@@ -361,14 +361,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         });
     }
 
-    roleChange(roleID,retainDist:any ='') {
+    roleChange(roleID, retainDist: any = '') {
         roleID = roleID + '';
-        if(retainDist===''){
+        if (retainDist === '') {
             this.user.DistributorMasterID = 0;
         }
         
-
-        this.userBranch = [];        
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5' || roleID === '7') {
             if (roleID === '2') {
                 this.showIseries = true;
@@ -384,7 +382,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         } else {
             this.showIseries = false;
             this.user.RoleID = roleID;
-            this.userBranch = [];
+            this.userBranch = this.userBranch.filter(u => u != 1);
             this.cBranches = this.tBranches;
             console.log(this.cBranches);
             if (this.cBranches[0].value === 1) {
@@ -392,13 +390,13 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
             // Alok- show ISeries for Drive
-            if(roleID === "3"){
+            if (roleID === "3") {
                 this.showIseries = true;
             }
         }
-       // if (this.action == 'edit') {
+        // if (this.action == 'edit') {
         //    this.transformation();
-       // }
+        // }
         this.pushBranches();
         this.getDistributor();
 
@@ -539,7 +537,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
     }
     pushBranches() {
-         console.log(this.userBranch);
+        console.log(this.userBranch);
         this.selectedBranch.length = 0;
         this.selectedBranch = [];
 
