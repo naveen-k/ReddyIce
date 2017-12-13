@@ -126,7 +126,7 @@ export class TicketListComponent implements OnInit {
         }
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
-            if (this.user.Role && (this.user.Role.RoleID <= 3 || this.user.Role.RoleID == 7)) {
+            if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
                 this.searchObj.UserId = +this.searchObj.UserId || 1;
             }

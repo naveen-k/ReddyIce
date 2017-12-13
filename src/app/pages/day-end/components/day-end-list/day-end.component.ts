@@ -29,21 +29,17 @@ export class DayEndComponent implements OnInit {
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
-        console.log(this.logedInUser);
+        // console.log(this.logedInUser);
         this.filter = this.service.getFilter();
         if (this.logedInUser.IsDistributor) {
             this.userSubTitle = ` - ${this.logedInUser.Distributor.DistributorName}`;
-            this.filter.type = 'distributor';
-            this.filter.userBranch = this.logedInUser.Distributor.DistributorMasterId || this.logedInUser.Distributor.DistributorMasterID;
-        } else {
-            this.filter.type = 'internal';
         }
 
         if (this.logedInUser.Role.RoleID === 3 && this.logedInUser.IsSeasonal) {
-            this.filter.type = 'internal';
             this.logedInUser.IsRIInternal = true;
             this.logedInUser.IsDistributor = false;
         }
+
         //Check if LogedIn User is Seasonal Distributor or not 
 
         // if (!this.logedInUser.IsRIInternal) {
