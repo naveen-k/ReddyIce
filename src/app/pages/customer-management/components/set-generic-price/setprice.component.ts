@@ -60,6 +60,7 @@ export class SetPriceComponent implements OnInit {
             this.showSpinner = false;
             this.editClicked = new Array(this.externalProducts.length);
             this.editClicked.fill(false);
+            this.updateProductOnTypeChange();
         }, (err) => {
         });
     }

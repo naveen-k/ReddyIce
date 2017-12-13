@@ -282,7 +282,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     filterRoles() {
-        this.roleList = this.roles.reduce((accumulator, child) => {
+        this.roleList = this.roles.reduce((accumulator, child) => {console.log(accumulator, child,'accumulator, child')
             if (child.ShowExternal) {
                 return [
                     ...accumulator,

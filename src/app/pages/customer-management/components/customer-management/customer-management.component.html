@@ -24,15 +24,15 @@
                 </div>
                 <div class="col-sm-8">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" (click)="sequenceChangeHandler(1)">
+                        <input type="radio" name="type" [value]="1"  [(ngModel)]="riCustomer" (ngModelChange)="sequenceChangeHandler()">
                         <span>Yes</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" (click)="sequenceChangeHandler(2)">
+                        <input type="radio" name="type" [value]="2" [(ngModel)]="riCustomer" (ngModelChange)="sequenceChangeHandler()">
                         <span>No</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" checked (click)="sequenceChangeHandler(3)">
+                        <input type="radio" name="type" [value]="3" [(ngModel)]="riCustomer" (ngModelChange)="sequenceChangeHandler()">
                         <span>Both</span>
                     </label>
                 </div>
@@ -49,15 +49,15 @@
                 </div>
                 <div class="col-sm-10">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="usertype" (click)="usertypeChangeHandler(1)">
+                        <input type="radio" name="usertype" [value]="1" [(ngModel)]="isActtive" (ngModelChange)="sequenceChangeHandler()">
                         <span>Active</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="usertype" (click)="usertypeChangeHandler(2)">
+                        <input type="radio" name="usertype" [value]="2" [(ngModel)]="isActtive" (ngModelChange)="sequenceChangeHandler()">
                         <span>Inactive</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="usertype" checked (click)="usertypeChangeHandler(3)">
+                        <input type="radio" name="usertype" [value]="3" [(ngModel)]="isActtive" (ngModelChange)="sequenceChangeHandler()">
                         <span>Both</span>
                     </label>
                 </div>
@@ -131,7 +131,7 @@
                                     <i class="ion-edit custom-tooltip-ion" [routerLink]="['../edit', cust.CustomerId]" style="margin-right: 5px" [hidden]="cust.IsRICustomer">
                                         <span class="tooltiptext">Edit</span>
                                     </i>
-                                    <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer" (click)="deleteCustomer(cust.CustomerId)">
+                                    <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px" [hidden]="cust.IsRICustomer || !cust.Active" (click)="deleteCustomer(cust.CustomerId)">
                                         <span class="tooltiptext">Inactive</span>
                                     </i>
                                 </td>

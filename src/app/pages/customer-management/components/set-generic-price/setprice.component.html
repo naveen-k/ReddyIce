@@ -48,7 +48,7 @@
                         <tr *ngFor="let product of extProducts|filter:customer.searchString; let index=index">
                             
                             <td>
-                                <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px; cursor:pointer" (click)="onEditClicked(product);formTouchHandler()">
+                                <i class="ion-edit custom-tooltip-ion" [hidden]="!product.IsActive" style="margin-right: 5px; cursor:pointer" (click)="onEditClicked(product);formTouchHandler()">
                                 <span class="tooltiptext">Edit</span></i>
                                 <i class="ion-trash-a custom-tooltip-ion" [hidden]="product.IsInternal || !product.IsActive" style="margin-right: 5px;cursor:pointer" (click)="deleteProduct(product.ProductId,false)">
                                 <span class="tooltiptext">Inactive</span></i>
