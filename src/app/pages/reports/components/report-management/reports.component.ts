@@ -31,7 +31,7 @@ export class ReportsComponent implements OnInit {
         branch: 1,
         driver: 1,
         custID: 0,
-        custtID:0,
+        custtID: 0,
         custType: 0,
         ticketNumber: null,
         custName: 'All Customers',
@@ -107,6 +107,8 @@ export class ReportsComponent implements OnInit {
         this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
+        this.filter.manifestDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+
         this.user = this.userService.getUser();
         if (this.user.Role.RoleName == 'Driver') {
             this.isRIDriver = true;
@@ -128,6 +130,8 @@ export class ReportsComponent implements OnInit {
 
         if (this.user.Role.RoleName === "ITAdmin" && this.user.IsRIInternal) {
             this.isITAdmin = true;
+        } else if (this.user.Role.RoleName === "OCS" && this.user.IsRIInternal) {
+            this.isITAdmin = true;
         } else if (this.user.Role.RoleName === "Admin" && this.user.IsRIInternal) {
             this.isInternalAdmin = true;
         } else if (this.user.Role.RoleName === "Admin" && !this.user.IsRIInternal) {
@@ -141,12 +145,12 @@ export class ReportsComponent implements OnInit {
         }
 
         if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
-            this.filter.userType='internal';
+            this.filter.userType = 'internal';
             this.isInternalDriver = true;
             this.user.IsRIInternal = true;
             this.user.IsDistributor = false;
-          }
-    
+        }
+
         this.userTypeChangeHandler();
         this.getCustomers();
     }
@@ -253,13 +257,13 @@ export class ReportsComponent implements OnInit {
     }
 
     customerTypeChange(custType) {
-       if(custType){
-        this.customerstatus=custType;
-        
-       }
-       this.filter.custID = 0;
-       this.filter.custtID = 0;
-       this.filterCustomers();
+        if (custType) {
+            this.customerstatus = custType;
+
+        }
+        this.filter.custID = 0;
+        this.filter.custtID = 0;
+        this.filterCustomers();
     }
 
     getCustomersbyTicketNumber(ticketNumber) {
@@ -414,7 +418,7 @@ export class ReportsComponent implements OnInit {
                 const tempArr = [];
                 res.forEach(cus => {
                     tempArr.push({
-                        value: `${cus.CustomerID}`+'-'+`${cus.CustomerSourceID}`,
+                        value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
                         label: `${cus.CustomerName}`,
                         data: cus,
                     });
@@ -439,28 +443,28 @@ export class ReportsComponent implements OnInit {
         });
     }
     selectedCustomerChange(id) {
-        if(id ==undefined || id == '' || id=="0"){
+        if (id == undefined || id == '' || id == "0") {
             this.filter.custtID = 0;
             this.customerstatus = this.filter.custType;
             return;
         }
-        let custTemp:string[] = id.split('-');
-        
+        let custTemp: string[] = id.split('-');
+
         console.log(id);
         for (let i = 0; i < this.cutommers.length; i++) {
             if (this.cutommers[i].data) {
                 if (this.cutommers[i].data.CustomerID) {
                     if (this.cutommers[i].data.CustomerID == custTemp[0] && this.cutommers[i].data.CustomerSourceID == custTemp[1]) {
                         this.customerstatus = this.cutommers[i].data.CustomerSourceID;
-                        this.filter.custtID=this.cutommers[i].data.CustomerID;
+                        this.filter.custtID = this.cutommers[i].data.CustomerID;
                         break;
-                    } else if(custTemp[0] == "0"){
+                    } else if (custTemp[0] == "0") {
                         this.filter.custtID = 0;
                     }
-                }else {
-                    if(this.filter.custType === 0){
-                        this.customerstatus=0;
-                    }else{
+                } else {
+                    if (this.filter.custType === 0) {
+                        this.customerstatus = 0;
+                    } else {
                         this.customerstatus = this.customerstatus;
                     }
                 }

@@ -1,6 +1,16 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-2" [hidden]="IsTIR" (mouseleave)="d.close()">
+        <div class="col-sm-2" *ngIf="filter.reportType == 'MR'" (mouseleave)="d2.close()">
+            <label>Select Date</label>
+            <div class="input-group">
+                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d2="ngbDatepicker"
+                    [(ngModel)]="filter.manifestDate" disabled>
+                <button class="input-group-addon" (click)="d2.toggle()" type="button">
+                    <i class="ion-calendar"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'" (mouseleave)="d.close()">
             <label>Start Date</label>
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker"
@@ -10,7 +20,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR" (mouseleave)="d1.close()">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'" (mouseleave)="d1.close()">
             <label>End Date</label>
             <div class="input-group">
                 <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker"
@@ -20,7 +30,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">
+        <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>
@@ -50,21 +60,29 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR'">
                         <label>Dist/Copacker</label>
                         <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor);getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR'">
                         <label>Driver</label>
                         <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'DST'">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'DST' || filter.reportType === 'MR'">
                         <label>Driver</label>
                         <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="filter.reportType === 'MR'">
+                    <div class="col-sm-6">
+                        <label>Menifest Route#</label>
+                        <div class="input-group">
+                            <input type="text" numberOnly class="form-control" [(ngModel)]="filter.RouteNumber">
+                        </div>
                     </div>
                 </ng-container>
             </div>
@@ -78,17 +96,6 @@
                 </div>
                 <div class="col-sm-9">
                     <div class="row">
-                        <!-- <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                            <option value="AS" *ngIf="user.Role.RoleID < 3">Asset Scan</option>
-                            <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
-                            <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
-                            <option value="IOA" *ngIf="user.Role.RoleID < 3">Inventory on Arrival</option>
-                            <option value="TR" *ngIf="user.Role.RoleID===1||user.Role.RoleID===2">Invoice List</option>
-                            <option value="SRT">Sales</option>
-                            <option value="SR">Trip Details</option>
-                            <option value="TIR">Ticket Number</option>
-                            <option value="RS">Unit Summary</option>
-                        </select> -->
                         <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
                             <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option>
                             <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
@@ -99,6 +106,7 @@
                             <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
                             <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
                             <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
+                            <option value="MR">Menifest Route</option>
                         </select>
                     </div>
                 </div>
@@ -112,16 +120,11 @@
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'||IsTIR||filter.reportType==='SR'">
+        <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||filter.reportType==='RS'||IsTIR||filter.reportType==='SR'">
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
-                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)" ></reddy-select>
-                    <!-- <ng-template #rt let-r="result" let-t="term">
-                        {{ r.CustomerNumber}} - {{ r.CustomerName}}
-                    </ng-template>
-                    <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
-                        placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" /> -->
+                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
                 </div>
                 <div style='margin-left: 100px;'>
                     <a>
@@ -131,12 +134,6 @@
             </div>
         </div>
         <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
-            <!-- <label>Customer Type</label> -->
-            <!-- <select class="form-control" [(ngModel)]='filter.paymentType'>
-                <option [value]="0">All</option>
-                <option [value]="18">Cash</option>
-                <option [value]="19">Charge</option>
-            </select> -->
             <span class="col-sm-4 local-padding-eater">
                 <label class="top-margin">Customer Type</label>
             </span>
@@ -159,7 +156,7 @@
                 </label>
             </span>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType!='SR'" >
+        <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
             <label>Trip Status</label>
             <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
                 <option [value]="0">All Trips</option>
@@ -168,19 +165,10 @@
                 <option [value]="3">Trip Fully Approved</option>
             </select>
         </div>
-        <!-- <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
-            <label>Trip Status</label>
-            <select class="form-control" [(ngModel)]='filter.tripStatus'>
-                <option [value]="0">All Trips</option>
-                <option [value]="23">Draft</option>
-                <option [value]="24">Submitted</option>
-                <option [value]="25">Approved</option>
-            </select>
-        </div> -->
         <div class="col-md-1 text-right head-button-container">
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
         </div>
-       
+
     </div>
     <div class="row" [hidden]="IsTIR">
         <div class="col-sm-4" *ngIf="filter.reportType === 'SR'">
@@ -188,7 +176,8 @@
                 <label class="top-margin">Ticket Type</label>
             </span>
             <span class="col-sm-4 local-padding-eater left-margin">
-                <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" (click)="enableTripState()" checked>
+                <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" (click)="enableTripState()"
+                    checked>
                 <label class="top-margin">
                     <b>Regular</b>
                 </label>
@@ -208,18 +197,13 @@
                     <label class="control-label">
                         Enter Ticket Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number" (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
+                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number"
+                        (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
                     <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                         <div class="col-sm-12">
                             <label>Customer</label>
-                            <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
-                            <!-- <ng-template #rt let-r="result" let-t="term">
-                                    {{ r.CustomerName}}
-                                </ng-template>
-                                <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
-                                    placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" /> -->
                             <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" (selectedChange)="customerChangeHandler()"
                                 item-width="10px"></reddy-select>
                         </div>
