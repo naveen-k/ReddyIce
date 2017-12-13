@@ -1060,7 +1060,8 @@ export class CreateTicketComponent implements OnInit {
   }
 
   isPODRequired() {
-    if (this.ticket.CustomerType === 21) { return false; }
+    // POD is not required if logged in user is OCS
+    if (this.ticket.CustomerType === 21 || this.user.Role.RoleID === 4) { return false; }
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
     return selectedCustomer ? !!selectedCustomer.ChainID : false;
   }
