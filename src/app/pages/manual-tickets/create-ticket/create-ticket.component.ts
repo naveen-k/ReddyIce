@@ -104,8 +104,9 @@ export class CreateTicketComponent implements OnInit {
         if (!v.CustomerTypeID || !v.Active) { return false; }
         let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
         if (flag) {
+          term = term.trim();
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || v.CustomerId.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+            || v.CustomerNumber.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
         }
         return flag;
       }).slice(0, 10);
