@@ -127,7 +127,7 @@ export class CreateCustomerComponent implements OnInit {
             // console.log("addedProduct ", this.addedProduct)
         } else {
             this.addProductCheck.fill(false);
-            this.addNewProductCheck.fill(false);
+            this.addNewProductCheck.fill(true);
             this.newlyAddedproduct.push({} as MapProducts);
             this.addNewProductCheck.push(true);
         }
@@ -204,6 +204,7 @@ export class CreateCustomerComponent implements OnInit {
                         this.addNewProductCheck.splice(index2, 1);
                     } else {
                         this.addedProduct[index2].IsActive = false;
+                        this.addedProduct.splice(index2,1);
                         this.addProductCheck.splice(index2, 1);
                     }
                     // this.newlyAddedproduct = this.newlyAddedproduct;
