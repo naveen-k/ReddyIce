@@ -282,7 +282,7 @@
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
-                                            <td class="textAlignCenter" [hidden]="isReadOnly">
+                                            <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
@@ -370,7 +370,7 @@
                                                 (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
-                                            <td class="textAlignCenter" [hidden]="isReadOnly">
+                                            <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
@@ -445,7 +445,7 @@
                                                     (ngModelChange)="isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <!--<td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>-->
-                                            <td class="textAlignCenter" [hidden]="isReadOnly">
+                                            <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
@@ -516,7 +516,7 @@
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
-                                            <td class="textAlignCenter" [hidden]="isReadOnly">
+                                            <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
                                                 </a>
