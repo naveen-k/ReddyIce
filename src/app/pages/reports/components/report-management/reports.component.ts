@@ -49,25 +49,6 @@ export class ReportsComponent implements OnInit {
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
     hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
-    // search = (text$: Observable<any>) => text$.debounceTime(300)
-    //     .distinctUntilChanged()
-    //     .do((term) => this.searching = true)
-    //     .switchMap(term => !term.length ? [] :
-    //         this.reportService.getCustomerSearch(
-    //             term.replace('#', '%23', 'g'),
-    //             this.filter.userType, this.filter.branch,
-    //             this.filter.distributor,
-    //             this.filter.custType,
-    //         )
-    //             .do(() => this.searching = false)
-    //             .catch(() => {
-    //                 this.searching = true;
-    //                 return Observable.of([]);
-    //             }),
-    // )
-    //     .do(() => this.searching = false)
-    //     .merge(this.hideSearchingWhenUnsubscribed)
-
     user: User;
     linkRpt: SafeResourceUrl;
 
@@ -187,10 +168,14 @@ export class ReportsComponent implements OnInit {
     }
 
     getAllBranches() {
+        this.branches = [];
         this.reportService.getBranches().subscribe((res) => {
-            // res.shift();
-            // res.unshift({ BranchID: 1, BranchName: 'All Branches' });
-            this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchName');
+            if (this.filter.reportType === 'MR') {
+                Array.isArray(res) && res.shift();
+                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
+            } else {
+                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
+            }
             this.branchChangeHandler(this.filter.branch);
         }, (err) => { });
     }
