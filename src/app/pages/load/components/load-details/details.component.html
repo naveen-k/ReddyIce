@@ -116,21 +116,21 @@
                                                    <td> {{item.ProductName}}</td>
                                                     <td >
                                                         <input [disabled]="item.disabled['Load1'] || loadData?.TripStatus" [(ngModel)]='item.Load1' class="form-control small-input text-align-right"
-                                                         type="number" min="0" >
+                                                        type="text" numberOnly [maxlength]="10">
                                                     </td>
                                                    
                                                     <td >
                                                         <input [disabled]="item.disabled['Load2'] || loadData?.TripStatus" [(ngModel)]='item.Load2' class="form-control small-input dollar-input text-align-right"
-                                                        type="text" numberOnly >
+                                                        type="text" numberOnly [maxlength]="10">
                                                     </td>
                                                    
                                                     <td >
                                                         <input [disabled]="item.disabled['Load3'] || loadData?.TripStatus" [(ngModel)]='item.Load3' class="form-control small-input text-align-right"
-                                                        type="text" numberOnly >
+                                                        type="text" numberOnly [maxlength]="10">
                                                     </td>
                                                     <td colspan="2">
                                                         <input [disabled]="item.disabled['Load4'] || loadData?.TripStatus" [(ngModel)]='item.Load4' class="form-control small-input text-align-right"
-                                                        type="text" numberOnly >
+                                                        type="text" numberOnly [maxlength]="10">
                                                             
                                                     </td>
                                                    
@@ -150,26 +150,26 @@
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load1'
                                                                 class="form-control small-input text-align-right"
-                                                                type="text" numberOnly>
+                                                                type="text" numberOnly [maxlength]="10">
                                                         </td>
                                                       
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load2'
                                                                  class="form-control small-input dollar-input text-align-right"
-                                                                 type="text" numberOnly>
+                                                                 type="text" numberOnly [maxlength]="10">
                                                         </td>
                                                        
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load3'
                                                                  class="form-control small-input text-align-right"
-                                                                 type="text" numberOnly>
+                                                                 type="text" numberOnly [maxlength]="10">
                                                         </td>
         
         
                                                         <td >
                                                             <input [disabled]='!item.ProductID' [(ngModel)]='item.Load4'
                                                                  class="form-control small-input text-align-right"
-                                                                 type="text" numberOnly>
+                                                                 type="text" numberOnly [maxlength]="10">
                                                                 
                                                         </td>
                                                         <td width="0%">
