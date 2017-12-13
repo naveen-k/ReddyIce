@@ -195,7 +195,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.isFormValid = true;
     }
 
-    onSubmit() {
+    onSubmit() { 
+        debugger
         if (this.userObject.IsDistributor) {
             this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
         }
@@ -222,7 +223,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
                         } else {
                             obj = branch;
-                            obj.IsActive = false;
+                            obj.IsActive = true;
                             this.addedBranches.push(obj);
                         }
 
@@ -436,9 +437,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         // if (uRole === 1 && +role === 2) {
         //     return dist.filter((user) => user.IsSeasonal);
         // } else 
-        if (uRole === 2 && +role === 3) {
-            return dist.filter((user) => user.IsSeasonal);
-        }
+        // debugger;
+        // if (uRole === 2 && +role === 3) {
+        //     return dist.filter((user) => user.IsSeasonal);
+        // }
         return dist;
     }
     getDistributor() {
