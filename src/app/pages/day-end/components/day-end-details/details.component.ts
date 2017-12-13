@@ -222,12 +222,12 @@ export class DetailsComponent implements OnInit {
     loadUnitReconciliation() {
         this.service.getUnitsReconciliation(this.tripId).subscribe((res) => {
             if (Array.isArray(res)) {
-                this.unitReconciliation = res;console.log('this.unitReconciliation',this.tripData)
+                this.unitReconciliation = res;
                 this.unitReconciliation.forEach(element => {
-                    element['Load1Quantity'] = element['Load1Quantity'] ? element['Load1Quantity'] : (this.tripData.IsSeasonal ? element['Load1Quantity'] : element['Load']);
-                    element['ReturnQuantity'] = element['ReturnQuantity'] ? element['ReturnQuantity'] : (this.tripData.IsSeasonal ? element['ReturnQuantity'] : element['Returns']);
-                    element['DamageQuantity'] = element['DamageQuantity'] ? element['DamageQuantity'] : (this.tripData.IsSeasonal ? element['DamageQuantity'] : element['TruckDamage']);
-                    element['CustomerDamageDRV'] = element['CustomerDamageDRV'] ? element['CustomerDamageDRV'] : (this.tripData.IsSeasonal ? element['CustomerDamageDRV'] : element['CustomerDamage']);
+                    element['Load1Quantity'] = element['Load1Quantity'];// ? element['Load1Quantity'] : (this.tripData.IsSeasonal ? element['Load1Quantity'] : element['Load']);
+                    element['ReturnQuantity'] = element['ReturnQuantity'];// ? element['ReturnQuantity'] : (this.tripData.IsSeasonal ? element['ReturnQuantity'] : element['Returns']);
+                    element['DamageQuantity'] = element['DamageQuantity'];// ? element['DamageQuantity'] : (this.tripData.IsSeasonal ? element['DamageQuantity'] : element['TruckDamage']);
+                    element['CustomerDamageDRV'] = element['CustomerDamageDRV'];// ? element['CustomerDamageDRV'] : (this.tripData.IsSeasonal ? element['CustomerDamageDRV'] : element['CustomerDamage']);
                     this.unitReconChange(element);
                 });
             }
