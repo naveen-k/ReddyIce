@@ -345,6 +345,11 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custtID}`);
 
+            } else if (rType === 'MR') {
+
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}`);
+
             } else {
                 return false;
             }
