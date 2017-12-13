@@ -51,12 +51,12 @@
                                                 <td>
                                                     <span>Issued: </span>
                                                     <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.PalletsIssued' style="width:70px;text-align:right;"
-                                                    type="text" numberOnly>
+                                                    type="text" numberOnly [maxlength]="10">
                                                 </td>
                                                 <td>
                                                     <span>Truck Number: </span>
                                                     <input [disabled]="loadData?.TripStatus" [(ngModel)]='loadData.TruckNumber'  style="width:70px;text-align:right;"
-                                                    type="text" numberOnly>
+                                                    type="text" numberOnly [maxlength]="10">
                                                 </td>
                                             </tr>
                                         </tbody>
