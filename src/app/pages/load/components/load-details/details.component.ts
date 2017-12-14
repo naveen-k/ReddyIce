@@ -143,13 +143,14 @@ export class DetailsComponent implements OnInit {
     productChangeHandler(product: any, arrayIndex: any): void {
         const products = this.newlyAddedProduct.filter(t => t.ProductID === product.ProductID);
         if (products.length === 2) {
-            product.ProductID = '';
+            //product.ProductID = '';
+            this.newlyAddedProduct[arrayIndex]={};
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',
                 backdrop: 'static',
             });
             activeModal.componentInstance.BUTTONS.OK = 'OK';
-            // activeModal.componentInstance.showCancel = true;
+            //activeModal.componentInstance.showCancel = true;
             activeModal.componentInstance.modalHeader = 'Warning!';
             activeModal.componentInstance.modalContent = `Product already selected. You cannot select same product again. If product is duplicate then you cannot submit`;
             activeModal.componentInstance.closeModalHandler = (() => {
