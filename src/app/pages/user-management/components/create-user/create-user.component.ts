@@ -398,6 +398,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             if (roleID === '3' && this.userObject.IsRIInternal) {
                 this.showIseries = true;
             }
+            this.hideISeriesRoute();
         }
         // if (this.action == 'edit') {
         //    this.transformation();
@@ -406,7 +407,13 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.getDistributor();
 
     }
-
+    hideISeriesRoute(){
+        if ( this.user.RoleID == '3' && !this.user.IsRIInternal && this.userObject.Role.RoleID ==1) {
+            this.showIseries = false;
+        } else if ( this.user.RoleID == '3' && this.user.IsRIInternal) {
+            this.showIseries = true;
+        }
+    }
     loadBranches() {
         //if (!this.userBranch) { return; }
 
@@ -421,6 +428,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
     riChangeHandler(status) {
         console.log(status);
+        this.hideISeriesRoute();
         if (status) {
             this.user.FirstName = '';
             this.user.LastName = '';
