@@ -395,7 +395,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
             // Alok- show ISeries for Drive
-            if (roleID === '3' && this.user.IsRIInternal) {
+            if (roleID === '3' && this.userObject.IsRIInternal) {
                 this.showIseries = true;
             }
         }
