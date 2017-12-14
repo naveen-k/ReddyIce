@@ -254,6 +254,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
         }
+        if(this.showIseries === true && (user.ISeriesRouteNumber === undefined || user.ISeriesRouteNumber===null || user.ISeriesRouteNumber == 0)){
+            this.notification.error('ISeriesRoute Number is mandatory!!!');
+            return false;
+        }
+
         return true;
     }
 
@@ -390,7 +395,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
             // Alok- show ISeries for Drive
-            if (roleID === "3") {
+            if (roleID === '3' && this.user.IsRIInternal) {
                 this.showIseries = true;
             }
         }
