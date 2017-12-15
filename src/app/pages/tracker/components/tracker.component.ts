@@ -550,7 +550,8 @@ export class TrackerComponent implements OnInit {
         }
         if (trips[i].TotalSale != null || trips[i].TotalSale != undefined
           || trips[i].TaxAmount != null || trips[i].TaxAmount != undefined) {
-          var totalInvoice = trips[i].TotalSale + trips[i].TaxAmount;
+          // var totalInvoice = trips[i].TotalSale + trips[i].TaxAmount;
+          var totalInvoice = trips[i].TotalSale.fpArithmetic("+", trips[i].TaxAmount || 0);
           if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
             totalInvoice = totalInvoice + ".00";
           }

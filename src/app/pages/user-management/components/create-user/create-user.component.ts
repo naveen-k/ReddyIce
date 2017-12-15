@@ -408,9 +408,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     }
     hideISeriesRoute(){
-        if ( this.user.RoleID == '3' && !this.user.IsRIInternal && this.userObject.Role.RoleID ==1) {
-            this.showIseries = false;
-        } else if ( this.user.RoleID == '3' && this.user.IsRIInternal) {
+       if ( this.user.RoleID == '3' && this.user.IsRIInternal) {
             this.showIseries = true;
         }
     }
