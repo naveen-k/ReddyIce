@@ -12,7 +12,7 @@
                     </label>
                     <div class="input-group">
                         <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="dateChangeHandler()"
-                            [maxDate]="todaysDate" ngbDatepicker #d="ngbDatepicker" disabled>
+                            ngbDatepicker #d="ngbDatepicker" disabled>
                         <button class="input-group-addon" (click)="d.toggle()" type="button">
                             <i class="ion-calendar"></i>
                         </button>
