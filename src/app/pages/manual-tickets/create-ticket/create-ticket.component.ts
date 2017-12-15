@@ -827,12 +827,14 @@ export class CreateTicketComponent implements OnInit {
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('', 'Ticket created successfully!');
-
       let d: any[] = ticket.DeliveryDate.split('-');
-      if (d.length && d.length == 3) {
+      if (this.tripMode && d.length && d.length == 3) {
         this.listFilter.CreatedDate.month = +d[0];
         this.listFilter.CreatedDate.day = +d[1];
         this.listFilter.CreatedDate.year = +d[2];
+      } else{
+        const now = new Date();
+        this.listFilter.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
       }
       if (this.tripMode) {
         this.location.back();
