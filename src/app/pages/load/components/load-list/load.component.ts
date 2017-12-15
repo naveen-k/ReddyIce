@@ -117,7 +117,7 @@ export class LoadComponent implements OnInit {
             this.filter.tripCode = 0;
         }
         this.maxTripCode= this.getHighestTripCode(fLoad);
-        this.filteredLoads = fLoad;
+        this.filteredLoads = fLoad.sort((a, b) => Number(b.TripCode) - Number(a.TripCode));
     }
     getHighestTripCode(fLoad) {
         let arr=[];
