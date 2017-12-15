@@ -2,14 +2,10 @@
     <div class="col-md-12">
         <ba-card cardTitle="Trip List {{userSubTitle}}" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="row">
-                <div class="col-sm-3" (mouseleave)="d.close()">
+                <div class="col-sm-3">
                     <label><b> Select Date </b></label>
                     <div class="input-group">
-                        <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="selectionchangeHandler()"
-                        [maxDate]="todaysDate"  ngbDatepicker #d="ngbDatepicker" disabled>
-                        <button class="input-group-addon" (click)="d.toggle()"  type="button">
-                            <i class="ion-calendar"></i>
-                        </button>
+                        <date-picker [maxDate]="todaysDate" [(dateModel)]="filter.selectedDate" (dateModelChange)="selectionchangeHandler()"></date-picker>
                     </div>
                 </div>
                 <div class="col-sm-3">

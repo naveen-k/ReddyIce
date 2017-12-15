@@ -1,33 +1,21 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-2" *ngIf="filter.reportType == 'MR'" (mouseleave)="d2.close()">
+        <div class="col-sm-2" *ngIf="filter.reportType == 'MR'">
             <label>Select Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d2="ngbDatepicker"
-                    [(ngModel)]="filter.manifestDate" disabled>
-                <button class="input-group-addon" (click)="d2.toggle()" type="button">
-                    <i class="ion-calendar"></i>
-                </button>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.manifestDate"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'" (mouseleave)="d.close()">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker"
-                    [(ngModel)]="filter.startDate" (ngModelChange)="getCustomers()" disabled>
-                <button class="input-group-addon" (click)="d.toggle()" type="button">
-                    <i class="ion-calendar"></i>
-                </button>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'" (mouseleave)="d1.close()">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'">
             <label>End Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker"
-                    [(ngModel)]="filter.endDate" (ngModelChange)="getCustomers()" disabled>
-                <button class="input-group-addon" (click)="d1.toggle()" type="button">
-                    <i class="ion-calendar"></i>
-                </button>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">

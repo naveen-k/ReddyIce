@@ -1,6 +1,4 @@
 <ba-card cardTitle="{{pageTitle}} {{userSubTitle}}" id="newTicket">
-    <!-- <img src="assets/reddyIce/draftTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 23"
-        width="15" class="newTicketTitleStatusIcon"> -->
     <img src="assets/reddyIce/submitTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 24 || ticket.TicketStatusID == 23" width="18" class="newTicketTitleStatusIcon">
     <img src="assets/reddyIce/approveTicket.png" *ngIf="ticket.TicketStatusID == 25" width="15" class="newTicketTitleStatusIcon">
 
@@ -11,24 +9,12 @@
                 <button class="btn btn-danger" style="margin-left:10px;" (click)="approveTicket()" [hidden]="(!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25) || tripMode === true">
                     Approve
                 </button>
-                <!-- <button class="btn btn-danger" (click)="editTicket()" [hidden]="!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25">
-                    Back to Draft
-                </button> -->
-                <!-- <button class="btn btn-danger buttonMargin" onclick="document.getElementById('file').click()" [hidden]="isReadOnly">
-                    Upload POD
-                </button> -->
                 <input id="file" type="file" (change)="onFileUpload($event)" style="display:none" accept="image/png,image/jpeg,application/pdf"
                 />
-                <!-- <button class="btn btn-danger buttonMargin" (click)="preSaveTicket()" [hidden]="isReadOnly || hideSave" [disabled]="!isFormDirty">
-                    Save
-                </button> -->
                 <button class="btn btn-danger buttonMargin" [hidden]="tripMode || ticket.TicketStatusID !== 23" [disabled]="ticket.TicketStatusID !== 23"
                     (click)="deleteTicket()">
                     Delete
                 </button>
-                <!-- <button class="btn btn-danger buttonMargin" (click)="submitTicket()" [hidden]="isReadOnly || tripMode" [disabled]="ticket.TicketStatusID != 23">
-                    Submit
-                </button> -->
                 <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="!isFormDirty || isSubmited">
                     Submit
                 </button>
@@ -96,14 +82,10 @@
             </fieldset>
         </div>
         <div class="col-sm-6">
-            <div class="row" (mouseleave)="d.close()">
+            <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date:</label>
                 <div class="col-sm-5 input-group">
-                    <input class="form-control" [firstDayOfWeek]="7" [(ngModel)]="ticket.DeliveryDate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
-                        disabled (ngModelChange)="isFormDirty=true" [maxDate]="date.maxDate" [minDate]="date.minDate">
-                    <button class="input-group-addon" (click)="d.toggle();"  type="button" [disabled]="isReadOnly || tripMode">
-                        <i class="ion-calendar"></i>
-                    </button>
+                    <date-picker [minDate]="date.minDate" [maxDate]="date.maxDate" [(dateModel)]="ticket.DeliveryDate" (dateModelChange)="isFormDirty=true;"></date-picker>
                 </div>
             </div>
             <div class="row" [style.visibility]="(ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">

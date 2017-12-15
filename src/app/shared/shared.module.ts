@@ -11,7 +11,7 @@ import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { NumberOnlyDirective } from './directives/number-only.directive';
 import { MinValueValidatorDirective } from './directives/min-value.directive';
 import { SharedService } from './shared.service';
-import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from './components/modal/modal.component';
 import { UserService } from './user.service';
 import { GenericSort } from './pipes/generic-sort.pipe';
@@ -22,6 +22,8 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { NumberDecimalDirective } from './directives/number-decimal.directive';
 import { GenericFilter } from './pipes/generic-filter.pipe';
 import { NgModule } from '@angular/core';
+import { DatePicker } from './components/date-picker/date-picker.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
     declarations: [
         GenericFilter,
@@ -42,7 +44,8 @@ import { NgModule } from '@angular/core';
         AlphaNumeric,
         ConcatStringPipe,
         ModelPopupComponent,
-        CurrencyFormatter
+        CurrencyFormatter,
+        DatePicker
     ],
     exports: [
         GenericFilter,
@@ -63,13 +66,14 @@ import { NgModule } from '@angular/core';
         AlphaNumeric,
         ConcatStringPipe,
         ModelPopupComponent,
-        CurrencyFormatter
+        CurrencyFormatter,
+        DatePicker
     ],
     entryComponents: [
         ModalComponent,
         ModelPopupComponent
     ],
-    imports: [CommonModule, NgbModalModule],
+    imports: [CommonModule, NgbModalModule, NgbModule, FormsModule],
     providers: [HttpService, UserService, SharedService],
 })
 export class SharedModule {
