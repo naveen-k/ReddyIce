@@ -2,7 +2,7 @@
     <div class='col-md-12'>
         <ba-card cardTitle="Tracker{{userSubTitle}}" baCardClass="medium-card" class="smart-table-container">
             <div class="row">
-                <div class="col-sm-2" (mouseleave)="d.close()">
+                <div class="col-sm-2">
                     <label>Select Date</label>
                     <div class="input-group">
                         <date-picker [maxDate]="todaysDate" [(dateModel)]="tripFilterOption.tripDate" (dateModelChange)="dateChangeHandler();"></date-picker>
