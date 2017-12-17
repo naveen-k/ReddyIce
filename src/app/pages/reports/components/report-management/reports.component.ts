@@ -123,6 +123,10 @@ export class ReportsComponent implements OnInit {
             this.isExternalDriver = true;
         } else if (this.user.Role.RoleName === "Manager" && this.user.IsRIInternal) {
             this.isInternalAdmin = true;
+        } else if (this.user.Role.RoleID == 8 && this.user.IsRIInternal) {
+            this.isInternalAdmin = true;
+        } else if(this.user.Role.RoleID == 8 && !this.user.IsRIInternal) {
+            this.isExternalAdmin = true;
         }
 
         if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {

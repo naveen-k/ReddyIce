@@ -124,6 +124,7 @@ export class TicketListComponent implements OnInit {
         if(this.searchObj.BranchId === null){
             return;
         }
+        this.showSpinner = true;
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
             if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 4 || this.user.Role.RoleID == 7)) {
@@ -131,6 +132,7 @@ export class TicketListComponent implements OnInit {
                 this.searchObj.UserId = +this.searchObj.UserId || 1;
             }
             this.drivers = res;
+            this.showSpinner = false;
             this.getSearchedTickets(byType);
         });
     }
