@@ -68,11 +68,12 @@ export class DayEndComponent implements OnInit {
         this.service.getTrips(this.service.formatDate(this.filter.selectedDate)).subscribe((res) => {
             let distributors = [],
                 branches = [];
-            this.trips = res.Trips || [];
+            this.trips = res.DayEnd || [];
             console.log(this.trips);
             let tmpDist = {};
             let tmpBranch = {};
             this.trips.forEach((trip) => {
+                trip.isDistributor = !!trip.DistributorMasterID;
                 if (this.logedInUser && this.logedInUser.IsSeasonal && this.logedInUser.Role.RoleID === 3) {
                     trip.isDistributor = 0;
                 }
@@ -88,7 +89,7 @@ export class DayEndComponent implements OnInit {
                 if (tmpBranch[trip.BranchID]) { return; }
                 branches.push({
                     value: trip.BranchID,
-                    label: trip.BranchName
+                    label: `${trip.BranchCode}-${trip.BranchName}`
                 })
                 tmpBranch[trip.BranchID] = trip.BranchID;
             })
@@ -97,9 +98,9 @@ export class DayEndComponent implements OnInit {
             distributors.length && distributors.unshift({ value: 1, label: 'All Distributors' });
             this.distributors = distributors;
             this.branches = branches;
-            // if (this.filter.userBranch) {
-            //     this.filter.userBranch = 1;
-            // }
+            if (!this.filter.userBranch) {
+                this.filter.userBranch = 1;
+            }
 
             // Hack for displaying Distributor in case of no data return
             if (this.logedInUser.IsDistributor && !this.distributors.length) {

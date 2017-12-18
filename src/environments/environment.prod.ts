@@ -3,6 +3,6 @@
 
 export const environment = {
   production: true,
-  apiEndpoint: 'http://frozen.reddyice.com/reddyice_dev/',
-  reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx',
+  apiEndpoint: 'https://myicebox.reddyice.com/IceBoxApi/',
+  reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
 };
