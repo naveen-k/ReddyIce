@@ -18,7 +18,8 @@
                 <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">
+        <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
+        ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>

@@ -20,6 +20,7 @@ export class ReportsComponent implements OnInit {
     isExternalAdmin: boolean = false;
     isInternalDriver: boolean = false;
     isExternalDriver: boolean = false;
+    isSTech: boolean = false;
     filter: any = {
         startDate: null,
         todaysDate: null,
