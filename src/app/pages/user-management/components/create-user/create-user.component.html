@@ -152,12 +152,12 @@
                   </select> -->
                   
               <br/>
-              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
+              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
               <br/>
               <div style="width:100%;margin-top: 10px;max-height:50px;overflow:auto;">
                 <ul style="padding-left: 15px;">
                    <li *ngFor="let brannch of selectedBranch" >
-                      {{brannch.label}} <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' ||user.RoleID == '5')" class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
+                      {{brannch.label}} <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8')" class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
                       <span class="tooltiptext">Remove</span>
                    </i>
                  </li>

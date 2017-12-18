@@ -34,6 +34,7 @@ export class LoginService {
         localStorage.setItem('auth_token', '');
         localStorage.setItem('userId', '');
         localStorage.setItem('user_token', '');
+        localStorage.clear();
     }
 
 }
