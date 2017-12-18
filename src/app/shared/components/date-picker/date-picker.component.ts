@@ -47,6 +47,7 @@ import { NgbInputDatepicker } from "@ng-bootstrap/ng-bootstrap/datepicker/datepi
         input {
             border-top-right-radius: 0;
             border-bottom-right-radius: 0;
+            z-index: 0 !important;
         }
         button {
             border-top-left-radius: 0;
