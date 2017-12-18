@@ -318,7 +318,7 @@ export class UserManagementComponent implements OnInit {
         }
       }
       this.allBranches = this.service.transformOptionsReddySelect(this.userBranches, 'BranchID', 'BranchCode', 'BranchName');
-      if (!response.IsDistributor) {
+      if (!this.isDistributorExist) {
         this.getDistributors();
       }
       
@@ -333,6 +333,9 @@ export class UserManagementComponent implements OnInit {
   }
 
   getUserList(id?: number) {
+    if (this.isDistributorExist) {
+      this.filterBranch = 1;
+    } 
     this.showSpinner = true;
     this.service.getUsers(id, this.filterBranch).subscribe((res) => {
       res.forEach((u) => {
