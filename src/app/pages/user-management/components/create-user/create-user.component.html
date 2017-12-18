@@ -107,7 +107,7 @@
         Phone
       </label>
       <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-      maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" (ngModelChange)="changeHandler()">
+      maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal || !isNewUser" (ngModelChange)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
@@ -125,8 +125,18 @@
                   <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
                 </select>
     </div>
-
-    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || user.IsSeasonal" [hidden]="userObject.IsDistributor">
+    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header" >
+      <label for="distributor">
+        Distributor
+        <sup style="color:red;">*</sup>
+      </label>
+      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+        #distributor="ngModel" (ngModelChange)="changeHandler()">
+                    <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
+                  </select-->
+      <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
+    </div>
+    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.RoleID==='3')||(user.IsSeasonal && actionName=='edit')" [hidden]="userObject.IsDistributor">
       <label for="exampleSelect1">
         Branch
         <sup style="color:red;">*</sup>
@@ -142,42 +152,47 @@
                   </select> -->
                   
               <br/>
-              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();"></reddy-select>
-              
-              <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown--><br><br>
+              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
+              <br/>
+              <div style="width:100%;margin-top: 10px;max-height:50px;overflow:auto;">
+                <ul style="padding-left: 15px;">
+                   <li *ngFor="let brannch of selectedBranch" >
+                      {{brannch.label}} <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8')" class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
+                      <span class="tooltiptext">Remove</span>
+                   </i>
+                 </li>
+                 </ul>
+               </div>
+              <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown-->
                     <!--button class="btn btn-danger" (click)="onMultiSelect(optionsModel)">Fire</button -->
  
     </div>
-    <div *ngIf="user.IsRIInternal||showIseries" class="col-md-6 page-header">
-      <label for="iseriesroute" class="control-label">ISeries Route</label>
+    <div *ngIf="showIseries" class="col-md-6 page-header">
+      <label for="iseriesroute" class="control-label">ISeries Route <sup style="color:red;">*</sup></label>
       <input type="text" [numberOnly] class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber"
         #ISeriesRouteNumber="ngModel" maxlength="6" (ngModelChange)="changeHandler()" >
     </div>
 
-    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header" >
-      <label for="distributor">
-        Distributor
-        <sup style="color:red;">*</sup>
-      </label>
-      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
-        #distributor="ngModel" (ngModelChange)="changeHandler()">
-                    <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
-                  </select-->
-      <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
-    </div>
    
+    </div>
+    <div class="row">
     <div class="col-md-6 page-header">
-      <label class="vertical-center"></label>
+      
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
       <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
         [disabled]="isNewUser"></ba-checkbox>
     </div>
     <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="col-md-6 page-header">
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-       <label class="vertical-center"></label>
+     
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
-        disabled="true"></ba-checkbox>
+        [disabled]="true"></ba-checkbox>
     </div>
+    <div *ngIf="user.IsRIInternal && !isDistributorAdmin && user.RoleID == 3" class="col-md-6 page-header">
+     
+      <ba-checkbox [(ngModel)]="user.IsChecker" (ngModelChange)="changeHandler()" [label]="'Is Checker?'"
+        [ngModelOptions]="{standalone: true}"></ba-checkbox>
+    </div>    
   </div>
 </form>
 
@@ -224,7 +239,7 @@
     </div>
   </div>
   <div class="row page-header rowContainer">
-    <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal">
+    <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal || user.IsSeasonal">
     
       <label for="exampleSelect1">Branch</label>
         <!--select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
@@ -278,6 +293,7 @@
       </div>
     </div>
 </form>
-<div style="width:100%; border: 1px solid black; padding: 5px; text-align: justify" [hidden]="!isDistributorAdmin">
-  By utilizing the Reddy Ice “Handheld” device, you expressly agree and acknowledge that you are solely responsible for you or your employees use of any Reddy Ice “Handheld” device and all activity that occurs while you or your employees are using the Reddy Ice “Handheld” device.
+<div style="padding: 5px;" [hidden]="!isDistributorAdmin">
+  By utilizing the Reddy Ice “Handheld” device, you expressly agree and acknowledge that you are solely responsible for you or your employees use of any Reddy Ice “Handheld” device and all activity that occurs while you or your employees are using the Reddy Ice “Handheld” device. I certify that I have read and agree to the  
+  <a href="assets/static/terms.html" target="_blank" title="Handheld Terms and Conditions" ><u>Handheld Terms and Conditions</u></a>
 </div>

@@ -9,7 +9,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { User } from '../../user-management.interface';
 import { selector } from 'rxjs/operator/multicast';
 import { any } from 'codelyzer/util/function';
-
+import { ModelPopupComponent } from '../../../../shared/components/model-popup/model-popup.component';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
@@ -25,6 +25,7 @@ export class UserManagementComponent implements OnInit {
   isDistributorAdmin: boolean = false;
   cardTitle: string;
   userDetails: UserDetails;
+  IsSesonalTrue:boolean=false;
   formIsDirty: boolean = false;
   isDistributorExist: boolean = false;
   isEditClicked: boolean = false;
@@ -32,7 +33,8 @@ export class UserManagementComponent implements OnInit {
   userObject: any = [];
   // isError: boolean = false;
   showSpinner: boolean = true;
-
+  filterBranch: number = 1;
+  allBranches: any =[];
   usersList: any[];
 
   // ngModel for usertype dropdown
@@ -154,7 +156,7 @@ export class UserManagementComponent implements OnInit {
         });
       }
     }
-    console.log("user -------------------------------- ", user);
+
     this.action = 'edit';
     this.newUser = Object.assign({}, user);
     //this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
@@ -213,15 +215,15 @@ export class UserManagementComponent implements OnInit {
   }
 
   onSaveUser(user) {
-    console.log("user --------- ", user);
     delete user.role;
     delete user.BranchID;
     if (!user.IsRIInternal) { delete user.UserName; }
+    // if(user.Branch.length>0){
+      
+    // }
     this.service.createUser(user).subscribe((res) => {
-      console.log(user);
       this.notification.success('Success', 'User created successfully');
       const savedUserlist = [...this.userTableData, res];
-      console.log(res);
       this.userTableData = savedUserlist;
 
       this.rightCardOpen = !this.rightCardOpen;
@@ -233,14 +235,12 @@ export class UserManagementComponent implements OnInit {
 
     },
       (error) => {
-        console.log();
         error = JSON.parse(error._body);
         this.notification.error('Error', error.Message);
       });
   }
 
   onUpdateUser(user) {
-    console.log("--------------- on Updateuser ---- ", user);
     delete user.Role;
     delete user.MenuOptions;
     //delete user.Branch;
@@ -310,18 +310,34 @@ export class UserManagementComponent implements OnInit {
     const user = this.userService.getUser();
     this.service.getBranches(user.UserId).subscribe((response) => {
       this.userBranches = response;
+      if(this.userBranches && this.userBranches.length){
+        if(this.userBranches.length > 0 && this.userBranches[0].BranchID == 1) {
+          this.filterBranch = this.userBranches[1].BranchID;
+        } else if(this.userBranches.length > 0 && this.userBranches[0].BranchID != 1){
+          this.filterBranch = this.userBranches[0].BranchID;
+        }
+      }
+      this.allBranches = this.service.transformOptionsReddySelect(this.userBranches, 'BranchID', 'BranchCode', 'BranchName');
+      if (!this.isDistributorExist) {
+        this.getDistributors();
+      }
+      
     });
   }
 
   getDistributors() {
     this.service.getDistributerAndCopacker().subscribe((response) => {
       this.distributorsAndCopackers = response;
+      this.getUserList(parseInt(this.logUserID, 10));
     });
   }
 
   getUserList(id?: number) {
+    if (this.isDistributorExist) {
+      this.filterBranch = 1;
+    } 
     this.showSpinner = true;
-    this.service.getUsers(id).subscribe((res) => {
+    this.service.getUsers(id, this.filterBranch).subscribe((res) => {
       res.forEach((u) => {
         u = this.formatUser(u);
       });
@@ -345,27 +361,44 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  formatUser(user: any) {
+  
+  formatUser(user: any = '') {
     user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BranchName : 'NA')}`;
+    if (user.Branch) {
+      user.concatBranch = user.Branch.map(function(elem){
+          return elem.BranchName;
+      }).join(",");
+
+      user.concatCode = user.Branch.map(function(elem){
+          return elem.BranchCode;
+      }).join(",");
+
+      user.concatBranchCode =  user.Branch.map(function(elem){
+          return elem.BranchCode + ' - ' + elem.BranchName;
+      }).join(",");
+    }
     user['tmp_role'] = `${(user.Role ? user.Role.RoleName : '')}`;
     user['tmp_distributor'] = `${(user.Distributor ? user.Distributor.DistributorName : '')}`;
     return user;
   }
-
+  logUserID:any;
   ngOnInit() {
     this.userObject = this.userService.getUser();
-    // console.log(this.userObject.Role.RoleName);
     const userId = localStorage.getItem('userId') || '';
+    this.logUserID = userId;
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.idDataLoaded = true;
       this.userDetails = response;
+      if(this.userDetails.IsSeasonal){
+        this.IsSesonalTrue=true;
+      }else{
+        this.IsSesonalTrue=false;
+      }
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
       // console.log(this.userRoles);
       if (!response.IsDistributor) {
-        this.getUserList(parseInt(userId, 10));
         this.getBranches();
-        this.getDistributors();
       } else if (response.IsDistributor) {
         this.getBranches();
         this.isDistributorAdmin = true;
@@ -383,8 +416,12 @@ export class UserManagementComponent implements OnInit {
   changeUserTypeHandler() {
     this.updateUserTableOnTypeChange();
   }
-  moreBranches(branches) {
-    const activeModal = this.modalService.open(ModalComponent, {
+  /**
+   * Get more branches list by clicking on more link
+   * @params : branches, username
+   */
+  moreBranches(branches,username) {
+    const activeModal = this.modalService.open(ModelPopupComponent, {
       size: 'sm',
       backdrop: 'static',
     });
@@ -398,12 +435,18 @@ export class UserManagementComponent implements OnInit {
 
     });
 
-    let branch = cstring.join(', ');
+    let branch = cstring;
     activeModal.componentInstance.showCancel = false;
-    activeModal.componentInstance.modalHeader = 'List of branch';
-    activeModal.componentInstance.modalContent = `${branch}`;
+    activeModal.componentInstance.modalHeader = `Selected branches of ${username}`;
+    activeModal.componentInstance.modalContent = branch;
     activeModal.componentInstance.closeModalHandler = (() => {
 
     });
   }
+  /**
+   * Filter logged-in user's branches
+   */
+  branchChangeHandler() {
+    this.getUserList(parseInt(this.logUserID, 10));
+}
 }

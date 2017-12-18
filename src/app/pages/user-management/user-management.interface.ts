@@ -21,5 +21,7 @@ export interface User {
   Distributor: any;
   IsDistributor: boolean;
   DisBranchName:string;
+  IsChecker?: boolean;
+
 }
 

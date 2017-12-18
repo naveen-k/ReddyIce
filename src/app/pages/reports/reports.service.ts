@@ -20,13 +20,14 @@ export class ReportService extends SharedService {
             });
     }
     getBranches() {
-        return this.http.get(`api/branch`)
+        return this.http.get(`api/reportbranch`)
             .map((res) => res.json()).map((res) => {
                 return res;
             });
     }
-    getDriversbyBranch(branchId) {
-        return this.http.get(`api/user?driverlistbybranch=${branchId}&IsInternal=${true}`)
+    getDriversbyBranch(branchId,userId,startDate,endDate,distributorID) {
+        //return this.http.get(`api/user?driverlistbybranch=${branchId}&IsInternal=${true}`)
+        return this.http.get(`api/report/getlistoftripdriver?BranchId=${branchId}&UserId=${userId}&TripStartDate=${startDate}&TripEndDate=${endDate}&DistributorId=${distributorID}`)
             .map((res) => res.json()).map((res) => {
                 return res;
             });
@@ -78,5 +79,12 @@ export class ReportService extends SharedService {
             .map((res) => res.json()).map((res) => {
                 return res;
             });
+    }
+
+    getCustomerDropDownList(branch,userID,startDate,endDate,distributor){
+        return this.http.get(`api/report/customerswithfilters?BranchId=${branch}&UserId=${userID}&TripStartDate=${startDate}&TripEndDate=${endDate}&DistributorId=${distributor}`)
+        .map((res)=>res.json()).map((res)=>{
+            return res;
+        })
     }
 }

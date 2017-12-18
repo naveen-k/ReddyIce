@@ -101,10 +101,10 @@
                                         <i *ngIf="(customer.sortField === 'checkCashAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'checkCashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
-                                <th class="textRightPadd" *ngIf="!user.IsRIInternal">
+                                <th class="textRightPadd" *ngIf="user.Role.RoleID!='3'">
                                     Drayage
                                 </th>
-                                <th class="textRightPadd" *ngIf="!user.IsRIInternal">
+                                <th class="textRightPadd" *ngIf="user.Role.RoleID!='3'">
                                     Buyback
                                 </th>
                                 <th class="text-align-center">
@@ -126,25 +126,25 @@
                                 <td class="text-align-left">{{item.TicketNumber }}</td>
                                 <td>{{item.ticketType}}</td>                                
                                 <td><span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:20 }}</span></td>                                
-                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currency:'USD':true:'1.2' }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
-                                <td class="textRightPadd" ><span *ngIf="item.CashAmount || item.CheckAmount" [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currency:'USD':true:'1.2' }}</span><span *ngIf="item.TicketTypeID == 30">$0.00</span></td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currencyFormatter }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                <td class="textRightPadd" ><span *ngIf="item.CashAmount || item.CheckAmount" [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currencyFormatter }}</span><span *ngIf="item.TicketTypeID == 30">$0.00</span></td>
                                 <!--td class="textRightPadd" ></td-->                                
                                 <!--td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount"></td-->
-                                <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="!user.IsRIInternal"></td>
-                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="!user.IsRIInternal"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
-                                <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="!user.IsRIInternal"></td>
-                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="!user.IsRIInternal"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currency:'USD':true:'1.2'}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="user.Role.RoleID!='3'"></td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="user.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="user.Role.RoleID!='3'"></td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="user.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                 <td class="text-align-center">
                                     <input type="checkbox" disabled name="riInternal" [checked]="item.CustomerSourceID===101">
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="4"><b>Total</b></td>                                
-                                <td class="textRightPadd"><b>{{total.totalInvoice | currency:'USD':true:'1.2'}}</b></td>
-                                <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currency:'USD':true:'1.2'}}</b></td>
-                                <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currency:'USD':true:'1.2'}}</b></td>
-                                <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currency:'USD':true:'1.2'}}</b></td>
-                                <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currency:'USD':true:'1.2'}}</b></td> -->
+                                <td class="textRightPadd"><b>{{total.totalInvoice | currencyFormatter}}</b></td>
+                                <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currencyFormatter}}</b></td>
+                                <td class="textRightPadd" *ngIf="user.Role.RoleID!='3'" ><b>{{total.totalDrayage | currencyFormatter}}</b></td>
+                                <td class="textRightPadd" *ngIf="user.Role.RoleID!='3'"><b>{{total.totalBuyBack | currencyFormatter}}</b></td>
+                                <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currencyFormatter}}</b></td> -->
                                 <td></td>
                             </tr>
                         </tbody>

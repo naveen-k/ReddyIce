@@ -12,7 +12,7 @@ import { environment } from '../../../../environments/environment';
     styleUrls: ['./ticket-list.component.scss'],
 })
 export class TicketListComponent implements OnInit {
-
+    newWindow:any;
     showSpinner: boolean = false;
 
     // allbranches related to loggen in usr
@@ -22,6 +22,7 @@ export class TicketListComponent implements OnInit {
     user: User = {} as User;
 
     allTickets: any = [];
+    allTicketsTemp: any = [];
 
     // model search
     searchObj: any = {};
@@ -62,9 +63,8 @@ export class TicketListComponent implements OnInit {
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
 
-
         this.searchObj = this.service.getSearchedObject();
-
+        //this.searchObj.BranchId = 1;
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
@@ -75,10 +75,13 @@ export class TicketListComponent implements OnInit {
         // load all branches
         let branches = this.activatedRoute.snapshot.data['branches'];
         // Remove 'All branch' object
-        if (branches.length && branches[0].value === 1) {
-            branches.shift();
-            this.sortBranches(branches);
+        if (branches && branches.length && this.user.Role.RoleID === 3){
+            if ((branches.length > 0) && (branches[0] === null  || branches[0].BranchID === 1)) {
+                branches.shift();
+                this.sortBranches(branches);
+            }
         }
+        
         this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
         if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
@@ -92,11 +95,11 @@ export class TicketListComponent implements OnInit {
         // Set first branch default selected
         if (this.searchObj.BranchId) {
             this.branchChangeHandler();
-        }
-
-        if (this.searchObj.DistributorID) {
+        } else if (this.searchObj.DistributorID) {
             this.getDistributors();
             // this.getSearchedTickets();
+        } else {
+            this.getSearchedTickets();
         }
     }
 
@@ -117,30 +120,38 @@ export class TicketListComponent implements OnInit {
         });
     }
 
-    getDrivers() {
+    getDrivers(byType: any = '') {
+        if(this.searchObj.BranchId === null){
+            return;
+        }
+        this.showSpinner = true;
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
-            if (this.user.Role && this.user.Role.RoleID <= 2) {
+            if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 4 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
                 this.searchObj.UserId = +this.searchObj.UserId || 1;
             }
             this.drivers = res;
-            this.getSearchedTickets();
+            this.showSpinner = false;
+            this.getSearchedTickets(byType);
         });
     }
 
-    getDistributors() {
+    getDistributors(byType: any = '') {
         this.service.getDistributerAndCopacker().subscribe(res => {
             this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
-            this.getSearchedTickets();
+            this.getSearchedTickets(byType);
         });
     }
 
-    branchChangeHandler() {
-        this.getDrivers();
+    branchChangeHandler(byType: any = '') {
+        //this.searchObj.UserId = null;
+        this.getDrivers(byType);
     }
-
-    getSearchedTickets() {
+    dateChangeHandler(){
+        this.searchObj.UserId = null;
+    }
+    getSearchedTickets(byType: any = '') {
         // Cloned search object
         const searchObj = JSON.parse(JSON.stringify(this.searchObj));
         const dt = `${searchObj.CreatedDate.month}-${searchObj.CreatedDate.day}-${searchObj.CreatedDate.year}`;
@@ -155,44 +166,64 @@ export class TicketListComponent implements OnInit {
         };
         this.showSpinner = true;
         if (searchObj.userType == 'External') { searchObj.BranchId = null; }
-        return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
-            if (response) {
-                this.showSpinner = false;
-                if (response == 'No record found') {
-                    this.allTickets = [];
-                } else {
-                    response.forEach(element => {
-                        element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
-                    });
-                    this.allTickets = response;
-                    
-                    this.allTickets.forEach(ticket => {
-                        
-                        //  ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
-                        //  ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
-                        //  ticket.amount = ticket.TotalSale + ticket.TaxAmount;
-                        //  ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
-                         if (ticket.TicketTypeID === 30) { return; }
-                         this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
-                         this.total.totalCash += ticket.CashAmount || 0;
-                         this.total.totalCheck += ticket.CheckAmount || 0;
-                         this.total.totalCharge += ticket.ChargeAmount || 0;
-                         this.total.totalDrayage += ticket.Drayage || 0;
-                         this.total.totalBuyBack += ticket.BuyBack || 0;
-                         this.total.totalDistAmt += ticket.DistAmt || 0;
-                     });
-                }
-            }
-        },
-            (error) => {
-                if (error) {
+        if (byType !== 'byuser') {
+            return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
+                //debugger;
+                if (response) {
                     this.showSpinner = false;
-                    this.allTickets = [];
+                    if (response == 'No record found') {
+                        this.allTickets = [];
+                        this.allTicketsTemp = [];
+                    } else {
+                        response.forEach(element => {
+                            element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
+                        });
+                        this.allTickets = response;
+                        this.allTicketsTemp = response;
+                        this.ticketTotal();
+
+                    }
                 }
             },
-        );
-    }
+                (error) => {
+                    if (error) {
+                        this.showSpinner = false;
+                        this.allTickets = [];
+                    }
+                },
+            );
+        } else {
+            this.allTickets = this.allTicketsTemp;
+            this.allTickets.forEach(element => {
+                element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
+            });
+            this.showSpinner = false;
 
+            this.ticketTotal();
+
+        }
+    }
+    ticketTotal() {
+        this.allTickets.forEach(ticket => {
+
+            //  ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
+            //  ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
+            //  ticket.amount = ticket.TotalSale + ticket.TaxAmount;
+            //  ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
+
+            this.total.totalDistAmt += ticket.DistAmt || 0; ticket.CustomerName = ticket.Customer.CustomerName;
+            ticket.CustomerNumber = ticket.Customer.CustomerNumber;
+            ticket.CustomerTitle = ticket.Customer.CustomerNumber + " - " + ticket.Customer.CustomerName;
+            ticket.TotalSaleWithTax = (ticket.TotalSale + ticket.TaxAmount) || 0;
+            if (ticket.TicketTypeID === 30) { return; }
+            this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+            this.total.totalCash += ticket.CashAmount || 0;
+            this.total.totalCheck += ticket.CheckAmount || 0;
+            this.total.totalCharge += ticket.ChargeAmount || 0;
+            this.total.totalDrayage += ticket.Drayage || 0;
+            this.total.totalBuyBack += ticket.BuyBack || 0;
+        });
+    }
     // approve all checked tickets
     approveCheckedTickets() {
         const selectedIds = [];
@@ -238,19 +269,23 @@ export class TicketListComponent implements OnInit {
         );
     }
 
-    typeChangeHandler() {
+    typeChangeHandler(byType: any = '') {
         // if (!this.searchObj.BranchId) {
         //     return;
         // }
+        this.searchObj.UserId = null;
+        this.searchObj.DistributorID = 0;
         if (this.searchObj.userType === 'External') {
-            this.getDistributors();
+            this.searchObj.BranchId = null;
+            this.getDistributors(byType);
         } else {
-            this.getDrivers();
+            
+            this.getDrivers(byType);
         }
     }
 
-    userChangeHandler() {
-        this.getSearchedTickets();
+    userChangeHandler(byType: any = '') {
+        this.getSearchedTickets(byType);
     }
 
     // delete ticket in the draft state
@@ -273,7 +308,10 @@ export class TicketListComponent implements OnInit {
     viewTicket(ticketID) {
         // ticketID = 3212;
         if (ticketID) {
-            window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
+            if(this.newWindow){
+                this.newWindow.close();
+            }
+            this.newWindow =  window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
         } else {
             this.notificationService.error("Ticket preview unavailable!!");
         }

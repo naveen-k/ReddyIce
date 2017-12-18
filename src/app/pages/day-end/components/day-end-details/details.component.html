@@ -1,15 +1,21 @@
 <div class="row">
     <div class=" col-md-12">
         <ba-card cardTitle="  Trip Detail {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
-            <img src="assets/reddyIce/draftTicket.png" *ngIf="tripData.TripStatusID == 23"
-            width="15" class="newTicketTitleStatusIcon">
+            <img src="assets/reddyIce/draftTicket.png" *ngIf="tripData.TripStatusID == 23" width="15" class="newTicketTitleStatusIcon">
             <img src="assets/reddyIce/submitTicket.png" *ngIf="tripData.TripStatusID == 24" width="18" class="newTicketTitleStatusIcon">
             <img src="assets/reddyIce/approveTicket.png" *ngIf="tripData.TripStatusID == 25" width="15" class="newTicketTitleStatusIcon">
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" *ngIf='tripData.TripStatusID == 24' (click)="saveReconciliation(25)">Approve</button>
-                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>
-                <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                    (click)="saveReconciliation(23)">Save</button>
+                <button class="btn btn-danger pull-right" 
+                [disabled]="!tripData.UnitApprovedBy"
+                *ngIf='tripData.IsClosed && (((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || logedInUser.Role.RoleID == 2 || logedInUser.Role.RoleID == 1 ||logedInUser.Role.RoleID == 6)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24))'
+                    (click)="approveTrip(25);">Approve</button>
+               <!-- <button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>-->
+               <!-- Save button is not needed anymore, as trip will submit from HH-->
+                <!-- <button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed'
+                    (click)="saveReconciliation(23)">Save</button> -->
+                    <!-- <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker == true )' (click)="saveReconciliation(24)">Submit</button> -->
+                    <!-- Save button is not needed anymore, as trip will submit from HH-->
+                     <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker != true )' (click)="saveReconciliation(24)">Save</button>-->
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
             </div>
             <div class="row add-margin-bottom">
@@ -38,7 +44,7 @@
                         </div>
                     </div>
                     <div class="row page-header bold-head">
-                        <div class="col-md-3">                            
+                        <div class="col-md-3">
                             <span>Driver:</span>
                             <label>{{tripData.DriverName}}</label>
                         </div>
@@ -70,7 +76,7 @@
                             <div class="col-md-6 padding-eater">
                             </div>
                             <div class="col-md-6 pull-right">
-                                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
+                                <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
                                     [queryParams]="{branchId:tripData.BranchID, driverId:tripData.UserID, isDistributor:tripData.DistributorMasterID, sdate:tripData.TripStartDate, edate:tripData.TripEndDate}">Create Ticket</button>
                             </div>
                             <div class="col-md-12 page-header">
@@ -78,72 +84,106 @@
                                     <table class="table table-striped">
                                         <thead class="tableHeader">
                                             <tr>
-                                                <th>Action</th>                                                
+                                                <th></th>
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
-                                                Ticket Number
-                                                 <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
+                                                        Ticket #
+                                                        <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                                    </span>
                                                 </th>
                                                 <th>
                                                     <span style="cursor:pointer;" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
-                                                Ticket Type
-                                                 <i *ngIf="(customer.sortField === 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                            </span>
+                                                        Ticket Type
+                                                        <i *ngIf="(customer.sortField === 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                                    </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerName';customer.isAsc=!customer.isAsc;">
-                                                        Customer 
-                                                     <i *ngIf="(customer.sortField == 'CustomerName')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                                                </span>
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;">
+                                                        Customer
+                                                        <i *ngIf="(customer.sortField == 'CustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                                    </span>
                                                 </th>
-                                                <th class="text-align-right">
-                                                    <span >
+                                                <th class="textRightPadd">
+                                                    <span>
                                                         Total Invoice
                                                         <!-- <i *ngIf="(customer.sortField === 'CheckAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'CheckAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
-                                                <th class="text-align-right">
+                                                <th class="textRightPadd">
                                                     <span>
-                                                        Received Amount
-                                                     <!-- <i *ngIf="(customer.sortField === 'IsSaleTicket')" [ngClass]="(customer.isAsc && customer.sortField === 'IsSaleTicket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        Received Amt
+                                                        <!-- <i *ngIf="(customer.sortField === 'IsSaleTicket')" [ngClass]="(customer.isAsc && customer.sortField === 'IsSaleTicket' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
-
+                                                <!-- <th class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'">
+                                                    Drayage
+                                                </th>
+                                                <th class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'">
+                                                    Buyback
+                                                </th>
+                                                <th class="text-align-center">
+                                                    RI Internal
+                                                </th>-->
                                             </tr>
                                         </thead>
                                         <tbody>
 
                                             <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
                                                 <td>
-                                                    <i class="ion-iphone" style="margin: 0 5px" *ngIf="!item.IsPaperTicket">
-                                                       
+                                                    <i class="ion-iphone custom-tooltip-ion" style="margin: 0 5px" *ngIf="!item.IsPaperTicket">
+                                                        <span class="tooltiptext">HH Ticket</span>
                                                     </i>
-                                                    <i class="ion-ios-book" style="margin: 0 5px" *ngIf="item.IsPaperTicket">
+                                                    <i class="ion-ios-book custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket">
+                                                        <span class="tooltiptext">Paper Ticket</span>
+                                                    </i>
+                                                    <i class="ion-edit custom-tooltip-ion custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket && tripData.TripStatusID != 25"
+                                                        [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]">
                                                         <span class="tooltiptext">Edit</span>
                                                     </i>
-                                                    <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" *ngIf="!item.IsPaperTicket">
-                                                        <span class="tooltiptext">View</span>
+                                                    <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.ID)">
+                                                        <span class="tooltiptext">View </span>
                                                     </i>
-                                                    <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" *ngIf="item.IsPaperTicket">
-                                                        <span class="tooltiptext">Edit</span>
-                                                    </i>
-                                                </td>                                                
-                                                <td>{{item.TicketNumber }}</td>
-                                                <td>{{item.IsSaleTicket | ticketType: item.Customer}}</td>
-                                                <td>{{item.CustomerNumber}} - {{item.CustomerName}}</td>
-                                                <td class="text-align-right" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.TotalSale + item.TaxAmount | currency:'USD':true:'1.2' }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
-                                                <td class="text-align-right" *ngIf="item.CashAmount || item.CheckAmount">{{ item.CheckAmount + item.CashAmount | currency:'USD':true:'1.2' }}</td>
-                                                <td class="text-align-right" *ngIf="!item.CashAmount && !item.CheckAmount">{{item.IsSaleTicket ? item.TotalSale : 0 | currency:'USD':true:'1.2' }}</td>
+                                                </td>
+                                                <td class="text-align-left">{{item.TicketNumber }}</td>
+                                                <td>{{item.ticketType}}</td>
+                                                <td>
+                                                    <span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:false:20 }}</span>
+                                                </td>
+                                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">
+                                                    <span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currencyFormatter }}
+                                                    <span *ngIf="item.TicketTypeID === 27">)</span>
+                                                </td>
+                                                <td class="textRightPadd">
+                                                    <span [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currencyFormatter }}</span>
+                                                    <span *ngIf="item.TicketTypeID == 30">$0.00</span>
+                                                </td>
+                                                <!--td class="textRightPadd" ></td-->
+                                                <!--td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount"></td-->
+                                                <!-- <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"></td>
+                                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                                <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="logedInUser.Role.RoleID!='3'"></td>
+                                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="logedInUser.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                                <td class="text-align-center">
+                                                    <input type="checkbox" disabled name="riInternal" [checked]="item.CustomerSourceID===101">
+                                                </td>-->
                                             </tr>
                                             <tr *ngIf="!tripData?.TripTicketList?.length">
-                                                <th class="text-center" colspan="9"> No data found </th>
+                                                <th class="text-center" colspan="6"> No data found </th>
                                             </tr>
                                             <tr>
-                                                <td colspan="3"></td>
-                                                <td class="text-align-right"><b>Total</b></td>
-                                                <td class="text-align-right"><b>{{ticketTotal.invoiceTotal | currency:'USD':true:'1.2'}}</b></td>
-                                                <td class="text-align-right"><b>{{ticketTotal.receivedTotal | currency:'USD':true:'1.2'}}</b></td>
+                                                <td colspan="4">
+                                                    <b>Total</b>
+                                                </td>
+                                                <td class="textRightPadd">
+                                                    <b>{{ticketTotal.invoiceTotal | currencyFormatter}}</b>
+                                                </td>
+                                                <td class="textRightPadd">
+                                                    <b>{{ticketTotal.receivedTotal | currencyFormatter}}</b>
+                                                </td>
+                                                <!-- <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'" ><b>{{ticketTotal.totalDrayage | currencyFormatter}}</b></td>
+                                                <td class="textRightPadd" *ngIf="logedInUser.Role.RoleID!='3'"><b>{{ticketTotal.totalBuyBack | currencyFormatter}}</b></td>-->
+                                                <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currencyFormatter}}</b></td> -->
+                                                <!-- <td></td>-->
                                             </tr>
                                         </tbody>
                                     </table>
@@ -164,19 +204,29 @@
                                                 <span>Pallets </span>
                                             </td>
                                             <td>
-                                                <span>Issued: </span> <input [(ngModel)]='tripData.PalletLoadQuantity' style="width:70px" type="text" [numberOnly]>
+                                                <span>Issued: </span>
+                                                <input [(ngModel)]='tripData.PalletLoadQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
+                                                    type="text" [numberOnly]>
                                             </td>
                                             <td>
-                                                <span>Returned: </span> <input [(ngModel)]='tripData.PalletReturnQuantity' style="width:70px" type="text" [numberOnly]>
+                                                <span>Returned: </span>
+                                                <input [(ngModel)]='tripData.PalletReturnQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
+                                                    type="text" [numberOnly]>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                
+
                             </div>
-                            
                             <div class="col-sm-6">
-                                <button class="btn btn-danger pull-right" (click)=addProductRow() [hidden]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>Add Product</button>
+                                <button class="btn btn-danger pull-right"
+                                [disabled]="tripData.TripStatusID == 23" 
+                                [hidden]="(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy" 
+                                (click)="handlerUnitReconSubmit()">Submit</button>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <button class="btn btn-danger pull-right" (click)=addProductRow() [hidden]='true || tripData.TripStatusID == 25 || userRoleId ==3'>Add Product</button>
                             </div>
                             <div class="col-md-12 page-header">
 
@@ -184,105 +234,158 @@
                                     <table class="table table-bordered">
                                         <thead class="tableHeader">
                                             <tr>
-                                                <th>
+                                                <th class="text-align-left">
                                                     <span>
                                                         Product
                                                         <!-- <i *ngIf="(customer.sortField == 'product')" [ngClass]="(customer.isAsc && customer.sortField == 'product' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
-                                                    <span >
+                                                    <span>
                                                         Load
                                                         <!-- <i *ngIf="(customer.sortField == 'load')" [ngClass]="(customer.isAsc && customer.sortField == 'load' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
                                                     <span>
-                                                            Return
-                                                            <!-- <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                        Return
+                                                        <!-- <i *ngIf="(customer.sortField === 'return')" [ngClass]="(customer.isAsc && customer.sortField === 'return' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
                                                 <th colspan="2" class="text-center">
                                                     <span>
-                                                        Truck Damage
+                                                        Truck Junk
                                                         <!-- <i *ngIf="(customer.sortField === 'truckDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'truckDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
                                                     </span>
                                                 </th>
+                                                <th>
+                                                    <span>
+                                                        Sales
+                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
+                                                </th>
+
+                                                <th>
+                                                    <span>
+                                                        Sales
+                                                        <br> Credits
+                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
+                                                </th>
+                                                <th>
+                                                    <span>
+                                                        Manual
+                                                        <br> Tickets
+                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
+                                                </th>
+                                                <th>
+                                                    <span>
+                                                        Good
+                                                        <br> Returns
+                                                        <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
+                                                </th>
                                                 <th colspan="2" class="text-center">
                                                     <span>
-                                    Customer Damage
-                                     <!-- <i *ngIf="(customer.sortField === 'customerDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'customerDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
-                                </span>
+                                                        Inv Junk
+                                                        <!-- <i *ngIf="(customer.sortField === 'customerDamage')" [ngClass]="(customer.isAsc && customer.sortField === 'customerDamage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
                                                 </th>
                                                 <th>
                                                     <span>
-                                                         Manual <br> Tickets
-                                     <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
-                                </span>
-                                                </th>
-                                                <th>
-                                                    <span>
-                                    Sale
-                                     <!-- <i *ngIf="(customer.sortField === 'sale')" [ngClass]="(customer.isAsc && customer.sortField === 'sale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
-                                </span>
-                                                </th>
-                                                <th>
-                                                    <span>
-                                    Over/<br>Short
-                                     <!-- <i *ngIf="(customer.sortField === 'over')" [ngClass]="(customer.isAsc && customer.sortField === 'over' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
-                                </span>
+                                                        Over/
+                                                        <br>Short
+                                                        <!-- <i *ngIf="(customer.sortField === 'over')" [ngClass]="(customer.isAsc && customer.sortField === 'over' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>  -->
+                                                    </span>
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <tr style="background: #5bc0de;" class="tableHeader">
+                                                <td width="21%" style="text-align:left;"></td>
+                                                <td width="6%">HH</td>
+                                                <td width="8%"></td>
+                                                <td width="6%">HH</td>
+                                                <td width="8%"></td>
+                                                <td width="5%">HH</td>
+                                                <td width="8%"></td>
+                                                <td width="7%"></td>
+                                                <td width="7%"></td>
+                                                <td width="5%"></td>
+                                                <td width="5%"></td>
+                                                <td width="6%">HH</td>
+                                                <td width="9%"></td>
+                                                <td class="textAlignCenter" width="7%"></td>
+                                            </tr>
                                             <tr *ngFor="let item of unitReconciliation|sort:customer.sortField:customer.isAsc">
-                                                <td width="25%">{{item.ProductName}}</td>
+                                                <td width="21%" style="text-align:left;">{{item.ProductName}}</td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.Load1Quantity' class="form-control small-input" type="text" [numberOnly]
-                                                        (ngModelChange)="unitReconChange(item)"></td>
+                                                <td width="8%">
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || tripData.UnitApprovedBy || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.Load1Quantity' class="form-control small-input"
+                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
-                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)"></td>
+                                                <td width="8%">
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker)|| tripData.TripStatusID == 25 || tripData.UnitApprovedBy || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.ReturnQuantity' class="form-control small-input dollar-input"
+                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.DamageQuantity' class="form-control small-input" type="text" [numberOnly]
-                                                        (ngModelChange)="unitReconChange(item)"></td>
-                                                <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
-                                                <td width="9%"><input [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
-                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)"></td>
-                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
+                                                <td width="8%">
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || tripData.UnitApprovedBy || !tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.DamageQuantity' class="form-control small-input"
+                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                </td>
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
+                                                <td width="7%">{{item.SaleReturnQty?item.SaleReturnQty:0}}</td>
+                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
+                                                <td width="5%">{{item.GoodReturns?item.GoodReturns:0}}</td>
+                                                <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
+                                                <td width="9%">
+                                                    <input [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || tripData.UnitApprovedBy ||!tripData.IsClosed || !item.IsEditable || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.CustomerDamageDRV' class="form-control small-input"
+                                                        type="text" [numberOnly] (ngModelChange)="unitReconChange(item)">
+                                                </td>
                                                 <td class="textAlignCenter" width="7%">{{item.OverShort}}</td>
                                             </tr>
                                         </tbody>
                                         <tbody *ngIf="isNewlyAdded" class="add-border">
                                             <tr *ngFor="let item of newlyAddedProduct; let i = index">
-                                                <td width="25%">
+                                                <td width="21%">
                                                     <select class="form-control small-select" [(ngModel)]='item.ProductID' (ngModelChange)="productChangeHandler(item, i)">
-                                                        <option *ngFor="let product of productList;" [ngValue] = 'product.ProductID'>
+                                                        <option *ngFor="let product of productList;" [ngValue]='product.ProductID'>
                                                             {{product.ProductName}}
-                                                        </option> 
+                                                        </option>
                                                     </select>
                                                 </td>
                                                 <td width="6%">{{item.Load?item.Load:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.Load1Quantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input" type="number"></td>
+                                                <td width="8%">
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.Load1Quantity'
+                                                        (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                        type="text">
+                                                </td>
                                                 <td width="6%">{{item.Returns? item.Returns:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.ReturnQuantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
-                                                        type="number"></td>
+                                                <td width="8%">
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.ReturnQuantity'
+                                                        (ngModelChange)="unitReconChange(item)" class="form-control small-input dollar-input"
+                                                        type="text">
+                                                </td>
                                                 <td width="5%">{{item.TruckDamage?item.TruckDamage:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.DamageQuantity' (ngModelChange)="unitReconChange(item)" class="form-control small-input" type="number"></td>
-                                                <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
-                                                <td width="9%"><input numberOnly [disabled]='!item.ProductName || tripData.TripStatusID == 24 || tripData.TripStatusID == 25'
-                                                        [(ngModel)]='item.CustomerDamageDRV' (ngModelChange)="unitReconChange(item)" class="form-control small-input"
-                                                        type="number"></td>
-                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
+                                                <td width="8%">
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.DamageQuantity'
+                                                        (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                        type="text">
+                                                </td>
+
+
+
                                                 <td width="7%">{{item.Sale?item.Sale:0}}</td>
+                                                <td width="7%">{{item.SaleReturnQty?item.SaleReturnQty:0}}</td>
+                                                <td width="5%">{{item.ManualTicket?item.ManualTicket:0}}</td>
+                                                <td width="6%">{{item.CustomerDamage?item.CustomerDamage:0}}</td>
+                                                <td width="9%">
+                                                    <input numberOnly [disabled]='!item.ProductName || userRoleId==3 || tripData.UnitApprovedBy || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' [(ngModel)]='item.CustomerDamageDRV'
+                                                        (ngModelChange)="unitReconChange(item)" class="form-control small-input"
+                                                        type="number">
+                                                </td>
                                                 <td width="7%">{{item.OverShort?item.OverShort:0}}
                                                     <i (click)="removeProduct(i);" class="ion-trash-a remove-item"></i>
                                                 </td>
@@ -293,18 +396,22 @@
                                         </tbody>
                                         <tbody>
                                             <tr>
-                                                <td><b>Total</b></td>
+                                                <td>
+                                                    <b>Total</b>
+                                                </td>
                                                 <td>{{totalUnit.TotalLoad}}</td>
                                                 <td>{{totalUnit.TotalLoadActual}}</td>
                                                 <td>{{totalUnit.TotalReturn}}</td>
                                                 <td>{{totalUnit.TotalReturnActual}}</td>
                                                 <td>{{totalUnit.TotalTruckDamage}}</td>
                                                 <td>{{totalUnit.TotalTruckDamageActual}}</td>
+                                                <td>{{totalUnit.TotalSale}}</td>
+                                                <td>{{totalUnit.TotalSaleCredits}}</td>
+                                                <td>{{totalUnit.TotalManualTickets}}</td>
+                                                <td>{{totalUnit.TotalGoodReturns}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamage}}</td>
                                                 <td>{{totalUnit.TotalCustomerDamageActual}}</td>
-                                                <td>{{totalUnit.TotalManualTickets}}</td>
-                                                <td>{{totalUnit.TotalSale}}</td>
-                                                <td>{{ totalUnit.TotalOverShort?totalUnit.TotalOverShort:0}}</td>
+                                                <td style="text-align:center">{{ totalUnit.TotalOverShort?totalUnit.TotalOverShort:0}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -317,7 +424,7 @@
                     <ng-template ngbTabContent>
                         <div class="row page-header">
                             <div class="col-sm-1"></div>
-                            <div class="col-sm-10">
+                            <div class="col-sm-10" style="overflow-x:auto;">
                                 <table class="table table-condensed table-bordered cash-table">
                                     <thead class="tableHeader">
                                         <th></th>
@@ -330,174 +437,271 @@
                                     <tbody>
                                         <tr>
                                             <td>Manual Tickets</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualSale | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCash | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCheck | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCreditCard | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCharge | currency:'USD':true:'1.2'}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualSale | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCash | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCheck | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCreditCard | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalManualCharge | currencyFormatter}}</td>
                                         </tr>
                                         <tr>
                                             <td>HH Tickets</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCheck | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCreditCard | currency:'USD':true:'1.2'}}</td>
-                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCharge | currency:'USD':true:'1.2'}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHSale | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCash | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCheck | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCreditCard | currencyFormatter}}</td>
+                                            <td class="text-align-right">{{ ticketDetails?.Total.TotalHHCharge | currencyFormatter}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualSale + ticketDetails?.Total.TotalHHSale | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ ticketDetails?.Total.MCHHCash | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.MCHHC | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.MCCHHC | currencyFormatter}}</b></td>
+                                            <td class="text-align-right"><b>{{ticketDetails?.Total.TotalManualCharge + ticketDetails?.Total.TotalHHCharge | currencyFormatter}}</b></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-sm-1"></div>
-                            <div class="row cash-recon-container">
-                                <div class="col-sm-4">
-                                    <div class="border">
-                                        <div class="row padding">
-                                            <h5 class="frameHeading">Payment</h5>
+                        </div>
+                        <div class="row cash-recon-container">
+                            <div class="col-sm-8">
+
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div class="border">
+                                            <div class="row padding">
+                                                <h5 class="frameHeading">Payment</h5>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <label>Cash:</label>
+                                                </div>
+                                                <div class="col-sm-4 text-align-right">
+                                                    <span>{{ ticketDetails?.Total.MCHHCash | currencyFormatter}}</span>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <label>Check:</label>
+                                                </div>
+                                                <div class="col-sm-4 text-align-right">
+                                                    <span>{{ ticketDetails?.Total.MCHHC | currencyFormatter}}</span>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <label>Credit Card:</label>
+                                                </div>
+                                                <div class="col-sm-4 text-align-right">
+                                                    <span>{{ ticketDetails?.Total.MCCHHC | currencyFormatter}}</span>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <hr style="margin: 2px 0">
+                                                </div>
+                                                <div class="col-sm-8 ">
+                                                    <label>Total Payment:</label>
+                                                </div>
+                                                <div class="col-sm-4 text-align-right">
+                                                    <span>
+                                                        <b>{{ ticketDetails?.Total.CCC | currencyFormatter}}</b>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <label>Cash:</label>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="border">
+                                            <div class="row padding">
+                                                <h5 class="frameHeading">Sales</h5>
                                             </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span>{{ ticketDetails?.Total.TotalManualCash +  ticketDetails?.Total.TotalHHCash | currency:'USD':true:'1.2'}}</span>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Check:</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span>{{  ticketDetails?.Total.TotalHHCheck +  ticketDetails?.Total.TotalManualCheck | currency:'USD':true:'1.2'}}</span>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Credit Card:</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span>{{  ticketDetails?.Total.TotalHHCreditCard +  ticketDetails?.Total.TotalManualCreditCard | currency:'USD':true:'1.2'}}</span>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <hr style="margin: 2px 0">
-                                            </div>
-                                            <div class="col-sm-8 ">
-                                                <label>Total Payment:</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span><b>{{ 
-                                                        ticketDetails?.Total.TotalManualCash +  
-                                                        ticketDetails?.Total.TotalHHCash + 
-                                                        ticketDetails?.Total.TotalHHCheck + 
-                                                        ticketDetails?.Total.TotalManualCheck + 
-                                                        ticketDetails?.Total.TotalHHCreditCard + 
-                                                        ticketDetails?.Total.TotalManualCreditCard
-                                                        | currency:'USD':true:'1.2'}}</b></span>
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <label>Cash:</label>
+                                                </div>
+                                                <div class="col-sm-4 text-align-right">
+                                                    <span> {{ ticketDetails?.Total.TotalCashCustomer | currencyFormatter}}</span>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <label>Charge:</label>
+                                                </div>
+                                                <div class="col-sm-4 text-align-right">
+                                                    <span>{{ ticketDetails?.Total.TotalChargeCustomer | currencyFormatter}}</span>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <hr style="margin: 2px 0">
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <label>Total Sale:</label>
+                                                </div>
+                                                <div class="col-sm-4 text-align-right">
+                                                    <span>
+                                                        <b>{{ticketDetails?.Total.totalSales | currencyFormatter}}</b>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="border">
-                                        <div class="row padding">
-                                            <h5 class="frameHeading">Sales</h5>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <label>Cash:</label>
+                                <div class="row cash-recon-container">
+                                    <div class="col-sm-5">
+                                        <div class="border">
+                                            <div class="row padding">
+                                                <h5 class="frameHeading">Comments</h5>
                                             </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span> {{  ticketDetails?.Total.TotalManualSale +  ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</span>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <textarea rows="7" style="width:100%;border:0px;resize: none;" [(ngModel)]="ticketDetails?.Total.Comments" [disabled]="(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)"></textarea>
+
+                                                </div>
+
                                             </div>
-                                            <div class="col-sm-8">
-                                                <label>Charge:</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span>{{  ticketDetails?.Total.TotalHHCharge +  ticketDetails?.Total.TotalManualCharge | currency:'USD':true:'1.2'}}</span>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <hr style="margin: 2px 0">
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Total Sale:</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span><b>{{ticketDetails?.Total.TotalManualSale +  ticketDetails?.Total.TotalHHSale | currency:'USD':true:'1.2'}}</b></span>
-                                            </div>
+
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="border">
-                                        <div class="row padding">
-                                            <h5 class="frameHeading">Actual Deposit</h5>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <label>Cash($):</label>
+                                    <div class="col-sm-7">
+                                        <div class="border">
+                                            <div class="row padding">
+                                                <h5 class="frameHeading frameHeadingLong">HH Record Deposit</h5>
                                             </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <label>Cash($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHCashRecived | currencyFormatter:false' 
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>Misc($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHMiscExpense | currencyFormatter:false' 
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                
                                             </div>
-                                            <div class="col-sm-8">
-                                                <label>Check($):</label>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <label>Check($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHCheckReceived | currencyFormatter:false'
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>Deposited($):</label>
+                                                </div>
+                                                <div class="col-sm-3 text-align-right">
+                                                    <input type="text" [numberOnly]="true" [value]='ticketDetails?.Total.HHAmountDeposited | currencyFormatter:false'
+                                                        min="0" [disabled]='true' placeholder="0.00">
+                                                </div>
+                                                
                                             </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Coins($):</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true"  [(ngModel)]='ticketDetails?.Total.ActualCoin' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Credit Card($):</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <input type="number" min="0" [value]='ticketDetails?.Total.TotalManualCreditCard + ticketDetails?.Total.TotalHHCreditCard'
-                                                    disabled>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Misc($):</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' [disabled]='tripData.TripStatusID == 24 || tripData.TripStatusID == 25'>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <hr style="margin: 2px 0">
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Total Deposit:</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span><b>{{
-                                                    (ticketDetails?.Total.actualdepositcheck || 0) + 
-                                                    (ticketDetails?.Total.actualdepositcash || 0 )+  
-                                                    (ticketDetails?.Total.actualdepositmisc || 0 + 
-                                                    ticketDetails?.Total.actualdepositcoin || 0) 
-                                                    |currency:'USD':true:'1.2'}}</b></span>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <label>Over/Short:</label>
-                                            </div>
-                                            <div class="col-sm-4 text-align-right">
-                                                <span><b>{{
-                                                        ticketDetails?.Total.TotalManualCash +  
-                                                        ticketDetails?.Total.TotalHHCash + 
-                                                        ticketDetails?.Total.TotalHHCheck + 
-                                                        ticketDetails?.Total.TotalManualCheck + 
-                                                        ticketDetails?.Total.TotalHHCreditCard + 
-                                                        ticketDetails?.Total.TotalManualCreditCard 
-                                                        - (ticketDetails?.Total.actualdepositcheck || 0)
-                                                        - (ticketDetails?.Total.actualdepositcash || 0) 
-                                                        - (ticketDetails?.Total.actualdepositmisc || 0)
-                                                        - (ticketDetails?.Total.actualdepositcoin || 0)
-                                                        | currency:'USD':true:'1.2'}}</b></span>
+                                            <div class="row">
+                                                <div class="col-sm-12" style="padding-top:5px;" *ngIf="ticketDetails?.Total.DriverApproval !==null">
+                                                    
+                                                    <label>Driver Approval:</label>
+                                                    <textarea rows="2" style="width:100%;border:1px;resize: none;" [value]="ticketDetails?.Total.DriverApproval" readonly></textarea>
+
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-4 ">
+                                <div class="border">
+                                    <div class="row padding">
+                                        <h5 class="frameHeading">Actual Deposit</h5>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <label>Checks/Money Orders($):</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcheck' (ngModelChange)="cashReconChange(ticketDetails)"
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' placeholder="0.00">
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Cash($):</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.actualdepositcash' (ngModelChange)="cashReconChange(ticketDetails)"
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' placeholder="0.00">
+                                        </div>
+                                        
+                                        <div class="col-sm-8">
+                                            <label>Coins($):</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.ActualCoin' (ngModelChange)="cashReconChange(ticketDetails)"
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' placeholder="0.00">
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Total Deposit:</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <span>
+                                                <b>
+                                                    {{ticketDetails.Total.TotalPreDiposit|currencyFormatter}}
+                                                </b>
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-12">
+                                                <hr style="border-top: dotted 1px #ccc; margin:5px 0" />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Credit Card($):</label>
+                                        </div>
+                                        <div class="col-sm-6 text-align-right">
+                                            <input type="text" [numberOnly]="true" min="0" [value]='ticketDetails?.Total.CreditCardAmountTotal|currencyFormatter:false' disabled placeholder="0.00">
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Tolls($):</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.Tolls'
+                                            [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Money Order Fee($):</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <input type="text" [numberOnly]="true" min="0" [(ngModel)]='ticketDetails?.Total.MoneyOrderFee'
+                                            [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' (ngModelChange)="cashReconChange(ticketDetails)" placeholder="0.00">
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Misc($):</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <input type="text" [numberOnly]="true" [(ngModel)]='ticketDetails?.Total.Misc' (ngModelChange)="cashReconChange(ticketDetails)"
+                                                min="0" [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || tripData.TripStatusID == 25 || !tripData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' placeholder="0.00">
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <hr style="margin: 2px 0">
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Total Deposit & Other:</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <span>
+                                                <b>{{totalDeposit|currencyFormatter}}</b>
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Over/Short:</label>
+                                        </div>
+                                        <div class="col-sm-4 text-align-right">
+                                            <span>
+                                                <b>{{ totalOverShort | currencyFormatter}}</b>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </ng-template>
                 </ngb-tab>
 

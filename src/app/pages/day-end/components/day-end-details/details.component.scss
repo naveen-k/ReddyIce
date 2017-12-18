@@ -66,14 +66,17 @@
     text-align: center;
     left: 30px;
 }
+.frameHeadingLong{
+    width: 200px;
+}
 
 // .frameMargin {
 //     margin-left: 10px;
 // }
 .cash-recon-container{
-    padding-top: 20px;
+    padding-top: 10px;
     input{
-        width: 50px;
+        width: 65px;
         text-align: right;
     }
 }
@@ -118,4 +121,17 @@ table.cash-table {
 
 .credit-amount{
     color: red;
+}
+.textRightPadd {
+    text-align: right;
+    padding-right: 10px;
+}
+.text-align-center{
+    text-align: center;
+}
+.text-align-left{
+    text-align: left;
+}
+.padding-right{
+    padding-right: 0px;
 }

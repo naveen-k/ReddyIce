@@ -41,10 +41,6 @@
     text-align: center;
 }
 
-.input-group .form-control {
-    z-index: 0 !important;
-}
-
 .custom-tooltip-ion:hover .tooltiptext{
     visibility: visible;
 }
@@ -59,4 +55,8 @@
     padding: 2px 5px;
     line-height: 15px;
     font-size: 12px;
+}
+
+.google-maps {
+    height: calc(100vh - 337px);
 }

@@ -15,6 +15,11 @@ export class CustomerManagementComponent implements OnInit {
     // selectedCustomer: any = [];
     isDistributorExist: boolean;
     userSubTitle: string = '';
+    allcustomers: any = [];
+    cutommers: any = [];
+    paginationData: any = [];
+    riCustomer: number = 3;
+    isActtive: number = 3;
     showSpinner: boolean = false;
     constructor(
         protected service: CustomerManagementService,
@@ -33,22 +38,57 @@ export class CustomerManagementComponent implements OnInit {
         this.getAllCustomers();
     }
 
+
     isRI = 3;
-    sequenceChangeHandler(sequence) {
-        this.isRI = sequence;
+    sequenceChangeHandler() {
+        console.log("this.riCustomer === 1 && this.isActtive ",this.riCustomer ,'--', this.isActtive);
+        this.cutommers = this.customers.filter((p) => {
+            if (this.riCustomer === 1 && this.isActtive === 1) {
+                return p.IsRICustomer && p.Active;
+            } else if (this.riCustomer === 1 && this.isActtive === 2) {
+                return p.IsRICustomer && !p.Active;
+            } else if (this.riCustomer === 1 && this.isActtive === 3) {
+                return p.IsRICustomer;
+            } else if (this.riCustomer === 2 && this.isActtive === 1) {
+                return !p.IsRICustomer && p.Active;
+            } else if (this.riCustomer === 2 && this.isActtive === 2) {
+                return !p.IsRICustomer && !p.Active;
+            } else if (this.riCustomer === 2 && this.isActtive === 3) {
+                return !p.IsRICustomer;
+            } else if (this.riCustomer === 3 && this.isActtive === 1) {
+                return p.Active;
+            } else if (this.riCustomer === 3 && this.isActtive === 2) {
+                return !p.Active;
+            } else if (this.riCustomer === 3 && this.isActtive === 3) {
+                return true;
+            }
+        });
     }
 
     userType = 3;
     usertypeChangeHandler(sequence) {
-        this.userType = sequence;
+        this.isActtive = sequence;
+        this.cutommers = this.customers.filter((p) => {
+            if (sequence === 1) {
+                return p.Active;
+            } else if (sequence === 2) {
+                return !p.Active;
+            }
+            return true;
+        });
     }
 
     getAllCustomers() {
         this.showSpinner = true;
         this.service.getAllCustomers().subscribe((res) => {
             this.customers = res;
+            //this.cutommers = res;
             this.showSpinner = false;
             // console.log(this.customers);
+            // this.riCustomer = 3;
+            // this.isActtive = 3;
+            this.sequenceChangeHandler();
+            //this.usertypeChangeHandler(3);
         }, (err) => {
             // console.log(err);
         });
@@ -71,7 +111,7 @@ export class CustomerManagementComponent implements OnInit {
             }, (err) => {
                 this.notification.error('Error in Inactivating a customer!!');
             });
-           
+
         });
     }
 }

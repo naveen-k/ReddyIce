@@ -42,6 +42,7 @@ const routes: Routes = [
         },
         data:{
           tripTicketEditMode: true,
+          tripMode: true,
         },
       },
       {

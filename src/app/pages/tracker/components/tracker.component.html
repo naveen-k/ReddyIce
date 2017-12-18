@@ -5,16 +5,12 @@
                 <div class="col-sm-2">
                     <label>Select Date</label>
                     <div class="input-group">
-                        <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tripFilterOption.tripDate" [maxDate]="todaysDate"
-                            (ngModelChange)="dateChangeHandler()" ngbDatepicker #d="ngbDatepicker" disabled>
-                        <button class="input-group-addon" (click)="d.toggle()" type="button">
-                            <i class="ion-calendar"></i>
-                        </button>
+                        <date-picker [maxDate]="todaysDate" [(dateModel)]="tripFilterOption.tripDate" (dateModelChange)="dateChangeHandler();"></date-picker>
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <label>Select Driver Type</label>
-                    <select [disabled]="isDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+                    <select [disabled]="isDistributor || user.Role?.RoleID===3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                         <option [value]="'Internal'">RI Driver</option>
                         <option [value]="'External'">Dist./CoPacker</option>
                     </select>
@@ -30,17 +26,13 @@
                 <div class="col-sm-2" *ngIf="searchObj.userType=='Internal'">
                     <label>Select Driver</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
-                        <option *ngFor="let driver of driverOnBranch | unique">
-                            {{driver.DriverName}}
-                        </option>
+                        <option *ngFor="let driver of driverOnBranch | unique">{{driver.DriverName}}</option>
                     </select>
                 </div>
                 <div class="col-sm-2" *ngIf="searchObj.userType=='External'">
                     <label>Select Driver</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
-                        <option *ngFor="let driver of driverOndistributor | unique">
-                            {{driver.DriverName}}
-                        </option>
+                        <option *ngFor="let driver of driverOndistributor | unique">{{driver.DriverName}}</option>
                     </select>
                 </div>
                 <div class="col-sm-3">
@@ -63,17 +55,21 @@
                             <div class="block" style="background:yellow;"></div>
                             <span class="blockContent">Did Not Service</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External'">
-                            <div class="block" style="background:brown;"></div>
+                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                            <div class="block" style="background:#90EE90;"></div>
                             <span class="blockContent">Planned Service</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External'">
-                            <div class="block" style="background:red;"></div>
+                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                            <div class="block" style="background:#ff0000;"></div>
                             <span class="blockContent">Skipped Stops</span>
+                        </div>
+                        <div class="col-md-6"  [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                            <div class="block" style="background:#999900;"></div>
+                            <span class="blockContent">Planned Sequence</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 center" [hidden]="isDistributor || searchObj.userType == 'External'">
+                <div class="col-md-8 center" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="type" checked (click)="sequenceChangeHandler(1)">
                         <span>Planned Seq</span>
@@ -95,7 +91,7 @@
                             <thead class="tableHeader">
                                 <tr>
                                     <th style="width:1%;">Actions</th>
-                                    <th style="width:1%;" [hidden]="isDistributor || searchObj.userType == 'External'">
+                                    <th style="width:1%;" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
                                         <span>
                                             Planned
                                         </span>
@@ -121,16 +117,18 @@
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr>
                                         <td>
-                                            <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
+                                            <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
                                                 <span class="tooltiptext">View Ticket Details</span>
                                             </i>
                                         </td>
-                                        <td [hidden]="isDistributor || searchObj.userType == 'External'">{{subitem.PlannedSequence}}</td>
+                                        <td style="text-align:center;" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                                            {{subitem.PlannedSequence}}
+                                        </td>
                                         <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
                                             {{subitem.ActualSequence}}
                                         </td>
-                                        <td title="{{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
-                                            {{subitem.CustomerNumber}}
+                                        <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
+                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:2}}
                                         </td>
                                         <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
                                             {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:10}}

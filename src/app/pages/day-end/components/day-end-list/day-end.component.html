@@ -5,16 +5,12 @@
                 <div class="col-sm-3">
                     <label><b> Select Date </b></label>
                     <div class="input-group">
-                        <input class="form-control" [firstDayOfWeek]="7" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]='filter.selectedDate' (ngModelChange)="selectionchangeHandler()"
-                        [maxDate]="todaysDate"  ngbDatepicker #d="ngbDatepicker" disabled>
-                        <button class="input-group-addon" (click)="d.toggle()" type="button">
-                            <i class="ion-calendar"></i>
-                        </button>
+                        <date-picker [maxDate]="todaysDate" [(dateModel)]="filter.selectedDate" (dateModelChange)="selectionchangeHandler()"></date-picker>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <label><b>Select Driver Type</b></label>
-                    <select class="form-control" [(ngModel)]="filter.type" [disabled]="logedInUser.IsDistributor">
+                    <select class="form-control" [(ngModel)]="filter.type" [disabled]="logedInUser.IsDistributor || this.logedInUser.Role.RoleID==3">
                         <option value="internal">RI Internal</option>
                         <option value="distributor">Distributor</option>
                     </select>
@@ -25,7 +21,7 @@
                 </div>
                 <div class="col-sm-4" *ngIf="filter.type === 'distributor'">
                     <label><b>Select Distributor</b></label>
-                    <reddy-select [disabled]="logedInUser.IsDistributor" [options]="distributors" [(selected)]="filter.userBranch"></reddy-select>
+                    <reddy-select [disabled]="logedInUser.IsDistributor" [options]="distributors" [(selected)]="filter.userBranch" ></reddy-select>
                 </div>
             </div>
             <div>
@@ -83,11 +79,12 @@
                     <tbody>                        
                         <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc|dayEnd:filter.type:filter.userBranch">
                             <td class="table-id" style="cursor: pointer">                                
-                                <i *ngIf="!logedInUser.IsRIInternal || item.isDistributor === 1" class="ion-eye custom-tooltip-ion"
+                                <i *ngIf="item.isDistributor===1 && !item.IsSeasonal" class="ion-eye custom-tooltip-ion"
                                     [routerLink]="['../ticket-detail', item.TripID]" style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
-                                <i *ngIf="logedInUser.IsRIInternal && item.isDistributor === 0" class="ion-edit custom-tooltip-ion"
+                                <!-- <i *ngIf="(logedInUser.IsRIInternal && item.isDistributor === 0) || (item.IsSeasonal)&&(logedInUser.IsRIInternal)|| (item.isDistributor === 1 && item.IsSeasonal)" class="ion-edit custom-tooltip-ion" -->
+                                <i *ngIf="item.isDistributor===0 || item.IsSeasonal" class="ion-edit custom-tooltip-ion"
                                     [routerLink]="['../detail',item.TripID]" style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
                                 </i>
@@ -97,8 +94,8 @@
                             <td *ngIf="logedInUser.IsRIInternal">{{item.BranchCode}}-{{item.BranchName}}</td>
                             <td>{{item.DriverName}}</td>
                             <td class="textAlignCenter">{{item.TripCode}}</td>
-                            <td class="textRightPadding">{{item.TripTotalSale | currency:'USD':true:'1.2'}}</td>
-                            <td class="textRightPadding">{{item.TripTotalAmount | currency:'USD':true:'1.2'}}</td>
+                            <td class="textRightPadding">{{item.TripTotalSale | currencyFormatter}}</td>
+                            <td class="textRightPadding">{{item.TripTotalAmount| currencyFormatter}}</td>
                             <td class="textAlignCenter">
                                 <input type="checkbox" name="tripHHMultiSelect" [(ngModel)]="item.IsClosed" disabled>
                             </td>

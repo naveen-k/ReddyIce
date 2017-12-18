@@ -1,0 +1,141 @@
+@import '../../../../theme/sass/smartTable';
+
+.page-header {
+    margin: 10px 0;
+};
+.bottom-margin{
+    margin-bottom: 20px;
+}
+.right{
+    text-align: right;
+}
+
+.cash-reconciliation-table {
+    width: 100%
+}
+.overflow{
+    overflow-y: scroll;
+}
+.add-margin-bottom{
+    margin-bottom: 15px;
+}
+.bold-head{
+    div span{
+        font-weight: bold;
+    }
+}
+.head-button-container{
+   position: absolute;
+    right: 20px;
+    top: 7px;
+    
+}
+.add-margin-right{
+    margin-right: 20px;
+}
+.small-input{
+  
+    padding: 5px !important;
+    margin-top: 3px;
+   
+}
+.dollar-input:before{
+    content: '\0024';
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    left: -20px;
+    
+}   
+.padding {
+    padding:5px;
+}
+
+.border {
+    border:1px solid #5bc0de;
+    margin: 2px;
+    padding: 5px;
+}
+
+.frameHeading {
+    position: absolute;
+    top: -5px;
+    background: white;
+    width: 124px;
+    padding: 0px 11px;
+    text-align: center;
+    left: 30px;
+}
+
+// .frameMargin {
+//     margin-left: 10px;
+// }
+.cash-recon-container{
+    padding-top: 20px;
+    input{
+        width: 50px;
+        text-align: right;
+    }
+}
+
+table.cash-table {
+    th{
+        padding: 6px;
+       text-align: right;
+    }
+}
+.text-align-right{
+    text-align: right;
+}
+
+.add-border{
+    border-top: 1px solid;
+}
+.remove-item{
+    position: absolute;
+    right:0px;
+    color:#e85656;
+    cursor: pointer;
+}
+.newTicketTitleStatusIcon {
+    position: absolute;
+    left: 5px;
+    top: 15px;
+}
+.textAlignCenter {
+    text-align: center;
+}
+
+.pallets {
+    td {
+        padding: 5px 10px 5px 5px;
+        border: 0px solid #dddddd;
+        span{
+            font-weight: 400;
+        }
+    }
+}
+
+.credit-amount{
+    color: red;
+}
+.textRightPadd {
+    text-align: right;
+    padding-right: 10px;
+}
+.text-align-center{
+    text-align: center;
+}
+.text-align-left{
+    text-align: left;
+}
+.text-align-right {
+    text-align:right;
+}
+.spinnerContainer{
+    text-align: center;
+    position: absolute;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+    margin: auto;
+}

@@ -1,25 +1,25 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-2" [hidden]="IsTIR">
+        <div class="col-sm-2" *ngIf="filter.reportType == 'MR'">
+            <label>Select Date</label>
+            <div class="input-group">
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.manifestDate"></date-picker>
+            </div>
+        </div>
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'">
             <label>Start Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d="ngbDatepicker" [(ngModel)]="filter.startDate"
-                    disabled>
-                <button class="input-group-addon" (click)="d.toggle()" type="button">
-                    <i class="ion-calendar"></i>
-                </button>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'">
             <label>End Date</label>
             <div class="input-group">
-                <input class="form-control" [firstDayOfWeek]="7" [maxDate]="filter.todaysDate" name="dp" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="filter.endDate" disabled>
-                <button class="input-group-addon" (click)="d1.toggle()" type="button">
-                    <i class="ion-calendar"></i>
-                </button>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType === 'DR'||filter.reportType ==='AS'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">
+        <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
+        ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>
@@ -45,25 +45,33 @@
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
                         <label>Branch</label>
-                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch)"></reddy-select>
+                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch);getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR'">
                         <label>Dist/Copacker</label>
-                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor)"></reddy-select>
+                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor);getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR'">
                         <label>Driver</label>
-                        <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver"></reddy-select>
+                        <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'DST'">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'DST' || filter.reportType === 'MR'">
                         <label>Driver</label>
-                        <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver"></reddy-select>
+                        <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="filter.reportType === 'MR'">
+                    <div class="col-sm-6">
+                        <label>Manifest Route#</label>
+                        <div class="input-group">
+                            <input type="text" numberOnly class="form-control" [(ngModel)]="filter.RouteNumber">
+                        </div>
                     </div>
                 </ng-container>
             </div>
@@ -78,15 +86,16 @@
                 <div class="col-sm-9">
                     <div class="row">
                         <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                            <option value="AS" *ngIf="user.Role.RoleID < 3">Asset Scan</option>
-                            <option value="DR" *ngIf="!user.IsDistributor">Deposit Register</option>
-                            <option value="DST" *ngIf="user.Role.RoleID < 3">Distributor Statement</option>
-                            <option value="IOA" *ngIf="user.Role.RoleID < 3">Inventory on Arrival</option>
-                            <option value="TR" *ngIf="user.Role.RoleID===1||user.Role.RoleID===2">Invoice List</option>
-                            <option value="SRT">Sales</option>
-                            <option value="SR">Trip Details</option>
-                            <option value="TIR">Ticket Number</option>
-                            <option value="RS">Unit Summary</option>
+                            <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option>
+                            <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
+                            <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
+                            <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
+                            <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>
+                            <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
+                            <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
+                            <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
+                            <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
+                            <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
                         </select>
                     </div>
                 </div>
@@ -94,25 +103,17 @@
         </div>
         <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
             <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange()">
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
                 <option [value]="0">All Customers</option>
                 <option [value]="101">RI Customers</option>
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-        <div class="col-md-1 text-right head-button-container">
-            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
-        </div>
-        <div class="col-sm-2" [hidden]="filter.reportType==='DST'||filter.reportType==='RS'||IsTIR||filter.reportType==='SR'">
+        <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||filter.reportType==='RS'||IsTIR||filter.reportType==='SR'">
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
-                    <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
-                    <ng-template #rt let-r="result" let-t="term">
-                            {{ r.CustomerNumber}} - {{ r.CustomerName}}
-                    </ng-template>
-                    <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
-                         placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" />
+                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
                 </div>
                 <div style='margin-left: 100px;'>
                     <a>
@@ -121,22 +122,59 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
+            <span class="col-sm-4 local-padding-eater">
+                <label class="top-margin">Customer Type</label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="paymentType" value="0" [(ngModel)]="filter.paymentType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>All</b>
+                </label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="paymentType" value="18" [(ngModel)]="filter.paymentType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>Cash</b>
+                </label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="paymentType" value="19" [(ngModel)]="filter.paymentType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>Charge</b>
+                </label>
+            </span>
+        </div>
+        <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
+            <label>Trip Status</label>
+            <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
+                <option [value]="0">All Trips</option>
+                <option [value]="1">HH Day End Not Done</option>
+                <option [value]="2">HH Day End Done-Not Approved</option>
+                <option [value]="3">Trip Fully Approved</option>
+            </select>
+        </div>
+        <div class="col-md-1 text-right head-button-container">
+            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
+        </div>
+
     </div>
     <div class="row" [hidden]="IsTIR">
-        <div class="col-sm-3" *ngIf="filter.reportType === 'SR'">
+        <div class="col-sm-4" *ngIf="filter.reportType === 'SR'">
             <span class="col-sm-4 local-padding-eater">
                 <label class="top-margin">Ticket Type</label>
             </span>
             <span class="col-sm-4 local-padding-eater left-margin">
-                <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" checked>
+                <input type="radio" name="ticketType" value="regular" [(ngModel)]="filter.ticketType" class="top-margin" (click)="enableTripState()"
+                    checked>
                 <label class="top-margin">
                     <b>Regular</b>
                 </label>
             </span>
             <span class="col-sm-4 local-padding-eater left-margin">
-                <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin">
+                <input type="radio" name="ticketType" value="paper" [(ngModel)]="filter.ticketType" class="top-margin" (click)="disableTripState()">
                 <label class="top-margin">
-                    <b>Paper</b>
+                    <b>Office Manual Ticket</b>
                 </label>
             </span>
         </div>
@@ -148,27 +186,23 @@
                     <label class="control-label">
                         Enter Ticket Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="true" [(ngModel)]="filter.ticketNumber" (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
+                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number"
+                        (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
-                        <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
-                            <div class="col-sm-12">
-                                <label>Customer</label>
-                                <!-- <reddy-select [options]="customers" [(selected)]="filter.custID"></reddy-select> -->
-                                <!-- <ng-template #rt let-r="result" let-t="term">
-                                    {{ r.CustomerName}}
-                                </ng-template>
-                                <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.customer" [ngbTypeahead]="search" [resultTemplate]="rt"
-                                    placeholder="All Customer" [inputFormatter]="inputFormatter" [editable]="false" /> -->
-                                    <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" (selectedChange)="customerChangeHandler()" item-width="10px"></reddy-select>
-                            </div> 
-                            <div style='margin-left: 100px;'>
-                                <a>
-                                    <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
-                                </a>
-                            </div>
+                    <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
+                        <div class="col-sm-12">
+                            <label>Customer</label>
+                            <reddy-select [options]="customersByTicketNumber" [(selected)]="filter.ticketID" (selectedChange)="customerChangeHandler()"
+                                item-width="10px"></reddy-select>
+                        </div>
+                        <div style='margin-left: 100px;'>
+                            <a>
+                                <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
+                            </a>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>

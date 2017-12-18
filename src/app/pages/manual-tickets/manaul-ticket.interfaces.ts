@@ -75,4 +75,6 @@ export interface ManualTicket {
     isUserTypeDistributor?: boolean;
     DistributorCopackerID: number;
     CustomerSourceID: number;
+    IsRIInternal?:boolean;
+    
 }

@@ -127,7 +127,7 @@ export class CreateCustomerComponent implements OnInit {
             // console.log("addedProduct ", this.addedProduct)
         } else {
             this.addProductCheck.fill(false);
-            this.addNewProductCheck.fill(false);
+            this.addNewProductCheck.fill(true);
             this.newlyAddedproduct.push({} as MapProducts);
             this.addNewProductCheck.push(true);
         }
@@ -204,6 +204,7 @@ export class CreateCustomerComponent implements OnInit {
                         this.addNewProductCheck.splice(index2, 1);
                     } else {
                         this.addedProduct[index2].IsActive = false;
+                        this.addedProduct.splice(index2,1);
                         this.addProductCheck.splice(index2, 1);
                     }
                     // this.newlyAddedproduct = this.newlyAddedproduct;
@@ -308,18 +309,18 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!customer.ZipCode) {
             this.notification.error('', 'Customer ZipCode is mandatory!!!');
             return false;
-        } else if (!customer.PrimayContact) {
-            this.notification.error('', 'Customer Primary Contact is mandatory!!!');
-            return false;
-        } else if (!customer.Phone) {
-            this.notification.error('', 'Customer Phone is mandatory!!!');
-            return false;
-        } else if (!customer.Email) {
-            this.notification.error('', 'Customer EmailID is mandatory!!!');
-            return false;
-        } else if (!this.validateEmailID()) {
-            this.notification.error('', 'Wrong format of Customer EmailID!!!');
-            return false;
+        // } else if (!customer.PrimayContact) {
+        //     this.notification.error('', 'Customer Primary Contact is mandatory!!!');
+        //     return false;
+        // } else if (!customer.Phone) {
+        //     this.notification.error('', 'Customer Phone is mandatory!!!');
+        //     return false;
+        // } else if (!customer.Email) {
+        //     this.notification.error('', 'Customer EmailID is mandatory!!!');
+        //     return false;
+        //  } else if (!this.validateEmailID()) {
+        //     this.notification.error('', 'Wrong format of Customer EmailID!!!');
+        //     return false;
         } else if (mode === 2 && (this.addProductCheck.length === undefined || this.addProductCheck.length === 0)
             && (newlyAddedproduct.length === undefined || newlyAddedproduct.length === 0)) {
             this.notification.error('', 'Atleast one product is mandatory!!!');

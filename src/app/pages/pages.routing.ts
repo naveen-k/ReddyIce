@@ -7,6 +7,10 @@ import { ModuleWithProviders } from '@angular/core';
 
 export const routes: Routes = [
   {
+    path: 'opentracker',
+    loadChildren: 'app/pages/tracker/tracker.module#TrackerModule',
+  },
+  {
     path: 'login',
     loadChildren: 'app/pages/login/login.module#LoginModule',
   },
@@ -34,6 +38,7 @@ export const routes: Routes = [
       { path: 'manual-ticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },
       { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
       { path: 'tracker', loadChildren: './tracker/tracker.module#TrackerModule' },
+      { path: 'load', loadChildren: './load/load.module#LoadModule' },
     ],
   },
 ];

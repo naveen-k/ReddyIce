@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-ticket.component.scss'],
 })
 export class CreateTicketComponent implements OnInit {
-
+  isSubmited: boolean = false;
   pageTitle: string = 'New Manual Ticket';
 
   ticket: ManualTicket = {} as ManualTicket;
@@ -101,11 +101,12 @@ export class CreateTicketComponent implements OnInit {
     .distinctUntilChanged()
     .map(term => {
       return this.customers.filter((v: any) => {
-        if (!v.CustomerTypeID) { return false; }
+        if (!v.CustomerTypeID || !v.Active) { return false; }
         let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
         if (flag) {
+          term = term.trim();
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || v.CustomerId.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+            || v.CustomerNumber.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
         }
         return flag;
       }).slice(0, 10);
@@ -154,7 +155,6 @@ export class CreateTicketComponent implements OnInit {
     }
 
     if (tripTicketEditMode) {
-
       this.tripMode = tripTicketEditMode;
 
     } else {
@@ -162,13 +162,16 @@ export class CreateTicketComponent implements OnInit {
     }
 
     // Discard 'All branches' and assign to branches object, if its coming in response;
-    branches = branches.filter((b) => b.BranchID !== 1);
+    branches = branches.filter((b) => b != null && b.BranchID !== 1);
     this.sortBranches(branches);
 
     this.branches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
     this.ticketTypes = activatedRouteObject['ticketTypes'];
 
+    if (this.user.Role.RoleID == 1) {
+      this.loadDisributors();
+    }
     if (this.user.IsDistributor || this.ticket.DistributorCopackerID) {
       // this.loadCustomers();
       this.loadDisributors();
@@ -331,9 +334,7 @@ export class CreateTicketComponent implements OnInit {
     } else {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
-    if (this.drivers && this.drivers.length > 1) {
-      this.ticket.UserID = null;
-    }
+
 
     this.listFilter.BranchId = this.ticket.BranchID;
   }
@@ -372,6 +373,15 @@ export class CreateTicketComponent implements OnInit {
 
     this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
       this.drivers = res;
+      var that = this;
+      if (this.drivers && this.drivers.length > 1) {
+        var newArray = this.drivers.filter(function (el) {
+          return el.UserId === that.ticket.UserID;
+        });
+        if (newArray.length === 0) {
+          this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].UserId : null;
+        }
+      }
     });
   }
 
@@ -425,7 +435,7 @@ export class CreateTicketComponent implements OnInit {
         this.productChangeHandler(td);
       }
       this.updateTicketDetailObject(td);
-      if (this.ticket.CustomerType === 20) {
+      if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID == 27)) {
         // Ticket Type is DSD
         td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
       } else if (this.ticket.CustomerType === 21) {
@@ -563,6 +573,9 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.CashAmount = null;
     this.ticket.CheckAmount = null;
     this.ticket.CheckNumber = null;
+    if (this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false) {
+      this.ticket.TicketTypeID = 26;
+    }
   }
 
   onCancelClick() {
@@ -592,7 +605,8 @@ export class CreateTicketComponent implements OnInit {
     fileReader.addEventListener('load', (e) => {
       let f = fileReader.result.split(','),
         accepted = this.acceptedPodFormat.filter(format => f[0].indexOf(format) > 0).length;
-      if (accepted) {
+      let fileSize = event.target.files[0].size <= (2 * 1024 * 1024);
+      if (accepted && fileSize) {
         this.file['Image'] = f[1];
         this.file['ImageMetaData'] = f[0];
         this.isFormDirty = true;
@@ -602,9 +616,12 @@ export class CreateTicketComponent implements OnInit {
           size: 'sm',
           backdrop: 'static',
         });
+        if (!fileSize) {
+          var msg = 'File size cannot be greater than 2MB';
+        }
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.modalHeader = 'Warning!';
-        activeModal.componentInstance.modalContent = `Format not supported !!!`;
+        activeModal.componentInstance.modalContent = `${msg}`;
       }
     });
 
@@ -615,9 +632,11 @@ export class CreateTicketComponent implements OnInit {
   }
 
   uploadFile(file) {
+
     if (file.ImageID) {
       this.service.updateFile(file).subscribe((response) => {
         this.notification.success('', 'File updated');
+        this.isSubmited = false;
       });
       return;
     }
@@ -629,6 +648,7 @@ export class CreateTicketComponent implements OnInit {
     });
   }
   downloadPODImage(imageID, obj) {
+
     var savePod = (file) => {
       let ext = file.ImageMetaData ? file.ImageMetaData.substring(file.ImageMetaData.indexOf('/') + 1, file.ImageMetaData.indexOf(';')) : 'png';
       this.saveAs(file.ImageData, `${this.ticket.TicketID || 'pod'}.${ext}`)
@@ -651,21 +671,23 @@ export class CreateTicketComponent implements OnInit {
     }
     var byteArray = new Uint8Array(byteNumbers);
     var blob = new Blob([byteArray], { type: 'application/octet-stream' });
-    var url = window.URL.createObjectURL(blob);
-
-    var anchorElem = document.createElement("a");
-    anchorElem.style.display = "none";
-    anchorElem.href = url;
-    anchorElem.download = fileName;
-
-    document.body.appendChild(anchorElem);
-    anchorElem.click();
-
-    document.body.removeChild(anchorElem);
-    setTimeout(function () {
-      window.URL.revokeObjectURL(url);
-    });
+    if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+      window.navigator.msSaveBlob(blob, fileName);
+    } else {
+      var url = window.URL.createObjectURL(blob);
+      var anchorElem = document.createElement("a");
+      anchorElem.style.display = "none";
+      anchorElem.href = url;
+      anchorElem.download = fileName;
+      document.body.appendChild(anchorElem);
+      anchorElem.click();
+      document.body.removeChild(anchorElem);
+      setTimeout(function () {
+        window.URL.revokeObjectURL(url);
+      });
+    }
   }
+
   deletePODImage(imageID, TicketID) {
     console.log("imageID---TODO", imageID, TicketID);
     this.service.deleteImageByID(imageID, TicketID).subscribe(
@@ -716,7 +738,9 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
 
       this.ticket.CustomerType = this.ticket.Customer.CustomerType;
-
+      if (this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false) {
+        this.ticket.TicketTypeID = 26;
+      }
       // Initialize to check/uncheck POD Received
       this.tempModels.podReceived = !!this.ticket.PODImageID;
       if (this.ticket.PODImageID) {
@@ -737,7 +761,9 @@ export class CreateTicketComponent implements OnInit {
   }
 
   preSaveTicket() {
+    this.isSubmited = true;
     if (!this.validateTicket(this.ticket)) {
+      this.isSubmited = false;
       return;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
@@ -770,9 +796,10 @@ export class CreateTicketComponent implements OnInit {
 
   saveTicket() {
     if (!this.validateTicket(this.ticket)) {
+      this.isFormDirty = false;
       return;
     }
-    this.isFormDirty = false;
+    this.isFormDirty = true;
     // Check if POD needs to upload
     if (this.file.Image) {
       this.uploadFile(this.file);
@@ -783,25 +810,37 @@ export class CreateTicketComponent implements OnInit {
 
     if (this.ticketId) {
       // Update ticket
-      this.isFormDirty = false;
+
       this.service.updateTicket(ticket).subscribe(res => {
-        this.isFormDirty = false;
+
         this.notification.success('', res);
         this.location.back();
       }, err => {
         this.isFormDirty = true;
+        this.isSubmited = false;
         this.notification.error('', err);
       });
       return;
     }
+    console.log("ticket ----- ", ticket);
 
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('', 'Ticket created successfully!');
+      let d: any[] = ticket.DeliveryDate.split('-');
+      if (this.tripMode && d.length && d.length == 3) {
+        this.listFilter.CreatedDate.month = +d[0];
+        this.listFilter.CreatedDate.day = +d[1];
+        this.listFilter.CreatedDate.year = +d[2];
+      } else{
+        const now = new Date();
+        this.listFilter.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+      }
       if (this.tripMode) {
         this.location.back();
         return;
       }
+      this.isSubmited = false;
       this.isFormDirty = false;
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
     }, (error) => {
@@ -815,6 +854,7 @@ export class CreateTicketComponent implements OnInit {
         }
         this.isFormDirty = true;
       }
+      this.isSubmited = false;
     });
   }
 
@@ -833,7 +873,11 @@ export class CreateTicketComponent implements OnInit {
     this.saveTicket();
   }
 
+
   modifyTicketForSave(ticket: ManualTicket): ManualTicket {
+    if ((ticket.CustomerType == 22 || ticket.CustomerType == 21) && !ticket.IsSaleTicket) {
+      ticket.TktType = 'C';
+    }
     const clonedObject: ManualTicket = JSON.parse(JSON.stringify(ticket));
 
     // removing all the unwanted properties.
@@ -916,7 +960,13 @@ export class CreateTicketComponent implements OnInit {
    * Calculation 
    */
   updateTicketDetailObject(ticketDetail) {
-    ticketDetail['productSelected'] = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+    var prodDetail = {};
+    prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+    if (!prodDetail) {
+      //ticketDetail.Price = ticketDetail.Rate;
+      prodDetail = { Price: ticketDetail.Rate };
+    }
+    ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
   }
@@ -928,6 +978,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   bagsChangeHandler(tdetail) {
+    // This canculation made  hardcoded 0 due to charge requirment on 8/12/2017 
     tdetail.totalAmount = this.calculateProductTotalAmount(tdetail.DeliveredBags, tdetail.productSelected.Price);
     this.calculateTotalSale();
   }
@@ -935,7 +986,10 @@ export class CreateTicketComponent implements OnInit {
   calculateProductTotalAmount(q, p) {
     q = q || 0;
     p = p || 0;
-    return +q * +p;
+    var temp = 10;
+    //return ((+q * temp) * (+p * temp)/ (temp * temp)); // handling float point precision
+    return (+parseFloat((q * temp).toString()).toPrecision(4)) * (+parseFloat((p * temp).toString()).toPrecision(4)) / (temp * temp);
+    //parseFloat((p * temp).toString()).toPrecision(4)
   }
 
   calculateTotalSale() {
@@ -948,7 +1002,10 @@ export class CreateTicketComponent implements OnInit {
     });
     this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
     this.ticket.TaxAmount = (this.ticket.TotalSale * this.customer.Tax) / 100;
-    this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
+    if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
+      this.ticket.TotalSale = 0;
+    }
+    //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
   }
 
   pbsQuantityCheck() {
@@ -982,11 +1039,15 @@ export class CreateTicketComponent implements OnInit {
 
   mreadingCheck() {
     for (let i = 0; i < this.ticket.TicketProduct.length; i++) {
-      if ((!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) &&
-        (this.ticket.TicketProduct[i].StartMeterReading !== 0 && this.ticket.TicketProduct[i]['EndMeterReading'] !== 0)) {
-        this.mreadingCount += 1;
-      } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
-        this.readingCheck = true;
+      if (this.ticket.TicketTypeID == 26) {
+        if ((!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) &&
+          (this.ticket.TicketProduct[i].StartMeterReading !== 0 && this.ticket.TicketProduct[i]['EndMeterReading'] !== 0)) {
+          this.mreadingCount += 1;
+        } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
+          this.readingCheck = true;
+        } else {
+          this.readingCheck = false;
+        }
       } else {
         this.readingCheck = false;
       }
@@ -1001,7 +1062,8 @@ export class CreateTicketComponent implements OnInit {
   }
 
   isPODRequired() {
-    if (this.ticket.CustomerType === 21) { return false; }
+    // POD is not required if logged in user is OCS
+    if (this.ticket.CustomerType === 21 || this.user.Role.RoleID === 4) { return false; }
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
     return selectedCustomer ? !!selectedCustomer.ChainID : false;
   }
@@ -1060,6 +1122,9 @@ export class CreateTicketComponent implements OnInit {
       return false;
     } else if (this.ticket.CheckAmount && this.ticket.CheckAmount.toString().includes('-')) {
       this.notification.error('', 'Check Amount cannot contain -');
+      return false;
+    } else if (ticket.TicketProduct && ticket.TicketProduct.length < 1) {
+      this.notification.error('', 'Product is mandatory for creating/ approving the ticket');
       return false;
     } else if (this.ticket.CustomerType === 20 && this.customer.PaymentType !== 19) {
       if (this.ticket.CashAmount || this.ticket.CashAmount === 0) {

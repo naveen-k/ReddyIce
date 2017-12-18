@@ -11,6 +11,7 @@ export interface UserDetails {
   RoleList: UserRoles[];
   Distributor?: UserDistributor;
   MenuOptions: UserMenuOptions[];
+  IsSeasonal?:boolean;
 }
 
 export interface UserDistributor {
