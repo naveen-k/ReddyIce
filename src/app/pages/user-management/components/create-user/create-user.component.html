@@ -125,7 +125,17 @@
                   <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
                 </select>
     </div>
-
+    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header" >
+      <label for="distributor">
+        Distributor
+        <sup style="color:red;">*</sup>
+      </label>
+      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
+        #distributor="ngModel" (ngModelChange)="changeHandler()">
+                    <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
+                  </select-->
+      <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
+    </div>
     <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.RoleID==='3')||(user.IsSeasonal && actionName=='edit')" [hidden]="userObject.IsDistributor">
       <label for="exampleSelect1">
         Branch
@@ -144,7 +154,7 @@
               <br/>
               <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
               <br/>
-              <div style="width:100%;margin-top: 10px;max-height:80px;overflow:auto;">
+              <div style="width:100%;margin-top: 10px;max-height:50px;overflow:auto;">
                 <ul style="padding-left: 15px;">
                    <li *ngFor="let brannch of selectedBranch" >
                       {{brannch.label}} <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' ||user.RoleID == '5')" class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
@@ -153,7 +163,7 @@
                  </li>
                  </ul>
                </div>
-              <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown--><br><br>
+              <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown-->
                     <!--button class="btn btn-danger" (click)="onMultiSelect(optionsModel)">Fire</button -->
  
     </div>
@@ -163,31 +173,23 @@
         #ISeriesRouteNumber="ngModel" maxlength="6" (ngModelChange)="changeHandler()" >
     </div>
 
-    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header" >
-      <label for="distributor">
-        Distributor
-        <sup style="color:red;">*</sup>
-      </label>
-      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
-        #distributor="ngModel" (ngModelChange)="changeHandler()">
-                    <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
-                  </select-->
-      <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
+   
     </div>
+    <div class="row">
     <div class="col-md-6 page-header">
-      <label class="vertical-center"></label>
+      
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
       <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
         [disabled]="isNewUser"></ba-checkbox>
     </div>
     <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="col-md-6 page-header">
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-       <label class="vertical-center"></label>
+     
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
         [disabled]="true"></ba-checkbox>
     </div>
-    <div *ngIf="user.IsRIInternal && !isDistributorAdmin && user.RoleID == 3" class="col-md-6 page-header" style="margin-top:-8px;">
-      <!-- <label class="vertical-center"></label> -->
+    <div *ngIf="user.IsRIInternal && !isDistributorAdmin && user.RoleID == 3" class="col-md-6 page-header">
+     
       <ba-checkbox [(ngModel)]="user.IsChecker" (ngModelChange)="changeHandler()" [label]="'Is Checker?'"
         [ngModelOptions]="{standalone: true}"></ba-checkbox>
     </div>    

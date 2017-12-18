@@ -7,7 +7,7 @@
           <div style="float:right; width:60%; width:auto;" *ngIf="!IsSesonalTrue">
             <button (click)="showNewCustomer($event)" class="btn btn-primary addCustBtn" [disabled]="rightCardOpen||IsSesonalTrue">
               Add User
-          </button>
+            </button>
           </div>
 
         </div>
@@ -16,18 +16,22 @@
         <h4>Distributor : Dist 001</h4>
       </div> -->
       <div class="row" style="min-height:51px;">
-        <div class="col-sm-4 col-md-4">
+        <div class="col-sm-3 col-md-3">
           <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
         </div>
-        <div class="col-sm-2" [hidden]="rightCardOpen">
+        <div class="col-sm-3 col-md-3" *ngIf="!isDistributorAdmin">
+          <reddy-select [(selected)]="filterBranch" (selectedChange)="branchChangeHandler();" [options]="allBranches"></reddy-select>
+        </div>
+        <div class="col-sm-2 col-md-2" [hidden]="rightCardOpen">
           <select class="form-control" [(ngModel)]="userType" (ngModelChange)="changeUserTypeHandler();">
             <option value="active">Active</option>
             <option value="inActive">InActive</option>
             <option value="all">All</option>
-        </select>
+          </select>
         </div>
-        <div [ngClass]="{'col-sm-6':!rightCardOpen, 'col-sm-8':rightCardOpen}" style="padding-right: 30px;">
-          <pagination [tableData]="userTableData |filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone', 'concatBranch', 'concatCode', 'concatBranchCode'] | sort:customer.sortField:customer.isAsc " [(currentPage)]="paginationData" [sortingOrder]="customer.isAsc" style="float: right;" [showPages]="false"></pagination>
+        <div [ngClass]="{'col-sm-4':!rightCardOpen, 'col-sm-6':rightCardOpen}" style="padding-right: 30px;">
+          <pagination [tableData]="userTableData |filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone', 'concatBranch', 'concatCode', 'concatBranchCode'] | sort:customer.sortField:customer.isAsc "
+            [(currentPage)]="paginationData" [sortingOrder]="customer.isAsc" style="float: right;" [showPages]="false"></pagination>
         </div>
       </div>
       <!-- <ng2-smart-table [settings]="settings" [source]="source" class="page-header" (edit)="onEditCliked($event)"></ng2-smart-table>  -->
@@ -38,14 +42,14 @@
               <th width="100px;" class="allign">Actions</th>
               <th class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'FirstName';customer.isAsc=!customer.isAsc;">
-                    Name
-                    <i *ngIf="(customer.sortField === 'FirstName')" [ngClass]="(customer.isAsc && customer.sortField === 'FirstName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                  Name
+                  <i *ngIf="(customer.sortField === 'FirstName')" [ngClass]="(customer.isAsc && customer.sortField === 'FirstName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th *ngIf="!hideColumn" class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;">
-                    Username
-                    <i *ngIf="(customer.sortField === 'UserName')" [ngClass]="(customer.isAsc && customer.sortField === 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                  Username
+                  <i *ngIf="(customer.sortField === 'UserName')" [ngClass]="(customer.isAsc && customer.sortField === 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
 
@@ -53,37 +57,37 @@
                 <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_role';customer.isAsc=!customer.isAsc;">
                   Role
                   <i *ngIf="(customer.sortField === 'tmp_role')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_role' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
-              </span>
+                </span>
               </th>
               <th *ngIf="!hideColumn && !isDistributorExist" class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_distributor';customer.isAsc=!customer.isAsc;">
-                    Distributor
-                    <i *ngIf="(customer.sortField === 'tmp_distributor')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_distributor' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                  Distributor
+                  <i *ngIf="(customer.sortField === 'tmp_distributor')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_distributor' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th *ngIf="!hideColumn && !isDistributorExist" class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_branch';customer.isAsc=!customer.isAsc;">
-                    Branch
-                    <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                  Branch
+                  <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th *ngIf="!isDistributorExist" class="text-in-center">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'IsRIInternal';customer.isAsc=!customer.isAsc;">
-                    RI Internal
-                    <i *ngIf="(customer.sortField === 'IsRIInternal')" [ngClass]="(customer.isAsc && customer.sortField === 'IsRIInternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                  RI Internal
+                  <i *ngIf="(customer.sortField === 'IsRIInternal')" [ngClass]="(customer.isAsc && customer.sortField === 'IsRIInternal' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>
               <th *ngIf="isDistributorExist && !hideColumn" class="allign">
-                  <span style="cursor:pointer;" (click)="customer.sortField = 'EmailID';customer.isAsc=!customer.isAsc;">
-                      Email
-                      <i *ngIf="(customer.sortField === 'EmailID')" [ngClass]="(customer.isAsc && customer.sortField === 'EmailID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
-                  </span>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'EmailID';customer.isAsc=!customer.isAsc;">
+                  Email
+                  <i *ngIf="(customer.sortField === 'EmailID')" [ngClass]="(customer.isAsc && customer.sortField === 'EmailID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                </span>
               </th>
               <th *ngIf="isDistributorExist" class="text-in-center">
-                  <span style="cursor:pointer;" (click)="customer.sortField = 'Phone';customer.isAsc=!customer.isAsc;">
-                      Phone #
-                      <i *ngIf="(customer.sortField === 'Phone')" [ngClass]="(customer.isAsc && customer.sortField === 'Phone' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
-                  </span>
+                <span style="cursor:pointer;" (click)="customer.sortField = 'Phone';customer.isAsc=!customer.isAsc;">
+                  Phone #
+                  <i *ngIf="(customer.sortField === 'Phone')" [ngClass]="(customer.isAsc && customer.sortField === 'Phone' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                </span>
               </th>
             </tr>
           </thead>
@@ -94,28 +98,52 @@
             <tr *ngFor="let item of paginationData">
               <td class="table-id" style="cursor: pointer">
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
-                   <span class="tooltiptext">View</span>
+                  <span class="tooltiptext">View</span>
                 </i>
                 <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px" [hidden]="userDetails?.IsSeasonal">
-                   <span class="tooltiptext">Edit</span>
+                  <span class="tooltiptext">Edit</span>
                 </i>
                 <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"
                   [hidden]="!item.IsActive||userDetails?.IsSeasonal">
-                   <span class="tooltiptext">Deactivate</span>
+                  <span class="tooltiptext">Deactivate</span>
                 </i>
               </td>
-              <td class="userCell"><span [title]="item.FirstName + ' - ' + item.LastName">{{ item.FirstName || 'NA'|cutString:true:15 }} {{ item.LastName || 'NA'|cutString:true:15 }}</span></td>
-              <td *ngIf="!hideColumn" class="userCell"><span [title]="item.UserName ">{{ item.UserName || 'NA' |cutString:true:30}}</span></td>
-              <td class="userCell"><span [title]="item.Role?.RoleName">{{ item.Role?.RoleName}}</span></td>
-              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell"><span [title]="item.Distributor?.DistributorName">{{ item.IsDistributor?item.Distributor.DistributorName:''|cutString:true:30}}</span></td>
-              <td *ngIf="!hideColumn && !isDistributorExist" class="userCell"><span  *ngFor="let b of item.Branch | slice:0:1" [title]="b.BranchCode+'-'+b.BranchName">{{b.BranchCode}} - {{b.BranchName|cutString:true:30}}</span><span *ngIf="item.Branch?.length > 1"> <a href="javascript:void(0);" (click)="moreBranches(item.Branch,item.UserName)">({{item.Branch?.length}}) more...</a></span><!--{{item.Branch | concat:'BranchName'}}--></td>
-              <td *ngIf="!isDistributorExist" class="text-in-center"><input type="checkbox" value="" disabled [checked]=item.IsRIInternal></td>
-              <td *ngIf="isDistributorExist && !hideColumn" class="userCell"><span [title]="item.EmailID">{{item.EmailID|cutString:true:30}}</span></td>
-              <td *ngIf="isDistributorExist" class="userCell text-in-center"><span [title]="item.Phone">{{item.Phone|cutString:true:30}}</span></td>
+              <td class="userCell">
+                <span [title]="item.FirstName + ' - ' + item.LastName">{{ item.FirstName || 'NA'|cutString:true:15 }} {{ item.LastName || 'NA'|cutString:true:15 }}</span>
+              </td>
+              <td *ngIf="!hideColumn" class="userCell">
+                <span [title]="item.UserName ">{{ item.UserName || 'NA' |cutString:true:30}}</span>
+              </td>
+              <td class="userCell">
+                <span [title]="item.Role?.RoleName">{{ item.Role?.RoleName}}</span>
+              </td>
+              <td *ngIf="!hideColumn  && !isDistributorExist" class="userCell">
+                <span [title]="item.Distributor?.DistributorName">{{ item.IsDistributor?item.Distributor.DistributorName:''|cutString:true:30}}</span>
+              </td>
+              <td *ngIf="!hideColumn && !isDistributorExist" class="userCell">
+                <span *ngFor="let b of item.Branch | slice:0:1" [title]="b.BranchCode+'-'+b.BranchName">{{b.BranchCode}} - {{b.BranchName|cutString:true:30}}</span>
+                <span *ngIf="item.Branch?.length > 1">
+                  <a href="javascript:void(0);" (click)="moreBranches(item.Branch,item.UserName)">({{item.Branch?.length}}) more...</a>
+                </span>
+                <!--{{item.Branch | concat:'BranchName'}}-->
+              </td>
+              <td *ngIf="!isDistributorExist" class="text-in-center">
+                <input type="checkbox" value="" disabled [checked]=item.IsRIInternal>
+              </td>
+              <td *ngIf="isDistributorExist && !hideColumn" class="userCell">
+                <span [title]="item.EmailID">{{item.EmailID|cutString:true:30}}</span>
+              </td>
+              <td *ngIf="isDistributorExist" class="userCell text-in-center">
+                <span [title]="item.Phone">{{item.Phone|cutString:true:30}}</span>
+              </td>
             </tr>
-            <tr [hidden]='!showSpinner' class="text-center">
-              <td colspan="10"><a> <img src="assets/reddyIce/spinner.gif " width='25px'></a></td>
-            </tr>
+            <!-- <tr [hidden]='!showSpinner' class="text-center">
+              <td colspan="10">
+                <a>
+                  <img src="assets/reddyIce/spinner.gif " width='25px'>
+                </a>
+              </td>
+            </tr> -->
             <tr *ngIf="!paginationData.length && !showSpinner" class="text-center">
               <td colspan="10">No data found</td>
             </tr>
@@ -123,15 +151,21 @@
         </table>
 
       </div>
+      <div class="spinnerContainer" [hidden]='!showSpinner'>
+        <a>
+          <img src="assets/reddyIce/spinner.gif " width='25px'>
+        </a>
+      </div>      
     </ba-card>
   </div>
 
   <div [hidden]="!rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
     <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
       <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
-      <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)" [cacheDistributor] ="distributorsAndCopackers"
-        (onUpdateUser)="onUpdateUser($event)" (closeNewUser)="showNewCustomer($event)" [roles]="userRoles" [branches]="userBranches"
-        [isDistributorAdmin]="isDistributorAdmin" [userDetails]="userDetails" [action]='action' [mIOpen]="rightCardOpen" [formIsDirty]="formIsDirty">
+      <create-user (formChanged)="formChangedHandler()" [user]="newUser" [isNewUser]="isNewUser" (onSaveUser)="onSaveUser($event)"
+        [cacheDistributor]="distributorsAndCopackers" (onUpdateUser)="onUpdateUser($event)" (closeNewUser)="showNewCustomer($event)"
+        [roles]="userRoles" [branches]="userBranches" [isDistributorAdmin]="isDistributorAdmin" [userDetails]="userDetails"
+        [action]='action' [mIOpen]="rightCardOpen" [formIsDirty]="formIsDirty">
       </create-user>
 
     </ba-card>

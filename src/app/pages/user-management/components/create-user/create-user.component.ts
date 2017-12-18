@@ -208,26 +208,21 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.DistributorMasterID = '';
         }
         if (this.user.IsRIInternal || this.user.IsSeasonal) {
-
             if (this.addedBranches) {
 
                 if (this.isNewUser) {
                     this.user.Branch = this.addedBranches;
                 } else {
-
                     var obj: any = {};
-
                     this.tempUserBranch.forEach(branch => {
+                        obj = branch;
                         if (this.userBranch.indexOf(branch.BranchID + '') > -1 || this.userBranch.indexOf(branch.BranchID) > -1) {
-
+                            
                         } else {
-                            obj = branch;
-                            obj.IsActive = true;
-                            this.addedBranches.push(obj);
+                           obj.IsActive = false;
+                           this.addedBranches.push(obj); 
                         }
-
                     });
-
                     this.user.Branch = this.addedBranches;
                 }
             }
@@ -235,6 +230,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         } else {
             this.user.Branch = [];
         }
+        console.log(this.user);
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
 

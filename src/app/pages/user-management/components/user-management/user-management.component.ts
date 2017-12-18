@@ -33,7 +33,8 @@ export class UserManagementComponent implements OnInit {
   userObject: any = [];
   // isError: boolean = false;
   showSpinner: boolean = true;
-
+  filterBranch: number = 1;
+  allBranches: any =[];
   usersList: any[];
 
   // ngModel for usertype dropdown
@@ -155,7 +156,7 @@ export class UserManagementComponent implements OnInit {
         });
       }
     }
-    console.log("user -------------------------------- ", user);
+
     this.action = 'edit';
     this.newUser = Object.assign({}, user);
     //this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
@@ -214,7 +215,6 @@ export class UserManagementComponent implements OnInit {
   }
 
   onSaveUser(user) {
-    console.log("user --------- ", user);
     delete user.role;
     delete user.BranchID;
     if (!user.IsRIInternal) { delete user.UserName; }
@@ -222,10 +222,8 @@ export class UserManagementComponent implements OnInit {
       
     // }
     this.service.createUser(user).subscribe((res) => {
-      console.log(user);
       this.notification.success('Success', 'User created successfully');
       const savedUserlist = [...this.userTableData, res];
-      console.log(res);
       this.userTableData = savedUserlist;
 
       this.rightCardOpen = !this.rightCardOpen;
@@ -237,14 +235,12 @@ export class UserManagementComponent implements OnInit {
 
     },
       (error) => {
-        console.log();
         error = JSON.parse(error._body);
         this.notification.error('Error', error.Message);
       });
   }
 
   onUpdateUser(user) {
-    console.log("--------------- on Updateuser ---- ", user);
     delete user.Role;
     delete user.MenuOptions;
     //delete user.Branch;
@@ -314,6 +310,18 @@ export class UserManagementComponent implements OnInit {
     const user = this.userService.getUser();
     this.service.getBranches(user.UserId).subscribe((response) => {
       this.userBranches = response;
+      if(this.userBranches && this.userBranches.length){
+        if(this.userBranches.length > 0 && this.userBranches[0].BranchID == 1) {
+          this.filterBranch = this.userBranches[1].BranchID;
+        } else if(this.userBranches.length > 0 && this.userBranches[0].BranchID != 1){
+          this.filterBranch = this.userBranches[0].BranchID;
+        }
+      }
+      this.allBranches = this.service.transformOptionsReddySelect(this.userBranches, 'BranchID', 'BranchCode', 'BranchName');
+      if (!response.IsDistributor) {
+        this.getDistributors();
+      }
+      
     });
   }
 
@@ -326,7 +334,7 @@ export class UserManagementComponent implements OnInit {
 
   getUserList(id?: number) {
     this.showSpinner = true;
-    this.service.getUsers(id).subscribe((res) => {
+    this.service.getUsers(id, this.filterBranch).subscribe((res) => {
       res.forEach((u) => {
         u = this.formatUser(u);
       });
@@ -373,7 +381,6 @@ export class UserManagementComponent implements OnInit {
   logUserID:any;
   ngOnInit() {
     this.userObject = this.userService.getUser();
-    console.log(this.userObject);
     const userId = localStorage.getItem('userId') || '';
     this.logUserID = userId;
     this.userService.getUserDetails(userId).subscribe((response) => {
@@ -384,15 +391,11 @@ export class UserManagementComponent implements OnInit {
       }else{
         this.IsSesonalTrue=false;
       }
-      console.log(this.userDetails.IsSeasonal);
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
       // console.log(this.userRoles);
       if (!response.IsDistributor) {
-        
         this.getBranches();
-        this.getDistributors();
-        
       } else if (response.IsDistributor) {
         this.getBranches();
         this.isDistributorAdmin = true;
@@ -410,6 +413,10 @@ export class UserManagementComponent implements OnInit {
   changeUserTypeHandler() {
     this.updateUserTableOnTypeChange();
   }
+  /**
+   * Get more branches list by clicking on more link
+   * @params : branches, username
+   */
   moreBranches(branches,username) {
     const activeModal = this.modalService.open(ModelPopupComponent, {
       size: 'sm',
@@ -433,4 +440,10 @@ export class UserManagementComponent implements OnInit {
 
     });
   }
+  /**
+   * Filter logged-in user's branches
+   */
+  branchChangeHandler() {
+    this.getUserList(parseInt(this.logUserID, 10));
+}
 }
