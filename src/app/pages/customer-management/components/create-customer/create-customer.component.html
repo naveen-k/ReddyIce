@@ -78,7 +78,7 @@
                     <div class="row">
                         <label for="example-text-input" class="col-sm-7">Allow Credit on Same Ticket</label>
                         <div class="col-sm-5">
-                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnSameTicket' (ngModelChange)="formFlagHandler()"
+                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnsameticket' (ngModelChange)="formFlagHandler()"
                                 class="checkbox-size" />
                         </div>
                     </div>
@@ -260,7 +260,7 @@
                             <tr *ngFor="let mprod of newlyAddedproduct; let i=index">
                                     <td class="text-align-left">
                                         <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
-                                            (ngModelChange)="productChangeHandler(mprod)">
+                                            (ngModelChange)="productChangeHandler(mprod, i)">
                                             <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                 {{prod.DisplayName}}
                                             </option>

@@ -22,7 +22,7 @@ export class CreateCustomerComponent implements OnInit {
     selectedProducts: DualListItem[] = [];
     deactivateClicked: boolean = false;
     addedProduct: MapProducts[] = [];
-    newlyAddedproduct: MapProducts[] = [];
+    newlyAddedproduct: any[] = [];
     isFromDirty: boolean = false;
     keepSorted = true;
     isView: boolean = false;
@@ -137,10 +137,10 @@ export class CreateCustomerComponent implements OnInit {
         
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
             // console.log("sdsa ---0-----", this.customer);
-            if (this.customer.AllowReturnSameTicket) {
-                this.customer.AllowReturnSameTicket = 1;
+            if (this.customer.AllowReturnsameticket) {
+                this.customer.AllowReturnsameticket = 1;
             } else {
-                this.customer.AllowReturnSameTicket = 0;
+                this.customer.AllowReturnsameticket = 0;
             }
 
             if (this.mode === 2) {
@@ -222,7 +222,7 @@ export class CreateCustomerComponent implements OnInit {
 
     }
 
-    productChangeHandler(mprod) {
+    productChangeHandler(mprod, index) {
         //console.log("mprod ---- ------- ",mprod);
         let mProdTemp = mprod.cProductId.split('-');
         const product = this.addedProduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
@@ -232,7 +232,7 @@ export class CreateCustomerComponent implements OnInit {
 
             // if (this.mode === 2){ product1.length =0; product1.pop(); } else { product.length=0; product.pop(); }
 
-            mprod.cProductId = '';
+            //mprod.cProductId = '';
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',
                 backdrop: 'static',
@@ -241,6 +241,7 @@ export class CreateCustomerComponent implements OnInit {
             activeModal.componentInstance.modalHeader = 'Warning!';
             activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
             activeModal.componentInstance.closeModalHandler = (() => {
+                this.newlyAddedproduct[index] = {};
             });
             return;
         } else {
