@@ -63,7 +63,7 @@ export class Login implements OnInit {
     if (this.isLoginMode) {
       if (this.loginForm.valid) {
         // your code goes here
-        const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
+        const user = `username=${values['email']}&password=${encodeURIComponent(values['password'])}&grant_type=password`;
 
         this.loginService.login(user).subscribe((res) => {
           this.isProcessing = false;
