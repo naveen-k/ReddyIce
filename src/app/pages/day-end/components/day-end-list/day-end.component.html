@@ -3,25 +3,33 @@
         <ba-card cardTitle="Trip List {{userSubTitle}}" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
             <div class="row">
                 <div class="col-sm-3">
-                    <label><b> Select Date </b></label>
+                    <label>
+                        <b> Select Date </b>
+                    </label>
                     <div class="input-group">
                         <date-picker [maxDate]="todaysDate" [(dateModel)]="filter.selectedDate" (dateModelChange)="selectionchangeHandler()"></date-picker>
                     </div>
                 </div>
                 <div class="col-sm-3">
-                    <label><b>Select Driver Type</b></label>
+                    <label>
+                        <b>Select Driver Type</b>
+                    </label>
                     <select class="form-control" [(ngModel)]="filter.type" [disabled]="logedInUser.IsDistributor || this.logedInUser.Role.RoleID==3">
                         <option value="internal">RI Internal</option>
                         <option value="distributor">Distributor</option>
                     </select>
                 </div>
                 <div class="col-sm-4" *ngIf="filter.type === 'internal'">
-                    <label><b>Select Branch</b></label>
+                    <label>
+                        <b>Select Branch</b>
+                    </label>
                     <reddy-select [options]="branches" [(selected)]="filter.userBranch"></reddy-select>
                 </div>
                 <div class="col-sm-4" *ngIf="filter.type === 'distributor'">
-                    <label><b>Select Distributor</b></label>
-                    <reddy-select [disabled]="logedInUser.IsDistributor" [options]="distributors" [(selected)]="filter.userBranch" ></reddy-select>
+                    <label>
+                        <b>Select Distributor</b>
+                    </label>
+                    <reddy-select [disabled]="logedInUser.IsDistributor" [options]="distributors" [(selected)]="filter.userBranch"></reddy-select>
                 </div>
             </div>
             <div>
@@ -32,37 +40,37 @@
                             <th *ngIf="logedInUser.IsRIInternal">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'RouteNumber';customer.isAsc=!customer.isAsc;">
                                     Route #
-                                     <i *ngIf="(customer.sortField == 'RouteNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'RouteNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField == 'RouteNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'RouteNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th *ngIf="logedInUser.IsRIInternal">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
                                     Branch
-                                     <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th>
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'driver';customer.isAsc=!customer.isAsc;">
                                     Driver
-                                     <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th class="textAlignCenter">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
                                     Trip Code
-                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th class="text-right">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
                                     Total Sale
-                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th class="text-right">
                                 <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
                                     Received Amt
-                                     <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                    <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th class="textAlignCenter">
@@ -76,17 +84,21 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>                        
+                    <tbody>
                         <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc|dayEnd:filter.type:filter.userBranch">
-                            <td class="table-id" style="cursor: pointer">                                
-                                <i *ngIf="item.isDistributor && !item.IsSeasonal" class="ion-eye custom-tooltip-ion"
-                                    [routerLink]="['../ticket-detail', item.TripID]" style="margin-right: 5px">
+                            <td class="table-id" style="cursor: pointer">
+                                <i *ngIf="item.isDistributor && !item.IsSeasonal" class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
+                                    style="margin-right: 5px">
                                     <span class="tooltiptext">View</span>
                                 </i>
                                 <!-- <i *ngIf="(logedInUser.IsRIInternal && item.isDistributor === 0) || (item.IsSeasonal)&&(logedInUser.IsRIInternal)|| (item.isDistributor === 1 && item.IsSeasonal)" class="ion-edit custom-tooltip-ion" -->
-                                <i *ngIf="!item.isDistributor || item.IsSeasonal" class="ion-edit custom-tooltip-ion"
-                                    [routerLink]="['../detail',item.TripID]" style="margin-right: 5px">
+                                <i *ngIf="(!item.isDistributor || item.IsSeasonal) && item.TripStatusID !== 25" class="ion-edit custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
+                                    style="margin-right: 5px">
                                     <span class="tooltiptext">Edit</span>
+                                </i>
+                                <i *ngIf="(!item.isDistributor || item.IsSeasonal) && item.TripStatusID === 25" class="ion-eye custom-tooltip-ion" [routerLink]="['../detail',item.TripID]"
+                                    style="margin-right: 5px">
+                                    <span class="tooltiptext">View</span>
                                 </i>
                             </td>
 
@@ -123,7 +135,11 @@
                 </table>
 
             </div>
-            <div class='spinnerContainer' [hidden]='!showSpinner'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+            <div class='spinnerContainer' [hidden]='!showSpinner'>
+                <a>
+                    <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+                </a>
+            </div>
         </ba-card>
     </div>
 </div>
