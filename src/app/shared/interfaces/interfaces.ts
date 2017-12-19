@@ -42,8 +42,8 @@ export interface Customer {
     CustomerTypeCode: string;
     latitude: string;
     longitude: string;
-    //AllowReturnsameticket: string;
-    AllowReturnSameTicket: any;
+    AllowReturnsameticket: any;
+    //AllowReturnSameTicket: any;
     FreightCodePriceFile: string;
     MobileIn: boolean;
     SoldBy: string;
