@@ -199,6 +199,10 @@ export class TrackerComponent implements OnInit {
               }
             }
             this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
+
+            if (this.user.IsDistributor) {
+              this.distributorChangeHandler();
+            }
           }
         }
         // this.drawMapPath();
