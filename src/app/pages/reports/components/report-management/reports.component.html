@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
-        ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST'||IsTIR">
+        ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || IsTIR || filter.reportType == 'WOC'">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>
@@ -55,9 +55,13 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR'">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC'">
                         <label>Driver</label>
                         <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
+                    </div>
+                    <div class="col-sm-6" *ngIf="filter.reportType === 'WOC'">
+                        <label>STech</label>
+                        <reddy-select [options]="stechs" [(selected)]="filter.stech" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
@@ -96,7 +100,7 @@
                             <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
                             <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
                             <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
-                            <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Work Order Count</option>
+                            <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
                         </select>
                     </div>
                 </div>
@@ -110,7 +114,8 @@
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-        <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||filter.reportType==='RS'||IsTIR||filter.reportType==='SR'">
+        <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
+        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC'">
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>

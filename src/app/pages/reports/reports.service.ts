@@ -32,6 +32,12 @@ export class ReportService extends SharedService {
                 return res;
             });
     }
+    getSTechByBranch(branchId,startDate,endDate) {
+        return this.http.get(`api/report/getlistoftripservicetechnician?BranchId=${branchId}&TripStartDate=${startDate}&TripEndDate=${endDate}`)
+        .map((res) => res.json()).map((res) => {
+            return res;
+        });
+    }
     getDriversbyDistributors(distID) {
         return this.http.get(`api/report/driverbydistributorid?id=${distID}`)
             .map((res) => res.json()).map((res) => {

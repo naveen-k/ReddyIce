@@ -31,6 +31,7 @@ export class ReportsComponent implements OnInit {
         distributor: 0,
         branch: 1,
         driver: 1,
+        stech: 0,
         custID: 0,
         custtID: 0,
         custType: 0,
@@ -128,6 +129,8 @@ export class ReportsComponent implements OnInit {
             this.isInternalAdmin = true;
         } else if(this.user.Role.RoleID == 8 && !this.user.IsRIInternal) {
             this.isExternalAdmin = true;
+        } else if (this.user.Role.RoleID == 5 && this.user.IsRIInternal) {
+            this.isSTech = true;
         }
 
         if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
@@ -151,6 +154,9 @@ export class ReportsComponent implements OnInit {
         this.filter.customer = null;
         if (this.user.IsRIInternal) {
             this.filter.userType = 'internal';
+            if (this.filter.reportType == 'WOC') {
+                this.fetchSTechByBranch();
+            }
         }
         switch (this.filter.reportType) {
             case 'DST':
@@ -193,6 +199,18 @@ export class ReportsComponent implements OnInit {
         }, (err) => { });
     }
 
+    // WOC
+    stechs: any[] = []; 
+    fetchSTechByBranch() {
+        // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
+        this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
+            res.unshift({ STechID: 1, StechName: 'All STech' });
+            this.stechs = this.reportService.transformOptionsReddySelect(res, 'STechID', 'StechName');
+        }, (err) => { 
+            console.log("Something went wrong while fetching STech");
+        });
+    }
+
     branchChangeHandler(branchID) {
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
@@ -206,6 +224,10 @@ export class ReportsComponent implements OnInit {
             this.filter.driver = this.user.UserId;
         } else {
             this.filter.driver = 1;
+        }
+
+        if (this.filter.reportType == 'WOC') {
+            this.fetchSTechByBranch();
         }
 
         // this.getCustomers();
@@ -340,6 +362,10 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}`);
 
+            } else if (rType === 'WOC') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when WOC is clicked', this.linkRpt);                    
             } else {
                 return false;
             }
