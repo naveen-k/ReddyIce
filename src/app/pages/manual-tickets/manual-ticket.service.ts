@@ -52,7 +52,7 @@ export class ManualTicketService extends SharedService {
       url = `api/customer?custType=${custType}&distcopackerid=${distcopackerid}`
     }
     return this.http.get(url)
-      .map(res => res.json());
+      .map(res => res.json().Customer || res.json());
   }
 
   getCustomerDetail(customerId: number, isInternal: boolean = true): Observable<Customer> {
