@@ -24,6 +24,7 @@ import { GenericFilter } from './pipes/generic-filter.pipe';
 import { NgModule } from '@angular/core';
 import { DatePicker } from './components/date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
+import { TruncateZero } from 'app/shared/pipes/truncateZero.pipe';
 @NgModule({
     declarations: [
         GenericFilter,
@@ -45,6 +46,7 @@ import { FormsModule } from '@angular/forms';
         ConcatStringPipe,
         ModelPopupComponent,
         CurrencyFormatter,
+        TruncateZero,
         DatePicker
     ],
     exports: [
@@ -67,6 +69,7 @@ import { FormsModule } from '@angular/forms';
         ConcatStringPipe,
         ModelPopupComponent,
         CurrencyFormatter,
+        TruncateZero,
         DatePicker
     ],
     entryComponents: [

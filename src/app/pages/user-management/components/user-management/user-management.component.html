@@ -19,15 +19,16 @@
         <div class="col-sm-3 col-md-3">
           <input type="text" class="form-control" id="input01" [(ngModel)]="customer.searchString" placeholder="Search">
         </div>
-        <div class="col-sm-3 col-md-3" *ngIf="!isDistributorAdmin">
-          <reddy-select [(selected)]="filterBranch" (selectedChange)="branchChangeHandler();" [options]="allBranches"></reddy-select>
-        </div>
         <div class="col-sm-2 col-md-2" [hidden]="rightCardOpen">
           <select class="form-control" [(ngModel)]="userType" (ngModelChange)="changeUserTypeHandler();">
             <option value="active">Active</option>
             <option value="inActive">InActive</option>
             <option value="all">All</option>
           </select>
+        </div>
+        <div class="col-sm-3 col-md-3" *ngIf="!isDistributorAdmin">
+          <!--Alok: hiding branch filter.. as its no more needed -->
+          <!-- <reddy-select [(selected)]="filterBranch" (selectedChange)="branchChangeHandler();" [options]="allBranches"></reddy-select> -->
         </div>
         <div [ngClass]="{'col-sm-4':!rightCardOpen, 'col-sm-6':rightCardOpen}" style="padding-right: 30px;">
           <pagination [tableData]="userTableData |filter:customer.searchString:['FirstName', 'LastName', 'FullName', 'UserName', 'tmp_role', 'tmp_branch', 'IsRIInternal', 'tmp_distributor', 'EmailID', 'Phone', 'concatBranch', 'concatCode', 'concatBranchCode'] | sort:customer.sortField:customer.isAsc "
@@ -155,7 +156,7 @@
         <a>
           <img src="assets/reddyIce/spinner.gif " width='25px'>
         </a>
-      </div>      
+      </div>
     </ba-card>
   </div>
 

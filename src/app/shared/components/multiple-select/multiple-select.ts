@@ -19,7 +19,7 @@ export class SelectComponent implements AfterViewInit {
     position: string = 'bottom';
 
     private _disabled: boolean = false;
-    
+
     get disabled(): boolean {
         return this._disabled;
     }
@@ -36,8 +36,7 @@ export class SelectComponent implements AfterViewInit {
     private _selected: any;
     @Input()
     set selected(value: any) {
-        //if (value === 0) { console.log(value) };
-        if (!value && value !== 0) { console.log('undefined', value); return; }
+        if (!value && value !== 0) { return; }
         if (!this.multiple && !(value instanceof Array)) { value = [value]; }
         this._selected = value;
         if (this.elementRef) {
@@ -75,7 +74,7 @@ export class SelectComponent implements AfterViewInit {
             position: this.position,
             selectAll: this.selectAll,
             allSelected: false,
-            onClick: (this.multiple)?this.onClose.bind(this):void(0)
+            onClick: (this.multiple) ? this.onClose.bind(this) : void (0)
         });
     }
 
@@ -108,7 +107,7 @@ export class SelectComponent implements AfterViewInit {
 
     enableDisable(disable: boolean) {
         if (this.elementRef) {
-            if (disable) {                
+            if (disable) {
                 this.elementRef.multipleSelect('disable');
             } else {
                 this.elementRef.multipleSelect('enable');

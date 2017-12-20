@@ -25,7 +25,7 @@ export class UserManagementComponent implements OnInit {
   isDistributorAdmin: boolean = false;
   cardTitle: string;
   userDetails: UserDetails;
-  IsSesonalTrue:boolean=false;
+  IsSesonalTrue: boolean = false;
   formIsDirty: boolean = false;
   isDistributorExist: boolean = false;
   isEditClicked: boolean = false;
@@ -34,7 +34,7 @@ export class UserManagementComponent implements OnInit {
   // isError: boolean = false;
   showSpinner: boolean = true;
   filterBranch: number = 1;
-  allBranches: any =[];
+  allBranches: any = [];
   usersList: any[];
 
   // ngModel for usertype dropdown
@@ -219,7 +219,7 @@ export class UserManagementComponent implements OnInit {
     delete user.BranchID;
     if (!user.IsRIInternal) { delete user.UserName; }
     // if(user.Branch.length>0){
-      
+
     // }
     this.service.createUser(user).subscribe((res) => {
       this.notification.success('Success', 'User created successfully');
@@ -310,10 +310,10 @@ export class UserManagementComponent implements OnInit {
     const user = this.userService.getUser();
     this.service.getBranches(user.UserId).subscribe((response) => {
       this.userBranches = response;
-      if(this.userBranches && this.userBranches.length){
-        if(this.userBranches.length > 0 && this.userBranches[0].BranchID == 1) {
+      if (this.userBranches && this.userBranches.length) {
+        if (this.userBranches.length > 0 && this.userBranches[0].BranchID == 1) {
           this.filterBranch = this.userBranches[1].BranchID;
-        } else if(this.userBranches.length > 0 && this.userBranches[0].BranchID != 1){
+        } else if (this.userBranches.length > 0 && this.userBranches[0].BranchID != 1) {
           this.filterBranch = this.userBranches[0].BranchID;
         }
       }
@@ -321,7 +321,7 @@ export class UserManagementComponent implements OnInit {
       if (!this.isDistributorExist) {
         this.getDistributors();
       }
-      
+
     });
   }
 
@@ -335,13 +335,29 @@ export class UserManagementComponent implements OnInit {
   getUserList(id?: number) {
     if (this.isDistributorExist) {
       this.filterBranch = 1;
-    } 
+    }
     this.showSpinner = true;
     this.service.getUsers(id, this.filterBranch).subscribe((res) => {
-      res.forEach((u) => {
+
+      const userBranch = {};
+      res.UserBranches.forEach(u => {
+        if (userBranch[u.UserID]) {
+          userBranch[u.UserID].push(u);
+          return;
+        }
+        userBranch[u.UserID] = [u];
+      });
+      res.User.forEach((u) => {
+        u['Branch'] = userBranch[u.UserId];
+        u['Role'] = { 'RoleID': u.RoleID, 'RoleName': u.RoleName };
+        if (u.DistributorMasterID) {
+          u['Distributor'] = { 'DistributorMasterId': u.DistributorMasterID, 'DistributorName': u.DistributorCopackerName }
+        }
+
         u = this.formatUser(u);
       });
-      this.usersList = res;
+
+      this.usersList = res.User;
       this.updateUserTableOnTypeChange();
       this.showSpinner = false;
     }, (error) => {
@@ -361,27 +377,27 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  
+
   formatUser(user: any = '') {
     user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BranchName : 'NA')}`;
     if (user.Branch) {
-      user.concatBranch = user.Branch.map(function(elem){
-          return elem.BranchName;
+      user.concatBranch = user.Branch.map(function (elem) {
+        return elem.BranchName;
       }).join(",");
 
-      user.concatCode = user.Branch.map(function(elem){
-          return elem.BranchCode;
+      user.concatCode = user.Branch.map(function (elem) {
+        return elem.BranchCode;
       }).join(",");
 
-      user.concatBranchCode =  user.Branch.map(function(elem){
-          return elem.BranchCode + ' - ' + elem.BranchName;
+      user.concatBranchCode = user.Branch.map(function (elem) {
+        return elem.BranchCode + ' - ' + elem.BranchName;
       }).join(",");
     }
     user['tmp_role'] = `${(user.Role ? user.Role.RoleName : '')}`;
     user['tmp_distributor'] = `${(user.Distributor ? user.Distributor.DistributorName : '')}`;
     return user;
   }
-  logUserID:any;
+  logUserID: any;
   ngOnInit() {
     this.userObject = this.userService.getUser();
     const userId = localStorage.getItem('userId') || '';
@@ -389,14 +405,14 @@ export class UserManagementComponent implements OnInit {
     this.userService.getUserDetails(userId).subscribe((response) => {
       this.idDataLoaded = true;
       this.userDetails = response;
-      if(this.userDetails.IsSeasonal){
-        this.IsSesonalTrue=true;
-      }else{
-        this.IsSesonalTrue=false;
+      if (this.userDetails.IsSeasonal) {
+        this.IsSesonalTrue = true;
+      } else {
+        this.IsSesonalTrue = false;
       }
       this.isDistributorExist = response.IsDistributor;
       this.userRoles = response.RoleList;
-      // console.log(this.userRoles);
+      
       if (!response.IsDistributor) {
         this.getBranches();
       } else if (response.IsDistributor) {
@@ -420,7 +436,7 @@ export class UserManagementComponent implements OnInit {
    * Get more branches list by clicking on more link
    * @params : branches, username
    */
-  moreBranches(branches,username) {
+  moreBranches(branches, username) {
     const activeModal = this.modalService.open(ModelPopupComponent, {
       size: 'sm',
       backdrop: 'static',
@@ -448,5 +464,5 @@ export class UserManagementComponent implements OnInit {
    */
   branchChangeHandler() {
     this.getUserList(parseInt(this.logUserID, 10));
-}
+  }
 }

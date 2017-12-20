@@ -29,7 +29,6 @@ export class GenericSort implements PipeTransform {
                 }
             }
         });
-        console.log('generic sort', array);
         return array;
     }
 

@@ -22,7 +22,7 @@ export class CreateCustomerComponent implements OnInit {
     selectedProducts: DualListItem[] = [];
     deactivateClicked: boolean = false;
     addedProduct: MapProducts[] = [];
-    newlyAddedproduct: MapProducts[] = [];
+    newlyAddedproduct: any[] = [];
     isFromDirty: boolean = false;
     keepSorted = true;
     isView: boolean = false;
@@ -89,7 +89,6 @@ export class CreateCustomerComponent implements OnInit {
                 if (this.mode === 3 && this.isRI) {
                     this.customer.Address = (this.customer.Address) ? this.customer.Address : this.customer.Address1 + ' ' + this.customer.Address2;
                 }
-                console.log(this.customer);
                 if (response.CustomerDetails.C_CustomerNumber_) {
                     this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
@@ -97,7 +96,6 @@ export class CreateCustomerComponent implements OnInit {
                     element.ProductPrice = (element.ProductPrice === null) ? 0 : element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.00` : element.ProductPrice;
                 });
                 this.addedProduct = response.ProductDetail;
-                console.log("this.addedProduct ------ ", this.addedProduct);
                 this.addProductCheck = new Array(this.addedProduct.length);
                 this.addProductCheck.fill(false);
             });
@@ -124,7 +122,6 @@ export class CreateCustomerComponent implements OnInit {
             this.addProductCheck.fill(false);
             this.addedProduct.push({} as MapProducts);
             this.addProductCheck.push(true);
-            // console.log("addedProduct ", this.addedProduct)
         } else {
             this.addProductCheck.fill(false);
             this.addNewProductCheck.fill(true);
@@ -134,13 +131,13 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     save() {
-        
+
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
-            // console.log("sdsa ---0-----", this.customer);
-            if (this.customer.AllowReturnSameTicket) {
-                this.customer.AllowReturnSameTicket = 1;
+
+            if (this.customer.AllowReturnsameticket) {
+                this.customer.AllowReturnsameticket = 1;
             } else {
-                this.customer.AllowReturnSameTicket = 0;
+                this.customer.AllowReturnsameticket = 0;
             }
 
             if (this.mode === 2) {
@@ -149,7 +146,6 @@ export class CreateCustomerComponent implements OnInit {
 
                 this.customer.EditedProducts = this.addedProduct;
                 this.customer.NewAddedProducts = this.newlyAddedproduct;
-                // console.log("this.customerId, this.customer ", this.customerId, " :--> ", this.customer)
                 this.service.updateCustomer(this.customerId, this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('', 'Customer Edited successfully');
@@ -164,14 +160,12 @@ export class CreateCustomerComponent implements OnInit {
                 this.customer.MappedProducts = this.addedProduct;
                 this.customer.EditedProducts = this.addedProduct;
                 this.customer.NewAddedProducts = this.addedProduct;
-                // console.log("this.customerId ", this.customer)
                 this.service.createCustomer(this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('', 'Customer Added successfully');
                         this.router.navigate(['/pages/customer-management/list'], { relativeTo: this.route });
                     }
                 }, (err) => {
-                    //console.log("err ",err);
                     this.notification.error('', err._body);
                 });
             }
@@ -204,7 +198,7 @@ export class CreateCustomerComponent implements OnInit {
                         this.addNewProductCheck.splice(index2, 1);
                     } else {
                         this.addedProduct[index2].IsActive = false;
-                        this.addedProduct.splice(index2,1);
+                        this.addedProduct.splice(index2, 1);
                         this.addProductCheck.splice(index2, 1);
                     }
                     // this.newlyAddedproduct = this.newlyAddedproduct;
@@ -214,25 +208,22 @@ export class CreateCustomerComponent implements OnInit {
                 } catch (e) {
                     console.log('e------>', e);
                 }
-            } else {
-                //this.deactivateClicked = false;
             }
 
         }
 
     }
 
-    productChangeHandler(mprod) {
-        //console.log("mprod ---- ------- ",mprod);
+    productChangeHandler(mprod, index) {
         let mProdTemp = mprod.cProductId.split('-');
         const product = this.addedProduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
         const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
-        //console.log("product ----- ", product,"product1 ----- ",product1);
+
         if ((product.length + product1.length) === 2) {
 
             // if (this.mode === 2){ product1.length =0; product1.pop(); } else { product.length=0; product.pop(); }
 
-            mprod.cProductId = '';
+            //mprod.cProductId = '';
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',
                 backdrop: 'static',
@@ -241,6 +232,7 @@ export class CreateCustomerComponent implements OnInit {
             activeModal.componentInstance.modalHeader = 'Warning!';
             activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
             activeModal.componentInstance.closeModalHandler = (() => {
+                this.newlyAddedproduct[index] = {};
             });
             return;
         } else {
@@ -252,7 +244,6 @@ export class CreateCustomerComponent implements OnInit {
              mprod.ExternalProductId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalProductId;
              mprod.ExternalCustomerId = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].ExternalCustomerId;
              mprod.IsActive = this.products.filter(prod => +prod.ProductId === +mprod.ProductId)[0].IsActive;*/
-            console.log("prod.IsInternal === mProdTemp[1] ", mProdTemp[1]);
             let tempProd = this.products.filter(prod => +prod.ProductId === +mProdTemp[0] && (prod.IsInternal + '' === '' + mProdTemp[1]))[0];
             mprod.ProductId = tempProd.ProductId;
             mprod.ProductPrice = tempProd.ProductPrice;
@@ -264,7 +255,6 @@ export class CreateCustomerComponent implements OnInit {
             mprod.ExternalCustomerId = tempProd.ExternalCustomerId;
             mprod.IsActive = tempProd.IsActive;
         }
-        //console.log("this.addedProduct   -------",this.addedProduct);
     }
 
     validateEmailID() {
@@ -309,18 +299,6 @@ export class CreateCustomerComponent implements OnInit {
         } else if (!customer.ZipCode) {
             this.notification.error('', 'Customer ZipCode is mandatory!!!');
             return false;
-        // } else if (!customer.PrimayContact) {
-        //     this.notification.error('', 'Customer Primary Contact is mandatory!!!');
-        //     return false;
-        // } else if (!customer.Phone) {
-        //     this.notification.error('', 'Customer Phone is mandatory!!!');
-        //     return false;
-        // } else if (!customer.Email) {
-        //     this.notification.error('', 'Customer EmailID is mandatory!!!');
-        //     return false;
-        //  } else if (!this.validateEmailID()) {
-        //     this.notification.error('', 'Wrong format of Customer EmailID!!!');
-        //     return false;
         } else if (mode === 2 && (this.addProductCheck.length === undefined || this.addProductCheck.length === 0)
             && (newlyAddedproduct.length === undefined || newlyAddedproduct.length === 0)) {
             this.notification.error('', 'Atleast one product is mandatory!!!');
@@ -329,11 +307,9 @@ export class CreateCustomerComponent implements OnInit {
             this.notification.error('', 'Atleast one product is mandatory!!!');
             return false;
         } else if (mode === 1 && addedProduct.length > 0) {
-            // console.log("addedProduct ----------------------", addedProduct)
             if (addedProduct) {
                 var check = true;
                 addedProduct.forEach(element => {
-                    // console.log("element.ExternalProductID || ! element.Price", element.ExternalProductID, element.Price);
                     if (!element.cProductId || !element.ProductPrice) {
                         check = false;
                     }
@@ -343,7 +319,6 @@ export class CreateCustomerComponent implements OnInit {
                 }
                 return check;
             } else {
-                // console.log("succe1");
                 return true;
             }
 
@@ -356,9 +331,6 @@ export class CreateCustomerComponent implements OnInit {
                         check = false;
                     }
                 });
-
-                // console.log("succe0");
-                // return check;
             }
             if (addedProduct && addedProduct.length > 0) {
                 addedProduct.forEach(element => {
@@ -367,9 +339,6 @@ export class CreateCustomerComponent implements OnInit {
                         check = false;
                     }
                 });
-
-                // console.log("succe0");
-                // return check;
             } else {
                 return true;
             }
@@ -380,13 +349,11 @@ export class CreateCustomerComponent implements OnInit {
             }
 
         } else {
-            // console.log("succe2");
             return true;
         }
     }
     editProductPrice(mode, index) {
         this.isFromDirty = true;
-        // console.log("mode ----- ", mode, " index---", index);
         if (mode === 1) {
             this.addProductCheck.fill(false);
             this.addProductCheck[index] = true;

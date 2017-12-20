@@ -354,7 +354,7 @@ export class CreateTicketComponent implements OnInit {
   loadCustomers() {
     this.customers = [];
     const callback = (res) => {
-      this.customers = res;
+      this.customers = res.Customer ? res.Customer : res;
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
         this.ticket.CustomerType = customer.CustomerTypeID;
@@ -362,6 +362,7 @@ export class CreateTicketComponent implements OnInit {
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
+
     if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
     } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
@@ -392,7 +393,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   customerChangeHandler(event) {
-    this.ticket.CustomerID = event.item.CustomerId;
+    this.ticket.CustomerID = event.item.CustomerID || event.item.CustomerId;
     this.loadCustomerDetail(this.ticket.CustomerID, event.item.IsRICustomer);
 
     this.ticket.CustomerSourceID = event.item.IsRICustomer ? 101 : 103
@@ -689,12 +690,10 @@ export class CreateTicketComponent implements OnInit {
   }
 
   deletePODImage(imageID, TicketID) {
-    console.log("imageID---TODO", imageID, TicketID);
     this.service.deleteImageByID(imageID, TicketID).subscribe(
       (res) => {
         if (res) {
           this.isDownloadable = false;
-          console.log("image deleted, this.isDownloadable", this.isDownloadable);
           this.notification.success('', "POD Image deleted successfully");
         }
       }, (error) => {
@@ -822,8 +821,7 @@ export class CreateTicketComponent implements OnInit {
       });
       return;
     }
-    console.log("ticket ----- ", ticket);
-
+    
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('', 'Ticket created successfully!');
@@ -832,7 +830,7 @@ export class CreateTicketComponent implements OnInit {
         this.listFilter.CreatedDate.month = +d[0];
         this.listFilter.CreatedDate.day = +d[1];
         this.listFilter.CreatedDate.year = +d[2];
-      } else{
+      } else {
         const now = new Date();
         this.listFilter.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
       }
@@ -986,10 +984,7 @@ export class CreateTicketComponent implements OnInit {
   calculateProductTotalAmount(q, p) {
     q = q || 0;
     p = p || 0;
-    var temp = 10;
-    //return ((+q * temp) * (+p * temp)/ (temp * temp)); // handling float point precision
-    return (+parseFloat((q * temp).toString()).toPrecision(4)) * (+parseFloat((p * temp).toString()).toPrecision(4)) / (temp * temp);
-    //parseFloat((p * temp).toString()).toPrecision(4)
+    return q.fpArithmetic("*", p);
   }
 
   calculateTotalSale() {
@@ -1000,8 +995,8 @@ export class CreateTicketComponent implements OnInit {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       this.ticket.TotalSale += +t['totalAmount'] || 0;
     });
-    this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
-    this.ticket.TaxAmount = (this.ticket.TotalSale * this.customer.Tax) / 100;
+    this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    this.ticket.TaxAmount = this.tempModels.totalTax;
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }

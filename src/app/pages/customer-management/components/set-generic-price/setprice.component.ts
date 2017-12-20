@@ -167,7 +167,7 @@ export class SetPriceComponent implements OnInit {
     }
     onUpdateProduct(product) {
         if (product) {
-            console.log("product ", product);
+           
             product.IsActive = true;
             let tempProd: MapProducts[] = [];
             tempProd.push(product);

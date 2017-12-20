@@ -41,7 +41,6 @@ export class CustomerManagementComponent implements OnInit {
 
     isRI = 3;
     sequenceChangeHandler() {
-        console.log("this.riCustomer === 1 && this.isActtive ",this.riCustomer ,'--', this.isActtive);
         this.cutommers = this.customers.filter((p) => {
             if (this.riCustomer === 1 && this.isActtive === 1) {
                 return p.IsRICustomer && p.Active;

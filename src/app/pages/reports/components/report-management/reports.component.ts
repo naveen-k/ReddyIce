@@ -126,7 +126,7 @@ export class ReportsComponent implements OnInit {
             this.isInternalAdmin = true;
         } else if (this.user.Role.RoleID == 8 && this.user.IsRIInternal) {
             this.isInternalAdmin = true;
-        } else if(this.user.Role.RoleID == 8 && !this.user.IsRIInternal) {
+        } else if (this.user.Role.RoleID == 8 && !this.user.IsRIInternal) {
             this.isExternalAdmin = true;
         }
 
@@ -349,9 +349,7 @@ export class ReportsComponent implements OnInit {
             this.viewReport = false;
             if (this.customersByTicketNumber.length > 1) {
                 this.filter.showCustomerDropdown = true;
-                console.log(this.filter.ticketID);
                 if (this.filter.ticketID) {
-                    console.log(this.filter.ticketID);
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                     this.selectedCustomerType = this.customerstatus;
                     this.viewReport = true;
@@ -364,7 +362,7 @@ export class ReportsComponent implements OnInit {
                 }
             } else {
                 this.filter.showCustomerDropdown = false;
-                // console.log(this.customersByTicketNumber[0].TicketId);
+
                 //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                 this.selectedCustomerType = this.customerstatus;
                 if (this.customersByTicketNumber.length > 0) {
@@ -381,10 +379,7 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
 
             }
-
         }
-
-        console.log(this.linkRpt);
     }
 
     formatDate(startLatestDate) {
@@ -420,7 +415,6 @@ export class ReportsComponent implements OnInit {
                 });
                 tempArr.unshift({ value: 0, label: 'All Customers', data: {} });
                 this.dropDownCustomers = tempArr;
-                console.log(this.dropDownCustomers);
                 this.filterCustomers();
             }, (err) => { })
     }
@@ -444,8 +438,6 @@ export class ReportsComponent implements OnInit {
             return;
         }
         let custTemp: string[] = id.split('-');
-
-        console.log(id);
         for (let i = 0; i < this.cutommers.length; i++) {
             if (this.cutommers[i].data) {
                 if (this.cutommers[i].data.CustomerID) {

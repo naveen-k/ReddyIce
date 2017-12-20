@@ -29,7 +29,6 @@ export class DayEndComponent implements OnInit {
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
-        // console.log(this.logedInUser);
         this.filter = this.service.getFilter();
         if (this.logedInUser.IsDistributor) {
             this.userSubTitle = ` - ${this.logedInUser.Distributor.DistributorName}`;
@@ -68,11 +67,11 @@ export class DayEndComponent implements OnInit {
         this.service.getTrips(this.service.formatDate(this.filter.selectedDate)).subscribe((res) => {
             let distributors = [],
                 branches = [];
-            this.trips = res.Trips || [];
-            console.log(this.trips);
+            this.trips = res.DayEnd || [];
             let tmpDist = {};
             let tmpBranch = {};
             this.trips.forEach((trip) => {
+                trip.isDistributor = !!trip.DistributorMasterID;
                 if (this.logedInUser && this.logedInUser.IsSeasonal && this.logedInUser.Role.RoleID === 3) {
                     trip.isDistributor = 0;
                 }
@@ -88,7 +87,7 @@ export class DayEndComponent implements OnInit {
                 if (tmpBranch[trip.BranchID]) { return; }
                 branches.push({
                     value: trip.BranchID,
-                    label: trip.BranchName
+                    label: `${trip.BranchCode}-${trip.BranchName}`
                 })
                 tmpBranch[trip.BranchID] = trip.BranchID;
             })
@@ -97,9 +96,9 @@ export class DayEndComponent implements OnInit {
             distributors.length && distributors.unshift({ value: 1, label: 'All Distributors' });
             this.distributors = distributors;
             this.branches = branches;
-            // if (this.filter.userBranch) {
-            //     this.filter.userBranch = 1;
-            // }
+            if (!this.filter.userBranch) {
+                this.filter.userBranch = 1;
+            }
 
             // Hack for displaying Distributor in case of no data return
             if (this.logedInUser.IsDistributor && !this.distributors.length) {
@@ -109,18 +108,6 @@ export class DayEndComponent implements OnInit {
                 }]
             }
             this.showSpinner = false;
-            // console.log(this.trips);
-            // for(let i=0;i<this.trips.length;i++){
-            //     if(this.trips[i].IsClosed==false ){
-            //         for(let j=0;j<this.trips[i].TripTicketList.length;j++){
-            //             if(this.trips[i].TripTicketList[j].CreditCardAmount){
-            //                 this.totalCreditAmount = this.totalCreditAmount + this.trips[i].TripTicketList[j].CreditCardAmount;
-            //                 this.trips[i].TripTotalAmount=this.trips[i].TripTotalAmount-this.totalCreditAmount;
-            //             }
-            //         }
-            //     }
-
-            // }
         },
             (error) => {
                 this.showSpinner = false;
