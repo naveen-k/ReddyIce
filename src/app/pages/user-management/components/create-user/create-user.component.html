@@ -1,4 +1,4 @@
-<form #customerForm="ngForm" class="user-form" *ngIf="actionName != 'view'" >
+<form #customerForm="ngForm" class="user-form" *ngIf="actionName != 'view'">
   <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid ||isEmailExist||!isFormValid||!formIsDirty"
     (click)="onSubmit()">Save</button>
 
@@ -42,8 +42,9 @@
         Last Name
         <sup style="color:red;">*</sup>
       </label>
-      <input alphaNumeric [acceptSpace]="true" [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name" [(ngModel)]="user.LastName"
-        name="LastName" #LastName="ngModel" required minlength="2" maxlength="45" (ngModelChange)="changeHandler();" (blur)="spaceRemover(user.LastName)">
+      <input alphaNumeric [acceptSpace]="true" [disabled]="user.IsRIInternal" type="text" class="form-control" id="lname" placeholder="Last Name"
+        [(ngModel)]="user.LastName" name="LastName" #LastName="ngModel" required minlength="2" maxlength="45" (ngModelChange)="changeHandler();"
+        (blur)="spaceRemover(user.LastName)">
       <div *ngIf="LastName.invalid && (LastName.dirty || LastName.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="LastName.errors.required" class="custom-tooltip bottom">
@@ -79,8 +80,8 @@
         <sup style="color:red;">*</sup>
       </label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
-        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" maxlength="30" [disabled]="user.IsRIInternal || !isNewUser" (blur)="checkEmail(user.EmailID)"
-        (ngModelChange)="changeHandler()" maxlength="50">
+        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" maxlength="30" [disabled]="user.IsRIInternal || !isNewUser"
+        (blur)="checkEmail(user.EmailID)" (ngModelChange)="changeHandler()" maxlength="50">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">
@@ -106,8 +107,9 @@
       <label for="inputEmail3" class="control-label">
         Phone
       </label>
-      <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-      maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal || !isNewUser" (ngModelChange)="changeHandler()">
+      <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone"
+        #Phone="ngModel" maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal || !isNewUser"
+        (ngModelChange)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
@@ -121,78 +123,75 @@
         Role
         <sup style="color:red;">*</sup>
       </label>
-      <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);" >
-                  <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
-                </select>
+      <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);">
+        <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
+      </select>
     </div>
-    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header" >
+    <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">
       <label for="distributor">
         Distributor
         <sup style="color:red;">*</sup>
       </label>
-      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
-        #distributor="ngModel" (ngModelChange)="changeHandler()">
-                    <option *ngFor="let distributor of distributorsAndCopackers | distributorFilter:user.RoleID" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
-                  </select-->
-      <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"  (selectedChange)="changeHandler();"></reddy-select>
-    </div>
-    <div class="col-md-6 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.RoleID==='3')||(user.IsSeasonal && actionName=='edit')" [hidden]="userObject.IsDistributor">
-      <label for="exampleSelect1">
-        Branch
-        <sup style="color:red;">*</sup>
-      </label>
-      <!-- <select class="form-control" [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" id="branchSelection" [(ngModel)]="user.BranchID"
-        name="branch" #branch="ngModel" (ngModelChange)="changeHandler(); loadBranches();">
-                    <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
-                      <span *ngIf="_branch.BranchID != '1'">{{_branch.BranchID}} - {{_branch.BranchName}}</span>
-                      <span *ngIf="_branch.BranchID == '1'">
-                 {{_branch.BranchName}}
-              </span>
-                    </option>
-                  </select> -->
-                  
-              <br/>
-              <reddy-select  [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8'" [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch"  (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
-              <br/>
-              <div style="width:100%;margin-top: 10px;max-height:50px;overflow:auto;">
-                <ul style="padding-left: 15px;">
-                   <li *ngFor="let brannch of selectedBranch" >
-                      {{brannch.label}} <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8')" class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
-                      <span class="tooltiptext">Remove</span>
-                   </i>
-                 </li>
-                 </ul>
-               </div>
-              <!--ss-multiselect-dropdown [disabled]="user.RoleID == '1'|| user.RoleID == '2' || user.RoleID === '4' || user.RoleID === '5'" [settings]="{dynamicTitleMaxItems:1,maxHeight:'100px',buttonClasses:'btn-default form-control ss-button',containerClasses:'cdropdown-inline',enableSearch:'true'}" (ngModelChange)="changeHandler(); loadBranches();" name="dd" stopScrollPropagation="true" [options]="cBranches" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="userBranch"></ss-multiselect-dropdown-->
-                    <!--button class="btn btn-danger" (click)="onMultiSelect(optionsModel)">Fire</button -->
- 
-    </div>
-    <div *ngIf="showIseries" class="col-md-6 page-header">
-      <label for="iseriesroute" class="control-label">ISeries Route <sup style="color:red;">*</sup></label>
-      <input type="text" [numberOnly] class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber"
-        #ISeriesRouteNumber="ngModel" maxlength="6" (ngModelChange)="changeHandler()" >
+
+      <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"
+        (selectedChange)="changeHandler();clearBranch();"></reddy-select>
     </div>
 
-   
+    <div *ngIf="showIseries" class="col-md-6 page-header">
+      <label for="iseriesroute" class="control-label">ISeries Route
+        <sup style="color:red;">*</sup>
+      </label>
+      <input type="text" [numberOnly] class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber"
+        name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel" maxlength="6" (ngModelChange)="changeHandler()">
     </div>
-    <div class="row">
+
+
+  </div>
+  <div class="row">
     <div class="col-md-6 page-header">
-      
+
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
       <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
         [disabled]="isNewUser"></ba-checkbox>
     </div>
     <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="col-md-6 page-header">
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-     
+
       <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
         [disabled]="true"></ba-checkbox>
     </div>
     <div *ngIf="user.IsRIInternal && !isDistributorAdmin && user.RoleID == 3" class="col-md-6 page-header">
-     
-      <ba-checkbox [(ngModel)]="user.IsChecker" (ngModelChange)="changeHandler()" [label]="'Is Checker?'"
-        [ngModelOptions]="{standalone: true}"></ba-checkbox>
-    </div>    
+
+      <ba-checkbox [(ngModel)]="user.IsChecker" (ngModelChange)="changeHandler()" [label]="'Is Checker?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12" *ngIf="user.IsRIInternal || (user.IsSeasonal && user.RoleID==='3')||(user.IsSeasonal && actionName=='edit')"
+      [hidden]="userObject.IsDistributor">
+      <label for="exampleSelect1">
+        Branch
+        <sup style="color:red;">*</sup>
+      </label>
+      <br/>
+      <reddy-select [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8'"
+        [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch" (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
+      <br/>
+      <div style="width:100%;margin-top: 10px;max-height:250px;overflow:auto;">
+        <span *ngIf="selectedBranch?.length && (user.RoleID == '6' || user.RoleID == '3')" style="width:90px; float:right;">ISeries Route</span>
+        <ul style="padding-left: 15px; margin-top: 20px;">
+          <li *ngFor="let brannch of selectedBranch" style="margin:8px 0">
+            <span [title]="brannch.BranchCode - brannch.BranchName">{{brannch.BranchCode}} - {{brannch.BranchName | cutString:true:60}}</span>
+            <span style="float:right">
+              <input *ngIf="user.RoleID == '6' || user.RoleID == '3'" type="text" [name]="[brannch.IseriesRouteNumber]" numberOnly [(ngModel)]="brannch.IseriesRouteNumber" style="width:50px" (ngModelChange)="enableSave()">
+              <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8')"
+                class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
+                <span class="tooltiptext">Remove</span>
+              </i>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </form>
 
@@ -240,60 +239,54 @@
   </div>
   <div class="row page-header rowContainer">
     <div class="col-md-6 padding-eater" *ngIf="user.IsRIInternal || user.IsSeasonal">
-    
+
       <label for="exampleSelect1">Branch</label>
-        <!--select class="form-control userMgmtSelect" id="branchSelection" [(ngModel)]="user.BranchID" name="branch" #branch="ngModel"
-          disabled>
-            <option *ngFor="let _branch of branches" [value]="_branch.BranchID">
-              <span *ngIf="_branch.BranchID != '1'">{{_branch.BranchID}} - {{_branch.BranchName}}</span>
-              <span *ngIf="_branch.BranchID == '1'">
-        {{_branch.BranchName}}
-      </span>
-          </option>
-        </select-->
-        <!--ss-multiselect-dropdown name="dd" stopScrollPropagation="true" [options]="myOptions" checkedStyle="fontawesome" closeOnClickOutside="true" [(ngModel)]="optionsModel"></ss-multiselect-dropdown><br><br-->
-        
-        <div class="col-md-12" style="max-height:80px;overflow:auto;"><ul class="ulpadding"><li *ngFor="let b of user.Branch" >{{b.BranchCode}} - {{b.BranchName}}</li></ul></div>
-          
+      <div class="col-md-12" style="max-height:80px;overflow:auto;">
+        <ul class="ulpadding">
+          <li *ngFor="let b of user.Branch">{{b.BranchCode}} - {{b.BranchName}}</li>
+        </ul>
+      </div>
+
     </div>
     <div class="col-md-1" [hidden]="!user.IsRIInternal"></div>
-      <div class="col-md-5 padding-eater first-column" *ngIf="user.ISeriesRouteNumber">
-        <label for="inputiseriesroute" class="control-label">ISeries Route</label>
-        <input type="number" class="form-control" id="iseriseroute" placeholder="ISerise Route" [(ngModel)]="user.ISeriesRouteNumber" name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel"
-           disabled>
-      </div>
-     
-    
+    <div class="col-md-5 padding-eater first-column" *ngIf="user.ISeriesRouteNumber">
+      <label for="inputiseriesroute" class="control-label">ISeries Route</label>
+      <input type="number" class="form-control" id="iseriseroute" placeholder="ISerise Route" [(ngModel)]="user.ISeriesRouteNumber"
+        name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel" disabled>
+    </div>
+
+
   </div>
-  
+
   <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row" [hidden]="userObject.IsDistributor">
     <div class="col-md-5 padding-eater">
       <label for="distributor">Distributor</label>
-      <!--select class="form-control userMgmtSelect" id="distributorSelection" [(ngModel)]="user.DistributorMasterID" name="distributor"
-        #distributor="ngModel" disabled>
-          <option *ngFor="let distributor of distributorsAndCopackers" [value]="distributor.DistributorCopackerID">{{distributor.Name}}</option>
-      </select-->
-      <reddy-select [position]="'top'" [disabled]="true" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID" ></reddy-select>
+      <reddy-select [position]="'top'" [disabled]="true" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"></reddy-select>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater">
-      <br/><br/>
+      <br/>
+      <br/>
       <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
       <ba-checkbox [ngModel]="user.IsSeasonal" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
     </div>
   </div>
   <div class="checkbox active-user page-header rowContainer">
-      <div class="row">
-        <div class="col-md-2" *ngIf="user.IsRIInternal" [hidden]="!userObject.IsDistributor"></div>
-        <div class="col-md-5 (user.IsRIInternal || isDistributorAdmin)?padding-eater:''">
-          <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-          <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
-  
-        </div>
+    <div class="row">
+      <div class="col-md-2" *ngIf="user.IsRIInternal" [hidden]="!userObject.IsDistributor"></div>
+      <div class="col-md-5 (user.IsRIInternal || isDistributorAdmin)?padding-eater:''">
+        <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+        <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" disabled="true"></ba-checkbox>
+
       </div>
     </div>
+  </div>
 </form>
 <div style="padding: 5px;" [hidden]="!isDistributorAdmin">
-  By utilizing the Reddy Ice “Handheld” device, you expressly agree and acknowledge that you are solely responsible for you or your employees use of any Reddy Ice “Handheld” device and all activity that occurs while you or your employees are using the Reddy Ice “Handheld” device. I certify that I have read and agree to the  
-  <a href="assets/static/terms.html" target="_blank" title="Handheld Terms and Conditions" ><u>Handheld Terms and Conditions</u></a>
+  By utilizing the Reddy Ice “Handheld” device, you expressly agree and acknowledge that you are solely responsible for you
+  or your employees use of any Reddy Ice “Handheld” device and all activity that occurs while you or your employees are using
+  the Reddy Ice “Handheld” device. I certify that I have read and agree to the
+  <a href="assets/static/terms.html" target="_blank" title="Handheld Terms and Conditions">
+    <u>Handheld Terms and Conditions</u>
+  </a>
 </div>
