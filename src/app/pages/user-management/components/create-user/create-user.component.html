@@ -134,7 +134,7 @@
       </label>
 
       <reddy-select [disabled]="!isNewUser" [position]="'top'" [options]="distributorsAndCopackers" [(selected)]="user.DistributorMasterID"
-        (selectedChange)="changeHandler();"></reddy-select>
+        (selectedChange)="changeHandler();clearBranch();"></reddy-select>
     </div>
 
     <div *ngIf="showIseries" class="col-md-6 page-header">
@@ -177,12 +177,12 @@
         [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch" (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
       <br/>
       <div style="width:100%;margin-top: 10px;max-height:250px;overflow:auto;">
-        <span *ngIf="selectedBranch?.length" style="width:90px; float:right;">ISeries Route</span>
+        <span *ngIf="selectedBranch?.length && (user.RoleID == '6' || user.RoleID == '3')" style="width:90px; float:right;">ISeries Route</span>
         <ul style="padding-left: 15px; margin-top: 20px;">
           <li *ngFor="let brannch of selectedBranch" style="margin:8px 0">
-            <span [title]="brannch.label">{{brannch.label | cutString:true:60}}</span>
+            <span [title]="brannch.BranchCode - brannch.BranchName">{{brannch.BranchCode}} - {{brannch.BranchName | cutString:true:60}}</span>
             <span style="float:right">
-              <input type="text" name="route" numberOnly [(ngModel)]="brannch.iseriesRoute" style="width:50px">
+              <input *ngIf="user.RoleID == '6' || user.RoleID == '3'" type="text" name="route" numberOnly [(ngModel)]="brannch.IseriesRouteNumber" style="width:50px" (ngModelChange)="enableSave()">
               <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8')"
                 class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
                 <span class="tooltiptext">Remove</span>
