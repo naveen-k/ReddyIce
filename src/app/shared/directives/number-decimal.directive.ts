@@ -36,14 +36,6 @@ export class NumberDecimalDirective implements OnInit {
     this.el.value = this.el.value;
   }
 
-//   @HostListener("keypress", ["$event.target.value"])
-//   keypress(value) {console.log('come')
-//         let number = value.split('.');
-//         if(number[1] && number[1].length > 1) {
-//             this.ngModelChange.emit((parseFloat(value)).toFixed(2));
-//         }            
-//   }  
-
   @HostListener("focus", ["$event.target.value"])
   onFocus(value) {
         if((parseFloat(value)).toFixed(2) == '0.00'){

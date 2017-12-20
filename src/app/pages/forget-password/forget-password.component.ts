@@ -34,7 +34,6 @@ export class ForgetPasswordComponent {
       user.EmailId = values['email'];
 
       this.loginService.forgetPassword(user).subscribe((res) => {
-        console.log('forget-pw-success');
         this.notification.success('Success', res.Message);
         this.router.navigate(['/login']);
       }, (error) => {

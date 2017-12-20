@@ -67,7 +67,7 @@ export class Login implements OnInit {
 
         this.loginService.login(user).subscribe((res) => {
           this.isProcessing = false;
-          console.log(res);
+
           if (res.IsNewUser !== 'False' && !res.IsRIInternal) {
             this.router.navigate(['resetpassword']);
           } else {
@@ -81,9 +81,9 @@ export class Login implements OnInit {
       }
     }
     else {
-      
-      const user: any = {};   
-        user.EmailId = values['forgotEmail'];   
+
+      const user: any = {};
+      user.EmailId = values['forgotEmail'];
       this.fpService.forgetPassword(user).subscribe((res) => {
         this.isProcessing = false;
         this.notification.success('Success', res.Message);
@@ -96,7 +96,7 @@ export class Login implements OnInit {
     }
 
   }
- 
+
   autoLoginUser(values) {
     const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
     this.loginService.login(user).subscribe((res) => {

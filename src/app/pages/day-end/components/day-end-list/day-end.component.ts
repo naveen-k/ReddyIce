@@ -29,7 +29,6 @@ export class DayEndComponent implements OnInit {
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
-        // console.log(this.logedInUser);
         this.filter = this.service.getFilter();
         if (this.logedInUser.IsDistributor) {
             this.userSubTitle = ` - ${this.logedInUser.Distributor.DistributorName}`;
@@ -69,7 +68,6 @@ export class DayEndComponent implements OnInit {
             let distributors = [],
                 branches = [];
             this.trips = res.DayEnd || [];
-            console.log(this.trips);
             let tmpDist = {};
             let tmpBranch = {};
             this.trips.forEach((trip) => {
@@ -110,18 +108,6 @@ export class DayEndComponent implements OnInit {
                 }]
             }
             this.showSpinner = false;
-            // console.log(this.trips);
-            // for(let i=0;i<this.trips.length;i++){
-            //     if(this.trips[i].IsClosed==false ){
-            //         for(let j=0;j<this.trips[i].TripTicketList.length;j++){
-            //             if(this.trips[i].TripTicketList[j].CreditCardAmount){
-            //                 this.totalCreditAmount = this.totalCreditAmount + this.trips[i].TripTicketList[j].CreditCardAmount;
-            //                 this.trips[i].TripTotalAmount=this.trips[i].TripTotalAmount-this.totalCreditAmount;
-            //             }
-            //         }
-            //     }
-
-            // }
         },
             (error) => {
                 this.showSpinner = false;

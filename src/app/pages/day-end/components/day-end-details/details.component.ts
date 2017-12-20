@@ -256,15 +256,10 @@ export class DetailsComponent implements OnInit {
                 (+ticketDetails.Total.ActualCoin || 0) +
                 (+ticketDetails.Total.Tolls || 0) +
                 (+ticketDetails.Total.MoneyOrderFee || 0)
-
-            // this.totalOverShort = this.totalDeposit - ((+ticketDetails.Total.TotalManualCash) +
-            //     (+ticketDetails.Total.TotalHHCash) + (+ticketDetails.Total.TotalManualCheck) +
-            //     (+ticketDetails.Total.TotalHHCheck) + (+ticketDetails.Total.TotalHHCreditCard) +
-            //     (+ticketDetails.Total.TotalManualCreditCard));
+                
             this.totalOverShort = (+this.totalDeposit || 0).fpArithmetic("-", (+ticketDetails.Total.MCHHC + +ticketDetails.Total.MCHHCash + +ticketDetails.Total.MCCHHC) || 0);
             ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0) + (+ticketDetails.Total.actualdepositcheck || 0) + (+ticketDetails.Total.ActualCoin || 0);
         }
-        console.log('this.totalDeposit:', this.totalDeposit);
     }
     approveTrip(status) {
         const activeModal = this.modalService.open(ModalComponent, {

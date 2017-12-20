@@ -9,10 +9,12 @@
 //  reportEndpoint: 'http://frozen.reddyice.com/iceboxReportSqldev/Reports/ReportData.aspx',
 // apiEndpoint: 'http://frozen.reddyice.com/reddyice_dev/',
 // reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx',
+// apiEndpoint: 'http://frozen.reddyice.com/IceBoxApi_Support/',
+// reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
 
 
 export const environment = {
   production: false,
   apiEndpoint: 'http://frozen.reddyice.com/reddyice_dev/',
-  reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
+  reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx'
 };
