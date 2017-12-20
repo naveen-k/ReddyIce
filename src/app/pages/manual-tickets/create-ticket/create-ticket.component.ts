@@ -354,7 +354,7 @@ export class CreateTicketComponent implements OnInit {
   loadCustomers() {
     this.customers = [];
     const callback = (res) => {
-      this.customers = res;
+      this.customers = res.Customer ? res.Customer : res;
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
         this.ticket.CustomerType = customer.CustomerTypeID;
@@ -362,6 +362,7 @@ export class CreateTicketComponent implements OnInit {
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
+ 
     if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
     } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
@@ -392,7 +393,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   customerChangeHandler(event) {
-    this.ticket.CustomerID = event.item.CustomerId;
+    this.ticket.CustomerID = event.item.CustomerID || event.item.CustomerId;
     this.loadCustomerDetail(this.ticket.CustomerID, event.item.IsRICustomer);
 
     this.ticket.CustomerSourceID = event.item.IsRICustomer ? 101 : 103
