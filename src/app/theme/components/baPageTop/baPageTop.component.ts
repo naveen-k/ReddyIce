@@ -28,7 +28,6 @@ export class BaPageTop implements OnInit {
     this.logedInUser = this.userService.getUser();
   
        this.showReset = this.logedInUser.IsRIInternal;
-       console.log( this.showReset);
   }
 
   public toggleMenu() {

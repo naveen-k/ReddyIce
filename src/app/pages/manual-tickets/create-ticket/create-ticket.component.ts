@@ -690,12 +690,10 @@ export class CreateTicketComponent implements OnInit {
   }
 
   deletePODImage(imageID, TicketID) {
-    console.log("imageID---TODO", imageID, TicketID);
     this.service.deleteImageByID(imageID, TicketID).subscribe(
       (res) => {
         if (res) {
           this.isDownloadable = false;
-          console.log("image deleted, this.isDownloadable", this.isDownloadable);
           this.notification.success('', "POD Image deleted successfully");
         }
       }, (error) => {
@@ -823,8 +821,7 @@ export class CreateTicketComponent implements OnInit {
       });
       return;
     }
-    console.log("ticket ----- ", ticket);
-
+    
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
       this.notification.success('', 'Ticket created successfully!');

@@ -87,7 +87,6 @@ export class TrackerComponent implements OnInit {
       // get the user type: isDistributor or internal
       this.isDistributor = this.user.IsDistributor;
     }
-    console.log(this.user);
     this.isDistributorExist = this.user.IsDistributor;
     this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
 
@@ -150,8 +149,7 @@ export class TrackerComponent implements OnInit {
       if (typeof res == 'object') {
         this.trips = res.DayEnd;
         var branchesArr = [];
-        console.log('this.trips', this.trips.length);
-
+        
         this.showSpinner = false;
         this.allBranches = [];
         var distributorArr = [];
@@ -170,7 +168,6 @@ export class TrackerComponent implements OnInit {
                 continue;
               }
               if (!tmpObj[this.trips[i].BranchID]) {
-                console.log('isDistributor: ', this.trips[i].isDistributor);
                 if (this.trips[i].isDistributor != 1) {
                   branchesArr.push(
                     {
@@ -183,7 +180,6 @@ export class TrackerComponent implements OnInit {
               }
             }
             this.sortBranches(branchesArr);
-            console.log('branchesArr', branchesArr);
             this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
 
           } else if (this.searchObj.userType == 'External') {
@@ -279,7 +275,6 @@ export class TrackerComponent implements OnInit {
           });
         }
       }
-      // console.log(this.driverOnBranch);
       if (this.driverOnBranch && this.driverOnBranch.length > 0) {
         this.tripFilterOption.DriverName = this.driverOnBranch[0].DriverName;    // assigning in model
         // this.tripFilterOption.TripCode = this.driverOnBranch[0].TripCode;        // assigning in model
@@ -295,7 +290,6 @@ export class TrackerComponent implements OnInit {
 
   // Fetch selected Trip
   tripChangeHandler() {
-    console.log('TripCode', this.tripFilterOption.TripCode);
     const tripId = this.driverSpecTrips.filter(t => t.TripCode === this.tripFilterOption.TripCode)[0].TripID;
     this.fetchTicketDetailsByTrip(tripId);
   }
@@ -332,7 +326,6 @@ export class TrackerComponent implements OnInit {
         }
       }
     }
-    console.log('this.driverSpecTrips', this.driverSpecTrips);
     if (this.driverSpecTrips.length) {
       this.selectedTrip = [];
       this.tripFilterOption.TripCode = this.driverSpecTrips[0].TripCode;
@@ -422,7 +415,6 @@ export class TrackerComponent implements OnInit {
       if (trips[i].TicketTypeID === 29) {
         this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
         this.pinTextColor = '000';
-        console.log("here : ", i);
       } else if (trips[i].OrderID == null) {
         this.pinColor = '0000ff';   // blue color for Unplanned Service
         this.pinTextColor = 'fff';
@@ -610,7 +602,6 @@ export class TrackerComponent implements OnInit {
   DistributorTrips = [];
   driverOndistributor = [];
   distributorChangeHandler() {
-    console.log(this.tripFilterOption.DistributorMasterID);
     this.driverOndistributor = [];
     for (var i = 0; i < this.trips.length; i++) {
       if (this.tripFilterOption.DistributorMasterID == this.trips[i].DistributorMasterID) {
@@ -621,7 +612,6 @@ export class TrackerComponent implements OnInit {
         });
       }
     }
-    console.log(this.driverOndistributor);
     if (this.driverOndistributor.length > 0) {
       this.tripFilterOption.DriverName = this.driverOndistributor[0].DriverName;    // assigning in model
       this.tripFilterOption.TripCode = this.driverOndistributor[0].TripCode;        // assigning in model
