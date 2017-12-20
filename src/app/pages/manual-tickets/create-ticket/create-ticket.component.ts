@@ -362,7 +362,7 @@ export class CreateTicketComponent implements OnInit {
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
- 
+
     if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
     } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
@@ -833,7 +833,7 @@ export class CreateTicketComponent implements OnInit {
         this.listFilter.CreatedDate.month = +d[0];
         this.listFilter.CreatedDate.day = +d[1];
         this.listFilter.CreatedDate.year = +d[2];
-      } else{
+      } else {
         const now = new Date();
         this.listFilter.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
       }
@@ -987,10 +987,7 @@ export class CreateTicketComponent implements OnInit {
   calculateProductTotalAmount(q, p) {
     q = q || 0;
     p = p || 0;
-    var temp = 10;
-    //return ((+q * temp) * (+p * temp)/ (temp * temp)); // handling float point precision
-    return (+parseFloat((q * temp).toString()).toPrecision(4)) * (+parseFloat((p * temp).toString()).toPrecision(4)) / (temp * temp);
-    //parseFloat((p * temp).toString()).toPrecision(4)
+    return q.fpArithmetic("*", p);
   }
 
   calculateTotalSale() {
@@ -1001,8 +998,8 @@ export class CreateTicketComponent implements OnInit {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       this.ticket.TotalSale += +t['totalAmount'] || 0;
     });
-    this.tempModels.totalTax = (this.ticket.TotalSale * this.customer.Tax) / 100;
-    this.ticket.TaxAmount = (this.ticket.TotalSale * this.customer.Tax) / 100;
+    this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    this.ticket.TaxAmount = this.tempModels.totalTax;
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }
