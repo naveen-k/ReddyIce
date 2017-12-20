@@ -237,7 +237,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
         //console.log(this.selectedBranch);
         //console.log(this.user);
-        //this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
+        this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
     private populateIseriseRoute(){
         /*let tempB = [];
