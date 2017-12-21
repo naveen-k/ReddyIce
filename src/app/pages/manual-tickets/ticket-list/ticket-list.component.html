@@ -113,8 +113,6 @@
             </thead>
             <tbody>                
                 <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:(searchObj.userType === 'Internal')?searchObj.UserId:searchObj.DistributorID ) | filter:searchString:['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType'] | sort:customer.sortField:customer.isAsc; let i=index">
-                <!-- <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:(searchObj.userType === 'Internal')?searchObj.UserId:searchObj.DistributorID ) | filter:searchString:['TicketNUmber', 'CustomerName', 'TicketType'] | sort:customer.sortField:customer.isAsc; let i=index"> -->
-                <!-- <tr *ngFor="let item of allTickets"> -->
                     <td>
                         <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
@@ -150,7 +148,7 @@
                     <td>{{ item.ticketType }}</td>
                     <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:10 }}</span></td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
-                    <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSale | currencyFormatter }}</td>
+                    <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currencyFormatter }}</td>
                     <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currencyFormatter }}</td>

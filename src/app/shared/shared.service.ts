@@ -80,7 +80,7 @@ export class SharedService {
         return tmpArr;
     }
 
-    getTicketType(isSaleTicket: boolean, CustomerType: any, ticketTypeId: number) {
+    getTicketType(isSaleTicket: boolean, customer: any, ticketTypeId: number) {
         if (ticketTypeId === 29) {
             return 'DNS'
         } else if (ticketTypeId === 28) {
@@ -89,13 +89,13 @@ export class SharedService {
             return 'Void'
         } else if (ticketTypeId === 110) {
             return 'Credit & Sale';
-        } else if (CustomerType === 20) {
+        } else if (customer.CustomerType === 20) {
             if (ticketTypeId === 26) {
                 return 'Sale';
             } else {
                 return 'Credit';
             }
-        } else if (CustomerType === 22) {
+        } else if (customer.CustomerType === 22) {
             if (isSaleTicket && ticketTypeId === 26) {
                 return 'PBM - Sale';
             } else if (isSaleTicket && ticketTypeId === 27) {

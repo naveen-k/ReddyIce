@@ -3,9 +3,6 @@
 // apiEndpoint: 'https://myicebox.reddyice.com/IceBoxApi/',
 //   reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
 
-// Temporary end point to test manual ticket listing page as per 'fetch from SP' approach
-// apiEndpoint: 'http://frozen.reddyice.com/manualticketiceboc/',
-
 export const environment = {
   production: true,
   apiEndpoint: 'http://frozen.reddyice.com/reddyice_dev/',
