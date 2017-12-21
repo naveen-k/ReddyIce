@@ -213,22 +213,22 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             //if (this.user.RoleID == '6' || this.user.RoleID == '3') {
             this.populateIseriseRoute();
             //}
-            
-            if (this.addedBranches && this.addedBranches.length>0) {
+
+            if (this.addedBranches && this.addedBranches.length > 0) {
 
                 if (this.isNewUser) {
                     this.user.Branch = this.addedBranches;
                 } else {
-                    var obj: any = {};
-                    this.tempUserBranch.forEach(branch => {
-                        obj = branch;
-                        if (this.userBranch.indexOf(branch.BranchID + '') > -1 || this.userBranch.indexOf(branch.BranchID) > -1) {
+                    // var obj: any = {};
+                    // this.tempUserBranch.forEach(branch => {
+                    //     obj = branch;
+                    //     if (this.userBranch.indexOf(branch.BranchID + '') > -1 || this.userBranch.indexOf(branch.BranchID) > -1) {
 
-                        } else {
-                            obj.IsActive = false;
-                            this.addedBranches.push(obj);
-                        }
-                    });
+                    //     } else {
+                    //         obj.IsActive = false;
+                    //         this.addedBranches.push(obj);
+                    //     }
+                    // });
                     this.user.Branch = this.addedBranches;
                 }
             } else if (this.user.RoleID == '1' || this.user.RoleID == '2' || this.user.RoleID == '4' || this.user.RoleID == '5' || this.user.RoleID == '8') {
@@ -394,7 +394,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     roleChange(roleID, retainDist: any = '') {
         roleID = roleID + '';
-        if (retainDist === '' && this.user.DistributorMasterID ===0) {
+        if (retainDist === '' && this.user.DistributorMasterID === 0) {
             this.user.DistributorMasterID = 0;
         }
 
@@ -404,6 +404,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.cBranches = [{ value: '1', label: '1 - All Branches', data: { BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true } }];
             this.addedBranches = [{ BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true }];
             this.userBranch = [1];
+            // Remove all the other branches except 'All Branch' from User's Obj
+            this.user.Branch = [{ BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true }];
 
         } else {
             this.user.RoleID = roleID;
@@ -413,6 +415,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             if (this.cBranches[0].value === 1) {
                 this.cBranches.shift();
             }
+
+            // To make sure 'All Branch' object is not present in User's Obj
+            this.user.Branch = this.user.Branch.filter(b => b.BranchID != 1);
 
             // Alok- show ISeries for Drive
             /* if (roleID === '3' && this.userObject.IsRIInternal) {
