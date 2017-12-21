@@ -118,7 +118,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             if (this.userBranch) { this.userBranch.length = 0; }
 
             this.userBranch = [];
-
+            this.selectedBranch = [];
             if (this.user.Branch) {
                 for (i = 0; i < this.user.Branch.length; i++) {
                     if (this.user.Branch[i].IsActive === true) {
@@ -210,10 +210,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.DistributorMasterID = '';
         }
         if (this.user.IsRIInternal || this.user.IsSeasonal) {
-            if (this.user.RoleID == '6' || this.user.RoleID == '3') {
-                this.populateIseriseRoute();
-            }
-            if (this.addedBranches) {
+            //if (this.user.RoleID == '6' || this.user.RoleID == '3') {
+            this.populateIseriseRoute();
+            //}
+            
+            if (this.addedBranches && this.addedBranches.length>0) {
 
                 if (this.isNewUser) {
                     this.user.Branch = this.addedBranches;
@@ -230,21 +231,18 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                     });
                     this.user.Branch = this.addedBranches;
                 }
+            } else if (this.user.RoleID == '1' || this.user.RoleID == '2' || this.user.RoleID == '4' || this.user.RoleID == '5' || this.user.RoleID == '8') {
+                this.user.Branch = [{ BranchCode: 1, BranchID: 1, BranchName: "All Branches", IsActive: true }];
             }
 
         } else {
             this.user.Branch = [];
         }
         //console.log(this.selectedBranch);
-        //console.log(this.user);
+        console.log(this.user);
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
     private populateIseriseRoute() {
-        /*let tempB = [];
-        this.selectedBranch.forEach(branch=>{
-            tempB.push({ BranchID: branch.value, BranchCode: branch.data.BranchCode, BranchName:branch.label , IsActive: true ,IseriesRouteNumber:branch.IseriesRouteNumber});
-           
-        });*/
         this.addedBranches = this.selectedBranch;
     }
     validateUser(user) {
@@ -396,7 +394,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     roleChange(roleID, retainDist: any = '') {
         roleID = roleID + '';
-        if (retainDist === '') {
+        if (retainDist === '' && this.user.DistributorMasterID ===0) {
             this.user.DistributorMasterID = 0;
         }
 
@@ -404,6 +402,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5' || roleID === '8') {
             this.cBranches = [];
             this.cBranches = [{ value: '1', label: '1 - All Branches', data: { BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true } }];
+            this.addedBranches = [{ BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true }];
             this.userBranch = [1];
 
         } else {
@@ -426,7 +425,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         //    this.transformation();
         // }
         //this.pushBranches();
-        this.selectedBranch = [];
+        if (roleID === '2' || roleID === '4' || roleID === '5' || roleID === '8') {
+            this.selectedBranch = [];
+        }
+
         this.getDistributor();
 
     }
@@ -484,7 +486,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             dists.forEach(distrib => {
                 tempArr.push({
                     value: distrib.DistributorCopackerID,
-                    label: distrib.Name,
+                    label: (distrib.IsSeasonal) ? `${distrib.Name} (S)` : distrib.Name,
                     data: distrib
                 });
             });
@@ -574,7 +576,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
     pushBranches() {
         const cloneSelectedBranch = this.userBranch.join("--").split("--");
-
         let selectedBranch = this.selectedBranch.filter(b => {
             if (cloneSelectedBranch.indexOf(b.BranchID + '') >= 0) {
                 cloneSelectedBranch.splice(cloneSelectedBranch.indexOf(b.BranchID + ''), 1);
@@ -585,23 +586,26 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         cloneSelectedBranch.map(b => {
             const br = this.branchList[this.branchList.findIndex((cb) => +cb.BranchID === +b)];
-            selectedBranch.push({
-                'BranchID': br.BranchID,
-                'BranchCode': br.BranchCode,
-                'BranchName': br.BranchName
-            })
+            if (br) {
+                selectedBranch.push({
+                    'BranchID': br.BranchID,
+                    'BranchCode': br.BranchCode,
+                    'BranchName': br.BranchName,
+                    'IsActive': br.Active
+                })
+            }
         })
-
         this.selectedBranch = selectedBranch;
     }
     removeBranch(branch) {
         this.formIsDirty = true;
         setTimeout(this.formChanged.emit('changed'), 1000);
+
         this.userBranch = this.userBranch.filter((u) => +u !== +branch.BranchID);
         this.pushBranches();
     }
     clearBranch() {
-        this.userBranch = [];
+        (this.user.RoleID === '2' && this.user.IsSeasonal) ? this.userBranch = [1] : [];
         this.selectedBranch = [];
     }
 
