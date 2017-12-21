@@ -175,11 +175,11 @@ export class TicketListComponent implements OnInit {
                         this.allTickets = [];
                         this.allTicketsTemp = [];
                     } else {
-                        response.forEach(element => {
-                            element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
+                        response.ManualTicket.forEach(element => {
+                            element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.CustomerType, element.TicketTypeID)
                         });
-                        this.allTickets = response;
-                        this.allTicketsTemp = response;
+                        this.allTickets = response.ManualTicket;
+                        this.allTicketsTemp = response.ManualTicket;
                         this.ticketTotal();
 
                     }
@@ -204,25 +204,25 @@ export class TicketListComponent implements OnInit {
         }
     }
     ticketTotal() {
-        this.allTickets.forEach(ticket => {
+        // this.allTickets.forEach(ticket => {
 
-            //  ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
-            //  ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
-            //  ticket.amount = ticket.TotalSale + ticket.TaxAmount;
-            //  ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
+        //     //  ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
+        //     //  ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
+        //     //  ticket.amount = ticket.TotalSale + ticket.TaxAmount;
+        //     //  ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
 
-            this.total.totalDistAmt += ticket.DistAmt || 0; ticket.CustomerName = ticket.Customer.CustomerName;
-            ticket.CustomerNumber = ticket.Customer.CustomerNumber;
-            ticket.CustomerTitle = ticket.Customer.CustomerNumber + " - " + ticket.Customer.CustomerName;
-            ticket.TotalSaleWithTax = (ticket.TotalSale + ticket.TaxAmount) || 0;
-            if (ticket.TicketTypeID === 30) { return; }
-            this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
-            this.total.totalCash += ticket.CashAmount || 0;
-            this.total.totalCheck += ticket.CheckAmount || 0;
-            this.total.totalCharge += ticket.ChargeAmount || 0;
-            this.total.totalDrayage += ticket.Drayage || 0;
-            this.total.totalBuyBack += ticket.BuyBack || 0;
-        });
+        //     this.total.totalDistAmt += ticket.DistAmt || 0; ticket.CustomerName = ticket.Customer.CustomerName;
+        //     ticket.CustomerNumber = ticket.Customer.CustomerNumber;
+        //     ticket.CustomerTitle = ticket.Customer.CustomerNumber + " - " + ticket.Customer.CustomerName;
+        //     ticket.TotalSaleWithTax = (ticket.TotalSale + ticket.TaxAmount) || 0;
+        //     if (ticket.TicketTypeID === 30) { return; }
+        //     this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
+        //     this.total.totalCash += ticket.CashAmount || 0;
+        //     this.total.totalCheck += ticket.CheckAmount || 0;
+        //     this.total.totalCharge += ticket.ChargeAmount || 0;
+        //     this.total.totalDrayage += ticket.Drayage || 0;
+        //     this.total.totalBuyBack += ticket.BuyBack || 0;
+        // });
     }
     // approve all checked tickets
     approveCheckedTickets() {
