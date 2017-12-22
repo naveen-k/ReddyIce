@@ -417,7 +417,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
             // To make sure 'All Branch' object is not present in User's Obj
-            this.user.Branch = this.user.Branch.filter(b => b.BranchID != 1);
+            this.user.Branch = this.user.Branch ? this.user.Branch.filter(b => b.BranchID != 1) : [];
 
             // Alok- show ISeries for Drive
             /* if (roleID === '3' && this.userObject.IsRIInternal) {
@@ -440,8 +440,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     hideISeriesRoute() {
         if (this.user.IsRIInternal || this.user.IsSeasonal) {
             this.showIseries = false;
-        } else {
+        } else if (this.userDetails.IsDistributor && +this.user.RoleID === 3) {
+            this.showIseries = false;
+        } else if(this.user.RoleID){
             this.showIseries = true;
+        } else {
+            this.showIseries = false; 
         }
     }
     loadBranches() {
