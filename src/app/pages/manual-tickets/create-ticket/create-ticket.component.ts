@@ -396,7 +396,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.CustomerID = event.item.CustomerID || event.item.CustomerId;
     this.loadCustomerDetail(this.ticket.CustomerID, event.item.IsRICustomer);
 
-    this.ticket.CustomerSourceID = event.item.IsRICustomer ? 101 : 103
+    this.ticket.CustomerSourceID = (''+event.item.IsRICustomer == "true") ? 101 : 103
     // Reset ticket details
     this.ticket.TicketProduct = [{} as TicketProduct];
   }
@@ -784,8 +784,14 @@ export class CreateTicketComponent implements OnInit {
           activeModal.componentInstance.closeModalHandler = (() => {
             this.saveTicket();
           });
+          activeModal.componentInstance.dismissHandler = (() => {
+            this.isSubmited = false;
+            this.isFormDirty = true;
+          });          
         } else if (err.status === 409) {
           this.notification.error('', 'Ticket Number already in use!!!');
+          this.isSubmited = false;
+          this.isFormDirty = true;
         }
       });
     }

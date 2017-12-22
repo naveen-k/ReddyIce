@@ -12,7 +12,7 @@ import { environment } from '../../../../environments/environment';
     styleUrls: ['./ticket-list.component.scss'],
 })
 export class TicketListComponent implements OnInit {
-    newWindow:any;
+    newWindow: any;
     showSpinner: boolean = false;
 
     // allbranches related to loggen in usr
@@ -75,13 +75,13 @@ export class TicketListComponent implements OnInit {
         // load all branches
         let branches = this.activatedRoute.snapshot.data['branches'];
         // Remove 'All branch' object
-        if (branches && branches.length && this.user.Role.RoleID === 3){
-            if ((branches.length > 0) && (branches[0] === null  || branches[0].BranchID === 1)) {
+        if (branches && branches.length && this.user.Role.RoleID === 3) {
+            if ((branches.length > 0) && (branches[0] === null || branches[0].BranchID === 1)) {
                 branches.shift();
                 this.sortBranches(branches);
             }
         }
-        
+
         this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
         if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
@@ -121,7 +121,7 @@ export class TicketListComponent implements OnInit {
     }
 
     getDrivers(byType: any = '') {
-        if(this.searchObj.BranchId === null){
+        if (this.searchObj.BranchId === null) {
             return;
         }
         this.showSpinner = true;
@@ -148,7 +148,7 @@ export class TicketListComponent implements OnInit {
         //this.searchObj.UserId = null;
         this.getDrivers(byType);
     }
-    dateChangeHandler(){
+    dateChangeHandler() {
         this.searchObj.UserId = null;
     }
     getSearchedTickets(byType: any = '') {
@@ -205,23 +205,10 @@ export class TicketListComponent implements OnInit {
     }
     ticketTotal() {
         this.allTickets.forEach(ticket => {
-
-            //  ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
-            //  ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
-            //  ticket.amount = ticket.TotalSale + ticket.TaxAmount;
-            //  ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
-
             this.total.totalDistAmt += ticket.DistAmt || 0; ticket.CustomerName = ticket.Customer.CustomerName;
             ticket.CustomerNumber = ticket.Customer.CustomerNumber;
             ticket.CustomerTitle = ticket.Customer.CustomerNumber + " - " + ticket.Customer.CustomerName;
-            ticket.TotalSaleWithTax = (ticket.TotalSale + ticket.TaxAmount) || 0;
-            if (ticket.TicketTypeID === 30) { return; }
-            this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
-            this.total.totalCash += ticket.CashAmount || 0;
-            this.total.totalCheck += ticket.CheckAmount || 0;
-            this.total.totalCharge += ticket.ChargeAmount || 0;
-            this.total.totalDrayage += ticket.Drayage || 0;
-            this.total.totalBuyBack += ticket.BuyBack || 0;
+            ticket.TotalSaleWithTax = (ticket.TotalSale || 0 + ticket.TaxAmount || 0);
         });
     }
     // approve all checked tickets
@@ -279,7 +266,7 @@ export class TicketListComponent implements OnInit {
             this.searchObj.BranchId = null;
             this.getDistributors(byType);
         } else {
-            
+
             this.getDrivers(byType);
         }
     }
@@ -308,10 +295,10 @@ export class TicketListComponent implements OnInit {
     viewTicket(ticketID) {
         // ticketID = 3212;
         if (ticketID) {
-            if(this.newWindow){
+            if (this.newWindow) {
                 this.newWindow.close();
             }
-            this.newWindow =  window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
+            this.newWindow = window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
         } else {
             this.notificationService.error("Ticket preview unavailable!!");
         }
