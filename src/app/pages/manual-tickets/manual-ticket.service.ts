@@ -24,7 +24,20 @@ export class ManualTicketService extends SharedService {
       url = `api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}`;
     }
     return this.http.get(url)
-      .map(res => res.json());
+      .map(res => res.json())
+      .map(res => res.ManualTicket)
+      .map(res => {
+        res.forEach(element => {
+          element['Customer'] = {
+            CustomerID: element.CustomerID,
+            CustomerName: element.CustomerName,
+            CustomerType: element.CustomerTypeID,
+            CustomerNumber: element.CustomerNumber,
+          };
+        })
+        return res;
+      })
+
   }
 
   approveAllCheckedTickets(approveTicketsObj) {
@@ -112,7 +125,7 @@ export class ManualTicketService extends SharedService {
     };
     return this.http.post('api/manualticket/uploadImage', fileObj).map((res) => res.json());
   }
-*/
+  */
   dsdSmartTableData = [
     {
       product: 'Product1',
