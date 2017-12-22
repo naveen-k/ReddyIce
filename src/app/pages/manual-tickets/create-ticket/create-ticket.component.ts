@@ -785,11 +785,13 @@ export class CreateTicketComponent implements OnInit {
             this.saveTicket();
           });
           activeModal.componentInstance.dismissHandler = (() => {
-            this.isSubmited = true;
+            this.isSubmited = false;
+            this.isFormDirty = true;
           });          
         } else if (err.status === 409) {
           this.notification.error('', 'Ticket Number already in use!!!');
-          this.isSubmited = true;
+          this.isSubmited = false;
+          this.isFormDirty = true;
         }
       });
     }
