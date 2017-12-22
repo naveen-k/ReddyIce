@@ -45,7 +45,8 @@ export class ReportsComponent implements OnInit {
         tripState: 0,
         tripStatus: 0,
         modifiedStartDateforDriver: null,
-        modifiedEndDateforDriver: null
+        modifiedEndDateforDriver: null,
+        manifestDate: null
     };
 
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
@@ -152,10 +153,18 @@ export class ReportsComponent implements OnInit {
         this.yesFlag = false;
         this.viewReport = false;
         this.filter.customer = null;
+        this.filter.stech = [];
+        this.filter.stech = undefined;
         if (this.user.IsRIInternal) {
             this.filter.userType = 'internal';
-            if (this.filter.reportType == 'WOC') {
-                this.fetchSTechByBranch();
+            if (this.filter.reportType == 'WOC' || this.filter.reportType == 'WOS') {
+                if(this.filter.reportType == 'WOS'){
+                    this.filter.branch = undefined;
+                }
+                if(this.filter.branch!==undefined){
+                    this.fetchSTechByBranch();
+                }
+                
             }
         }
         switch (this.filter.reportType) {
@@ -180,8 +189,9 @@ export class ReportsComponent implements OnInit {
 
     getAllBranches() {
         this.branches = [];
+        this.stechs =[];
         this.reportService.getBranches().subscribe((res) => {
-            if (this.filter.reportType === 'MR') {
+            if (this.filter.reportType === 'MR' || this.filter.reportType === 'WOS') {
                 Array.isArray(res) && res.shift();
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
             } else {
@@ -199,34 +209,44 @@ export class ReportsComponent implements OnInit {
         }, (err) => { });
     }
 
-    // WOC
-    stechs: any[] = []; 
+    // WOC or WOS
+    stechs: any[] = [];
     fetchSTechByBranch() {
         // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
-        this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
-            res.unshift({ STechID: 1, StechName: 'All STech' });
-            this.stechs = this.reportService.transformOptionsReddySelect(res, 'STechID', 'StechName');
-        }, (err) => { 
-            console.log("Something went wrong while fetching STech");
-        });
+        if (this.filter.reportType == 'WOC') {
+            this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
+                res.unshift({ UserId: 1, STechName: 'All STech' });
+                this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+            }, (err) => { 
+                console.log("Something went wrong while fetching STech");
+            });
+        } else if  (this.filter.reportType == 'WOS') {
+            this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
+                this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+            }, (err) => { 
+                console.log("Something went wrong while fetching STech");
+            });
+        } 
     }
 
     branchChangeHandler(branchID) {
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
-
-        this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
-            res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
-            this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-        }, (err) => { });
-        this.filter.custID = 0;
-        if (this.user.Role.RoleName === 'Driver') {
-            this.filter.driver = this.user.UserId;
-        } else {
-            this.filter.driver = 1;
+        debugger;
+        if (this.filter.reportType != 'WOC' && this.filter.reportType != 'WOS') {
+            this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
+                res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
+                this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
+            }, (err) => { });
+            this.filter.custID = 0;
+            if (this.user.Role.RoleName === 'Driver') {
+                this.filter.driver = this.user.UserId;
+            } else {
+                this.filter.driver = 1;
+            }
         }
 
-        if (this.filter.reportType == 'WOC') {
+        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'WOS' && this.filter.branch)) {
             this.fetchSTechByBranch();
         }
 
@@ -261,6 +281,9 @@ export class ReportsComponent implements OnInit {
         if (!this.user.IsDistributor) {
             this.filter.branch = 1;
             this.filter.distributor = 0;
+        }
+        if (this.filter.reportType == 'WOS') {
+            this.filter.branch = undefined;
         }
     }
 
@@ -366,6 +389,25 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOC is clicked', this.linkRpt);                    
+            } else if (rType === 'WOS') {
+                console.log('this.filter.branch', this.filter.branch);
+                console.log('this.filter.stech', this.filter.stech);
+                //
+                if (this.filter.branch == undefined || this.filter.stech == undefined) {
+                    const activeModal = this.modalService.open(ModalComponent, {
+                        size: 'sm',
+                        backdrop: 'static',
+                    });
+                    var msg = 'Please select branch and stech to view the report!';
+                    activeModal.componentInstance.BUTTONS.OK = 'OK';
+                    activeModal.componentInstance.modalHeader = 'Warning!';
+                    activeModal.componentInstance.modalContent = `${msg}`;
+                } else {
+                    this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
+                    console.log('when WOS is clicked', this.linkRpt);    
+                }
+                //              
             } else {
                 return false;
             }

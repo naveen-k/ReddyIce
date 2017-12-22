@@ -1,25 +1,26 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-2" *ngIf="filter.reportType == 'MR'">
+        <div class="col-sm-2" *ngIf="filter.reportType == 'MR' || filter.reportType == 'WOS'">
             <label>Select Date</label>
             <div class="input-group">
-                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.manifestDate"></date-picker>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.manifestDate" (dateModelChange)="branchChangeHandler()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'WOS'">
             <label>Start Date</label>
             <div class="input-group">
                 <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR'">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'WOS'">
             <label>End Date</label>
             <div class="input-group">
                 <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
-        ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || IsTIR || filter.reportType == 'WOC'">
+        ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || IsTIR || filter.reportType == 'WOC'
+        || filter.reportType == 'WOS' || filter.reportType == 'WONS'">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>
@@ -40,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" [hidden]="IsTIR">
+        <div class="col-sm-4" [hidden]="IsTIR || filter.reportType == 'WONS'">
             <div class="row">
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
@@ -55,11 +56,11 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC'">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'WOS'">
                         <label>Driver</label>
                         <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
-                    <div class="col-sm-6" *ngIf="filter.reportType === 'WOC'">
+                    <div class="col-sm-6" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'WOS'">
                         <label>STech</label>
                         <reddy-select [options]="stechs" [(selected)]="filter.stech" (selectedChange)="driverChange()"></reddy-select>
                     </div>
@@ -101,6 +102,8 @@
                             <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
                             <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
                             <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
+                            <option value="WOS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Search</option>
+                            <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number Search</option>
                         </select>
                     </div>
                 </div>
@@ -115,7 +118,8 @@
             </select>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
-        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC'">
+        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
+        || filter.reportType == 'WOS'">
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
@@ -161,7 +165,8 @@
             </select>
         </div>
         <div class="col-md-1 text-right head-button-container">
-            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)">View Report</button>
+            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)"
+            [disabled]="(filter.reportType=='WOC' || filter.reportType=='WOS') && (!filter.branch || !filter.stech)">View Report</button>
         </div>
 
     </div>
@@ -208,6 +213,19 @@
                             </a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" [hidden]="filter.reportType !== 'WONS'">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label class="control-label">
+                        Enter Work Order
+                    </label>
+                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Work Order"
+                        (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
                 </div>
             </div>
         </div>
