@@ -203,6 +203,20 @@ export class ReportsComponent implements OnInit {
         }, (err) => { });
     }
 
+    getCustomerBranches() {
+        this.branches = [];
+        this.stechs = [];
+        this.reportService.getCustomerBranches().subscribe((res) => {
+            if (this.filter.reportType === 'WOS') {
+                Array.isArray(res) && res.shift();
+                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
+            } else {
+                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
+            }
+            this.branchChangeHandler();
+        }, (err) => { });
+    }
+
     getDistributors() {
         this.reportService.getDistributors().subscribe((res) => {
             res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
@@ -275,7 +289,11 @@ export class ReportsComponent implements OnInit {
         this.viewReport = false;
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
-            this.getAllBranches();
+            if (this.filter.reportType == 'WOS' || this.filter.reportType == 'WOC') {
+                this.getCustomerBranches();
+            } else {
+                this.getAllBranches();
+            }
         } else {
             this.getDistributors();
         }

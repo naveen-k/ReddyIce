@@ -25,6 +25,12 @@ export class ReportService extends SharedService {
                 return res;
             });
     }
+    getCustomerBranches() {
+        return this.http.get(`api/reportcustomerbranch`)
+            .map((res) => res.json()).map((res) => {
+                return res;
+            });
+    }
     getDriversbyBranch(branchId,userId,startDate,endDate,distributorID) {
         //return this.http.get(`api/user?driverlistbybranch=${branchId}&IsInternal=${true}`)
         return this.http.get(`api/report/getlistoftripdriver?BranchId=${branchId}&UserId=${userId}&TripStartDate=${startDate}&TripEndDate=${endDate}&DistributorId=${distributorID}`)
