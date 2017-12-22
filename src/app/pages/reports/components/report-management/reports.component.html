@@ -173,7 +173,7 @@
 
     </div>
     <div class="row" [hidden]="IsTIR">
-        <div class="col-sm-4" *ngIf="filter.reportType === 'SR'">
+        <div class="col-sm-4" *ngIf="filter.reportType === 'SR' || filter.reportType === 'DR'">
             <span class="col-sm-4 local-padding-eater">
                 <label class="top-margin">Ticket Type</label>
             </span>
