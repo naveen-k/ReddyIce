@@ -46,7 +46,8 @@ export class ReportsComponent implements OnInit {
         tripStatus: 0,
         modifiedStartDateforDriver: null,
         modifiedEndDateforDriver: null,
-        manifestDate: null
+        manifestDate: null,
+        workOrderNumber: null
     };
 
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
@@ -153,16 +154,16 @@ export class ReportsComponent implements OnInit {
         this.yesFlag = false;
         this.viewReport = false;
         this.filter.customer = null;
-        this.filter.stech = [];
-        this.filter.branch = [];
+        this.filter.stech = null;
+        this.filter.branch = null;
         this.filter.stech = undefined;
         if (this.user.IsRIInternal) {
             this.filter.userType = 'internal';
             if (this.filter.reportType == 'WOC' || this.filter.reportType == 'WOS') {
                 if (this.filter.reportType == 'WOS') {
-                    this.filter.branch = undefined;
+                    this.filter.branch = null;
                 }
-                if (this.filter.branch !== undefined) {
+                if (this.filter.branch !== null) {
                     this.fetchSTechByBranch();
                 }
 
@@ -198,7 +199,7 @@ export class ReportsComponent implements OnInit {
             } else {
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
             }
-            this.branchChangeHandler(this.filter.branch);
+            this.branchChangeHandler();
         }, (err) => { });
     }
 
@@ -230,7 +231,7 @@ export class ReportsComponent implements OnInit {
         }
     }
 
-    branchChangeHandler(branchID) {
+    branchChangeHandler() {
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
         if (this.filter.reportType != 'WOC' && this.filter.reportType != 'WOS') {
@@ -283,7 +284,7 @@ export class ReportsComponent implements OnInit {
             this.filter.distributor = 0;
         }
         if (this.filter.reportType == 'WOS') {
-            this.filter.branch = undefined;
+            this.filter.branch = null;
         }
     }
 
@@ -393,6 +394,10 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOS is clicked', this.linkRpt);
+            } else if (rType === 'WONS') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WONumber=${this.filter.workOrderNumber}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when WONS is clicked', this.linkRpt);
             } else {
                 return false;
             }
@@ -455,7 +460,8 @@ export class ReportsComponent implements OnInit {
         return yy + '/' + mm + '/' + dd;
     }
     getCustomers() {
-        this.branchChangeHandler(this.filter.branch)
+        //this.branchChangeHandler(this.filter.branch)
+        this.branchChangeHandler();
         this.viewReport = false;
         this.modifiedStartDate = this.modifyDate(this.filter.startDate);
         this.modifiedEndDate = this.modifyDate(this.filter.endDate);

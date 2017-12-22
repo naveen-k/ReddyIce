@@ -47,7 +47,7 @@
                     <div class="col-sm-6">
                         <label>Branch</label>
                         <sup style="color:red;" *ngIf="filter.reportType == 'WOS'">*</sup>
-                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch);getCustomers()"></reddy-select>
+                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler();getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'external'">
@@ -105,7 +105,7 @@
                             <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
                             <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
                             <option value="WOS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Search</option>
-                            <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number Search</option>
+                            <!-- <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number Search</option> -->
                         </select>
                     </div>
                 </div>
@@ -222,12 +222,11 @@
     <div class="row" [hidden]="filter.reportType !== 'WONS'">
         <div class="col-sm-12">
             <div class="row">
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                     <label class="control-label">
-                        Enter Work Order
+                        Enter Work Order Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Work Order"
-                        (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
+                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.workOrderNumber" placeholder="Enter Work Order Number">
                 </div>
             </div>
         </div>
