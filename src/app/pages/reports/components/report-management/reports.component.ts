@@ -31,6 +31,7 @@ export class ReportsComponent implements OnInit {
         distributor: 0,
         branch: 1,
         driver: 1,
+        stech: 0,
         custID: 0,
         custtID: 0,
         custType: 0,
@@ -44,7 +45,9 @@ export class ReportsComponent implements OnInit {
         tripState: 0,
         tripStatus: 0,
         modifiedStartDateforDriver: null,
-        modifiedEndDateforDriver: null
+        modifiedEndDateforDriver: null,
+        manifestDate: null,
+        workOrderNumber: null
     };
 
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
@@ -128,6 +131,8 @@ export class ReportsComponent implements OnInit {
             this.isInternalAdmin = true;
         } else if (this.user.Role.RoleID == 8 && !this.user.IsRIInternal) {
             this.isExternalAdmin = true;
+        } else if (this.user.Role.RoleID == 5 && this.user.IsRIInternal) {
+            this.isSTech = true;
         }
 
         if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
@@ -149,8 +154,20 @@ export class ReportsComponent implements OnInit {
         this.yesFlag = false;
         this.viewReport = false;
         this.filter.customer = null;
+        this.filter.stech = null;
+        this.filter.branch = null;
+        this.filter.stech = undefined;
         if (this.user.IsRIInternal) {
             this.filter.userType = 'internal';
+            if (this.filter.reportType == 'WOC' || this.filter.reportType == 'WOS') {
+                if (this.filter.reportType == 'WOS') {
+                    this.filter.branch = null;
+                }
+                if (this.filter.branch !== null) {
+                    this.fetchSTechByBranch();
+                }
+
+            }
         }
         switch (this.filter.reportType) {
             case 'DST':
@@ -174,14 +191,15 @@ export class ReportsComponent implements OnInit {
 
     getAllBranches() {
         this.branches = [];
+        this.stechs = [];
         this.reportService.getBranches().subscribe((res) => {
-            if (this.filter.reportType === 'MR') {
+            if (this.filter.reportType === 'MR' || this.filter.reportType === 'WOS') {
                 Array.isArray(res) && res.shift();
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
             } else {
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
             }
-            this.branchChangeHandler(this.filter.branch);
+            this.branchChangeHandler();
         }, (err) => { });
     }
 
@@ -193,19 +211,44 @@ export class ReportsComponent implements OnInit {
         }, (err) => { });
     }
 
-    branchChangeHandler(branchID) {
+    // WOC or WOS
+    stechs: any[] = [];
+    fetchSTechByBranch() {
+        // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
+        if (this.filter.reportType == 'WOC') {
+            this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
+                res.unshift({ UserId: 1, STechName: 'All STech' });
+                this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+            }, (err) => {
+                console.log("Something went wrong while fetching STech");
+            });
+        } else if (this.filter.reportType == 'WOS') {
+            this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
+                this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+            }, (err) => {
+                console.log("Something went wrong while fetching STech");
+            });
+        }
+    }
+
+    branchChangeHandler() {
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
+        if (this.filter.reportType != 'WOC' && this.filter.reportType != 'WOS') {
+            this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
+                res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
+                this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
+            }, (err) => { });
+            this.filter.custID = 0;
+            if (this.user.Role.RoleName === 'Driver') {
+                this.filter.driver = this.user.UserId;
+            } else {
+                this.filter.driver = 1;
+            }
+        }
 
-        this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
-            res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
-            this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-        }, (err) => { });
-        this.filter.custID = 0;
-        if (this.user.Role.RoleName === 'Driver') {
-            this.filter.driver = this.user.UserId;
-        } else {
-            this.filter.driver = 1;
+        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'WOS' && this.filter.branch)) {
+            this.fetchSTechByBranch();
         }
 
         // this.getCustomers();
@@ -239,6 +282,9 @@ export class ReportsComponent implements OnInit {
         if (!this.user.IsDistributor) {
             this.filter.branch = 1;
             this.filter.distributor = 0;
+        }
+        if (this.filter.reportType == 'WOS') {
+            this.filter.branch = null;
         }
     }
 
@@ -340,6 +386,18 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}`);
 
+            } else if (rType === 'WOC') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when WOC is clicked', this.linkRpt);
+            } else if (rType === 'WOS') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when WOS is clicked', this.linkRpt);
+            } else if (rType === 'WONS') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WONumber=${this.filter.workOrderNumber}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when WONS is clicked', this.linkRpt);
             } else {
                 return false;
             }
@@ -397,7 +455,8 @@ export class ReportsComponent implements OnInit {
         return yy + '/' + mm + '/' + dd;
     }
     getCustomers() {
-        this.branchChangeHandler(this.filter.branch)
+        //this.branchChangeHandler(this.filter.branch)
+        this.branchChangeHandler();
         this.viewReport = false;
         this.modifiedStartDate = this.modifyDate(this.filter.startDate);
         this.modifiedEndDate = this.modifyDate(this.filter.endDate);
