@@ -46,6 +46,7 @@
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
                         <label>Branch</label>
+                        <sup style="color:red;" *ngIf="filter.reportType == 'WOS'">*</sup>
                         <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="branchChangeHandler(filter.branch);getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
@@ -62,6 +63,7 @@
                     </div>
                     <div class="col-sm-6" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'WOS'">
                         <label>STech</label>
+                        <sup style="color:red;" *ngIf="filter.reportType == 'WOS' || filter.reportType == 'WOC'">*</sup>
                         <reddy-select [options]="stechs" [(selected)]="filter.stech" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>

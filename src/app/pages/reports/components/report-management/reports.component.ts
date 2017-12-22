@@ -128,7 +128,7 @@ export class ReportsComponent implements OnInit {
             this.isInternalAdmin = true;
         } else if (this.user.Role.RoleID == 8 && this.user.IsRIInternal) {
             this.isInternalAdmin = true;
-        } else if(this.user.Role.RoleID == 8 && !this.user.IsRIInternal) {
+        } else if (this.user.Role.RoleID == 8 && !this.user.IsRIInternal) {
             this.isExternalAdmin = true;
         } else if (this.user.Role.RoleID == 5 && this.user.IsRIInternal) {
             this.isSTech = true;
@@ -154,17 +154,18 @@ export class ReportsComponent implements OnInit {
         this.viewReport = false;
         this.filter.customer = null;
         this.filter.stech = [];
+        this.filter.branch = [];
         this.filter.stech = undefined;
         if (this.user.IsRIInternal) {
             this.filter.userType = 'internal';
             if (this.filter.reportType == 'WOC' || this.filter.reportType == 'WOS') {
-                if(this.filter.reportType == 'WOS'){
+                if (this.filter.reportType == 'WOS') {
                     this.filter.branch = undefined;
                 }
-                if(this.filter.branch!==undefined){
+                if (this.filter.branch !== undefined) {
                     this.fetchSTechByBranch();
                 }
-                
+
             }
         }
         switch (this.filter.reportType) {
@@ -189,7 +190,7 @@ export class ReportsComponent implements OnInit {
 
     getAllBranches() {
         this.branches = [];
-        this.stechs =[];
+        this.stechs = [];
         this.reportService.getBranches().subscribe((res) => {
             if (this.filter.reportType === 'MR' || this.filter.reportType === 'WOS') {
                 Array.isArray(res) && res.shift();
@@ -217,22 +218,21 @@ export class ReportsComponent implements OnInit {
             this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
-            }, (err) => { 
+            }, (err) => {
                 console.log("Something went wrong while fetching STech");
             });
-        } else if  (this.filter.reportType == 'WOS') {
+        } else if (this.filter.reportType == 'WOS') {
             this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
-            }, (err) => { 
+            }, (err) => {
                 console.log("Something went wrong while fetching STech");
             });
-        } 
+        }
     }
 
     branchChangeHandler(branchID) {
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
-        debugger;
         if (this.filter.reportType != 'WOC' && this.filter.reportType != 'WOS') {
             this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
                 res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
@@ -388,26 +388,11 @@ export class ReportsComponent implements OnInit {
             } else if (rType === 'WOC') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
-                console.log('when WOC is clicked', this.linkRpt);                    
+                console.log('when WOC is clicked', this.linkRpt);
             } else if (rType === 'WOS') {
-                console.log('this.filter.branch', this.filter.branch);
-                console.log('this.filter.stech', this.filter.stech);
-                //
-                if (this.filter.branch == undefined || this.filter.stech == undefined) {
-                    const activeModal = this.modalService.open(ModalComponent, {
-                        size: 'sm',
-                        backdrop: 'static',
-                    });
-                    var msg = 'Please select branch and stech to view the report!';
-                    activeModal.componentInstance.BUTTONS.OK = 'OK';
-                    activeModal.componentInstance.modalHeader = 'Warning!';
-                    activeModal.componentInstance.modalContent = `${msg}`;
-                } else {
-                    this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
-                    console.log('when WOS is clicked', this.linkRpt);    
-                }
-                //              
+                console.log('when WOS is clicked', this.linkRpt);
             } else {
                 return false;
             }
