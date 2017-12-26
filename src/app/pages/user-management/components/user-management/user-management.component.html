@@ -101,7 +101,7 @@
                 <i class="ion-eye custom-tooltip-ion" (click)="onView(item)" style="margin-right: 5px" [hidden]="!item.IsActive">
                   <span class="tooltiptext">View</span>
                 </i>
-                <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px" [hidden]="userDetails?.IsSeasonal">
+                <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px" [hidden]="userDetails?.IsSeasonal || item.Role.RoleID === 1">
                   <span class="tooltiptext">Edit</span>
                 </i>
                 <i class="ion-trash-a custom-tooltip-ion" *ngIf="item.Role.RoleID !== userDetails.Role.RoleID" (click)="deleteUser(item)"

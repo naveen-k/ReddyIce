@@ -24,7 +24,8 @@ export class CreateTicketComponent implements OnInit {
   isSubmited: boolean = false;
   pageTitle: string = 'New Manual Ticket';
 
-  ticket: ManualTicket = {} as ManualTicket;
+  //ticket: ManualTicket = {} as ManualTicket;
+  ticket: any = {} as ManualTicket;
 
   // hold temp models
   tempModels: any = {
@@ -433,7 +434,8 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketProduct.forEach(td => {
       if (!td.ProductID) {
         td.ProductID = productdetail[0].ProductID;
-        this.productChangeHandler(td);
+        let index=this.ticket.TicketProduct.findIndex(x => x.ProductID == td.ProductID);
+        this.productChangeHandler(td,index);
       }
       this.updateTicketDetailObject(td);
       if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID == 27)) {
@@ -471,10 +473,10 @@ export class CreateTicketComponent implements OnInit {
     this.checkNumberValidation();
   }
 
-  productChangeHandler(ticketDetail) {
+  productChangeHandler(ticketDetail,index) {
     const product = this.ticket.TicketProduct.filter(t => t.ProductID === ticketDetail.ProductID);
     if (product.length === 2) {
-      ticketDetail.ProductID = '';
+      //ticketDetail.ProductID = '';
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
@@ -484,6 +486,7 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
       activeModal.componentInstance.closeModalHandler = (() => {
+        this.ticket.TicketProduct[index] = {};
       });
       return;
     }

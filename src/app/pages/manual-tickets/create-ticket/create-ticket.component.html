@@ -245,9 +245,9 @@
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <tr *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
