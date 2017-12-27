@@ -14,6 +14,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
     styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
+    cacheBranches;
     selectedCustomerType: number = 0;
     isITAdmin: boolean = false;
     isInternalAdmin: boolean = false;
@@ -154,21 +155,20 @@ export class ReportsComponent implements OnInit {
         this.yesFlag = false;
         this.viewReport = false;
         this.filter.customer = null;
-        this.filter.stech = null;
-        this.filter.branch = null;
-        this.filter.stech = undefined;
-        if (this.user.IsRIInternal) {
-            this.filter.userType = 'internal';
-            if (this.filter.reportType == 'WOC' || this.filter.reportType == 'WOS') {
-                if (this.filter.reportType == 'WOS') {
-                    this.filter.branch = null;
-                }
-                if (this.filter.branch !== null) {
-                    this.fetchSTechByBranch();
-                }
+        this.filter.stech = 1;
+        this.filter.branch = 1;
+        // if (this.user.IsRIInternal) {
+        //     this.filter.userType = 'internal';
+        //     if (this.filter.reportType == 'WOC' || this.filter.reportType == 'WOS') {
+        //         if (this.filter.reportType == 'WOS') {
+        //             this.filter.branch = null;
+        //         }
+        //         if (this.filter.branch !== null) {
+        //             this.fetchSTechByBranch();
+        //         }
 
-            }
-        }
+        //     }
+        // }
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -193,7 +193,7 @@ export class ReportsComponent implements OnInit {
         this.branches = [];
         this.stechs = [];
         this.reportService.getBranches().subscribe((res) => {
-            if (this.filter.reportType === 'MR' || this.filter.reportType === 'WOS') {
+            if (this.filter.reportType === 'MR') {
                 Array.isArray(res) && res.shift();
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
             } else {
@@ -202,19 +202,30 @@ export class ReportsComponent implements OnInit {
             this.branchChangeHandler();
         }, (err) => { });
     }
-
+    private populateCustomerBranch(){
+        if (this.filter.reportType === 'WOS') {
+            this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
+            this.branches.shift();
+        } else {
+            this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
+            this.fetchSTechByBranch();
+        }
+    }
     getCustomerBranches() {
         this.branches = [];
         this.stechs = [];
-        this.reportService.getCustomerBranches().subscribe((res) => {
-            if (this.filter.reportType === 'WOS') {
-                Array.isArray(res) && res.shift();
-                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
-            } else {
-                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
-            }
-            this.branchChangeHandler();
-        }, (err) => { });
+        if (this.cacheBranches) {
+           this.populateCustomerBranch();
+        } else {
+            this.reportService.getCustomerBranches().subscribe((res) => {
+
+                res.unshift({ 'BranchID': 1, 'BranchCode': 1, 'BranchName': 'All Branches' });
+                this.cacheBranches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
+                this.populateCustomerBranch();
+                // this.branchChangeHandler();
+            }, (err) => { });
+        }
+
     }
 
     getDistributors() {
@@ -227,9 +238,10 @@ export class ReportsComponent implements OnInit {
 
     // WOC or WOS
     stechs: any[] = [];
-    fetchSTechByBranch() {
+    private fetchSTechByBranch() {
         // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
         if (this.filter.reportType == 'WOC') {
+            this.filter.stech = 1;
             this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
@@ -248,23 +260,17 @@ export class ReportsComponent implements OnInit {
     branchChangeHandler() {
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
-        if (this.filter.reportType != 'WOC' && this.filter.reportType != 'WOS') {
-            this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
-                res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
-                this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-            }, (err) => { });
-            this.filter.custID = 0;
-            if (this.user.Role.RoleName === 'Driver') {
-                this.filter.driver = this.user.UserId;
-            } else {
-                this.filter.driver = 1;
-            }
-        }
 
-        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'WOS' && this.filter.branch)) {
-            this.fetchSTechByBranch();
+        this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
+            res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
+            this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
+        }, (err) => { });
+        this.filter.custID = 0;
+        if (this.user.Role.RoleName === 'Driver') {
+            this.filter.driver = this.user.UserId;
+        } else {
+            this.filter.driver = 1;
         }
-
         // this.getCustomers();
     }
 
@@ -302,7 +308,7 @@ export class ReportsComponent implements OnInit {
             this.filter.distributor = 0;
         }
         if (this.filter.reportType == 'WOS') {
-            this.filter.branch = null;
+            this.filter.branch = 0;
         }
     }
 
@@ -456,6 +462,8 @@ export class ReportsComponent implements OnInit {
 
             }
         }
+
+        console.log(this.linkRpt);
     }
 
     formatDate(startLatestDate) {
@@ -474,26 +482,39 @@ export class ReportsComponent implements OnInit {
     }
     getCustomers() {
         //this.branchChangeHandler(this.filter.branch)
-        this.branchChangeHandler();
-        this.viewReport = false;
-        this.modifiedStartDate = this.modifyDate(this.filter.startDate);
-        this.modifiedEndDate = this.modifyDate(this.filter.endDate);
-        this.reportService
-            .getCustomerDropDownList(this.filter.branch, this.user.UserId, this.modifiedStartDate, this.modifiedEndDate, this.filter.distributor)
-            .subscribe((res) => {
-                //this.dropDownCustomers=res;
-                const tempArr = [];
-                res.forEach(cus => {
-                    tempArr.push({
-                        value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
-                        label: `${cus.CustomerName}`,
-                        data: cus,
+        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'WOS')) {
+            this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
+            this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
+            if(this.filter.branch){
+                this.fetchSTechByBranch();
+            }
+            
+        } else {
+            this.branchChangeHandler();
+
+            this.viewReport = false;
+            this.modifiedStartDate = this.modifyDate(this.filter.startDate);
+            this.modifiedEndDate = this.modifyDate(this.filter.endDate);
+            this.reportService
+                .getCustomerDropDownList(this.filter.branch, this.user.UserId, this.modifiedStartDate, this.modifiedEndDate, this.filter.distributor)
+                .subscribe((res) => {
+                    //this.dropDownCustomers=res;
+                    const tempArr = [];
+                    res.forEach(cus => {
+                        tempArr.push({
+                            value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
+                            label: `${cus.CustomerName}`,
+                            data: cus,
+                        });
                     });
-                });
-                tempArr.unshift({ value: 0, label: 'All Customers', data: {} });
-                this.dropDownCustomers = tempArr;
-                this.filterCustomers();
-            }, (err) => { })
+                    tempArr.unshift({ value: 0, label: 'All Customers', data: {} });
+                    this.dropDownCustomers = tempArr;
+                    this.filterCustomers();
+                }, (err) => { })
+        }
+
+
+
     }
 
     filterCustomers() {
