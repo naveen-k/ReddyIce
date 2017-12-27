@@ -53,7 +53,7 @@
                 <ng-container *ngIf="filter.userType === 'external'">
                     <div class="col-sm-6" [hidden]="filter.reportType === 'MR'">
                         <label>Dist/Copacker</label>
-                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getAllCustomers(filter.distributor);getCustomers()"></reddy-select>
+                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
