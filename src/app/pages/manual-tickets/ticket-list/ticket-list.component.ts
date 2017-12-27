@@ -208,7 +208,7 @@ export class TicketListComponent implements OnInit {
             this.total.totalDistAmt += ticket.DistAmt || 0; ticket.CustomerName = ticket.Customer.CustomerName;
             ticket.CustomerNumber = ticket.Customer.CustomerNumber;
             ticket.CustomerTitle = ticket.Customer.CustomerNumber + " - " + ticket.Customer.CustomerName;
-            ticket.TotalSaleWithTax = (ticket.TotalSale || 0 + ticket.TaxAmount || 0);
+            ticket.TotalSaleWithTax = (ticket.TotalSale || 0) + (ticket.TaxAmount || 0);
         });
     }
     // approve all checked tickets
