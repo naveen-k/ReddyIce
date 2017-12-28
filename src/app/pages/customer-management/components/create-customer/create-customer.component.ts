@@ -21,7 +21,7 @@ export class CreateCustomerComponent implements OnInit {
 
     selectedProducts: DualListItem[] = [];
     deactivateClicked: boolean = false;
-    addedProduct: MapProducts[] = [];
+    addedProduct: any[] = [];
     newlyAddedproduct: any[] = [];
     isFromDirty: boolean = false;
     keepSorted = true;
@@ -214,7 +214,7 @@ export class CreateCustomerComponent implements OnInit {
 
     }
 
-    productChangeHandler(mprod, index) {
+    productChangeHandler(mprod, index,flag) {
         let mProdTemp = mprod.cProductId.split('-');
         const product = this.addedProduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
         const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
@@ -232,7 +232,11 @@ export class CreateCustomerComponent implements OnInit {
             activeModal.componentInstance.modalHeader = 'Warning!';
             activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
             activeModal.componentInstance.closeModalHandler = (() => {
-                this.newlyAddedproduct[index] = {};
+                if(flag === 1) {
+                     this.addedProduct[index] = {};
+                } else {
+                    this.newlyAddedproduct[index] = {}
+                }
             });
             return;
         } else {
