@@ -168,7 +168,7 @@
         <sup style="color:red;">*</sup>
       </label>
       <br/>
-      <reddy-select [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8'"
+      <reddy-select [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '8'"
         [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch" (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
       <br/>
       <div style="width:100%;margin-top: 10px;">
@@ -179,7 +179,7 @@
             <span style="float:right">
               <input *ngIf="user.RoleID == '6' || user.RoleID == '3'" type="text" [ngModelOptions]="{standalone: true}" numberOnly [(ngModel)]="brannch.IseriesRouteNumber"
                 style="width:50px" (ngModelChange)="enableSave()">
-              <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '5' || user.RoleID == '8')"
+              <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '8')"
                 class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
                 <span class="tooltiptext">Remove</span>
               </i>

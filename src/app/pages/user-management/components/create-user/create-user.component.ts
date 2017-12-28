@@ -107,7 +107,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
 
         let role = val.RoleID + '';
-        if (role === '1' || role === '2' || role === '4' || role === '5') {
+        if (role === '1' || role === '2' || role === '4' || role === '8') {
             this.user.Branch = [{ BranchCode: 1, BranchID: 1, BranchName: "All Branches", IsActive: true }];
             this.userBranch = [1];
         }
@@ -231,7 +231,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                     // });
                     this.user.Branch = this.addedBranches;
                 }
-            } else if (this.user.RoleID == '1' || this.user.RoleID == '2' || this.user.RoleID == '4' || this.user.RoleID == '5' || this.user.RoleID == '8') {
+            } else if (this.user.RoleID == '1' || this.user.RoleID == '2' || this.user.RoleID == '4' || this.user.RoleID == '8') {
                 this.user.Branch = [{ BranchCode: 1, BranchID: 1, BranchName: "All Branches", IsActive: true }];
             }
 
@@ -399,7 +399,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }
 
 
-        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '5' || roleID === '8') {
+        if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '8') {
             this.cBranches = [];
             this.cBranches = [{ value: '1', label: '1 - All Branches', data: { BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true } }];
             this.addedBranches = [{ BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true }];
@@ -430,7 +430,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         //    this.transformation();
         // }
         //this.pushBranches();
-        if (roleID === '2' || roleID === '4' || roleID === '5' || roleID === '8') {
+        if (roleID === '2' || roleID === '4' || roleID === '8') {
             this.selectedBranch = [];
         }
 
