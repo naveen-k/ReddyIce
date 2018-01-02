@@ -108,7 +108,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         let role = val.RoleID + '';
         if (role === '1' || role === '2' || role === '4' || role === '8') {
-            this.user.Branch = [{ BranchCode: 1, BranchID: 1, BranchName: "All Branches", IsActive: true }];
+            this.user.Branch = [{ BranchCode: 1, BranchID: 1, BUName: "All BU", IsActive: true }];
             this.userBranch = [1];
         }
         else {
@@ -232,7 +232,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                     this.user.Branch = this.addedBranches;
                 }
             } else if (this.user.RoleID == '1' || this.user.RoleID == '2' || this.user.RoleID == '4' || this.user.RoleID == '8') {
-                this.user.Branch = [{ BranchCode: 1, BranchID: 1, BranchName: "All Branches", IsActive: true }];
+                this.user.Branch = [{ BranchCode: 1, BranchID: 1, BUName: "All BU", IsActive: true }];
             }
 
         } else {
@@ -251,12 +251,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.notification.error('Distributor is mandatory!!!');
                 return false;
             } else if (user.IsSeasonal && (!this.userBranch || this.userBranch.length === 0)) {
-                this.notification.error('Branch is mandatory!!!');
+                this.notification.error('BU is mandatory!!!');
                 return false;
             }
         } else {
             if (this.userBranch.length === 0) {
-                this.notification.error('Branch is mandatory!!!');
+                this.notification.error('BU is mandatory!!!');
                 return false;
             }
 
@@ -401,11 +401,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '8') {
             this.cBranches = [];
-            this.cBranches = [{ value: '1', label: '1 - All Branches', data: { BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true } }];
-            this.addedBranches = [{ BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true }];
+            this.cBranches = [{ value: '1', label: '1 - All BU', data: { BranchID: 1, BranchCode: 1, BUName: 'All BU', IsActive: true } }];
+            this.addedBranches = [{ BranchID: 1, BranchCode: 1, BUName: 'All BU', IsActive: true }];
             this.userBranch = [1];
             // Remove all the other branches except 'All Branch' from User's Obj
-            this.user.Branch = [{ BranchID: 1, BranchCode: 1, BranchName: 'All Branches', IsActive: true }];
+            this.user.Branch = [{ BranchID: 1, BranchCode: 1, BUName: 'All BU', IsActive: true }];
 
         } else {
             this.user.RoleID = roleID;
@@ -539,7 +539,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             res.forEach(branch => {
                 tempArr.push({
                     value: branch.BranchID,
-                    label: `${branch.BranchCode} - ${branch.BranchName}`,
+                    label: `${branch.BranchCode} - ${branch.BUName}`,
                     data: branch
                 });
             });
@@ -562,7 +562,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (optionsModel) {
             for (let branch of this.selectedBranch) {
                 if (optionsModel.indexOf(branch.BranchID + '') > -1 || optionsModel.indexOf(branch.BranchID) > -1) {
-                    this.addedBranches.push({ BranchID: branch.BranchID, BranchCode: branch.BranchCode, BranchName: branch.BranchName, IsActive: true });
+                    this.addedBranches.push({ BranchID: branch.BranchID, BranchCode: branch.BranchCode, BUName: branch.BUName, IsActive: true });
                 }
             }
         }
@@ -599,7 +599,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 selectedBranch.push({
                     'BranchID': br.BranchID,
                     'BranchCode': br.BranchCode,
-                    'BranchName': br.BranchName,
+                    'BUName': br.BUName,
                     'IsActive': br.Active
                 })
             }

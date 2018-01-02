@@ -87,12 +87,12 @@ export class DayEndComponent implements OnInit {
                 if (tmpBranch[trip.BranchID]) { return; }
                 branches.push({
                     value: trip.BranchID,
-                    label: `${trip.BranchCode}-${trip.BranchName}`
+                    label: `${trip.BranchCode}-${trip.BUName}`
                 })
                 tmpBranch[trip.BranchID] = trip.BranchID;
             })
 
-            branches.unshift({ value: 1, label: 'All Branches' });
+            branches.unshift({ value: 1, label: 'All BU' });
             distributors.length && distributors.unshift({ value: 1, label: 'All Distributors' });
             this.distributors = distributors;
             this.branches = branches;

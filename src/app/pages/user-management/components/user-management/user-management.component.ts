@@ -317,7 +317,7 @@ export class UserManagementComponent implements OnInit {
           this.filterBranch = this.userBranches[0].BranchID;
         }
       }
-      this.allBranches = this.service.transformOptionsReddySelect(this.userBranches, 'BranchID', 'BranchCode', 'BranchName');
+      this.allBranches = this.service.transformOptionsReddySelect(this.userBranches, 'BranchID', 'BranchCode', 'BUName');
       if (!this.isDistributorExist) {
         this.getDistributors();
       }
@@ -379,10 +379,10 @@ export class UserManagementComponent implements OnInit {
 
 
   formatUser(user: any = '') {
-    user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BranchName : 'NA')}`;
+    user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BUName : 'NA')}`;
     if (user.Branch) {
       user.concatBranch = user.Branch.map(function (elem) {
-        return elem.BranchName;
+        return elem.BUName;
       }).join(",");
 
       user.concatCode = user.Branch.map(function (elem) {
@@ -390,7 +390,7 @@ export class UserManagementComponent implements OnInit {
       }).join(",");
 
       user.concatBranchCode = user.Branch.map(function (elem) {
-        return elem.BranchCode + ' - ' + elem.BranchName;
+        return elem.BranchCode + ' - ' + elem.BUName;
       }).join(",");
     }
     user['tmp_role'] = `${(user.Role ? user.Role.RoleName : '')}`;
@@ -445,7 +445,7 @@ export class UserManagementComponent implements OnInit {
     branches.find((val) => {
       if (typeof val === 'object') {
         if (val['IsActive'] === true) {
-          cstring.push(val['BranchCode'] + ' - ' + val['BranchName']);
+          cstring.push(val['BranchCode'] + ' - ' + val['BUName']);
         }
       }
 
@@ -453,7 +453,7 @@ export class UserManagementComponent implements OnInit {
 
     let branch = cstring;
     activeModal.componentInstance.showCancel = false;
-    activeModal.componentInstance.modalHeader = `Selected branches of ${username}`;
+    activeModal.componentInstance.modalHeader = `Selected BU of ${username}`;
     activeModal.componentInstance.modalContent = branch;
     activeModal.componentInstance.closeModalHandler = (() => {
 

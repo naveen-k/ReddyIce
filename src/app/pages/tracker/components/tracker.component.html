@@ -16,7 +16,7 @@
                     </select>
                 </div>
                 <div class="col-sm-3" [hidden]="isDistributor" *ngIf="searchObj.userType=='Internal'">
-                    <label>Select Branch</label>
+                    <label>Select BU</label>
                     <reddy-select [options]="allBranches" [(selected)]="tripFilterOption.branchId" (selectedChange)="branchChangeHandler()"></reddy-select>
                 </div>
                 <div class="col-sm-3" *ngIf="searchObj.userType=='External'">

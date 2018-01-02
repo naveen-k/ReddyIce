@@ -15,7 +15,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://frozen.reddyice.com/reddyice_dev/',
+  apiEndpoint: 'http://frozen.reddyice.com/axchangeapi/',
   reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx',
   prodLabel: '(BUAT)'
 };
