@@ -51,7 +51,7 @@ export class LoadComponent implements OnInit {
                 this.branches.shift();
             }
         }
-        this.allBranches = this.service.transformOptionsReddySelect(this.branches, 'BranchID', 'BranchCode', 'BranchName');
+        this.allBranches = this.service.transformOptionsReddySelect(this.branches, 'BranchID', 'BranchCode', 'BUName');
         if(this.filter.userBranch && this.filter.userBranch>0){
             this.getDrivers();
         }
@@ -91,7 +91,7 @@ export class LoadComponent implements OnInit {
     }
     getBranchName(){
         let b = this.branches.filter((b)=>b.BranchID === this.filter.userBranch);
-        this.filter.userBranchName = b[0].BranchCode +' - '+b[0].BranchName;
+        this.filter.userBranchName = b[0].BranchCode +' - '+b[0].BUName;
     }
     getDriverName(){
         let d = this.drivers.filter((d)=>d.value === this.filter.userDriver);
