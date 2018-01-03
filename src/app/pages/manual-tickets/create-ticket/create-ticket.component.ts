@@ -374,14 +374,14 @@ export class CreateTicketComponent implements OnInit {
   loadDriversOfBranch(branchId) {
 
     this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
-      this.drivers = res;
+      this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
       var that = this;
       if (this.drivers && this.drivers.length > 1) {
         var newArray = this.drivers.filter(function (el) {
-          return el.UserId === that.ticket.UserID;
+          return +el.value === +that.ticket.UserID;
         });
         if (newArray.length === 0) {
-          this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].UserId : null;
+          this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : null;
         }
       }
     });

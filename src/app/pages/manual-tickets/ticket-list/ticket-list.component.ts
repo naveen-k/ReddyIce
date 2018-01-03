@@ -132,7 +132,7 @@ export class TicketListComponent implements OnInit {
                
                 this.searchObj.UserId = +this.searchObj.UserId || 1;
             }
-            this.drivers = res;
+            this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
             this.showSpinner = false;
             this.getSearchedTickets(byType);
         });
