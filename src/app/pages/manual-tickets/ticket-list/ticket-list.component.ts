@@ -62,7 +62,6 @@ export class TicketListComponent implements OnInit {
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
-
         this.searchObj = this.service.getSearchedObject();
         //this.searchObj.BranchId = 1;
         const now = new Date();
@@ -124,7 +123,7 @@ export class TicketListComponent implements OnInit {
         if (this.searchObj.BranchId === null) {
             return;
         }
-        debugger;
+       
         this.showSpinner = true;
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
@@ -147,11 +146,11 @@ export class TicketListComponent implements OnInit {
     }
 
     branchChangeHandler(byType: any = '') {
-        this.searchObj.UserId = 0;
+        this.searchObj.UserId = -1;
         this.getDrivers(byType);
     }
     dateChangeHandler() {
-        this.searchObj.UserId = 0;
+        this.searchObj.UserId = -1;
     }
     getSearchedTickets(byType: any = '') {
         // Cloned search object
