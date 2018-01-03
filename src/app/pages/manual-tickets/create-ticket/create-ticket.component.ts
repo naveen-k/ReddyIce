@@ -1072,7 +1072,7 @@ export class CreateTicketComponent implements OnInit {
     return selectedCustomer ? !!selectedCustomer.ChainID : false;
   }
 
-  validateTicket(ticket): boolean {console.log(ticket,'ticket-------');
+  validateTicket(ticket): boolean {
     if (!ticket.TicketNumber) {
       this.notification.error('', 'Ticket Number is mandatory!!!');
       return false;
