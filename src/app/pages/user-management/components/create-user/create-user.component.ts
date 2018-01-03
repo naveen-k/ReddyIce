@@ -108,7 +108,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         let role = val.RoleID + '';
         if (role === '1' || role === '2' || role === '4' || role === '8') {
-            this.user.Branch = [{ BranchCode: 1, BranchID: 1, BUName: "All BU", IsActive: true }];
+            this.user.Branch = [{ BranchCode: 1, BranchID: 1, BUName: "All Business Unit", IsActive: true }];
             this.userBranch = [1];
         }
         else {
@@ -232,7 +232,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                     this.user.Branch = this.addedBranches;
                 }
             } else if (this.user.RoleID == '1' || this.user.RoleID == '2' || this.user.RoleID == '4' || this.user.RoleID == '8') {
-                this.user.Branch = [{ BranchCode: 1, BranchID: 1, BUName: "All BU", IsActive: true }];
+                this.user.Branch = [{ BranchCode: 1, BranchID: 1, BUName: "All Business Unit", IsActive: true }];
             }
 
         } else {
@@ -251,12 +251,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 this.notification.error('Distributor is mandatory!!!');
                 return false;
             } else if (user.IsSeasonal && (!this.userBranch || this.userBranch.length === 0)) {
-                this.notification.error('BU is mandatory!!!');
+                this.notification.error('Business Unit is mandatory!!!');
                 return false;
             }
         } else {
             if (this.userBranch.length === 0) {
-                this.notification.error('BU is mandatory!!!');
+                this.notification.error('Business Unit is mandatory!!!');
                 return false;
             }
 
@@ -401,11 +401,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
         if (roleID === '1' || roleID === '2' || roleID === '4' || roleID === '8') {
             this.cBranches = [];
-            this.cBranches = [{ value: '1', label: '1 - All BU', data: { BranchID: 1, BranchCode: 1, BUName: 'All BU', IsActive: true } }];
-            this.addedBranches = [{ BranchID: 1, BranchCode: 1, BUName: 'All BU', IsActive: true }];
+            this.cBranches = [{ value: '1', label: '1 - All Business Unit', data: { BranchID: 1, BranchCode: 1, BUName: 'All Business Unit', IsActive: true } }];
+            this.addedBranches = [{ BranchID: 1, BranchCode: 1, BUName: 'All Business Unit', IsActive: true }];
             this.userBranch = [1];
             // Remove all the other branches except 'All Branch' from User's Obj
-            this.user.Branch = [{ BranchID: 1, BranchCode: 1, BUName: 'All BU', IsActive: true }];
+            this.user.Branch = [{ BranchID: 1, BranchCode: 1, BUName: 'All Business Unit', IsActive: true }];
 
         } else {
             this.user.RoleID = roleID;

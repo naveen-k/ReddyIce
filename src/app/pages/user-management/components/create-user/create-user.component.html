@@ -164,7 +164,7 @@
     <div class="col-md-12 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && (user.RoleID==='3' || user.RoleID==='2'))||(user.IsSeasonal && actionName=='edit')"
       [hidden]="userObject.IsDistributor">
       <label for="exampleSelect1">
-        BU
+        Business Unit
         <sup style="color:red;">*</sup>
       </label>
       <br/>
@@ -267,10 +267,10 @@
       </div>
     </div>
   </div>
-  <div class="row page-header rowContainer">
+  <div class="row page-header rowContainer">{{user.IsRIInternal}} {{user.IsSeasonal}}
     <div class="col-md-12 padding-eater first-column" *ngIf="user.IsRIInternal || user.IsSeasonal">
 
-      <label for="exampleSelect1">BU</label>
+      <label for="exampleSelect1">Business Unit</label>
       <label for="iseriesroute" class="control-label" style="float:right" *ngIf="user.Branch?.length>0 && (user.RoleID == '6' || user.RoleID == '3')">ISeries Route</label>
       <div class="col-md-12" style="max-height:80px;overflow:auto;">
         <ul class="ulpadding">

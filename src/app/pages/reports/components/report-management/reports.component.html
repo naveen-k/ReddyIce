@@ -45,7 +45,7 @@
             <div class="row">
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
-                        <label>BU</label>
+                        <label>Business Unit</label>
                         <sup style="color:red;" *ngIf="filter.reportType == 'WOS'">*</sup>
                         <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="getCustomers();"></reddy-select>
                     </div>

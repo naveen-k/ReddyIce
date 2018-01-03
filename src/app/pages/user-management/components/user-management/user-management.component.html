@@ -68,7 +68,7 @@
               </th>
               <th *ngIf="!hideColumn && !isDistributorExist" class="allign">
                 <span style="cursor:pointer;" (click)="customer.sortField = 'tmp_branch';customer.isAsc=!customer.isAsc;">
-                  BU
+                  Business Unit
                   <i *ngIf="(customer.sortField === 'tmp_branch')" [ngClass]="(customer.isAsc && customer.sortField === 'tmp_branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                 </span>
               </th>

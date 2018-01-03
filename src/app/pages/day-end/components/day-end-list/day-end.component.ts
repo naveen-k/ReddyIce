@@ -92,7 +92,7 @@ export class DayEndComponent implements OnInit {
                 tmpBranch[trip.BranchID] = trip.BranchID;
             })
 
-            branches.unshift({ value: 1, label: 'All BU' });
+            branches.unshift({ value: 1, label: 'All Business Unit' });
             distributors.length && distributors.unshift({ value: 1, label: 'All Distributors' });
             this.distributors = distributors;
             this.branches = branches;

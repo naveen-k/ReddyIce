@@ -14,7 +14,7 @@
             </select>
         </div>
         <div class="col-sm-3" *ngIf="!user.IsDistributor" [hidden]="searchObj.userType=='External'">
-            <label>Select BU</label>
+            <label>Select Business Unit</label>
             <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler()"></reddy-select>            
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">

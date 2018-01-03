@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-sm-4" *ngIf="filter.type === 'internal'">
                     <label>
-                        <b>Select BU</b>
+                        <b>Select Business Unit</b>
                     </label>
                     <div class="padBtm-10">
                         <reddy-select [options]="branches" [(selected)]="filter.userBranch"></reddy-select>
@@ -53,7 +53,7 @@
                                     </th>
                                     <th *ngIf="logedInUser.IsRIInternal">
                                         <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
-                                            BU
+                                            Business Unit
                                             <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>

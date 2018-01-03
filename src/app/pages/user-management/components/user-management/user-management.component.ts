@@ -453,7 +453,7 @@ export class UserManagementComponent implements OnInit {
 
     let branch = cstring;
     activeModal.componentInstance.showCancel = false;
-    activeModal.componentInstance.modalHeader = `Selected BU of ${username}`;
+    activeModal.componentInstance.modalHeader = `Selected Business Unit of ${username}`;
     activeModal.componentInstance.modalContent = branch;
     activeModal.componentInstance.closeModalHandler = (() => {
 
