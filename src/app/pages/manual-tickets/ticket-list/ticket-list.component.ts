@@ -166,7 +166,6 @@ export class TicketListComponent implements OnInit {
             totalBuyBack: 0,
             totalDistAmt: 0,
         };
-        debugger;
         this.showSpinner = true;
         if (searchObj.userType == 'External') { searchObj.BranchId = null; }
         if (byType !== 'byuser') {
