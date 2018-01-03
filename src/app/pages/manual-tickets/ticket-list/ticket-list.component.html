@@ -20,7 +20,7 @@
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>
             <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler('byuser')">
-                <option [ngValue]="-1" selected>Select Driver</option>
+                <option [ngValue]="-1" selected style="display:none;">Select Driver</option>
                 <option *ngFor="let obj of drivers" [ngValue]="obj.UserId">
                     {{obj.FirstName}} {{obj.LastName}}
                 </option>

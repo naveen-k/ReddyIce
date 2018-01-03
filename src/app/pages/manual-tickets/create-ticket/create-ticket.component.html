@@ -70,7 +70,7 @@
                     <div class="col-sm-7">
                         <select [disabled]="ticketId" class="form-control" name="customer" [(ngModel)]="ticket.UserID" [disabled]="isReadOnly || tripMode"
                             (ngModelChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true">
-                            <option [ngValue]="-1" selected>Select Driver</option>
+                            <option [ngValue]="-1" selected style="display:none;">Select Driver</option>
                             <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
                         </select>
                     </div>
