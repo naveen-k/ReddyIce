@@ -124,11 +124,13 @@ export class TicketListComponent implements OnInit {
         if (this.searchObj.BranchId === null) {
             return;
         }
+        debugger;
         this.showSpinner = true;
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
             if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 4 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
+               
                 this.searchObj.UserId = +this.searchObj.UserId || 1;
             }
             this.drivers = res;
@@ -145,11 +147,11 @@ export class TicketListComponent implements OnInit {
     }
 
     branchChangeHandler(byType: any = '') {
-        //this.searchObj.UserId = null;
+        this.searchObj.UserId = 0;
         this.getDrivers(byType);
     }
     dateChangeHandler() {
-        this.searchObj.UserId = null;
+        this.searchObj.UserId = 0;
     }
     getSearchedTickets(byType: any = '') {
         // Cloned search object
@@ -164,6 +166,7 @@ export class TicketListComponent implements OnInit {
             totalBuyBack: 0,
             totalDistAmt: 0,
         };
+        debugger;
         this.showSpinner = true;
         if (searchObj.userType == 'External') { searchObj.BranchId = null; }
         if (byType !== 'byuser') {
