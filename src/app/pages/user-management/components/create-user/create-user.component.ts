@@ -198,11 +198,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     onSubmit() {
+        this.formIsDirty =false;
         if (this.userObject.IsDistributor) {
             this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
         }
         //this.onMultiSelect(this.userBranch);
-        if (!this.validateUser(this.user)) { return };
+        if (!this.validateUser(this.user)) { this.formIsDirty =true; return };
         // If user is RI internal user then distributor ID should be set to empty
         if (this.userDetails.IsDistributor) {
             this.user.DistributorMasterID = this.userDetails.Distributor.DistributorMasterId;
@@ -239,7 +240,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.Branch = [];
         }
         //console.log(this.selectedBranch);
-        console.log(this.user);
+        //console.log(this.user);
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
     private populateIseriseRoute() {
