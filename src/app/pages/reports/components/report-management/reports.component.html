@@ -1,18 +1,18 @@
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
-        <div class="col-sm-2" *ngIf="filter.reportType == 'MR' || filter.reportType == 'WOS'">
+        <div class="col-sm-2" *ngIf="filter.reportType == 'MR' || filter.reportType == 'EOD'">
             <label>Select Date</label>
             <div class="input-group">
                 <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.manifestDate" (dateModelChange)="branchChangeHandler()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'WOS'">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'EOD'">
             <label>Start Date</label>
             <div class="input-group">
                 <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate" (dateModelChange)="getCustomers()"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'WOS'">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'EOD'">
             <label>End Date</label>
             <div class="input-group">
                 <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="getCustomers()"></date-picker>
@@ -20,7 +20,7 @@
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
         ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || IsTIR || filter.reportType == 'WOC'
-        || filter.reportType == 'WOS' || filter.reportType == 'WONS'">
+        || filter.reportType == 'EOD' || filter.reportType == 'WONS'">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>
@@ -46,7 +46,7 @@
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
                         <label>Business Unit</label>
-                        <sup style="color:red;" *ngIf="filter.reportType == 'WOS'">*</sup>
+                        <sup style="color:red;" *ngIf="filter.reportType == 'EOD'">*</sup>
                         <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="getCustomers();"></reddy-select>
                     </div>
                 </ng-container>
@@ -57,13 +57,13 @@
                     </div>
                 </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'WOS'">
+                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
                         <label>Driver</label>
                         <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
-                    <div class="col-sm-6" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'WOS'">
+                    <div class="col-sm-6" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'EOD'">
                         <label>Service Technician</label>
-                        <sup style="color:red;" *ngIf="filter.reportType == 'WOS' || filter.reportType == 'WOC'">*</sup>
+                        <sup style="color:red;" *ngIf="filter.reportType == 'EOD' || filter.reportType == 'WOC'">*</sup>
                         <reddy-select [options]="stechs" [(selected)]="filter.stech" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>
@@ -104,7 +104,7 @@
                             <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
                             <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
                             <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
-                            <option value="WOS" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
+                            <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
                             <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
                         </select>
                     </div>
@@ -121,7 +121,7 @@
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
-        || filter.reportType == 'WOS'">
+        || filter.reportType == 'EOD'">
             <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                 <div class="col-sm-12">
                     <label>Customer</label>
@@ -168,7 +168,7 @@
         </div>
         <div class="col-md-1 text-right head-button-container">
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)"
-            [disabled]="(filter.reportType=='WOC' || filter.reportType=='WOS') && (!filter.branch || !filter.stech)">View Report</button>
+            [disabled]="(filter.reportType=='WOC' || filter.reportType=='EOD') && (!filter.branch || !filter.stech)">View Report</button>
         </div>
 
     </div>
