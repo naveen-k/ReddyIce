@@ -16,7 +16,7 @@
                     (click)="deleteTicket()">
                     Delete
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="!isFormDirty || isSubmited">
+                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="ticket.RoleID !==10 &&  (!isFormDirty || isSubmited)">
                     Submit
                 </button>
             </div>

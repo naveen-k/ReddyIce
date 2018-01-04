@@ -358,8 +358,8 @@ export class CreateTicketComponent implements OnInit {
       this.customers = res.Customer ? res.Customer : res;
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
-        this.ticket.CustomerType = customer.CustomerTypeID;
-        this.ticket.Customer.ChainID = customer.ChainID;
+        this.ticket.CustomerType = (customer && customer.CustomerTypeID)?customer.CustomerTypeID:this.ticket.Customer.CustomerType;
+        this.ticket.Customer.ChainID = (customer && customer.ChainID)?customer.ChainID:0;
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
@@ -383,6 +383,16 @@ export class CreateTicketComponent implements OnInit {
         if (newArray.length === 0) {
           this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : null;
         }
+      } 
+      /**
+       * EDI Enhancement
+       */
+      if(that.ticket.RoleID ===10 && this.ticket.UserID>0 && this.ticket){
+      
+        this.drivers =[];
+        this.drivers.push({"value":this.ticket.UserID,"label":this.ticket.UserName,'data':{'UserId':this.ticket.UserID, 'FirstName':this.ticket.UserID, 'LastName':this.ticket.UserID}});
+
+        console.log("---this.ticket----", this.ticket);
       }
     });
   }
@@ -432,6 +442,11 @@ export class CreateTicketComponent implements OnInit {
 
   prepareTicketProduct(productdetail) {
     this.ticket.TicketProduct.forEach(td => {
+      console.log("------",td.Rate);
+      // if(this.ticket.RoleID === 10 && td.Rate){
+      //   td.Price = td.Rate;
+      // }
+      
       if (!td.ProductID) {
         td.ProductID = productdetail[0].ProductID;
         let index=this.ticket.TicketProduct.findIndex(x => x.ProductID == td.ProductID);
@@ -491,6 +506,10 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     product[0]['ProductSourceID'] = this.customer.productdetail.filter(pr => pr.ProductID === product[0]['ProductID'])[0]['ProductSourceID']
+    /**
+     * This code has been changed to retain the Rate EDI Enhancement
+     */
+    delete ticketDetail.Rate;
     this.updateTicketDetailObject(ticketDetail);
     this.unitChangeHandler(ticketDetail);     // called this method to update the amount on product change itself
   }
@@ -813,12 +832,17 @@ export class CreateTicketComponent implements OnInit {
       this.uploadFile(this.file);
       return;
     }
-
+    /**
+     * EDI Enhancement
+     */
+    if(this.ticket.RoleID===10){
+      this.ticket.TicketStatusID = 24;
+    }
     const ticket = this.modifyTicketForSave(this.ticket);
 
     if (this.ticketId) {
       // Update ticket
-
+     
       this.service.updateTicket(ticket).subscribe(res => {
 
         this.notification.success('', res);
@@ -969,8 +993,14 @@ export class CreateTicketComponent implements OnInit {
   updateTicketDetailObject(ticketDetail) {
     var prodDetail = {};
     prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
-    if (!prodDetail) {
-      //ticketDetail.Price = ticketDetail.Rate;
+    /**
+     * This code has been changed to retain the Rate  EDI Enhancement
+     */
+    // if (!prodDetail) {
+    //   //ticketDetail.Price = ticketDetail.Rate;
+    //   prodDetail = { Price: ticketDetail.Rate };
+    // }
+    if(ticketDetail.Rate){
       prodDetail = { Price: ticketDetail.Rate };
     }
     ticketDetail['productSelected'] = prodDetail;
@@ -1002,7 +1032,8 @@ export class CreateTicketComponent implements OnInit {
 
     this.ticket.TicketProduct.forEach((t) => {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
-      this.ticket.TotalSale += +t['totalAmount'] || 0;
+      // this.ticket.TotalSale += +t['totalAmount'] || 0;
+      this.ticket.TotalSale = this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
     });
     this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
     this.ticket.TaxAmount = this.tempModels.totalTax;
@@ -1082,7 +1113,7 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.isPOReuquired() && !this.ticket.PONumber) {
       this.notification.error('', 'PO number is mandatory!!!');
       return false;
-    } else if (this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) {
+    } else if ((this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) && (this.ticket && this.ticket.RoleID !== 10) ) {
       this.notification.error('', 'POD is mandatory!!!');
       return false;
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
