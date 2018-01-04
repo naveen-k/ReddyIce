@@ -62,7 +62,6 @@ export class TicketListComponent implements OnInit {
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
-
         this.searchObj = this.service.getSearchedObject();
         //this.searchObj.BranchId = 1;
         const now = new Date();
@@ -124,14 +123,16 @@ export class TicketListComponent implements OnInit {
         if (this.searchObj.BranchId === null) {
             return;
         }
+       
         this.showSpinner = true;
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
             if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 4 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
+               
                 this.searchObj.UserId = +this.searchObj.UserId || 1;
             }
-            this.drivers = res;
+            this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
             this.showSpinner = false;
             this.getSearchedTickets(byType);
         });
@@ -145,11 +146,11 @@ export class TicketListComponent implements OnInit {
     }
 
     branchChangeHandler(byType: any = '') {
-        //this.searchObj.UserId = null;
+        this.searchObj.UserId = -1;
         this.getDrivers(byType);
     }
     dateChangeHandler() {
-        this.searchObj.UserId = null;
+        this.searchObj.UserId = -1;
     }
     getSearchedTickets(byType: any = '') {
         // Cloned search object

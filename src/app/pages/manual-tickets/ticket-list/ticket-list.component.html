@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-2">
             <label>Select Driver Type</label>
-            <select [disabled]="user.IsDistributor || user.Role.RoleID == 3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+            <select [disabled]="user.IsDistributor || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 6 || user.Role.RoleID == 7" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                 <option [value]="'Internal'">RI Driver</option>
                 <option [value]="'External'">Dist./CoPacker</option>
             </select>
@@ -19,11 +19,13 @@
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>
-            <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler('byuser')">
-                <option *ngFor="let obj of drivers" [value]="obj.UserId">
+            <!-- <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler('byuser')">
+                <option [ngValue]="-1" selected style="display:none;">Select Driver</option>
+                <option *ngFor="let obj of drivers" [ngValue]="obj.value">
                     {{obj.FirstName}} {{obj.LastName}}
                 </option>
-            </select>
+            </select> -->
+            <reddy-select [disabled]="user.IsDistributor" [options]="drivers" [(selected)]="searchObj.UserId" (selectedChange)="userChangeHandler('byuser')"></reddy-select>  
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
             <label>Dist./CoPacker</label>            
