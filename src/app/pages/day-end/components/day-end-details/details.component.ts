@@ -248,17 +248,17 @@ export class DetailsComponent implements OnInit {
     totalOverShort: any = 0;
     cashReconChange(ticketDetails) {
         if (ticketDetails) {
-            this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0) +
-                (+ticketDetails.Total.actualdepositcheck || 0) +
-                (+ticketDetails.Total.Misc || 0) +
-                (+ticketDetails.Total.TotalHHCreditCard) +
-                (+ticketDetails.Total.TotalManualCreditCard) +
-                (+ticketDetails.Total.ActualCoin || 0) +
-                (+ticketDetails.Total.Tolls || 0) +
-                (+ticketDetails.Total.MoneyOrderFee || 0)
-                
-            this.totalOverShort = (+this.totalDeposit || 0).fpArithmetic("-", (+ticketDetails.Total.MCHHC + +ticketDetails.Total.MCHHCash + +ticketDetails.Total.MCCHHC) || 0);
-            ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0) + (+ticketDetails.Total.actualdepositcheck || 0) + (+ticketDetails.Total.ActualCoin || 0);
+            this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0)
+            .fpArithmetic("+",(+ticketDetails.Total.actualdepositcheck || 0))
+            .fpArithmetic("+",(+ticketDetails.Total.Misc || 0))
+            .fpArithmetic("+",(+ticketDetails.Total.TotalHHCreditCard || 0))
+            .fpArithmetic("+",(+ticketDetails.Total.TotalManualCreditCard))
+            .fpArithmetic("+", (+ticketDetails.Total.ActualCoin || 0))
+            .fpArithmetic("+",(+ticketDetails.Total.Tolls || 0))
+            .fpArithmetic("+",(+ticketDetails.Total.MoneyOrderFee || 0));
+                            
+            this.totalOverShort = (+this.totalDeposit || 0).fpArithmetic("-", (+ticketDetails.Total.MCHHC || 0).fpArithmetic("+",+ticketDetails.Total.MCHHCash || 0).fpArithmetic("+",+ticketDetails.Total.MCCHHC || 0));
+            ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0).fpArithmetic("+",+ticketDetails.Total.actualdepositcheck || 0).fpArithmetic("+",+ticketDetails.Total.ActualCoin || 0);
         }
     }
     approveTrip(status) {
