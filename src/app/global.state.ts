@@ -65,6 +65,5 @@ Number.prototype.fpArithmetic = function (op, x): number {
     '+': this + x,
     '/': this / x
   }[op];
-  console.log(n);
   return Math.round(n * 100000) / 100000;
 }

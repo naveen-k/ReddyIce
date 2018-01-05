@@ -835,7 +835,7 @@ export class CreateTicketComponent implements OnInit {
     /**
      * EDI Enhancement
      */
-    if(this.ticket.RoleID===10){
+    if(this.ticket.RoleID===10 && this.ticket.TicketStatusID===23){
       this.ticket.TicketStatusID = 24;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
