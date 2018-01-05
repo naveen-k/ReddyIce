@@ -159,8 +159,8 @@ export class ReportsComponent implements OnInit {
         this.filter.branch = 1;
         // if (this.user.IsRIInternal) {
         //     this.filter.userType = 'internal';
-        //     if (this.filter.reportType == 'WOC' || this.filter.reportType == 'WOS') {
-        //         if (this.filter.reportType == 'WOS') {
+        //     if (this.filter.reportType == 'WOC' || this.filter.reportType == 'EOD') {
+        //         if (this.filter.reportType == 'EOD') {
         //             this.filter.branch = null;
         //         }
         //         if (this.filter.branch !== null) {
@@ -204,7 +204,7 @@ export class ReportsComponent implements OnInit {
         }, (err) => { });
     }
     private populateCustomerBranch(){
-        if (this.filter.reportType === 'WOS') {
+        if (this.filter.reportType === 'EOD') {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
             this.branches.shift();
         } else {
@@ -237,7 +237,7 @@ export class ReportsComponent implements OnInit {
         }, (err) => { });
     }
 
-    // WOC or WOS
+    // WOC or EOD
     stechs: any[] = [];
     private fetchSTechByBranch() {
         // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
@@ -249,7 +249,7 @@ export class ReportsComponent implements OnInit {
             }, (err) => {
                 console.log("Something went wrong while fetching STech");
             });
-        } else if (this.filter.reportType == 'WOS') {
+        } else if (this.filter.reportType == 'EOD') {
             this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
             }, (err) => {
@@ -296,7 +296,7 @@ export class ReportsComponent implements OnInit {
         this.viewReport = false;
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
-            if (this.filter.reportType == 'WOS' || this.filter.reportType == 'WOC') {
+            if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC') {
                 this.getCustomerBranches();
             } else {
                 this.getAllBranches();
@@ -308,7 +308,7 @@ export class ReportsComponent implements OnInit {
             this.filter.branch = 1;
             this.filter.distributor = 0;
         }
-        if (this.filter.reportType == 'WOS') {
+        if (this.filter.reportType == 'EOD') {
             this.filter.branch = 0;
         }
     }
@@ -415,10 +415,10 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOC is clicked', this.linkRpt);
-            } else if (rType === 'WOS') {
+            } else if (rType === 'EOD') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
-                console.log('when WOS is clicked', this.linkRpt);
+                console.log('when EOD is clicked', this.linkRpt);
             } else if (rType === 'WONS') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WONumber=${this.filter.workOrderNumber}&LoggedInUserID=${this.user.UserId}`);
@@ -483,7 +483,7 @@ export class ReportsComponent implements OnInit {
     }
     getCustomers() {
         //this.branchChangeHandler(this.filter.branch)
-        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'WOS')) {
+        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'EOD')) {
             this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
             if(this.filter.branch){
