@@ -1,6 +1,13 @@
 <div class="row">
     <div class="col-md-12">
-        <ba-card cardTitle="Trip List {{userSubTitle}}" baCardClass="with-scroll" class="dayend-card smart-table-container" #customer>
+        <ba-card cardTitle="Trip List {{userSubTitle}}"  #customer>
+            <!-- <div class="row">
+                <div class="col-sm-12">
+                    <div class="pull-right head-button-container">
+                        <button class="btn btn-danger pull-right add-margin-right" (click)="printPage()">Print</button>
+                    </div>
+                </div>
+            </div> -->
             <div class="row">
                 <div class="col-sm-3">
                     <label>
@@ -42,43 +49,43 @@
                 <div class="col-sm-12">
                     <div class="overflow-x">
                         <table class="table table-striped">
-                            <thead class="tableHeader">
+                            <thead class="tableHeader" id="day-end-list-head">
                                 <tr>
                                     <th>Actions</th>
                                     <th *ngIf="logedInUser.IsRIInternal">
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'RouteNumber';customer.isAsc=!customer.isAsc;">
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'RouteNumber';customer.isAsc=!customer.isAsc;sortable('RouteNumber');">
                                             Route #
                                             <i *ngIf="(customer.sortField == 'RouteNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'RouteNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>
                                     <th *ngIf="logedInUser.IsRIInternal">
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'branch';customer.isAsc=!customer.isAsc;">
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'BranchCode';customer.isAsc=!customer.isAsc;sortable('BranchCode');">
                                             Branch
-                                            <i *ngIf="(customer.sortField === 'branch')" [ngClass]="(customer.isAsc && customer.sortField === 'branch' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                            <i *ngIf="(customer.sortField === 'BranchCode')" [ngClass]="(customer.isAsc && customer.sortField === 'BranchCode' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>
                                     <th>
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'driver';customer.isAsc=!customer.isAsc;">
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'DriverName';customer.isAsc=!customer.isAsc;sortable('DriverName');">
                                             Driver
-                                            <i *ngIf="(customer.sortField === 'driver')" [ngClass]="(customer.isAsc && customer.sortField === 'driver' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                            <i *ngIf="(customer.sortField === 'DriverName')" [ngClass]="(customer.isAsc && customer.sortField === 'DriverName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>
                                     <th class="textAlignCenter">
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'TripCode';customer.isAsc=!customer.isAsc;sortable('TripCode');">
                                             Trip Code
-                                            <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                            <i *ngIf="(customer.sortField === 'TripCode')" [ngClass]="(customer.isAsc && customer.sortField === 'TripCode' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>
                                     <th class="text-right">
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'TripTotalSale';customer.isAsc=!customer.isAsc;sortable('TripTotalSale');">
                                             Total Sale
-                                            <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                            <i *ngIf="(customer.sortField === 'TripTotalSale')" [ngClass]="(customer.isAsc && customer.sortField === 'TripTotalSale' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>
                                     <th class="text-right">
-                                        <span style="cursor:pointer;" (click)="customer.sortField = 'trip';customer.isAsc=!customer.isAsc;">
+                                        <span style="cursor:pointer;" (click)="customer.sortField = 'TripTotalAmount';customer.isAsc=!customer.isAsc;sortable('TripTotalAmount');">
                                             Received Amt
-                                            <i *ngIf="(customer.sortField === 'trip')" [ngClass]="(customer.isAsc && customer.sortField === 'trip' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                            <i *ngIf="(customer.sortField === 'TripTotalAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'TripTotalAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>
                                     <th class="textAlignCenter">
@@ -93,7 +100,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let item of trips|sort:customer.sortField:customer.isAsc|dayEnd:filter.type:filter.userBranch">
+                                <tr *ngFor="let item of trips|dayEnd:filter.type:filter.userBranch|sort:customer.sortField:customer.isAsc">
                                     <td class="table-id" style="cursor: pointer">
                                         <i *ngIf="item.isDistributor && !item.IsSeasonal" class="ion-eye custom-tooltip-ion" [routerLink]="['../ticket-detail', item.TripID]"
                                             style="margin-right: 5px">
@@ -121,16 +128,16 @@
                                     </td>
                                     <td class="textAlignCenter">{{item.NoOfTickets}}</td>
                                     <td class="textAlignCenter">
-                                        <i class="custom-tooltip-ion">
-                                            <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TripStatusID == 23" width="15">
+                                        <i class="custom-tooltip-ion" *ngIf="item.TripStatusID == 23">
+                                            <img src="assets/reddyIce/draftTicket.png" width="15">
                                             <span class="tooltiptext">Draft</span>
                                         </i>
-                                        <i class="custom-tooltip-ion">
-                                            <img src="assets/reddyIce/submitTicket.png" *ngIf="item.TripStatusID == 24" width="18">
+                                        <i class="custom-tooltip-ion" *ngIf="item.TripStatusID == 24">
+                                            <img src="assets/reddyIce/submitTicket.png" width="18">
                                             <span class="tooltiptext">Submitted</span>
                                         </i>
-                                        <i class="custom-tooltip-ion">
-                                            <img src="assets/reddyIce/approveTicket.png" *ngIf="item.TripStatusID == 25" width="15">
+                                        <i class="custom-tooltip-ion" *ngIf="item.TripStatusID == 25">
+                                            <img src="assets/reddyIce/approveTicket.png" width="15">
                                             <span class="tooltiptext">Approved</span>
                                         </i>
                                     </td>
