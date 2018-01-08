@@ -169,7 +169,6 @@ export class TicketListComponent implements OnInit {
         if (searchObj.userType == 'External') { searchObj.BranchId = null; }
         if (byType !== 'byuser') {
             return this.service.getAllTickets(dt, searchObj.BranchId).subscribe((response: any) => {
-                //debugger;
                 if (response) {
                     this.showSpinner = false;
                     if (response == 'No record found') {

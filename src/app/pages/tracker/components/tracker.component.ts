@@ -238,6 +238,9 @@ export class TrackerComponent implements OnInit {
       }
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
       this.tripStartDate = res.Trips[0].TripStartDate
+      if (this.selectedTrip) {
+        this.selectedTrip.sort(this.comparator); // sorting planned sequence
+      }
       this.drawMapPath();
     })
   }
@@ -259,7 +262,7 @@ export class TrackerComponent implements OnInit {
   driverOnBranch = [];
   // Fetch selected Branch
   branchChangeHandler() {
-
+    var routeNo;
     if (this.tripFilterOption.branchId) {
       this.driverOnBranch = [];
       for (var i = 0; i < this.trips.length; i++) {
@@ -268,10 +271,16 @@ export class TrackerComponent implements OnInit {
             // removing extraa spaces
             this.trips[i].DriverName = this.trips[i].DriverName.split('  ').join('');
           }
+          if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
+            routeNo = this.trips[i].RouteNumber;
+          } else {
+            routeNo = 'Unplanned';
+          }
           this.driverOnBranch.push({
             DriverName: this.trips[i].DriverName,
             TripCode: this.trips[i].TripCode,
             TripID: this.trips[i].TripID,
+            RouteNumber: routeNo
           });
         }
       }
@@ -304,7 +313,8 @@ export class TrackerComponent implements OnInit {
           this.driverSpecTrips.push(
             {
               TripCode: this.driverOnBranch[i].TripCode,
-              TripID: this.driverOnBranch[i].TripID
+              TripID: this.driverOnBranch[i].TripID,
+              RouteNumber: this.driverOnBranch[i].RouteNumber
             }
           );
         }
@@ -568,10 +578,10 @@ export class TrackerComponent implements OnInit {
 
       this.map.fitBounds(this.bounds);      // auto-zoom
       this.map.panToBounds(this.bounds);    // auto-center
+      this.selectedTrip[i].pinColor = '#'+this.pinColor;
+      this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
     }
   }
-
-
 
   viewTicket(ticketID) {
     // ticketID = 3212;

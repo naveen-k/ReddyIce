@@ -1,6 +1,6 @@
 <div class="row">
     <div class='col-md-12'>
-        <ba-card cardTitle="Tracker{{userSubTitle}}" baCardClass="medium-card" class="smart-table-container">
+        <ba-card cardTitle="Tracker{{userSubTitle}}" class="smart-table-container">
             <div class="row">
                 <div class="col-sm-2">
                     <label>Select Date</label>
@@ -39,7 +39,7 @@
                     <label>Select Trip</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' (change)="tripChangeHandler()">
                         <option *ngFor="let trip of driverSpecTrips">
-                            {{trip.TripCode}}
+                            {{trip.TripCode}} - {{trip.RouteNumber}}
                         </option>
                     </select>
                 </div>
@@ -86,7 +86,8 @@
             </div>
             <div class="row marginTop">
                 <div class="col-md-4"style="padding-right:0;">
-                    <div class="table-container" style="height:350px; overflow-y:scroll;">
+                    <!-- <div class="table-container" style="height:350px; overflow-y:scroll;"> -->
+                    <div class="table-container">
                         <table class="table table-striped table-condensed">
                             <thead class="tableHeader">
                                 <tr>
@@ -115,7 +116,7 @@
                             </thead>
                             <tbody>
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
-                                    <tr>
+                                    <tr [ngStyle]="{'background': subitem.pinColor, 'color': subitem.pinTextColor}">
                                         <td>
                                             <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
                                                 <span class="tooltiptext">View Ticket Details</span>
@@ -141,7 +142,8 @@
                         <div *ngIf="(selectedTrip && !selectedTrip.length && !showSpinner) || (!selectedTrip && !showSpinner)" style='text-align:center; margin-top:10px;'> No data found </div>
                     </div>
                 </div>
-                <div class="col-md-8" style="overflow-y: hidden;height: 384px;">
+                <!-- <div class="col-md-8" style="overflow-y: hidden;height: 384px;"> -->
+                <div class="col-md-8">
                     <ba-card cardTitle="Route Map">
                         <div class="google-maps"></div>
                     </ba-card>
