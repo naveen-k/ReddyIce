@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-2">
             <label>Select Driver Type</label>
-            <select [disabled]="user.IsDistributor || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 6 || user.Role.RoleID == 7" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+            <select [disabled]="user.IsDistributor || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                 <option [value]="'Internal'">RI Driver</option>
                 <option [value]="'External'">Dist./CoPacker</option>
             </select>

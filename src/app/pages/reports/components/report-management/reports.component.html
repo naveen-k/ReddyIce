@@ -226,7 +226,8 @@
                     <label class="control-label">
                         Enter Work Order Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.workOrderNumber" placeholder="Enter Work Order Number">
+                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.workOrderNumber" placeholder="Enter Work Order Number"
+                    (ngModelChange)="getWorkOrderIdByTicketNumber(filter.workOrderNumber)">
                 </div>
             </div>
         </div>

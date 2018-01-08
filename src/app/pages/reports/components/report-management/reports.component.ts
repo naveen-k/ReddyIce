@@ -48,7 +48,7 @@ export class ReportsComponent implements OnInit {
         modifiedStartDateforDriver: null,
         modifiedEndDateforDriver: null,
         manifestDate: null,
-        workOrderNumber: null
+        workOrderId: null
     };
 
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
@@ -157,18 +157,6 @@ export class ReportsComponent implements OnInit {
         this.filter.customer = null;
         this.filter.stech = 1;
         this.filter.branch = 1;
-        // if (this.user.IsRIInternal) {
-        //     this.filter.userType = 'internal';
-        //     if (this.filter.reportType == 'WOC' || this.filter.reportType == 'EOD') {
-        //         if (this.filter.reportType == 'EOD') {
-        //             this.filter.branch = null;
-        //         }
-        //         if (this.filter.branch !== null) {
-        //             this.fetchSTechByBranch();
-        //         }
-
-        //     }
-        // }
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -181,7 +169,6 @@ export class ReportsComponent implements OnInit {
                 break;
             default:
                 this.IsTIR = false;
-                //this.filter.userType = 'internal';
                 break;
         }
         if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {
@@ -352,6 +339,22 @@ export class ReportsComponent implements OnInit {
             });
         }
     }
+
+    getWorkOrderIdByTicketNumber(workOrderNumber) {
+        this.viewReport = false;
+        if (workOrderNumber) {
+            this.reportService.checkworkorderexistence(workOrderNumber).subscribe((res) => {
+                if (res != 0) {
+                    this.filter.workOrderId = res.workOrderId;
+                    this.viewReport = true;
+                } else {
+                    this.viewReport = false;
+                }
+            }, (err) => {
+            });
+        }
+    }
+
     customerChangeHandler() {
         this.updateLink(this.filter.reportType);
     }
@@ -421,7 +424,7 @@ export class ReportsComponent implements OnInit {
                 console.log('when EOD is clicked', this.linkRpt);
             } else if (rType === 'WONS') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WONumber=${this.filter.workOrderNumber}&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WONS is clicked', this.linkRpt);
             } else {
                 return false;
@@ -489,10 +492,8 @@ export class ReportsComponent implements OnInit {
             if(this.filter.branch){
                 this.fetchSTechByBranch();
             }
-            
         } else {
             this.branchChangeHandler();
-
             this.viewReport = false;
             this.modifiedStartDate = this.modifyDate(this.filter.startDate);
             this.modifiedEndDate = this.modifyDate(this.filter.endDate);
@@ -504,7 +505,7 @@ export class ReportsComponent implements OnInit {
                     res.forEach(cus => {
                         tempArr.push({
                             value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
-                            label: `${cus.CustomerName}`,
+                            label: `${cus.CustomerNumber} - ${cus.CustomerName}`,
                             data: cus,
                         });
                     });

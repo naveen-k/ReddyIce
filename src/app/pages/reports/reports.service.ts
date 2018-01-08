@@ -93,6 +93,13 @@ export class ReportService extends SharedService {
             });
     }
 
+    checkworkorderexistence(workOrderNumber) {
+        return this.http.get(`api/checkworkorderexistence?WorkOrderNo=${workOrderNumber}`)
+        .map((res) => res.json()).map((res) => {
+            return res;
+        });
+    }
+
     getCustomerDropDownList(branch,userID,startDate,endDate,distributor){
         return this.http.get(`api/report/customerswithfilters?BranchId=${branch}&UserId=${userID}&TripStartDate=${startDate}&TripEndDate=${endDate}&DistributorId=${distributor}`)
         .map((res)=>res.json()).map((res)=>{
