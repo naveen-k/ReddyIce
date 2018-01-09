@@ -387,7 +387,7 @@ export class CreateTicketComponent implements OnInit {
       /**
        * EDI Enhancement
        */
-      if(that.ticket.RoleID ===10 && this.ticket.UserID>0 && this.ticket){
+      if(that.ticket.UserID ===2 && this.ticket.UserID>0 && this.ticket){
       
         this.drivers =[];
         this.drivers.push({"value":this.ticket.UserID,"label":this.ticket.UserName,'data':{'UserId':this.ticket.UserID, 'FirstName':this.ticket.UserID, 'LastName':this.ticket.UserID}});
@@ -835,7 +835,7 @@ export class CreateTicketComponent implements OnInit {
     /**
      * EDI Enhancement
      */
-    if(this.ticket.RoleID===10 && this.ticket.TicketStatusID===23){
+    if(this.ticket.UserID===2 && this.ticket.TicketStatusID===23){
       this.ticket.TicketStatusID = 24;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
@@ -1113,7 +1113,7 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.isPOReuquired() && !this.ticket.PONumber) {
       this.notification.error('', 'PO number is mandatory!!!');
       return false;
-    } else if ((this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) && (this.ticket && this.ticket.RoleID !== 10) ) {
+    } else if ((this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) && (this.ticket && this.ticket.UserID !== 2) ) {
       this.notification.error('', 'POD is mandatory!!!');
       return false;
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
