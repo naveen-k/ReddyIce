@@ -35,7 +35,7 @@
                             <span>RI Driver</span>
                         </label>
                         <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input [disabled]="user.IsDistributor || !!ticket.TicketID || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 6 || user.Role.RoleID == 7" type="radio" name="driverType" [value]="true"
+                            <input [disabled]="user.IsDistributor || !!ticket.TicketID || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7" type="radio" name="driverType" [value]="true"
                                 [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
                             <span>Distributor/CoPacker</span>
                         </label>
