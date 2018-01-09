@@ -167,7 +167,7 @@ export class DayEndComponent implements OnInit {
         <tr>
             <th align="left">Delivery Date</th>
             <th align="left">Driver Type</th>
-            ${this.filter.type === 'internal' ? '<th align="left">Branch</th>' : ''}
+            ${this.filter.type === 'internal' ? '<th align="left">Business Unit</th>' : ''}
             ${this.filter.type === 'distributor' ? '<th align="left">Distributor</th>' : ''}
         </tr>
         </thead>
@@ -183,7 +183,7 @@ export class DayEndComponent implements OnInit {
         <thead class="tableHeader">
             <tr>
                 ${this.logedInUser.IsRIInternal ? '<th>Route #</th>' : ''}
-                ${this.logedInUser.IsRIInternal ? '<th>Branch</th>' : ''}
+                ${this.logedInUser.IsRIInternal ? '<th>Business Unit</th>' : ''}
                 <th>Driver</th>
                 <th>Trip Code</th>
                 <th>Total Sale</th>

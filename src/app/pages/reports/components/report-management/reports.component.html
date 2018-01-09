@@ -53,7 +53,7 @@
         </div>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && (filter.userType === 'internal')">
             <div class="col-sm-2">
-                <label>Branch</label>
+                <label>Business Units</label>
                 <sup style="color:red;" *ngIf="filter.reportType == 'EOD'">*</sup>
                 <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="getCustomers();"></reddy-select>
             </div>
@@ -68,34 +68,21 @@
         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
         || filter.reportType == 'EOD'">
             <div class="row">
-                <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6">
-                        <label>Business Unit</label>
-                        <sup style="color:red;" *ngIf="filter.reportType == 'EOD'">*</sup>
-                        <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="getCustomers();"></reddy-select>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="filter.userType === 'external'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR'">
-                        <label>Dist/Copacker</label>
-                        <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getCustomers()"></reddy-select>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
-                        <label>Driver</label>
-                        <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
-                    </div>
-                    <div class="col-sm-6" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'EOD'">
-                        <label>Service Technician</label>
-                        <sup style="color:red;" *ngIf="filter.reportType == 'EOD' || filter.reportType == 'WOC'">*</sup>
-                        <reddy-select [options]="stechs" [(selected)]="filter.stech" (selectedChange)="driverChange()"></reddy-select>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="filter.userType === 'external'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'DST' || filter.reportType === 'MR'">
-                        <label>Driver</label>
-                        <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
+                <ng-container>
+                    <div class="col-sm-12" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
+                        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
+                        || filter.reportType == 'EOD'">
+                        <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
+                            <div class="col-sm-12">
+                                <label>Customer</label>
+                                <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
+                            </div>
+                            <div style='margin-left: 100px;'>
+                                <a>
+                                    <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </ng-container>
             </div>
