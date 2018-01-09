@@ -61,6 +61,7 @@ export class DayEndComponent implements OnInit {
     }
 
     selectionchangeHandler() {
+        if(this.popupWin){this.popupWin.close();}
         this.loadFilteredTrips();
     }
 
@@ -126,12 +127,15 @@ export class DayEndComponent implements OnInit {
     /**
      * This functiuon is used for print the list of day-end trip
      */
+    popupWin:any;
     printPage() {
-        let printContents, printContentsHead, popupWin; console.log(document.getElementById('day-end-list-head'));
+        let printContents, printContentsHead;
         //printContentsHead = document.getElementById('day-end-list-head').innerHTML;
-        popupWin = window.open('', '_blank', 'top=0,left=0,height="100",width="100%",fullscreen="yes"');
-        popupWin.document.open();
-        popupWin.document.write(`
+        if(this.popupWin){this.popupWin.close();}
+        setTimeout(()=>{
+        this.popupWin = window.open('', '_new', 'top=0,left=0,height="100",width="100%",fullscreen="yes"');
+        this.popupWin.document.open();
+        this.popupWin.document.write(`
           <html>
             <head>
               <title>Day End Trip List</title>
@@ -142,7 +146,8 @@ export class DayEndComponent implements OnInit {
             <body onload="window.print();window.close()">${this.populatePrintData()}</body>
           </html>`
         );
-        popupWin.document.close();
+        this.popupWin.document.close();
+    },1000);
     }
     /**
      * This functiuon is used for prepare the list of trips as a print format
