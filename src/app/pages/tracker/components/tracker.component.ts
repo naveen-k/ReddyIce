@@ -425,15 +425,23 @@ export class TrackerComponent implements OnInit {
       if (trips[i].TicketTypeID === 29) {
         this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
         this.pinTextColor = '000';
+        this.selectedTrip[i].pinColor = '#'+this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
       } else if (trips[i].OrderID == null) {
         this.pinColor = '0000ff';   // blue color for Unplanned Service
         this.pinTextColor = 'fff';
+        this.selectedTrip[i].pinColor = '#'+this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
       } else if (trips[i].OrderID != null && trips[i].TicketNumber !== null) {
         this.pinColor = '90EE90';   // lightgreen color for Planned Service
         this.pinTextColor = '000';
+        this.selectedTrip[i].pinColor = '#'+this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
       } else if (trips[i].OrderID != null && trips[i].TicketNumber == null) {
         this.pinColor = 'ff0000';   // red color for Skipped stops
         this.pinTextColor = 'fff';
+        this.selectedTrip[i].pinColor = '#'+this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
       }
       if (sequence === 1) {
         this.pinColor = '999900';   // red color for Skipped stops
@@ -578,8 +586,6 @@ export class TrackerComponent implements OnInit {
 
       this.map.fitBounds(this.bounds);      // auto-zoom
       this.map.panToBounds(this.bounds);    // auto-center
-      this.selectedTrip[i].pinColor = '#'+this.pinColor;
-      this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
     }
   }
 

@@ -116,7 +116,7 @@
                             </thead>
                             <tbody>
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
-                                    <tr [ngStyle]="{'background': subitem.pinColor, 'color': subitem.pinTextColor}">
+                                    <tr [ngStyle]="{'background': subitem.pinColor, 'color': subitem.pinTextColor}" style="border-bottom:1px solid white;">
                                         <td>
                                             <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
                                                 <span class="tooltiptext">View Ticket Details</span>
