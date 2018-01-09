@@ -174,6 +174,7 @@ export class ReportsComponent implements OnInit {
                 break;
             default:
                 this.IsTIR = false;
+                this.filter.userType = 'internal';
                 break;
         }
         if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {
@@ -200,10 +201,12 @@ export class ReportsComponent implements OnInit {
         if (this.filter.reportType === 'EOD') {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
             this.branches.shift();
+           
         } else {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
-            this.fetchSTechByBranch();
+           
         }
+        this.fetchSTechByBranch();
     }
     getCustomerBranches() {
         this.branches = [];
@@ -274,6 +277,10 @@ export class ReportsComponent implements OnInit {
         } else {
             this.filter.driver = 1;
         }
+
+        if (this.filter.reportType == 'MR') {
+            this.routeNumberChange();
+        }
         // this.getCustomers();
     }
 
@@ -301,8 +308,11 @@ export class ReportsComponent implements OnInit {
         if (this.filter.userType === 'internal') {
             if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC') {
                 this.getCustomerBranches();
-            } else {
+            } else if (this.filter.reportType !== 'WONS') {
                 this.getAllBranches();
+            } else {
+                this.overlayStatus = false;
+                this.viewReport = true;
             }
         } else {
             this.getDistributors();
@@ -314,6 +324,15 @@ export class ReportsComponent implements OnInit {
         if (this.filter.reportType == 'EOD') {
             this.filter.branch = 0;
         }
+    }
+
+    routes:any[] = [];
+    routeNumberChange() {
+        this.reportService.getManifestRoutes(this.filter.branch, this.formatDate(this.filter.manifestDate)).subscribe((res) => {
+            this.routes = res;
+            //this.routes = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
+        }, (err) => {
+        });
     }
 
     focuOutCustomer() {
@@ -360,16 +379,15 @@ export class ReportsComponent implements OnInit {
     }
 
     getWorkOrderIdByTicketNumber(workOrderNumber) {
-        this.viewReport = false;
         if (workOrderNumber) {
             this.reportService.checkworkorderexistence(workOrderNumber).subscribe((res) => {
                 if (res != 0) {
                     this.filter.workOrderId = res.workOrderId;
-                    this.viewReport = true;
                 } else {
-                    this.viewReport = false;
+                    this.notification.error("Work Order Number Does Not Exist.");
                 }
             }, (err) => {
+                this.notification.error("Something went wrong.")
             });
         }
     }
@@ -429,7 +447,6 @@ export class ReportsComponent implements OnInit {
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custtID}`);
 
             } else if (rType === 'MR') {
-
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}`);
 
@@ -442,6 +459,7 @@ export class ReportsComponent implements OnInit {
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when EOD is clicked', this.linkRpt);
             } else if (rType === 'WONS') {
+                this.getWorkOrderIdByTicketNumber(this.filter.workOrderNumber);
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WONS is clicked', this.linkRpt);
