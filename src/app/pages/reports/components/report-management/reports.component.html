@@ -49,10 +49,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" [hidden]="IsTIR || filter.reportType == 'WONS'">
+        <div class="col-sm-6" [hidden]="IsTIR || filter.reportType == 'WONS'">
             <div class="row">
                 <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label>Branch</label>
                         <sup style="color:red;" *ngIf="filter.reportType == 'EOD'">*</sup>
                         <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="getCustomers();"></reddy-select>
@@ -64,8 +64,25 @@
                         <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getCustomers()"></reddy-select>
                     </div>
                 </ng-container>
+                <ng-container>
+                    <div class="col-sm-4" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
+                    filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
+                    || filter.reportType == 'EOD'">
+                        <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
+                            <div class="col-sm-12">
+                                <label>Customer</label>
+                                <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
+                            </div>
+                            <div style='margin-left: 100px;'>
+                                <a>
+                                    <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
                 <ng-container *ngIf="filter.userType === 'internal'">
-                    <div class="col-sm-6" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
+                    <div class="col-sm-4" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
                         <label>Driver</label>
                         <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
@@ -126,21 +143,6 @@
                 <option [value]="101">RI Customers</option>
                 <option [value]="103">External Customers</option>
             </select>
-        </div>
-        <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
-        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
-        || filter.reportType == 'EOD'">
-            <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
-                <div class="col-sm-12">
-                    <label>Customer</label>
-                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
-                </div>
-                <div style='margin-left: 100px;'>
-                    <a>
-                        <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
-                    </a>
-                </div>
-            </div>
         </div>
         <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
             <span class="col-sm-4 local-padding-eater">

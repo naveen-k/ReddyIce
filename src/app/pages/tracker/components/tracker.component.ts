@@ -417,35 +417,40 @@ export class TrackerComponent implements OnInit {
   drawRoute(google: any, sequence: number, trips: any[]) {
     if (!trips || !trips.length) { return false };
     trips = trips.slice(0);
-    if (sequence === 2) {
-      trips.sort((a, b) => { return a.ActualSequence - b.ActualSequence })
-    }
+    // if (sequence === 2) {
+    //   trips.sort((a, b) => { return a.ActualSequence - b.ActualSequence })
+    // }
+    debugger;
     for (let i = 0; i < trips.length; i++) {
-      // changing color of the marker icon based on condition
-      if (trips[i].TicketTypeID === 29) {
-        this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
-        this.pinTextColor = '000';
-        this.selectedTrip[i].pinColor = '#'+this.pinColor;
-        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
-      } else if (trips[i].OrderID == null) {
-        this.pinColor = '0000ff';   // blue color for Unplanned Service
-        this.pinTextColor = 'fff';
-        this.selectedTrip[i].pinColor = '#'+this.pinColor;
-        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
-      } else if (trips[i].OrderID != null && trips[i].TicketNumber !== null) {
-        this.pinColor = '90EE90';   // lightgreen color for Planned Service
-        this.pinTextColor = '000';
-        this.selectedTrip[i].pinColor = '#'+this.pinColor;
-        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
-      } else if (trips[i].OrderID != null && trips[i].TicketNumber == null) {
-        this.pinColor = 'ff0000';   // red color for Skipped stops
-        this.pinTextColor = 'fff';
-        this.selectedTrip[i].pinColor = '#'+this.pinColor;
-        this.selectedTrip[i].pinTextColor = '#'+this.pinTextColor;
+      if(sequence == 2) {
+        // changing color of the marker icon based on condition
+        if (trips[i].TicketTypeID === 29) {
+          this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
+          this.pinTextColor = '000';
+          this.selectedTrip[i].pinColor = '#' + this.pinColor;
+          this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
+        } else if (trips[i].OrderID == null) {
+          this.pinColor = '0000ff';   // blue color for Unplanned Service
+          this.pinTextColor = 'fff';
+          this.selectedTrip[i].pinColor = '#' + this.pinColor;
+          this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
+        } else if (trips[i].OrderID != null && trips[i].TicketNumber !== null) {
+          this.pinColor = '90EE90';   // lightgreen color for Planned Service
+          this.pinTextColor = '000';
+          this.selectedTrip[i].pinColor = '#' + this.pinColor;
+          this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
+        } else if (trips[i].OrderID != null && trips[i].TicketNumber == null) {
+          this.pinColor = 'ff0000';   // red color for Skipped stops
+          this.pinTextColor = 'fff';
+          this.selectedTrip[i].pinColor = '#' + this.pinColor;
+          this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
+        }
       }
       if (sequence === 1) {
         this.pinColor = '999900';   // red color for Skipped stops
         this.pinTextColor = 'fff';
+        this.selectedTrip[i].pinColor = '#' + this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
       }
 
 
