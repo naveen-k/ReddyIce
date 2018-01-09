@@ -1,3 +1,13 @@
+<div [hidden]="!overlayStatus" style="top:65px;bottom:0;left:0;right:0;height:calc(100% - 65px); opacity:0.5;background:black;z-index:999;position:absolute;">
+    <div style="margin:auto;position:absolute;top:50%;left:50%;">
+        <img src="assets/reddyIce/spinner.gif " width='25px'>
+    </div>
+</div>
+<div id='loader' *ngIf="viewButtonStatus" style='top:65px;bottom:0;left:0;right:0;height:80vh;z-index:999;position:absolute;'>
+    <div style="margin:auto;position:absolute;top:50%;left:50%;">
+        <img src="assets/reddyIce/spinner.gif " width='25px'>
+    </div>
+</div>
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
         <div class="col-sm-2" *ngIf="filter.reportType == 'MR' || filter.reportType == 'EOD'">
@@ -41,7 +51,22 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" [hidden]="IsTIR || filter.reportType == 'WONS'">
+        <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && (filter.userType === 'internal')">
+            <div class="col-sm-2">
+                <label>Branch</label>
+                <sup style="color:red;" *ngIf="filter.reportType == 'EOD'">*</sup>
+                <reddy-select [options]="branches" [(selected)]="filter.branch" (selectedChange)="getCustomers();"></reddy-select>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'external'">
+            <div class="col-sm-2" [hidden]="filter.reportType === 'MR'">
+                <label>Dist/Copacker</label>
+                <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getCustomers()"></reddy-select>
+            </div>
+        </ng-container>
+        <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
+        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
+        || filter.reportType == 'EOD'">
             <div class="row">
                 <ng-container *ngIf="filter.userType === 'internal'">
                     <div class="col-sm-6">
@@ -73,12 +98,44 @@
                         <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
                     </div>
                 </ng-container>
+            </div>
+        </div>
+        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
+            <label>Select Customer Source</label>
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
+                <option [value]="0">All Customers</option>
+                <option [value]="101">RI Customers</option>
+                <option [value]="103">External Customers</option>
+            </select>
+        </div>
+        <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'internal'">
+            <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
+                <label>Driver</label>
+                <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
+            </div>
+            <div class="col-sm-2" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'EOD'">
+                <label>Service Technician</label>
+                <sup style="color:red;" *ngIf="filter.reportType == 'EOD' || filter.reportType == 'WOC'">*</sup>
+                <reddy-select [options]="stechs" [(selected)]="filter.stech" (selectedChange)="driverChange()"></reddy-select>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'external'">
+            <div class="col-sm-2" [hidden]="filter.reportType === 'DST' || filter.reportType === 'MR'">
+                <label>Driver</label>
+                <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
+            </div>
+        </ng-container>
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'WONS'" *ngIf="filter.reportType === 'MR'">
+            <div class="row">
                 <ng-container *ngIf="filter.reportType === 'MR'">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <label>Manifest Route#</label>
-                        <div class="input-group">
-                            <input type="text" numberOnly class="form-control" [(ngModel)]="filter.RouteNumber">
-                        </div>
+                        <!-- <div class="input-group">
+                                <input type="text" numberOnly class="form-control" [(ngModel)]="filter.RouteNumber">
+                            </div> -->
+                        <select class="form-control" [(ngModel)]='filter.RouteNumber'>
+                            <option *ngFor="let route of routes">{{route}}</option>
+                        </select>
                     </div>
                 </ng-container>
             </div>
@@ -111,29 +168,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
-            <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
-                <option [value]="0">All Customers</option>
-                <option [value]="101">RI Customers</option>
-                <option [value]="103">External Customers</option>
-            </select>
-        </div>
-        <div class="col-sm-2" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
-        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
-        || filter.reportType == 'EOD'">
-            <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
-                <div class="col-sm-12">
-                    <label>Customer</label>
-                    <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
-                </div>
-                <div style='margin-left: 100px;'>
-                    <a>
-                        <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
-                    </a>
-                </div>
-            </div>
-        </div>
         <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
             <span class="col-sm-4 local-padding-eater">
                 <label class="top-margin">Customer Type</label>
@@ -157,20 +191,33 @@
                 </label>
             </span>
         </div>
+        <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
+            <span class="col-sm-4 local-padding-eater">
+                <label class="top-margin">Ticket Type</label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="invoiceTicketType" value="0" [(ngModel)]="filter.invoiceTicketType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>All</b>
+                </label>
+                <input type="radio" name="invoiceTicketType" value="29" [(ngModel)]="filter.invoiceTicketType" class="top-margin">
+                <label class="top-margin">
+                    <b>DNS Only</b>
+                </label>
+            </span>
+        </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
             <label>Trip Status</label>
             <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
                 <option [value]="0">All Trips</option>
                 <option [value]="1">HH Day End Not Done</option>
-                <option [value]="2">HH Day End Done-Not Approved</option>
-                <option [value]="3">Trip Fully Approved</option>
+                <option [value]="2">Not Approved</option>
+                <option [value]="3">Approved</option>
             </select>
         </div>
         <div class="col-md-1 text-right head-button-container">
-            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)"
-            [disabled]="(filter.reportType=='WOC' || filter.reportType=='EOD') && (!filter.branch || !filter.stech)">View Report</button>
+            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)" [disabled]="viewButtonStatus || ((filter.reportType=='WOC' || filter.reportType=='EOD') && (!filter.branch || !filter.stech))">View Report</button>
         </div>
-
     </div>
     <div class="row" [hidden]="IsTIR">
         <div class="col-sm-4" *ngIf="filter.reportType === 'SR' || filter.reportType === 'DR'">
@@ -231,12 +278,10 @@
             </div>
         </div>
     </div>
-    <div id='loader' *ngIf="viewReport" style='text-align:center;position: absolute;z-index: -1;left: 40%;top: 40%;'>
-        <a>
-            <img src="assets/reddyIce/spinner.gif " width='25px'>
-        </a>
-    </div>
     <div class="top-margin" style="z-index: 999">
-        <iframe *ngIf="viewReport" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt'></iframe>
+        <iframe id="reportFrame" #reportFrame [hidden]="!onLoadFrame || viewButtonStatus" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)"
+            [src]='linkRpt' (load)="afterLoading();"></iframe>
+        <iframe *ngIf="!onLoadFrame || viewButtonStatus" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)"
+            [src]=''></iframe>
     </div>
 </ba-card>

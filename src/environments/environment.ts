@@ -9,8 +9,8 @@
 //  reportEndpoint: 'http://frozen.reddyice.com/iceboxReportSqldev/Reports/ReportData.aspx',
 // apiEndpoint: 'http://frozen.reddyice.com/reddyice_dev/',
 // reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx',
-// apiEndpoint: 'http://frozen.reddyice.com/IceBoxApi_Support/',
-// reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
+// apiEndpoint: 'http://frozen.reddyice.com/IceBoxApi_Support/',axchangeapi
+// reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',DashboardReportsPhase3
 
 
 export const environment = {
