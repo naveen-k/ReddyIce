@@ -8,6 +8,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
 import { ReportService } from '../../reports.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { debounce } from 'rxjs/operator/debounce';
 
 @Component({
     templateUrl: './reports.component.html',
@@ -15,6 +16,8 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
 })
 export class ReportsComponent implements OnInit {
     overlayStatus: boolean = false;
+    onLoadFrame:boolean = false;
+    viewButtonStatus:boolean =false;
     cacheBranches;
     selectedCustomerType: number = 0;
     isITAdmin: boolean = false;
@@ -56,7 +59,7 @@ export class ReportsComponent implements OnInit {
     hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
     user: User;
-    linkRpt: SafeResourceUrl;
+    linkRpt: SafeResourceUrl =  this.sanitizer.bypassSecurityTrustResourceUrl('');
 
     distributors: any[] = [];
     modifiedStartDate: any;
@@ -374,14 +377,14 @@ export class ReportsComponent implements OnInit {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
+        this.viewButtonStatus = true;
+        this.onLoadFrame = true;
         if (rType !== 'TIR') {
             //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
             this.selectedCustomerType = this.customerstatus;
 
             this.viewReport = true;
-            setTimeout(function () {
-                $('#loader').hide();
-            }, 10000);
+            
 
             // hack to check if start date is not greater than end date
             if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
@@ -448,15 +451,13 @@ export class ReportsComponent implements OnInit {
 
         if (rType === 'TIR') {
             this.viewReport = false;
-            if (this.customersByTicketNumber.length > 1) {
+            if (this.customersByTicketNumber && this.customersByTicketNumber.length > 1) {
                 this.filter.showCustomerDropdown = true;
                 if (this.filter.ticketID) {
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                     this.selectedCustomerType = this.customerstatus;
                     this.viewReport = true;
-                    setTimeout(function () {
-                        $('#loader').hide();
-                    }, 5000);
+                   
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
                 } else {
                     this.viewReport = false;
@@ -466,22 +467,20 @@ export class ReportsComponent implements OnInit {
 
                 //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                 this.selectedCustomerType = this.customerstatus;
-                if (this.customersByTicketNumber.length > 0) {
+                if (this.customersByTicketNumber && this.customersByTicketNumber.length > 0) {
                     this.viewReport = true;
                 } else {
                     this.viewReport = false;
                     this.notification.error('Ticket Number Not Found!!');
                 }
 
-                setTimeout(function () {
-                    $('#loader').hide();
-                }, 5000);
+              
                 this.filter.showCustomerDropdown = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-
+               
             }
         }
-
+        
         console.log(this.linkRpt);
     }
 
@@ -586,4 +585,29 @@ export class ReportsComponent implements OnInit {
 
         this.viewReport = false;
     }
+    private checkIframeLoaded() {
+        // Get a handle to the iframe element
+        var iframe = document.getElementById('reportFrame');
+        // var iframeDoc = iframe[0].contentDocument || iframe[0].contentWindow.document;
+    
+        // // Check if loading is complete
+        // if (  iframeDoc.readyState  == 'complete' ) {
+        //     //iframe.contentWindow.alert("Hello");
+        //     iframe[0].contentWindow.onload = function(){
+        //         alert("I am loaded");
+        //     };
+        //     // The loading is complete, call the function we want executed once the iframe is loaded
+        //     this.afterLoading();
+        //     return;
+        // } 
+    
+        // // If we are here, it is not loaded. Set things up so we check   the status again in 100 milliseconds
+        // window.setTimeout(this.checkIframeLoaded, 100);
+    }
+    afterLoading(){
+        $('#loader').hide();
+        this.viewButtonStatus = false;
+        console.log("data loadedd");
+    }
+    
 }
