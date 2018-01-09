@@ -167,6 +167,21 @@
                 </label>
             </span>
         </div>
+        <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
+            <span class="col-sm-4 local-padding-eater">
+                <label class="top-margin">Ticket Type</label>
+            </span>
+            <span class="col-sm-4 local-padding-eater left-margin">
+                <input type="radio" name="invoiceTicketType" value="0" [(ngModel)]="filter.invoiceTicketType" class="top-margin" checked>
+                <label class="top-margin">
+                    <b>All</b>
+                </label>
+                <input type="radio" name="invoiceTicketType" value="29" [(ngModel)]="filter.invoiceTicketType" class="top-margin">
+                <label class="top-margin">
+                    <b>DNS Only</b>
+                </label>
+            </span>
+        </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
             <label>Trip Status</label>
             <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
