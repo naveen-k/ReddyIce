@@ -14,6 +14,7 @@ import { ModalComponent } from '../../../../shared/components/modal/modal.compon
     styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
+    overlayStatus: boolean = false;
     cacheBranches;
     selectedCustomerType: number = 0;
     isITAdmin: boolean = false;
@@ -188,7 +189,8 @@ export class ReportsComponent implements OnInit {
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
             }
             this.branchChangeHandler();
-        }, (err) => { });
+            this.overlayStatus = false;
+        }, (err) => { this.overlayStatus = false; });
     }
     private populateCustomerBranch(){
         if (this.filter.reportType === 'EOD') {
@@ -204,14 +206,16 @@ export class ReportsComponent implements OnInit {
         this.stechs = [];
         if (this.cacheBranches) {
            this.populateCustomerBranch();
+
         } else {
             this.reportService.getCustomerBranches().subscribe((res) => {
 
                 res.unshift({ 'BranchID': 1, 'BranchCode': 1, 'BranchName': 'All Branches' });
                 this.cacheBranches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
                 this.populateCustomerBranch();
+                this.overlayStatus = false;
                 // this.branchChangeHandler();
-            }, (err) => { });
+            }, (err) => { this.overlayStatus = false; });
         }
 
     }
@@ -221,7 +225,8 @@ export class ReportsComponent implements OnInit {
             res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
             this.distributors = this.reportService.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
             this.distributorChangeHandler();
-        }, (err) => { });
+            this.overlayStatus = false;
+        }, (err) => { this.overlayStatus = false; });
     }
 
     // WOC or EOD
@@ -233,26 +238,32 @@ export class ReportsComponent implements OnInit {
             this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+                this.overlayStatus = false;
             }, (err) => {
                 console.log("Something went wrong while fetching STech");
+                this.overlayStatus = false;
             });
         } else if (this.filter.reportType == 'EOD') {
             this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+                this.overlayStatus = false;
             }, (err) => {
                 console.log("Something went wrong while fetching STech");
+                this.overlayStatus = false;
             });
         }
     }
 
     branchChangeHandler() {
+        this.overlayStatus = true;
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
 
         this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
             res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
             this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-        }, (err) => { });
+            this.overlayStatus = false;
+        }, (err) => {   this.overlayStatus = false; });
         this.filter.custID = 0;
         if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
@@ -280,6 +291,7 @@ export class ReportsComponent implements OnInit {
 
 
     userTypeChangeHandler() {
+        this.overlayStatus = true;
         this.viewReport = false;
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
@@ -315,6 +327,7 @@ export class ReportsComponent implements OnInit {
     }
 
     getCustomersbyTicketNumber(ticketNumber) {
+        this.overlayStatus = true;
         this.filter.ticketID = '';
         this.filter.showCustomerDropdown = false;
         this.viewReport = false;
@@ -335,7 +348,9 @@ export class ReportsComponent implements OnInit {
                     this.filter.ticketID = '';
                     // this.notification.error('No Customer Found!!!');
                 }
+                this.overlayStatus = false;
             }, (err) => {
+                this.overlayStatus = false;
             });
         }
     }

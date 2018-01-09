@@ -1,3 +1,6 @@
+<div [hidden]="!overlayStatus" style="top:65px;bottom:0;left:0;right:0;height:80vh; opacity:0.5;background:transparent;z-index:999;position:absolute;">
+    <div style="margin:auto;position:absolute;top:50%;left:50%;"><img src="assets/reddyIce/spinner.gif " width='25px'></div>
+</div>
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="row">
         <div class="col-sm-2" *ngIf="filter.reportType == 'MR' || filter.reportType == 'EOD'">
@@ -162,8 +165,8 @@
             <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
                 <option [value]="0">All Trips</option>
                 <option [value]="1">HH Day End Not Done</option>
-                <option [value]="2">HH Day End Done-Not Approved</option>
-                <option [value]="3">Trip Fully Approved</option>
+                <option [value]="2">Not Approved</option>
+                <option [value]="3">Approved</option>
             </select>
         </div>
         <div class="col-md-1 text-right head-button-container">
