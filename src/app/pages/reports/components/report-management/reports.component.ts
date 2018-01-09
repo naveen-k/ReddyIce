@@ -191,7 +191,7 @@ export class ReportsComponent implements OnInit {
                 Array.isArray(res) && res.shift();
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
             } else {
-                res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
+                // res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
             }
             this.branchChangeHandler();
@@ -218,7 +218,7 @@ export class ReportsComponent implements OnInit {
         } else {
             this.reportService.getCustomerBranches().subscribe((res) => {
 
-                res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
+                // res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
                 this.cacheBranches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
                 this.populateCustomerBranch();
                 this.overlayStatus = false;
