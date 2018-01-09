@@ -150,7 +150,7 @@ export class DayEndComponent implements OnInit {
     populatePrintData() {
         let tbody = '', thead = '', table = '', selectedData = '', branch: any = {};
         let filterDataForPrint: any = [];
-        filterDataForPrint = this.dayEndPipe.transform(this.trips, this.filter.type, this.filter.userBranch);debugger;
+        filterDataForPrint = this.dayEndPipe.transform(this.trips, this.filter.type, this.filter.userBranch);
         filterDataForPrint=this.genericSort.transform(filterDataForPrint,this.customer.sortField,this.customer.isAsc);
         if (this.filter.type === 'internal') {
             branch = this.branches.filter(item => item.value === this.filter.userBranch)[0];
