@@ -16,7 +16,7 @@
                     (click)="deleteTicket()">
                     Delete
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="ticket.UserID !==2 &&  (!isFormDirty || isSubmited)">
+                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="EDI_USER_ID !==2 &&  (!isFormDirty || isSubmited)">
                     Submit
                 </button>
             </div>
@@ -96,7 +96,7 @@
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type:</label>
                 <div class="col-sm-7">
                     <label [hidden]="isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input [disabled]="(ticket.CustomerType == 22 && !!ticket.TicketID) || ticket.UserID===2" type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID"
+                        <input [disabled]="(ticket.CustomerType == 22 && !!ticket.TicketID) || ticket.UserID == EDI_USER_ID" type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID"
                             (ngModelChange)="typeChangeHandler();isFormDirty=true;">
                         <span>{{sType.Value}}</span>
                     </label>

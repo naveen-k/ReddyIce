@@ -7,5 +7,6 @@ export const environment = {
   production: true,
   apiEndpoint: 'http://frozen.reddyice.com/axchangeapi/',
   reportEndpoint: 'http://frozen.reddyice.com/DashboardReportsPhase3/Reports/ReportData.aspx',
-  prodLabel: '(AX)'
+  prodLabel: '(AX)',
+  ediUserId: 2
 };

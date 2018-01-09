@@ -15,6 +15,7 @@ import { Branch, Customer } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
 
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'environments/environment';
 
 @Component({
   templateUrl: './create-ticket.component.html',
@@ -94,7 +95,7 @@ export class CreateTicketComponent implements OnInit {
   file: any = {};
 
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
-
+  EDI_USER_ID:number;
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
 
@@ -126,6 +127,7 @@ export class CreateTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.EDI_USER_ID = environment.ediUserId;
     const now = new Date();
     this.date.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
@@ -387,7 +389,7 @@ export class CreateTicketComponent implements OnInit {
       /**
        * EDI Enhancement
        */
-      if(that.ticket.UserID ===2 && this.ticket.UserID>0 && this.ticket){
+      if(that.ticket.UserID === this.EDI_USER_ID && this.ticket.UserID>0 && this.ticket){
       
         this.drivers =[];
         this.drivers.push({"value":this.ticket.UserID,"label":this.ticket.UserName,'data':{'UserId':this.ticket.UserID, 'FirstName':this.ticket.UserID, 'LastName':this.ticket.UserID}});
@@ -835,7 +837,7 @@ export class CreateTicketComponent implements OnInit {
     /**
      * EDI Enhancement
      */
-    if(this.ticket.UserID===2 && this.ticket.TicketStatusID===23){
+    if(this.ticket.UserID=== this.EDI_USER_ID && this.ticket.TicketStatusID===23){
       this.ticket.TicketStatusID = 24;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
