@@ -415,6 +415,9 @@ export class CreateTicketComponent implements OnInit {
   }
 
   distributorChangeHandler() {
+    this.ticket.Customer = '';
+    // this.ticket.DistributorCopackerID = null;
+    this.ticket.TicketProduct = [];
     this.loadCustomers();
     this.listFilter.DistributorID = this.ticket.DistributorCopackerID;
   }
@@ -976,8 +979,14 @@ export class CreateTicketComponent implements OnInit {
   }
 
   userTypeChangeHandler() {
+    
     this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = null;
     this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = null;
+
+    // this.ticket.TicketProduct = [{} as TicketProduct];
+    this.ticket.Customer = '';
+    // this.ticket.DistributorCopackerID = null;
+    this.ticket.TicketProduct = [];
 
     if (this.ticket.isUserTypeDistributor) {
       this.listFilter.userType = 'External';
