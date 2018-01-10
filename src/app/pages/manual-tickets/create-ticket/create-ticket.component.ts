@@ -171,7 +171,7 @@ export class CreateTicketComponent implements OnInit {
 
     this.ticketTypes = activatedRouteObject['ticketTypes'];
 
-    if (this.user.Role.RoleID == 1) {
+    if (this.user.Role.RoleID == 1 || this.user.Role.RoleID == 6) {
       this.loadDisributors();
     }
     if (this.user.IsDistributor || this.ticket.DistributorCopackerID) {
@@ -182,7 +182,6 @@ export class CreateTicketComponent implements OnInit {
         this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
       }
     }
-
     this.prepareTicketTypes();
 
     // load customers, if BranchID is available
@@ -359,8 +358,8 @@ export class CreateTicketComponent implements OnInit {
       this.customers = res.Customer ? res.Customer : res;
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
-        this.ticket.CustomerType = (customer && customer.CustomerTypeID)?customer.CustomerTypeID:this.ticket.Customer.CustomerType;
-        this.ticket.Customer.ChainID = (customer && customer.ChainID)?customer.ChainID:0;
+        this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? customer.CustomerTypeID : this.ticket.Customer.CustomerType;
+        this.ticket.Customer.ChainID = (customer && customer.ChainID) ? customer.ChainID : 0;
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
@@ -373,29 +372,28 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadDriversOfBranch(branchId) {
-
-    this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
-      this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
-      var that = this;
-      if (this.drivers && this.drivers.length > 1) {
-        var newArray = this.drivers.filter(function (el) {
-          return +el.value === +that.ticket.UserID;
-        });
-        if (newArray.length === 0) {
-          this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : null;
+    if (branchId != null) {
+      this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
+        this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
+        var that = this;
+        if (this.drivers && this.drivers.length > 1) {
+          var newArray = this.drivers.filter(function (el) {
+            return +el.value === +that.ticket.UserID;
+          });
+          if (newArray.length === 0) {
+            this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : null;
+          }
         }
-      } 
-      /**
-       * EDI Enhancement
-       */
-      if((that.ticket.IsEDITicket && that.ticket.IsEDITicket === true) && this.ticket.UserID>0 && this.ticket){
-      
-        this.drivers =[];
-        this.drivers.push({"value":this.ticket.UserID,"label":this.ticket.UserName,'data':{'UserId':this.ticket.UserID, 'FirstName':this.ticket.UserID, 'LastName':this.ticket.UserID}});
+        /**
+         * EDI Enhancement
+         */
+        if ((that.ticket.IsEDITicket && that.ticket.IsEDITicket === true) && this.ticket.UserID > 0 && this.ticket) {
 
-        console.log("---this.ticket----", this.ticket);
-      }
-    });
+          this.drivers = [];
+          this.drivers.push({ "value": this.ticket.UserID, "label": this.ticket.UserName, 'data': { 'UserId': this.ticket.UserID, 'FirstName': this.ticket.UserID, 'LastName': this.ticket.UserID } });
+        }
+      });
+    }
   }
 
   loadDisributors(branchId?: any) {
@@ -408,7 +406,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.CustomerID = event.item.CustomerID || event.item.CustomerId;
     this.loadCustomerDetail(this.ticket.CustomerID, event.item.IsRICustomer);
 
-    this.ticket.CustomerSourceID = (''+event.item.IsRICustomer == "true") ? 101 : 103
+    this.ticket.CustomerSourceID = ('' + event.item.IsRICustomer == "true") ? 101 : 103
     // Reset ticket details
     this.ticket.TicketProduct = [{} as TicketProduct];
   }
@@ -446,15 +444,15 @@ export class CreateTicketComponent implements OnInit {
 
   prepareTicketProduct(productdetail) {
     this.ticket.TicketProduct.forEach(td => {
-      console.log("------",td.Rate);
+      console.log("------", td.Rate);
       // if(this.ticket.RoleID === 10 && td.Rate){
       //   td.Price = td.Rate;
       // }
-      
+
       if (!td.ProductID) {
         td.ProductID = productdetail[0].ProductID;
-        let index=this.ticket.TicketProduct.findIndex(x => x.ProductID == td.ProductID);
-        this.productChangeHandler(td,index);
+        let index = this.ticket.TicketProduct.findIndex(x => x.ProductID == td.ProductID);
+        this.productChangeHandler(td, index);
       }
       this.updateTicketDetailObject(td);
       if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID == 27)) {
@@ -492,7 +490,7 @@ export class CreateTicketComponent implements OnInit {
     this.checkNumberValidation();
   }
 
-  productChangeHandler(ticketDetail,index) {
+  productChangeHandler(ticketDetail, index) {
     const product = this.ticket.TicketProduct.filter(t => t.ProductID === ticketDetail.ProductID);
     if (product.length === 2) {
       //ticketDetail.ProductID = '';
@@ -666,7 +664,7 @@ export class CreateTicketComponent implements OnInit {
       this.service.updateFile(file).subscribe((response) => {
         this.notification.success('', 'File updated');
         this.isSubmited = false;
-        this.overlayStatus= false;
+        this.overlayStatus = false;
       });
       return;
     }
@@ -772,7 +770,6 @@ export class CreateTicketComponent implements OnInit {
       }
 
       this.loadCustomers();
-
       // load driver or distributor
       if (this.ticket.isUserTypeDistributor) {
         this.loadDisributors(this.ticket.BranchID);
@@ -812,7 +809,7 @@ export class CreateTicketComponent implements OnInit {
           activeModal.componentInstance.dismissHandler = (() => {
             this.isSubmited = false;
             this.isFormDirty = true;
-          });          
+          });
         } else if (err.status === 409) {
           this.notification.error('', 'Ticket Number already in use!!!');
           this.isSubmited = false;
@@ -825,10 +822,10 @@ export class CreateTicketComponent implements OnInit {
 
 
   saveTicket() {
-    this.overlayStatus= true;
+    this.overlayStatus = true;
     if (!this.validateTicket(this.ticket)) {
       this.isFormDirty = false;
-      this.overlayStatus= false;
+      this.overlayStatus = false;
       return;
     }
     this.isFormDirty = true;
@@ -840,31 +837,31 @@ export class CreateTicketComponent implements OnInit {
     /**
      * EDI Enhancement
      */
-    if((this.ticket.IsEDITicket && this.ticket.IsEDITicket=== true) && this.ticket.TicketStatusID===23){
+    if ((this.ticket.IsEDITicket && this.ticket.IsEDITicket === true) && this.ticket.TicketStatusID === 23) {
       this.ticket.TicketStatusID = 24;
     }
     const ticket = this.modifyTicketForSave(this.ticket);
 
     if (this.ticketId) {
       // Update ticket
-     
+
       this.service.updateTicket(ticket).subscribe(res => {
-        this.overlayStatus= false;
+        this.overlayStatus = false;
         this.notification.success('', res);
-       
+
         this.location.back();
-        
+
       }, err => {
         this.isFormDirty = true;
         this.isSubmited = false;
         this.notification.error('', err);
-        this.overlayStatus= false;
+        this.overlayStatus = false;
       });
       return;
     }
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
-      this.overlayStatus= false;
+      this.overlayStatus = false;
       this.notification.success('', 'Ticket created successfully!');
       let d: any[] = ticket.DeliveryDate.split('-');
       if (this.tripMode && d.length && d.length == 3) {
@@ -894,7 +891,7 @@ export class CreateTicketComponent implements OnInit {
         this.isFormDirty = true;
       }
       this.isSubmited = false;
-      this.overlayStatus= false;
+      this.overlayStatus = false;
     });
   }
 
@@ -983,7 +980,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   userTypeChangeHandler() {
-    
+
     this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = null;
     this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = null;
 
@@ -1015,7 +1012,7 @@ export class CreateTicketComponent implements OnInit {
     //   //ticketDetail.Price = ticketDetail.Rate;
     //   prodDetail = { Price: ticketDetail.Rate };
     // }
-    if(ticketDetail.Rate){
+    if (ticketDetail.Rate) {
       prodDetail = { Price: ticketDetail.Rate };
     }
     ticketDetail['productSelected'] = prodDetail;
@@ -1128,7 +1125,7 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.isPOReuquired() && !this.ticket.PONumber) {
       this.notification.error('', 'PO number is mandatory!!!');
       return false;
-    } else if ((this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) && (this.ticket && this.ticket.IsEDITicket !== true) ) {
+    } else if ((this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) && (this.ticket && this.ticket.IsEDITicket !== true)) {
       this.notification.error('', 'POD is mandatory!!!');
       return false;
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
