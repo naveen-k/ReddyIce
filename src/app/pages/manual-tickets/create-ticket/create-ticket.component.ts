@@ -38,6 +38,8 @@ export class CreateTicketComponent implements OnInit {
 
   branches: any[];
 
+  overlayStatus: boolean = false;
+
   // List of Cutomers
   customers: Customer[] = [];
 
@@ -643,10 +645,12 @@ export class CreateTicketComponent implements OnInit {
         });
         if (!fileSize) {
           var msg = 'File size cannot be greater than 2MB';
+          this.overlayStatus = false;
         }
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.modalHeader = 'Warning!';
         activeModal.componentInstance.modalContent = `${msg}`;
+        this.overlayStatus = false;
       }
     });
 
@@ -662,6 +666,7 @@ export class CreateTicketComponent implements OnInit {
       this.service.updateFile(file).subscribe((response) => {
         this.notification.success('', 'File updated');
         this.isSubmited = false;
+        this.overlayStatus= false;
       });
       return;
     }
@@ -720,11 +725,7 @@ export class CreateTicketComponent implements OnInit {
           this.isDownloadable = false;
           this.notification.success('', "POD Image deleted successfully");
         }
-      }, (error) => {
-        if (error) {
-          this.notification.error('', 'Something went wrong while deletion of POD Image');
-        }
-      },
+      }
     );
   }
   deleteProductHandler(tdetail) {
@@ -824,8 +825,10 @@ export class CreateTicketComponent implements OnInit {
 
 
   saveTicket() {
+    this.overlayStatus= true;
     if (!this.validateTicket(this.ticket)) {
       this.isFormDirty = false;
+      this.overlayStatus= false;
       return;
     }
     this.isFormDirty = true;
@@ -846,19 +849,22 @@ export class CreateTicketComponent implements OnInit {
       // Update ticket
      
       this.service.updateTicket(ticket).subscribe(res => {
-
+        this.overlayStatus= false;
         this.notification.success('', res);
+       
         this.location.back();
+        
       }, err => {
         this.isFormDirty = true;
         this.isSubmited = false;
         this.notification.error('', err);
+        this.overlayStatus= false;
       });
       return;
     }
-    
     // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
+      this.overlayStatus= false;
       this.notification.success('', 'Ticket created successfully!');
       let d: any[] = ticket.DeliveryDate.split('-');
       if (this.tripMode && d.length && d.length == 3) {
@@ -888,6 +894,7 @@ export class CreateTicketComponent implements OnInit {
         this.isFormDirty = true;
       }
       this.isSubmited = false;
+      this.overlayStatus= false;
     });
   }
 

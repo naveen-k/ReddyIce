@@ -1,3 +1,9 @@
+<div [hidden]="!overlayStatus" style="top:65px;bottom:0;left:0;right:0;height:calc(100% - 65px); opacity:0.5;background:black;z-index:999;position:absolute;">
+    <div style="margin:auto;position:absolute;top:50%;left:50%;">
+        <img src="assets/reddyIce/spinner.gif " width='25px'>
+    </div>
+</div>
+
 <ba-card cardTitle="{{pageTitle}} {{userSubTitle}}" id="newTicket">
     <img src="assets/reddyIce/submitTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 24 || ticket.TicketStatusID == 23"
         width="18" class="newTicketTitleStatusIcon">
