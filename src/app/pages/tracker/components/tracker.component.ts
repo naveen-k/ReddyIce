@@ -420,7 +420,6 @@ export class TrackerComponent implements OnInit {
     // if (sequence === 2) {
     //   trips.sort((a, b) => { return a.ActualSequence - b.ActualSequence })
     // }
-    debugger;
     for (let i = 0; i < trips.length; i++) {
       if(sequence == 2) {
         // changing color of the marker icon based on condition
