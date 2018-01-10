@@ -239,8 +239,9 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconChange(item) {
+        let totalInv = (+item.Load + +item.Returns - +item.TruckDamage);
         //item.OverShort = (+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale + +item.GoodReturns) - (+item.Load1Quantity);
-        item.OverShort = (+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale) - (+item.Load1Quantity + +item.GoodReturns + + item.SaleReturnQty);
+        item.OverShort = +item.Sale - +item.SaleReturnQty + +item.ManualTicket - +totalInv + +item.GoodReturns + +item.CustomerDamage;// -((+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale) - (+item.Load1Quantity + +item.GoodReturns + + item.SaleReturnQty));
         this.calculateTotalUnitReconcilation();
     }
 
