@@ -281,8 +281,11 @@ export class ReportsComponent implements OnInit {
             this.filter.driver = 1;
         }
 
-        if (this.filter.reportType == 'MR' || this.filter.reportType == 'SSR') {
+        if (this.filter.reportType == 'MR') {
             this.routeNumberChange();
+        }
+        if (this.filter.reportType == 'SSR') {
+            this.getRoutesForRange();
         }
         // this.getCustomers();
     }
@@ -332,6 +335,14 @@ export class ReportsComponent implements OnInit {
     routes:any[] = [];
     routeNumberChange() {
         this.reportService.getManifestRoutes(this.filter.branch, this.formatDate(this.filter.manifestDate)).subscribe((res) => {
+            this.routes = res;
+            //this.routes = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
+        }, (err) => {
+        });
+    }
+
+    getRoutesForRange() {
+        this.reportService.getRoutesForRange(this.filter.branch, this.formatDate(this.filter.startDate), this.formatDate(this.filter.endDate)).subscribe((res) => {
             this.routes = res;
             //this.routes = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
         }, (err) => {
