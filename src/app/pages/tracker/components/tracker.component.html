@@ -71,15 +71,15 @@
                 </div>
                 <div class="col-md-8 center" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" checked (click)="sequenceChangeHandler(1)">
+                        <input type="radio" name="type" [value]="1" checked (click)="sequenceChangeHandler($event)">
                         <span>Planned Seq</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" (click)="sequenceChangeHandler(2)">
+                        <input type="radio" name="type" [value]="2" (click)="sequenceChangeHandler($event)">
                         <span>Actual Delivery Seq</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" (click)="sequenceChangeHandler(3)">
+                        <input type="radio" name="type" [value]="3" (click)="sequenceChangeHandler($event)">
                         <span>Planned & Actual Seq</span>
                     </label>
                 </div>
