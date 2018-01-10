@@ -30,7 +30,7 @@
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
         ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || IsTIR || filter.reportType == 'WOC'
-        || filter.reportType == 'EOD' || filter.reportType == 'WONS'">
+        || filter.reportType == 'EOD' || filter.reportType == 'WONS' || filter.reportType == 'SSR'">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>
@@ -66,12 +66,12 @@
         </ng-container>
         <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
-        || filter.reportType == 'EOD'">
+        || filter.reportType == 'EOD'||filter.reportType==='SSR'">
             <div class="row">
                 <ng-container>
                     <div class="col-sm-12" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
                         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
-                        || filter.reportType == 'EOD'">
+                        || filter.reportType == 'EOD'|| filter.reportType == 'SSR'">
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">
                                 <label>Customer</label>
@@ -96,7 +96,7 @@
             </select>
         </div>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'internal'">
-            <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
+            <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'|| filter.reportType == 'SSR'">
                 <label>Driver</label>
                 <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
             </div>
@@ -112,9 +112,9 @@
                 <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
             </div>
         </ng-container>
-        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'WONS'" *ngIf="filter.reportType === 'MR'">
+        <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'WONS'" *ngIf="filter.reportType === 'MR'|| filter.reportType === 'SSR'">
             <div class="row">
-                <ng-container *ngIf="filter.reportType === 'MR'">
+                <ng-container *ngIf="filter.reportType === 'MR'|| filter.reportType === 'SSR'">
                     <div class="col-sm-12">
                         <label>Manifest Route#</label>
                         <!-- <div class="input-group">
@@ -147,9 +147,10 @@
                             <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
                             <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
                             <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
-                            <!-- <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
+                            <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
                             <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
-                            <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option> -->
+                            <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
+                            <option value="SSR" *ngIf="isITAdmin||isInternalAdmin||isSTech">Skipped Stops</option>
                         </select>
                     </div>
                 </div>
