@@ -153,6 +153,7 @@ export class ReportsComponent implements OnInit {
     }
 
     reportTypeChangeHandler() {
+        this.onLoadFrame = false;
         this.filter.tripState = 0;
         this.disableTrippState = false;
         this.filter.ticketType = 'regular';
@@ -162,6 +163,7 @@ export class ReportsComponent implements OnInit {
         this.filter.customer = null;
         this.filter.stech = 1;
         this.filter.branch = 1;
+        this.filter.workOrderNumber = null;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -279,7 +281,7 @@ export class ReportsComponent implements OnInit {
             this.filter.driver = 1;
         }
 
-        if (this.filter.reportType == 'MR') {
+        if (this.filter.reportType == 'MR' || this.filter.reportType == 'SSR') {
             this.routeNumberChange();
         }
         // this.getCustomers();
@@ -383,9 +385,20 @@ export class ReportsComponent implements OnInit {
         if (workOrderNumber) {
             this.reportService.checkworkorderexistence(workOrderNumber).subscribe((res) => {
                 if (res != 0) {
-                    this.filter.workOrderId = res.workOrderId;
+                    this.filter.workOrderId = res;
+                    this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
+                    this.overlayStatus = false;
+                    this.viewReport = true;
+                    console.log('when WONS is clicked', this.linkRpt);
+                    this.overlayStatus = false;
+                    this.viewReport = true;
+                    //this.viewButtonStatus = false;
                 } else {
                     this.notification.error("Work Order Number Does Not Exist.");
+                    this.overlayStatus = false;
+                    this.viewReport = true;
+                    this.viewButtonStatus = false;
                 }
             }, (err) => {
                 this.notification.error("Something went wrong.")
@@ -461,9 +474,15 @@ export class ReportsComponent implements OnInit {
                 console.log('when EOD is clicked', this.linkRpt);
             } else if (rType === 'WONS') {
                 this.getWorkOrderIdByTicketNumber(this.filter.workOrderNumber);
+                // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                // (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
+                
+                // console.log('when WONS is clicked', this.linkRpt);
+            } else if (rType === 'SSR') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
-                console.log('when WONS is clicked', this.linkRpt);
+                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}&LoggedInUserID=${this.user.UserId}`);
+                
+                console.log('when SSR is clicked', this.linkRpt);
             } else {
                 return false;
             }
