@@ -1142,10 +1142,10 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.ticketMinMaxLength) {
       this.notification.error('', 'Ticket number should be 4-10 digits long only!!!');
       return false;
-    } else if (this.ticket.CheckNumber && !this.ticket.CheckAmount) {
+    } else if (this.ticket.CheckNumber && (+this.ticket.CheckAmount <= 0)) {
       this.notification.error('', 'Check Amount is required as Check Number exists!!!');
       return false;
-    } else if (this.ticket.CheckAmount && !this.ticket.CheckNumber) {
+    } else if (+this.ticket.CheckAmount > 0 && !this.ticket.CheckNumber) {
       this.notification.error('', 'Check number is required as Check Amount exists!!!');
       return false;
     } else if (this.ticket.CustomerType === 21 && this.ticket.TicketProduct && this.pbsQuantityCheck() > 0) {

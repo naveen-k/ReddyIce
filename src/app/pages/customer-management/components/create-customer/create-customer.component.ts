@@ -143,9 +143,10 @@ export class CreateCustomerComponent implements OnInit {
             if (this.mode === 2) {
                 ///const mAddedProduct = this.addedProduct.concat(this.newlyAddedproduct);
                 // this.customer.MappedProducts = mAddedProduct;
-
+                debugger;
                 this.customer.EditedProducts = this.addedProduct;
-                this.customer.NewAddedProducts = this.newlyAddedproduct;
+                this.customer.NewAddedProducts = [];//this.newlyAddedproduct;
+                this.customer.EditedProducts.push(...this.newlyAddedproduct);
                 this.service.updateCustomer(this.customerId, this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('', 'Customer Edited successfully');
@@ -156,10 +157,10 @@ export class CreateCustomerComponent implements OnInit {
                     this.notification.error('', err._body);
                 });
 
-            } else {
+            } else {debugger;
                 this.customer.MappedProducts = this.addedProduct;
                 this.customer.EditedProducts = this.addedProduct;
-                this.customer.NewAddedProducts = this.addedProduct;
+                this.customer.NewAddedProducts = [];//this.addedProduct;
                 this.service.createCustomer(this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('', 'Customer Added successfully');
