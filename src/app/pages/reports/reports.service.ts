@@ -106,6 +106,13 @@ export class ReportService extends SharedService {
             return res;
         });
     }
+    
+    getRoutesForRange(branchId, DeliveryStartDate, DeliveryEndDate) {
+        return this.http.get(`api/report/getroutesfordaterange?BranchId=${branchId}&DeliveryStartDate=${DeliveryStartDate}&DeliveryEndDate=${DeliveryEndDate}`)
+        .map((res) => res.json()).map((res) => {
+            return res;
+        });
+    }
 
     getCustomerDropDownList(branch,userID,startDate,endDate,distributor){
         return this.http.get(`api/report/customerswithfilters?BranchId=${branch}&UserId=${userID}&TripStartDate=${startDate}&TripEndDate=${endDate}&DistributorId=${distributor}`)
