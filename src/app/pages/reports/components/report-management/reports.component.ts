@@ -8,12 +8,16 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
 import { ReportService } from '../../reports.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { debounce } from 'rxjs/operator/debounce';
 
 @Component({
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
+    overlayStatus: boolean = false;
+    onLoadFrame:boolean = false;
+    viewButtonStatus:boolean =false;
     cacheBranches;
     selectedCustomerType: number = 0;
     isITAdmin: boolean = false;
@@ -28,6 +32,7 @@ export class ReportsComponent implements OnInit {
         endDate: null,
         reportType: 'AS',
         ticketType: 'regular',
+        invoiceTicketType: '0',
         userType: 'internal',
         distributor: 0,
         branch: 0,
@@ -48,14 +53,14 @@ export class ReportsComponent implements OnInit {
         modifiedStartDateforDriver: null,
         modifiedEndDateforDriver: null,
         manifestDate: null,
-        workOrderNumber: null
+        workOrderId: null
     };
 
     inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
     hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
     user: User;
-    linkRpt: SafeResourceUrl;
+    linkRpt: SafeResourceUrl =  this.sanitizer.bypassSecurityTrustResourceUrl('');
 
     distributors: any[] = [];
     modifiedStartDate: any;
@@ -157,18 +162,6 @@ export class ReportsComponent implements OnInit {
         this.filter.customer = null;
         this.filter.stech = 1;
         this.filter.branch = 1;
-        // if (this.user.IsRIInternal) {
-        //     this.filter.userType = 'internal';
-        //     if (this.filter.reportType == 'WOC' || this.filter.reportType == 'EOD') {
-        //         if (this.filter.reportType == 'EOD') {
-        //             this.filter.branch = null;
-        //         }
-        //         if (this.filter.branch !== null) {
-        //             this.fetchSTechByBranch();
-        //         }
-
-        //     }
-        // }
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -181,7 +174,7 @@ export class ReportsComponent implements OnInit {
                 break;
             default:
                 this.IsTIR = false;
-                //this.filter.userType = 'internal';
+                this.filter.userType = 'internal';
                 break;
         }
         if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {
@@ -198,34 +191,39 @@ export class ReportsComponent implements OnInit {
                 Array.isArray(res) && res.shift();
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
             } else {
-                res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
+                // res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
                 this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
             }
             this.branchChangeHandler();
-        }, (err) => { });
+            this.overlayStatus = false;
+        }, (err) => { this.overlayStatus = false; });
     }
     private populateCustomerBranch(){
         if (this.filter.reportType === 'EOD') {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
             this.branches.shift();
+           
         } else {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
-            this.fetchSTechByBranch();
+           
         }
+        this.fetchSTechByBranch();
     }
     getCustomerBranches() {
         this.branches = [];
         this.stechs = [];
         if (this.cacheBranches) {
            this.populateCustomerBranch();
+
         } else {
             this.reportService.getCustomerBranches().subscribe((res) => {
 
-                res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
+                // res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
                 this.cacheBranches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
                 this.populateCustomerBranch();
+                this.overlayStatus = false;
                 // this.branchChangeHandler();
-            }, (err) => { });
+            }, (err) => { this.overlayStatus = false; });
         }
 
     }
@@ -235,7 +233,8 @@ export class ReportsComponent implements OnInit {
             res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
             this.distributors = this.reportService.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
             this.distributorChangeHandler();
-        }, (err) => { });
+            this.overlayStatus = false;
+        }, (err) => { this.overlayStatus = false; });
     }
 
     // WOC or EOD
@@ -247,31 +246,41 @@ export class ReportsComponent implements OnInit {
             this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+                this.overlayStatus = false;
             }, (err) => {
                 console.log("Something went wrong while fetching STech");
+                this.overlayStatus = false;
             });
         } else if (this.filter.reportType == 'EOD') {
             this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+                this.overlayStatus = false;
             }, (err) => {
                 console.log("Something went wrong while fetching STech");
+                this.overlayStatus = false;
             });
         }
     }
 
     branchChangeHandler() {
+        this.overlayStatus = true;
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
 
         this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
             res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
             this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-        }, (err) => { });
+            this.overlayStatus = false;
+        }, (err) => {   this.overlayStatus = false; });
         this.filter.custID = 0;
         if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
         } else {
             this.filter.driver = 1;
+        }
+
+        if (this.filter.reportType == 'MR') {
+            this.routeNumberChange();
         }
         // this.getCustomers();
     }
@@ -294,13 +303,17 @@ export class ReportsComponent implements OnInit {
 
 
     userTypeChangeHandler() {
+        this.overlayStatus = true;
         this.viewReport = false;
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
             if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC') {
                 this.getCustomerBranches();
-            } else {
+            } else if (this.filter.reportType !== 'WONS') {
                 this.getAllBranches();
+            } else {
+                this.overlayStatus = false;
+                this.viewReport = true;
             }
         } else {
             this.getDistributors();
@@ -312,6 +325,15 @@ export class ReportsComponent implements OnInit {
         if (this.filter.reportType == 'EOD') {
             this.filter.branch = 0;
         }
+    }
+
+    routes:any[] = [];
+    routeNumberChange() {
+        this.reportService.getManifestRoutes(this.filter.branch, this.formatDate(this.filter.manifestDate)).subscribe((res) => {
+            this.routes = res;
+            //this.routes = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
+        }, (err) => {
+        });
     }
 
     focuOutCustomer() {
@@ -329,6 +351,7 @@ export class ReportsComponent implements OnInit {
     }
 
     getCustomersbyTicketNumber(ticketNumber) {
+        this.overlayStatus = true;
         this.filter.ticketID = '';
         this.filter.showCustomerDropdown = false;
         this.viewReport = false;
@@ -349,22 +372,39 @@ export class ReportsComponent implements OnInit {
                     this.filter.ticketID = '';
                     // this.notification.error('No Customer Found!!!');
                 }
+                this.overlayStatus = false;
             }, (err) => {
+                this.overlayStatus = false;
             });
         }
     }
+
+    getWorkOrderIdByTicketNumber(workOrderNumber) {
+        if (workOrderNumber) {
+            this.reportService.checkworkorderexistence(workOrderNumber).subscribe((res) => {
+                if (res != 0) {
+                    this.filter.workOrderId = res.workOrderId;
+                } else {
+                    this.notification.error("Work Order Number Does Not Exist.");
+                }
+            }, (err) => {
+                this.notification.error("Something went wrong.")
+            });
+        }
+    }
+
     customerChangeHandler() {
         this.updateLink(this.filter.reportType);
     }
     updateLink(rType) {
+        this.viewButtonStatus = true;
+        this.onLoadFrame = true;
         if (rType !== 'TIR') {
             //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
             this.selectedCustomerType = this.customerstatus;
 
             this.viewReport = true;
-            setTimeout(function () {
-                $('#loader').hide();
-            }, 10000);
+            
 
             // hack to check if start date is not greater than end date
             if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
@@ -385,7 +425,7 @@ export class ReportsComponent implements OnInit {
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsPaperTicket=${this.filter.ticketType === 'paper'}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custtID}&TripState=${this.filter.tripState}`);
             } else if (rType === 'TR') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custtID}&CustType=${this.selectedCustomerType}&PaymentType=${this.filter.paymentType}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustomerID=${this.filter.custtID}&CustType=${this.selectedCustomerType}&PaymentType=${this.filter.paymentType}&tktTypeID=${this.filter.invoiceTicketType}`);
 
             } else if (rType === 'AS') {
 
@@ -408,7 +448,6 @@ export class ReportsComponent implements OnInit {
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custtID}`);
 
             } else if (rType === 'MR') {
-
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}`);
 
@@ -421,8 +460,9 @@ export class ReportsComponent implements OnInit {
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&Date=${this.formatDate(this.filter.manifestDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when EOD is clicked', this.linkRpt);
             } else if (rType === 'WONS') {
+                this.getWorkOrderIdByTicketNumber(this.filter.workOrderNumber);
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WONumber=${this.filter.workOrderNumber}&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WONS is clicked', this.linkRpt);
             } else {
                 return false;
@@ -431,15 +471,13 @@ export class ReportsComponent implements OnInit {
 
         if (rType === 'TIR') {
             this.viewReport = false;
-            if (this.customersByTicketNumber.length > 1) {
+            if (this.customersByTicketNumber && this.customersByTicketNumber.length > 1) {
                 this.filter.showCustomerDropdown = true;
                 if (this.filter.ticketID) {
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                     this.selectedCustomerType = this.customerstatus;
                     this.viewReport = true;
-                    setTimeout(function () {
-                        $('#loader').hide();
-                    }, 5000);
+                   
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
                 } else {
                     this.viewReport = false;
@@ -449,22 +487,20 @@ export class ReportsComponent implements OnInit {
 
                 //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                 this.selectedCustomerType = this.customerstatus;
-                if (this.customersByTicketNumber.length > 0) {
+                if (this.customersByTicketNumber && this.customersByTicketNumber.length > 0) {
                     this.viewReport = true;
                 } else {
                     this.viewReport = false;
                     this.notification.error('Ticket Number Not Found!!');
                 }
 
-                setTimeout(function () {
-                    $('#loader').hide();
-                }, 5000);
+              
                 this.filter.showCustomerDropdown = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-
+               
             }
         }
-
+        
         console.log(this.linkRpt);
     }
 
@@ -490,10 +526,8 @@ export class ReportsComponent implements OnInit {
             if(this.filter.branch){
                 this.fetchSTechByBranch();
             }
-            
         } else {
             this.branchChangeHandler();
-
             this.viewReport = false;
             this.modifiedStartDate = this.modifyDate(this.filter.startDate);
             this.modifiedEndDate = this.modifyDate(this.filter.endDate);
@@ -505,7 +539,7 @@ export class ReportsComponent implements OnInit {
                     res.forEach(cus => {
                         tempArr.push({
                             value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
-                            label: `${cus.CustomerName}`,
+                            label: `${cus.CustomerNumber} - ${cus.CustomerName}`,
                             data: cus,
                         });
                     });
@@ -571,4 +605,29 @@ export class ReportsComponent implements OnInit {
 
         this.viewReport = false;
     }
+    private checkIframeLoaded() {
+        // Get a handle to the iframe element
+        var iframe = document.getElementById('reportFrame');
+        // var iframeDoc = iframe[0].contentDocument || iframe[0].contentWindow.document;
+    
+        // // Check if loading is complete
+        // if (  iframeDoc.readyState  == 'complete' ) {
+        //     //iframe.contentWindow.alert("Hello");
+        //     iframe[0].contentWindow.onload = function(){
+        //         alert("I am loaded");
+        //     };
+        //     // The loading is complete, call the function we want executed once the iframe is loaded
+        //     this.afterLoading();
+        //     return;
+        // } 
+    
+        // // If we are here, it is not loaded. Set things up so we check   the status again in 100 milliseconds
+        // window.setTimeout(this.checkIframeLoaded, 100);
+    }
+    afterLoading(){
+        $('#loader').hide();
+        this.viewButtonStatus = false;
+        console.log("data loadedd");
+    }
+    
 }

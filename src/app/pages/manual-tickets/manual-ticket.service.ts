@@ -27,14 +27,16 @@ export class ManualTicketService extends SharedService {
       .map(res => res.json())
       .map(res => res.ManualTicket)
       .map(res => {
-        res.forEach(element => {
-          element['Customer'] = {
-            CustomerID: element.CustomerID,
-            CustomerName: element.CustomerName,
-            CustomerType: element.CustomerTypeID,
-            CustomerNumber: element.CustomerNumber,
-          };
-        })
+        if (res) {
+          res.forEach(element => {
+            element['Customer'] = {
+              CustomerID: element.CustomerID,
+              CustomerName: element.CustomerName,
+              CustomerType: element.CustomerTypeID,
+              CustomerNumber: element.CustomerNumber,
+            };
+          })
+        }
         return res;
       })
 
