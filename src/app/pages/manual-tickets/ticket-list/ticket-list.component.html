@@ -1,3 +1,8 @@
+<div [hidden]="!overlayStatus" style="top:65px;bottom:0;left:0;right:0;height:calc(100% - 65px); opacity:0.5;background:gray;z-index:999;position:absolute;">
+    <div style="margin:auto;position:fixed;top:50%;left:50%;">
+        <img src="assets/reddyIce/spinner.gif " width='25px'>
+    </div>
+</div>
 <ba-card cardTitle="Manual Ticket List {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
     <div class="row">
         <div class="col-sm-2">
@@ -36,7 +41,7 @@
             <input type="text" class="form-control" id="input01" [(ngModel)]="searchString" placeholder="Search">
         </div>
         <div class="col-sm-2 createTicketBtn">
-            <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right">
+            <button [routerLink]="['../ticket']" (click)="overlayStatus = true" class="btn btn-primary addCustBtn pull-right">
                 Create Ticket
             </button>
         </div>
@@ -123,7 +128,7 @@
                         <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.TicketID)">
                             <span class="tooltiptext">View Ticket Details</span>
                         </i>
-                        <a [routerLink]="['../view/'+item.TicketID]">
+                        <a [routerLink]="['../view/'+item.TicketID]" (click)="overlayStatus = true;">
                             <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">View</span>
                             </i>
@@ -136,12 +141,20 @@
                         <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID!==23" (click)="deleteTicket(item.TicketID)">
                             <span class="tooltiptext">Delete</span>
                         </i> -->
-                        <a [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID==25">
+                        <a *ngIf="item.ticketType !='Credit & Sale'" [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID==25">
                             <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
-                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="deleteTicket(item.TicketID)">
+                        <a *ngIf="item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber,'edit')" [hidden]="item.TicketStatusID==25">
+                            <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                                <span class="tooltiptext">Choose</span>
+                            </i>
+                        </a>
+                        <i *ngIf="item.ticketType !='Credit & Sale'" class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="deleteTicket(item.TicketID);overlayStatus = true;">
+                            <span class="tooltiptext">Delete</span>
+                        </i>
+                        <i *ngIf="item.ticketType =='Credit & Sale'" class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="showTicketChoice(item.TicketNumber,'delete');">
                             <span class="tooltiptext">Delete</span>
                         </i>
                     </td>

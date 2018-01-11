@@ -185,15 +185,15 @@ export class CreateTicketComponent implements OnInit {
     this.prepareTicketTypes();
 
     // load customers, if BranchID is available
-    if (this.ticket.BranchID || this.ticket.DistributorCopackerID) {
+    if (+this.ticket.BranchID>1 || this.ticket.DistributorCopackerID) {
       this.loadCustomers();
     }
 
     // load driver or distributor
-    if (this.ticket.BranchID && this.ticket.isUserTypeDistributor) {
-      this.loadDisributors(this.ticket.BranchID);
-    } else if (this.ticket.BranchID) {
-      this.loadDriversOfBranch(this.ticket.BranchID);
+    if (+this.ticket.BranchID >1 && this.ticket.isUserTypeDistributor) {
+      this.loadDisributors(+this.ticket.BranchID);
+    } else if (+this.ticket.BranchID>1) {
+      this.loadDriversOfBranch(+this.ticket.BranchID);
     }
 
     // if ticketId is not null, consider it as edit ticket mode and load ticket object
@@ -336,7 +336,6 @@ export class CreateTicketComponent implements OnInit {
       this.loadDriversOfBranch(this.ticket.BranchID);
     }
 
-
     this.listFilter.BranchId = this.ticket.BranchID;
   }
 
@@ -444,7 +443,7 @@ export class CreateTicketComponent implements OnInit {
         };
         setTimeout(callPrepareTicket, 100);
       }
-      this.custType = this.customer.PaymentType === 19 ? false : true;
+      this.custType = this.customer.PaymentType && this.customer.PaymentType === 19 ? false : true;
     });
   }
 

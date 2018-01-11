@@ -7,11 +7,15 @@ import { UserService } from '../../../shared/user.service';
 import { ManualTicketService } from '../manual-ticket.service';
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../environments/environment';
+
+import { ModelPopupComponent } from 'app/shared/components/model-popup/model-popup.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 @Component({
     templateUrl: './ticket-list.component.html',
     styleUrls: ['./ticket-list.component.scss'],
 })
 export class TicketListComponent implements OnInit {
+    overlayStatus:boolean = false;
     counter:number = 0;
     newWindow: any;
     showSpinner: boolean = false;
@@ -56,6 +60,7 @@ export class TicketListComponent implements OnInit {
         protected userService: UserService,
         protected notificationService: NotificationsService,
         protected activatedRoute: ActivatedRoute,
+        protected modalService: NgbModal,
     ) { }
 
     ngOnInit() {
@@ -85,11 +90,11 @@ export class TicketListComponent implements OnInit {
 
         this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
-        if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && this.searchObj.BranchId <=1) {
+        if (!this.user.IsDistributor && this.user.Branch && (this.user.Branch.BranchID && this.user.Branch.BranchID !== 1) && this.searchObj.BranchId <=1) {
             this.searchObj.BranchId = this.user.Branch.BranchID;
         }
 
-        if (this.user.Distributor && this.user.Distributor.DistributorMasterId && this.searchObj.DistributorID<=1) {
+        if (this.user.IsDistributor && this.user.Distributor.DistributorMasterId && this.searchObj.DistributorID<=1) {
             this.searchObj.DistributorID = this.user.Distributor.DistributorMasterId;
         }
 
@@ -133,7 +138,7 @@ export class TicketListComponent implements OnInit {
             if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 4 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
                
-                this.searchObj.UserId = (+this.searchObj.UserId>1)?+this.searchObj.UserId: -1;
+                this.searchObj.UserId = (+this.searchObj.UserId>0)?+this.searchObj.UserId: -1;
             }
             this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
             this.showSpinner = false;
@@ -290,12 +295,14 @@ export class TicketListComponent implements OnInit {
                 if (response) {
                     this.notificationService.success('Ticket deleted successfully');
                     this.getSearchedTickets();
+                    this.overlayStatus = false;
                 }
             },
             (error) => {
                 if (error) {
                     this.notificationService.error(error._body);
                 }
+                this.overlayStatus = false;
             },
         );
     }
@@ -310,5 +317,52 @@ export class TicketListComponent implements OnInit {
         } else {
             this.notificationService.error("Ticket preview unavailable!!");
         }
+    }
+    showTicketChoice(ticketNumber,mode){
+        this.overlayStatus = true;
+        this.service.getSaleCreditTicket(ticketNumber).subscribe(
+            (response) => {
+                if (response) {
+                    const activeModal = this.modalService.open(ModelPopupComponent, {
+                        size: 'sm',
+                        backdrop: 'static',
+                      });
+                      let cstring = [];
+                      response.forEach(item=>{
+                          item.link = `/pages/manual-ticket/ticket/${item.TicketID}`;
+                          item.mode = mode;
+                          if(item.TicketTypeId==26){
+                              item.title="Sale";
+                            cstring.push(item);
+                          }else if(item.TicketTypeId==27){
+                            item.title="Credit";
+                            cstring.push(item);
+                          }
+                        
+                      
+                      })
+                      let ticket = cstring;
+                      
+                      activeModal.componentInstance.showCancel = false;
+                      activeModal.componentInstance.modalHeader = `Credit & Sale Ticket #: ${ticketNumber}`;
+                      activeModal.componentInstance.modeltype = 'ticket';
+                      activeModal.componentInstance.modalContent = ticket;
+                      activeModal.componentInstance.closeModalHandler = (() => {
+                        this.overlayStatus = false;
+                      });
+                      activeModal.componentInstance.deleteTicketHandler = ((ticketId) => {
+                          console.log("----------------",ticketId);
+                        this.deleteTicket(ticketId);
+                        
+                      });
+                
+                }
+            },
+            (error) => {
+                if (error) {
+                    this.notificationService.error(error._body);
+                }
+            },
+        );
     }
 }
