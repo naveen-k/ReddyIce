@@ -300,7 +300,7 @@ export class TrackerComponent implements OnInit {
 
   // Fetch selected Trip
   tripChangeHandler() {
-    const tripId = this.driverSpecTrips.filter(t => t.TripCode === this.tripFilterOption.TripCode)[0].TripID;
+    const tripId = this.driverSpecTrips.filter(t => t.TripCode === +this.tripFilterOption.TripCode)[0].TripID;
     this.fetchTicketDetailsByTrip(tripId);
   }
 
@@ -320,10 +320,10 @@ export class TrackerComponent implements OnInit {
           );
         }
       }
-      if (this.driverSpecTrips[0]) {
-        this.tripFilterOption.TripCode = this.driverSpecTrips[0].TripCode;
-        this.tripChangeHandler();
-      }
+      // if (this.driverSpecTrips[0]) {
+      //   this.tripFilterOption.TripCode = this.driverSpecTrips[0].TripCode;
+      //   this.tripChangeHandler();
+      // }
     } else if (this.searchObj.userType == 'External') {
       for (var i = 0; i < this.driverOndistributor.length; i++) {
         if (this.tripFilterOption.DriverName == this.driverOndistributor[i]['DriverName']) {
