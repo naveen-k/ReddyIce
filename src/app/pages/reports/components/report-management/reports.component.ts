@@ -206,7 +206,6 @@ export class ReportsComponent implements OnInit {
            
         } else {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
-           
         }
         this.fetchSTechByBranch();
     }
@@ -219,7 +218,7 @@ export class ReportsComponent implements OnInit {
         } else {
             this.reportService.getCustomerBranches().subscribe((res) => {
 
-                res.unshift({ 'BranchID': 1, 'BranchCode': 1, 'BranchName': 'All Branches' });
+                //res.unshift({ 'BranchID': 1, 'BranchCode': 1, 'BranchName': 'All Branches' });
                 this.cacheBranches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BranchName');
                 this.populateCustomerBranch();
                 this.overlayStatus = false;
