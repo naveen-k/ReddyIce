@@ -141,6 +141,10 @@ export class ReportsComponent implements OnInit {
             this.isSTech = true;
         }
 
+        if (this.isSTech) {
+            this.filter.reportType = "WOC";
+        }
+
         if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
             this.filter.userType = 'internal';
             this.isInternalDriver = true;
