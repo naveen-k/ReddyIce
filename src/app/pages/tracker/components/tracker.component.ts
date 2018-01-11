@@ -241,6 +241,7 @@ export class TrackerComponent implements OnInit {
       if (this.selectedTrip) {
         this.selectedTrip.sort(this.comparator); // sorting planned sequence
       }
+      this.sequenceChangeHandler(this.filter.sequence);
       this.drawMapPath();
     })
   }
@@ -344,12 +345,21 @@ export class TrackerComponent implements OnInit {
     }
   }
 
+  filter = {
+    sequence:1
+  }
   // Filter Markers in the Google Map based on Sequence Radio Button selection
-  sequenceChangeHandler(sequence) {
-    if (sequence === 1) {
+  sequenceChangeHandler(event) {
+    if (event.target) {
+      this.filter.sequence = event.target.value;
+    } else if (event.sequence) {
+      this.filter.sequence = this.filter.sequence;
+    }
+    // this.filter.sequence = event.target.value;
+    if (+this.filter.sequence === 1) {
       this.planned = true;
       this.actual = false;
-    } else if (sequence === 2) {
+    } else if (+this.filter.sequence === 2) {
       this.actual = true;
       this.planned = false;
     } else {
@@ -420,7 +430,6 @@ export class TrackerComponent implements OnInit {
     // if (sequence === 2) {
     //   trips.sort((a, b) => { return a.ActualSequence - b.ActualSequence })
     // }
-    debugger;
     for (let i = 0; i < trips.length; i++) {
       if(sequence == 2) {
         // changing color of the marker icon based on condition

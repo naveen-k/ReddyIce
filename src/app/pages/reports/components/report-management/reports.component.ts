@@ -207,7 +207,6 @@ export class ReportsComponent implements OnInit {
 
         } else {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
-
         }
         this.fetchSTechByBranch();
     }
