@@ -16,8 +16,8 @@ import { debounce } from 'rxjs/operator/debounce';
 })
 export class ReportsComponent implements OnInit {
     overlayStatus: boolean = false;
-    onLoadFrame:boolean = false;
-    viewButtonStatus:boolean =false;
+    onLoadFrame: boolean = false;
+    viewButtonStatus: boolean = false;
     cacheBranches;
     selectedCustomerType: number = 0;
     isITAdmin: boolean = false;
@@ -60,7 +60,7 @@ export class ReportsComponent implements OnInit {
     hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
     user: User;
-    linkRpt: SafeResourceUrl =  this.sanitizer.bypassSecurityTrustResourceUrl('');
+    linkRpt: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 
     distributors: any[] = [];
     modifiedStartDate: any;
@@ -200,14 +200,14 @@ export class ReportsComponent implements OnInit {
             this.overlayStatus = false;
         }, (err) => { this.overlayStatus = false; });
     }
-    private populateCustomerBranch(){
+    private populateCustomerBranch() {
         if (this.filter.reportType === 'EOD') {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
             this.branches.shift();
-           
+
         } else {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
-           
+
         }
         this.fetchSTechByBranch();
     }
@@ -215,7 +215,7 @@ export class ReportsComponent implements OnInit {
         this.branches = [];
         this.stechs = [];
         if (this.cacheBranches) {
-           this.populateCustomerBranch();
+            this.populateCustomerBranch();
 
         } else {
             this.reportService.getCustomerBranches().subscribe((res) => {
@@ -273,7 +273,7 @@ export class ReportsComponent implements OnInit {
             res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
             this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
             this.overlayStatus = false;
-        }, (err) => {   this.overlayStatus = false; });
+        }, (err) => { this.overlayStatus = false; });
         this.filter.custID = 0;
         if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
@@ -332,7 +332,7 @@ export class ReportsComponent implements OnInit {
         }
     }
 
-    routes:any[] = [];
+    routes: any[] = [];
     routeNumberChange() {
         this.reportService.getManifestRoutes(this.filter.branch, this.formatDate(this.filter.manifestDate)).subscribe((res) => {
             this.routes = res;
@@ -343,8 +343,7 @@ export class ReportsComponent implements OnInit {
 
     getRoutesForRange() {
         this.reportService.getRoutesForRange(this.filter.branch, this.formatDate(this.filter.startDate), this.formatDate(this.filter.endDate)).subscribe((res) => {
-            this.routes = res;
-            //this.routes = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
+            this.routes = res.map((v) => { return { value: v, label: v } });
         }, (err) => {
         });
     }
@@ -398,7 +397,7 @@ export class ReportsComponent implements OnInit {
                 if (res != 0) {
                     this.filter.workOrderId = res;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
+                        (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
                     this.overlayStatus = false;
                     this.viewReport = true;
                     console.log('when WONS is clicked', this.linkRpt);
@@ -428,7 +427,7 @@ export class ReportsComponent implements OnInit {
             this.selectedCustomerType = this.customerstatus;
 
             this.viewReport = true;
-            
+
 
             // hack to check if start date is not greater than end date
             if ((Date.parse(this.formatDate(this.filter.endDate)) < Date.parse(this.formatDate(this.filter.startDate)))) {
@@ -487,12 +486,12 @@ export class ReportsComponent implements OnInit {
                 this.getWorkOrderIdByTicketNumber(this.filter.workOrderNumber);
                 // this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                 // (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&WOID=${this.filter.workOrderId}&LoggedInUserID=${this.user.UserId}`);
-                
+
                 // console.log('when WONS is clicked', this.linkRpt);
             } else if (rType === 'SSR') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}&LoggedInUserID=${this.user.UserId}`);
-                
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}&LoggedInUserID=${this.user.UserId}`);
+
                 console.log('when SSR is clicked', this.linkRpt);
             } else {
                 return false;
@@ -507,7 +506,7 @@ export class ReportsComponent implements OnInit {
                     this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                     this.selectedCustomerType = this.customerstatus;
                     this.viewReport = true;
-                   
+
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
                 } else {
                     this.viewReport = false;
@@ -524,13 +523,13 @@ export class ReportsComponent implements OnInit {
                     this.notification.error('Ticket Number Not Found!!');
                 }
 
-              
+
                 this.filter.showCustomerDropdown = false;
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-               
+
             }
         }
-        
+
         console.log(this.linkRpt);
     }
 
@@ -553,7 +552,7 @@ export class ReportsComponent implements OnInit {
         if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'EOD')) {
             this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
-            if(this.filter.branch){
+            if (this.filter.branch) {
                 this.fetchSTechByBranch();
             }
         } else {
@@ -639,7 +638,7 @@ export class ReportsComponent implements OnInit {
         // Get a handle to the iframe element
         var iframe = document.getElementById('reportFrame');
         // var iframeDoc = iframe[0].contentDocument || iframe[0].contentWindow.document;
-    
+
         // // Check if loading is complete
         // if (  iframeDoc.readyState  == 'complete' ) {
         //     //iframe.contentWindow.alert("Hello");
@@ -650,14 +649,14 @@ export class ReportsComponent implements OnInit {
         //     this.afterLoading();
         //     return;
         // } 
-    
+
         // // If we are here, it is not loaded. Set things up so we check   the status again in 100 milliseconds
         // window.setTimeout(this.checkIframeLoaded, 100);
     }
-    afterLoading(){
+    afterLoading() {
         $('#loader').hide();
         this.viewButtonStatus = false;
         console.log("data loadedd");
     }
-    
+
 }
