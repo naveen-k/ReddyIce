@@ -195,13 +195,21 @@
             </span>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
-            <label>Trip Status</label>
-            <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
-                <option [value]="0">All Trips</option>
+        <!-- changes due to new requirment to add ticket status-->
+            <label>{{filter.ticketType == 'paper' ? 'Ticket' : 'Trip'}} Status</label>
+            <!-- <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
+                <option [value]="0">All {{filter.ticketType == 'paper' ? 'Ticket' : 'Trip'}}</option>
                 <option [value]="1">HH Day End Not Done</option>
                 <option [value]="2">Not Approved</option>
                 <option [value]="3">Approved</option>
-            </select>
+            </select> -->
+
+            <select class="form-control" [(ngModel)]='filter.tripState' (ngModelChange)="driverChange()">
+                <option [value]="0">All {{filter.ticketType == 'paper' ? 'Ticket' : 'Trip'}}</option>
+                <option [value]="1">{{filter.ticketType == 'paper' ? 'Draft' : 'HH Day End Not Done'}}</option>
+                <option [value]="2">{{filter.ticketType == 'paper' ? 'Submitted' : 'Not Approved'}}</option>
+                <option [value]="3">Approved</option>
+            </select>            
         </div>
         <div class="col-md-1 text-right head-button-container">
             <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)" [disabled]="viewButtonStatus || ((filter.reportType=='WOC' || filter.reportType=='EOD') && (!filter.branch || !filter.stech))">View Report</button>
