@@ -98,7 +98,7 @@ export class CreateTicketComponent implements OnInit {
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
-
+  distributorsCache: any=[];
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
@@ -139,7 +139,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.DeliveryDate = this.listFilter.CreatedDate;
     this.ticket.BranchID = +this.listFilter.BranchId;
     this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
-    this.ticket.UserID = this.listFilter.UserId ? +this.listFilter.UserId : 0;
+    this.ticket.UserID = (+this.listFilter.UserId>0) ? +this.listFilter.UserId : -1;
     this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
 
     // get the ticket id from route
@@ -372,7 +372,7 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadDriversOfBranch(branchId) {
-    if (branchId != null) {
+    if (branchId != null && branchId>1) {
       this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
         this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
         var that = this;
@@ -381,7 +381,7 @@ export class CreateTicketComponent implements OnInit {
             return +el.value === +that.ticket.UserID;
           });
           if (newArray.length === 0) {
-            this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : null;
+            this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : -1;
           }
         }
         /**
@@ -397,9 +397,15 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadDisributors(branchId?: any) {
-    this.service.getDistributerAndCopacker().subscribe(res => {
-      this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
-    })
+    if(this.distributorsCache.length==0){
+      this.service.getDistributerAndCopacker().subscribe(res => {
+        this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
+        this.distributorsCache = this.distributors
+      })
+    } else{
+      this.distributors = this.distributorsCache;
+    }
+    
   }
 
   customerChangeHandler(event) {
@@ -981,8 +987,8 @@ export class CreateTicketComponent implements OnInit {
 
   userTypeChangeHandler() {
 
-    this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = null;
-    this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = null;
+    this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = -1;
+    this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = -1;
 
     // this.ticket.TicketProduct = [{} as TicketProduct];
     this.ticket.Customer = '';

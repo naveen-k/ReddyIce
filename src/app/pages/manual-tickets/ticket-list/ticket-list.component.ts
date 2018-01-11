@@ -12,6 +12,7 @@ import { environment } from '../../../../environments/environment';
     styleUrls: ['./ticket-list.component.scss'],
 })
 export class TicketListComponent implements OnInit {
+    counter:number = 0;
     newWindow: any;
     showSpinner: boolean = false;
 
@@ -47,6 +48,7 @@ export class TicketListComponent implements OnInit {
         totalBuyBack: 0,
         totalDistAmt: 0,
     };
+    distributorsCache:any =[]
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
 
     constructor(
@@ -83,16 +85,17 @@ export class TicketListComponent implements OnInit {
 
         this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
-        if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && !this.searchObj.BranchId) {
+        if (!this.user.IsDistributor && this.user.Branch && this.user.Branch.BranchID !== 1 && this.searchObj.BranchId <=1) {
             this.searchObj.BranchId = this.user.Branch.BranchID;
         }
 
-        if (this.user.Distributor && this.user.Distributor.DistributorMasterId && !this.searchObj.DistributorID) {
+        if (this.user.Distributor && this.user.Distributor.DistributorMasterId && this.searchObj.DistributorID<=1) {
             this.searchObj.DistributorID = this.user.Distributor.DistributorMasterId;
         }
 
         // Set first branch default selected
-        if (this.searchObj.BranchId) {
+
+        if (this.searchObj.BranchId && this.searchObj.BranchId>0) {
             this.branchChangeHandler();
         } else if (this.searchObj.DistributorID) {
             this.getDistributors();
@@ -120,7 +123,7 @@ export class TicketListComponent implements OnInit {
     }
 
     getDrivers(byType: any = '') {
-        if (this.searchObj.BranchId === null) {
+        if (!this.searchObj.BranchId || this.searchObj.BranchId === null || this.searchObj.BranchId === -1) {
             return;
         }
        
@@ -130,7 +133,7 @@ export class TicketListComponent implements OnInit {
             if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 4 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
                
-                this.searchObj.UserId = +this.searchObj.UserId || 1;
+                this.searchObj.UserId = (+this.searchObj.UserId>1)?+this.searchObj.UserId: -1;
             }
             this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
             this.showSpinner = false;
@@ -139,14 +142,19 @@ export class TicketListComponent implements OnInit {
     }
 
     getDistributors(byType: any = '') {
+        if(this.distributorsCache.length==0){
         this.service.getDistributerAndCopacker().subscribe(res => {
             this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
+            this.distributorsCache = this.distributors;
             this.getSearchedTickets(byType);
         });
+        } else{
+            this.distributors = this.distributorsCache;
+            this.getSearchedTickets(byType);
+        }
     }
 
     branchChangeHandler(byType: any = '') {
-        this.searchObj.UserId = -1;
         this.getDrivers(byType);
     }
     dateChangeHandler() {
@@ -260,10 +268,10 @@ export class TicketListComponent implements OnInit {
         // if (!this.searchObj.BranchId) {
         //     return;
         // }
-        this.searchObj.UserId = null;
-        this.searchObj.DistributorID = 0;
+        this.searchObj.UserId = -1;
+        this.searchObj.DistributorID = -1;
         if (this.searchObj.userType === 'External') {
-            this.searchObj.BranchId = null;
+            this.searchObj.BranchId = -1;
             this.getDistributors(byType);
         } else {
 

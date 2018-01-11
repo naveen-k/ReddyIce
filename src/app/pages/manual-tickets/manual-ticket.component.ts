@@ -14,12 +14,12 @@ export class ManualTicketComponent {
     searchObject.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
     searchObject.userType = userService.getUser().IsDistributor ? 'External' : 'Internal';
     if (userService.getUser().Role.RoleID < 3 || userService.getUser().Role.RoleID == 4) {
-      searchObject.UserId = 1;
+      searchObject.UserId = -1;
     } else {
       searchObject.UserId = userService.getUser().UserId;
     }
 
-    searchObject.BranchId = null;
-    searchObject.DistributorID = null;
+    searchObject.BranchId = -1;
+    searchObject.DistributorID = -1;
   }
 }
