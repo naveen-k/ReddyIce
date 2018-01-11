@@ -234,8 +234,8 @@
                     <label class="control-label">
                         Enter Ticket Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number"
-                        (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
+                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number">
+                        <!-- (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)"> -->
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
                     <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
