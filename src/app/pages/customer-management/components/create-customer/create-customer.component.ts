@@ -143,7 +143,6 @@ export class CreateCustomerComponent implements OnInit {
             if (this.mode === 2) {
                 ///const mAddedProduct = this.addedProduct.concat(this.newlyAddedproduct);
                 // this.customer.MappedProducts = mAddedProduct;
-                debugger;
                 this.customer.EditedProducts = this.addedProduct;
                 this.customer.NewAddedProducts = [];//this.newlyAddedproduct;
                 this.customer.EditedProducts.push(...this.newlyAddedproduct);
@@ -157,7 +156,7 @@ export class CreateCustomerComponent implements OnInit {
                     this.notification.error('', err._body);
                 });
 
-            } else {debugger;
+            } else {
                 this.customer.MappedProducts = this.addedProduct;
                 this.customer.EditedProducts = this.addedProduct;
                 this.customer.NewAddedProducts = [];//this.addedProduct;
