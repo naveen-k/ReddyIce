@@ -300,7 +300,7 @@ export class TrackerComponent implements OnInit {
 
   // Fetch selected Trip
   tripChangeHandler() {
-    const tripId = this.driverSpecTrips.filter(t => t.TripCode === this.tripFilterOption.TripCode)[0].TripID;
+    const tripId = this.driverSpecTrips.filter(t => t.TripCode === +this.tripFilterOption.TripCode)[0].TripID;
     this.fetchTicketDetailsByTrip(tripId);
   }
 

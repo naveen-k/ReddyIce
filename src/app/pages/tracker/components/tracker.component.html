@@ -38,7 +38,7 @@
                 <div class="col-sm-3">
                     <label>Select Trip</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' (change)="tripChangeHandler()">
-                        <option *ngFor="let trip of driverSpecTrips">
+                        <option *ngFor="let trip of driverSpecTrips" [value]="trip.TripCode">
                             {{trip.TripCode}} - {{trip.RouteNumber}}
                         </option>
                     </select>
