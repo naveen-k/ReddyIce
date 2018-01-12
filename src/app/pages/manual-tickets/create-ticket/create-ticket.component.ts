@@ -141,7 +141,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
     this.ticket.UserID = (+this.listFilter.UserId>0) ? +this.listFilter.UserId : -1;
     this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
-
+    debugger;
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
 
@@ -174,10 +174,10 @@ export class CreateTicketComponent implements OnInit {
     if (this.user.Role.RoleID == 1 || this.user.Role.RoleID == 6) {
       this.loadDisributors();
     }
-    if (this.user.IsDistributor || this.ticket.DistributorCopackerID) {
+    if (this.user.IsDistributor || (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID>0)) {
       // this.loadCustomers();
       this.loadDisributors();
-      if (!this.ticket.DistributorCopackerID) {
+      if (!this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID < 1) {
         // Set distributor 
         this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
       }
@@ -774,7 +774,7 @@ export class CreateTicketComponent implements OnInit {
         this.isDownloadable = true;
       }
 
-      //this.loadCustomers();
+      this.loadCustomers();
       // load driver or distributor
       if (this.ticket.isUserTypeDistributor) {
         this.loadDisributors(this.ticket.BranchID);
