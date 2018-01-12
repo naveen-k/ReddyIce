@@ -8,19 +8,20 @@
         <div class="col-sm-2">
             <label>Select Date</label>
             <div class="input-group">
-                <date-picker [maxDate]="todaysDate" [(dateModel)]="searchObj.CreatedDate" (dateModelChange)="getSearchedTickets();dateChangeHandler();"></date-picker>
+                <date-picker [maxDate]="todaysDate" [(dateModel)]="searchObj.CreatedDate" (dateModelChange)="dateChangeHandler();"></date-picker>
             </div>
         </div>
         <div class="col-sm-2">
             <label>Select Driver Type</label>
-            <select [disabled]="user.IsDistributor || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+            <select [disabled]="user.IsDistributor || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7" class="form-control"
+                id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                 <option [value]="'Internal'">RI Driver</option>
                 <option [value]="'External'">Dist./CoPacker</option>
             </select>
         </div>
         <div class="col-sm-3" *ngIf="!user.IsDistributor" [hidden]="searchObj.userType=='External'">
             <label>Select Business Unit</label>
-            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler()"></reddy-select>            
+            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler()"></reddy-select>
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
             <label>Driver</label>
@@ -30,15 +31,15 @@
                     {{obj.FirstName}} {{obj.LastName}}
                 </option>
             </select> -->
-            <reddy-select [disabled]="user.IsDistributor" [options]="drivers" [(selected)]="searchObj.UserId" (selectedChange)="userChangeHandler('byuser')"></reddy-select>  
+            <reddy-select [disabled]="user.IsDistributor" [options]="drivers" [(selected)]="searchObj.UserId" (selectedChange)="userChangeHandler('byuser')"></reddy-select>
         </div>
         <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
-            <label>Dist./CoPacker</label>            
+            <label>Dist./CoPacker</label>
             <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="searchObj.DistributorID" (selectedChange)="userChangeHandler()"></reddy-select>
         </div>
         <div class="col-sm-3">
             <label>Search</label>
-            <input type="text" class="form-control" id="input01" [(ngModel)]="searchString" placeholder="Search">
+            <input type="text" class="form-control" id="input01" [(ngModel)]="searchString" placeholder="Search" (ngModelChange)="searchItem();">
         </div>
         <div class="col-sm-2 createTicketBtn">
             <button [routerLink]="['../ticket']" (click)="overlayStatus = true" class="btn btn-primary addCustBtn pull-right">
@@ -51,77 +52,80 @@
             <thead class="tableHeader">
                 <tr>
                     <th style="width:112px;">
+                        <span style="padding: 0px 15px 0px 5px;" title="Select/Unselect All">
+                            <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
+                        </span>
                         <button [disabled]="!allTickets.length || disableApprove" class="btn btn-primary" (click)="approveCheckedTickets()" style="margin:-5px;">
                             Approve
                         </button>
                     </th>
                     <th class="table-id thVerticalAlign actionAlignCenter" style="width:91px;">Actions</th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
-                          Ticket #
-                           <i *ngIf="(customer.sortField == 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
-                    </th>
-                    <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
-                            Ticket Type
-                            <i *ngIf="(customer.sortField == 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        <span class="cursorPointer" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;sortable('TicketNumber');">
+                            Ticket #
+                            <i *ngIf="(customer.sortField == 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerTitle';customer.isAsc=!customer.isAsc;">
-                          Customer
-                          <i *ngIf="(customer.sortField == 'CustomerTitle')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTitle' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                        <span class="cursorPointer" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;sortable('TicketTypeID');">
+                            Ticket Type
+                            <i *ngIf="(customer.sortField == 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
+                    </th>
+                    <th class="thVerticalAlign table-text-align">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerTitle';customer.isAsc=!customer.isAsc;sortable('CustomerTitle');">
+                            Customer
+                            <i *ngIf="(customer.sortField == 'CustomerTitle')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTitle' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                     <th class="thVerticalAlign table-text-align" [hidden]="searchObj.userType!='Internal'">
-                        <span class="cursorPointer" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;sortable('UserName');">
                             Driver
-                            <i *ngIf="(customer.sortField == 'UserName')" [ngClass]="(customer.isAsc && customer.sortField == 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'UserName')" [ngClass]="(customer.isAsc && customer.sortField == 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TotalSaleWithTax';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TotalSaleWithTax';customer.isAsc=!customer.isAsc;sortable('TotalSaleWithTax');">
                             Total Sale
-                            <i *ngIf="(customer.sortField == 'TotalSaleWithTax')" [ngClass]="(customer.isAsc && customer.sortField == 'TotalSaleWithTax' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                            <i *ngIf="(customer.sortField == 'TotalSaleWithTax')" [ngClass]="(customer.isAsc && customer.sortField == 'TotalSaleWithTax' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
-                             Received Amt
-                            <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;sortable('CashAmount');">
+                            Received Amt
+                            <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;sortable('Drayage');">
                             Drayage
-                            <i *ngIf="(customer.sortField == 'Drayage')" [ngClass]="(customer.isAsc && customer.sortField == 'Drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'Drayage')" [ngClass]="(customer.isAsc && customer.sortField == 'Drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;sortable('BuyBack');">
                             Buyback
-                            <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'DeliveryDate';customer.isAsc=!customer.isAsc;">
-                          Delivery Date
-                          <i *ngIf="(customer.sortField == 'DeliveryDate')" [ngClass]="(customer.isAsc && customer.sortField == 'DeliveryDate' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                        <span class="cursorPointer" (click)="customer.sortField = 'DeliveryDate';customer.isAsc=!customer.isAsc;sortable('DeliveryDate');">
+                            Delivery Date
+                            <i *ngIf="(customer.sortField == 'DeliveryDate')" [ngClass]="(customer.isAsc && customer.sortField == 'DeliveryDate' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
-                    <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
+                    <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;sortable('TicketStatusID');" class="thVerticalAlign textAlignCenter statusPadding">
                         <span class="cursorPointer">
-                          Status
-                          <i *ngIf="(customer.sortField == 'TicketStatusID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketStatusID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                            Status
+                            <i *ngIf="(customer.sortField == 'TicketStatusID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketStatusID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                 </tr>
             </thead>
-            <tbody>                
-                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:(searchObj.userType === 'Internal')?searchObj.UserId:searchObj.DistributorID ) | filter:searchString:['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType'] | sort:customer.sortField:customer.isAsc; let i=index">
+            <tbody>
+                <tr *ngFor="let item of allFilterdTickets;  let i=index">
                     <td>
-                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
+                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler();checkIfAllSelected();"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
                     </td>
                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
@@ -161,7 +165,9 @@
                     <td>{{ item.TicketNumber }}</td>
                     <!-- <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td> -->
                     <td>{{ item.ticketType }}</td>
-                    <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:10 }}</span></td>
+                    <td>
+                        <span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:10 }}</span>
+                    </td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currencyFormatter }}</td>
@@ -195,8 +201,13 @@
                 </tr>-->
             </tbody>
         </table>
-        <div class='spinnerContainer' [hidden]='!showSpinner'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-        <div *ngIf="(!allTickets.length && !showSpinner) || (allTickets.length==0 && !showSpinner)" class='marginTopCenter'> No data found </div>
+        <div class='spinnerContainer' [hidden]='!showSpinner'>
+            <a>
+                <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+            </a>
+        </div>
+        <div *ngIf="(!allFilterdTickets.length && !showSpinner) || (allFilterdTickets.length==0 && !showSpinner)" class='marginTopCenter'>
+        No data found </div>
     </div>
-    
+
 </ba-card>

@@ -10,16 +10,20 @@ import { environment } from '../../../../environments/environment';
 
 import { ModelPopupComponent } from 'app/shared/components/model-popup/model-popup.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
+import { TicketFilter } from 'app/pages/manual-tickets/pipes/filter-ticket.pipe';
+import { GenericFilter } from 'app/shared/pipes/generic-filter.pipe';
+import { GenericSort } from 'app/shared/pipes/generic-sort.pipe';
 @Component({
     templateUrl: './ticket-list.component.html',
     styleUrls: ['./ticket-list.component.scss'],
+    providers: [TicketFilter, GenericFilter, GenericSort]
 })
 export class TicketListComponent implements OnInit {
-    overlayStatus:boolean = false;
-    counter:number = 0;
+    overlayStatus: boolean = false;
+    counter: number = 0;
     newWindow: any;
     showSpinner: boolean = false;
-
+    selectedAll: any;
     // allbranches related to loggen in usr
     allBranches: Array<any>;
 
@@ -52,7 +56,10 @@ export class TicketListComponent implements OnInit {
         totalBuyBack: 0,
         totalDistAmt: 0,
     };
-    distributorsCache:any =[]
+    distributorsCache: any = [];
+    allFilterdTickets: Array<any> = [];
+    customer: any = { sortField: '', isAsc: false };
+    searchColumn: Array<any> = ['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType']
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
 
     constructor(
@@ -61,6 +68,9 @@ export class TicketListComponent implements OnInit {
         protected notificationService: NotificationsService,
         protected activatedRoute: ActivatedRoute,
         protected modalService: NgbModal,
+        private ticketFilter: TicketFilter,
+        private genericFilter: GenericFilter,
+        private genericSort: GenericSort
     ) { }
 
     ngOnInit() {
@@ -90,17 +100,17 @@ export class TicketListComponent implements OnInit {
 
         this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
 
-        if (!this.user.IsDistributor && this.user.Branch && (this.user.Branch.BranchID && this.user.Branch.BranchID !== 1) && this.searchObj.BranchId <=1) {
+        if (!this.user.IsDistributor && this.user.Branch && (this.user.Branch.BranchID && this.user.Branch.BranchID !== 1) && this.searchObj.BranchId <= 1) {
             this.searchObj.BranchId = this.user.Branch.BranchID;
         }
 
-        if (this.user.IsDistributor && this.user.Distributor.DistributorMasterId && this.searchObj.DistributorID<=1) {
+        if (this.user.IsDistributor && this.user.Distributor.DistributorMasterId && this.searchObj.DistributorID <= 1) {
             this.searchObj.DistributorID = this.user.Distributor.DistributorMasterId;
         }
 
         // Set first branch default selected
 
-        if (this.searchObj.BranchId && this.searchObj.BranchId>0) {
+        if (this.searchObj.BranchId && this.searchObj.BranchId > 0) {
             this.branchChangeHandler();
         } else if (this.searchObj.DistributorID) {
             this.getDistributors();
@@ -128,17 +138,17 @@ export class TicketListComponent implements OnInit {
     }
 
     getDrivers(byType: any = '') {
-        if (!this.searchObj.BranchId || this.searchObj.BranchId === null || this.searchObj.BranchId === -1) {
+        if (this.searchObj.BranchId === -1) {
             return;
         }
-       
+
         this.showSpinner = true;
         this.service.getDriverByBranch(this.searchObj.BranchId, this.searchObj.userType === 'Internal').subscribe(res => {
             res = res || [];
             if (this.user.Role && (this.user.Role.RoleID < 3 || this.user.Role.RoleID == 4 || this.user.Role.RoleID == 7)) {
                 res.unshift({ 'UserId': 1, 'FirstName': 'All', 'LastName': 'Drivers' });
-               
-                this.searchObj.UserId = (+this.searchObj.UserId>0)?+this.searchObj.UserId: -1;
+
+                this.searchObj.UserId = (+this.searchObj.UserId > 0) ? +this.searchObj.UserId : -1;
             }
             this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
             this.showSpinner = false;
@@ -147,13 +157,13 @@ export class TicketListComponent implements OnInit {
     }
 
     getDistributors(byType: any = '') {
-        if(this.distributorsCache.length==0){
-        this.service.getDistributerAndCopacker().subscribe(res => {
-            this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
-            this.distributorsCache = this.distributors;
-            this.getSearchedTickets(byType);
-        });
-        } else{
+        if (this.distributorsCache.length == 0) {
+            this.service.getDistributerAndCopacker().subscribe(res => {
+                this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
+                this.distributorsCache = this.distributors;
+                this.getSearchedTickets(byType);
+            });
+        } else {
             this.distributors = this.distributorsCache;
             this.getSearchedTickets(byType);
         }
@@ -161,9 +171,11 @@ export class TicketListComponent implements OnInit {
 
     branchChangeHandler(byType: any = '') {
         this.getDrivers(byType);
+
     }
     dateChangeHandler() {
         this.searchObj.UserId = -1;
+        this.getSearchedTickets();
     }
     getSearchedTickets(byType: any = '') {
         // Cloned search object
@@ -187,12 +199,16 @@ export class TicketListComponent implements OnInit {
                     if (response == 'No record found') {
                         this.allTickets = [];
                         this.allTicketsTemp = [];
+                        this.allFilterdTickets = [];
+                        this.unSelectAll();
                     } else {
                         response.forEach(element => {
                             element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
                         });
                         this.allTickets = response;
                         this.allTicketsTemp = response;
+                        this.allFilterdTickets = this.getFilteredAllTicket();
+                        this.unSelectAll();
                         this.ticketTotal();
 
                     }
@@ -202,11 +218,15 @@ export class TicketListComponent implements OnInit {
                     if (error) {
                         this.showSpinner = false;
                         this.allTickets = [];
+                        this.allFilterdTickets = [];
+                        this.unSelectAll();
                     }
                 },
             );
         } else {
             this.allTickets = this.allTicketsTemp;
+            this.allFilterdTickets = this.getFilteredAllTicket();
+            this.unSelectAll();
             this.allTickets.forEach(element => {
                 element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
             });
@@ -215,6 +235,7 @@ export class TicketListComponent implements OnInit {
             this.ticketTotal();
 
         }
+
     }
     ticketTotal() {
         this.allTickets.forEach(ticket => {
@@ -240,6 +261,7 @@ export class TicketListComponent implements OnInit {
         }
 
         this.createMultiTicketApprovalObject(selectedIds);
+        this.disableApprove = true;
     }
 
     ticketSelectionHandler() {
@@ -282,6 +304,8 @@ export class TicketListComponent implements OnInit {
 
             this.getDrivers(byType);
         }
+        this.allFilterdTickets = this.getFilteredAllTicket();
+        this.unSelectAll();
     }
 
     userChangeHandler(byType: any = '') {
@@ -318,44 +342,67 @@ export class TicketListComponent implements OnInit {
             this.notificationService.error("Ticket preview unavailable!!");
         }
     }
-    showTicketChoice(ticketNumber,mode){
+    showTicketChoice(ticketNumber, mode) {
         this.overlayStatus = true;
         this.service.getSaleCreditTicket(ticketNumber).subscribe(
             (response) => {
                 if (response) {
-                    const activeModal = this.modalService.open(ModelPopupComponent, {
-                        size: 'sm',
-                        backdrop: 'static',
-                      });
-                      let cstring = [];
-                      response.forEach(item=>{
-                          item.link = `/pages/manual-ticket/ticket/${item.TicketID}`;
-                          item.mode = mode;
-                          if(item.TicketTypeId==26){
-                              item.title="Sale";
-                            cstring.push(item);
-                          }else if(item.TicketTypeId==27){
-                            item.title="Credit";
-                            cstring.push(item);
-                          }
-                        
-                      
-                      })
-                      let ticket = cstring;
-                      
-                      activeModal.componentInstance.showCancel = false;
-                      activeModal.componentInstance.modalHeader = `Credit & Sale Ticket #: ${ticketNumber}`;
-                      activeModal.componentInstance.modeltype = 'ticket';
-                      activeModal.componentInstance.modalContent = ticket;
-                      activeModal.componentInstance.closeModalHandler = (() => {
-                        this.overlayStatus = false;
-                      });
-                      activeModal.componentInstance.deleteTicketHandler = ((ticketId) => {
-                          console.log("----------------",ticketId);
-                        this.deleteTicket(ticketId);
-                        
-                      });
-                
+                   
+                    if(mode == 'delete'){
+                        let count=0;
+                        response.forEach(item => {
+                        this.service.deleteDraftTicket(item.TicketID).subscribe(
+                            (res) => {
+                                if (res) {
+                                    count++;
+                                    if(count==response.length){
+                                        this.notificationService.success('Ticket deleted successfully');
+                                        this.getSearchedTickets();
+                                        this.overlayStatus = false;
+                                    }
+                                    
+                                }
+                            },
+                            (error) => {
+                                if (error) {
+                                    this.notificationService.error(error._body);
+                                }
+                                this.overlayStatus = false;
+                            },
+                        );
+                       
+                       
+                    });
+                    }
+                    else if (mode == 'edit') {
+                        const activeModal = this.modalService.open(ModelPopupComponent, {
+                            size: 'sm',
+                            backdrop: 'static',
+                        });
+                        let cstring = [];
+                        response.forEach(item => {
+                            item.link = `/pages/manual-ticket/ticket/${item.TicketID}`;
+                            item.mode = mode;
+                            if (item.TicketTypeId == 26) {
+                                item.title = "Sale";
+                                cstring.push(item);
+                            } else if (item.TicketTypeId == 27) {
+                                item.title = "Credit";
+                                cstring.push(item);
+                            }
+                        })
+                        let ticket = cstring;
+
+
+                        activeModal.componentInstance.showCancel = false;
+                        activeModal.componentInstance.modalHeader = `Edit Ticket #: ${ticketNumber}`;
+                        activeModal.componentInstance.modeltype = 'ticket';
+                        activeModal.componentInstance.modalContent = ticket;
+                        activeModal.componentInstance.closeModalHandler = (() => {
+                            this.overlayStatus = false;
+                        });
+                    }
+
                 }
             },
             (error) => {
@@ -364,5 +411,52 @@ export class TicketListComponent implements OnInit {
                 }
             },
         );
+
+    }
+
+    getFilteredAllTicket() {
+        let filterData = [];
+        filterData = this.ticketFilter.transform(this.allTickets, this.searchObj.userType, (this.searchObj.userType === 'Internal') ? this.searchObj.UserId : this.searchObj.DistributorID);
+
+        filterData = this.genericFilter.transform(filterData, this.searchString, this.searchColumn);
+
+        filterData = this.genericSort.transform(filterData, this.customer.sortField, this.customer.isAsc);
+
+        return filterData;
+    }
+
+    selectAll() {
+        //this.allFilterdTickets = this.getFilteredAllTicket();
+
+        for (var i = 0; i < this.allFilterdTickets.length; i++) {
+            if (this.allFilterdTickets[i].TicketStatusID == 24) {
+                this.disableApprove = (this.selectedAll == false) ? true : false;
+                this.allFilterdTickets[i].selected = this.selectedAll;
+            }
+        }
+
+    }
+    checkIfAllSelected() {
+        //this.allFilterdTickets = this.getFilteredAllTicket();
+        this.selectedAll = this.allFilterdTickets.every(function (item: any) {
+            return item.selected == true;
+        })
+    }
+    sortable(name) {
+        this.customer.sortField = name;
+        this.customer.isAsc = !this.customer.isAsc;
+    }
+    unSelectAll() {
+        this.allFilterdTickets = this.getFilteredAllTicket();
+        this.selectedAll = false;
+        for (var i = 0; i < this.allFilterdTickets.length; i++) {
+            if (this.allFilterdTickets[i].TicketStatusID == 24) {
+                this.disableApprove = true;
+                this.allFilterdTickets[i].selected = false;
+            }
+        }
+    }
+    searchItem() {
+        this.unSelectAll();
     }
 }
