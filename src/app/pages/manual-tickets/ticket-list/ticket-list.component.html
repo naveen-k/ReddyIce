@@ -132,7 +132,12 @@
                         <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.TicketID)">
                             <span class="tooltiptext">View Ticket Details</span>
                         </i>
-                        <a [routerLink]="['../view/'+item.TicketID]" (click)="overlayStatus = true;">
+                        <a *ngIf="item.ticketType !='Credit & Sale'" [routerLink]="['../view/'+item.TicketID]" (click)="overlayStatus = true;">
+                            <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
+                                <span class="tooltiptext">View</span>
+                            </i>
+                        </a>
+                        <a *ngIf="item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber,'view')">
                             <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">View</span>
                             </i>

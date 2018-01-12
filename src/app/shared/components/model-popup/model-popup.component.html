@@ -12,10 +12,15 @@
       <div [hidden]="modeltype!='ticket'" class="clearfix" >
         <ul>
           <li *ngFor="let ticket of modalContent;">{{ticket.title}} <a *ngIf="ticket.mode=='edit'" style="cursor:pointer;" (click)="dismiss(ticket.link)">
-            &nbsp;<i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+            &nbsp;<i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" >
               <span class="tooltiptext">Edit</span>
           </i>
         </a>
+        <a *ngIf="ticket.mode=='view'" style="cursor:pointer;" (click)="dismiss(ticket.link)">
+          &nbsp;<i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" >
+            <span class="tooltiptext">View</span>
+        </i>
+      </a>
         <a *ngIf="ticket.mode=='delete'" style="cursor:pointer;" (click)="delete(ticket.TicketID)">{{ticket.title}}
           &nbsp;
           <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px">

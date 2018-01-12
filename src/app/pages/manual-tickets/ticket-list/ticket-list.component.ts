@@ -374,14 +374,22 @@ export class TicketListComponent implements OnInit {
                        
                     });
                     }
-                    else if (mode == 'edit') {
+                    else if (mode == 'edit' || mode == 'view') {
                         const activeModal = this.modalService.open(ModelPopupComponent, {
                             size: 'sm',
                             backdrop: 'static',
                         });
                         let cstring = [];
+                        let heading = 'View';
                         response.forEach(item => {
-                            item.link = `/pages/manual-ticket/ticket/${item.TicketID}`;
+                            if(mode == 'edit'){
+                                item.link = `/pages/manual-ticket/ticket/${item.TicketID}`;
+                                heading = 'Edit';
+                            } else{
+                                item.link = `/pages/manual-ticket/view/${item.TicketID}`;
+                                heading = 'View'
+                            }
+                            
                             item.mode = mode;
                             if (item.TicketTypeId == 26) {
                                 item.title = "Sale";
@@ -395,7 +403,7 @@ export class TicketListComponent implements OnInit {
 
 
                         activeModal.componentInstance.showCancel = false;
-                        activeModal.componentInstance.modalHeader = `Edit Ticket #: ${ticketNumber}`;
+                        activeModal.componentInstance.modalHeader = `${heading} Ticket #: ${ticketNumber}`;
                         activeModal.componentInstance.modeltype = 'ticket';
                         activeModal.componentInstance.modalContent = ticket;
                         activeModal.componentInstance.closeModalHandler = (() => {
