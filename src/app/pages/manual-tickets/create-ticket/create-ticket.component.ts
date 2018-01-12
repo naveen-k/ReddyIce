@@ -141,7 +141,6 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
     this.ticket.UserID = (+this.listFilter.UserId>0) ? +this.listFilter.UserId : -1;
     this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
-    debugger;
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
 
@@ -1041,7 +1040,7 @@ export class CreateTicketComponent implements OnInit {
   calculateProductTotalAmount(q, p) {
     q = q || 0;
     p = p || 0;
-    return q.fpArithmetic("*", p);
+    return (+q).fpArithmetic("*", (+p));
   }
 
   calculateTotalSale() {
