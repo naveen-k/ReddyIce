@@ -295,7 +295,7 @@ export class CreateTicketComponent implements OnInit {
 
     this.resetCashAndCheck();
 
-    if (this.ticket.DistributorCopackerID) {
+    if (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID>0) {
       this.loadCustomers();
     }
   }
@@ -363,9 +363,9 @@ export class CreateTicketComponent implements OnInit {
       }
     };
 
-    if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
+    if (+this.ticket.DistributorCopackerID>1 && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
-    } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
+    } else if (!this.user.IsDistributor && +this.ticket.DistributorCopackerID<1) {
       this.loadCustomerOfBranch(this.ticket.BranchID, callback);
     }
   }
@@ -774,7 +774,7 @@ export class CreateTicketComponent implements OnInit {
         this.isDownloadable = true;
       }
 
-      this.loadCustomers();
+      //this.loadCustomers();
       // load driver or distributor
       if (this.ticket.isUserTypeDistributor) {
         this.loadDisributors(this.ticket.BranchID);
@@ -991,6 +991,7 @@ export class CreateTicketComponent implements OnInit {
 
     // this.ticket.TicketProduct = [{} as TicketProduct];
     this.ticket.Customer = '';
+    this.customers =[];
     // this.ticket.DistributorCopackerID = null;
     this.ticket.TicketProduct = [];
 
