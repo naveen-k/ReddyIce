@@ -10,29 +10,18 @@ import { TripProduct } from '../../dayend.interfaces';
 import { Route } from '@angular/router/src/config';
 import { environment } from '../../../../../environments/environment';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap/tabset/tabset';
-<<<<<<< HEAD
-import { CurrencyFormatter } from 'app/shared/pipes/currency-pipe';
-=======
 import { DatePipe } from '@angular/common';
 import { CurrencyFormatter } from 'app/shared/pipes/currency-pipe';
 import { GenericSort } from 'app/shared/pipes/generic-sort.pipe';
->>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
 
 @Component({
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss'],
-<<<<<<< HEAD
-    providers: [NgbTabset,CurrencyFormatter]
-})
-export class DetailsComponent implements OnInit {
-    activeTab: string = 'details';
-=======
     providers:[NgbTabset,DatePipe,CurrencyFormatter,GenericSort]
 })
 export class DetailsComponent implements OnInit {
     customer: any = {sortField: '', isAsc: false};
     activeTab:string = 'details';
->>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
     logedInUser: User;
     tripId: number;
     tripData: any = {};
@@ -84,13 +73,9 @@ export class DetailsComponent implements OnInit {
         private modalService: NgbModal,
         protected router: Router,
         public tabset: NgbTabset,
-<<<<<<< HEAD
-        private currencyFormatter: CurrencyFormatter
-=======
         private date: DatePipe,
         private currencyFormatter:CurrencyFormatter,
         private sort:GenericSort
->>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
     ) { }
 
     tripStatus(statusCode) {
@@ -496,11 +481,11 @@ export class DetailsComponent implements OnInit {
             mainData += this.printCashData();
             tabName = 'Cash Reconciliation'
         }
-        if (this.popupWin) { this.popupWin.close(); }
-        setTimeout(() => {
-            this.popupWin = window.open('', '_new', 'top=0,left=0,height="100",width="100%",fullscreen="yes"');
-            this.popupWin.document.open();
-            this.popupWin.document.write(`
+        if(this.popupWin){this.popupWin.close();}
+        setTimeout(()=>{
+        this.popupWin = window.open('', '_new', 'top=0,left=0,height="100%",width="100%",fullscreen="yes"');
+        this.popupWin.document.open();
+        this.popupWin.document.write(`
           <html>
             <head>
               <title>Trip Details(${tabName})</title>
@@ -522,7 +507,7 @@ export class DetailsComponent implements OnInit {
             <div class="row page-header">
             <div class="col-sm-1"></div>
             <div class="col-sm-10" style="overflow-x:auto;" id="cashContainer">
-                <table cellpadding="5" border=1 style="border-collapse: collapse;" class="table table-condensed table-bordered cash-table">
+                <table cellpadding="5" border=1 style="border-collapse: collapse;" width="100%">
                     <thead class="tableHeader">
                         <th></th>
                         <th>Total Sale</th>
@@ -724,43 +709,30 @@ export class DetailsComponent implements OnInit {
         `;
         return table;
     }
-<<<<<<< HEAD
-    printUnitData() {
-        let table = '';
-        return table;
-    }
-    printDetailData() {
-        let table = '';
-        return table;
-    }
-    printHeaderData() {
-        let table = '';
-        return table;
-=======
     printUnitData(){
         let tbody = '', thead = '', table = '';
         let topTable = `
-            <table cellpadding="5">
+            <table cellpadding="5" border=1 style="border-collapse: collapse;">
                 <tbody>
                     <tr>
                         <td>
                             <span>Pallets </span>
-                                </td>
+                        </td>
                         <td>
                             <span>Issued: </span>
-                            ${this.tripData.PalletLoadQuantity}
+                            <input type="text" value="${this.tripData.PalletLoadQuantity}" min="0" disabled>
                         </td>
                         <td>
                             <span>Returned: </span>
-                            ${this.tripData.PalletReturnQuantity}
+                            <input type="text" value="${this.tripData.PalletReturnQuantity}" min="0" disabled>
                         </td>
                     </tr>
                 </tbody>
             </table><br/>                    
         `;
-        table += topTable + `<table border="1">`;
+        table += topTable + `<table cellpadding="5" border=1 style="border-collapse: collapse;" width="100%">`;
         thead = `
-            <thead class="tableHeader">
+            <thead>
                 <tr>
                     <th class="text-align-left">
                         <span>
@@ -821,7 +793,7 @@ export class DetailsComponent implements OnInit {
         `;
         table += thead + `<tbody>`;
         let tr = `
-                <tr style="background: #5bc0de;" class="tableHeader">
+                <tr style="background: #5bc0de;">
                 <td width="21%" style="text-align:left;"></td>
                 <td width="6%">HH</td>
                 <td width="8%"></td>
@@ -845,15 +817,15 @@ export class DetailsComponent implements OnInit {
                 <td width="21%" style="text-align:left;">${item.ProductName}</td>
                 <td width="6%">${item.Load?item.Load:0}</td>
                 <td width="8%">
-                    ${item.Load1Quantity}
+                    <input type="text" value="${item.Load1Quantity}" min="0" disabled style="width:50px;">
                 </td>
                 <td width="6%">${item.Returns? item.Returns:0}</td>
                 <td width="8%">
-                    ${item.ReturnQuantity}
+                    <input type="text" value="${item.ReturnQuantity}" min="0" disabled style="width:50px;">
                 </td>
                 <td width="5%">${item.TruckDamage?item.TruckDamage:0}</td>
                 <td width="8%">
-                    ${item.DamageQuantity}
+                    <input type="text" value="${item.DamageQuantity}" min="0" disabled style="width:50px;">
                 </td>
                 <td width="7%">${item.Sale?item.Sale:0}</td>
                 <td width="7%">${item.SaleReturnQty?item.SaleReturnQty:0}</td>
@@ -861,7 +833,7 @@ export class DetailsComponent implements OnInit {
                 <td width="5%">${item.GoodReturns?item.GoodReturns:0}</td>
                 <td width="6%">${item.CustomerDamage?item.CustomerDamage:0}</td>
                 <td width="9%">
-                    ${item.CustomerDamageDRV}
+                    <input type="text" value="${item.CustomerDamageDRV}" min="0" disabled style="width:50px;">
                 </td>
                 <td class="textAlignCenter" width="7%">${item.OverShort}</td>
             </tr>`
@@ -876,22 +848,22 @@ export class DetailsComponent implements OnInit {
                 </td>
                 <td width="6%">${item.Load?item.Load:0}</td>
                 <td width="8%">
-                    ${item.Load1Quantity}
+                    <input type="text" value="${item.Load1Quantity}" min="0" disabled style="width:50px;"> 
                 </td>
                 <td width="6%">${item.Returns? item.Returns:0}</td>
                 <td width="8%">
-                    ${item.ReturnQuantity}
+                    <input type="text" value="${item.ReturnQuantity}" min="0" disabled style="width:50px;">
                 </td>
                 <td width="5%">${item.TruckDamage?item.TruckDamage:0}</td>
                 <td width="8%">
-                    ${item.DamageQuantity}
+                    <input type="text" value="${item.DamageQuantity}" min="0" disabled style="width:50px;">
                 </td>
                 <td width="7%">${item.Sale?item.Sale:0}</td>
                 <td width="7%">${item.SaleReturnQty?item.SaleReturnQty:0}</td>
                 <td width="5%">${item.ManualTicket?item.ManualTicket:0}</td>
                 <td width="6%">${item.CustomerDamage?item.CustomerDamage:0}</td>
                 <td width="9%">
-                    ${item.CustomerDamageDRV}
+                    <input type="text" value="${item.CustomerDamageDRV}" min="0" disabled style="width:50px;">
                 </td>
                 <td width="7%">${item.OverShort?item.OverShort:0}
                 </td>
@@ -931,7 +903,7 @@ export class DetailsComponent implements OnInit {
     printDetailData(){
         let table = '',tbody='',thead='';//window.document.getElementById('detailsContainer').innerHTML;
 
-       table =` <table width="100%" cellpadding="5" cellspacing="0" border="1" bordercolor="black">`;
+       table =` <table cellpadding="5" border=1 style="border-collapse: collapse;" width="100%">`;
 thead =`<thead>
             <tr>
                 <th></th>
@@ -1007,7 +979,7 @@ thead =`<thead>
         let sdateData = this.date.transform(this.tripData.TripStartDate);
         let edateData = this.date.transform(this.tripData.TripEndDate);
         let tripStatus = this.tripStatus(this.tripData.TripStatusID)
-        selectedData = `<table width="100%" cellpadding="5" cellspacing="0" border="1" bordercolor="black"><tr><td><table width="100%">
+        selectedData = `<table cellpadding="5" border=1 style="border-collapse: collapse;" width="100%"><tr><td><table width="100%">
         <thead>
         <tr>
             <th align="left">Business Unit:</th>
@@ -1046,7 +1018,6 @@ thead =`<thead>
     sortable(name){
         this.customer.sortField = name;
         this.customer.isAsc=!this.customer.isAsc;
->>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
     }
 }
 
