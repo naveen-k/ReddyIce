@@ -484,7 +484,194 @@ export class DetailsComponent implements OnInit {
         return table;
     }
     printUnitData(){
-        let table ='';
+        let tbody = '', thead = '', table = '';
+        let topTable = `
+            <table cellpadding="5">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>Pallets </span>
+                                </td>
+                        <td>
+                            <span>Issued: </span>
+                            ${this.tripData.PalletLoadQuantity}
+                        </td>
+                        <td>
+                            <span>Returned: </span>
+                            ${this.tripData.PalletReturnQuantity}
+                        </td>
+                    </tr>
+                </tbody>
+            </table><br/>                    
+        `;
+        table += topTable + `<table border="1">`;
+        thead = `
+            <thead class="tableHeader">
+                <tr>
+                    <th class="text-align-left">
+                        <span>
+                            Product
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Load
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Return
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Truck Junk
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Sales
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Sales
+                            <br> Credits
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Manual
+                            <br> Tickets
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Good
+                            <br> Returns
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Inv Junk
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Over/
+                            <br>Short
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+        `;
+        table += thead + `<tbody>`;
+        let tr = `
+                <tr style="background: #5bc0de;" class="tableHeader">
+                <td width="21%" style="text-align:left;"></td>
+                <td width="6%">HH</td>
+                <td width="8%"></td>
+                <td width="6%">HH</td>
+                <td width="8%"></td>
+                <td width="5%">HH</td>
+                <td width="8%"></td>
+                <td width="7%"></td>
+                <td width="7%"></td>
+                <td width="5%"></td>
+                <td width="5%"></td>
+                <td width="6%">HH</td>
+                <td width="9%"></td>
+                <td class="textAlignCenter" width="7%"></td>
+            </tr>
+        `;
+        table += tr;        
+        tr = '';
+        this.unitReconciliation.forEach(item => {
+            tr += `<tr>
+                <td width="21%" style="text-align:left;">${item.ProductName}</td>
+                <td width="6%">${item.Load?item.Load:0}</td>
+                <td width="8%">
+                    ${item.Load1Quantity}
+                </td>
+                <td width="6%">${item.Returns? item.Returns:0}</td>
+                <td width="8%">
+                    ${item.ReturnQuantity}
+                </td>
+                <td width="5%">${item.TruckDamage?item.TruckDamage:0}</td>
+                <td width="8%">
+                    ${item.DamageQuantity}
+                </td>
+                <td width="7%">${item.Sale?item.Sale:0}</td>
+                <td width="7%">${item.SaleReturnQty?item.SaleReturnQty:0}</td>
+                <td width="5%">${item.ManualTicket?item.ManualTicket:0}</td>
+                <td width="5%">${item.GoodReturns?item.GoodReturns:0}</td>
+                <td width="6%">${item.CustomerDamage?item.CustomerDamage:0}</td>
+                <td width="9%">
+                    ${item.CustomerDamageDRV}
+                </td>
+                <td class="textAlignCenter" width="7%">${item.OverShort}</td>
+            </tr>`
+        });
+        tr += `</tbody>`;
+        table += tr + `<tbody  *ngIf="${this.isNewlyAdded}">`;
+        tr = '';
+        this.newlyAddedProduct.forEach(item => {
+            tr += `<tr>
+                <td width="21%">
+                    ${item.ProductID}
+                </td>
+                <td width="6%">${item.Load?item.Load:0}</td>
+                <td width="8%">
+                    ${item.Load1Quantity}
+                </td>
+                <td width="6%">${item.Returns? item.Returns:0}</td>
+                <td width="8%">
+                    ${item.ReturnQuantity}
+                </td>
+                <td width="5%">${item.TruckDamage?item.TruckDamage:0}</td>
+                <td width="8%">
+                    ${item.DamageQuantity}
+                </td>
+                <td width="7%">${item.Sale?item.Sale:0}</td>
+                <td width="7%">${item.SaleReturnQty?item.SaleReturnQty:0}</td>
+                <td width="5%">${item.ManualTicket?item.ManualTicket:0}</td>
+                <td width="6%">${item.CustomerDamage?item.CustomerDamage:0}</td>
+                <td width="9%">
+                    ${item.CustomerDamageDRV}
+                </td>
+                <td width="7%">${item.OverShort?item.OverShort:0}
+                </td>
+            </tr>
+            <tr *ngIf="${!this.unitReconciliation.length} && ${!this.newlyAddedProduct.length}">
+                <th class="text-center" colspan="12"> No data found </th>
+            </tr>`
+        });
+        tr += `</tbody>`;
+        tr = `
+            <tbody>
+                <tr>
+                    <td>
+                        <b>Total</b>
+                    </td>
+                    <td>${this.totalUnit.TotalLoad}</td>
+                    <td>${this.totalUnit.TotalLoadActual}</td>
+                    <td>${this.totalUnit.TotalReturn}</td>
+                    <td>${this.totalUnit.TotalReturnActual}</td>
+                    <td>${this.totalUnit.TotalTruckDamage}</td>
+                    <td>${this.totalUnit.TotalTruckDamageActual}</td>
+                    <td>${this.totalUnit.TotalSale}</td>
+                    <td>${this.totalUnit.TotalSaleCredits}</td>
+                    <td>${this.totalUnit.TotalManualTickets}</td>
+                    <td>${this.totalUnit.TotalGoodReturns}</td>
+                    <td>${this.totalUnit.TotalCustomerDamage}</td>
+                    <td>${this.totalUnit.TotalCustomerDamageActual}</td>
+                    <td style="text-align:center">${this.totalUnit.TotalOverShort?this.totalUnit.TotalOverShort:0}</td>
+                </tr>
+            </tbody>
+        </table>
+        `;
+        table += tr;
+        // let table = window.document.getElementById('unitContainer').innerHTML;
         return table;
     }
     printDetailData(){
