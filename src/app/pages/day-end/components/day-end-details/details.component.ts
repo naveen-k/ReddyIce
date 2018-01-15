@@ -10,15 +10,29 @@ import { TripProduct } from '../../dayend.interfaces';
 import { Route } from '@angular/router/src/config';
 import { environment } from '../../../../../environments/environment';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap/tabset/tabset';
+<<<<<<< HEAD
 import { CurrencyFormatter } from 'app/shared/pipes/currency-pipe';
+=======
+import { DatePipe } from '@angular/common';
+import { CurrencyFormatter } from 'app/shared/pipes/currency-pipe';
+import { GenericSort } from 'app/shared/pipes/generic-sort.pipe';
+>>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
 
 @Component({
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss'],
+<<<<<<< HEAD
     providers: [NgbTabset,CurrencyFormatter]
 })
 export class DetailsComponent implements OnInit {
     activeTab: string = 'details';
+=======
+    providers:[NgbTabset,DatePipe,CurrencyFormatter,GenericSort]
+})
+export class DetailsComponent implements OnInit {
+    customer: any = {sortField: '', isAsc: false};
+    activeTab:string = 'details';
+>>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
     logedInUser: User;
     tripId: number;
     tripData: any = {};
@@ -33,7 +47,7 @@ export class DetailsComponent implements OnInit {
     isDistributorExist: boolean;
     userSubTitle: string = '';
     userRoleId: number;
-
+    printStatus:boolean = false;
     totalUnit: any = {
         TotalLoad: 0,
         TotalLoadActual: 0,
@@ -70,7 +84,13 @@ export class DetailsComponent implements OnInit {
         private modalService: NgbModal,
         protected router: Router,
         public tabset: NgbTabset,
+<<<<<<< HEAD
         private currencyFormatter: CurrencyFormatter
+=======
+        private date: DatePipe,
+        private currencyFormatter:CurrencyFormatter,
+        private sort:GenericSort
+>>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
     ) { }
 
     tripStatus(statusCode) {
@@ -92,6 +112,7 @@ export class DetailsComponent implements OnInit {
     }
 
     ngOnInit() {
+        if(this.popupWin){this.popupWin.close();}
         const userId = localStorage.getItem('userId') || '';
         this.logedInUser = this.userService.getUser();
         this.userRoleId = this.logedInUser.Role.RoleID;
@@ -99,7 +120,7 @@ export class DetailsComponent implements OnInit {
         this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.logedInUser.Distributor.DistributorName : '';
 
         this.tripId = +this.route.snapshot.params['tripId'];
-        this.loadTripData();
+        //this.loadTripData();
         this.loadTripDetailByDate();
     }
 
@@ -149,7 +170,7 @@ export class DetailsComponent implements OnInit {
             this.cashReconciliationSubTotal();
             this.cashReconChange(this.ticketDetails);
         }, (err) => {
-
+            this.printStatus = false;
         });
     }
     TotalCashReconciliation: any = {
@@ -188,6 +209,7 @@ export class DetailsComponent implements OnInit {
             if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalHHCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
             if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalHHChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
         }
+        this.printStatus = true;
     }
     cashReconciliationSubTotal() {
         this.ticketDetails.Total.TotalManualSale = this.TotalCashReconciliation.TotalManualSale;
@@ -269,6 +291,7 @@ export class DetailsComponent implements OnInit {
         }
     }
     approveTrip(status) {
+        if(this.popupWin){this.popupWin.close();}
         const activeModal = this.modalService.open(ModalComponent, {
             size: 'sm',
             backdrop: 'static',
@@ -284,6 +307,7 @@ export class DetailsComponent implements OnInit {
     }
 
     handlerUnitReconSubmit() {
+        if(this.popupWin){this.popupWin.close();}
         const activeModal = this.modalService.open(ModalComponent, {
             size: 'sm',
             backdrop: 'static',
@@ -298,6 +322,7 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconcileSubmit() {
+       
         let objToSave = {
             TripId: this.tripId,
             PalletLoadQuantity: this.tripData.PalletLoadQuantity,
@@ -314,6 +339,7 @@ export class DetailsComponent implements OnInit {
     }
 
     saveReconciliation(statusId) {
+        if(this.popupWin){this.popupWin.close();}
         const total = this.ticketDetails.Total;
         const cashRecon = {
             TripID: this.tripId,
@@ -338,10 +364,12 @@ export class DetailsComponent implements OnInit {
     }
 
     submitApproveReconciliation() {
+        if(this.popupWin){this.popupWin.close();}
         this.saveReconciliation(24);
     }
 
     addProductRow() {
+        if(this.popupWin){this.popupWin.close();}
         this.isNewlyAdded = true;
         if (!this.newlyAddedProduct) { return; }
         this.newlyAddedProduct.push({} as TripProduct);
@@ -360,6 +388,7 @@ export class DetailsComponent implements OnInit {
 
     // intializing other manadatory field = 0 which are not taken as input. 
     resetField(index) {
+        if(this.popupWin){this.popupWin.close();}
         this.newlyAddedProduct[index].CustomerDamage = 0;
         this.newlyAddedProduct[index].DamageQuantity = 0;
         this.newlyAddedProduct[index].Load = 0;
@@ -374,6 +403,7 @@ export class DetailsComponent implements OnInit {
     }
 
     productChangeHandler(product: any, arrayIndex: any): void {
+        if(this.popupWin){this.popupWin.close();}
         const products = this.newlyAddedProduct.filter(t => t.ProductID === product.ProductID);
         if (products.length === 2) {
             // product.ProductID = '';
@@ -400,6 +430,7 @@ export class DetailsComponent implements OnInit {
 
     // remove newly added product from Array
     removeProduct(index) {
+        if(this.popupWin){this.popupWin.close();}
         this.newlyAddedProduct.splice(index, 1);
     }
 
@@ -437,6 +468,7 @@ export class DetailsComponent implements OnInit {
         });
     }
     viewTicket(ticketID) {
+        if(this.popupWin){this.popupWin.close();}
         if (ticketID) {
             window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
         } else {
@@ -444,7 +476,8 @@ export class DetailsComponent implements OnInit {
         }
 
     }
-    onTabChange(event) {
+    onTabChange(event){
+        if(this.popupWin){this.popupWin.close();}
         this.activeTab = event.nextId;
     }
     popupWin: any;
@@ -452,15 +485,15 @@ export class DetailsComponent implements OnInit {
         let printContents, printContentsHead, tabName='';
         //printContentsHead = document.getElementById('day-end-list-head').innerHTML;
         let mainData = '';//window.document.getElementById('cashContainer').innerHTML;
-        mainData += this.printHeaderData();
-        if (this.activeTab == 'details') {
-            mainData = this.printDetailData();
+        mainData =this.printHeaderData()+"<br/>";
+        if(this.activeTab=='details'){
+            mainData += this.printDetailData();
             tabName = 'Ticket Details'
-        } else if (this.activeTab == 'unit') {
-            mainData = this.printUnitData();
+        }else if(this.activeTab=='unit'){
+            mainData += this.printUnitData();
             tabName = 'Units Reconciliation'
-        } else if (this.activeTab == 'cash') {
-            mainData = this.printCashData();
+        }else if(this.activeTab=='cash'){
+            mainData += this.printCashData();
             tabName = 'Cash Reconciliation'
         }
         if (this.popupWin) { this.popupWin.close(); }
@@ -691,6 +724,7 @@ export class DetailsComponent implements OnInit {
         `;
         return table;
     }
+<<<<<<< HEAD
     printUnitData() {
         let table = '';
         return table;
@@ -702,6 +736,317 @@ export class DetailsComponent implements OnInit {
     printHeaderData() {
         let table = '';
         return table;
+=======
+    printUnitData(){
+        let tbody = '', thead = '', table = '';
+        let topTable = `
+            <table cellpadding="5">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>Pallets </span>
+                                </td>
+                        <td>
+                            <span>Issued: </span>
+                            ${this.tripData.PalletLoadQuantity}
+                        </td>
+                        <td>
+                            <span>Returned: </span>
+                            ${this.tripData.PalletReturnQuantity}
+                        </td>
+                    </tr>
+                </tbody>
+            </table><br/>                    
+        `;
+        table += topTable + `<table border="1">`;
+        thead = `
+            <thead class="tableHeader">
+                <tr>
+                    <th class="text-align-left">
+                        <span>
+                            Product
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Load
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Return
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Truck Junk
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Sales
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Sales
+                            <br> Credits
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Manual
+                            <br> Tickets
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Good
+                            <br> Returns
+                        </span>
+                    </th>
+                    <th colspan="2" class="text-center">
+                        <span>
+                            Inv Junk
+                        </span>
+                    </th>
+                    <th>
+                        <span>
+                            Over/
+                            <br>Short
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+        `;
+        table += thead + `<tbody>`;
+        let tr = `
+                <tr style="background: #5bc0de;" class="tableHeader">
+                <td width="21%" style="text-align:left;"></td>
+                <td width="6%">HH</td>
+                <td width="8%"></td>
+                <td width="6%">HH</td>
+                <td width="8%"></td>
+                <td width="5%">HH</td>
+                <td width="8%"></td>
+                <td width="7%"></td>
+                <td width="7%"></td>
+                <td width="5%"></td>
+                <td width="5%"></td>
+                <td width="6%">HH</td>
+                <td width="9%"></td>
+                <td class="textAlignCenter" width="7%"></td>
+            </tr>
+        `;
+        table += tr;        
+        tr = '';
+        this.unitReconciliation.forEach(item => {
+            tr += `<tr>
+                <td width="21%" style="text-align:left;">${item.ProductName}</td>
+                <td width="6%">${item.Load?item.Load:0}</td>
+                <td width="8%">
+                    ${item.Load1Quantity}
+                </td>
+                <td width="6%">${item.Returns? item.Returns:0}</td>
+                <td width="8%">
+                    ${item.ReturnQuantity}
+                </td>
+                <td width="5%">${item.TruckDamage?item.TruckDamage:0}</td>
+                <td width="8%">
+                    ${item.DamageQuantity}
+                </td>
+                <td width="7%">${item.Sale?item.Sale:0}</td>
+                <td width="7%">${item.SaleReturnQty?item.SaleReturnQty:0}</td>
+                <td width="5%">${item.ManualTicket?item.ManualTicket:0}</td>
+                <td width="5%">${item.GoodReturns?item.GoodReturns:0}</td>
+                <td width="6%">${item.CustomerDamage?item.CustomerDamage:0}</td>
+                <td width="9%">
+                    ${item.CustomerDamageDRV}
+                </td>
+                <td class="textAlignCenter" width="7%">${item.OverShort}</td>
+            </tr>`
+        });
+        tr += `</tbody>`;
+        table += tr + `<tbody  *ngIf="${this.isNewlyAdded}">`;
+        tr = '';
+        this.newlyAddedProduct.forEach(item => {
+            tr += `<tr>
+                <td width="21%">
+                    ${item.ProductID}
+                </td>
+                <td width="6%">${item.Load?item.Load:0}</td>
+                <td width="8%">
+                    ${item.Load1Quantity}
+                </td>
+                <td width="6%">${item.Returns? item.Returns:0}</td>
+                <td width="8%">
+                    ${item.ReturnQuantity}
+                </td>
+                <td width="5%">${item.TruckDamage?item.TruckDamage:0}</td>
+                <td width="8%">
+                    ${item.DamageQuantity}
+                </td>
+                <td width="7%">${item.Sale?item.Sale:0}</td>
+                <td width="7%">${item.SaleReturnQty?item.SaleReturnQty:0}</td>
+                <td width="5%">${item.ManualTicket?item.ManualTicket:0}</td>
+                <td width="6%">${item.CustomerDamage?item.CustomerDamage:0}</td>
+                <td width="9%">
+                    ${item.CustomerDamageDRV}
+                </td>
+                <td width="7%">${item.OverShort?item.OverShort:0}
+                </td>
+            </tr>
+            <tr *ngIf="${!this.unitReconciliation.length} && ${!this.newlyAddedProduct.length}">
+                <th class="text-center" colspan="12"> No data found </th>
+            </tr>`
+        });
+        tr += `</tbody>`;
+        tr = `
+            <tbody>
+                <tr>
+                    <td>
+                        <b>Total</b>
+                    </td>
+                    <td>${this.totalUnit.TotalLoad}</td>
+                    <td>${this.totalUnit.TotalLoadActual}</td>
+                    <td>${this.totalUnit.TotalReturn}</td>
+                    <td>${this.totalUnit.TotalReturnActual}</td>
+                    <td>${this.totalUnit.TotalTruckDamage}</td>
+                    <td>${this.totalUnit.TotalTruckDamageActual}</td>
+                    <td>${this.totalUnit.TotalSale}</td>
+                    <td>${this.totalUnit.TotalSaleCredits}</td>
+                    <td>${this.totalUnit.TotalManualTickets}</td>
+                    <td>${this.totalUnit.TotalGoodReturns}</td>
+                    <td>${this.totalUnit.TotalCustomerDamage}</td>
+                    <td>${this.totalUnit.TotalCustomerDamageActual}</td>
+                    <td style="text-align:center">${this.totalUnit.TotalOverShort?this.totalUnit.TotalOverShort:0}</td>
+                </tr>
+            </tbody>
+        </table>
+        `;
+        table += tr;
+        // let table = window.document.getElementById('unitContainer').innerHTML;
+        return table;
+    }
+    printDetailData(){
+        let table = '',tbody='',thead='';//window.document.getElementById('detailsContainer').innerHTML;
+
+       table =` <table width="100%" cellpadding="5" cellspacing="0" border="1" bordercolor="black">`;
+thead =`<thead>
+            <tr>
+                <th></th>
+                <th>
+                    Ticket #
+                </th>
+                <th>
+                    Ticket Type
+                </th>
+                <th align="left">
+                    Customer
+                </th>
+                <th class="textRightPadd">
+                    Total Invoice
+                </th>
+                <th class="textRightPadd">
+                    Received Amt
+                </th>
+                
+            </tr>
+        </thead>`;
+        table += thead;
+
+        tbody =`<tbody>`;
+
+        if(this.tripData && this.tripData.TripTicketList && this.tripData.TripTicketList.length>0)
+        {
+            let tripDataList = this.sort.transform(this.tripData.TripTicketList,this.customer.sortField,this.customer.isAsc);
+            tripDataList.forEach(item => {
+                tbody +=`<tr >
+                    <td>
+                    <span class="tooltiptext">${(!item.IsPaperTicket)?'HH Ticket':'Paper Ticket'}</span>
+                    </td>
+                    <td class="text-align-left">${item.TicketNumber }</td>
+                    <td>${item.ticketType}</td>
+                    <td align="left">
+                        ${item.CustomerNumber } - ${item.CustomerName }
+                    </td>
+                    <td align="right" style="${(item.TicketTypeID === 27)?'color:red':''}">
+                        ${(item.TicketTypeID === 27)?'('+this.currencyFormatter.transform(item.amount)+')':this.currencyFormatter.transform(item.amount)} 
+                    </td>
+                    <td align="right">
+                        <span>${(item.TicketTypeID == 30)?'$0.00':this.currencyFormatter.transform(item.checkCashAmount)}</span>
+                    </td>
+                    
+                </tr>`;
+            });
+            
+                tbody +=`<tr style="background:#CCC">
+                    <td colspan="4">
+                        <b>Total</b>
+                    </td>
+                    <td align="right">
+                        <b>${this.currencyFormatter.transform(this.ticketTotal.invoiceTotal)}</b>
+                    </td>
+                    <td align="right">
+                        <b>${this.currencyFormatter.transform(this.ticketTotal.receivedTotal)}</b>
+                    </td>
+                </tr>`;
+        }  else {
+            tbody +=`<tr><td colspan="6">No Records Found.<td><tr>`;
+        }                        
+               
+                tbody +=`</tbody>`;
+                table += tbody;
+                table +=`</table>`;
+
+
+        return table;
+    }
+    printHeaderData(){
+        let selectedData = '';
+        let sdateData = this.date.transform(this.tripData.TripStartDate);
+        let edateData = this.date.transform(this.tripData.TripEndDate);
+        let tripStatus = this.tripStatus(this.tripData.TripStatusID)
+        selectedData = `<table width="100%" cellpadding="5" cellspacing="0" border="1" bordercolor="black"><tr><td><table width="100%">
+        <thead>
+        <tr>
+            <th align="left">Business Unit:</th>
+            <th align="left">Route:</th>
+            <th align="left">Trip Code:</th>
+            <th align="left">HH Day End:</th>
+            <th align="left">Trip Start Date:</th>
+            
+        </tr>
+        <tr>
+            <td align="left">${this.tripData.BranchCode} - ${this.tripData.BUName}</td>
+            <td align="left">${(this.tripData.IsUnplanned)?'Unplanned':this.tripData.RouteNumber}</td>
+            <td align="left">${this.tripData.TripCode}</td>
+            <td align="left">${(this.tripData.IsClosed)?'Yes':'No'}</td>
+            <td align="left">${sdateData}</td>
+            
+        </tr>
+        <tr>
+            <th align="left">Driver:</th>
+            <th align="left">Truck:</th>
+            <th align="left">Status:</th>
+            <th align="left">ERP Processed:</th>
+            <th align="left">Trip End Date:</th>
+        </tr>
+        <tr>
+            <td align="left">${this.tripData.DriverName}</td>
+            <td align="left">${this.tripData.TruckID}</td>
+            <td align="left">${tripStatus}</td>
+            <td align="left">${(this.tripData.IsProcessed)?'Yes':'No'}</td>
+            <td align="left">${edateData}</td>
+        </tr>
+        </thead>
+        </table></td></tr></table>`;
+        return selectedData;
+    }
+    sortable(name){
+        this.customer.sortField = name;
+        this.customer.isAsc=!this.customer.isAsc;
+>>>>>>> dd0dd1c101ca6e815eb829536f14853177019094
     }
 }
 

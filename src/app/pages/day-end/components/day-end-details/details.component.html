@@ -16,8 +16,8 @@
                     <!-- <button class="btn btn-danger pull-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker == true )' (click)="saveReconciliation(24)">Submit</button> -->
                     <!-- Save button is not needed anymore, as trip will submit from HH-->
                      <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker != true )' (click)="saveReconciliation(24)">Save</button>-->
-                <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
-                <button class="btn btn-danger pull-right add-margin-right" (click)="printReconciliation()">Print</button>
+                <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']" (click)=" (popupWin)?popupWin.close():''">Back</button>
+                <button class="btn btn-danger pull-right add-margin-right" (click)="printReconciliation()" [disabled]="!printStatus">Print</button>
             </div>
             <div class="row add-margin-bottom">
 
@@ -81,25 +81,25 @@
                                     [queryParams]="{branchId:tripData.BranchID, driverId:tripData.UserID, isDistributor:tripData.DistributorMasterID, sdate:tripData.TripStartDate, edate:tripData.TripEndDate}">Create Ticket</button>
                             </div>
                             <div class="col-md-12 page-header">
-                                <div class="overflow">
+                                <div class="overflow" id="detailsContainer">
                                     <table class="table table-striped">
                                         <thead class="tableHeader">
                                             <tr>
                                                 <th></th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;sortable('TicketNumber');">
                                                         Ticket #
                                                         <i *ngIf="(customer.sortField === 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                                     </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;sortable('TicketTypeID');">
                                                         Ticket Type
                                                         <i *ngIf="(customer.sortField === 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField === 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                                     </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;sortable('CustomerNumber');">
                                                         Customer
                                                         <i *ngIf="(customer.sortField == 'CustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                                     </span>
@@ -138,7 +138,7 @@
                                                         <span class="tooltiptext">Paper Ticket</span>
                                                     </i>
                                                     <i class="ion-edit custom-tooltip-ion custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket && tripData.TripStatusID != 25"
-                                                        [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]">
+                                                        [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]" (click)="(popupWin)?popupWin.close():''">
                                                         <span class="tooltiptext">Edit</span>
                                                     </i>
                                                     <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.ID)">
@@ -231,7 +231,7 @@
                             </div>
                             <div class="col-md-12 page-header">
 
-                                <div class="overflow">
+                                <div class="overflow" id="unitContainer">
                                     <table class="table table-bordered">
                                         <thead class="tableHeader">
                                             <tr>
