@@ -10,14 +10,15 @@ import { TripProduct } from '../../dayend.interfaces';
 import { Route } from '@angular/router/src/config';
 import { environment } from '../../../../../environments/environment';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap/tabset/tabset';
+import { CurrencyFormatter } from 'app/shared/pipes/currency-pipe';
 
 @Component({
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss'],
-    providers:[NgbTabset]
+    providers: [NgbTabset,CurrencyFormatter]
 })
 export class DetailsComponent implements OnInit {
-    activeTab:string = 'details';
+    activeTab: string = 'details';
     logedInUser: User;
     tripId: number;
     tripData: any = {};
@@ -68,7 +69,8 @@ export class DetailsComponent implements OnInit {
         private notification: NotificationsService,
         private modalService: NgbModal,
         protected router: Router,
-        public tabset: NgbTabset
+        public tabset: NgbTabset,
+        private currencyFormatter: CurrencyFormatter
     ) { }
 
     tripStatus(statusCode) {
@@ -254,16 +256,16 @@ export class DetailsComponent implements OnInit {
     cashReconChange(ticketDetails) {
         if (ticketDetails) {
             this.totalDeposit = (+ticketDetails.Total.actualdepositcash || 0)
-            .fpArithmetic("+",(+ticketDetails.Total.actualdepositcheck || 0))
-            .fpArithmetic("+",(+ticketDetails.Total.Misc || 0))
-            .fpArithmetic("+",(+ticketDetails.Total.TotalHHCreditCard || 0))
-            .fpArithmetic("+",(+ticketDetails.Total.TotalManualCreditCard))
-            .fpArithmetic("+", (+ticketDetails.Total.ActualCoin || 0))
-            .fpArithmetic("+",(+ticketDetails.Total.Tolls || 0))
-            .fpArithmetic("+",(+ticketDetails.Total.MoneyOrderFee || 0));
-                            
-            this.totalOverShort = (+this.totalDeposit || 0).fpArithmetic("-", (+ticketDetails.Total.MCHHC || 0).fpArithmetic("+",+ticketDetails.Total.MCHHCash || 0).fpArithmetic("+",+ticketDetails.Total.MCCHHC || 0));
-            ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0).fpArithmetic("+",+ticketDetails.Total.actualdepositcheck || 0).fpArithmetic("+",+ticketDetails.Total.ActualCoin || 0);
+                .fpArithmetic("+", (+ticketDetails.Total.actualdepositcheck || 0))
+                .fpArithmetic("+", (+ticketDetails.Total.Misc || 0))
+                .fpArithmetic("+", (+ticketDetails.Total.TotalHHCreditCard || 0))
+                .fpArithmetic("+", (+ticketDetails.Total.TotalManualCreditCard))
+                .fpArithmetic("+", (+ticketDetails.Total.ActualCoin || 0))
+                .fpArithmetic("+", (+ticketDetails.Total.Tolls || 0))
+                .fpArithmetic("+", (+ticketDetails.Total.MoneyOrderFee || 0));
+
+            this.totalOverShort = (+this.totalDeposit || 0).fpArithmetic("-", (+ticketDetails.Total.MCHHC || 0).fpArithmetic("+", +ticketDetails.Total.MCHHCash || 0).fpArithmetic("+", +ticketDetails.Total.MCCHHC || 0));
+            ticketDetails.Total.TotalPreDiposit = (+ticketDetails.Total.actualdepositcash || 0).fpArithmetic("+", +ticketDetails.Total.actualdepositcheck || 0).fpArithmetic("+", +ticketDetails.Total.ActualCoin || 0);
         }
     }
     approveTrip(status) {
@@ -442,54 +444,263 @@ export class DetailsComponent implements OnInit {
         }
 
     }
-    onTabChange(event){
+    onTabChange(event) {
         this.activeTab = event.nextId;
     }
-    popupWin:any;
-    printReconciliation(){
-        let printContents, printContentsHead;
+    popupWin: any;
+    printReconciliation() {
+        let printContents, printContentsHead, tabName='';
         //printContentsHead = document.getElementById('day-end-list-head').innerHTML;
         let mainData = '';//window.document.getElementById('cashContainer').innerHTML;
-        mainData +=this.printHeaderData();
-        if(this.activeTab=='details'){
+        mainData += this.printHeaderData();
+        if (this.activeTab == 'details') {
             mainData = this.printDetailData();
-        }else if(this.activeTab=='unit'){
+            tabName = 'Ticket Details'
+        } else if (this.activeTab == 'unit') {
             mainData = this.printUnitData();
-        }else if(this.activeTab=='cash'){
+            tabName = 'Units Reconciliation'
+        } else if (this.activeTab == 'cash') {
             mainData = this.printCashData();
+            tabName = 'Cash Reconciliation'
         }
-        if(this.popupWin){this.popupWin.close();}
-        setTimeout(()=>{
-        this.popupWin = window.open('', '_new', 'top=0,left=0,height="100",width="100%",fullscreen="yes"');
-        this.popupWin.document.open();
-        this.popupWin.document.write(`
+        if (this.popupWin) { this.popupWin.close(); }
+        setTimeout(() => {
+            this.popupWin = window.open('', '_new', 'top=0,left=0,height="100",width="100%",fullscreen="yes"');
+            this.popupWin.document.open();
+            this.popupWin.document.write(`
           <html>
             <head>
-              <title>Day End Trip List</title>
+              <title>Trip Details(${tabName})</title>
               <style>
               //........Customized style.......
               </style>
             </head>
-            <body onload="window.print();window.close()">${mainData}</body>
+            <body onload="window.print();window.close();">${mainData}</body>
           </html>`
-        );
-        this.popupWin.document.close();
-    },1000);
+            );
+            this.popupWin.document.close();
+        }, 1000);
     }
-    printCashData(){
-        let table ='';
+    currencyTransform(value) {
+        return this.currencyFormatter.transform(value)
+    }
+    printCashData() {
+        let table = `
+            <div class="row page-header">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10" style="overflow-x:auto;" id="cashContainer">
+                <table cellpadding="5" border=1 style="border-collapse: collapse;" class="table table-condensed table-bordered cash-table">
+                    <thead class="tableHeader">
+                        <th></th>
+                        <th>Total Sale</th>
+                        <th>Cash</th>
+                        <th>Check</th>
+                        <th>Credit Card</th>
+                        <th>Charge</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Manual Tickets</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalManualSale)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalManualCash)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalManualCheck)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalManualCreditCard)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalManualCharge)}</td>
+                        </tr>
+                        <tr>
+                            <td>HH Tickets</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalHHSale)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalHHCash)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalHHCheck)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalHHCreditCard)}</td>
+                            <td class="text-align-right">${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalHHCharge)}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Total</b></td>
+                            <td class="text-align-right"><b>${this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalManualSale + this.ticketDetails.Total.TotalHHSale)}</b></td>
+                            <td class="text-align-right"><b>${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.MCHHCash)}</b></td>
+                            <td class="text-align-right"><b>${this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.MCHHC)}</b></td>
+                            <td class="text-align-right"><b>${this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.MCCHHC)}</b></td>
+                            <td class="text-align-right"><b>${this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalManualCharge + this.ticketDetails.Total.TotalHHCharge)}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+            <div style="width: 100%; margin-top: 10px;">
+                <div style="width: 64%; float: left; margin-top: 10px;">
+                    <div style="width: 100%; float: left">
+                        <table cellpadding="5" width="38%" border="1" style="border-collapse: collapse;float:left">
+                            <thead>
+                            <th colspan="2">Payment</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Cash</td><td><span>${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.MCHHCash) }</span></td>
+                            </tr>
+                                <td>Check</td><td><span>${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.MCHHC)}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Credit Card</td><td><span>${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.MCCHHC)}</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Payment</b></td><td><span><b>${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.CCC)}</b></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <table cellpadding="5" border="1" width="58%" style="border-collapse: collapse;float:left; margin-left: 10px;">
+                            <thead>
+                            <th colspan="2">Sales</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Cash</td><td><span> ${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalCashCustomer)} </span></td>
+                            </tr>
+                                <td>Charge</td><td><span>${ this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalChargeCustomer)}</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Sale</b></td><td><span><b>${this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.totalSales)}</b></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>            
+                    <div style="width: 100%; float: left; margin-top: 10px;">
+                        <table cellpadding="5" width="38%" border=1 style="border-collapse: collapse;float:left">
+                            <thead>
+                            <th colspan="2">Comment</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="2"><textarea rows="7" style="width:100%;border:0px;resize: none;" ${((this.userRoleId==3 && !this.logedInUser.IsChecker) || this.tripData.TripStatusID == 25 || !this.tripData.IsClosed || (this.userRoleId==2 && this.logedInUser.IsSeasonal)) ? 'disabled' : ''}>${this.ticketDetails ? (this.ticketDetails.Total.Comments!= null ? this.ticketDetails.Total.Comments : '' ) : ''}</textarea></td>
+                            </tr>
+                            </tbody>
+                        </table>     
+                        
+                        <table cellpadding="5" border="1" width="58%" style="border-collapse: collapse;float:left; margin-left: 10px;">
+                            <thead>
+                            <th colspan="4">HH Record Deposit</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td style="width:25%">Cash($)</td>
+                                <td style="width:25%">
+                                    <input type="text" value="${this.ticketDetails ? this.ticketDetails.Total.HHCashRecived : ''}" min="0" disabled placeholder="0.00" style="width:98%">
+                                </td>
+                                <td style="width:25%">Misc($)</td>
+                                <td style="width:25%">
+                                    <input type="text" value="${this.ticketDetails ? this.ticketDetails.Total.HHMiscExpense : ''}" min="0" disabled placeholder="0.00" style="width:98%">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:25%">Check($)</td>
+                                <td style="width:25%">
+                                    <input type="text" value="${this.ticketDetails ? this.ticketDetails.Total.HHCheckReceived : ''}" min="0" disabled placeholder="0.00" style="width:98%">                    
+                                </td>
+                                <td style="width:25%">Deposited($)</td>
+                                <td style="width:25%">
+                                    <input type="text" value="${this.ticketDetails ? this.ticketDetails.Total.HHAmountDeposited : ''}" min="0" disabled placeholder="0.00" style="width:98%">                    
+                                </td>                    
+                            </tr>
+                            </tbody>
+                        </table>   
+                    </div>
+                </div>
+                <div style="width: 34%; float: left; margin-top: 10px;">    
+                    <table cellpadding="5" border=1 style="border-collapse: collapse;">
+                        <thead>
+                        <th colspan="2">Actual Deposit</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Checks/Money Orders($)</td>
+                            <td>
+                                <input type="text" value="${this.ticketDetails.Total.actualdepositcheck}"
+                                min="0" ${((this.userRoleId==3 && !this.logedInUser.IsChecker) || this.tripData.TripStatusID == 25 || !this.tripData.IsClosed || (this.userRoleId==2 && this.logedInUser.IsSeasonal)) ? 'disabled' : ''} placeholder="0.00">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cash($) </td>
+                            <td>
+                                <input type="text" value="${this.ticketDetails ? this.ticketDetails.Total.actualdepositcash : ''}" (ngModelChange)="cashReconChange(ticketDetails)"
+                                min="0" ${((this.userRoleId==3 && !this.logedInUser.IsChecker) || this.tripData.TripStatusID == 25 || !this.tripData.IsClosed || (this.userRoleId==2 && this.logedInUser.IsSeasonal)) ? 'disabled' : ''} placeholder="0.00">
+                            </td>                  
+                        </tr>
+                        <tr>
+                            <td>Coins($)</td>
+                            <td>
+                                <input type="text" value="${this.ticketDetails.Total.ActualCoin}"
+                                min="0" ${((this.userRoleId==3 && !this.logedInUser.IsChecker) || this.tripData.TripStatusID == 25 || !this.tripData.IsClosed || (this.userRoleId==2 && this.logedInUser.IsSeasonal)) ? 'disabled' : ''} placeholder="0.00">     
+                            </td>                  
+                        </tr>
+                        <tr>
+                            <td>Total Deposit</td>
+                            <td>
+                                ${this.ticketDetails && this.currencyTransform(this.ticketDetails.Total.TotalPreDiposit)}                    
+                            </td>                  
+                        </tr>   
+                        <tr>
+                            <td>Credit Card($)</td>
+                            <td>
+                                <input type="text" min="0" value="${this.ticketDetails.Total.CreditCardAmountTotal}" disabled placeholder="0.00"> 
+                            </td>                  
+                        </tr>
+                        <tr>
+                            <td>Tolls($)</td>
+                            <td>
+                                <input type="text" min="0" value="${this.ticketDetails.Total.Tolls}"
+                                ${((this.userRoleId==3 && !this.logedInUser.IsChecker) || this.tripData.TripStatusID == 25 || !this.tripData.IsClosed || (this.userRoleId==2 && this.logedInUser.IsSeasonal))} placeholder="0.00">   
+                            </td>                  
+                        </tr>
+                        <tr>
+                            <td>Money Order Fee($)</td>
+                            <td>
+                                <input type="text" min="0" value="${this.ticketDetails.Total.MoneyOrderFee}"
+                                ${((this.userRoleId==3 && !this.logedInUser.IsChecker) || this.tripData.TripStatusID == 25 || !this.tripData.IsClosed || (this.userRoleId==2 && this.logedInUser.IsSeasonal))? 'disabled' : ''}  placeholder="0.00">
+                            </td>                  
+                        </tr>
+                        <tr>
+                            <td>Misc($)</td>
+                            <td>
+                                <input type="text" value='${this.ticketDetails.Total.Misc}'
+                                min="0" ${((this.userRoleId==3 && !this.logedInUser.IsChecker) || this.tripData.TripStatusID == 25 || !this.tripData.IsClosed || (this.userRoleId==2 && this.logedInUser.IsSeasonal))} placeholder="0.00"> 
+                            </td>                  
+                        </tr>
+                        <tr>
+                            <td>Total Deposit & Other</td>
+                            <td>
+                                <span>
+                                <b>${this.currencyTransform(this.totalDeposit)}</b>
+                                </span>
+                            </td>                  
+                        </tr>
+                        <tr>
+                            <td>Over/Short</td>
+                            <td>
+                                <span>
+                                <b>${ this.currencyTransform(this.totalOverShort)}</b>
+                                </span>   
+                            </td>                  
+                        </tr>                               
+                        </tbody>
+                    </table> 
+                </div>
+            </div>
+        </div>            
+        `;
         return table;
     }
-    printUnitData(){
-        let table ='';
+    printUnitData() {
+        let table = '';
         return table;
     }
-    printDetailData(){
-        let table ='';
+    printDetailData() {
+        let table = '';
         return table;
     }
-    printHeaderData(){
-        let table ='';
+    printHeaderData() {
+        let table = '';
         return table;
     }
 }
