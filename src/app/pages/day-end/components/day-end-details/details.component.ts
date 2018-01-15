@@ -12,12 +12,15 @@ import { environment } from '../../../../../environments/environment';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap/tabset/tabset';
 import { DatePipe } from '@angular/common';
 import { CurrencyFormatter } from 'app/shared/pipes/currency-pipe';
+import { GenericSort } from 'app/shared/pipes/generic-sort.pipe';
+
 @Component({
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss'],
-    providers:[NgbTabset,DatePipe,CurrencyFormatter]
+    providers:[NgbTabset,DatePipe,CurrencyFormatter,GenericSort]
 })
 export class DetailsComponent implements OnInit {
+    customer: any = {sortField: '', isAsc: false};
     activeTab:string = 'details';
     logedInUser: User;
     tripId: number;
@@ -33,7 +36,7 @@ export class DetailsComponent implements OnInit {
     isDistributorExist: boolean;
     userSubTitle: string = '';
     userRoleId: number;
-
+    printStatus:boolean = false;
     totalUnit: any = {
         TotalLoad: 0,
         TotalLoadActual: 0,
@@ -71,7 +74,8 @@ export class DetailsComponent implements OnInit {
         protected router: Router,
         public tabset: NgbTabset,
         private date: DatePipe,
-        private currencyFormatter:CurrencyFormatter
+        private currencyFormatter:CurrencyFormatter,
+        private sort:GenericSort
     ) { }
 
     tripStatus(statusCode) {
@@ -93,6 +97,7 @@ export class DetailsComponent implements OnInit {
     }
 
     ngOnInit() {
+        if(this.popupWin){this.popupWin.close();}
         const userId = localStorage.getItem('userId') || '';
         this.logedInUser = this.userService.getUser();
         this.userRoleId = this.logedInUser.Role.RoleID;
@@ -100,7 +105,7 @@ export class DetailsComponent implements OnInit {
         this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.logedInUser.Distributor.DistributorName : '';
 
         this.tripId = +this.route.snapshot.params['tripId'];
-        this.loadTripData();
+        //this.loadTripData();
         this.loadTripDetailByDate();
     }
 
@@ -150,7 +155,7 @@ export class DetailsComponent implements OnInit {
             this.cashReconciliationSubTotal();
             this.cashReconChange(this.ticketDetails);
         }, (err) => {
-
+            this.printStatus = false;
         });
     }
     TotalCashReconciliation: any = {
@@ -189,6 +194,7 @@ export class DetailsComponent implements OnInit {
             if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalHHCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
             if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalHHChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
         }
+        this.printStatus = true;
     }
     cashReconciliationSubTotal() {
         this.ticketDetails.Total.TotalManualSale = this.TotalCashReconciliation.TotalManualSale;
@@ -270,6 +276,7 @@ export class DetailsComponent implements OnInit {
         }
     }
     approveTrip(status) {
+        if(this.popupWin){this.popupWin.close();}
         const activeModal = this.modalService.open(ModalComponent, {
             size: 'sm',
             backdrop: 'static',
@@ -285,6 +292,7 @@ export class DetailsComponent implements OnInit {
     }
 
     handlerUnitReconSubmit() {
+        if(this.popupWin){this.popupWin.close();}
         const activeModal = this.modalService.open(ModalComponent, {
             size: 'sm',
             backdrop: 'static',
@@ -299,6 +307,7 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconcileSubmit() {
+       
         let objToSave = {
             TripId: this.tripId,
             PalletLoadQuantity: this.tripData.PalletLoadQuantity,
@@ -315,6 +324,7 @@ export class DetailsComponent implements OnInit {
     }
 
     saveReconciliation(statusId) {
+        if(this.popupWin){this.popupWin.close();}
         const total = this.ticketDetails.Total;
         const cashRecon = {
             TripID: this.tripId,
@@ -339,10 +349,12 @@ export class DetailsComponent implements OnInit {
     }
 
     submitApproveReconciliation() {
+        if(this.popupWin){this.popupWin.close();}
         this.saveReconciliation(24);
     }
 
     addProductRow() {
+        if(this.popupWin){this.popupWin.close();}
         this.isNewlyAdded = true;
         if (!this.newlyAddedProduct) { return; }
         this.newlyAddedProduct.push({} as TripProduct);
@@ -361,6 +373,7 @@ export class DetailsComponent implements OnInit {
 
     // intializing other manadatory field = 0 which are not taken as input. 
     resetField(index) {
+        if(this.popupWin){this.popupWin.close();}
         this.newlyAddedProduct[index].CustomerDamage = 0;
         this.newlyAddedProduct[index].DamageQuantity = 0;
         this.newlyAddedProduct[index].Load = 0;
@@ -375,6 +388,7 @@ export class DetailsComponent implements OnInit {
     }
 
     productChangeHandler(product: any, arrayIndex: any): void {
+        if(this.popupWin){this.popupWin.close();}
         const products = this.newlyAddedProduct.filter(t => t.ProductID === product.ProductID);
         if (products.length === 2) {
             // product.ProductID = '';
@@ -401,6 +415,7 @@ export class DetailsComponent implements OnInit {
 
     // remove newly added product from Array
     removeProduct(index) {
+        if(this.popupWin){this.popupWin.close();}
         this.newlyAddedProduct.splice(index, 1);
     }
 
@@ -438,6 +453,7 @@ export class DetailsComponent implements OnInit {
         });
     }
     viewTicket(ticketID) {
+        if(this.popupWin){this.popupWin.close();}
         if (ticketID) {
             window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
         } else {
@@ -446,6 +462,7 @@ export class DetailsComponent implements OnInit {
 
     }
     onTabChange(event){
+        if(this.popupWin){this.popupWin.close();}
         this.activeTab = event.nextId;
     }
     popupWin:any;
@@ -677,8 +694,8 @@ export class DetailsComponent implements OnInit {
     printDetailData(){
         let table = '',tbody='',thead='';//window.document.getElementById('detailsContainer').innerHTML;
 
-       table =` <table width="100%" cellpadding="5">`;
-thead =`<thead style="background:#CCC">
+       table =` <table width="100%" cellpadding="5" cellspacing="0" border="1" bordercolor="black">`;
+thead =`<thead>
             <tr>
                 <th></th>
                 <th>
@@ -687,7 +704,7 @@ thead =`<thead style="background:#CCC">
                 <th>
                     Ticket Type
                 </th>
-                <th>
+                <th align="left">
                     Customer
                 </th>
                 <th class="textRightPadd">
@@ -705,7 +722,8 @@ thead =`<thead style="background:#CCC">
 
         if(this.tripData && this.tripData.TripTicketList && this.tripData.TripTicketList.length>0)
         {
-            this.tripData.TripTicketList.forEach(item => {
+            let tripDataList = this.sort.transform(this.tripData.TripTicketList,this.customer.sortField,this.customer.isAsc);
+            tripDataList.forEach(item => {
                 tbody +=`<tr >
                     <td>
                     <span class="tooltiptext">${(!item.IsPaperTicket)?'HH Ticket':'Paper Ticket'}</span>
@@ -749,10 +767,10 @@ thead =`<thead style="background:#CCC">
     }
     printHeaderData(){
         let selectedData = '';
-        let sdateData = this.date.transform(this.tripData.TripStartDatedate);
+        let sdateData = this.date.transform(this.tripData.TripStartDate);
         let edateData = this.date.transform(this.tripData.TripEndDate);
         let tripStatus = this.tripStatus(this.tripData.TripStatusID)
-        selectedData = `<table width="100%">
+        selectedData = `<table width="100%" cellpadding="5" cellspacing="0" border="1" bordercolor="black"><tr><td><table width="100%">
         <thead>
         <tr>
             <th align="left">Business Unit:</th>
@@ -785,8 +803,12 @@ thead =`<thead style="background:#CCC">
             <td align="left">${edateData}</td>
         </tr>
         </thead>
-        </table>`;
+        </table></td></tr></table>`;
         return selectedData;
+    }
+    sortable(name){
+        this.customer.sortField = name;
+        this.customer.isAsc=!this.customer.isAsc;
     }
 }
 
