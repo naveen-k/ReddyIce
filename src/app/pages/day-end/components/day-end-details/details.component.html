@@ -17,6 +17,7 @@
                     <!-- Save button is not needed anymore, as trip will submit from HH-->
                      <!--<button class="btn btn-danger pull-right add-margin-right" [hidden]='tripData.TripStatusID == 25 || !tripData.IsClosed || (logedInUser.Role.RoleID == 3 && logedInUser.IsChecker != true )' (click)="saveReconciliation(24)">Save</button>-->
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
+                <button class="btn btn-danger pull-right add-margin-right" (click)="printReconciliation()">Print</button>
             </div>
             <div class="row add-margin-bottom">
 
@@ -69,8 +70,8 @@
                     </div>
                 </div>
             </div>
-            <ngb-tabset class='dayend-tabset'>
-                <ngb-tab title="Ticket Details">
+            <ngb-tabset [activeId]="details" (tabChange)="onTabChange($event)" #tabset class='dayend-tabset'>
+                <ngb-tab title="Ticket Details" id="details">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
                             <div class="col-md-6 padding-eater">
@@ -193,7 +194,7 @@
                         </div>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Units Reconciliation">
+                <ngb-tab title="Units Reconciliation" id="unit">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
                             <div class="col-sm-6">
@@ -420,11 +421,11 @@
                         </div>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Cash Reconciliation">
+                <ngb-tab title="Cash Reconciliation" id="cash">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
                             <div class="col-sm-1"></div>
-                            <div class="col-sm-10" style="overflow-x:auto;">
+                            <div class="col-sm-10" style="overflow-x:auto;" id="cashContainer">
                                 <table class="table table-condensed table-bordered cash-table">
                                     <thead class="tableHeader">
                                         <th></th>

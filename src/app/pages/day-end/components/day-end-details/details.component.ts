@@ -9,12 +9,15 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TripProduct } from '../../dayend.interfaces';
 import { Route } from '@angular/router/src/config';
 import { environment } from '../../../../../environments/environment';
+import { NgbTabset } from '@ng-bootstrap/ng-bootstrap/tabset/tabset';
 
 @Component({
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss'],
+    providers:[NgbTabset]
 })
 export class DetailsComponent implements OnInit {
+    activeTab:string = 'details';
     logedInUser: User;
     tripId: number;
     tripData: any = {};
@@ -65,6 +68,7 @@ export class DetailsComponent implements OnInit {
         private notification: NotificationsService,
         private modalService: NgbModal,
         protected router: Router,
+        public tabset: NgbTabset
     ) { }
 
     tripStatus(statusCode) {
@@ -437,6 +441,56 @@ export class DetailsComponent implements OnInit {
             this.notification.error("Ticket preview unavailable!!");
         }
 
+    }
+    onTabChange(event){
+        this.activeTab = event.nextId;
+    }
+    popupWin:any;
+    printReconciliation(){
+        let printContents, printContentsHead;
+        //printContentsHead = document.getElementById('day-end-list-head').innerHTML;
+        let mainData = '';//window.document.getElementById('cashContainer').innerHTML;
+        mainData +=this.printHeaderData();
+        if(this.activeTab=='details'){
+            mainData = this.printDetailData();
+        }else if(this.activeTab=='unit'){
+            mainData = this.printUnitData();
+        }else if(this.activeTab=='cash'){
+            mainData = this.printCashData();
+        }
+        if(this.popupWin){this.popupWin.close();}
+        setTimeout(()=>{
+        this.popupWin = window.open('', '_new', 'top=0,left=0,height="100",width="100%",fullscreen="yes"');
+        this.popupWin.document.open();
+        this.popupWin.document.write(`
+          <html>
+            <head>
+              <title>Day End Trip List</title>
+              <style>
+              //........Customized style.......
+              </style>
+            </head>
+            <body onload="window.print();window.close()">${mainData}</body>
+          </html>`
+        );
+        this.popupWin.document.close();
+    },1000);
+    }
+    printCashData(){
+        let table ='';
+        return table;
+    }
+    printUnitData(){
+        let table ='';
+        return table;
+    }
+    printDetailData(){
+        let table ='';
+        return table;
+    }
+    printHeaderData(){
+        let table ='';
+        return table;
     }
 }
 
