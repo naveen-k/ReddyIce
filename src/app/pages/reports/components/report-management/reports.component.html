@@ -96,7 +96,7 @@
             </select>
         </div>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'internal'">
-            <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'|| filter.reportType == 'SSR'">
+            <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
                 <label>Driver</label>
                 <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
             </div>
