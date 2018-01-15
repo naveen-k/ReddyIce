@@ -10,11 +10,12 @@ import { TripProduct } from '../../dayend.interfaces';
 import { Route } from '@angular/router/src/config';
 import { environment } from '../../../../../environments/environment';
 import { NgbTabset } from '@ng-bootstrap/ng-bootstrap/tabset/tabset';
-
+import { DatePipe } from '@angular/common';
+import { CurrencyFormatter } from 'app/shared/pipes/currency-pipe';
 @Component({
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss'],
-    providers:[NgbTabset]
+    providers:[NgbTabset,DatePipe,CurrencyFormatter]
 })
 export class DetailsComponent implements OnInit {
     activeTab:string = 'details';
@@ -68,7 +69,9 @@ export class DetailsComponent implements OnInit {
         private notification: NotificationsService,
         private modalService: NgbModal,
         protected router: Router,
-        public tabset: NgbTabset
+        public tabset: NgbTabset,
+        private date: DatePipe,
+        private currencyFormatter:CurrencyFormatter
     ) { }
 
     tripStatus(statusCode) {
@@ -450,13 +453,13 @@ export class DetailsComponent implements OnInit {
         let printContents, printContentsHead;
         //printContentsHead = document.getElementById('day-end-list-head').innerHTML;
         let mainData = '';//window.document.getElementById('cashContainer').innerHTML;
-        mainData +=this.printHeaderData();
+        mainData =this.printHeaderData()+"<br/>";
         if(this.activeTab=='details'){
-            mainData = this.printDetailData();
+            mainData += this.printDetailData();
         }else if(this.activeTab=='unit'){
-            mainData = this.printUnitData();
+            mainData += this.printUnitData();
         }else if(this.activeTab=='cash'){
-            mainData = this.printCashData();
+            mainData += this.printCashData();
         }
         if(this.popupWin){this.popupWin.close();}
         setTimeout(()=>{
@@ -485,12 +488,118 @@ export class DetailsComponent implements OnInit {
         return table;
     }
     printDetailData(){
-        let table ='';
+        let table = '',tbody='',thead='';//window.document.getElementById('detailsContainer').innerHTML;
+
+       table =` <table width="100%" cellpadding="5">`;
+thead =`<thead style="background:#CCC">
+            <tr>
+                <th></th>
+                <th>
+                    Ticket #
+                </th>
+                <th>
+                    Ticket Type
+                </th>
+                <th>
+                    Customer
+                </th>
+                <th class="textRightPadd">
+                    Total Invoice
+                </th>
+                <th class="textRightPadd">
+                    Received Amt
+                </th>
+                
+            </tr>
+        </thead>`;
+        table += thead;
+
+        tbody =`<tbody>`;
+
+        if(this.tripData && this.tripData.TripTicketList && this.tripData.TripTicketList.length>0)
+        {
+            this.tripData.TripTicketList.forEach(item => {
+                tbody +=`<tr >
+                    <td>
+                    <span class="tooltiptext">${(!item.IsPaperTicket)?'HH Ticket':'Paper Ticket'}</span>
+                    </td>
+                    <td class="text-align-left">${item.TicketNumber }</td>
+                    <td>${item.ticketType}</td>
+                    <td align="left">
+                        ${item.CustomerNumber } - ${item.CustomerName }
+                    </td>
+                    <td align="right" style="${(item.TicketTypeID === 27)?'color:red':''}">
+                        ${(item.TicketTypeID === 27)?'('+this.currencyFormatter.transform(item.amount)+')':this.currencyFormatter.transform(item.amount)} 
+                    </td>
+                    <td align="right">
+                        <span>${(item.TicketTypeID == 30)?'$0.00':this.currencyFormatter.transform(item.checkCashAmount)}</span>
+                    </td>
+                    
+                </tr>`;
+            });
+            
+                tbody +=`<tr style="background:#CCC">
+                    <td colspan="4">
+                        <b>Total</b>
+                    </td>
+                    <td align="right">
+                        <b>${this.currencyFormatter.transform(this.ticketTotal.invoiceTotal)}</b>
+                    </td>
+                    <td align="right">
+                        <b>${this.currencyFormatter.transform(this.ticketTotal.receivedTotal)}</b>
+                    </td>
+                </tr>`;
+        }  else {
+            tbody +=`<tr><td colspan="6">No Records Found.<td><tr>`;
+        }                        
+               
+                tbody +=`</tbody>`;
+                table += tbody;
+                table +=`</table>`;
+
+
         return table;
     }
     printHeaderData(){
-        let table ='';
-        return table;
+        let selectedData = '';
+        let sdateData = this.date.transform(this.tripData.TripStartDatedate);
+        let edateData = this.date.transform(this.tripData.TripEndDate);
+        let tripStatus = this.tripStatus(this.tripData.TripStatusID)
+        selectedData = `<table width="100%">
+        <thead>
+        <tr>
+            <th align="left">Business Unit:</th>
+            <th align="left">Route:</th>
+            <th align="left">Trip Code:</th>
+            <th align="left">HH Day End:</th>
+            <th align="left">Trip Start Date:</th>
+            
+        </tr>
+        <tr>
+            <td align="left">${this.tripData.BranchCode} - ${this.tripData.BUName}</td>
+            <td align="left">${(this.tripData.IsUnplanned)?'Unplanned':this.tripData.RouteNumber}</td>
+            <td align="left">${this.tripData.TripCode}</td>
+            <td align="left">${(this.tripData.IsClosed)?'Yes':'No'}</td>
+            <td align="left">${sdateData}</td>
+            
+        </tr>
+        <tr>
+            <th align="left">Driver:</th>
+            <th align="left">Truck:</th>
+            <th align="left">Status:</th>
+            <th align="left">ERP Processed:</th>
+            <th align="left">Trip End Date:</th>
+        </tr>
+        <tr>
+            <td align="left">${this.tripData.DriverName}</td>
+            <td align="left">${this.tripData.TruckID}</td>
+            <td align="left">${tripStatus}</td>
+            <td align="left">${(this.tripData.IsProcessed)?'Yes':'No'}</td>
+            <td align="left">${edateData}</td>
+        </tr>
+        </thead>
+        </table>`;
+        return selectedData;
     }
 }
 
