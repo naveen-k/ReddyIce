@@ -170,13 +170,22 @@ export class ReportsComponent implements OnInit {
                 break;
             case 'IOA':
                 // this.getCustomers();
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                } else {
+                    this.filter.userType = 'internal';
+                }
                 break;
             case 'TIR':
                 this.IsTIR = true;
                 break;
             default:
                 this.IsTIR = false;
-                this.filter.userType = 'internal';
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                } else {
+                    this.filter.userType = 'internal';
+                }
                 break;
         }
         if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {

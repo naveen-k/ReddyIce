@@ -70,7 +70,7 @@
                     </div>
                 </div>
             </div>
-            <ngb-tabset [activeId]="details" (tabChange)="onTabChange($event)" #tabset class='dayend-tabset'>
+            <ngb-tabset [activeId]="activeTab" (tabChange)="onTabChange($event)" #tabset class='dayend-tabset'>
                 <ngb-tab title="Ticket Details" id="details">
                     <ng-template ngbTabContent>
                         <div class="row page-header">
