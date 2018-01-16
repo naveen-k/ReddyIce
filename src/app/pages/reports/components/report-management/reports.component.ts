@@ -350,10 +350,10 @@ export class ReportsComponent implements OnInit {
     }
 
     getRoutesForRange() {
-        this.reportService.getRoutesForRange(this.filter.branch, this.formatDate(this.filter.startDate), this.formatDate(this.filter.endDate)).subscribe((res) => {
-            this.routes = res.map((v) => { return { value: v, label: v } });
-        }, (err) => {
-        });
+        // this.reportService.getRoutesForRange(this.filter.branch, this.formatDate(this.filter.startDate), this.formatDate(this.filter.endDate)).subscribe((res) => {
+        //     this.routes = res.map((v) => { return { value: v, label: v } });
+        // }, (err) => {
+        // });
     }
 
     focuOutCustomer() {
