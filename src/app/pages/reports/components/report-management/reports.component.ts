@@ -168,6 +168,7 @@ export class ReportsComponent implements OnInit {
         this.filter.stech = 1;
         this.filter.branch = 1;
         this.filter.workOrderNumber = null;
+        this.filter.ticketNumber = null;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
