@@ -621,6 +621,11 @@ export class DetailsComponent implements OnInit {
                                     <input type="text" value="${this.ticketDetails ? this.ticketDetails.Total.HHAmountDeposited : ''}" min="0" disabled placeholder="0.00" style="width:98%">                    
                                 </td>                    
                             </tr>
+                            ${this.ticketDetails && this.ticketDetails.Total.DriverApproval !==null ?
+                            `<tr>
+                                <td style="width:50%" colspan="2">Driver Approval</td>
+                                <td style="width:50%" colspan="2"><textarea rows="3" style="width:100%;border:1px;resize: none;" readonly>${this.ticketDetails.Total.DriverApproval}</textarea></td>
+                            </tr>` : ''}
                             </tbody>
                         </table>   
                     </div>
