@@ -369,7 +369,7 @@ export class ReportsComponent implements OnInit {
     }
 
     getCustomersbyTicketNumber(ticketNumber) {
-        this.overlayStatus = true;
+        this.viewButtonStatus = true;
         this.filter.ticketID = '';
         this.filter.showCustomerDropdown = false;
         this.viewReport = false;
@@ -390,7 +390,7 @@ export class ReportsComponent implements OnInit {
                     this.filter.ticketID = '';
                     // this.notification.error('No Customer Found!!!');
                 }
-                this.overlayStatus = false;
+                this.viewButtonStatus = false;
 
                 ////
                 this.viewReport = false;
@@ -420,13 +420,16 @@ export class ReportsComponent implements OnInit {
 
                     this.filter.showCustomerDropdown = false;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-
+                    
                 }
                 console.log('from method: ', this.linkRpt);
                 ////
             }, (err) => {
-                this.overlayStatus = false;
+                this.viewButtonStatus = false;
             });
+        } else{
+           
+            this.viewButtonStatus = false;
         }
     }
 
