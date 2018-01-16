@@ -64,6 +64,14 @@
                 <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getCustomers()"></reddy-select>
             </div>
         </ng-container>
+        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
+            <label>Select Customer Source</label>
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
+                <option [value]="0">All Customers</option>
+                <option [value]="101">RI Customers</option>
+                <option [value]="103">External Customers</option>
+            </select>
+        </div>
         <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
         || filter.reportType == 'EOD'||filter.reportType==='SSR'">
@@ -86,14 +94,6 @@
                     </div>
                 </ng-container>
             </div>
-        </div>
-        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
-            <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
-                <option [value]="0">All Customers</option>
-                <option [value]="101">RI Customers</option>
-                <option [value]="103">External Customers</option>
-            </select>
         </div>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'internal'">
             <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'|| filter.reportType == 'SSR'">
