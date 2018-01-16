@@ -236,7 +236,6 @@ export class TrackerComponent implements OnInit {
       } else {
         this.actual = false;
         this.planned = true;
-        this.filter.sequence = 1;
       }
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
       this.tripStartDate = res.Trips[0].TripStartDate
@@ -356,6 +355,8 @@ export class TrackerComponent implements OnInit {
       this.filter.sequence = event.target.value;
     } else if (event.sequence) {
       this.filter.sequence = this.filter.sequence;
+    } else {
+      this.filter.sequence = event;
     }
     // this.filter.sequence = event.target.value;
     if (+this.filter.sequence === 1) {
