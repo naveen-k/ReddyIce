@@ -157,6 +157,7 @@ export class ReportsComponent implements OnInit {
     }
 
     reportTypeChangeHandler() {
+        this.isTIRCustomers = false;
         this.onLoadFrame = false;
         this.filter.tripState = 0;
         this.disableTrippState = false;
@@ -169,6 +170,7 @@ export class ReportsComponent implements OnInit {
         this.filter.branch = 1;
         this.filter.workOrderNumber = null;
         this.filter.ticketNumber = null;
+        this.filter.showCustomerDropdown = false;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -369,7 +371,10 @@ export class ReportsComponent implements OnInit {
         this.filterCustomers();
     }
 
+
+    isTIRCustomers = false;
     getCustomersbyTicketNumber(ticketNumber) {
+
         this.viewButtonStatus = true;
         this.filter.ticketID = '';
         this.filter.showCustomerDropdown = false;
@@ -386,12 +391,12 @@ export class ReportsComponent implements OnInit {
                 this.customersByTicketNumber = tempArr;
                 if (this.customersByTicketNumber.length === 1) {
                     this.filter.ticketID = this.customersByTicketNumber[0].value;
+                    this.isTIRCustomers = false;
                 } else {
                     this.viewReport = false;
                     this.filter.ticketID = '';
                     // this.notification.error('No Customer Found!!!');
                 }
-                this.viewButtonStatus = false;
 
                 ////
                 this.viewReport = false;
@@ -401,14 +406,15 @@ export class ReportsComponent implements OnInit {
                         this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                         this.selectedCustomerType = this.customerstatus;
                         this.viewReport = true;
-
                         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+
                     } else {
                         this.viewReport = false;
                     }
+                    this.viewButtonStatus = false;
+                    this.isTIRCustomers = true;
                 } else {
                     this.filter.showCustomerDropdown = false;
-
                     //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                     this.selectedCustomerType = this.customerstatus;
                     if (this.customersByTicketNumber && this.customersByTicketNumber.length > 0) {
@@ -417,8 +423,6 @@ export class ReportsComponent implements OnInit {
                         this.viewReport = false;
                         this.notification.error('Ticket Number Not Found!!');
                     }
-
-
                     this.filter.showCustomerDropdown = false;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
                     
@@ -428,9 +432,10 @@ export class ReportsComponent implements OnInit {
             }, (err) => {
                 this.viewButtonStatus = false;
             });
-        } else{
-           
+        } else {
+            this.notification.error("Please enter a valid ticket number.");
             this.viewButtonStatus = false;
+            this.isTIRCustomers = true;
         }
     }
 
@@ -460,7 +465,10 @@ export class ReportsComponent implements OnInit {
     }
 
     customerChangeHandler() {
-        this.updateLink(this.filter.reportType);
+        // this.updateLink(this.filter.reportType);
+        this.viewButtonStatus = true;
+        this.isTIRCustomers = false;
+        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
     }
     updateLink(rType) {
         this.viewButtonStatus = true;
