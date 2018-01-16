@@ -64,6 +64,14 @@
                 <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="filter.distributor" (selectedChange)="distributorChangeHandler();getCustomers()"></reddy-select>
             </div>
         </ng-container>
+        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
+            <label>Select Customer Source</label>
+            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
+                <option [value]="0">All Customers</option>
+                <option [value]="101">RI Customers</option>
+                <option [value]="103">External Customers</option>
+            </select>
+        </div>
         <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
         || filter.reportType == 'EOD'||filter.reportType==='SSR'">
@@ -86,14 +94,6 @@
                     </div>
                 </ng-container>
             </div>
-        </div>
-        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
-            <label>Select Customer Source</label>
-            <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
-                <option [value]="0">All Customers</option>
-                <option [value]="101">RI Customers</option>
-                <option [value]="103">External Customers</option>
-            </select>
         </div>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'internal'">
             <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
@@ -151,7 +151,7 @@
                             <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
                             <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
                             <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
-                            <option value="SSR" *ngIf="isITAdmin||isInternalAdmin||isSTech">Skipped Stops</option>
+                            <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
                         </select>
                     </div>
                 </div>
@@ -243,8 +243,8 @@
                     <label class="control-label">
                         Enter Ticket Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number"
-                        (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)">
+                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number">
+                        <!-- (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)"> -->
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
                     <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
