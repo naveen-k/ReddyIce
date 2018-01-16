@@ -141,6 +141,10 @@ export class ReportsComponent implements OnInit {
             this.isSTech = true;
         }
 
+        if (this.isSTech) {
+            this.filter.reportType = "WOC";
+        }
+
         if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
             this.filter.userType = 'internal';
             this.isInternalDriver = true;
@@ -164,19 +168,22 @@ export class ReportsComponent implements OnInit {
         this.filter.stech = 1;
         this.filter.branch = 1;
         this.filter.workOrderNumber = null;
+        this.filter.ticketNumber = null;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
                 break;
-            case 'IOA':
-                // this.getCustomers();
-                break;
             case 'TIR':
                 this.IsTIR = true;
                 break;
+            case 'IOA':
             default:
                 this.IsTIR = false;
-                this.filter.userType = 'internal';
+                if (this.user.IsDistributor) {
+                    this.filter.userType = 'external';
+                } else {
+                    this.filter.userType = 'internal';
+                }
                 break;
         }
         if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {
@@ -384,6 +391,39 @@ export class ReportsComponent implements OnInit {
                     // this.notification.error('No Customer Found!!!');
                 }
                 this.overlayStatus = false;
+
+                ////
+                this.viewReport = false;
+                if (this.customersByTicketNumber && this.customersByTicketNumber.length > 1) {
+                    this.filter.showCustomerDropdown = true;
+                    if (this.filter.ticketID) {
+                        this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+                        this.selectedCustomerType = this.customerstatus;
+                        this.viewReport = true;
+
+                        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+                    } else {
+                        this.viewReport = false;
+                    }
+                } else {
+                    this.filter.showCustomerDropdown = false;
+
+                    //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
+                    this.selectedCustomerType = this.customerstatus;
+                    if (this.customersByTicketNumber && this.customersByTicketNumber.length > 0) {
+                        this.viewReport = true;
+                    } else {
+                        this.viewReport = false;
+                        this.notification.error('Ticket Number Not Found!!');
+                    }
+
+
+                    this.filter.showCustomerDropdown = false;
+                    this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+
+                }
+                console.log('from method: ', this.linkRpt);
+                ////
             }, (err) => {
                 this.overlayStatus = false;
             });
@@ -498,35 +538,7 @@ export class ReportsComponent implements OnInit {
         }
 
         if (rType === 'TIR') {
-            this.viewReport = false;
-            if (this.customersByTicketNumber && this.customersByTicketNumber.length > 1) {
-                this.filter.showCustomerDropdown = true;
-                if (this.filter.ticketID) {
-                    this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-                    this.selectedCustomerType = this.customerstatus;
-                    this.viewReport = true;
-
-                    this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-                } else {
-                    this.viewReport = false;
-                }
-            } else {
-                this.filter.showCustomerDropdown = false;
-
-                //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
-                this.selectedCustomerType = this.customerstatus;
-                if (this.customersByTicketNumber && this.customersByTicketNumber.length > 0) {
-                    this.viewReport = true;
-                } else {
-                    this.viewReport = false;
-                    this.notification.error('Ticket Number Not Found!!');
-                }
-
-
-                this.filter.showCustomerDropdown = false;
-                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-
-            }
+            this.getCustomersbyTicketNumber(this.filter.ticketNumber);
         }
 
         console.log(this.linkRpt);
