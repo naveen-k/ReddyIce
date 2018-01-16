@@ -170,6 +170,7 @@ export class ReportsComponent implements OnInit {
         this.filter.branch = 1;
         this.filter.workOrderNumber = null;
         this.filter.ticketNumber = null;
+        this.filter.showCustomerDropdown = false;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -373,6 +374,7 @@ export class ReportsComponent implements OnInit {
 
     isTIRCustomers = false;
     getCustomersbyTicketNumber(ticketNumber) {
+
         this.viewButtonStatus = true;
         this.filter.ticketID = '';
         this.filter.showCustomerDropdown = false;
@@ -389,6 +391,7 @@ export class ReportsComponent implements OnInit {
                 this.customersByTicketNumber = tempArr;
                 if (this.customersByTicketNumber.length === 1) {
                     this.filter.ticketID = this.customersByTicketNumber[0].value;
+                    this.isTIRCustomers = false;
                 } else {
                     this.viewReport = false;
                     this.filter.ticketID = '';
@@ -404,7 +407,7 @@ export class ReportsComponent implements OnInit {
                         this.selectedCustomerType = this.customerstatus;
                         this.viewReport = true;
                         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-                        
+
                     } else {
                         this.viewReport = false;
                     }
@@ -422,16 +425,17 @@ export class ReportsComponent implements OnInit {
                     }
                     this.filter.showCustomerDropdown = false;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-                    this.viewButtonStatus = false;
+                    
                 }
                 console.log('from method: ', this.linkRpt);
                 ////
             }, (err) => {
                 this.viewButtonStatus = false;
             });
-        } else{
-           
+        } else {
+            this.notification.error("Please enter a valid ticket number.");
             this.viewButtonStatus = false;
+            this.isTIRCustomers = true;
         }
     }
 
