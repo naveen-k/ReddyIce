@@ -341,7 +341,8 @@ export class ReportsComponent implements OnInit {
     routes: any[] = [];
     routeNumberChange() {
         this.reportService.getManifestRoutes(this.filter.branch, this.formatDate(this.filter.manifestDate)).subscribe((res) => {
-            this.routes = res;
+            //this.routes = res;
+            this.routes = res.map((v) => { return { value: v, label: v } });
             //this.routes = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
         }, (err) => {
         });
