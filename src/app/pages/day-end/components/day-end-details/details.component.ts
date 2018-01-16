@@ -547,7 +547,7 @@ export class DetailsComponent implements OnInit {
                 <div class="col-sm-1"></div>
             </div>
             <div style="width: 100%; margin-top: 10px;">
-                <div style="width: 64%; float: left; margin-top: 10px;">
+                <div style="width: 65%; float: left; margin-top: 10px;">
                     <div style="width: 100%; float: left">
                         <table cellpadding="5" width="38%" border="1" style="border-collapse: collapse;float:left">
                             <thead>
@@ -630,7 +630,7 @@ export class DetailsComponent implements OnInit {
                         </table>   
                     </div>
                 </div>
-                <div style="width: 34%; float: left; margin-top: 10px;">    
+                <div style="width: 35%; float: left; margin-top: 10px;">    
                     <table cellpadding="5" border=1 style="border-collapse: collapse;">
                         <thead>
                         <th colspan="2">Actual Deposit</th>
