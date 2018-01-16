@@ -7,6 +7,7 @@
                 <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==23 && user.IsDistributor && user.Role.RoleID == 3" [disabled]="!tripData.IsClosed"
                     (click)="submitTickets(24)">Submit</button>
                 <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
+                <button class="btn btn-danger pull-right add-margin-right" (click)="printReconciliation()" [disabled]="!printStatus">Print</button>
             </div>
             <div class="row">
                 <div class=" col-md-12">
