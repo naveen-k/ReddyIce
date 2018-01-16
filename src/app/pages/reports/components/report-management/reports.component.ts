@@ -157,6 +157,7 @@ export class ReportsComponent implements OnInit {
     }
 
     reportTypeChangeHandler() {
+        this.isTIRCustomers = false;
         this.onLoadFrame = false;
         this.filter.tripState = 0;
         this.disableTrippState = false;
@@ -169,21 +170,15 @@ export class ReportsComponent implements OnInit {
         this.filter.branch = 1;
         this.filter.workOrderNumber = null;
         this.filter.ticketNumber = null;
+        this.filter.showCustomerDropdown = false;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
                 break;
-            case 'IOA':
-                // this.getCustomers();
-                if (this.user.IsDistributor) {
-                    this.filter.userType = 'external';
-                } else {
-                    this.filter.userType = 'internal';
-                }
-                break;
             case 'TIR':
                 this.IsTIR = true;
                 break;
+            case 'IOA':
             default:
                 this.IsTIR = false;
                 if (this.user.IsDistributor) {
@@ -293,8 +288,11 @@ export class ReportsComponent implements OnInit {
             this.filter.driver = 1;
         }
 
-        if (this.filter.reportType == 'MR' || this.filter.reportType == 'SSR') {
+        if (this.filter.reportType == 'MR') {
             this.routeNumberChange();
+        }
+        if (this.filter.reportType == 'SSR') {
+            this.getRoutesForRange();
         }
         // this.getCustomers();
     }
@@ -344,8 +342,16 @@ export class ReportsComponent implements OnInit {
     routes: any[] = [];
     routeNumberChange() {
         this.reportService.getManifestRoutes(this.filter.branch, this.formatDate(this.filter.manifestDate)).subscribe((res) => {
-            this.routes = res;
+            //this.routes = res;
+            this.routes = res.map((v) => { return { value: v, label: v } });
             //this.routes = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
+        }, (err) => {
+        });
+    }
+
+    getRoutesForRange() {
+        this.reportService.getRoutesForRange(this.filter.branch, this.formatDate(this.filter.startDate), this.formatDate(this.filter.endDate)).subscribe((res) => {
+            this.routes = res.map((v) => { return { value: v, label: v } });
         }, (err) => {
         });
     }
@@ -364,8 +370,11 @@ export class ReportsComponent implements OnInit {
         this.filterCustomers();
     }
 
+
+    isTIRCustomers = false;
     getCustomersbyTicketNumber(ticketNumber) {
-        this.overlayStatus = true;
+
+        this.viewButtonStatus = true;
         this.filter.ticketID = '';
         this.filter.showCustomerDropdown = false;
         this.viewReport = false;
@@ -381,12 +390,12 @@ export class ReportsComponent implements OnInit {
                 this.customersByTicketNumber = tempArr;
                 if (this.customersByTicketNumber.length === 1) {
                     this.filter.ticketID = this.customersByTicketNumber[0].value;
+                    this.isTIRCustomers = false;
                 } else {
                     this.viewReport = false;
                     this.filter.ticketID = '';
                     // this.notification.error('No Customer Found!!!');
                 }
-                this.overlayStatus = false;
 
                 ////
                 this.viewReport = false;
@@ -396,14 +405,15 @@ export class ReportsComponent implements OnInit {
                         this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                         this.selectedCustomerType = this.customerstatus;
                         this.viewReport = true;
-
                         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+
                     } else {
                         this.viewReport = false;
                     }
+                    this.viewButtonStatus = false;
+                    this.isTIRCustomers = true;
                 } else {
                     this.filter.showCustomerDropdown = false;
-
                     //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
                     this.selectedCustomerType = this.customerstatus;
                     if (this.customersByTicketNumber && this.customersByTicketNumber.length > 0) {
@@ -412,17 +422,19 @@ export class ReportsComponent implements OnInit {
                         this.viewReport = false;
                         this.notification.error('Ticket Number Not Found!!');
                     }
-
-
                     this.filter.showCustomerDropdown = false;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-
+                    
                 }
                 console.log('from method: ', this.linkRpt);
                 ////
             }, (err) => {
-                this.overlayStatus = false;
+                this.viewButtonStatus = false;
             });
+        } else {
+            this.notification.error("Please enter a valid ticket number.");
+            this.viewButtonStatus = false;
+            this.isTIRCustomers = true;
         }
     }
 
@@ -452,7 +464,10 @@ export class ReportsComponent implements OnInit {
     }
 
     customerChangeHandler() {
-        this.updateLink(this.filter.reportType);
+        // this.updateLink(this.filter.reportType);
+        this.viewButtonStatus = true;
+        this.isTIRCustomers = false;
+        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
     }
     updateLink(rType) {
         this.viewButtonStatus = true;
@@ -525,7 +540,7 @@ export class ReportsComponent implements OnInit {
                 // console.log('when WONS is clicked', this.linkRpt);
             } else if (rType === 'SSR') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&Route=${this.filter.RouteNumber}&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DriverID=${this.filter.driver}&Route=${this.filter.RouteNumber}&LoggedInUserID=${this.user.UserId}`);
 
                 console.log('when SSR is clicked', this.linkRpt);
             } else {
