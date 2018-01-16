@@ -125,7 +125,7 @@ export class DetailsComponent implements OnInit {
             this.tripData.TripTicketList.forEach(ticket => {
                 ticket.TicketNumber = +ticket.TicketNumber;
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
-                ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
+                ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID, ticket.Is_PBM_DSD);
                 ticket.amount = +ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount || 0);
                 var cardAmount = (this.tripData.IsClosed) ? ticket.CreditCardAmount : 0;
                 // ticket.checkCashAmount = (ticket.TicketTypeID === 30) ? 0 : ticket.CheckAmount + ticket.CashAmount + cardAmount;
