@@ -225,16 +225,18 @@ export class TrackerComponent implements OnInit {
   fetchTicketDetailsByTrip(tripId) {
     this.showSpinner = true;
     this.selectedTrip = [];
-    this.drawMapPath();
+    //this.drawMapPath();
     this.service.getTripTicketsByTripID(tripId).subscribe(res => {
       this.showSpinner = false;
       this.IsUnplanned = res.Trips[0].IsUnplanned;
       if (this.IsUnplanned) { // if unplanned trip, map according 'Actual' scenario
         this.actual = true;
         this.planned = false;
+        this.filter.sequence = 2;
       } else {
         this.actual = false;
         this.planned = true;
+        this.filter.sequence = 1;
       }
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
       this.tripStartDate = res.Trips[0].TripStartDate
