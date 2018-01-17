@@ -132,12 +132,12 @@
                         <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.TicketID)">
                             <span class="tooltiptext">View Ticket Details</span>
                         </i>
-                        <a *ngIf="item.ticketType !='Credit & Sale'" [routerLink]="['../view/'+item.TicketID]" (click)="overlayStatus = true;">
+                        <a *ngIf="!(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" [routerLink]="['../view/'+item.TicketID]" (click)="overlayStatus = true;">
                             <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">View</span>
                             </i>
                         </a>
-                        <a *ngIf="item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber,'view')">
+                        <a *ngIf="item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber,'view')">
                             <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">View</span>
                             </i>
@@ -150,20 +150,20 @@
                         <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID!==23" (click)="deleteTicket(item.TicketID)">
                             <span class="tooltiptext">Delete</span>
                         </i> -->
-                        <a *ngIf="item.ticketType !='Credit & Sale'" [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID==25">
+                        <a *ngIf="!(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID==25">
                             <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
-                        <a *ngIf="item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber,'edit')" [hidden]="item.TicketStatusID==25">
+                        <a *ngIf="(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" (click)="showTicketChoice(item.TicketNumber,'edit')" [hidden]="item.TicketStatusID==25">
                             <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">Choose</span>
                             </i>
                         </a>
-                        <i *ngIf="item.ticketType !='Credit & Sale'" class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="deleteTicket(item.TicketID);overlayStatus = true;">
+                        <i *ngIf="!(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="deleteTicket(item.TicketID);overlayStatus = true;">
                             <span class="tooltiptext">Delete</span>
                         </i>
-                        <i *ngIf="item.ticketType =='Credit & Sale'" class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="showTicketChoice(item.TicketNumber,'delete');">
+                        <i *ngIf="(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="showTicketChoice(item.TicketNumber,'delete');">
                             <span class="tooltiptext">Delete</span>
                         </i>
                     </td>
