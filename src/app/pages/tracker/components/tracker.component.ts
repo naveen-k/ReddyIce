@@ -203,6 +203,7 @@ export class TrackerComponent implements OnInit {
         this.trips = [];
         this.showSpinner = false;
       }
+      this.drawMapPath();
     }, (error) => {
       console.log(error);
       this.trips = [];
@@ -249,7 +250,7 @@ export class TrackerComponent implements OnInit {
       this.typeChangeHandler();
     } else {
       this.loadTrips();
-      this.drawMapPath();
+      // this.drawMapPath();
     }
   }
   driverOnBranch = [];
@@ -385,27 +386,21 @@ export class TrackerComponent implements OnInit {
       if (+this.filter.sequence === 1) {
         // this.drawPolyline(google, 1);
         // this.drawRoute(google, 1, this.selectedTrip);
-        this.drawRoutesOnMap(google, 1, this.selectedTrip, this);
+        this.drawRoutesOnMap(google, 1, this.selectedTrip);
       } else if (+this.filter.sequence === 3) {
         //this.drawPolyline(google, 2);
         // this.drawRoute(google, 1, this.selectedTrip);
         // this.drawRoute(google, 2, this.selectedTrip);
-        // this.drawRoutesOnMap(google, 1, this.selectedTrip);
-        // this.drawRoutesOnMap(google, 2, this.selectedTrip);
-        this.plannedAndActual(google, this.drawRoutesOnMap);
+        this.drawRoutesOnMap(google, 1, this.selectedTrip);
+        this.drawRoutesOnMap(google, 2, this.selectedTrip);
       } else {
         //this.drawPolyline(google, 3);
         // this.drawRoute(google, 2, this.selectedTrip);
-        this.drawRoutesOnMap(google, 2, this.selectedTrip, this);
+        this.drawRoutesOnMap(google, 2, this.selectedTrip);
       }
     });
   }
 
-  private plannedAndActual(google: any, callback) {
-    let that = this;
-    this.drawRoutesOnMap(google, 1, this.selectedTrip, this);
-    callback(google, 2, that.selectedTrip, that);
-  }
   // function to sort the selectedTrip array by PlannedSequence
   comparator(a, b) {
     return a["PlannedSequence"] - b["PlannedSequence"];
@@ -419,26 +414,32 @@ export class TrackerComponent implements OnInit {
    * @param sequence 
    * @param trips 
    */
-  private drawRoutesOnMap(google: any, sequence: number, trips: any[], that) {
+  private drawRoutesOnMap(google: any, sequence: number, trips: any[]) {
     if (!trips || !trips.length) { return false };
     trips = trips.slice(0);
     // adding pushpin marker logic here
-    
     let positionObj = {
       lat: null,
       long: null,
       startPt: null,
       endPt: null
     }
-    that.start = null;
+    let end = null;
+    this.start = null;
     for (let i = 0; i < trips.length; i++) {
-      setTimeout(function() {
-        that.setMarkerAndTableColor(sequence, trips, i, that);
-        that.customiseMarkerIcon(google, sequence, trips, i, that);
-        positionObj = that.getMarkerPosition(google, sequence, trips, i, that);
-        that.plotMarkers(google, sequence, trips, i, positionObj, that);
-      }, 0);
+      // this.setMarkerAndTableColor(sequence, trips, i);
+      // this.customiseMarkerIcon(google, sequence, trips, i);
+      // positionObj = this.getMarkerPosition(google, sequence, trips, i);
+      // this.plotMarkers(google, sequence, trips, i, positionObj);
+      this.loadMarkers(google, sequence, trips, i, positionObj);
     }
+  }
+
+  private loadMarkers(google, sequence, trips, i, positionObj) {
+    this.setMarkerAndTableColor(sequence, trips, i);
+    this.customiseMarkerIcon(google, sequence, trips, i);
+    positionObj = this.getMarkerPosition(google, sequence, trips, i);
+    this.plotMarkers(google, sequence, trips, i, positionObj);
   }
 
   /**
@@ -448,36 +449,36 @@ export class TrackerComponent implements OnInit {
    * @param trips 
    * @param i 
    */
-  private setMarkerAndTableColor(sequence: number, trips: any[], i: number, that) {
+  private setMarkerAndTableColor(sequence: number, trips: any[], i: number) {
     if (sequence == 2) {
       // changing color of the marker icon based on condition
       if (trips[i].TicketTypeID === 29) {
-        that.pinColor = 'ffff00';   // yellow color for Did Not Service stops
-        that.pinTextColor = '000';
-        that.selectedTrip[i].pinColor = '#' + that.pinColor;
-        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+        this.pinColor = 'ffff00';   // yellow color for Did Not Service stops
+        this.pinTextColor = '000';
+        this.selectedTrip[i].pinColor = '#' + this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
       } else if (trips[i].OrderID == null) {
-        that.pinColor = '0000ff';   // blue color for Unplanned Service
-        that.pinTextColor = 'fff';
-        that.selectedTrip[i].pinColor = '#' + that.pinColor;
-        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+        this.pinColor = '0000ff';   // blue color for Unplanned Service
+        this.pinTextColor = 'fff';
+        this.selectedTrip[i].pinColor = '#' + this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
       } else if (trips[i].OrderID != null && trips[i].TicketNumber !== null) {
-        that.pinColor = '90EE90';   // lightgreen color for Planned Service
-        that.pinTextColor = '000';
-        that.selectedTrip[i].pinColor = '#' + that.pinColor;
-        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+        this.pinColor = '90EE90';   // lightgreen color for Planned Service
+        this.pinTextColor = '000';
+        this.selectedTrip[i].pinColor = '#' + this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
       } else if (trips[i].OrderID != null && trips[i].TicketNumber == null) {
-        that.pinColor = 'ff0000';   // red color for Skipped stops
-        that.pinTextColor = 'fff';
-        that.selectedTrip[i].pinColor = '#' + that.pinColor;
-        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+        this.pinColor = 'ff0000';   // red color for Skipped stops
+        this.pinTextColor = 'fff';
+        this.selectedTrip[i].pinColor = '#' + this.pinColor;
+        this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
       }
     }
     if (sequence === 1) {
-      that.pinColor = '999900';   // red color for Skipped stops
-      that.pinTextColor = 'fff';
-      that.selectedTrip[i].pinColor = '#' + that.pinColor;
-      that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+      this.pinColor = '999900';   // red color for Skipped stops
+      this.pinTextColor = 'fff';
+      this.selectedTrip[i].pinColor = '#' + this.pinColor;
+      this.selectedTrip[i].pinTextColor = '#' + this.pinTextColor;
     }
   }
 
@@ -488,16 +489,16 @@ export class TrackerComponent implements OnInit {
    * @param trips 
    * @param i 
    */
-  private customiseMarkerIcon(google, sequence, trips, i, that) {
+  private customiseMarkerIcon(google, sequence, trips, i) {
     // customising the marker icon here
     if (sequence === 2) {
-      that.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence || '').toString() + "|" + that.pinColor + "|" + that.pinTextColor,
+      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence || '').toString() + "|" + this.pinColor + "|" + this.pinTextColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34));
     } else if (sequence === 1) {
       if (trips[i].PlannedSequence != null) {
-        that.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence || i + 1).toString() + "|" + that.pinColor + "|" + that.pinTextColor,
+        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence || i + 1).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
           new google.maps.Size(21, 34),
           new google.maps.Point(0, 0),
           new google.maps.Point(10, 34));
@@ -520,7 +521,6 @@ export class TrackerComponent implements OnInit {
       endPt: null
     }
 
-    let that = this;
     // start point of straight line
 
     if (sequence === 1) {
@@ -530,15 +530,15 @@ export class TrackerComponent implements OnInit {
         trips[i].PlannedLongitude != "0.0") {
         positionObj.lat = trips[i].PlannedLatitude;
         positionObj.long = trips[i].PlannedLongitude;
-        if (!that.start) {
+        if (!this.start) {
           var startPt = new google.maps.LatLng(trips[i].PlannedLatitude, trips[i].PlannedLongitude);
           positionObj.startPt = startPt;
-          that.start = startPt;
+          this.start = startPt;
         } else {
           var endPt = new google.maps.LatLng(trips[i].PlannedLatitude, trips[i].PlannedLongitude);
           positionObj.endPt = endPt;
-          positionObj.startPt = that.start;
-          that.start = endPt;
+          positionObj.startPt = this.start;
+          this.start = endPt;
         }
       }
     }
@@ -550,15 +550,15 @@ export class TrackerComponent implements OnInit {
         trips[i].ActualLongitude != "0.0") {
         positionObj.lat = trips[i].ActualLatitude;
         positionObj.long = trips[i].ActualLongitude;
-        if (!that.start) {
+        if (!this.start) {
           var startPt = new google.maps.LatLng(trips[i].ActualLatitude, trips[i].ActualLongitude);
           positionObj.startPt = startPt;
-          that.start = startPt;
+          this.start = startPt;
         } else {
           var endPt = new google.maps.LatLng(trips[i].ActualLatitude, trips[i].ActualLongitude);
           positionObj.endPt = endPt;
-          positionObj.startPt = that.start;
-          that.start = endPt;
+          positionObj.startPt = this.start;
+          this.start = endPt;
         }
       }
     }
@@ -574,7 +574,7 @@ export class TrackerComponent implements OnInit {
    * @param i 
    * @param position 
    */
-  private plotMarkers(google, sequence, trips, i, position, that) {
+  private plotMarkers(google, sequence, trips, i, position) {
     var strokeColour = '';
     if (sequence == 2) {
       strokeColour = 'brown'
@@ -588,22 +588,22 @@ export class TrackerComponent implements OnInit {
         strokeWeight: 2,
         strokeOpacity: 1
       });
-      polyline.setMap(that.map);
-      that.bounds.extend(position.startPt);
-      that.bounds.extend(position.endPt);
+      polyline.setMap(this.map);
+      this.bounds.extend(position.startPt);
+      this.bounds.extend(position.endPt);
     } else if (position.startPt && !position.endPt) {
-      // polyline.setMap(that.map);
-      that.bounds.extend(position.startPt);
+      // polyline.setMap(this.map);
+      this.bounds.extend(position.startPt);
     } else if (!position.startPt && position.endPt) {
-      // polyline.setMap(that.map);
-      that.bounds.extend(position.endPt);
+      // polyline.setMap(this.map);
+      this.bounds.extend(position.endPt);
     }
 
     if (position.lat && position.long) {
       var marker = new google.maps.Marker({
         position: new google.maps.LatLng(position.lat, position.long),
-        map: that.map,
-        icon: that.pinImage
+        map: this.map,
+        icon: this.pinImage
       });
 
       google.maps.event.addListener(marker, 'click', ((marker, i) => {
@@ -635,13 +635,13 @@ export class TrackerComponent implements OnInit {
           infowindowContent += 'Total Received Amount : $' + '0.00' + '<br>';
         }
         return () => {
-          that.infowindow.setContent(infowindowContent);
-          that.infowindow.open(that.map, marker);
+          this.infowindow.setContent(infowindowContent);
+          this.infowindow.open(this.map, marker);
         }
       })(marker, i));
     }
-    that.map.fitBounds(that.bounds);      // auto-zoom
-    that.map.panToBounds(that.bounds);    // auto-center
+    this.map.fitBounds(this.bounds);      // auto-zoom
+    this.map.panToBounds(this.bounds);    // auto-center
   }
 
   /*
@@ -846,7 +846,7 @@ export class TrackerComponent implements OnInit {
     this.tripFilterOption.branchId = null;
     this.tripFilterOption.DistributorMasterID = null;
     this.loadTrips();
-    this.drawMapPath();
+    // this.drawMapPath();
   }
 
   DistributorCopackerID = 0;
