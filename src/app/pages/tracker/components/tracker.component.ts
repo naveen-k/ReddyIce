@@ -526,8 +526,8 @@ export class TrackerComponent implements OnInit {
     if (sequence === 1) {
       if (trips[i].PlannedLatitude &&
         trips[i].PlannedLongitude &&
-        trips[i].PlannedLatitude != "0.0" &&
-        trips[i].PlannedLongitude != "0.0") {
+        +trips[i].PlannedLatitude != 0 &&
+        +trips[i].PlannedLongitude != 0) {
         positionObj.lat = trips[i].PlannedLatitude;
         positionObj.long = trips[i].PlannedLongitude;
         if (!this.start) {
@@ -546,8 +546,8 @@ export class TrackerComponent implements OnInit {
     if (sequence === 2) {
       if (trips[i].ActualLatitude &&
         trips[i].ActualLongitude &&
-        trips[i].ActualLatitude != "0.0" &&
-        trips[i].ActualLongitude != "0.0") {
+        +trips[i].ActualLatitude != 0 &&
+        +trips[i].ActualLongitude != 0) {
         positionObj.lat = trips[i].ActualLatitude;
         positionObj.long = trips[i].ActualLongitude;
         if (!this.start) {
