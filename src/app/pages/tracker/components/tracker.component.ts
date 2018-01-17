@@ -99,18 +99,16 @@ export class TrackerComponent implements OnInit {
 
     if (this.isDistributor) {
       this.searchObj.userType = 'External';
-      this.actual = true;
-      this.planned = false;
+      this.filter.sequence = 2;
       this.tripFilterOption.branchId = 0;
       this.tripFilterOption.isForAll = false;
-      this.typeChangeHandler(); // to load distributors
       this.tripFilterOption.DistributorMasterID = this.user.Distributor.DistributorMasterId;
     } else {
       this.tripFilterOption.branchId = 1;
       this.tripFilterOption.isForAll = true;
     }
 
-
+    this.typeChangeHandler();
     this.loadTrips();
   }
 
@@ -201,7 +199,6 @@ export class TrackerComponent implements OnInit {
             }
           }
         }
-        // this.drawMapPath();
       } else {
         this.trips = [];
         this.showSpinner = false;
@@ -225,24 +222,20 @@ export class TrackerComponent implements OnInit {
   fetchTicketDetailsByTrip(tripId) {
     this.showSpinner = true;
     this.selectedTrip = [];
-    this.drawMapPath();
     this.service.getTripTicketsByTripID(tripId).subscribe(res => {
       this.showSpinner = false;
       this.IsUnplanned = res.Trips[0].IsUnplanned;
       if (this.IsUnplanned) { // if unplanned trip, map according 'Actual' scenario
-        this.actual = true;
-        this.planned = false;
+        this.filter.sequence = 2;
       } else {
-        this.actual = false;
-        this.planned = true;
+        this.filter.sequence = 1;
       }
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
       this.tripStartDate = res.Trips[0].TripStartDate
       if (this.selectedTrip) {
         this.selectedTrip.sort(this.comparator); // sorting planned sequence
       }
-      this.sequenceChangeHandler(this.filter.sequence);
-      this.drawMapPath();
+      this.sequenceChangeHandler();
     })
   }
 
@@ -255,10 +248,9 @@ export class TrackerComponent implements OnInit {
     if (this.isDistributor) {
       this.typeChangeHandler();
     } else {
-      // this.loadBranches();
+      this.loadTrips();
+      this.drawMapPath();
     }
-    this.loadTrips();
-    this.drawMapPath();
   }
   driverOnBranch = [];
   // Fetch selected Branch
@@ -287,7 +279,6 @@ export class TrackerComponent implements OnInit {
       }
       if (this.driverOnBranch && this.driverOnBranch.length > 0) {
         this.tripFilterOption.DriverName = this.driverOnBranch[0].DriverName;    // assigning in model
-        // this.tripFilterOption.TripCode = this.driverOnBranch[0].TripCode;        // assigning in model
         this.driverChangeHandler();
       }
 
@@ -310,7 +301,6 @@ export class TrackerComponent implements OnInit {
     if (this.searchObj.userType == 'Internal') {
       for (var i = 0; i < this.driverOnBranch.length; i++) {
         if (this.tripFilterOption.DriverName == this.driverOnBranch[i]['DriverName']) {
-          //this.driverSpecTrips.push(this.driverOnBranch[i].TripCode);
           this.driverSpecTrips.push(
             {
               TripCode: this.driverOnBranch[i].TripCode,
@@ -320,18 +310,24 @@ export class TrackerComponent implements OnInit {
           );
         }
       }
-      if (this.driverSpecTrips[0]) {
-        this.tripFilterOption.TripCode = this.driverSpecTrips[0].TripCode;
-        this.tripChangeHandler();
-      }
     } else if (this.searchObj.userType == 'External') {
+      var routeNo;
       for (var i = 0; i < this.driverOndistributor.length; i++) {
         if (this.tripFilterOption.DriverName == this.driverOndistributor[i]['DriverName']) {
           //this.driverSpecTrips.push(this.driverOndistributor[i].TripCode);
+
+          //
+          if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
+            routeNo = this.trips[i].RouteNumber;
+          } else {
+            routeNo = 'Unplanned';
+          }
+          //
           this.driverSpecTrips.push(
             {
               TripCode: this.driverOndistributor[i].TripCode,
-              TripID: this.driverOndistributor[i].TripID
+              TripID: this.driverOndistributor[i].TripID,
+              RouteNumber: routeNo
             }
           );
         }
@@ -341,31 +337,14 @@ export class TrackerComponent implements OnInit {
       this.selectedTrip = [];
       this.tripFilterOption.TripCode = this.driverSpecTrips[0].TripCode;
       this.tripChangeHandler();
-      // this.fetchTicketDetailsByTrip(this.tripFilterOption.TripCode);
     }
   }
 
   filter = {
-    sequence:1
+    sequence: 1
   }
   // Filter Markers in the Google Map based on Sequence Radio Button selection
-  sequenceChangeHandler(event) {
-    if (event.target) {
-      this.filter.sequence = event.target.value;
-    } else if (event.sequence) {
-      this.filter.sequence = this.filter.sequence;
-    }
-    // this.filter.sequence = event.target.value;
-    if (+this.filter.sequence === 1) {
-      this.planned = true;
-      this.actual = false;
-    } else if (+this.filter.sequence === 2) {
-      this.actual = true;
-      this.planned = false;
-    } else {
-      this.planned = false;
-      this.actual = false;
-    }
+  sequenceChangeHandler() {
     this.drawMapPath();
   }
 
@@ -403,27 +382,269 @@ export class TrackerComponent implements OnInit {
       //const selectedTrip = [{ PlannedLatitude: '32.736259', PlannedLongitude: '-96.864586' }, { PlannedLatitude: '32.7498', PlannedLongitude: '-96.8720' }, { PlannedLatitude: '32.7905', PlannedLongitude: '-96.8104' }, { PlannedLatitude: '32.8481', PlannedLongitude: '-96.8512' }]
 
       // If Planned Sequence Radio button is selected
-      if (this.planned) {
+      if (+this.filter.sequence === 1) {
         // this.drawPolyline(google, 1);
-        this.drawRoute(google, 1, this.selectedTrip);
-      } else if (this.actual) {
+        // this.drawRoute(google, 1, this.selectedTrip);
+        this.drawRoutesOnMap(google, 1, this.selectedTrip, this);
+      } else if (+this.filter.sequence === 3) {
         //this.drawPolyline(google, 2);
-        this.drawRoute(google, 2, this.selectedTrip);
+        // this.drawRoute(google, 1, this.selectedTrip);
+        // this.drawRoute(google, 2, this.selectedTrip);
+        // this.drawRoutesOnMap(google, 1, this.selectedTrip);
+        // this.drawRoutesOnMap(google, 2, this.selectedTrip);
+        this.plannedAndActual(google, this.drawRoutesOnMap);
       } else {
         //this.drawPolyline(google, 3);
-        this.drawRoute(google, 1, this.selectedTrip);
-        this.drawRoute(google, 2, this.selectedTrip);
+        // this.drawRoute(google, 2, this.selectedTrip);
+        this.drawRoutesOnMap(google, 2, this.selectedTrip, this);
       }
     });
   }
 
+  private plannedAndActual(google: any, callback) {
+    let that = this;
+    this.drawRoutesOnMap(google, 1, this.selectedTrip, this);
+    callback(google, 2, that.selectedTrip, that);
+  }
   // function to sort the selectedTrip array by PlannedSequence
   comparator(a, b) {
     return a["PlannedSequence"] - b["PlannedSequence"];
   }
 
   pinTextColor = '';
+  start: any = null;
+  /**
+   * Draw routes on map based on trip list
+   * @param google 
+   * @param sequence 
+   * @param trips 
+   */
+  private drawRoutesOnMap(google: any, sequence: number, trips: any[], that) {
+    if (!trips || !trips.length) { return false };
+    trips = trips.slice(0);
+    // adding pushpin marker logic here
+    
+    let positionObj = {
+      lat: null,
+      long: null,
+      startPt: null,
+      endPt: null
+    }
+    that.start = null;
+    for (let i = 0; i < trips.length; i++) {
+      setTimeout(function() {
+        that.setMarkerAndTableColor(sequence, trips, i, that);
+        that.customiseMarkerIcon(google, sequence, trips, i, that);
+        positionObj = that.getMarkerPosition(google, sequence, trips, i, that);
+        that.plotMarkers(google, sequence, trips, i, positionObj, that);
+      }, 0);
+    }
+  }
 
+  /**
+   * used to set the color of the markers on the map and the left side table based of
+   * various conditions
+   * @param sequence 
+   * @param trips 
+   * @param i 
+   */
+  private setMarkerAndTableColor(sequence: number, trips: any[], i: number, that) {
+    if (sequence == 2) {
+      // changing color of the marker icon based on condition
+      if (trips[i].TicketTypeID === 29) {
+        that.pinColor = 'ffff00';   // yellow color for Did Not Service stops
+        that.pinTextColor = '000';
+        that.selectedTrip[i].pinColor = '#' + that.pinColor;
+        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+      } else if (trips[i].OrderID == null) {
+        that.pinColor = '0000ff';   // blue color for Unplanned Service
+        that.pinTextColor = 'fff';
+        that.selectedTrip[i].pinColor = '#' + that.pinColor;
+        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+      } else if (trips[i].OrderID != null && trips[i].TicketNumber !== null) {
+        that.pinColor = '90EE90';   // lightgreen color for Planned Service
+        that.pinTextColor = '000';
+        that.selectedTrip[i].pinColor = '#' + that.pinColor;
+        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+      } else if (trips[i].OrderID != null && trips[i].TicketNumber == null) {
+        that.pinColor = 'ff0000';   // red color for Skipped stops
+        that.pinTextColor = 'fff';
+        that.selectedTrip[i].pinColor = '#' + that.pinColor;
+        that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+      }
+    }
+    if (sequence === 1) {
+      that.pinColor = '999900';   // red color for Skipped stops
+      that.pinTextColor = 'fff';
+      that.selectedTrip[i].pinColor = '#' + that.pinColor;
+      that.selectedTrip[i].pinTextColor = '#' + that.pinTextColor;
+    }
+  }
+
+  /**
+   * used to customise marker icon based on the passed parameters
+   * @param google 
+   * @param sequence 
+   * @param trips 
+   * @param i 
+   */
+  private customiseMarkerIcon(google, sequence, trips, i, that) {
+    // customising the marker icon here
+    if (sequence === 2) {
+      that.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence || '').toString() + "|" + that.pinColor + "|" + that.pinTextColor,
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(10, 34));
+    } else if (sequence === 1) {
+      if (trips[i].PlannedSequence != null) {
+        that.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence || i + 1).toString() + "|" + that.pinColor + "|" + that.pinTextColor,
+          new google.maps.Size(21, 34),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(10, 34));
+      }
+    }
+  }
+
+  /**
+   * used to get the marker position based on lat and long
+   * @param google
+   * @param sequence 
+   * @param trips 
+   * @param i 
+   */
+  private getMarkerPosition(google, sequence, trips, i) {
+    let positionObj = {
+      lat: null,
+      long: null,
+      startPt: null,
+      endPt: null
+    }
+
+    let that = this;
+    // start point of straight line
+
+    if (sequence === 1) {
+      if (trips[i].PlannedLatitude &&
+        trips[i].PlannedLongitude &&
+        trips[i].PlannedLatitude != "0.0" &&
+        trips[i].PlannedLongitude != "0.0") {
+        positionObj.lat = trips[i].PlannedLatitude;
+        positionObj.long = trips[i].PlannedLongitude;
+        if (!that.start) {
+          var startPt = new google.maps.LatLng(trips[i].PlannedLatitude, trips[i].PlannedLongitude);
+          positionObj.startPt = startPt;
+          that.start = startPt;
+        } else {
+          var endPt = new google.maps.LatLng(trips[i].PlannedLatitude, trips[i].PlannedLongitude);
+          positionObj.endPt = endPt;
+          positionObj.startPt = that.start;
+          that.start = endPt;
+        }
+      }
+    }
+
+    if (sequence === 2) {
+      if (trips[i].ActualLatitude &&
+        trips[i].ActualLongitude &&
+        trips[i].ActualLatitude != "0.0" &&
+        trips[i].ActualLongitude != "0.0") {
+        positionObj.lat = trips[i].ActualLatitude;
+        positionObj.long = trips[i].ActualLongitude;
+        if (!that.start) {
+          var startPt = new google.maps.LatLng(trips[i].ActualLatitude, trips[i].ActualLongitude);
+          positionObj.startPt = startPt;
+          that.start = startPt;
+        } else {
+          var endPt = new google.maps.LatLng(trips[i].ActualLatitude, trips[i].ActualLongitude);
+          positionObj.endPt = endPt;
+          positionObj.startPt = that.start;
+          that.start = endPt;
+        }
+      }
+    }
+
+    return positionObj;
+  }
+
+  /**
+   * used to plot markers on the map
+   * @param google
+   * @param sequence 
+   * @param trips 
+   * @param i 
+   * @param position 
+   */
+  private plotMarkers(google, sequence, trips, i, position, that) {
+    var strokeColour = '';
+    if (sequence == 2) {
+      strokeColour = 'brown'
+    } else {
+      strokeColour = '#999900'
+    }
+    if (position.startPt && position.endPt) {
+      var polyline = new google.maps.Polyline({
+        path: [position.startPt, position.endPt],
+        strokeColor: strokeColour,
+        strokeWeight: 2,
+        strokeOpacity: 1
+      });
+      polyline.setMap(that.map);
+      that.bounds.extend(position.startPt);
+      that.bounds.extend(position.endPt);
+    } else if (position.startPt && !position.endPt) {
+      // polyline.setMap(that.map);
+      that.bounds.extend(position.startPt);
+    } else if (!position.startPt && position.endPt) {
+      // polyline.setMap(that.map);
+      that.bounds.extend(position.endPt);
+    }
+
+    if (position.lat && position.long) {
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(position.lat, position.long),
+        map: that.map,
+        icon: that.pinImage
+      });
+
+      google.maps.event.addListener(marker, 'click', ((marker, i) => {
+        let infowindowContent = '';
+        if (trips[i].CustomerName) {
+          infowindowContent += 'Customer Name : ' + trips[i].CustomerName + '<br>';
+        } else {
+          infowindowContent += 'Customer Name : ' + '-' + '<br>';
+        }
+        if (trips[i].TotalSale != null || trips[i].TotalSale != undefined
+          || trips[i].TaxAmount != null || trips[i].TaxAmount != undefined) {
+          var totalInvoice = trips[i].TotalSale.fpArithmetic("+", trips[i].TaxAmount || 0);
+          if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
+            totalInvoice = totalInvoice + ".00";
+          }
+          infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
+        } else {
+          infowindowContent += 'Total Invoice : $' + '0.00' + '<br>';
+        }
+
+        if (trips[i].CashAmount != null || trips[i].CashAmount != undefined
+          || trips[i].CheckAmount != null || trips[i].CheckAmount != undefined) {
+          var receivedAmt = trips[i].CashAmount + trips[i].CheckAmount;
+          if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
+            receivedAmt = receivedAmt + ".00";
+          }
+          infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
+        } else {
+          infowindowContent += 'Total Received Amount : $' + '0.00' + '<br>';
+        }
+        return () => {
+          that.infowindow.setContent(infowindowContent);
+          that.infowindow.open(that.map, marker);
+        }
+      })(marker, i));
+    }
+    that.map.fitBounds(that.bounds);      // auto-zoom
+    that.map.panToBounds(that.bounds);    // auto-center
+  }
+
+  /*
   drawRoute(google: any, sequence: number, trips: any[]) {
     if (!trips || !trips.length) { return false };
     trips = trips.slice(0);
@@ -481,7 +702,6 @@ export class TrackerComponent implements OnInit {
       // adding pushpin marker logic here
       let positionLatitude: any;
       let positionLongitude: any;
-
       // start point of straight line
       if (sequence === 1) {
         if (trips[i].PlannedLatitude != null && trips[i].PlannedLongitude != null
@@ -554,6 +774,12 @@ export class TrackerComponent implements OnInit {
         polyline.setMap(this.map);
         this.bounds.extend(startPt);
         this.bounds.extend(endPt);
+      } else if (startPt && !endPt) {
+        // polyline.setMap(this.map);
+        this.bounds.extend(startPt);
+      } else if (!startPt && endPt) {
+        // polyline.setMap(this.map);
+        this.bounds.extend(endPt);
       }
 
       var marker = new google.maps.Marker({
@@ -571,7 +797,6 @@ export class TrackerComponent implements OnInit {
         }
         if (trips[i].TotalSale != null || trips[i].TotalSale != undefined
           || trips[i].TaxAmount != null || trips[i].TaxAmount != undefined) {
-          // var totalInvoice = trips[i].TotalSale + trips[i].TaxAmount;
           var totalInvoice = trips[i].TotalSale.fpArithmetic("+", trips[i].TaxAmount || 0);
           if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
             totalInvoice = totalInvoice + ".00";
@@ -601,10 +826,9 @@ export class TrackerComponent implements OnInit {
       this.map.fitBounds(this.bounds);      // auto-zoom
       this.map.panToBounds(this.bounds);    // auto-center
     }
-  }
+  } */
 
   viewTicket(ticketID) {
-    // ticketID = 3212;
     if (ticketID) {
       window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600,resizable=yes,scrollbars=1");
     } else {
@@ -615,12 +839,9 @@ export class TrackerComponent implements OnInit {
   distributors: any = [];
   typeChangeHandler() {
     if (this.searchObj.userType == 'External') {
-      this.actual = true;
-      this.planned = false;
-      // this.tripFilterOption.DistributorMasterID = this.user.Distributor.DistributorMasterId;
+      this.filter.sequence = 2;
     } else {
-      this.actual = false;
-      this.planned = true;
+      this.filter.sequence = 1;
     }
     this.tripFilterOption.branchId = null;
     this.tripFilterOption.DistributorMasterID = null;
@@ -647,6 +868,5 @@ export class TrackerComponent implements OnInit {
       this.tripFilterOption.TripCode = this.driverOndistributor[0].TripCode;        // assigning in model
     }
     this.driverChangeHandler();
-    // this.loadTrips();
   }
 }
