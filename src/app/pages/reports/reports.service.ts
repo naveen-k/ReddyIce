@@ -120,4 +120,12 @@ export class ReportService extends SharedService {
             return res;
         })
     }
+    loadExternalReports(url){
+        console.log("------------------url ---- ",url);
+        return this.http.get(url)
+        .map((res) => {
+            console.log("------------------res ------ ",res);
+            return res;
+        });
+    }
 }
