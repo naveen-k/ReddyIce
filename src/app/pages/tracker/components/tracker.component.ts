@@ -192,7 +192,9 @@ export class TrackerComponent implements OnInit {
                 tmpObj[this.trips[i].DistributorName] = this.trips[i];
               }
             }
+            debugger;
             this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
+            this.tripFilterOption.DistributorMasterID = this.distributors[0].value;
 
             if (this.user.IsDistributor) {
               this.distributorChangeHandler();
