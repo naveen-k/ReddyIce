@@ -9,6 +9,9 @@
     </div>
 </div>
 <ba-card cardTitle="Reports {{userSubTitle}}">
+    <div class="text-right head-button-container">
+        <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)" [disabled]="viewButtonStatus || ((filter.reportType=='WOC' || filter.reportType=='EOD') && (!filter.branch || !filter.stech))">View Report</button>
+    </div>
     <div class="row">
         <div class="col-sm-2" *ngIf="filter.reportType == 'MR' || filter.reportType == 'EOD'">
             <label>Select Date</label>
@@ -130,13 +133,11 @@
         </div>
         <div class="col-sm-4 head-button-container-for-report">
             <div class="row">
-                <div class="col-sm-3">
-                    <div class="row padding">
-                        <label>Select Report</label>
-                    </div>
+                <div class="col-sm-5 padding" style="text-align:right;padding-right:0px;">
+                        <label>Select Report:</label>
                 </div>
-                <div class="col-sm-9">
-                    <div class="row">
+                <div class="col-sm-7">
+                  
                         <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
                             <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option>
                             <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
@@ -153,7 +154,7 @@
                             <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
                             <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
                         </select>
-                    </div>
+                  
                 </div>
             </div>
         </div>
@@ -212,9 +213,7 @@
                 <option [value]="3">Approved</option>
             </select>            
         </div>
-        <div class="col-md-1 text-right head-button-container">
-            <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)" [disabled]="viewButtonStatus || ((filter.reportType=='WOC' || filter.reportType=='EOD') && (!filter.branch || !filter.stech))">View Report</button>
-        </div>
+        
     </div>
     <div class="row" [hidden]="IsTIR">
         <div class="col-sm-4" *ngIf="filter.reportType === 'SR' || filter.reportType === 'DR'">
