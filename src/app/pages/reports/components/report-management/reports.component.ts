@@ -468,7 +468,12 @@ export class ReportsComponent implements OnInit {
         // this.updateLink(this.filter.reportType);
         this.viewButtonStatus = true;
         this.isTIRCustomers = false;
-        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+        // Add 2 times because of some times on IE browsers URL not loaded on iframe. 
+        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+        (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+        this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+        (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+        
     }
     updateLink(rType) {
         this.viewButtonStatus = true;
