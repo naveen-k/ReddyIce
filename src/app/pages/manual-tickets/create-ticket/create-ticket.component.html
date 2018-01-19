@@ -95,7 +95,7 @@
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date:</label>
                 <div class="col-sm-5 input-group">
-                    <date-picker [minDate]="date.minDate" [maxDate]="date.maxDate" [(dateModel)]="ticket.DeliveryDate" (dateModelChange)="isFormDirty=true;"></date-picker>
+                    <date-picker [minDate]="date.minDate" [maxDate]="date.maxDate" [(dateModel)]="ticket.DeliveryDate" (dateModelChange)="isFormDirty=true;" [disabled]="isReadOnly"></date-picker>
                 </div>
             </div>
             <div class="row" [style.visibility]="(ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
