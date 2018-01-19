@@ -192,7 +192,6 @@ export class TrackerComponent implements OnInit {
                 tmpObj[this.trips[i].DistributorName] = this.trips[i];
               }
             }
-            debugger;
             this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
             this.tripFilterOption.DistributorMasterID = this.distributors[0].value;
 
@@ -228,7 +227,7 @@ export class TrackerComponent implements OnInit {
     this.service.getTripTicketsByTripID(tripId).subscribe(res => {
       this.showSpinner = false;
       this.IsUnplanned = res.Trips[0].IsUnplanned;
-      if (this.IsUnplanned) { // if unplanned trip, map according 'Actual' scenario
+      if (this.IsUnplanned || this.searchObj.userType == 'External') { // if unplanned trip, map according 'Actual' scenario
         this.filter.sequence = 2;
       } else {
         this.filter.sequence = 1;
@@ -256,9 +255,10 @@ export class TrackerComponent implements OnInit {
     }
   }
   driverOnBranch = [];
+  routeNo;
   // Fetch selected Branch
   branchChangeHandler() {
-    var routeNo;
+    
     if (this.tripFilterOption.branchId) {
       this.driverOnBranch = [];
       for (var i = 0; i < this.trips.length; i++) {
@@ -268,15 +268,15 @@ export class TrackerComponent implements OnInit {
             this.trips[i].DriverName = this.trips[i].DriverName.split('  ').join('');
           }
           if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
-            routeNo = this.trips[i].RouteNumber;
+            this.routeNo = this.trips[i].RouteNumber;
           } else {
-            routeNo = 'Unplanned';
+            this.routeNo = 'Unplanned';
           }
           this.driverOnBranch.push({
             DriverName: this.trips[i].DriverName,
             TripCode: this.trips[i].TripCode,
             TripID: this.trips[i].TripID,
-            RouteNumber: routeNo
+            RouteNumber: this.routeNo
           });
         }
       }
@@ -320,17 +320,17 @@ export class TrackerComponent implements OnInit {
           //this.driverSpecTrips.push(this.driverOndistributor[i].TripCode);
 
           //
-          if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
-            routeNo = this.trips[i].RouteNumber;
-          } else {
-            routeNo = 'Unplanned';
-          }
+          // if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
+          //   this.routeNo = this.trips[i].RouteNumber;
+          // } else {
+          //   this.routeNo = 'Unplanned';
+          // }
           //
           this.driverSpecTrips.push(
             {
               TripCode: this.driverOndistributor[i].TripCode,
               TripID: this.driverOndistributor[i].TripID,
-              RouteNumber: routeNo
+              RouteNumber: this.routeNo
             }
           );
         }
@@ -494,7 +494,7 @@ export class TrackerComponent implements OnInit {
   private customiseMarkerIcon(google, sequence, trips, i) {
     // customising the marker icon here
     if (sequence === 2) {
-      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence || '').toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence ? trips[i].ActualSequence : '0' || '').toString() + "|" + this.pinColor + "|" + this.pinTextColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34));
