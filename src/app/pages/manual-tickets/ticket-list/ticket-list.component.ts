@@ -99,7 +99,10 @@ export class TicketListComponent implements OnInit {
         }
 
         this.allBranches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
-
+        if(this.searchObj.userType !=='External' && this.searchObj.UserId <1 && this.searchObj.BranchId <1 && this.allBranches && this.allBranches.length>0 && +this.allBranches[0].value==1)
+        {
+          this.searchObj.BranchId = 1;
+        }
         if (!this.user.IsDistributor && this.user.Branch && (this.user.Branch.BranchID && this.user.Branch.BranchID !== 1) && this.searchObj.BranchId <= 1) {
             this.searchObj.BranchId = this.user.Branch.BranchID;
         }
@@ -151,6 +154,9 @@ export class TicketListComponent implements OnInit {
                 this.searchObj.UserId = (+this.searchObj.UserId > 0) ? +this.searchObj.UserId : -1;
             }
             this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
+            if( (byType == 'yes' || (+this.searchObj.BranchId ==1 && this.searchObj.UserId <1)) && this.drivers && this.drivers.length>0 && +this.drivers[0].value==1){
+                this.searchObj.UserId = 1;
+            }
             this.showSpinner = false;
             this.getSearchedTickets(byType);
         });
@@ -174,7 +180,9 @@ export class TicketListComponent implements OnInit {
 
     }
     dateChangeHandler() {
-        this.searchObj.UserId = -1;
+        if( this.searchObj.UserId <1 && this.drivers && this.drivers.length>0 && +this.drivers[0].value==1){
+            this.searchObj.UserId = 1;
+        }
         this.getSearchedTickets();
     }
     getSearchedTickets(byType: any = '') {
@@ -301,8 +309,11 @@ export class TicketListComponent implements OnInit {
             this.searchObj.BranchId = -1;
             this.getDistributors(byType);
         } else {
-
-            this.getDrivers(byType);
+            if(this.searchObj.BranchId <1 && this.allBranches && this.allBranches.length>0 && +this.allBranches[0].value==1)
+            {
+              this.searchObj.BranchId = 1;
+            }
+            this.branchChangeHandler(byType);
         }
         this.allFilterdTickets = this.getFilteredAllTicket();
         this.unSelectAll();
