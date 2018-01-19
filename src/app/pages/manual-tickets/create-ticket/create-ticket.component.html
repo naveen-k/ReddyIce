@@ -270,7 +270,7 @@
                                             </td>
                                             <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
@@ -339,9 +339,9 @@
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
                                     <tbody>
-                                        <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
@@ -349,7 +349,7 @@
                                             </td>
                                             <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
@@ -416,9 +416,9 @@
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
                                     <tbody>
-                                        <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
@@ -426,7 +426,7 @@
                                             </td>
                                             <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
@@ -491,9 +491,9 @@
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
                                     <tbody>
-                                        <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct">
+                                        <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
@@ -501,7 +501,7 @@
                                             </td>
                                             <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
