@@ -494,13 +494,13 @@ export class TrackerComponent implements OnInit {
   private customiseMarkerIcon(google, sequence, trips, i) {
     // customising the marker icon here
     if (sequence === 2) {
-      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence ? trips[i].ActualSequence : '0' || '').toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+      this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].ActualSequence ? trips[i].ActualSequence : 0).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34));
     } else if (sequence === 1) {
       if (trips[i].PlannedSequence != null) {
-        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence || i + 1).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
+        this.pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + (trips[i].PlannedSequence ? trips[i].PlannedSequence : 0).toString() + "|" + this.pinColor + "|" + this.pinTextColor,
           new google.maps.Size(21, 34),
           new google.maps.Point(0, 0),
           new google.maps.Point(10, 34));
