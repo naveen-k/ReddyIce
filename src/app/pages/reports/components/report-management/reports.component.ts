@@ -421,6 +421,7 @@ export class ReportsComponent implements OnInit {
                         this.viewReport = true;
                     } else {
                         this.viewReport = false;
+                        this.onLoadFrame =false;
                         this.notification.error('Ticket Number Not Found!!');
                     }
                     this.filter.showCustomerDropdown = false;
@@ -442,6 +443,7 @@ export class ReportsComponent implements OnInit {
     getWorkOrderIdByTicketNumber(workOrderNumber) {
         if (workOrderNumber) {
             this.reportService.checkworkorderexistence(workOrderNumber).subscribe((res) => {
+                
                 if (res != 0) {
                     this.filter.workOrderId = res;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -453,13 +455,18 @@ export class ReportsComponent implements OnInit {
                     this.viewReport = true;
                     //this.viewButtonStatus = false;
                 } else {
+                    this.onLoadFrame =false;
                     this.notification.error("Work Order Number Does Not Exist.");
                     this.overlayStatus = false;
                     this.viewReport = true;
                     this.viewButtonStatus = false;
                 }
             }, (err) => {
-                this.notification.error("Something went wrong.")
+                this.notification.error("Something went wrong.");
+                this.onLoadFrame =false;
+                this.overlayStatus = false;
+                this.viewReport = true;
+                this.viewButtonStatus = false;
             });
         }
     }
