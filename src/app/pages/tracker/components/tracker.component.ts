@@ -314,17 +314,19 @@ export class TrackerComponent implements OnInit {
         }
       }
     } else if (this.searchObj.userType == 'External') {
-      var routeNo;
+      // var routeNo;
       for (var i = 0; i < this.driverOndistributor.length; i++) {
         if (this.tripFilterOption.DriverName == this.driverOndistributor[i]['DriverName']) {
           //this.driverSpecTrips.push(this.driverOndistributor[i].TripCode);
 
           //
-          // if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
-          //   this.routeNo = this.trips[i].RouteNumber;
-          // } else {
-          //   this.routeNo = 'Unplanned';
-          // }
+          if (!this.routeNo) {
+            if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
+              this.routeNo = this.trips[i].RouteNumber;
+            } else {
+              this.routeNo = 'Unplanned';
+            }
+          }
           //
           this.driverSpecTrips.push(
             {
