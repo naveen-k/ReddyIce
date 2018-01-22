@@ -34,6 +34,7 @@ export class ManualTicketService extends SharedService {
               CustomerName: element.CustomerName,
               CustomerType: element.CustomerTypeID,
               CustomerNumber: element.CustomerNumber,
+              AXCustomerNumber: element.AXCustomerNumber,
             };
           })
         }

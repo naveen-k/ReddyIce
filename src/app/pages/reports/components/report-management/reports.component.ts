@@ -56,7 +56,7 @@ export class ReportsComponent implements OnInit {
         workOrderId: null
     };
 
-    inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
+    inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
     hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
     user: User;
@@ -603,7 +603,7 @@ export class ReportsComponent implements OnInit {
                     res.forEach(cus => {
                         tempArr.push({
                             value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
-                            label: `${cus.CustomerNumber} - ${cus.CustomerName}`,
+                            label: `${cus.AXCustomerNumber} - ${cus.CustomerName}`,
                             data: cus,
                         });
                     });
