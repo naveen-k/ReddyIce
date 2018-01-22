@@ -99,9 +99,9 @@
                                                     </span>
                                                 </th>
                                                 <th>
-                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;sortable('CustomerNumber');">
+                                                    <span style="cursor:pointer;" (click)="customer.sortField = 'AXCustomerNumber';customer.isAsc=!customer.isAsc;sortable('AXCustomerNumber');">
                                                         Customer
-                                                        <i *ngIf="(customer.sortField == 'CustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                                        <i *ngIf="(customer.sortField == 'AXCustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'AXCustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                                     </span>
                                                 </th>
                                                 <th class="textRightPadd">
@@ -148,7 +148,7 @@
                                                 <td class="text-align-left">{{item.TicketNumber }}</td>
                                                 <td>{{item.ticketType}}</td>
                                                 <td>
-                                                    <span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:false:20 }}</span>
+                                                    <span [title]="item.AXCustomerNumber +'-'+ item.CustomerName">{{item.AXCustomerNumber }} - {{item.CustomerName | cutString:false:20 }}</span>
                                                 </td>
                                                 <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">
                                                     <span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currencyFormatter }}

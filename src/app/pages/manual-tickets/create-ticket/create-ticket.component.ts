@@ -100,8 +100,8 @@ export class CreateTicketComponent implements OnInit {
 
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
   // Customer input formatter
-  inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
-  distributorsCache: any = [];
+  inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
+  distributorsCache: any=[];
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
@@ -111,7 +111,7 @@ export class CreateTicketComponent implements OnInit {
         if (flag) {
           term = term.trim();
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || v.CustomerNumber.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+            || v.AXCustomerNumber.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
         }
         return flag;
       }).slice(0, 10);

@@ -72,6 +72,7 @@ export interface Customer {
     ChainID: number;
     sChainID: string;
     NotesForMemo: any;
+    AXCustomerNumber: any;
 }
 export interface MProducts {
     ExternalCustomerProductID: number;

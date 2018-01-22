@@ -945,7 +945,7 @@ thead =`<thead>
                     <td class="text-align-left">${item.TicketNumber }</td>
                     <td>${item.ticketType}</td>
                     <td align="left">
-                        ${item.CustomerNumber } - ${item.CustomerName }
+                        ${item.AXCustomerNumber } - ${item.CustomerName }
                     </td>
                     <td align="right" style="${(item.TicketTypeID === 27)?'color:red':''}">
                         ${(item.TicketTypeID === 27)?'('+this.currencyFormatter.transform(item.amount)+')':this.currencyFormatter.transform(item.amount)} 

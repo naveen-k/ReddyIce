@@ -60,7 +60,7 @@ export class TicketListComponent implements OnInit {
     distributorsCache: any = [];
     allFilterdTickets: Array<any> = [];
     customer: any = { sortField: '', isAsc: false };
-    searchColumn: Array<any> = ['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType']
+    searchColumn: Array<any> = ['TicketNumber', 'UserName', 'CustomerName', 'AXCustomerNumber', 'CashAmount', 'TotalSale', 'ticketType']
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
 
     constructor(
@@ -249,8 +249,8 @@ export class TicketListComponent implements OnInit {
     ticketTotal() {
         this.allTickets.forEach(ticket => {
             this.total.totalDistAmt += ticket.DistAmt || 0; ticket.CustomerName = ticket.Customer.CustomerName;
-            ticket.CustomerNumber = ticket.Customer.CustomerNumber;
-            ticket.CustomerTitle = ticket.Customer.CustomerNumber + " - " + ticket.Customer.CustomerName;
+            ticket.AXCustomerNumber = ticket.Customer.AXCustomerNumber;
+            ticket.CustomerTitle = ticket.Customer.AXCustomerNumber + " - " + ticket.Customer.CustomerName;
             ticket.TotalSaleWithTax = (ticket.TotalSale || 0) + (ticket.TaxAmount || 0);
         });
     }
