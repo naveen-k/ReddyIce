@@ -64,7 +64,7 @@ export class TicketDetailsComponent implements OnInit {
             this.tripData.TripTicketList.forEach(ticket => {
                
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
-                ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID);
+                ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID, ticket.Is_PBM_DSD);
                 ticket.amount = ticket.TotalSale + ticket.TaxAmount;
                 ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
                 if (ticket.TicketTypeID === 30) { return; }
