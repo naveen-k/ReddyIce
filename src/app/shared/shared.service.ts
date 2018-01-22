@@ -68,7 +68,7 @@ export class SharedService {
 
     }
 
-    transformOptionsReddySelect(options: Array<any>, value: string, label_1: string, label_2?: string, delimitter: string= '-') {
+    transformOptionsReddySelect(options: Array<any>, value: string, label_1: string, label_2?: string, delimitter: string = '-') {
         let tmpArr: Array<IOption> = [];
         options.forEach((option) => {
             tmpArr.push({
@@ -80,7 +80,7 @@ export class SharedService {
         return tmpArr;
     }
 
-    getTicketType(isSaleTicket: boolean, customer: any, ticketTypeId: number, Is_PBM_DSD : number = 0) {
+    getTicketType(isSaleTicket: boolean, customer: any, ticketTypeId: number, Is_PBM_DSD: number = 0, EDIUserName: boolean = false) {
         if (ticketTypeId === 29) {
             return 'DNS'
         } else if (ticketTypeId === 28) {
@@ -103,6 +103,8 @@ export class SharedService {
             } else {
                 return 'PBM - Cons';
             }
+        } else if (EDIUserName) {
+            return 'PBS - Sale';
         } else {
             return 'PBS - Cons';
         }

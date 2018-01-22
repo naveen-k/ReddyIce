@@ -41,8 +41,8 @@
                             <span>RI Driver</span>
                         </label>
                         <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input [disabled]="user.IsDistributor || !!ticket.TicketID || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7" type="radio" name="driverType" [value]="true"
-                                [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
+                            <input [disabled]="user.IsDistributor || !!ticket.TicketID || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7"
+                                type="radio" name="driverType" [value]="true" [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
                             <span>Distributor/CoPacker</span>
                         </label>
                     </div>
@@ -79,7 +79,7 @@
                             <option [ngValue]="-1" selected style="display:none;">Select Driver</option>
                             <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
                         </select> -->
-                        <reddy-select [disabled]="ticketId || isReadOnly || tripMode" [options]="drivers" [(selected)]="ticket.UserID" (selectedChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true"></reddy-select>  
+                        <reddy-select [disabled]="ticketId || isReadOnly || tripMode" [options]="drivers" [(selected)]="ticket.UserID" (selectedChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true; onDriverSelection()"></reddy-select>
                     </div>
                 </div>
                 <div class="row" [hidden]="!ticket.isUserTypeDistributor">
@@ -95,30 +95,31 @@
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date:</label>
                 <div class="col-sm-5 input-group">
-                    <date-picker [minDate]="date.minDate" [maxDate]="date.maxDate" [(dateModel)]="ticket.DeliveryDate" (dateModelChange)="isFormDirty=true;" [disabled]="isReadOnly"></date-picker>
+                    <date-picker [minDate]="date.minDate" [maxDate]="date.maxDate" [(dateModel)]="ticket.DeliveryDate" (dateModelChange)="isFormDirty=true;"
+                        [disabled]="isReadOnly"></date-picker>
                 </div>
             </div>
             <div class="row" [style.visibility]="(ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type:</label>
                 <div class="col-sm-7">
                     <label [hidden]="isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input [disabled]="(ticket.CustomerType == 22 && !!ticket.TicketID) || ticket.IsEDITicket == true" type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID"
-                            (ngModelChange)="typeChangeHandler();isFormDirty=true;">
+                        <input [disabled]="(ticket.CustomerType == 22 && !!ticket.TicketID) || ticket.IsEDITicket == true" type="radio" name="type"
+                            [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="typeChangeHandler();isFormDirty=true;">
                         <span>{{sType.Value}}</span>
                     </label>
                     <!--Hack for displaying disabled in case of read only mode-->
                     <label [hidden]="!isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input [disabled]="ticket.CustomerType == 22 && !!ticket.TicketID || ticket.IsEDITicket == true" type="radio" name="type1" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID"
-                            [disabled]="true">
+                        <input [disabled]="ticket.CustomerType == 22 && !!ticket.TicketID || ticket.IsEDITicket == true" type="radio" name="type1"
+                            [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" [disabled]="true">
                         <span>{{sType.Value}}</span>
                     </label>
                 </div>
             </div>
-            <div  class="row" *ngIf="ticket.IsEDITicket == true && (ticket.TicketReferenceId != null && ticket.TicketReferenceId != '')">
+            <div class="row" *ngIf="ticket.IsEDITicket == true && (ticket.TicketReferenceId != null && ticket.TicketReferenceId != '')">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Ticket Reference&nbsp;#:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" [(ngModel)]="ticket.TicketReferenceId" [disabled]="true" 
-                    name="TicketReferenceId" #TicketReferenceId="ngModel">
+                    <input type="text" class="form-control" [(ngModel)]="ticket.TicketReferenceId" [disabled]="true" name="TicketReferenceId"
+                        #TicketReferenceId="ngModel">
                 </div>
             </div>
         </div>
@@ -129,7 +130,8 @@
                     <label for="example-text-input" class="col-sm-4 col-form-label">Customer Type:</label>
                     <div class="col-sm-8">
                         <label [hidden]="isReadOnly || ticket.TicketID" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.CustomerType" (ngModelChange)="customerTypeChangeHandler();isFormDirty=true;">
+                            <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.CustomerType" (ngModelChange)="customerTypeChangeHandler();isFormDirty=true;"
+                                [disabled]="disableEDIUser">
                             <span>{{tType.Value}}</span>
                         </label>
                         <label [hidden]="!ticket.TicketID" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">

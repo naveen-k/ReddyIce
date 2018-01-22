@@ -13,14 +13,17 @@ import { ManualTicket, TicketProduct } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
 import { Branch, Customer } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
-
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
+import * as _ from 'lodash';
 
 @Component({
   templateUrl: './create-ticket.component.html',
   styleUrls: ['./create-ticket.component.scss'],
 })
 export class CreateTicketComponent implements OnInit {
+  disableEDIUser : boolean= false;
+  EDIUserName: string;
   isSubmited: boolean = false;
   pageTitle: string = 'New Manual Ticket';
 
@@ -98,7 +101,7 @@ export class CreateTicketComponent implements OnInit {
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
   // Customer input formatter
   inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
-  distributorsCache: any=[];
+  distributorsCache: any = [];
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
@@ -128,6 +131,7 @@ export class CreateTicketComponent implements OnInit {
 
   ngOnInit() {
     const now = new Date();
+    this.EDIUserName = environment.EDIUserName;
     this.date.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 
     // Initialize user object with current logged In user;
@@ -139,7 +143,7 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.DeliveryDate = this.listFilter.CreatedDate;
     this.ticket.BranchID = +this.listFilter.BranchId;
     this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
-    this.ticket.UserID = (+this.listFilter.UserId>0) ? +this.listFilter.UserId : -1;
+    this.ticket.UserID = (+this.listFilter.UserId > 0) ? +this.listFilter.UserId : -1;
     this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
@@ -173,7 +177,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.user.Role.RoleID == 1 || this.user.Role.RoleID == 6) {
       this.loadDisributors();
     }
-    if (this.user.IsDistributor || (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID>0)) {
+    if (this.user.IsDistributor || (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID > 0)) {
       // this.loadCustomers();
       this.loadDisributors();
       if (!this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID < 1) {
@@ -184,14 +188,14 @@ export class CreateTicketComponent implements OnInit {
     this.prepareTicketTypes();
 
     // load customers, if BranchID is available
-    if (+this.ticket.BranchID>1 || this.ticket.DistributorCopackerID) {
+    if (+this.ticket.BranchID > 1 || this.ticket.DistributorCopackerID) {
       this.loadCustomers();
     }
 
     // load driver or distributor
-    if (+this.ticket.BranchID >1 && this.ticket.isUserTypeDistributor) {
+    if (+this.ticket.BranchID > 1 && this.ticket.isUserTypeDistributor) {
       this.loadDisributors(+this.ticket.BranchID);
-    } else if (+this.ticket.BranchID>1) {
+    } else if (+this.ticket.BranchID > 1) {
       this.loadDriversOfBranch(+this.ticket.BranchID);
     }
 
@@ -294,7 +298,7 @@ export class CreateTicketComponent implements OnInit {
 
     this.resetCashAndCheck();
 
-    if (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID>0) {
+    if (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID > 0) {
       this.loadCustomers();
     }
   }
@@ -362,15 +366,29 @@ export class CreateTicketComponent implements OnInit {
       }
     };
 
-    if (+this.ticket.DistributorCopackerID>1 && this.ticket.CustomerType) {
+    if (+this.ticket.DistributorCopackerID > 1 && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
-    } else if (!this.user.IsDistributor && +this.ticket.DistributorCopackerID<1) {
+    } else if (!this.user.IsDistributor && +this.ticket.DistributorCopackerID < 1) {
       this.loadCustomerOfBranch(this.ticket.BranchID, callback);
     }
   }
 
+  onDriverSelection() {
+    let selectedUser,selectedUserName;
+    this.disableEDIUser = false;
+    selectedUser = _.filter(this.drivers, {value : this.listFilter.UserId});
+    selectedUserName = selectedUser && selectedUser.length ? selectedUser[0].label : '';
+    selectedUserName = selectedUser && selectedUser.length ? selectedUser[0].label : '';
+    console.log(selectedUserName.replace(/\s/g, "").replace(/-+/g, ''),selectedUserName);
+    if(selectedUserName && (selectedUserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName)){
+      this.ticket.CustomerType = 21;
+      this.disableEDIUser = true;
+      this.modes = [];
+    }
+  }
+
   loadDriversOfBranch(branchId) {
-    if (branchId != null && branchId>1) {
+    if (branchId != null && branchId > 1) {
       this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
         this.drivers = this.service.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName');
         var that = this;
@@ -395,15 +413,15 @@ export class CreateTicketComponent implements OnInit {
   }
 
   loadDisributors(branchId?: any) {
-    if(this.distributorsCache.length==0){
+    if (this.distributorsCache.length == 0) {
       this.service.getDistributerAndCopacker().subscribe(res => {
         this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
         this.distributorsCache = this.distributors
       })
-    } else{
+    } else {
       this.distributors = this.distributorsCache;
     }
-    
+
   }
 
   customerChangeHandler(event) {
@@ -984,13 +1002,13 @@ export class CreateTicketComponent implements OnInit {
   }
 
   userTypeChangeHandler() {
-
+    this.disableEDIUser = false;
     this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = -1;
     this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = -1;
 
     // this.ticket.TicketProduct = [{} as TicketProduct];
     this.ticket.Customer = '';
-    this.customers =[];
+    this.customers = [];
     // this.ticket.DistributorCopackerID = null;
     this.ticket.TicketProduct = [];
 
