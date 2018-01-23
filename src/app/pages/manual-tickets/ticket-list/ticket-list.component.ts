@@ -237,7 +237,7 @@ export class TicketListComponent implements OnInit {
             this.allFilterdTickets = this.getFilteredAllTicket();
             this.unSelectAll();
             this.allTickets.forEach(element => {
-                element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID)
+                element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeIDelement, 0, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
             });
             this.showSpinner = false;
 
