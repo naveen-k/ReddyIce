@@ -261,7 +261,7 @@
                                         <th class="textAlignRight">Amount</th>
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
+                                    <tbody *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
                                         <tr *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
@@ -340,7 +340,7 @@
                                         <th>Amount</th>
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
+                                    <tbody *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
                                         <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
@@ -417,7 +417,7 @@
                                         <!--<th>Amount</th>-->
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
+                                    <tbody  *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
                                         <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
@@ -492,7 +492,7 @@
                                         <th>Amount</th>
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
+                                    <tbody *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
                                         <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
