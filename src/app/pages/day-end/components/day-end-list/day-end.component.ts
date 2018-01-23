@@ -75,8 +75,8 @@ export class DayEndComponent implements OnInit {
             this.trips = res.DayEnd || [];
             let tmpDist = {};
             let tmpBranch = {};
-            this.trips.forEach((trip) => {
-
+            this.trips.forEach((trip,i) => {
+                trip.branch = `${trip.BranchCode} - ${trip.BUName}`;
                 trip.isDistributor = !!trip.DistributorMasterID;
                 if (this.logedInUser && this.logedInUser.IsSeasonal && this.logedInUser.Role.RoleID === 3) {
                     trip.isDistributor = 0;
@@ -90,12 +90,13 @@ export class DayEndComponent implements OnInit {
                     tmpDist[trip.DistributorMasterID] = trip.DistributorMasterID;
                     return;
                 }
+
                 if (tmpBranch[trip.BranchID]) { return; }
                 branches.push({
                     value: trip.BranchID,
                     label: `${trip.BranchCode}-${trip.BUName}`
                 })
-                trip.branch = `${trip.BranchCode} - ${trip.BranchName}`;
+                
                 tmpBranch[trip.BranchID] = trip.BranchID;
             })
 
