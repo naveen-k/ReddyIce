@@ -408,9 +408,9 @@ export class CreateTicketComponent implements OnInit {
           this.drivers = [];
           this.drivers.push({ "value": this.ticket.UserID, "label": this.ticket.UserName, 'data': { 'UserId': this.ticket.UserID, 'FirstName': this.ticket.UserID, 'LastName': this.ticket.UserID } });
         }
-        if(this.listFilter.UserId) {
-          this.onDriverSelection();
-        }        
+        // if(this.listFilter.UserId) {
+        //   this.onDriverSelection();
+        // }        
       });
     }
   }

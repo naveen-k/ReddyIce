@@ -104,7 +104,11 @@ export class SharedService {
                 return 'PBM - Cons';
             }
         } else if (EDIUserName) {
-            return 'PBS - Sale';
+            if(ticketTypeId === 26){
+                return 'PBS - Sale';
+            } else{
+                return 'PBS - Credit';
+            }
         } else {
             return 'PBS - Cons';
         }

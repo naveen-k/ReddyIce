@@ -79,7 +79,7 @@
                             <option [ngValue]="-1" selected style="display:none;">Select Driver</option>
                             <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
                         </select> -->
-                        <reddy-select [disabled]="ticketId || isReadOnly || tripMode" [options]="drivers" [(selected)]="ticket.UserID" (selectedChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true; onDriverSelection()"></reddy-select>
+                        <reddy-select [disabled]="ticketId || isReadOnly || tripMode" [options]="drivers" [(selected)]="ticket.UserID" (selectedChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true;"></reddy-select>
                     </div>
                 </div>
                 <div class="row" [hidden]="!ticket.isUserTypeDistributor">
@@ -99,7 +99,7 @@
                         [disabled]="isReadOnly"></date-picker>
                 </div>
             </div>
-            <div class="row" [style.visibility]="(ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
+            <div class="row" [style.visibility]="((ticket.CustomerType == 21 && ticket.IsEDITicket !=true) || (ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type:</label>
                 <div class="col-sm-7">
                     <label [hidden]="isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
