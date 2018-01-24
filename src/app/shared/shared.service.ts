@@ -97,9 +97,9 @@ export class SharedService {
             }
         } else if (customer.CustomerType === 22) {
             if (isSaleTicket && ticketTypeId === 26) {
-                return Is_PBM_DSD === 1 ? 'Sale' : 'PBM - Sale';
+                return Is_PBM_DSD === 20 ? 'Sale' : 'PBM - Sale';
             } else if (isSaleTicket && ticketTypeId === 27) {
-                return Is_PBM_DSD === 1 ? 'Credit' : 'PBM - Credit';
+                return Is_PBM_DSD === 20 ? 'Credit' : 'PBM - Credit';
             } else {
                 return 'PBM - Cons';
             }

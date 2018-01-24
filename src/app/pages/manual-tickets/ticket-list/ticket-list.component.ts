@@ -212,7 +212,7 @@ export class TicketListComponent implements OnInit {
                         this.unSelectAll();
                     } else {
                         response.forEach(element => {
-                            element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, 0, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                            element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
                         });
                         this.allTickets = response;
                         this.allTicketsTemp = response;
@@ -237,7 +237,7 @@ export class TicketListComponent implements OnInit {
             this.allFilterdTickets = this.getFilteredAllTicket();
             this.unSelectAll();
             this.allTickets.forEach(element => {
-                element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeIDelement, 0, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeIDelement, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
             });
             this.showSpinner = false;
 
