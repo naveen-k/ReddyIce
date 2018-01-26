@@ -213,7 +213,8 @@ export class DetailsComponent implements OnInit {
         this.ticketDetails.Total.MCHHC = +this.ticketDetails.Total.TotalManualCheck.fpArithmetic("+", this.ticketDetails.Total.TotalHHCheck || 0);
         this.ticketDetails.Total.MCHHCash = +this.ticketDetails.Total.TotalManualCash.fpArithmetic("+", this.ticketDetails.Total.TotalHHCash || 0);
         this.ticketDetails.Total.MCCHHC = +this.ticketDetails.Total.TotalManualCreditCard.fpArithmetic("+", this.ticketDetails.Total.TotalHHCreditCard || 0);
-        this.ticketDetails.Total.CCC = this.ticketDetails.Total.MCHHCash + this.ticketDetails.Total.MCHHC + this.ticketDetails.Total.MCCHHC;
+        this.ticketDetails.Total.CCC = ((+this.ticketDetails.Total.MCHHCash||0).fpArithmetic("+" ,this.ticketDetails.Total.MCHHC || 0)).fpArithmetic("+", this.ticketDetails.Total.MCCHHC||0);
+        //this.ticketDetails.Total.CCC = this.ticketDetails.Total.MCHHCash + this.ticketDetails.Total.MCHHC + this.ticketDetails.Total.MCCHHC;
     }
     sortByWordLength = (a: any) => {
         return a.location.length;
