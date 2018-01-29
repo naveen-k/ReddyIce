@@ -212,7 +212,7 @@ export class ReportsComponent implements OnInit {
     private populateCustomerBranch() {
         if (this.filter.reportType === 'EOD') {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
-            this.branches.shift();
+            //this.branches.shift();
 
         } else {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
@@ -336,9 +336,9 @@ export class ReportsComponent implements OnInit {
             this.filter.branch = 1;
             this.filter.distributor = 0;
         }
-        if (this.filter.reportType == 'EOD') {
-            this.filter.branch = 0;
-        }
+        // if (this.filter.reportType == 'EOD') {
+        //     this.filter.branch = 0;
+        // }
     }
 
     routes: any[] = [];
