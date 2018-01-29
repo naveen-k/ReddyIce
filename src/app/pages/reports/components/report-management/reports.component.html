@@ -76,12 +76,12 @@
             </select>
         </div>
         <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
-        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
+        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS'
         || filter.reportType == 'EOD'||filter.reportType==='SSR'">
             <div class="row">
                 <ng-container>
                     <div class="col-sm-12" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
-                        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WOC' || filter.reportType == 'WONS'
+                        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS'
                         || filter.reportType == 'EOD'|| filter.reportType == 'SSR'">
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">

@@ -263,6 +263,7 @@ export class ReportsComponent implements OnInit {
             });
         } else if (this.filter.reportType == 'EOD') {
             this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
+                res.unshift({ UserId: 1, STechName: 'All STech' });
                 this.stechs = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
                 this.overlayStatus = false;
             }, (err) => {
@@ -539,7 +540,7 @@ export class ReportsComponent implements OnInit {
 
             } else if (rType === 'WOC') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOC is clicked', this.linkRpt);
             } else if (rType === 'EOD') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
