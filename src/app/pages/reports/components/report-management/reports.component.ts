@@ -379,11 +379,11 @@ export class ReportsComponent implements OnInit {
     customerTypeChange(custType) {
         if (custType) {
             this.customerstatus = custType;
-
         }
         this.filter.custID = 0;
         this.filter.custtID = 0;
-        this.filterCustomers();
+        if (this.filter.reportType != 'EOD' || this.filter.reportType != 'WOC')
+            this.filterCustomers();
     }
 
 
@@ -554,7 +554,7 @@ export class ReportsComponent implements OnInit {
 
             } else if (rType === 'WOC') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.fesCustID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.fesCustID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=${this.filter.custType}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOC is clicked', this.linkRpt);
             } else if (rType === 'EOD') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -646,7 +646,6 @@ export class ReportsComponent implements OnInit {
     }
     fesCustomers: any = [];
     selectedCustomerChange(id) {
-        debugger;
         if (id == undefined || id == '' || id == "0") {
             this.filter.custtID = 0;
             this.customerstatus = this.filter.custType;
