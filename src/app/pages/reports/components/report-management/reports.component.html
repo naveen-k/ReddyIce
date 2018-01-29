@@ -76,17 +76,36 @@
             </select>
         </div>
         <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
-        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS'
+        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS' || filter.reportType == 'WOC'
         || filter.reportType == 'EOD'||filter.reportType==='SSR'">
             <div class="row">
                 <ng-container>
                     <div class="col-sm-12" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
-                        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS'
+                        filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS' || filter.reportType == 'WOC'
                         || filter.reportType == 'EOD'|| filter.reportType == 'SSR'">
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">
                                 <label>Customer</label>
                                 <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
+                            </div>
+                            <div style='margin-left: 100px;'>
+                                <a>
+                                    <img [hidden]='!searching' src="assets/reddyIce/spinner.gif " width='25px'>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <div class="col-sm-2" *ngIf="filter.reportType == 'WOC' || filter.reportType == 'EOD'">
+            <div class="row">
+                <ng-container>
+                    <div class="col-sm-12">
+                        <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
+                            <div class="col-sm-12">
+                                <label>Customer</label>
+                                <reddy-select [options]="fesCustomers" [(selected)]="filter.fesCustID"></reddy-select>
                             </div>
                             <div style='margin-left: 100px;'>
                                 <a>

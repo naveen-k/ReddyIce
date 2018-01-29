@@ -39,6 +39,7 @@ export class ReportsComponent implements OnInit {
         driver: 1,
         stech: 0,
         custID: 0,
+        fesCustID: 0,
         custtID: 0,
         custType: 0,
         ticketNumber: null,
@@ -238,6 +239,18 @@ export class ReportsComponent implements OnInit {
 
     }
 
+    getFesCustomers() {
+        this.reportService.getlistofcustomerfes(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
+           //  res.unshift({ 'CustomerID': 0, 'CustomerName': 'All Customers' });
+            this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerID', 'CustomerName');
+            this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
+            this.overlayStatus = false;
+        }, (err) => {
+            console.log("Something went wrong while fetching FES Customers");
+            this.overlayStatus = false;
+        });
+    }
+
     getDistributors() {
         this.reportService.getDistributors().subscribe((res) => {
             res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
@@ -323,6 +336,7 @@ export class ReportsComponent implements OnInit {
         if (this.filter.userType === 'internal') {
             if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC') {
                 this.getCustomerBranches();
+                this.getFesCustomers();
             } else if (this.filter.reportType !== 'WONS') {
                 this.getAllBranches();
             } else {
@@ -540,7 +554,7 @@ export class ReportsComponent implements OnInit {
 
             } else if (rType === 'WOC') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.fesCustID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOC is clicked', this.linkRpt);
             } else if (rType === 'EOD') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -630,7 +644,9 @@ export class ReportsComponent implements OnInit {
             return false;
         });
     }
+    fesCustomers: any = [];
     selectedCustomerChange(id) {
+        debugger;
         if (id == undefined || id == '' || id == "0") {
             this.filter.custtID = 0;
             this.customerstatus = this.filter.custType;
