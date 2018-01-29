@@ -75,7 +75,7 @@
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-        <div class="col-sm-2"*ngIf="(filter.reportType==='WOC' || filter.reportType==='EOD')">
+        <div class="col-sm-2"*ngIf="(filter.reportType==='WOC')">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType'>
                 <option [value]="0">All Customers</option>
@@ -106,7 +106,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="col-sm-2" *ngIf="filter.reportType == 'WOC' || filter.reportType == 'EOD'">
+        <div class="col-sm-2" *ngIf="filter.reportType == 'WOC'">
             <div class="row">
                 <ng-container>
                     <div class="col-sm-12">
