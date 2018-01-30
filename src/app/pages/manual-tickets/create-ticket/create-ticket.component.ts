@@ -22,7 +22,7 @@ import * as _ from 'lodash';
   styleUrls: ['./create-ticket.component.scss'],
 })
 export class CreateTicketComponent implements OnInit {
-  disableEDIUser : boolean= false;
+  disableEDIUser: boolean = false;
   EDIUserName: string;
   isSubmited: boolean = false;
   pageTitle: string = 'New Manual Ticket';
@@ -101,7 +101,7 @@ export class CreateTicketComponent implements OnInit {
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
   // Customer input formatter
   inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
-  distributorsCache: any=[];
+  distributorsCache: any = [];
   search = (text$: Observable<any>) => text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
@@ -357,7 +357,7 @@ export class CreateTicketComponent implements OnInit {
   loadCustomers() {
     this.customers = [];
     const callback = (res) => {
-      this.customers = res.Customer ? res.Customer : res;
+      this.customers = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
         this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? customer.CustomerTypeID : this.ticket.Customer.CustomerType;
@@ -374,13 +374,13 @@ export class CreateTicketComponent implements OnInit {
   }
 
   onDriverSelection() {
-    let selectedUser,selectedUserName;
+    let selectedUser, selectedUserName;
     this.disableEDIUser = false;
-    selectedUser = _.filter(this.drivers, {value : this.listFilter.UserId});
+    selectedUser = _.filter(this.drivers, { value: this.listFilter.UserId });
     selectedUserName = selectedUser && selectedUser.length ? selectedUser[0].label : '';
     selectedUserName = selectedUser && selectedUser.length ? selectedUser[0].label : '';
-    console.log(selectedUserName.replace(/\s/g, "").replace(/-+/g, ''),selectedUserName);
-    if(selectedUserName && (selectedUserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName)){
+    console.log(selectedUserName.replace(/\s/g, "").replace(/-+/g, ''), selectedUserName);
+    if (selectedUserName && (selectedUserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName)) {
       this.ticket.CustomerType = 21;
       this.disableEDIUser = true;
       this.modes = [];
