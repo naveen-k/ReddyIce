@@ -123,9 +123,12 @@
         Role
         <sup style="color:red;">*</sup>
       </label>
-      <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);">
+      
+      <reddy-select [position]="'bottom'" [options]="roleListArr" [(selected)]="user.RoleID" (selectedChange)="changeHandler();roleChange(user.RoleID);"></reddy-select>
+
+      <!-- <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);">
         <option *ngFor="let role of roleList" [value]="role.RoleID">{{role.RoleName}}</option>
-      </select>
+      </select> -->
     </div>
     <div *ngIf="!user.IsRIInternal" [hidden]="userObject.IsDistributor" class="col-md-6 page-header">
       <label for="distributor">

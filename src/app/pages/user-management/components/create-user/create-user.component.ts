@@ -40,6 +40,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     tempUserBranch: any = [];
     distributorsAndCopackers: any = [];
     //cacheDistributor: any = [];
+    roleListArr: any = [];
 
 
     @Input() isNewUser: boolean;
@@ -320,6 +321,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (this.roleList && this.roleList.length === 1) {
             this.user.RoleID = this.roleList[0].RoleID;
         }
+        this.roleListOptions();
     }
 
     isDistributorSeasonal() {
@@ -372,6 +374,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
         }
+        this.roleListOptions();
         setTimeout(this.formChanged.emit('changed'), 1000);
 
     }
@@ -468,11 +471,13 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.FirstName = '';
             this.user.LastName = '';
             this.user.EmailID = '';
+            this.userBranch.length=0;
         }
         else {
 
             this.getDistributor();
         }
+        this.user.RoleID = -1;
         this.isAllFeildsChecked();
 
     }
@@ -583,7 +588,21 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 return accumulator;
             }, []);
         }
+        this.roleListOptions();
     }
+
+    roleListOptions() {
+        this.roleListArr=[];
+        this.roleList.forEach(role => {
+            this.roleListArr.push({
+                value: role.RoleID,
+                label: role.RoleName,
+                data: role
+            });
+        });
+        console.log('---------this.roleList',this.roleList,this.roleListArr)
+    }
+
     pushBranches() {
         const cloneSelectedBranch = this.userBranch.join("--").split("--");
         let selectedBranch = this.selectedBranch.filter(b => {
