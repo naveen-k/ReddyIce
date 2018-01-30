@@ -81,7 +81,8 @@ export class ReportsComponent implements OnInit {
     viewReport: boolean = false;
     searching: boolean = false;
     disableTrippState: boolean = false;
-
+    fesCustomers: any = [];
+    fesCustomerss: any = [];
     userSubTitle: string = '';
 
     constructor(
@@ -244,6 +245,7 @@ export class ReportsComponent implements OnInit {
            //  res.unshift({ 'CustomerID': 0, 'CustomerName': 'All Customers' });
             this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerID', 'CustomerName');
             this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
+            this.fesCustomerss = this.fesCustomers;
             this.overlayStatus = false;
         }, (err) => {
             console.log("Something went wrong while fetching FES Customers");
@@ -335,6 +337,8 @@ export class ReportsComponent implements OnInit {
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
             if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC') {
+                this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
+                this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
                 this.getCustomerBranches();
                 this.getFesCustomers();
             } else if (this.filter.reportType !== 'WONS') {
@@ -382,8 +386,7 @@ export class ReportsComponent implements OnInit {
         }
         this.filter.custID = 0;
         this.filter.custtID = 0;
-        if (this.filter.reportType != 'EOD' || this.filter.reportType != 'WOC')
-            this.filterCustomers();
+        this.filterCustomers();
     }
 
 
@@ -604,6 +607,7 @@ export class ReportsComponent implements OnInit {
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
             if (this.filter.branch) {
                 this.fetchSTechByBranch();
+                this.getFesCustomers();
             }
         } else {
             this.branchChangeHandler();
@@ -644,7 +648,21 @@ export class ReportsComponent implements OnInit {
             return false;
         });
     }
-    fesCustomers: any = [];
+
+    filterFesCustomers() {
+        this.viewReport = false;
+        var tempfesCustomers = this.fesCustomers;
+        this.fesCustomerss = tempfesCustomers.filter((p) => {
+            if (+this.filter.custType === 0) {
+                return true;
+            }
+            if (+this.filter.custType === p.data.CustomerSourceID || p.value === 0) {
+                return true;
+            }
+            return false;
+        });
+    }
+    
     selectedCustomerChange(id) {
         if (id == undefined || id == '' || id == "0") {
             this.filter.custtID = 0;

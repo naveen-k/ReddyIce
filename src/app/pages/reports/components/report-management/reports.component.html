@@ -75,7 +75,7 @@
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-        <div class="col-sm-2"*ngIf="(filter.reportType==='WOC')">
+        <div class="col-sm-2" *ngIf="(filter.reportType==='WOC')" (change)="filterFesCustomers();">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType'>
                 <option [value]="0">All Customers</option>
@@ -113,7 +113,7 @@
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">
                                 <label>Customer</label>
-                                <reddy-select [options]="fesCustomers" [(selected)]="filter.fesCustID"></reddy-select>
+                                <reddy-select [options]="fesCustomerss" [(selected)]="filter.fesCustID"></reddy-select>
                             </div>
                             <div style='margin-left: 100px;'>
                                 <a>
