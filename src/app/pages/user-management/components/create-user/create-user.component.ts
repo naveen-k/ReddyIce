@@ -318,8 +318,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
             return accumulator;
         }, []);
+
         if (this.roleList && this.roleList.length === 1) {
-            this.user.RoleID = this.roleList[0].RoleID;
+           // this.user.RoleID = this.roleList[0].RoleID;
         }
         this.roleListOptions();
     }
@@ -416,7 +417,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.userBranch = this.userBranch.filter(u => u != 1);
             this.cBranches = this.tBranches;
             console.log(this.cBranches);
-            if (this.cBranches[0].value === 1) {
+
+            if (this.cBranches[0].value && this.cBranches[0].value === 1) {
                 this.cBranches.shift();
             }
 
@@ -437,7 +439,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         if (roleID === '2' || roleID === '4' || roleID === '8') {
             this.selectedBranch = [];
         }
-
         this.getDistributor();
 
     }
