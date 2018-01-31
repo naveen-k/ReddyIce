@@ -108,7 +108,7 @@
         Phone
       </label>
       <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone"
-        #Phone="ngModel" maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal || !isNewUser"
+        #Phone="ngModel" maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal"
         (ngModelChange)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
@@ -226,7 +226,7 @@
     <div class="col-md-5 padding-eater first-column">
       <label for="inputEmail3" class="control-label">Phone</label>
       <input type="number" class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone" #Phone="ngModel"
-        pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" disabled>
+        pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" >
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5 padding-eater">
