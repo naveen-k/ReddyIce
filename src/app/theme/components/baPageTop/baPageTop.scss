@@ -175,6 +175,9 @@
     .navbar-label-margin-top {
       display: none;
     }
+    a.collapse-menu-link {
+      padding-left: 0px;
+    }
   }
 
   @media screen and (max-width: $resXS) {
@@ -183,6 +186,9 @@
     }
     .navbar-label-margin-top {
       display: none;
+    }
+    a.collapse-menu-link {
+      padding-left: 20px;
     }
   }
 
@@ -195,6 +201,9 @@
     }
     a.collapse-menu-link {
       margin-left: 10px;
+    }
+    a.collapse-menu-link {
+      padding-left: 20px;
     }
 
     .al-skin-dropdown {
