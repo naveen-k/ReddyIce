@@ -211,17 +211,18 @@ export class TicketListComponent implements OnInit {
                         this.allFilterdTickets = [];
                         this.unSelectAll();
                     } else {
-                        // response.forEach(element => {
-                        //     element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                         response.forEach(element => {
+                            element['ticketwithRefNo'] = element.TicketReferenceNo ? `${element.TicketReferenceNo} - ${element.TicketNumber}` : element.TicketNumber,
+                             element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                         });
+                        // let res= response.map(item=>{
+                        //     return Object.assign({
+                        //         ticketwithRefNo : item.TicketReferenceNo ? `${item.TicketReferenceNo} - ${item.TicketNumber}` : item.TicketNumber,
+                        //         //ticketType: this.service.getTicketType(item.IsSaleTicket, item.Customer, item.TicketTypeID, item.CustomerTypeID, item.UserName ? (item.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                        //     },item)
                         // });
-                        let res= response.map(item=>{
-                            return Object.assign({
-                                ticketwithRefNo : item.TicketReferenceNo ? `${item.TicketReferenceNo} - ${item.TicketNumber}` : item.TicketNumber,
-                                ticketType: this.service.getTicketType(item.IsSaleTicket, item.Customer, item.TicketTypeID, item.CustomerTypeID, item.UserName ? (item.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
-                            },item)
-                        });
-                        this.allTickets =res
-                        this.allTicketsTemp = res;
+                        this.allTickets =response
+                        this.allTicketsTemp = response;
                         this.allFilterdTickets = this.getFilteredAllTicket();
                         this.unSelectAll();
                         this.ticketTotal();
