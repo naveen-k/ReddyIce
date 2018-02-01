@@ -76,5 +76,5 @@ export interface ManualTicket {
     DistributorCopackerID: number;
     CustomerSourceID: number;
     IsRIInternal?:boolean;
-    
+    TicketReferenceNo?: string;
 }

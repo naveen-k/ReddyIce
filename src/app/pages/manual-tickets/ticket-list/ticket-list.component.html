@@ -167,7 +167,7 @@
                             <span class="tooltiptext">Delete</span>
                         </i>
                     </td>
-                    <td>{{ item.TicketNumber }}</td>
+                    <td>{{item.TicketReferenceNo ? (item.TicketReferenceNo+'-') : ''}}{{ item.TicketNumber }}</td>
                     <!-- <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td> -->
                     <td>{{ item.ticketType }}</td>
                     <td>
