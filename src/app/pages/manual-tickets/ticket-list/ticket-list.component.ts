@@ -321,7 +321,7 @@ export class TicketListComponent implements OnInit {
         );
     }
 
-    deleteMultiTicketApprovalObject(ticketIds) {console.log('ticketIds----------',ticketIds)
+    deleteMultiTicketApprovalObject(ticketIds) {
         const ticketObject = {
             TicketID: ticketIds
         };
@@ -334,7 +334,7 @@ export class TicketListComponent implements OnInit {
                     this.getSearchedTickets();  // in order to refresh the list after ticket status change
                 }
             },
-            (error) => {console.log(error,'e============');
+            (error) => {
                 if (error) {
                     this.notificationService.error('Error', JSON.parse(error._body));
                 }

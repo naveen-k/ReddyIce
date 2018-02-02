@@ -359,11 +359,9 @@ export class CreateTicketComponent implements OnInit {
     let cust;
     const callback = (res) => {
       cust = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
-      if(cust instanceof Object) {
-        this.customers.push(cust);
-      } else{
-        this.customers = cust;
-      }
+
+      this.customers = cust;
+
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = this.customers.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
         this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? customer.CustomerTypeID : this.ticket.Customer.CustomerType;
