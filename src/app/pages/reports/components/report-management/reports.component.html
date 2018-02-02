@@ -180,13 +180,13 @@
                             <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
                             <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
                             <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
-                            <option value="RM" *ngIf="isITAdmin||isInternalAdmin">Routemen</option>
+                            <option value="RM" *ngIf="isExternalAdmin">Routeman</option>
                         </select>
                   
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" [hidden]="filter.reportType!='TR' && filter.reportType!='RM'">
+        <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
             <span class="col-sm-4 local-padding-eater">
                 <label class="top-margin">Customer Type</label>
             </span>
@@ -209,7 +209,7 @@
                 </label>
             </span>
         </div>
-        <div class="col-sm-4" [hidden]="filter.reportType!='TR' && filter.reportType!='RM'">
+        <div class="col-sm-4" [hidden]="filter.reportType!='TR'">
             <span class="col-sm-4 local-padding-eater">
                 <label class="top-margin">Ticket Type</label>
             </span>
