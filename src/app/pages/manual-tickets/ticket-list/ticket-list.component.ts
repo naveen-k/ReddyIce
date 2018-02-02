@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { TicketFilter } from 'app/pages/manual-tickets/pipes/filter-ticket.pipe';
 import { GenericFilter } from 'app/shared/pipes/generic-filter.pipe';
 import { GenericSort } from 'app/shared/pipes/generic-sort.pipe';
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
 @Component({
     templateUrl: './ticket-list.component.html',
     styleUrls: ['./ticket-list.component.scss'],
@@ -262,7 +263,7 @@ export class TicketListComponent implements OnInit {
         });
     }
     // approve all checked tickets
-    approveCheckedTickets() {
+    approveCheckedTickets(flag= '') {
         const selectedIds = [];
         this.allTickets.forEach(element => {
             if (element.selected) {
@@ -275,8 +276,21 @@ export class TicketListComponent implements OnInit {
             // Show message box 'Nothing to approve, please select some tickets'
             return;
         }
-
-        this.createMultiTicketApprovalObject(selectedIds);
+        if(flag) {
+            const activeModal = this.modalService.open(ModalComponent, {
+                size: 'sm',
+                backdrop: 'static',
+              });
+                activeModal.componentInstance.BUTTONS.OK = 'OK';
+                activeModal.componentInstance.showCancel = true;
+                activeModal.componentInstance.modalHeader = 'Warning!';
+                activeModal.componentInstance.modalContent = `Do you want to delete?`;
+                activeModal.componentInstance.closeModalHandler = (() => {
+                    this.deleteMultiTicketApprovalObject(selectedIds);
+                });            
+        } else {
+            this.createMultiTicketApprovalObject(selectedIds);
+        }
         this.disableApprove = true;
     }
 
@@ -306,6 +320,27 @@ export class TicketListComponent implements OnInit {
             },
         );
     }
+
+    deleteMultiTicketApprovalObject(ticketIds) {console.log('ticketIds----------',ticketIds)
+        const ticketObject = {
+            TicketID: ticketIds
+        };
+
+        // call workflow service to approve all the checked ticket numbers
+        this.service.deleteAllCheckedTickets(ticketObject).subscribe(
+            (response) => {
+                if (response) {
+                    this.notificationService.success('Deleted');
+                    this.getSearchedTickets();  // in order to refresh the list after ticket status change
+                }
+            },
+            (error) => {console.log(error,'e============');
+                if (error) {
+                    this.notificationService.error('Error', JSON.parse(error._body));
+                }
+            },
+        );
+    }    
 
     typeChangeHandler(byType: any = '') {
         // if (!this.searchObj.BranchId) {

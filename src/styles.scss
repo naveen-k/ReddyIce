@@ -176,3 +176,14 @@ a.collapse-menu-link {
 simple-notification .icon svg {
     height: 50% !important;
 }
+
+@media only screen and (max-width: 767px) {
+    .al-content {
+        padding: 4px 16px !important;
+      }          
+}
+@media only screen and (max-width: 500px) {
+    .al-content {
+        padding: 4px 16px !important;
+      }       
+}

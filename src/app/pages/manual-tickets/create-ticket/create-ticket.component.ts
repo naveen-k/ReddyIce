@@ -356,10 +356,16 @@ export class CreateTicketComponent implements OnInit {
 
   loadCustomers() {
     this.customers = [];
+    let cust;
     const callback = (res) => {
-      this.customers = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
+      cust = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
+      if(cust instanceof Object) {
+        this.customers.push(cust);
+      } else{
+        this.customers = cust;
+      }
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
-        const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
+        const customer = this.customers.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
         this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? customer.CustomerTypeID : this.ticket.Customer.CustomerType;
         this.ticket.Customer.ChainID = (customer && customer.ChainID) ? customer.ChainID : 0;
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
