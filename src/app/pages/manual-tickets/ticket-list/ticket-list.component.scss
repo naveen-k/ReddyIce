@@ -94,3 +94,14 @@
     line-height: 15px;
     font-size: 12px;
 }
+.table > tbody > tr > td {
+    padding: 0px 8px;
+    line-height: 25px;
+}
+.table > thead > tr > th:last-child {
+    padding-right: 0px !important;
+}
+
+.table > tbody > tr > td:last-child {
+    padding-right: 0px !important;
+}
