@@ -206,12 +206,12 @@ thead =`<thead>
                 <th class="textRightPadd">
                     Received Amt
                 </th>
-                ${this.user.Role.RoleID!='3' ? `<th class="textRightPadd">
+                ${this.user.Role.RoleID!='3' ? `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' : `<th class="textRightPadd">
                 Drayage
-                </th>` : ''}
-                ${this.user.Role.RoleID!='3' ? `<th class="textRightPadd">
-                    Buyback
-                </th>` : ''}
+                </th>`}` : ''}
+                ${this.user.Role.RoleID!='3' ? `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' : `<th class="textRightPadd">
+                Buyback
+                </th>`}` : ''}
                 <th class="text-align-center">
                     RI Internal
                 </th>
@@ -238,15 +238,28 @@ thead =`<thead>
                         <span>${(item.TicketTypeID == 30)?'$0.00':item.checkCashAmount ?(this.currencyFormatter.transform(item.checkCashAmount)) : ''}</span>
                     </td>
                     
-                    ${(this.user.Role.RoleID!='3' && (!item.Drayage)) ? `<td align="right"></td>` : ''}
+                    ${(this.user.Role.RoleID!='3' && (!item.Drayage)) ? 
+                    `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' :
+                    `<td align="right"></td>` }`
+                     : ''}
 
-                    ${(this.user.Role.RoleID!='3' && (item.Drayage)) ? `<td class="textRightPadd" style="color: ${item.TicketTypeID === 27 ? 'red' : ''}">
-                    ${item.TicketTypeID === 27 ? `<span>(</span>` : ''}${this.currencyFormatter.transform(item.Drayage)} ${item.TicketTypeID === 27 ? `<span>)</span>` : ''}</td>` : ''}
+                    ${(this.user.Role.RoleID!='3' && (item.Drayage)) ? 
+                    `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' :
+                    `<td align="right" class="textRightPadd" style="color: ${item.TicketTypeID === 27 ? 'red' : ''}">
+                    ${item.TicketTypeID === 27 ? `<span>(</span>` : ''}${this.currencyFormatter.transform(item.Drayage)} ${item.TicketTypeID === 27 ? `<span>)</span>` : ''}</td>`
+                    }`
+                    : ''}
                     
-                    ${(this.user.Role.RoleID!='3' && (!item.BuyBack)) ? `<td align="right"></td>` : ''}
+                    ${(this.user.Role.RoleID!='3' && (!item.BuyBack)) ? 
+                    `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' :
+                    `<td align="right"></td>`}`
+                     : ''}
 
-                    ${(this.user.Role.RoleID!='3' && (item.BuyBack)) ? `<td align="right" style="color: ${item.TicketTypeID === 27 ? 'red' : ''}">
-                    ${item.TicketTypeID === 27 ? `<span>(</span>` : ''}${this.currencyFormatter.transform(item.BuyBack)}${item.TicketTypeID === 27 ?`<span>)</span>` : ''}</td>` : ''}     
+                    ${(this.user.Role.RoleID!='3' && (item.BuyBack)) ? 
+                    `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' :
+                    `<td align="right" style="color: ${item.TicketTypeID === 27 ? 'red' : ''}">
+                    ${item.TicketTypeID === 27 ? `<span>(</span>` : ''}${this.currencyFormatter.transform(item.BuyBack)}${item.TicketTypeID === 27 ?`<span>)</span>` : ''}</td>`}`
+                     : ''}     
                                    
                     <td align="right">
                         <input type="checkbox" disabled name="riInternal" ${item.CustomerSourceID===101 ? 'checked' : ''}>
@@ -264,8 +277,14 @@ thead =`<thead>
                     <td align="right">
                         <b>${this.currencyFormatter.transform(this.total.totalCash + this.total.totalCheck)}</b>
                     </td>
-                    ${(this.user.Role.RoleID!='3') ? `<td align="right" class="textRightPadd"><b>${(this.user.Role.RoleID!='3') ? this.currencyFormatter.transform(this.total.totalDrayage) : ''}</b></td>` : ''}
-                    ${(this.user.Role.RoleID!='3') ? `<td align="right" class="textRightPadd"><b>${(this.user.Role.RoleID!='3') ? this.currencyFormatter.transform(this.total.totalBuyBack): ''}</b></td>` : ''}
+                    ${(this.user.Role.RoleID!='3') ? 
+                    `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' :
+                    `<td align="right" class="textRightPadd" ><b>${(this.user.Role.RoleID!='3') ? this.currencyFormatter.transform(this.total.totalDrayage) : ''}</b></td>`}`
+                    : ''}                  
+                    ${(this.user.Role.RoleID!='3') ? 
+                    `${this.logedInUser.IsDistributor && this.logedInUser.Distributor.IsCopacker ? '' :
+                    `<td align="right" class="textRightPadd"><b>${(this.user.Role.RoleID!='3') ? this.currencyFormatter.transform(this.total.totalBuyBack): ''}</b></td>`}`
+                     : ''}
                     <td></td>                    
                 </tr>`;
         // }  else {
