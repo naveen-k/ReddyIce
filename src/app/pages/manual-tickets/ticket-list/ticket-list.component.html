@@ -51,7 +51,7 @@
         <table class="table table-striped table-condensed">
             <thead class="tableHeader">
                 <tr>
-                    <th style="padding-left: 2px;padding-right: 2px;">
+                    <th style="padding-left: 2px;padding-right: 2px;" *ngIf="allTickets.length > 0">
                         <span title="Select/Unselect All">
                             <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
                         </span>
@@ -68,7 +68,7 @@
                             <span class="tooltiptext">Delete</span>
                         </i>
                     </th>
-                    <th class="table-id thVerticalAlign actionAlignCenter" style="width:91px;">Actions</th>
+                    <th class="table-id thVerticalAlign actionAlignCenter" style="width: 8%;">Actions</th>
                     <th class="thVerticalAlign table-text-align width-ticket">
                         <span class="cursorPointer" (click)="customer.sortField = 'ticketwithRefNo';customer.isAsc=!customer.isAsc;sortable('ticketwithRefNo');">
                             Ticket #
@@ -133,7 +133,7 @@
             </thead>
             <tbody>
                 <tr valign="middle" *ngFor="let item of allFilterdTickets | sort:customer.sortField:customer.isAsc;  let i=index">
-                    <td>
+                    <td *ngIf="allTickets.length > 0">
                         <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler();checkIfAllSelected();"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
                     </td>
