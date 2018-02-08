@@ -1082,12 +1082,13 @@ export class CreateTicketComponent implements OnInit {
      * DSD FEES: DELIVERY CHARGE - 100045 &
      * DSD FEES: CC SERVICE CHARGE - 200418 
      */
-    if (this.ticket.TicketProduct.length && (this.ticket.TicketProduct[0].productSelected.ProductID == 45 ||
-      this.ticket.TicketProduct[0].productSelected.ProductID == 1497)) {
-      this.tempModels.totalTax = this.ticket.TotalSale;
-    } else {
-      this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
-    }
+    // if (this.ticket.TicketProduct.length && (this.ticket.TicketProduct[0].productSelected.ProductID == 45 ||
+    //   this.ticket.TicketProduct[0].productSelected.ProductID == 1497)) {
+    //   this.tempModels.totalTax = this.ticket.TotalSale;
+    // } else {
+    //   this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    // }
+    this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
     this.ticket.TaxAmount = this.tempModels.totalTax;
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
