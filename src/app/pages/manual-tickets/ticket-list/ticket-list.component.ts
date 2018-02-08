@@ -43,7 +43,7 @@ export class TicketListComponent implements OnInit {
     distributors: any[];
 
     todaysDate: any;
-
+    logedInUser: any = {}; 
     disableApprove: boolean = true;
 
     searchString: any;
@@ -82,6 +82,7 @@ export class TicketListComponent implements OnInit {
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
+        this.logedInUser = this.userService.getUser();
         this.searchObj = this.service.getSearchedObject();
         //this.searchObj.BranchId = 1;
         const now = new Date();

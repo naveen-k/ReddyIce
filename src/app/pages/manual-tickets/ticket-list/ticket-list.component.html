@@ -105,13 +105,13 @@
                             <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
-                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
+                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding" [hidden]="logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false'">
                         <span class="cursorPointer" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;sortable('Drayage');">
                             Drayage
                             <i *ngIf="(customer.sortField == 'Drayage')" [ngClass]="(customer.isAsc && customer.sortField == 'Drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
-                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
+                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding" [hidden]="logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false'">
                         <span class="cursorPointer" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;sortable('BuyBack');">
                             Buyback
                             <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
@@ -194,8 +194,8 @@
                     <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currencyFormatter }}</td>
-                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currencyFormatter }}</td>
-                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.BuyBack | currencyFormatter }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight" [hidden]="logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false'">{{ item.Drayage | currencyFormatter }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight" [hidden]="logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false'">{{ item.BuyBack | currencyFormatter }}</td>
                     <td>{{item.DeliveryDate|date}}</td>
                     <td class="textAlignCenter">
                         <div class="tooltip-position">
