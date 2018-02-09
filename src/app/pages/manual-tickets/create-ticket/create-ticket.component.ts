@@ -473,6 +473,7 @@ export class CreateTicketComponent implements OnInit {
 
   prepareTicketProduct(productdetail) {
     this.ticket.TicketProduct.forEach(td => {
+      
       console.log("------", td.Rate);
       // if(this.ticket.RoleID === 10 && td.Rate){
       //   td.Price = td.Rate;
@@ -1043,8 +1044,9 @@ export class CreateTicketComponent implements OnInit {
     //   prodDetail = { Price: ticketDetail.Rate };
     // }
     if (ticketDetail.Rate) {
-      prodDetail = { Price: ticketDetail.Rate };
+      prodDetail = { Price: ticketDetail.Rate,IsTaxable:prodDetail['IsTaxable'] };
     }
+    debugger;
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
@@ -1071,11 +1073,14 @@ export class CreateTicketComponent implements OnInit {
   calculateTotalSale() {
     this.ticket['tempTotalUnit'] = 0;
     this.ticket.TotalSale = 0;
-
+    this.tempModels.totalTax = 0;
     this.ticket.TicketProduct.forEach((t) => {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       // this.ticket.TotalSale += +t['totalAmount'] || 0;
-      this.ticket.TotalSale = this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
+      debugger;
+      this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
+      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", ((t.productSelected.IsTaxable)?(+t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100):0));
+      //this.tempModels.totalTax = t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100;
     });
     /**
      * hack for excluding tax for 
@@ -1088,7 +1093,8 @@ export class CreateTicketComponent implements OnInit {
     // } else {
     //   this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
     // }
-    this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    //this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    //this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
     this.ticket.TaxAmount = this.tempModels.totalTax;
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
