@@ -120,9 +120,10 @@
                         <!-- <div class="input-group">
                                 <input type="text" numberOnly class="form-control" [(ngModel)]="filter.RouteNumber">
                             </div> -->
-                        <select class="form-control" [(ngModel)]='filter.RouteNumber'>
+                        <!-- <select class="form-control" [(ngModel)]='filter.RouteNumber'>
                             <option *ngFor="let route of routes">{{route}}</option>
-                        </select>
+                        </select> -->
+                        <reddy-select [options]="routes" [(selected)]="filter.RouteNumber"></reddy-select>
                     </div>
                 </ng-container>
             </div>
