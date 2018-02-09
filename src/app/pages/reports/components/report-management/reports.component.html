@@ -10,7 +10,7 @@
 </div>
 <ba-card cardTitle="Reports {{userSubTitle}}">
     <div class="text-right head-button-container">
-        <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)" [disabled]="viewButtonStatus || ((filter.reportType=='WOC' || filter.reportType=='EOD') && (!filter.branch || !filter.stech))">View Report</button>
+        <button class="btn btn-danger button-top-margin" (click)="updateLink(filter.reportType)" [disabled]="viewButtonStatus || ((filter.reportType=='WOC' && !filter.branch) || (filter.reportType=='EOD' && !filter.stech) || (filter.reportType=='SSR' && routes.length==0))">View Report</button>
     </div>
     <div class="row">
         <div class="col-sm-2" *ngIf="filter.reportType == 'MR' || filter.reportType == 'EOD'">

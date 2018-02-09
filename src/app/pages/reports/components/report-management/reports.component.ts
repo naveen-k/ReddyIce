@@ -54,7 +54,8 @@ export class ReportsComponent implements OnInit {
         modifiedStartDateforDriver: null,
         modifiedEndDateforDriver: null,
         manifestDate: null,
-        workOrderId: null
+        workOrderId: null,
+        RouteNumber: 0
     };
 
     inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);

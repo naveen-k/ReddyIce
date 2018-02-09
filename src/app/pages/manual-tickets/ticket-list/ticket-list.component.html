@@ -148,7 +148,7 @@
                                 <span class="tooltiptext">View</span>
                             </i>
                         </a>
-                        <a *ngIf="item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber,'view')">
+                        <a *ngIf="item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber, item.CustomerID, item.DeliveryDate,'view')">
                             <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">View</span>
                             </i>
@@ -167,7 +167,7 @@
                                 <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
-                        <a *ngIf="(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" (click)="showTicketChoice(item.TicketNumber,'edit')"
+                        <a *ngIf="(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" (click)="showTicketChoice(item.TicketNumber, item.CustomerID, item.DeliveryDate,'edit')"
                             [hidden]="item.TicketStatusID==25">
                             <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">Edit</span>
@@ -178,7 +178,7 @@
                             <span class="tooltiptext">Delete</span>
                         </i>
                         <i *ngIf="(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" class="ion-trash-a custom-tooltip-ion"
-                            [hidden]="item.TicketStatusID==25" (click)="showTicketChoice(item.TicketNumber,'delete');">
+                            [hidden]="item.TicketStatusID==25" (click)="showTicketChoice(item.TicketNumber, item.CustomerID, item.DeliveryDate,'delete');">
                             <span class="tooltiptext">Delete</span>
                         </i>
                     </td>

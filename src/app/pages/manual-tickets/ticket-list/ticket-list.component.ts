@@ -43,7 +43,7 @@ export class TicketListComponent implements OnInit {
     distributors: any[];
 
     todaysDate: any;
-    logedInUser: any = {}; 
+    logedInUser: any = {};
     disableApprove: boolean = true;
 
     searchString: any;
@@ -213,17 +213,17 @@ export class TicketListComponent implements OnInit {
                         this.allFilterdTickets = [];
                         this.unSelectAll();
                     } else {
-                         response.forEach(element => {
+                        response.forEach(element => {
                             element['ticketwithRefNo'] = element.TicketReferenceNo ? `${element.TicketReferenceNo} - ${element.TicketNumber}` : element.TicketNumber,
-                             element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
-                         });
+                                element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                        });
                         // let res= response.map(item=>{
                         //     return Object.assign({
                         //         ticketwithRefNo : item.TicketReferenceNo ? `${item.TicketReferenceNo} - ${item.TicketNumber}` : item.TicketNumber,
                         //         //ticketType: this.service.getTicketType(item.IsSaleTicket, item.Customer, item.TicketTypeID, item.CustomerTypeID, item.UserName ? (item.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
                         //     },item)
                         // });
-                        this.allTickets =response
+                        this.allTickets = response
                         this.allTicketsTemp = response;
                         this.allFilterdTickets = this.getFilteredAllTicket();
                         this.unSelectAll();
@@ -264,7 +264,7 @@ export class TicketListComponent implements OnInit {
         });
     }
     // approve all checked tickets
-    approveCheckedTickets(flag= '') {
+    approveCheckedTickets(flag = '') {
         const selectedIds = [];
         this.allTickets.forEach(element => {
             if (element.selected) {
@@ -277,18 +277,18 @@ export class TicketListComponent implements OnInit {
             // Show message box 'Nothing to approve, please select some tickets'
             return;
         }
-        if(flag) {
+        if (flag) {
             const activeModal = this.modalService.open(ModalComponent, {
                 size: 'sm',
                 backdrop: 'static',
-              });
-                activeModal.componentInstance.BUTTONS.OK = 'OK';
-                activeModal.componentInstance.showCancel = true;
-                activeModal.componentInstance.modalHeader = 'Warning!';
-                activeModal.componentInstance.modalContent = `Do you want to delete?`;
-                activeModal.componentInstance.closeModalHandler = (() => {
-                    this.deleteMultiTicketApprovalObject(selectedIds);
-                });            
+            });
+            activeModal.componentInstance.BUTTONS.OK = 'OK';
+            activeModal.componentInstance.showCancel = true;
+            activeModal.componentInstance.modalHeader = 'Warning!';
+            activeModal.componentInstance.modalContent = `Do you want to delete?`;
+            activeModal.componentInstance.closeModalHandler = (() => {
+                this.deleteMultiTicketApprovalObject(selectedIds);
+            });
         } else {
             this.createMultiTicketApprovalObject(selectedIds);
         }
@@ -341,7 +341,7 @@ export class TicketListComponent implements OnInit {
                 }
             },
         );
-    }    
+    }
 
     typeChangeHandler(byType: any = '') {
         // if (!this.searchObj.BranchId) {
@@ -396,9 +396,16 @@ export class TicketListComponent implements OnInit {
             this.notificationService.error("Ticket preview unavailable!!");
         }
     }
-    showTicketChoice(ticketNumber, mode) {
+    // funtion to retrieve the time
+    sliceTime(str) {
+        if (str) {
+            return str.slice(0, 10);
+        }
+    }
+    showTicketChoice(ticketNumber, customerID, delivered, mode) {
+        let deliveryDate = this.sliceTime(delivered);
         this.overlayStatus = true;
-        this.service.getSaleCreditTicket(ticketNumber).subscribe(
+        this.service.getSaleCreditTicket(ticketNumber, customerID, deliveryDate).subscribe(
             (response) => {
                 if (response) {
 
