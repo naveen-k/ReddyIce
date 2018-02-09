@@ -122,7 +122,7 @@ export class ManualTicketService extends SharedService {
       .map(res => res.json());
   }
   getSaleCreditTicket(ticketId, CustomerId, deliveryDate) {
-    return this.http.get(`api/manualticket/getcomboticketsid?TicketNumber=${ticketId}&CustomerId=${CustomerId}&createdDate=${deliveryDate}`)
+    return this.http.get(`api/manualticket/getcomboticketsid?TicketNumber=${ticketId}&CustomerId=${CustomerId}&DeliveryDate=${deliveryDate}`)
       .map(res => res.json());
   }
 
