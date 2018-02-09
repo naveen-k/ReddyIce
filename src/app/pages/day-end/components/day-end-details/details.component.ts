@@ -178,21 +178,21 @@ export class DetailsComponent implements OnInit {
     cashReconciliationTotal(ticket) {
         if (ticket.TicketTypeID === 30) { return; }
         if (ticket.IsPaperTicket) {
-            this.TotalCashReconciliation.TotalManualSale += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
-            this.TotalCashReconciliation.TotalManualCash += ticket.CashAmount || 0;
-            this.TotalCashReconciliation.TotalManualCheck += ticket.CheckAmount || 0;
-            this.TotalCashReconciliation.TotalManualCreditCard += ticket.CreditCardAmount || 0;
-            this.TotalCashReconciliation.TotalManualCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0) ? ticket.ChargeAmount : 0) || 0;
-            if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalManualCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
-            if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalManualChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            this.TotalCashReconciliation.TotalManualSale = this.TotalCashReconciliation.TotalManualSale.fpArithmetic("+", ticket.TicketTypeID !== 27 ? (+ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount)) : (+ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount)) || 0);
+            this.TotalCashReconciliation.TotalManualCash = this.TotalCashReconciliation.TotalManualCash.fpArithmetic("+", ticket.CashAmount || 0);
+            this.TotalCashReconciliation.TotalManualCheck = this.TotalCashReconciliation.TotalManualCheck.fpArithmetic("+", ticket.CheckAmount || 0);
+            this.TotalCashReconciliation.TotalManualCreditCard = this.TotalCashReconciliation.TotalManualCreditCard.fpArithmetic("+", ticket.CreditCardAmount || 0);
+            this.TotalCashReconciliation.TotalManualCharge = this.TotalCashReconciliation.TotalManualCharge.fpArithmetic("+", ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0) ? ticket.ChargeAmount : 0) || 0);
+            if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalManualCashCustomer = this.TotalCashReconciliation.TotalManualCashCustomer.fpArithmetic("+", ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0); }
+            if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalManualChargeCustomer = this.TotalCashReconciliation.TotalManualChargeCustomer.fpArithmetic("+",ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0); }
         } else {
-            this.TotalCashReconciliation.TotalHHSale += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0;
-            this.TotalCashReconciliation.TotalHHCash += ticket.CashAmount || 0;
-            this.TotalCashReconciliation.TotalHHCheck += ticket.CheckAmount || 0;
-            this.TotalCashReconciliation.TotalHHCreditCard += ticket.CreditCardAmount || 0;
-            this.TotalCashReconciliation.TotalHHCharge += ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0) ? ticket.ChargeAmount : 0) || 0;
-            if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalHHCashCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
-            if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalHHChargeCustomer += ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0; }
+            this.TotalCashReconciliation.TotalHHSale = this.TotalCashReconciliation.TotalHHSale.fpArithmetic("+", ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0);
+            this.TotalCashReconciliation.TotalHHCash = this.TotalCashReconciliation.TotalHHCash.fpArithmetic("+", ticket.CashAmount || 0);
+            this.TotalCashReconciliation.TotalHHCheck = this.TotalCashReconciliation.TotalHHCheck.fpArithmetic("+", ticket.CheckAmount || 0);
+            this.TotalCashReconciliation.TotalHHCreditCard = this.TotalCashReconciliation.TotalHHCreditCard.fpArithmetic("+", ticket.CreditCardAmount || 0);
+            this.TotalCashReconciliation.TotalHHCharge = this.TotalCashReconciliation.TotalHHCharge.fpArithmetic("+", ((((+ticket.CashAmount) + (+ticket.CheckAmount)) == 0) ? ticket.ChargeAmount : 0) || 0);
+            if (ticket.PaymentTypeID === 18) { this.TotalCashReconciliation.TotalHHCashCustomer = this.TotalCashReconciliation.TotalHHCashCustomer.fpArithmetic("+", ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0); }
+            if (ticket.PaymentTypeID === 19) { this.TotalCashReconciliation.TotalHHChargeCustomer = this.TotalCashReconciliation.TotalHHChargeCustomer.fpArithmetic("+", ticket.TicketTypeID !== 27 ? (ticket.amount) : (ticket.amount) || 0); }
         }
         this.printStatus = true;
     }

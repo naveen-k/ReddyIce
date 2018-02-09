@@ -47,6 +47,10 @@ export class ManualTicketService extends SharedService {
     return this.http.put('api/manualticket/workflow', approveTicketsObj).map((res => res.json()));
   }
 
+  deleteAllCheckedTickets(deleteTicketsObj) {console.log(deleteTicketsObj,'deleteTicketsObj');
+    return this.http.post('api/manualticket/deletemultipleticket', deleteTicketsObj).map((res => res.json()));
+  }
+
   getTicketTypes() {
     return this.http.get(`api/manualticket/CustomerType`)
       .map(res => res.json());
@@ -117,8 +121,8 @@ export class ManualTicketService extends SharedService {
     return this.http.delete(`api/manualticket/deleteimage?imageId=${imageID}&ticketId=${TicketID}`)
       .map(res => res.json());
   }
-  getSaleCreditTicket(ticketId) {
-    return this.http.get(`api/manualticket/getcomboticketsid?TicketNumber=${ticketId}`)
+  getSaleCreditTicket(ticketId, CustomerId, deliveryDate) {
+    return this.http.get(`api/manualticket/getcomboticketsid?TicketNumber=${ticketId}&CustomerId=${CustomerId}&DeliveryDate=${deliveryDate}`)
       .map(res => res.json());
   }
 

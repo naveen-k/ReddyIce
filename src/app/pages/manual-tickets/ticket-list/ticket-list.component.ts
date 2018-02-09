@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { TicketFilter } from 'app/pages/manual-tickets/pipes/filter-ticket.pipe';
 import { GenericFilter } from 'app/shared/pipes/generic-filter.pipe';
 import { GenericSort } from 'app/shared/pipes/generic-sort.pipe';
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
 @Component({
     templateUrl: './ticket-list.component.html',
     styleUrls: ['./ticket-list.component.scss'],
@@ -42,7 +43,7 @@ export class TicketListComponent implements OnInit {
     distributors: any[];
 
     todaysDate: any;
-
+    logedInUser: any = {};
     disableApprove: boolean = true;
 
     searchString: any;
@@ -81,6 +82,7 @@ export class TicketListComponent implements OnInit {
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
+        this.logedInUser = this.userService.getUser();
         this.searchObj = this.service.getSearchedObject();
         //this.searchObj.BranchId = 1;
         const now = new Date();
@@ -212,9 +214,16 @@ export class TicketListComponent implements OnInit {
                         this.unSelectAll();
                     } else {
                         response.forEach(element => {
-                            element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                            element['ticketwithRefNo'] = element.TicketReferenceNo ? `${element.TicketReferenceNo} - ${element.TicketNumber}` : element.TicketNumber,
+                                element['ticketType'] = this.service.getTicketType(element.IsSaleTicket, element.Customer, element.TicketTypeID, element.CustomerTypeID, element.UserName ? (element.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
                         });
-                        this.allTickets = response;
+                        // let res= response.map(item=>{
+                        //     return Object.assign({
+                        //         ticketwithRefNo : item.TicketReferenceNo ? `${item.TicketReferenceNo} - ${item.TicketNumber}` : item.TicketNumber,
+                        //         //ticketType: this.service.getTicketType(item.IsSaleTicket, item.Customer, item.TicketTypeID, item.CustomerTypeID, item.UserName ? (item.UserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName) : false)
+                        //     },item)
+                        // });
+                        this.allTickets = response
                         this.allTicketsTemp = response;
                         this.allFilterdTickets = this.getFilteredAllTicket();
                         this.unSelectAll();
@@ -255,7 +264,7 @@ export class TicketListComponent implements OnInit {
         });
     }
     // approve all checked tickets
-    approveCheckedTickets() {
+    approveCheckedTickets(flag = '') {
         const selectedIds = [];
         this.allTickets.forEach(element => {
             if (element.selected) {
@@ -268,8 +277,21 @@ export class TicketListComponent implements OnInit {
             // Show message box 'Nothing to approve, please select some tickets'
             return;
         }
-
-        this.createMultiTicketApprovalObject(selectedIds);
+        if (flag) {
+            const activeModal = this.modalService.open(ModalComponent, {
+                size: 'sm',
+                backdrop: 'static',
+            });
+            activeModal.componentInstance.BUTTONS.OK = 'OK';
+            activeModal.componentInstance.showCancel = true;
+            activeModal.componentInstance.modalHeader = 'Warning!';
+            activeModal.componentInstance.modalContent = `Do you want to delete?`;
+            activeModal.componentInstance.closeModalHandler = (() => {
+                this.deleteMultiTicketApprovalObject(selectedIds);
+            });
+        } else {
+            this.createMultiTicketApprovalObject(selectedIds);
+        }
         this.disableApprove = true;
     }
 
@@ -289,6 +311,27 @@ export class TicketListComponent implements OnInit {
             (response) => {
                 if (response) {
                     this.notificationService.success('Approved');
+                    this.getSearchedTickets();  // in order to refresh the list after ticket status change
+                }
+            },
+            (error) => {
+                if (error) {
+                    this.notificationService.error('Error', JSON.parse(error._body));
+                }
+            },
+        );
+    }
+
+    deleteMultiTicketApprovalObject(ticketIds) {
+        const ticketObject = {
+            TicketID: ticketIds
+        };
+
+        // call workflow service to approve all the checked ticket numbers
+        this.service.deleteAllCheckedTickets(ticketObject).subscribe(
+            (response) => {
+                if (response) {
+                    this.notificationService.success('Deleted');
                     this.getSearchedTickets();  // in order to refresh the list after ticket status change
                 }
             },
@@ -353,9 +396,16 @@ export class TicketListComponent implements OnInit {
             this.notificationService.error("Ticket preview unavailable!!");
         }
     }
-    showTicketChoice(ticketNumber, mode) {
+    // funtion to retrieve the time
+    sliceTime(str) {
+        if (str) {
+            return str.slice(0, 10);
+        }
+    }
+    showTicketChoice(ticketNumber, customerID, delivered, mode) {
+        let deliveryDate = this.sliceTime(delivered);
         this.overlayStatus = true;
-        this.service.getSaleCreditTicket(ticketNumber).subscribe(
+        this.service.getSaleCreditTicket(ticketNumber, customerID, deliveryDate).subscribe(
             (response) => {
                 if (response) {
 

@@ -199,7 +199,7 @@ export class DayEndComponent implements OnInit {
             tbody += `<tr><td colspan="11" align="center">No data found</td></tr>`
         } else {
             filterDataForPrint.forEach(item => {
-                tbody += `<tr> ${(this.logedInUser.IsRIInternal) && `<td>${!item.IsUnplanned ? item.RouteNumber : 'Unplanned'}</td>`}
+                tbody += `<tr> ${(this.logedInUser.IsRIInternal) ? `<td>${!item.IsUnplanned ? item.RouteNumber : 'Unplanned'}</td>` : ''}
                 ${(this.logedInUser.IsRIInternal) ? `<td>${item.BranchCode}-${item.BranchName}</td>` : ''}
                 <td>${item.DriverName}</td>
                 <td>${item.TripCode}</td>
