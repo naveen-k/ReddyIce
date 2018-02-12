@@ -84,7 +84,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         return this._user;
     }
     set user(val: any) {
-        console.log("-----------------",val);
+        console.log("-----------------", val);
         if (!Object.keys(val).length) {
             return;
         }
@@ -202,12 +202,12 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     onSubmit() {
-        this.formIsDirty =false;
+        this.formIsDirty = false;
         if (this.userObject.IsDistributor) {
             this.user.DistributorMasterID = this.userObject.Distributor.DistributorMasterId;
         }
         //this.onMultiSelect(this.userBranch);
-        if (!this.validateUser(this.user)) { this.formIsDirty =true; return };
+        if (!this.validateUser(this.user)) { this.formIsDirty = true; return };
         // If user is RI internal user then distributor ID should be set to empty
         if (this.userDetails.IsDistributor) {
             this.user.DistributorMasterID = this.userDetails.Distributor.DistributorMasterId;
@@ -328,7 +328,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         }, []);
 
         if (this.roleList && this.roleList.length === 1) {
-           // this.user.RoleID = this.roleList[0].RoleID;
+            // this.user.RoleID = this.roleList[0].RoleID;
         }
         this.roleListOptions();
     }
@@ -391,18 +391,25 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     resetUser() {
         this.user = {};
     }
+    private validateEmail(email) {
+        var re = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        return re.test(String(email).toLowerCase());
+    }
     checkEmail(email) {
-        this.userService.isUserExist(email).subscribe((res) => {
-            // console.log(res);
-            if (res.Message === 'Email already exists') {
-                this.isEmailExist = true;
-            } else {
-                this.isEmailExist = false;
-            }
+        const ckeck = this.validateEmail(email);
+        if (ckeck) {
+            this.userService.isUserExist(email).subscribe((res) => {
+                // console.log(res);
+                if (res.Message === 'Email already exists') {
+                    this.isEmailExist = true;
+                } else {
+                    this.isEmailExist = false;
+                }
 
-        }, (err) => {
+            }, (err) => {
 
-        });
+            });
+        }
     }
 
     roleChange(roleID, retainDist: any = '') {
@@ -455,10 +462,10 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.showIseries = false;
         } else if (this.userDetails.IsDistributor && +this.user.RoleID === 3) {
             this.showIseries = false;
-        } else if(this.user.RoleID){
+        } else if (this.user.RoleID) {
             this.showIseries = true;
         } else {
-            this.showIseries = false; 
+            this.showIseries = false;
         }
     }
     loadBranches() {
@@ -480,7 +487,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.FirstName = '';
             this.user.LastName = '';
             this.user.EmailID = '';
-            this.userBranch.length=0;
+            this.userBranch.length = 0;
         }
         else {
 
@@ -603,7 +610,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
 
     roleListOptions() {
-        this.roleListArr=[];
+        this.roleListArr = [];
         this.roleList.forEach(role => {
             this.roleListArr.push({
                 value: role.RoleID,
@@ -611,7 +618,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                 data: role
             });
         });
-        console.log('---------this.roleList',this.roleList,this.roleListArr)
+        console.log('---------this.roleList', this.roleList, this.roleListArr)
     }
 
     pushBranches() {

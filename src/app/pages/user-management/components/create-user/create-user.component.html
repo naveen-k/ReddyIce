@@ -80,8 +80,8 @@
         <sup style="color:red;">*</sup>
       </label>
       <input type="email" class="form-control" id="inputEmail3" placeholder="Email" [(ngModel)]="user.EmailID" name="EmailID" #EmailID="ngModel"
-        required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" maxlength="30" [disabled]="user.IsRIInternal || !isNewUser"
-        (blur)="checkEmail(user.EmailID)" (ngModelChange)="changeHandler()" maxlength="50">
+        required pattern="^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$" maxlength="30" [disabled]="user.IsRIInternal || !isNewUser"
+        (blur)="checkEmail(user.EmailID);" (ngModelChange)="changeHandler()" maxlength="50">
       <div *ngIf="EmailID.invalid && (EmailID.dirty || EmailID.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="EmailID.errors.required" class="custom-tooltip bottom">
