@@ -84,6 +84,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         return this._user;
     }
     set user(val: any) {
+        console.log("-----------------",val);
         if (!Object.keys(val).length) {
             return;
         }
@@ -95,7 +96,9 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.roleChange(val.RoleID, 'retainDist');
         } else {
             if (!this.user.RoleID) {
-                this.user.RoleID = '';
+                this.user.RoleID = '-1';
+                this.user.DistributorMasterID = -1;
+                document.forms['userForm'].reset();
             }
         }
         this.loadBranches();
@@ -263,24 +266,30 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
         }
-        if (this.showIseries === true && (user.ISeriesRouteNumber === undefined || user.ISeriesRouteNumber === null || user.ISeriesRouteNumber == 0)) {
-            this.notification.error('ISeriesRoute Number is mandatory!!!');
-            return false;
-        }
-        if (!this.showIseries && this.selectedBranch && this.selectedBranch.length && this.selectedBranch.length > 0) {
-            if (this.user.RoleID == '3' || this.user.RoleID == '6') {
-                var check = true;
-                for (let i = 0; i < this.selectedBranch.length; i++) {
-                    if (this.selectedBranch[i].IseriesRouteNumber === undefined || this.selectedBranch[i].IseriesRouteNumber === null || this.selectedBranch[i].IseriesRouteNumber == '') {
-                        this.notification.error('All ISeriesRoute Number is mandatory!!!');
-                        check = false;
-                        break;
-                    }
+        /**
+         * Start -- ISeriesRouteNumber code is commented as per client requirment in Phase 3.
+         */
+        // if (this.showIseries === true && (user.ISeriesRouteNumber === undefined || user.ISeriesRouteNumber === null || user.ISeriesRouteNumber == 0)) {
+        //     this.notification.error('ISeriesRoute Number is mandatory!!!');
+        //     return false;
+        // }
+        // if (!this.showIseries && this.selectedBranch && this.selectedBranch.length && this.selectedBranch.length > 0) {
+        //     if (this.user.RoleID == '3' || this.user.RoleID == '6') {
+        //         var check = true;
+        //         for (let i = 0; i < this.selectedBranch.length; i++) {
+        //             if (this.selectedBranch[i].IseriesRouteNumber === undefined || this.selectedBranch[i].IseriesRouteNumber === null || this.selectedBranch[i].IseriesRouteNumber == '') {
+        //                 this.notification.error('All ISeriesRoute Number is mandatory!!!');
+        //                 check = false;
+        //                 break;
+        //             }
 
-                }
-                return check;
-            }
-        }
+        //         }
+        //         return check;
+        //     }
+        // }
+        /**
+         * End -- ISeriesRouteNumber code is commented as per client requirment in Phase 3.
+         */
 
         return true;
     }
@@ -291,7 +300,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.addedBranches.length = 0;
         this.getDistributor();
         this.userObject = this.userService.getUser();
-        //console.log(this.userObject);
 
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
@@ -479,6 +487,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.getDistributor();
         }
         this.user.RoleID = -1;
+        this.user.DistributorMasterID = -1;
+        this.user.ISeriesRouteNumber = '';
         this.isAllFeildsChecked();
 
     }

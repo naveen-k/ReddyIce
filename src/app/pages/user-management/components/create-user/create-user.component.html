@@ -1,4 +1,4 @@
-<form #customerForm="ngForm" class="user-form" *ngIf="actionName != 'view'">
+<form #customerForm="ngForm" class="user-form" *ngIf="actionName != 'view'" name="userForm">
   <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!customerForm.form.valid ||isEmailExist||!isFormValid||!formIsDirty"
     (click)="onSubmit()">Save</button>
 
@@ -140,13 +140,13 @@
         (selectedChange)="changeHandler();clearBranch();"></reddy-select>
     </div>
 
-    <div *ngIf="showIseries" class="col-md-6 page-header">
+    <!-- <div *ngIf="showIseries" class="col-md-6 page-header">
       <label for="iseriesroute" class="control-label">ISeries Route
         <sup style="color:red;">*</sup>
       </label>
       <input type="text" [numberOnly] class="form-control" id="iseriesroute" placeholder="ISeries Route" [(ngModel)]="user.ISeriesRouteNumber"
         name="ISeriesRouteNumber" #ISeriesRouteNumber="ngModel" maxlength="6" (ngModelChange)="changeHandler()">
-    </div>
+    </div> -->
 
 
     <div class="col-md-12 page-header rowContainer first-form-row">
@@ -175,13 +175,13 @@
         [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch" (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
       <br/>
       <div style="width:100%;margin-top: 10px;">
-        <span *ngIf="selectedBranch?.length && (user.RoleID == '6' || user.RoleID == '3')" style="width:90px; margin-bottom: 5px; float:right;">ISeries Route</span>
+        <!-- <span *ngIf="selectedBranch?.length && (user.RoleID == '6' || user.RoleID == '3')" style="width:90px; margin-bottom: 5px; float:right;">ISeries Route</span> -->
         <ul style="padding-left: 15px;width:100%;max-height:250px;overflow:auto;">
           <li *ngFor="let brannch of selectedBranch" style="margin:8px 0">
             <span [title]="brannch.BranchCode - brannch.BUName">{{brannch.BranchCode}} - {{brannch.BUName | cutString:true:60}}</span>
             <span style="float:right">
-              <input *ngIf="user.RoleID == '6' || user.RoleID == '3'" type="text" [ngModelOptions]="{standalone: true}" numberOnly [(ngModel)]="brannch.IseriesRouteNumber"
-                style="width:50px" (ngModelChange)="enableSave()">
+              <!-- <input *ngIf="user.RoleID == '6' || user.RoleID == '3'" type="text" [ngModelOptions]="{standalone: true}" numberOnly [(ngModel)]="brannch.IseriesRouteNumber"
+                style="width:50px" (ngModelChange)="enableSave()"> -->
               <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '8' || user.RoleID == '10')"
                 class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
                 <span class="tooltiptext">Remove</span>
@@ -236,7 +236,7 @@
       </select>
     </div>
   </div>
-  <div class="row page-header rowContainer">
+  <!-- <div class="row page-header rowContainer">
 
     <div class="col-md-5 padding-eater first-column" *ngIf="user.ISeriesRouteNumber && !user.IsRIInternal">
       <label for="inputiseriesroute" class="control-label">ISeries Route</label>
@@ -245,7 +245,7 @@
     </div>
 
 
-  </div>
+  </div> -->
 
   <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="row page-header rowContainer last-form-row" [hidden]="userObject.IsDistributor">
     <div class="col-md-5 padding-eater">
@@ -274,12 +274,12 @@
     <div class="col-md-12 padding-eater first-column" *ngIf="user.IsRIInternal || user.IsSeasonal">
 
       <label for="exampleSelect1">Business Unit</label>
-      <label for="iseriesroute" class="control-label" style="float:right" *ngIf="user.Branch?.length>0 && (user.RoleID == '6' || user.RoleID == '3')">ISeries Route</label>
+      <!-- <label for="iseriesroute" class="control-label" style="float:right" *ngIf="user.Branch?.length>0 && (user.RoleID == '6' || user.RoleID == '3')">ISeries Route</label> -->
       <div class="col-md-12" style="max-height:80px;overflow:auto;">
         <ul class="ulpadding">
           <li *ngFor="let b of user.Branch">
             <span style="padding-right:10px;">{{b.BranchCode}} - {{b.BUName}}</span>
-            <span style="float:right;" *ngIf="user.RoleID == '6' || user.RoleID == '3'">{{b.IseriesRouteNumber}}</span>
+            <!-- <span style="float:right;" *ngIf="user.RoleID == '6' || user.RoleID == '3'">{{b.IseriesRouteNumber}}</span> -->
           </li>
         </ul>
       </div>
