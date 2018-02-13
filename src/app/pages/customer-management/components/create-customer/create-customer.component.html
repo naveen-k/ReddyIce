@@ -120,9 +120,9 @@
                 </div>
             </div>
             <div class="row box-top-margin">
-                <label for="example-text-input" class="col-md-12">Notes for Memo (It will print on Invoice)</label>
+                <label for="example-text-input" class="col-md-12">Notes for Memo (Max length 50 Charecters)</label>
                 <div class="col-md-12">
-                    <input [disabled]="mode ===3" maxlength="500" [(ngModel)]='customer.NotesForMemo' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                    <input [disabled]="mode ===3" maxlength="50" [(ngModel)]='customer.NotesForMemo' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
                         type="text" class="form-control" placeholder="Notes for Memo" />
                 </div>
             </div>
