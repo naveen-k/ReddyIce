@@ -48,7 +48,7 @@ export class TicketListComponent implements OnInit {
         totalDistAmt: 0,
     };
     // dateFormat = ((date: NgbDateStruct) =>{debugger; return `${date.month}/${date.day}/${date.year}`});
-
+    logedInUser: any = {};    
     constructor(
         protected service: ManualTicketService,
         protected userService: UserService,
@@ -66,7 +66,7 @@ export class TicketListComponent implements OnInit {
         //this.searchObj.BranchId = 1;
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-
+        this.logedInUser = this.userService.getUser();
         // Get loggedIn user details
         this.user = this.userService.getUser();
 

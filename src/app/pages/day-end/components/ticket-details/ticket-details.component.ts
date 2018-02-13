@@ -31,7 +31,7 @@ export class TicketDetailsComponent implements OnInit {
         totalBuyBack: 0,
         totalDistAmt: 0,
     };
-
+    logedInUser: any = {};    
     constructor(private service: DayEndService,
         private route: ActivatedRoute,
         private router: Router,
@@ -46,7 +46,7 @@ export class TicketDetailsComponent implements OnInit {
             this.isDistributorExist = response.IsDistributor;
             this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + response.Distributor.DistributorName : '';
         });
-
+        this.logedInUser = this.userService.getUser();
         this.user = this.userService.getUser();
 
         this.tripId = +this.route.snapshot.params['tripId'];
