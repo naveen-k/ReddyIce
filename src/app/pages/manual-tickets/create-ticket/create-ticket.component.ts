@@ -352,21 +352,44 @@ export class CreateTicketComponent implements OnInit {
     });
   }
 
+  // loadCustomers() {
+  //   this.customers = [];
+  //   const callback = (res) => {
+  //     this.customers = res.Customer ? res.Customer : res;
+  //     if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
+  //       const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
+  //       this.ticket.CustomerType = customer.CustomerTypeID;
+  //       this.ticket.Customer.ChainID = customer.ChainID;
+  //       this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
+  //     }
+  //   };
+
+  //   if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
+  //     this.loadCustomersByType(this.ticket.CustomerType, callback);
+  //   } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
+  //     this.loadCustomerOfBranch(this.ticket.BranchID, callback);
+  //   }
+  // }
+
   loadCustomers() {
     this.customers = [];
+    let cust;
     const callback = (res) => {
-      this.customers = res.Customer ? res.Customer : res;
+      cust = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
+
+      this.customers = cust;
+
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
-        const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
-        this.ticket.CustomerType = customer.CustomerTypeID;
-        this.ticket.Customer.ChainID = customer.ChainID;
+        const customer = this.customers.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
+        this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? customer.CustomerTypeID : this.ticket.Customer.CustomerType;
+        this.ticket.Customer.ChainID = (customer && customer.ChainID) ? customer.ChainID : 0;
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
     };
 
-    if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
+    if (+this.ticket.DistributorCopackerID > 1 && this.ticket.CustomerType) {
       this.loadCustomersByType(this.ticket.CustomerType, callback);
-    } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
+    } else if (!this.user.IsDistributor && +this.ticket.DistributorCopackerID < 1) {
       this.loadCustomerOfBranch(this.ticket.BranchID, callback);
     }
   }
