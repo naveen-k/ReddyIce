@@ -1,9 +1,11 @@
 import { User } from '../../user-management/user-management.interface';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/operator/map';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/distinctUntilChanged';
+
 
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
@@ -97,15 +99,15 @@ export class CreateTicketComponent implements OnInit {
   listFilter: any;
 
   file: any = {};
-
+ 
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
   // Customer input formatter
   inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
-  distributorsCache: any = [];
-  search = (text$: Observable<any>) => text$.debounceTime(200)
+  distributorsCache: any = [];  
+  search = (text$: Observable<any>) => { var self = this; return text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
-      return this.customers.filter((v: any) => {
+      return self.customers.filter((v: any) => {
         if (!v.CustomerTypeID || !v.Active) { return false; }
         let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
         if (flag) {
@@ -116,6 +118,7 @@ export class CreateTicketComponent implements OnInit {
         return flag;
       }).slice(0, 10);
     })
+  };
 
   date = { maxDate: {}, minDate: {} };
 

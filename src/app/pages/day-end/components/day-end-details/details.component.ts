@@ -252,13 +252,12 @@ export class DetailsComponent implements OnInit {
     }
 
     unitReconChange(item) {
-        let totalInv = ((+item.Load1Quantity || 0) + (+item.ReturnQuantity || 0) - (+item.DamageQuantity || 0));
+        let totalInv = ((+item.Load1Quantity || 0) + (+item.ReturnQuantity || 0) - (+item.TruckDamageQty || 0));
         //item.OverShort = (+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale + +item.GoodReturns) - (+item.Load1Quantity);
         //item.OverShort = +item.Sale - +item.SaleReturnQty + +item.ManualTicket - +totalInv + +item.GoodReturns + (+item.CustomerDamageDRV || 0);// -((+item.ReturnQuantity + +item.DamageQuantity + +item.CustomerDamageDRV + +item.ManualTicket + +item.Sale) - (+item.Load1Quantity + +item.GoodReturns + + item.SaleReturnQty));
-        item.OverShort = (+item.Sale || 0) - (+item.SaleReturnQty || 0) + (+item.ManualTicket || 0) - (+item.Load1Quantity || 0) + (+item.ReturnQuantity || 0) - (+item.DamageQuantity || 0) + (+item.GoodReturns || 0) + (+item.CustomerDamage || 0);
+        item.OverShort = (+item.Sale || 0)  + (+item.ManualTicket || 0) - ((+item.Load1Quantity || 0) + (+item.GoodReturns || 0) - (+item.TruckDamage || 0) + (+ item.SaleReturnQty || 0)) + (+item.CustomerDamageDRV || 0) + (+item.ReturnQuantity || 0);
         this.calculateTotalUnitReconcilation();
     }
-
     totalDeposit: any = 0;
     totalOverShort: any = 0;
     cashReconChange(ticketDetails) {
