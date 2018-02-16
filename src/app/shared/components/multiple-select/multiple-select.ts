@@ -70,7 +70,7 @@ export class SelectComponent implements AfterViewInit {
         this.elementRef.multipleSelect({
             filter: true,
             single: !this.multiple,
-            onClose: this.onClose.bind(this),
+            onClose: (this.multiple) ? this.onClose.bind(this) : void (0),
             position: this.position,
             selectAll: this.selectAll,
             allSelected: false,

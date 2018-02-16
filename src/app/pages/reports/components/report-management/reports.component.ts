@@ -244,7 +244,7 @@ export class ReportsComponent implements OnInit {
     getFesCustomers() {
         this.reportService.getlistofcustomerfes(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
            //  res.unshift({ 'CustomerID': 0, 'CustomerName': 'All Customers' });
-            this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerID', 'CustomerName');
+            this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerNumber', 'CustomerName');
             this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
             this.fesCustomerss = this.fesCustomers;
             this.overlayStatus = false;
