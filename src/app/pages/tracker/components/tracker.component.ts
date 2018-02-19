@@ -80,7 +80,7 @@ export class TrackerComponent implements OnInit {
     } else {
       this.user = this.userService.getUser();
 
-      if (this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
+      if (this.user.Role.RoleID === 3 || this.user.Role.RoleID === 2 && this.user.IsSeasonal) {
         this.user.IsRIInternal = true;
         this.user.IsDistributor = false;
       }
