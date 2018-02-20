@@ -86,6 +86,9 @@ export class TrackerComponent implements OnInit {
       }
       // get the user type: isDistributor or internal
       this.isDistributor = this.user.IsDistributor;
+      if ((this.user.Role.RoleID === 3 || this.user.Role.RoleID === 2) && this.user.IsSeasonal) {
+        this.searchObj.userType = 'External';
+      }
     }
     this.isDistributorExist = this.user.IsDistributor;
     this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
@@ -298,6 +301,7 @@ export class TrackerComponent implements OnInit {
     this.fetchTicketDetailsByTrip(tripId);
   }
 
+  isSeasonal: boolean = false;
   // Fetch selected Driver
   driverChangeHandler() {
     this.driverSpecTrips = [];
@@ -326,6 +330,14 @@ export class TrackerComponent implements OnInit {
             } else {
               this.routeNo = 'Unplanned';
             }
+          }
+          //
+
+          //
+          if (this.driverOndistributor[i].IsSeasonal) {
+            this.isSeasonal = true;
+          } else {
+            this.isSeasonal = false;
           }
           //
           this.driverSpecTrips.push(
@@ -859,11 +871,17 @@ export class TrackerComponent implements OnInit {
   distributorChangeHandler() {
     this.driverOndistributor = [];
     for (var i = 0; i < this.trips.length; i++) {
+      if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
+        this.routeNo = this.trips[i].RouteNumber;
+      } else {
+        this.routeNo = 'Unplanned';
+      }
       if (this.tripFilterOption.DistributorMasterID == this.trips[i].DistributorMasterID) {
         this.driverOndistributor.push({
           DriverName: this.trips[i].DriverName,
           TripCode: this.trips[i].TripCode,
-          TripID: this.trips[i].TripID
+          TripID: this.trips[i].TripID,
+          IsSeasonal: this.trips[i].IsSeasonal //
         });
       }
     }
