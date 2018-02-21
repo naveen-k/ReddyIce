@@ -98,7 +98,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             if (!this.user.RoleID) {
                 this.user.RoleID = '-1';
                 this.user.DistributorMasterID = -1;
-                document.forms['userForm'].reset();
             }
         }
         this.loadBranches();

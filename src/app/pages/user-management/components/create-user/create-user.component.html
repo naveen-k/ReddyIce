@@ -108,8 +108,7 @@
         Phone
       </label>
       <input type="text" numberOnly class="form-control" id="phone" placeholder="xxx-xxx-xxxx" [(ngModel)]="user.Phone" name="Phone"
-        #Phone="ngModel" maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal"
-        (ngModelChange)="changeHandler()">
+        #Phone="ngModel" maxlength="10" pattern="^\d{3}[- ]?\d{3}[- ]?\d{4}$" [disabled]="user.IsRIInternal" (ngModelChange)="changeHandler()">
       <div *ngIf="Phone.invalid && (Phone.dirty || Phone.touched)" class="error-message">
         <i class="ion-android-alert showError"></i>
         <div *ngIf="Phone.errors && Phone.errors.pattern" class="custom-tooltip bottom">
@@ -123,7 +122,7 @@
         Role
         <sup style="color:red;">*</sup>
       </label>
-      
+
       <reddy-select [position]="'bottom'" [options]="roleListArr" [(selected)]="user.RoleID" (selectedChange)="changeHandler();roleChange(user.RoleID);"></reddy-select>
 
       <!-- <select class="form-control" id="role" [(ngModel)]="user.RoleID" name="role" #role="ngModel" (ngModelChange)="changeHandler();roleChange(user.RoleID);">
@@ -149,51 +148,53 @@
     </div> -->
 
 
-    <div class="col-md-12 page-header rowContainer first-form-row">
-    <div class="col-md-6 page-header" style="float:left;padding-left: 0px;">
-      <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-      <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
-        [disabled]="isNewUser"></ba-checkbox>
-    </div>
-    <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="col-md-6 page-header pad-0"  style="float:left">
-      <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
-      <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
-        [disabled]="true"></ba-checkbox>
-    </div>
-    <div *ngIf="user.IsRIInternal && !isDistributorAdmin && user.RoleID == 3" class="col-md-6 page-header pad-0" style="float:left">
-      <ba-checkbox [(ngModel)]="user.IsChecker" (ngModelChange)="changeHandler()" [label]="'Is Checker?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
-    </div>
-    </div>
-    <div class="col-md-12 page-header" *ngIf="user.IsRIInternal || (user.IsSeasonal && (user.RoleID==='3' || user.RoleID==='2'))||(user.IsSeasonal && actionName=='edit')"
-      [hidden]="userObject.IsDistributor">
-      <label for="exampleSelect1">
-        Business Unit
-        <sup style="color:red;">*</sup>
-      </label>
-      <br/>
-      <reddy-select [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '8' || user.RoleID == '10'"
-        [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch" (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
-      <br/>
-      <div style="width:100%;margin-top: 10px;">
-        <!-- <span *ngIf="selectedBranch?.length && (user.RoleID == '6' || user.RoleID == '3')" style="width:90px; margin-bottom: 5px; float:right;">ISeries Route</span> -->
-        <ul style="padding-left: 15px;width:100%;max-height:250px;overflow:auto;">
-          <li *ngFor="let brannch of selectedBranch" style="margin:8px 0">
-            <span [title]="brannch.BranchCode - brannch.BUName">{{brannch.BranchCode}} - {{brannch.BUName | cutString:true:60}}</span>
-            <span style="float:right">
-              <!-- <input *ngIf="user.RoleID == '6' || user.RoleID == '3'" type="text" [ngModelOptions]="{standalone: true}" numberOnly [(ngModel)]="brannch.IseriesRouteNumber"
-                style="width:50px" (ngModelChange)="enableSave()"> -->
-              <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '8' || user.RoleID == '10')"
-                class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
-                <span class="tooltiptext">Remove</span>
-              </i>
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
+
   </div>
 </form>
-
+<div class="row page-header rowContainer first-form-row">
+<div class="col-md-12 page-header rowContainer first-form-row">
+  <div class="col-md-6 page-header" style="float:left;padding-left: 0px;">
+    <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+    <ba-checkbox [(ngModel)]="user.IsActive" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" (ngModelChange)="changeHandler()"
+      [disabled]="isNewUser"></ba-checkbox>
+  </div>
+  <div *ngIf="!user.IsRIInternal && !isDistributorAdmin" class="col-md-6 page-header pad-0" style="float:left">
+    <!-- Please provide the reason before commenting out, why we don't want to use ba-checkbox?-->
+    <ba-checkbox [ngModel]="user.IsSeasonal" (ngModelChange)="changeHandler()" [label]="'Is Seasonal?'" [ngModelOptions]="{standalone: true}"
+      [disabled]="true"></ba-checkbox>
+  </div>
+  <div *ngIf="user.IsRIInternal && !isDistributorAdmin && user.RoleID == 3" class="col-md-6 page-header pad-0" style="float:left">
+    <ba-checkbox [(ngModel)]="user.IsChecker" (ngModelChange)="changeHandler()" [label]="'Is Checker?'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+  </div>
+</div>
+<div class="col-md-12 page-header rowContainer first-form-row" *ngIf="user.IsRIInternal || (user.IsSeasonal && (user.RoleID==='3' || user.RoleID==='2'))||(user.IsSeasonal && actionName=='edit')"
+  [hidden]="userObject.IsDistributor">
+  <label for="exampleSelect1">
+    Business Unit
+    <sup style="color:red;">*</sup>
+  </label>
+  <br/>
+  <reddy-select [disabled]="user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '8' || user.RoleID == '10'"
+    [multiple]="true" [position]="'top'" [options]="cBranches" [(selected)]="userBranch" (selectedChange)="changeHandler(); loadBranches();pushBranches();"></reddy-select>
+  <br/>
+  <div style="width:100%;margin-top: 10px;">
+    <!-- <span *ngIf="selectedBranch?.length && (user.RoleID == '6' || user.RoleID == '3')" style="width:90px; margin-bottom: 5px; float:right;">ISeries Route</span> -->
+    <ul style="padding-left: 15px;width:100%;max-height:250px;overflow:auto;">
+      <li *ngFor="let brannch of selectedBranch" style="margin:8px 0">
+        <span [title]="brannch.BranchCode - brannch.BUName">{{brannch.BranchCode}} - {{brannch.BUName | cutString:true:60}}</span>
+        <span style="float:right">
+          <!-- <input *ngIf="user.RoleID == '6' || user.RoleID == '3'" type="text" [ngModelOptions]="{standalone: true}" numberOnly [(ngModel)]="brannch.IseriesRouteNumber"
+              style="width:50px" (ngModelChange)="enableSave()"> -->
+          <i *ngIf="!(user.RoleID == '1' || user.RoleID == '2' || user.RoleID == '4' || user.RoleID == '8' || user.RoleID == '10')"
+            class="ion-trash-a custom-tooltip-ion" (click)="removeBranch(brannch)">
+            <span class="tooltiptext">Remove</span>
+          </i>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
 
 <form *ngIf="actionName === 'view'">
   <div class="row page-header rowContainer first-form-row">

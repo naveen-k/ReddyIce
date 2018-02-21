@@ -67,6 +67,9 @@ export class UserManagementComponent implements OnInit {
       IsSeasonal: true,
       // IsRIInternal: false,
     };
+    if(this.action === 'create'){
+      document.forms['userForm'].reset();
+    }
   }
 
   formChangedHandler() {
