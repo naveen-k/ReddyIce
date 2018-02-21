@@ -216,10 +216,15 @@ export class ReportsComponent implements OnInit {
     }
     private populateRBranches(res){
         if (this.filter.reportType === 'MR') {
-            Array.isArray(res) && res.shift();
+            if(Array.isArray(res) && res[0].BranchCode == 1){
+                res.shift();
+            }
+           // Array.isArray(res) && res.shift();
             this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
         } else {
-            // res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
+            if(Array.isArray(res) && res[0].BranchCode != 1){
+                res.unshift({ 'BranchID': 1, 'BranchCode': '1', 'BUName': 'All Business Units' });
+            }
             this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
         }
         this.branchChangeHandler();
@@ -272,6 +277,7 @@ export class ReportsComponent implements OnInit {
             this.populateDistributor(this.cacheDistributor);
         } else{
             this.reportService.getDistributors().subscribe((res) => {
+                res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
                 this.cacheDistributor = res;
                 this.populateDistributor(res);
             }, (err) => { this.overlayStatus = false; });
@@ -279,7 +285,6 @@ export class ReportsComponent implements OnInit {
         
     }
     private populateDistributor(res){
-        res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
         this.distributors = this.reportService.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
         this.distributorChangeHandler();
         this.overlayStatus = false;
