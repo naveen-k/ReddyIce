@@ -19,6 +19,8 @@ export class ReportsComponent implements OnInit {
     onLoadFrame: boolean = false;
     viewButtonStatus: boolean = false;
     cacheBranches;
+    cacheRBranches;
+    cacheDistributor;
     selectedCustomerType: number = 0;
     isITAdmin: boolean = false;
     isInternalAdmin: boolean = false;
@@ -177,6 +179,10 @@ export class ReportsComponent implements OnInit {
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
+                if (this.user.Role.RoleID === 2) {
+                    this.yesFlag = true;
+                }
+                this.userTypeChangeHandler();
                 break;
             case 'TIR':
                 this.IsTIR = true;
@@ -189,28 +195,35 @@ export class ReportsComponent implements OnInit {
                 } else {
                     this.filter.userType = 'internal';
                 }
+                this.userTypeChangeHandler();
                 break;
         }
-        if (this.user.Role.RoleID === 2 && this.filter.reportType === 'DST') {
-            this.yesFlag = true;
-        }
-        this.userTypeChangeHandler();
+        
     }
 
     getAllBranches() {
         this.branches = [];
         this.stechs = [];
-        this.reportService.getBranches().subscribe((res) => {
-            if (this.filter.reportType === 'MR') {
-                Array.isArray(res) && res.shift();
-                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
-            } else {
-                // res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
-                this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
-            }
-            this.branchChangeHandler();
-            this.overlayStatus = false;
-        }, (err) => { this.overlayStatus = false; });
+        if(this.cacheRBranches && this.cacheRBranches.length && this.cacheRBranches.length>0){
+            this.populateRBranches(this.cacheRBranches);
+        } else {
+            this.reportService.getBranches().subscribe((res) => {
+                this.cacheRBranches = res;
+                this.populateRBranches(res);
+            }, (err) => { this.overlayStatus = false; });
+        }
+     
+    }
+    private populateRBranches(res){
+        if (this.filter.reportType === 'MR') {
+            Array.isArray(res) && res.shift();
+            this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
+        } else {
+            // res.unshift({ 'BranchID': 0, 'BranchCode': '', 'BUName': 'All Business Units' });
+            this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
+        }
+        this.branchChangeHandler();
+        this.overlayStatus = false;
     }
     private populateCustomerBranch() {
         if (this.filter.reportType === 'EOD') {
@@ -253,16 +266,24 @@ export class ReportsComponent implements OnInit {
             this.overlayStatus = false;
         });
     }
-
+    
     getDistributors() {
-        this.reportService.getDistributors().subscribe((res) => {
-            res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
-            this.distributors = this.reportService.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
-            this.distributorChangeHandler();
-            this.overlayStatus = false;
-        }, (err) => { this.overlayStatus = false; });
+        if(this.cacheDistributor && this.cacheDistributor.length && this.cacheDistributor.length>0){
+            this.populateDistributor(this.cacheDistributor);
+        } else{
+            this.reportService.getDistributors().subscribe((res) => {
+                this.cacheDistributor = res;
+                this.populateDistributor(res);
+            }, (err) => { this.overlayStatus = false; });
+        }
+        
     }
-
+    private populateDistributor(res){
+        res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
+        this.distributors = this.reportService.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
+        this.distributorChangeHandler();
+        this.overlayStatus = false;
+    }
     // WOC or EOD
     stechs: any[] = [];
     private fetchSTechByBranch() {
