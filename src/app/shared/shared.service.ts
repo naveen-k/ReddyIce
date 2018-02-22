@@ -10,10 +10,11 @@ export class SharedService {
     protected http: HttpService;
 
     private _branches: any;
+    private _distributorCopacker: any;
     constructor(http: HttpService) { }
 
     getBranches(userId): Observable<any> {
-        // if (this._branches) { return Observable.of(this._branches); }
+        //if (this._branches) { return Observable.of(this._branches); }
         return this.http.get(`api/DistributorBranches?Id=${userId}`).map((res) => res.json()).map((res) => {
             // Cache branch response
             this._branches = res;
@@ -42,7 +43,11 @@ export class SharedService {
     }
 
     getDistributerAndCopacker(): Observable<any> {
-        return this.http.get('api/Distributor').map((res) => res.json());
+        if(this._distributorCopacker){return Observable.of(this._distributorCopacker);}
+        return this.http.get('api/Distributor').map((res) => res.json()).map((res) => {
+            this._distributorCopacker = res;
+            return res;
+        });
     }
 
     getDistributors(userId, selectedDate) {

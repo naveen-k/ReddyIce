@@ -6,7 +6,7 @@ import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class ReportService extends SharedService {
-
+    private _distributor;
     constructor(
         protected http: HttpService,
         private userService: UserService,
@@ -14,11 +14,14 @@ export class ReportService extends SharedService {
         super(http);
     }
     getDistributors() {
-        return this.http.get(`api/Distributor`)
+        if(this._distributor){return Observable.of(this._distributor);}
+        return this.http.get(`api/report/Distributor`)
             .map((res) => res.json()).map((res) => {
+                this._distributor = res;
                 return res;
             });
     }
+    
     getBranches() {
         return this.http.get(`api/reportbranch`)
             .map((res) => res.json()).map((res) => {

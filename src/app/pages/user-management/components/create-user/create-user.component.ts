@@ -297,9 +297,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.riUserName = '';
         this.addedBranches = [];
         this.addedBranches.length = 0;
-        this.getDistributor();
         this.userObject = this.userService.getUser();
-
+        this.getDistributor();
         if (this.isNewUser) {
             this.user.RoleID = this.roles ? this.roles[0].RoleID : '';
             if (!this.isDistributorAdmin) {
@@ -500,7 +499,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     }
     filterDistributor(dist, role) {
         let uRole = this.userObject.Role.RoleID
-        if (!dist || !role) { return [] };
+        if (!dist || !role || role == '-1') { return [] };
         // if (uRole === 1 && +role === 2) {
         //     return dist.filter((user) => user.IsSeasonal);
         // } else 
@@ -558,14 +557,16 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.branchList = res;
             if (this.cBranches) { this.cBranches.length = 0; }
             let tempArr = []
-
-            res.forEach(branch => {
-                tempArr.push({
-                    value: branch.BranchID,
-                    label: `${branch.BranchCode} - ${branch.BUName}`,
-                    data: branch
+            if(res){
+                res.forEach(branch => {
+                    tempArr.push({
+                        value: branch.BranchID,
+                        label: `${branch.BranchCode} - ${branch.BUName}`,
+                        data: branch
+                    });
                 });
-            });
+            }
+          
 
             this.cBranches = tempArr;
             this.tBranches = tempArr;
