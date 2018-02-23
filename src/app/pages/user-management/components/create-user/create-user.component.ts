@@ -250,8 +250,11 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.addedBranches = this.selectedBranch;
     }
     validateUser(user) {
-        if (!user.IsRIInternal || !user.IsRIInternal === undefined) {
-            if (!user.DistributorMasterID) {
+        if (!user.RoleID || user.RoleID == '-1') {
+            this.notification.error('User Role is mandatory!!!');
+            return false;
+        } else if (!user.IsRIInternal || !user.IsRIInternal === undefined) {
+            if (!user.DistributorMasterID || user.DistributorMasterID == -1) {
                 this.notification.error('Distributor is mandatory!!!');
                 return false;
             } else if (user.IsSeasonal && (!this.userBranch || this.userBranch.length === 0)) {
@@ -557,7 +560,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.branchList = res;
             if (this.cBranches) { this.cBranches.length = 0; }
             let tempArr = []
-            if(res){
+            if (res) {
                 res.forEach(branch => {
                     tempArr.push({
                         value: branch.BranchID,
@@ -566,7 +569,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
                     });
                 });
             }
-          
+
 
             this.cBranches = tempArr;
             this.tBranches = tempArr;
