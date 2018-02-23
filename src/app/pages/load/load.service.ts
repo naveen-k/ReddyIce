@@ -4,6 +4,7 @@ import { UserService } from '../../shared/user.service';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
+import { CacheService } from 'app/shared/cache.service';
 // import { User } from '../user-management.interface';
 
 @Injectable()
@@ -21,8 +22,9 @@ export class LoadService extends SharedService {
     constructor(
         protected http: HttpService,
         private userService: UserService,
+        protected cache: CacheService
     ) {
-        super(http);
+        super(http, cache);
     }
     getLoads(LoadDate,BranchId,userId,isForAll) {
        

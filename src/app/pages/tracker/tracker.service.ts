@@ -5,12 +5,13 @@ import { SharedService } from '../../shared/shared.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { CacheService } from 'app/shared/cache.service';
 
 @Injectable()
 export class TrackerService extends SharedService {
 
-  constructor(protected http: HttpService) {
-    super(http);
+  constructor(protected http: HttpService, protected cache: CacheService) {
+    super(http, cache);
   }
 
   getTrips(TripDate, open) {

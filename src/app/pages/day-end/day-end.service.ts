@@ -4,6 +4,7 @@ import { UserService } from '../../shared/user.service';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
+import { CacheService } from 'app/shared/cache.service';
 // import { User } from '../user-management.interface';
 
 @Injectable()
@@ -17,8 +18,9 @@ export class DayEndService extends SharedService {
     constructor(
         protected http: HttpService,
         private userService: UserService,
+        protected cache: CacheService
     ) {
-        super(http);
+        super(http, cache);
     }
     getTrips(TripDate) {
         return this.http.get(`api/trip/all?TripDate=${TripDate}`)

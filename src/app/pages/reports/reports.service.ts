@@ -4,14 +4,16 @@ import { UserService } from '../../shared/user.service';
 import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
+import { CacheService } from 'app/shared/cache.service';
 @Injectable()
 export class ReportService extends SharedService {
     private _distributor;
     constructor(
         protected http: HttpService,
         private userService: UserService,
+        protected cache: CacheService
     ) {
-        super(http);
+        super(http, cache);
     }
     getDistributors() {
         if(this._distributor){return Observable.of(this._distributor);}

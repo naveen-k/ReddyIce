@@ -93,7 +93,7 @@ export class TicketListComponent implements OnInit {
 
 
         // load all branches
-        let branches = this.activatedRoute.snapshot.data['branches'];
+        let branches = JSON.parse(JSON.stringify(this.activatedRoute.snapshot.data['branches']));
         // Remove 'All branch' object
         if (branches && branches.length && this.user.Role.RoleID === 3) {
             if ((branches.length > 0) && (branches[0] === null || branches[0].BranchID === 1)) {

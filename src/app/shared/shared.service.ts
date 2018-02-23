@@ -3,21 +3,18 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { HttpService } from './http.service';
 import { Injectable } from '@angular/core';
-
+import { CacheService } from './cache.service';
 
 @Injectable()
 export class SharedService {
     protected http: HttpService;
 
-    private _branches: any;
-    private _distributorCopacker: any;
-    constructor(http: HttpService) { }
+    constructor(http: HttpService, private cacheService: CacheService) { }
 
     getBranches(userId): Observable<any> {
-        //if (this._branches) { return Observable.of(this._branches); }
+        if (this.cacheService.has("branches")) { return this.cacheService.get("branches"); }
         return this.http.get(`api/DistributorBranches?Id=${userId}`).map((res) => res.json()).map((res) => {
-            // Cache branch response
-            this._branches = res;
+            this.cacheService.set("branches", res);
             return res;
         });
     }
@@ -34,18 +31,10 @@ export class SharedService {
         return this.http.put(`api/manualticket/updateImage?ImageID=${file.ImageID}`, file).map(res => res.json());
     }
 
-    getDistributorsByBranch(branchId: string): Observable<any[]> {
-        let url = `api/DistributorBranches`;
-        if (branchId) {
-            url = `api/DistributorBranches?BranchId=${branchId}`;
-        }
-        return this.http.get(url).map((res) => res.json());
-    }
-
     getDistributerAndCopacker(): Observable<any> {
-        if(this._distributorCopacker){return Observable.of(this._distributorCopacker);}
+        if (this.cacheService.has("distributorcopacker")) { return this.cacheService.get("distributorcopacker"); }
         return this.http.get('api/Distributor').map((res) => res.json()).map((res) => {
-            this._distributorCopacker = res;
+            this.cacheService.set("distributorcopacker",res);
             return res;
         });
     }
@@ -109,9 +98,9 @@ export class SharedService {
                 return 'PBM - Cons';
             }
         } else if (EDIUserName) {
-            if(ticketTypeId === 26){
+            if (ticketTypeId === 26) {
                 return 'PBS - Sale';
-            } else{
+            } else {
                 return 'PBS - Credit';
             }
         } else {

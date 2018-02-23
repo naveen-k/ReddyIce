@@ -45,7 +45,7 @@ export class LoadComponent implements OnInit {
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
         this.filter.tripCode = 0;
-        this.branches = this.activatedRoute.snapshot.data['branches'];
+        this.branches = JSON.parse(JSON.stringify(this.activatedRoute.snapshot.data['branches']));
         if (this.branches && this.branches.length) {
             if ((this.branches.length > 0) && (this.branches[0] === null || this.branches[0].BranchID === 1)) {
                 this.branches.shift();

@@ -7,14 +7,16 @@ import { SharedService } from '../../shared/shared.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { CacheService } from 'app/shared/cache.service';
 
 @Injectable()
 export class ManualTicketService extends SharedService {
   result: any;
   _searchObject: any = {};
 
-  constructor(protected http: HttpService, private tmpHttp: Http) {
-    super(http);
+  constructor(protected http: HttpService, private tmpHttp: Http, 
+    protected cache:CacheService) {
+    super(http, cache);
   }
 
   getAllTickets(createdDate, branchId): Observable<any[]> {
