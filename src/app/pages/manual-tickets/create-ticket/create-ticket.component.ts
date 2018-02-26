@@ -113,7 +113,7 @@ export class CreateTicketComponent implements OnInit {
         if (flag) {
           term = term.trim();
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || v.AXCustomerNumber.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+            || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
         }
         return flag;
       }).slice(0, 10);
