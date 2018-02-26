@@ -1049,7 +1049,6 @@ export class CreateTicketComponent implements OnInit {
     if (ticketDetail.Rate) {
       prodDetail = { Price: ticketDetail.Rate,IsTaxable:prodDetail['IsTaxable'] };
     }
-    debugger;
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
@@ -1080,7 +1079,6 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.TicketProduct.forEach((t) => {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       // this.ticket.TotalSale += +t['totalAmount'] || 0;
-      debugger;
       this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
       this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", ((t.productSelected.IsTaxable)?(+t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100):0));
       //this.tempModels.totalTax = t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100;
