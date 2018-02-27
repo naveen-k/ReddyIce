@@ -183,7 +183,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.user.IsDistributor || (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID > 0)) {
       // this.loadCustomers();
       this.loadDisributors();
-      if (!this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID < 1) {
+      if (this.ticket.DistributorCopackerID < 1) {
         // Set distributor 
         this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
       }
