@@ -73,7 +73,6 @@ export class TrackerComponent implements OnInit {
 
   ngOnInit() {
     const userId = localStorage.getItem('userId') || '';
-
     if (this.router.url === '/opentracker') {
       this.user = {} as User;
       this.isDistributor = false;
@@ -112,7 +111,7 @@ export class TrackerComponent implements OnInit {
     }
 
     this.typeChangeHandler();
-    this.loadTrips();
+    //this.loadTrips();
   }
 
   sortBranches(branches) {
@@ -154,7 +153,7 @@ export class TrackerComponent implements OnInit {
         this.showSpinner = false;
         this.allBranches = [];
         var distributorArr = [];
-        if (this.trips[0]) {
+        if (this.trips && this.trips.length && this.trips.length>0) {
           if (this.searchObj.userType == 'Internal') {
             let tmpObj = {};
             for (var i = 0; i < this.trips.length; i++) {
@@ -201,6 +200,16 @@ export class TrackerComponent implements OnInit {
             if (this.user.IsDistributor) {
               this.distributorChangeHandler();
             }
+          }
+        } else{
+        if (this.isDistributor) {
+            distributorArr.push(
+              {
+                DistributorName: this.user.Distributor.DistributorName,
+                DistributorMasterID: this.user.Distributor.DistributorMasterId,
+              });
+              this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
+              this.tripFilterOption.DistributorMasterID = this.distributors[0].value;
           }
         }
       } else {
