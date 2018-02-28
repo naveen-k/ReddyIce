@@ -263,14 +263,14 @@
                                     </thead>
                                     <tbody *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
                                         <tr *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
-                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
+                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && ((customer?.productdetail && tdetail.ProductID == -1) || customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
                                                 </select>
                                             </td>
-                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
+                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && !((customer?.productdetail && tdetail.ProductID == -1) || customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
                                                 <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
@@ -282,7 +282,7 @@
                                             <td class="textAlignRight">{{tdetail.productSelected?.Price | truncateZero}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">

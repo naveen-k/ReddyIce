@@ -536,7 +536,7 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
       activeModal.componentInstance.closeModalHandler = (() => {
-        this.ticket.TicketProduct[index] = {};
+        this.ticket.TicketProduct[index] = {ProductID: -1};
       });
       return;
     }
