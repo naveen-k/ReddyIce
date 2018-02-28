@@ -786,7 +786,6 @@ export class CreateTicketComponent implements OnInit {
   loadTicket(ticketId) {
     this.service.getTicketById(ticketId).subscribe(response => {
       this.ticket = response[0];
-
       this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
       this.ticket.CustomerID = this.ticket.Customer.CustomerID;
       this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
@@ -1052,6 +1051,7 @@ export class CreateTicketComponent implements OnInit {
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
+    ticketDetail.Quantity = (!prodDetail['IsTaxable'])?1:ticketDetail.Quantity;
   }
 
 

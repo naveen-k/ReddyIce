@@ -282,7 +282,7 @@
                                             <td class="textAlignRight">{{tdetail.productSelected?.Price | truncateZero}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="!tdetail.productSelected?.IsTaxable || isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
@@ -370,7 +370,7 @@
                                             </td>
                                             <td *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==27">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="!tdetail.productSelected?.IsTaxable || isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
@@ -516,7 +516,7 @@
                                             </td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="!tdetail.productSelected?.IsTaxable || isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
