@@ -1051,7 +1051,7 @@ export class CreateTicketComponent implements OnInit {
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
-    ticketDetail.Quantity = (!prodDetail['IsTaxable'])?1:ticketDetail.Quantity;
+    ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
   }
 
 
