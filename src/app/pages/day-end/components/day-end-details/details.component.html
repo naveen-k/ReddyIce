@@ -7,7 +7,7 @@
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" 
                 [disabled]="!tripData.UnitApprovedBy"
-                *ngIf='tripData.IsClosed && (((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || logedInUser.Role.RoleID == 2 || logedInUser.Role.RoleID == 1 ||logedInUser.Role.RoleID == 6)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24))'
+                *ngIf='tripData.IsClosed && (((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || (logedInUser.Role.RoleID == 2 && ((logedInUser.IsDistributor && !logedInUser.IsSeasonal) || logedInUser.IsRIInternal)) || logedInUser.Role.RoleID == 1 ||logedInUser.Role.RoleID == 6)&& (tripData.TripStatusID == 23 || tripData.TripStatusID == 24))'
                     (click)="approveTrip(25);">Approve</button>
                <!-- <button class="btn btn-danger pull-right" [hidden]='userRoleId==3 || tripData.TripStatusID == 25' (click)="saveReconciliation(24)">Submit</button>-->
                <!-- Save button is not needed anymore, as trip will submit from HH-->
@@ -222,7 +222,7 @@
                             <div class="col-sm-6">
                                 <button class="btn btn-danger pull-right"
                                 [disabled]="tripData.TripStatusID == 23" 
-                                [hidden]="(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy" 
+                                [hidden]="(userRoleId==3 && !logedInUser.IsChecker) || tripData.UnitApprovedBy || (userRoleId==2 && logedInUser.IsDistributor && logedInUser.IsSeasonal)" 
                                 (click)="handlerUnitReconSubmit()">Submit</button>
                             </div>
 
