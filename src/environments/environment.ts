@@ -15,7 +15,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://frozen.reddyice.com/axchangeapi/',
+  apiEndpoint: 'http://frozen.reddyice.com/reddyiceapimock/',
   reportEndpoint: 'http://frozen.reddyice.com/DashboardReportsPhase3/Reports/ReportData.aspx',
   prodLabel: '(AX)',
   EDIUserName : 'MyiceboxEDI'
