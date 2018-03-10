@@ -198,13 +198,13 @@ export class ReportsComponent implements OnInit {
                 this.userTypeChangeHandler();
                 break;
         }
-        
+
     }
 
     getAllBranches() {
         this.branches = [];
         this.stechs = [];
-        if(this.cacheRBranches && this.cacheRBranches.length && this.cacheRBranches.length>0){
+        if (this.cacheRBranches && this.cacheRBranches.length && this.cacheRBranches.length > 0) {
             this.populateRBranches(this.cacheRBranches);
         } else {
             this.reportService.getBranches().subscribe((res) => {
@@ -212,17 +212,17 @@ export class ReportsComponent implements OnInit {
                 this.populateRBranches(res);
             }, (err) => { this.overlayStatus = false; });
         }
-     
+
     }
-    private populateRBranches(res){
+    private populateRBranches(res) {
         if (this.filter.reportType === 'MR') {
-            if(Array.isArray(res) && res[0].BranchCode == 1){
+            if (Array.isArray(res) && res[0].BranchCode == 1) {
                 res.shift();
             }
-           // Array.isArray(res) && res.shift();
+            // Array.isArray(res) && res.shift();
             this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
         } else {
-            if(Array.isArray(res) && res[0].BranchCode != 1){
+            if (Array.isArray(res) && res[0].BranchCode != 1) {
                 res.unshift({ 'BranchID': 1, 'BranchCode': '1', 'BUName': 'All Business Units' });
             }
             this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
@@ -261,7 +261,7 @@ export class ReportsComponent implements OnInit {
 
     getFesCustomers() {
         this.reportService.getlistofcustomerfes(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
-           //  res.unshift({ 'CustomerID': 0, 'CustomerName': 'All Customers' });
+            //  res.unshift({ 'CustomerID': 0, 'CustomerName': 'All Customers' });
             this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerNumber', 'CustomerName');
             this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
             this.fesCustomerss = this.fesCustomers;
@@ -271,20 +271,23 @@ export class ReportsComponent implements OnInit {
             this.overlayStatus = false;
         });
     }
-    
+
     getDistributors() {
-        if(this.cacheDistributor && this.cacheDistributor.length && this.cacheDistributor.length>0){
+        if (this.cacheDistributor && this.cacheDistributor.length && this.cacheDistributor.length > 0) {
             this.populateDistributor(this.cacheDistributor);
-        } else{
+        } else {
             this.reportService.getDistributors().subscribe((res) => {
-                res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
+                if (Array.isArray(res) && res[0].DistributorCopackerID != 0) {
+                    res.unshift({ DistributorCopackerID: 0, Name: 'All Distributors' });
+                }
                 this.cacheDistributor = res;
                 this.populateDistributor(res);
+
             }, (err) => { this.overlayStatus = false; });
         }
-        
+
     }
-    private populateDistributor(res){
+    private populateDistributor(res) {
         this.distributors = this.reportService.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
         this.distributorChangeHandler();
         this.overlayStatus = false;
@@ -466,12 +469,12 @@ export class ReportsComponent implements OnInit {
                         this.viewReport = true;
                     } else {
                         this.viewReport = false;
-                        this.onLoadFrame =false;
+                        this.onLoadFrame = false;
                         this.notification.error('Ticket Number Not Found!!');
                     }
                     this.filter.showCustomerDropdown = false;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl(environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-                    
+
                 }
                 console.log('from method: ', this.linkRpt);
                 ////
@@ -488,7 +491,7 @@ export class ReportsComponent implements OnInit {
     getWorkOrderIdByTicketNumber(workOrderNumber) {
         if (workOrderNumber) {
             this.reportService.checkworkorderexistence(workOrderNumber).subscribe((res) => {
-                
+
                 if (res != 0) {
                     this.filter.workOrderId = res;
                     this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -500,7 +503,7 @@ export class ReportsComponent implements OnInit {
                     this.viewReport = true;
                     //this.viewButtonStatus = false;
                 } else {
-                    this.onLoadFrame =false;
+                    this.onLoadFrame = false;
                     this.notification.error("Work Order Number Does Not Exist.");
                     this.overlayStatus = false;
                     this.viewReport = true;
@@ -508,7 +511,7 @@ export class ReportsComponent implements OnInit {
                 }
             }, (err) => {
                 this.notification.error("Something went wrong.");
-                this.onLoadFrame =false;
+                this.onLoadFrame = false;
                 this.overlayStatus = false;
                 this.viewReport = true;
                 this.viewButtonStatus = false;
@@ -522,10 +525,10 @@ export class ReportsComponent implements OnInit {
         this.isTIRCustomers = false;
         // Add 2 times because of some times on IE browsers URL not loaded on iframe. 
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-        (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+            (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
         this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-        (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
-        
+            (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&ticketID=${this.filter.ticketID}`)
+
     }
     updateLink(rType) {
         this.viewButtonStatus = true;
@@ -689,7 +692,7 @@ export class ReportsComponent implements OnInit {
             return false;
         });
     }
-    
+
     selectedCustomerChange(id) {
         if (id == undefined || id == '' || id == "0") {
             this.filter.custtID = 0;
