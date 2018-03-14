@@ -323,11 +323,7 @@ export class ReportsComponent implements OnInit {
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
 
-        this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
-            res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
-            this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-            this.overlayStatus = false;
-        }, (err) => { this.overlayStatus = false; });
+        
         this.filter.custID = 0;
         if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
@@ -340,6 +336,18 @@ export class ReportsComponent implements OnInit {
         }
         if (this.filter.reportType == 'SSR') {
             this.getRoutesForRange();
+        }
+
+        // restricting unnecessary call for WONS, DST, MR, TIR reports
+        if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
+            this.filter.reportType != 'WONS' && this.filter.reportType != 'MR') {
+            this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
+                res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
+                this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
+                this.overlayStatus = false;
+            }, (err) => { this.overlayStatus = false; });
+        } else {
+            this.overlayStatus = false;
         }
         // this.getCustomers();
     }
@@ -644,7 +652,9 @@ export class ReportsComponent implements OnInit {
             this.viewReport = false;
             this.modifiedStartDate = this.modifyDate(this.filter.startDate);
             this.modifiedEndDate = this.modifyDate(this.filter.endDate);
-            this.reportService
+            if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
+                this.filter.reportType != 'WONS' && this.filter.reportType != 'MR') {
+                this.reportService
                 .getCustomerDropDownList(this.filter.branch, this.user.UserId, this.modifiedStartDate, this.modifiedEndDate, this.filter.distributor)
                 .subscribe((res) => {
                     //this.dropDownCustomers=res;
@@ -660,10 +670,8 @@ export class ReportsComponent implements OnInit {
                     this.dropDownCustomers = tempArr;
                     this.filterCustomers();
                 }, (err) => { })
+            }
         }
-
-
-
     }
 
     filterCustomers() {
