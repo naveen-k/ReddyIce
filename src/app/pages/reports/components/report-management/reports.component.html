@@ -33,7 +33,8 @@
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
         ||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || IsTIR || filter.reportType == 'WOC'
-        || filter.reportType == 'EOD' || filter.reportType == 'WONS' || filter.reportType == 'SSR'">
+        || filter.reportType == 'EOD' || filter.reportType == 'WONS' || filter.reportType == 'SSR' || filter.reportType == 'AT'
+        || filter.reportType === 'SP' || filter.reportType === 'AER'">
             <div class="row">
                 <div class="col-sm-12">
                     <label>User Type</label>
@@ -85,12 +86,14 @@
         </div> -->
         <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS' || filter.reportType == 'WOC'
-        || filter.reportType == 'EOD'||filter.reportType==='SSR'">
+        || filter.reportType == 'EOD'||filter.reportType==='SSR' || filter.reportType == 'AT' || filter.reportType == 'SP'
+        || filter.reportType == 'AER'">
             <div class="row">
                 <ng-container>
                     <div class="col-sm-12" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
                         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS' || filter.reportType == 'WOC'
-                        || filter.reportType == 'EOD'|| filter.reportType == 'SSR'">
+                        || filter.reportType == 'EOD'|| filter.reportType == 'SSR' || filter.reportType == 'AT' || filter.reportType == 'SP'
+                        || filter.reportType == 'AER'">
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">
                                 <label>Customer</label>
@@ -106,7 +109,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="col-sm-2" *ngIf="filter.reportType == 'WOC'">
+        <div class="col-sm-2" *ngIf="filter.reportType == 'WOC' || filter.reportType == 'AT' || filter.reportType == 'AER'">
             <div class="row">
                 <ng-container>
                     <div class="col-sm-12">
@@ -126,13 +129,16 @@
             </div>
         </div>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'internal'">
-            <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'EOD'">
+            <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'AT' 
+            || filter.reportType == 'EOD' || filter.reportType == 'SP' || filter.reportType == 'AER'">
                 <label>Driver</label>
                 <reddy-select [disabled]="isDriver" [options]="drivers" [(selected)]="filter.driver" (selectedChange)="driverChange()"></reddy-select>
             </div>
-            <div class="col-sm-2" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'EOD'">
+            <div class="col-sm-2" *ngIf="filter.reportType === 'WOC' || filter.reportType == 'EOD' || filter.reportType == 'AT' 
+            || filter.reportType === 'WOC' || filter.reportType == 'SP' || filter.reportType == 'AER'">
                 <label>Service Technician</label>
-                <sup style="color:red;" *ngIf="filter.reportType == 'EOD' || filter.reportType == 'WOC'">*</sup>
+                <sup style="color:red;" *ngIf="filter.reportType == 'EOD' || filter.reportType == 'WOC' || filter.reportType == 'AT'
+                || filter.reportType == 'SP' || filter.reportType == 'AER'">*</sup>
                 <reddy-select [options]="stechs" [(selected)]="filter.stech" (selectedChange)="driverChange()"></reddy-select>
             </div>
         </ng-container>
@@ -180,7 +186,10 @@
                             <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
                             <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
                             <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
-                            <option value="RM" *ngIf="isExternalAdmin">QuickBooks Extract</option>
+                            <option value="RM" *ngIf="isExternalAdmin">QuickBooks Extract</option> 
+                            <option value="AT" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Tracking</option>
+                            <option value="SP" *ngIf="isITAdmin||isInternalAdmin||isSTech">STech Productivity</option>
+                            <option value="AER" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Exception Report</option>
                         </select>
                   
                 </div>
