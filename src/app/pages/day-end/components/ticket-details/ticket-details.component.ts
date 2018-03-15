@@ -65,13 +65,13 @@ export class TicketDetailsComponent implements OnInit {
                
                 ticket.Customer = { CustomerName: ticket.CustomerName, CustomerID: ticket.CustomerID, CustomerType: ticket.CustomerType };
                 ticket.ticketType = this.service.getTicketType(ticket.IsSaleTicket, ticket.Customer, ticket.TicketTypeID, ticket.CustomerTypeID);
-                ticket.amount = ticket.TotalSale + ticket.TaxAmount;
-                ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:ticket.CheckAmount + ticket.CashAmount;
+                ticket.amount = +ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount);
+                ticket.checkCashAmount = (ticket.TicketTypeID === 30)?0:(+ticket.CheckAmount.fpArithmetic("+", +ticket.CashAmount));
                 if (ticket.TicketTypeID === 30) { return; }
                 /**
                  * penny issue change
                  */
-                this.total.totalInvoice = +this.total.totalInvoice.fpArithmetic("+", (ticket.TicketTypeID !== 27 ? (+ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount)) : (ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount)) || 0));                
+                this.total.totalInvoice = +this.total.totalInvoice.fpArithmetic("+", (ticket.TicketTypeID !== 27 ? (+ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount)) : (+ticket.TotalSale.fpArithmetic("+", +ticket.TaxAmount)) || 0));                
                 //this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
                 // this.total.totalInvoice += ticket.TicketTypeID !== 27 ? (ticket.TotalSale + ticket.TaxAmount) : (ticket.TotalSale + ticket.TaxAmount) || 0;
                 // this.total.totalCash += ticket.CashAmount || 0;
@@ -80,12 +80,12 @@ export class TicketDetailsComponent implements OnInit {
                 // this.total.totalDrayage += ticket.Drayage || 0;
                 // this.total.totalBuyBack += ticket.BuyBack || 0;
                 // this.total.totalDistAmt += ticket.DistAmt || 0;                
-                this.total.totalCash = this.total.totalCash.fpArithmetic("+",(ticket.CashAmount || 0));
-                this.total.totalCheck = this.total.totalCheck.fpArithmetic("+",(ticket.CheckAmount || 0));
-                this.total.totalCharge = this.total.totalCharge.fpArithmetic("+",(ticket.ChargeAmount || 0));
-                this.total.totalDrayage = this.total.totalDrayage.fpArithmetic("+",(ticket.Drayage || 0));
-                this.total.totalBuyBack = this.total.totalBuyBack.fpArithmetic("+",(ticket.BuyBack || 0));
-                this.total.totalDistAmt = this.total.totalDistAmt.fpArithmetic("+",(ticket.DistAmt || 0));
+                this.total.totalCash = +this.total.totalCash.fpArithmetic("+",(+ticket.CashAmount || 0));
+                this.total.totalCheck = +this.total.totalCheck.fpArithmetic("+",(+ticket.CheckAmount || 0));
+                this.total.totalCharge = +this.total.totalCharge.fpArithmetic("+",(+ticket.ChargeAmount || 0));
+                this.total.totalDrayage = +this.total.totalDrayage.fpArithmetic("+",(+ticket.Drayage || 0));
+                this.total.totalBuyBack = +this.total.totalBuyBack.fpArithmetic("+",(+ticket.BuyBack || 0));
+                this.total.totalDistAmt = +this.total.totalDistAmt.fpArithmetic("+",(+ticket.DistAmt || 0));
             });
             this.printStatus = true;
         }, (err) => {

@@ -113,7 +113,7 @@ export class CreateTicketComponent implements OnInit {
         if (flag) {
           term = term.trim();
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || v.AXCustomerNumber.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+            || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
         }
         return flag;
       }).slice(0, 10);
@@ -183,7 +183,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.user.IsDistributor || (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID > 0)) {
       // this.loadCustomers();
       this.loadDisributors();
-      if (!this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID < 1) {
+      if (this.ticket.DistributorCopackerID < 1) {
         // Set distributor 
         this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
       }
@@ -536,7 +536,7 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
       activeModal.componentInstance.closeModalHandler = (() => {
-        this.ticket.TicketProduct[index] = {};
+        this.ticket.TicketProduct[index] = {ProductID: -1};
       });
       return;
     }
@@ -786,7 +786,6 @@ export class CreateTicketComponent implements OnInit {
   loadTicket(ticketId) {
     this.service.getTicketById(ticketId).subscribe(response => {
       this.ticket = response[0];
-
       this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
       this.ticket.CustomerID = this.ticket.Customer.CustomerID;
       this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
@@ -1052,6 +1051,7 @@ export class CreateTicketComponent implements OnInit {
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
+    ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
   }
 
 
