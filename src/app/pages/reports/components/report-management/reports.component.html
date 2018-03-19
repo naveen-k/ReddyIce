@@ -128,6 +128,22 @@
                 </ng-container>
             </div>
         </div>
+        <div class="col-sm-2" *ngIf="filter.reportType === 'AT'">
+            <div class="row">
+                <ng-container *ngIf="filter.reportType === 'AT'">
+                    <div class="col-sm-12">
+                        <label>Assets</label>
+                        <!-- <div class="input-group">
+                                <input type="text" numberOnly class="form-control" [(ngModel)]="filter.RouteNumber">
+                            </div> -->
+                        <!-- <select class="form-control" [(ngModel)]='filter.RouteNumber'>
+                            <option *ngFor="let route of routes">{{route}}</option>
+                        </select> -->
+                        <reddy-select [options]="assets" [(selected)]="filter.AssetID"></reddy-select>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'internal'">
             <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'WOC' || filter.reportType == 'AT' 
             || filter.reportType == 'EOD' || filter.reportType == 'SP' || filter.reportType == 'AER'">

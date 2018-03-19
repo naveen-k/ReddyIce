@@ -49,6 +49,13 @@ export class ReportService extends SharedService {
             return res;
         });
     }
+    getAssets(branchId,startDate,endDate) {
+        //http://frozen.reddyice.com/FESEnhancement/api/report/getassetlist?BranchID={BranchID}&StartDate={StartDate}&EndDate={EndDate}&ReportType={ReportType
+        return this.http.get(`api/report/getassetlist?BranchID=${branchId}&StartDate=${startDate}&EndDate=${endDate}&ReportType=null`)
+        .map((res) => res.json()).map((res) => {
+            return res;
+        });
+    }
     getlistofcustomerfes(branchId,startDate,endDate) {
         return this.http.get(`api/report/getlistofcustomerfes?BranchId=${branchId}&TripStartDate=${startDate}&TripEndDate=${endDate}`)
         .map((res) => res.json()).map((res) => {

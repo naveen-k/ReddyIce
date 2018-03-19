@@ -294,6 +294,7 @@ export class ReportsComponent implements OnInit {
     }
     // WOC or EOD
     stechs: any[] = [];
+    assets: any[] = [];
     private fetchSTechByBranch() {
         // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
         if (this.filter.reportType == 'WOC' || this.filter.reportType == 'AT'
@@ -307,6 +308,21 @@ export class ReportsComponent implements OnInit {
                 console.log("Something went wrong while fetching STech");
                 this.overlayStatus = false;
             });
+            // get asset list
+            if (this.filter.reportType == 'AT') {
+                this.reportService.getAssets(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
+                    //res.unshift({ UserId: 1, STechName: 'All STech' });
+                    //this.assets = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+                    
+                    this.assets = res;
+                    this.assets = this.reportService.transformOptionsReddySelect((res.AssetList) ? res.AssetList : res, 'AssetID', 'AssetName');
+                    this.overlayStatus = false;
+                }, (err) => {
+                    console.log("Something went wrong while fetching assets");
+                    this.overlayStatus = false;
+                });
+            }
+            //
         } else if (this.filter.reportType == 'EOD') {
             this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
@@ -616,7 +632,7 @@ export class ReportsComponent implements OnInit {
                 console.log('when SSR is clicked', this.linkRpt);
             } else if (rType === 'AT') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.fesCustID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=0&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.fesCustID}&assetID=${this.filter.AssetID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=0&LoggedInUserID=${this.user.UserId}`);
                 console.log('when AT is clicked', this.linkRpt);
             } else if (rType === 'SP') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -654,7 +670,6 @@ export class ReportsComponent implements OnInit {
     }
     getCustomers() {
         //this.branchChangeHandler(this.filter.branch)
-        debugger;
         if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'EOD') || this.filter.reportType == 'AT') {
             this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
