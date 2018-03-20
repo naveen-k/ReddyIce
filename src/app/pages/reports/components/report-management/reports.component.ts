@@ -42,6 +42,7 @@ export class ReportsComponent implements OnInit {
         stech: 0,
         custID: 0,
         fesCustID: 0,
+        AssetID: 0,
         custtID: 0,
         custType: 0,
         ticketNumber: null,
@@ -313,7 +314,7 @@ export class ReportsComponent implements OnInit {
                 this.reportService.getAssets(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
                     //res.unshift({ UserId: 1, STechName: 'All STech' });
                     //this.assets = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
-                    
+                    res.AssetList.unshift({ AssetID: 0, AssetName: 'All Assets' });
                     this.assets = res;
                     this.assets = this.reportService.transformOptionsReddySelect((res.AssetList) ? res.AssetList : res, 'AssetID', 'AssetName');
                     this.overlayStatus = false;
