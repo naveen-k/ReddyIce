@@ -247,7 +247,10 @@ export class TrackerComponent implements OnInit {
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
       this.tripStartDate = res.Trips[0].TripStartDate
       if (this.selectedTrip) {
-        this.selectedTrip.sort(this.comparator); // sorting planned sequence
+        // console.log('this.searchObj.userType',this.searchObj.userType);
+        if (this.searchObj.userType != 'External') {
+          this.selectedTrip.sort(this.comparator); // sorting planned sequence
+        }
       }
       this.sequenceChangeHandler();
     })
