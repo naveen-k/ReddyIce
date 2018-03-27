@@ -62,15 +62,15 @@ export class ReportsComponent implements OnInit {
     };
 
     // Customer input formatter
-  inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
+  inputFormatter = (res => (res.AXCustomerNumber.trim()!='')?`${res.AXCustomerNumber} - ${res.CustomerName}`:`${res.CustomerName}`);
   search = (text$: Observable<any>) => { var self = this; return text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
       return self.dropDownCustomers.filter((v: any) => {
         let flag
           term = term.trim();
-          flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+          flag = (v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
+            || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1) && (this.filter.custType == v.CustomerSourceID || +this.filter.custType==0);
             if(!flag){
                 this.filter.custID = 0;
                 this.customerstatus = this.filter.custType;
@@ -362,10 +362,35 @@ export class ReportsComponent implements OnInit {
         }
 
         // restricting unnecessary call for WONS, DST, MR, TIR reports
-      
+        if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
+            this.filter.reportType != 'WONS' && this.filter.reportType != 'MR') {
+            this.overlayCounter++;
+            this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
+                res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
+                this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
+                this.overlayCounter--;
+                if(this.overlayCounter<=0)
+                {
+                    this.overlayStatus = false;
+                }
+            
+            }, (err) => { this.overlayStatus = false; });
+        } else {
+            this.overlayStatus = false;
+        }
         this.getCustomers();
     }
+    dateChangeHandler(){
+        if(this.filter.userType=='internal')
+        {
+            this.branchChangeHandler();
+        } else{
+            this.distributorChangeHandler();
+        }
+        
+       
 
+    }
     distributorChangeHandler() {
         const distributor = this.filter.distributor === 1 ? 0 : this.filter.distributor;
         this.reportService.getDriversbyDistributors(distributor || 0).subscribe((res) => {
@@ -373,13 +398,13 @@ export class ReportsComponent implements OnInit {
             this.driversofDist = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
         }, (err) => {
         });
-        this.filter.custID = 0;
+        this.filter.custID = '';
         if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
         } else {
             this.filter.driver = 1;
         }
-        // this.getCustomers();
+         this.getCustomers();
     }
 
 
@@ -436,9 +461,9 @@ export class ReportsComponent implements OnInit {
         if (custType) {
             this.customerstatus = custType;
         }
-        this.filter.custID = 0;
+        this.filter.custID = '';
         this.filter.custtID = 0;
-        this.filterCustomers();
+        //this.filterCustomers();
     }
 
 
@@ -654,22 +679,6 @@ export class ReportsComponent implements OnInit {
     }
     getCustomers() {
         //this.branchChangeHandler(this.filter.branch)
-        if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
-            this.filter.reportType != 'WONS' && this.filter.reportType != 'MR') {
-            this.overlayCounter++;
-            this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
-                res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
-                this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-                this.overlayCounter--;
-                if(this.overlayCounter<=0)
-                {
-                    this.overlayStatus = false;
-                }
-            
-            }, (err) => { this.overlayStatus = false; });
-        } else {
-            this.overlayStatus = false;
-        }
         if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'EOD')) {
             this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
@@ -691,7 +700,7 @@ export class ReportsComponent implements OnInit {
                 .getCustomerDropDownList(this.filter.branch, this.user.UserId, this.modifiedStartDate, this.modifiedEndDate, this.filter.distributor)
                 .subscribe((res) => {
                     this.dropDownCustomers=res;
-                    this.dropDownCustomers.unshift({"AXCustomerNumber": "1","CustomerID" :0,"CustomerName" :"All Customers", "CustomerSourceID" :0});
+                    this.dropDownCustomers.unshift({"AXCustomerNumber": "","CustomerID" :0,"CustomerName" :"All Customers", "CustomerSourceID" :"0"});
                     this.overlayCounter--;
                     if(this.overlayCounter<=0)
                     {

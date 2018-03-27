@@ -97,7 +97,7 @@
                                 <!-- <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select> -->
                                
                                     <ng-template #rt let-r="result" let-t="term">
-                                        {{ r.AXCustomerNumber}} - {{ r.CustomerName}}
+                                        {{ r.AXCustomerNumber}} {{r.AXCustomerNumber!=''?'-':''}} {{ r.CustomerName}}
                                     </ng-template>
                                     <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"                  placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
                                         [editable]="false" />
@@ -122,7 +122,7 @@
                                 <label>Customer</label>
                                 <!-- <reddy-select [options]="fesCustomerss" [(selected)]="filter.fesCustID"></reddy-select> -->
                                 <ng-template #rt let-r="result" let-t="term">
-                                    {{ r.AXCustomerNumber}} - {{ r.CustomerName}}
+                                    {{ r.AXCustomerNumber}} {{r.AXCustomerNumber!=''?'-':''}} {{ r.CustomerName}}
                                 </ng-template>
                                 <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"                  placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
                                     [editable]="false" />
