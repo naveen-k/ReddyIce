@@ -130,6 +130,12 @@ export class TrackerComponent implements OnInit {
     });
   }
 
+  // invoke api based on tracker type
+  trackerTypeChangeHandler() {
+    //alert(this.filter.trackerType);
+    this.typeChangeHandler();
+  }
+
   // Load all trips based on Date and Branch
   loadTrips() {
     if (this.selectedTrip) {
@@ -145,30 +151,20 @@ export class TrackerComponent implements OnInit {
       this.driverOndistributor = [];
     }
     this.showSpinner = true;
-    this.service.getTrips(this.selectedDate, this.router.url === '/opentracker').subscribe((res) => {
-      if (typeof res == 'object') {
-        this.trips = res.DayEnd;
-        var branchesArr = [];
+    if (this.filter.trackerType == 1) {
+      this.service.getTrips(this.selectedDate, this.router.url === '/opentracker').subscribe((res) => {
+        if (typeof res == 'object') {
+          this.trips = res.DayEnd;
+          var branchesArr = [];
 
-        this.showSpinner = false;
-        this.allBranches = [];
-        var distributorArr = [];
-        if (this.trips && this.trips.length && this.trips.length>0) {
-          if (this.searchObj.userType == 'Internal') {
-            let tmpObj = {};
-            for (var i = 0; i < this.trips.length; i++) {
-              if (this.user.Role && this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
-                branchesArr.push(
-                  {
-                    BranchID: this.trips[i].BranchID,
-                    BranchCode: this.trips[i].BranchCode,
-                    BranchName: this.trips[i].BranchName
-                  });
-                tmpObj[this.trips[i].BranchID] = this.trips[i];
-                continue;
-              }
-              if (!tmpObj[this.trips[i].BranchID]) {
-                if (this.trips[i].isDistributor != 1) {
+          this.showSpinner = false;
+          this.allBranches = [];
+          var distributorArr = [];
+          if (this.trips && this.trips.length && this.trips.length > 0) {
+            if (this.searchObj.userType == 'Internal') {
+              let tmpObj = {};
+              for (var i = 0; i < this.trips.length; i++) {
+                if (this.user.Role && this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
                   branchesArr.push(
                     {
                       BranchID: this.trips[i].BranchID,
@@ -176,52 +172,111 @@ export class TrackerComponent implements OnInit {
                       BranchName: this.trips[i].BranchName
                     });
                   tmpObj[this.trips[i].BranchID] = this.trips[i];
+                  continue;
+                }
+                if (!tmpObj[this.trips[i].BranchID]) {
+                  if (this.trips[i].isDistributor != 1) {
+                    branchesArr.push(
+                      {
+                        BranchID: this.trips[i].BranchID,
+                        BranchCode: this.trips[i].BranchCode,
+                        BranchName: this.trips[i].BranchName
+                      });
+                    tmpObj[this.trips[i].BranchID] = this.trips[i];
+                  }
                 }
               }
-            }
-            this.sortBranches(branchesArr);
-            this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
+              this.sortBranches(branchesArr);
+              this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
 
-          } else if (this.searchObj.userType == 'External') {
-            let tmpObj = {};
-            for (var i = 0; i < this.trips.length; i++) {
-              if (!tmpObj[this.trips[i].DistributorName]) {
-                distributorArr.push(
-                  {
-                    DistributorName: this.trips[i].DistributorName,
-                    DistributorMasterID: this.trips[i].DistributorMasterID,
-                  });
-                tmpObj[this.trips[i].DistributorName] = this.trips[i];
+            } else if (this.searchObj.userType == 'External') {
+              let tmpObj = {};
+              for (var i = 0; i < this.trips.length; i++) {
+                if (!tmpObj[this.trips[i].DistributorName]) {
+                  distributorArr.push(
+                    {
+                      DistributorName: this.trips[i].DistributorName,
+                      DistributorMasterID: this.trips[i].DistributorMasterID,
+                    });
+                  tmpObj[this.trips[i].DistributorName] = this.trips[i];
+                }
               }
-            }
-            this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
-            this.tripFilterOption.DistributorMasterID = this.distributors[0].value;
-
-            if (this.user.IsDistributor) {
-              this.distributorChangeHandler();
-            }
-          }
-        } else{
-        if (this.isDistributor) {
-            distributorArr.push(
-              {
-                DistributorName: this.user.Distributor.DistributorName,
-                DistributorMasterID: this.user.Distributor.DistributorMasterId,
-              });
               this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
               this.tripFilterOption.DistributorMasterID = this.distributors[0].value;
+
+              if (this.user.IsDistributor) {
+                this.distributorChangeHandler();
+              }
+            }
+          } else {
+            if (this.isDistributor) {
+              distributorArr.push(
+                {
+                  DistributorName: this.user.Distributor.DistributorName,
+                  DistributorMasterID: this.user.Distributor.DistributorMasterId,
+                });
+              this.distributors = this.service.transformOptionsReddySelect(distributorArr, 'DistributorMasterID', 'DistributorName');
+              this.tripFilterOption.DistributorMasterID = this.distributors[0].value;
+            }
           }
+        } else {
+          this.trips = [];
+          this.showSpinner = false;
         }
-      } else {
+        this.drawMapPath();
+      }, (error) => {
+        console.log(error);
         this.trips = [];
         this.showSpinner = false;
-      }
-      this.drawMapPath();
-    }, (error) => {
-      console.log(error);
-      this.trips = [];
-      this.showSpinner = false;
-    });
+      });
+    } else {
+      this.service.getTripsFES(this.selectedDate, this.router.url === '/opentracker').subscribe((res) => {
+        if (typeof res == 'object') {
+          this.trips = res.DayEnd;
+          var branchesArr = [];
+
+          this.showSpinner = false;
+          this.allBranches = [];
+          if (this.trips && this.trips.length && this.trips.length > 0) {
+            if (this.searchObj.userType == 'Internal') {
+              let tmpObj = {};
+              for (var i = 0; i < this.trips.length; i++) {
+                if (this.user.Role && this.user.Role.RoleID === 3 && this.user.IsSeasonal) {
+                  branchesArr.push(
+                    {
+                      BranchID: this.trips[i].BranchID,
+                      BranchCode: this.trips[i].BranchCode,
+                      BranchName: this.trips[i].BranchName
+                    });
+                  tmpObj[this.trips[i].BranchID] = this.trips[i];
+                  continue;
+                }
+                if (!tmpObj[this.trips[i].BranchID]) {
+                  if (this.trips[i].isDistributor != 1) {
+                    branchesArr.push(
+                      {
+                        BranchID: this.trips[i].BranchID,
+                        BranchCode: this.trips[i].BranchCode,
+                        BranchName: this.trips[i].BranchName
+                      });
+                    tmpObj[this.trips[i].BranchID] = this.trips[i];
+                  }
+                }
+              }
+              this.sortBranches(branchesArr);
+              this.allBranches = this.service.transformOptionsReddySelect(branchesArr, 'BranchID', 'BranchCode', 'BranchName');
+            }
+          }
+        } else {
+          this.trips = [];
+          this.showSpinner = false;
+        }
+      }, (error) => {
+        console.log(error);
+        this.trips = [];
+        this.showSpinner = false;
+      });
+    }
   }
 
   // funtion to retrieve the time
@@ -236,7 +291,8 @@ export class TrackerComponent implements OnInit {
   fetchTicketDetailsByTrip(tripId) {
     this.showSpinner = true;
     this.selectedTrip = [];
-    this.service.getTripTicketsByTripID(tripId).subscribe(res => {
+    let tripApiName = this.filter.trackerType == 1 ? 'getTripTicketsByTripID' : 'getTripTicketsByTripIDFES';
+    this.service[tripApiName](tripId).subscribe(res => {
       this.showSpinner = false;
       this.IsUnplanned = res.Trips[0].IsUnplanned;
       if (this.IsUnplanned || this.searchObj.userType == 'External') { // if unplanned trip, map according 'Actual' scenario
@@ -273,7 +329,7 @@ export class TrackerComponent implements OnInit {
   routeNo;
   // Fetch selected Branch
   branchChangeHandler() {
-    
+
     if (this.tripFilterOption.branchId) {
       this.driverOnBranch = [];
       for (var i = 0; i < this.trips.length; i++) {
@@ -370,7 +426,8 @@ export class TrackerComponent implements OnInit {
   }
 
   filter = {
-    sequence: 1
+    sequence: 1,
+    trackerType: 1
   }
   // Filter Markers in the Google Map based on Sequence Radio Button selection
   sequenceChangeHandler() {

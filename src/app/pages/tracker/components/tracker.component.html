@@ -2,13 +2,25 @@
     <div class='col-md-12'>
         <ba-card cardTitle="Tracker{{userSubTitle}}" class="smart-table-container">
             <div class="row">
+                <div class="col-md-8">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="trackerType" [value]="1" [(ngModel)]="filter.trackerType" (ngModelChange)="trackerTypeChangeHandler()">
+                        <span>Handheld</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="trackerType" [value]="2" [(ngModel)]="filter.trackerType" (ngModelChange)="trackerTypeChangeHandler()">
+                        <span>FES</span>
+                    </label>
+                </div>
+            </div>
+            <div class="row marginTop">
                 <div class="col-sm-2">
                     <label>Select Date</label>
                     <div class="input-group">
                         <date-picker [maxDate]="todaysDate" [(dateModel)]="tripFilterOption.tripDate" (dateModelChange)="dateChangeHandler();"></date-picker>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2" *ngIf = "filter.trackerType == 1">
                     <label>Select Driver Type</label>
                     <select [disabled]="isDistributor || user.Role?.RoleID===3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                         <option [value]="'Internal'">RI Driver</option>
@@ -24,7 +36,7 @@
                     <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="tripFilterOption.DistributorMasterID" (selectedChange)="distributorChangeHandler()"></reddy-select>
                 </div>
                 <div class="col-sm-2" *ngIf="searchObj.userType=='Internal'">
-                    <label>Select Driver</label>
+                    <label>Select {{filter.trackerType == 1 ? "Driver" : "STech"}}</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
                         <option *ngFor="let driver of driverOnBranch | unique:'DriverName'">{{driver.DriverName}}</option>
                     </select>

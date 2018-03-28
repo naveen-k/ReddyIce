@@ -25,7 +25,22 @@ export class TrackerService extends SharedService {
       });
   }
 
+  getTripsFES(TripDate, open) {
+    let url = `api/trip/allFES?TripDate=${TripDate}`;
+    if (open) {
+      url = `api/trip/openallfortracker?TripDate=${TripDate}`;
+    }
+    return this.http.get(url)
+      .map((res) => res.json()).map((res) => {
+        return res;
+      });
+  }
+
   getTripTicketsByTripID(tripId){
+    return this.http.get(`api/trip/allfortracker?TripID=${tripId}`).map(res=> res.json());
+  }
+
+  getTripTicketsByTripIDFES(tripId){
     return this.http.get(`api/trip/allfortracker?TripID=${tripId}`).map(res=> res.json());
   }
 
