@@ -415,7 +415,7 @@ export class TrackerComponent implements OnInit {
         // this.drawPolyline(google, 1);
         // this.drawRoute(google, 1, this.selectedTrip);
         this.drawRoutesOnMap(google, 1, this.selectedTrip);
-      } else if (+this.filter.sequence === 3) {
+      } else if (+this.filter.sequence === 3) { // both planned and unplanned sequence together
         //this.drawPolyline(google, 2);
         // this.drawRoute(google, 1, this.selectedTrip);
         // this.drawRoute(google, 2, this.selectedTrip);
