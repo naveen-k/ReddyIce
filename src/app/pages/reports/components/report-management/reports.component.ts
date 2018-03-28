@@ -195,6 +195,7 @@ export class ReportsComponent implements OnInit {
         this.filter.workOrderNumber = null;
         this.filter.ticketNumber = null;
         this.filter.showCustomerDropdown = false;
+        this.filter.custtID = 0;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
