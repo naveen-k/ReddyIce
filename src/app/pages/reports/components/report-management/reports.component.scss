@@ -74,20 +74,6 @@
   .left-addon input  { padding-left:  30px; }
   .right-addon input { padding-right: 30px; }
 
-  .inner-addon ::-webkit-input-placeholder { /* Chrome */
-    color: black;
-    opacity: 1;
-  }
-  .inner-addon :-ms-input-placeholder { /* IE 10+ */
-    color: black;
-    opacity: 1;
-  }
-  .inner-addon ::-moz-placeholder { /* Firefox 19+ */
-    color: black;
-    opacity: 1;
-  }
-  .inner-addon :-moz-placeholder { /* Firefox 4 - 18 */
-    color: black;
-    opacity: 1;
-  }  
+  
+   
  

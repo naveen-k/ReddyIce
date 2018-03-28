@@ -76,7 +76,7 @@ export class ReportsComponent implements OnInit {
                 this.customerstatus = this.filter.custType;
             }
       return flag;
-      }).slice(0, 10);
+      }).slice(0, 20);
     })
   };
 
