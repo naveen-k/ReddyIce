@@ -156,7 +156,6 @@ export class TrackerComponent implements OnInit {
         if (typeof res == 'object') {
           this.trips = res.DayEnd;
           var branchesArr = [];
-
           this.showSpinner = false;
           this.allBranches = [];
           var distributorArr = [];
@@ -246,7 +245,7 @@ export class TrackerComponent implements OnInit {
                     {
                       BranchID: this.trips[i].BranchID,
                       BranchCode: this.trips[i].BranchCode,
-                      BranchName: this.trips[i].BranchName
+                      BranchName: this.trips[i].BranchName || this.trips[i].BUName
                     });
                   tmpObj[this.trips[i].BranchID] = this.trips[i];
                   continue;
@@ -257,7 +256,7 @@ export class TrackerComponent implements OnInit {
                       {
                         BranchID: this.trips[i].BranchID,
                         BranchCode: this.trips[i].BranchCode,
-                        BranchName: this.trips[i].BranchName
+                        BranchName: this.trips[i].BranchName || this.trips[i].BUName
                       });
                     tmpObj[this.trips[i].BranchID] = this.trips[i];
                   }
@@ -280,7 +279,7 @@ export class TrackerComponent implements OnInit {
   }
 
   // funtion to retrieve the time
-  sliceTime(str) {
+  sliceTime(str) {console.log('---------',str);
     if (str) {
       return str.slice(11, 16);
     }
@@ -338,17 +337,18 @@ export class TrackerComponent implements OnInit {
             // removing extraa spaces
             this.trips[i].DriverName = this.trips[i].DriverName.split('  ').join('');
           }
-          if (this.trips[i].RouteNumber.toString().indexOf("999") == -1) {
+          if (this.filter.trackerType == 1 && (this.trips[i].RouteNumber.toString().indexOf("999") == -1)) {
             this.routeNo = this.trips[i].RouteNumber;
-          } else {
+          } else if (this.filter.trackerType == 1) {
             this.routeNo = 'Unplanned';
           }
-          this.driverOnBranch.push({
+          let driversDetailsObj = {
             DriverName: this.trips[i].DriverName,
             TripCode: this.trips[i].TripCode,
             TripID: this.trips[i].TripID,
-            RouteNumber: this.routeNo
-          });
+            RouteNumber: this.filter.trackerType == 1 ? this.routeNo : undefined
+          }
+          this.driverOnBranch.push(driversDetailsObj);
         }
       }
       if (this.driverOnBranch && this.driverOnBranch.length > 0) {
@@ -376,13 +376,12 @@ export class TrackerComponent implements OnInit {
     if (this.searchObj.userType == 'Internal') {
       for (var i = 0; i < this.driverOnBranch.length; i++) {
         if (this.tripFilterOption.DriverName == this.driverOnBranch[i]['DriverName']) {
-          this.driverSpecTrips.push(
-            {
-              TripCode: this.driverOnBranch[i].TripCode,
-              TripID: this.driverOnBranch[i].TripID,
-              RouteNumber: this.driverOnBranch[i].RouteNumber
-            }
-          );
+          let driverSpecObj = {
+            TripCode: this.driverOnBranch[i].TripCode,
+            TripID: this.driverOnBranch[i].TripID,
+            RouteNumber: this.filter.trackerType == 1 ? this.driverOnBranch[i].RouteNumber : undefined
+          };
+          this.driverSpecTrips.push(driverSpecObj);
         }
       }
     } else if (this.searchObj.userType == 'External') {
@@ -704,9 +703,9 @@ export class TrackerComponent implements OnInit {
           if (typeof totalInvoice === "number" && isFinite(totalInvoice) && Math.floor(totalInvoice) === totalInvoice) {
             totalInvoice = totalInvoice + ".00";
           }
-          infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>';
+          this.filter.trackerType == 1 && (infowindowContent += 'Total Invoice : $' + totalInvoice + '<br>');
         } else {
-          infowindowContent += 'Total Invoice : $' + '0.00' + '<br>';
+          this.filter.trackerType == 1 && (infowindowContent += 'Total Invoice : $' + '0.00' + '<br>');
         }
 
         if (trips[i].CashAmount != null || trips[i].CashAmount != undefined
@@ -715,9 +714,9 @@ export class TrackerComponent implements OnInit {
           if (typeof receivedAmt === "number" && isFinite(receivedAmt) && Math.floor(receivedAmt) === receivedAmt) {
             receivedAmt = receivedAmt + ".00";
           }
-          infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>';
+          this.filter.trackerType == 1 && (infowindowContent += 'Total Received Amount : $' + receivedAmt + '<br>');
         } else {
-          infowindowContent += 'Total Received Amount : $' + '0.00' + '<br>';
+          this.filter.trackerType == 1 && (infowindowContent += 'Total Received Amount : $' + '0.00' + '<br>');
         }
         return () => {
           this.infowindow.setContent(infowindowContent);
@@ -915,11 +914,16 @@ export class TrackerComponent implements OnInit {
 
   viewTicket(ticketID) {
     if (ticketID) {
-      window.open(environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID, "Ticket", "width=900,height=600,resizable=yes,scrollbars=1");
+      const reportUrl = this.filter.trackerType ?
+        this.filter.trackerType == 1 ?
+          environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID :
+          environment.reportEndpoint + "?Rtype=WONS&WOID=" + ticketID + "&LoggedInUserID=" + this.user.UserId : '';
+      window.open(reportUrl, "Ticket", "width=900,height=600,resizable=yes,scrollbars=1");
     } else {
       this.notification.error("Ticket preview unavailable!!");
     }
   }
+
 
   distributors: any = [];
   typeChangeHandler() {
@@ -928,7 +932,7 @@ export class TrackerComponent implements OnInit {
     } else {
       this.filter.sequence = 1;
     }
-    this.tripFilterOption.branchId = null;
+    this.tripFilterOption.branchId = 0;
     this.tripFilterOption.DistributorMasterID = null;
     this.loadTrips();
     // this.drawMapPath();

@@ -41,7 +41,7 @@ export class TrackerService extends SharedService {
   }
 
   getTripTicketsByTripIDFES(tripId){
-    return this.http.get(`api/trip/allfortracker?TripID=${tripId}`).map(res=> res.json());
+    return this.http.get(`api/trip/allfortrackerFES?TripID=${tripId}`).map(res=> res.json());
   }
 
   getDistributors(userId, selectedDate) {
