@@ -711,6 +711,14 @@ export class TrackerComponent implements OnInit {
           this.filter.trackerType == 1 && (infowindowContent += 'Total Invoice : $' + '0.00' + '<br>');
         }
 
+        if(this.filter.trackerType == 2 && trips[i].AssetName != null ) {
+          infowindowContent += 'Asset Name : ' + trips[i].AssetName + '<br>';
+        }
+
+        if(this.filter.trackerType == 2 && trips[i].BarCode != null ) {
+          infowindowContent += 'Bar Code : ' + trips[i].BarCode + '<br>';
+        }
+
         if (trips[i].CashAmount != null || trips[i].CashAmount != undefined
           || trips[i].CheckAmount != null || trips[i].CheckAmount != undefined) {
           var receivedAmt = trips[i].CashAmount + trips[i].CheckAmount;
