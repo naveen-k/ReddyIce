@@ -279,7 +279,7 @@ export class TrackerComponent implements OnInit {
   }
 
   // funtion to retrieve the time
-  sliceTime(str) {console.log('---------',str);
+  sliceTime(str) {
     if (str) {
       return str.slice(11, 16);
     }
@@ -302,6 +302,9 @@ export class TrackerComponent implements OnInit {
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
       this.tripStartDate = res.Trips[0].TripStartDate
       if (this.selectedTrip) {
+        this.selectedTrip.map(item=>{
+            item['createdDate'] = this.sliceTime(item.Created);
+        })
         // console.log('this.searchObj.userType',this.searchObj.userType);
         if (this.searchObj.userType != 'External') {
           this.selectedTrip.sort(this.comparator); // sorting planned sequence

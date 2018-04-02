@@ -51,7 +51,7 @@
                     <label>Select Trip</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' (change)="tripChangeHandler()">
                         <option *ngFor="let trip of driverSpecTrips | unique:'TripCode'" [value]="trip.TripCode">
-                            {{trip.TripCode}} {{filter.trackerType == 1 ? '-' : ''}} {{filter.trackerType == 1 ? trip.RouteNumber : ''}}
+                            {{trip.TripCode}} {{trip.RouteNumber ? '-' : ''}} {{trip.RouteNumber ? trip.RouteNumber : ''}}
                         </option>
                     </select>
                 </div>
@@ -134,10 +134,10 @@
                                                 <span class="tooltiptext">View Ticket Details</span>
                                             </i>
                                         </td>
-                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" title="{{subitem.createdDate}}">
                                             {{subitem.PlannedSequence}}
                                         </td>
-                                        <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
+                                        <td style="text-align:center;" *ngIf="!isNewTicket" >
                                             {{subitem.ActualSequence}}
                                         </td>
                                         <td title="{{subitem.AXCustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
