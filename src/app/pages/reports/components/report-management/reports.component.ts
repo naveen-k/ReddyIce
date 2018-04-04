@@ -77,7 +77,7 @@ export class ReportsComponent implements OnInit {
                 this.customerstatus = this.filter.custType;
             }
       return flag;
-      }).slice(0, 10);
+      }).slice(0, 20);
     })
   };
 
@@ -196,6 +196,7 @@ export class ReportsComponent implements OnInit {
         this.filter.workOrderNumber = null;
         this.filter.ticketNumber = null;
         this.filter.showCustomerDropdown = false;
+        this.filter.custtID = 0;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';

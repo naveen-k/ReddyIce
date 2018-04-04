@@ -187,3 +187,37 @@ simple-notification .icon svg {
         padding: 4px 16px !important;
       }       
 }
+
+.inner-addon {
+    ::-webkit-input-placeholder { /* Chrome */
+       color: black;
+       opacity: 1;
+     }
+      :-ms-input-placeholder { /* IE 10+ */
+       color: black;
+       opacity: 1;
+     }
+     ::-moz-placeholder { /* Firefox 19+ */
+       color: black;
+       opacity: 1;
+     }
+      :-moz-placeholder { /* Firefox 4 - 18 */
+       color: black;
+       opacity: 1;
+     }  
+   
+     .dropdown-item.active, .dropdown-item:active {
+       background-color: #5bc0de !important;
+     }
+     
+     .dropdown-menu {
+       max-height: 200px;
+       max-width: 350px;
+       overflow: auto;
+     }
+     
+     .dropdown-item {
+       line-height: 1.25;
+       padding:3px 0px 3px 10px;
+     }
+ } 

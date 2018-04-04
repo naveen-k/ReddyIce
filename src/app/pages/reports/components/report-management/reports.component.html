@@ -76,7 +76,7 @@
                 <option [value]="103">External Customers</option>
             </select>
         </div>
-       <!--  <div class="col-sm-2" *ngIf="(filter.reportType==='WOC')" (change)="filterFesCustomers();">
+        <!--  <div class="col-sm-2" *ngIf="(filter.reportType==='WOC')" (change)="filterFesCustomers();">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType'>
                 <option [value]="0">All Customers</option>
@@ -98,13 +98,21 @@
                             <div class="col-sm-12">
                                 <label>Customer</label>
                                 <!-- <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select> -->
-                               
-                                    <ng-template #rt let-r="result" let-t="term">
-                                        {{ r.AXCustomerNumber}} {{r.AXCustomerNumber!=''?'-':''}} {{ r.CustomerName}}
-                                    </ng-template>
-                                    <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"                  placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
-                                        [editable]="false" />
-                               
+
+                                <ng-template #rt let-r="result" let-t="term">
+                                    {{ r.AXCustomerNumber}} {{r.AXCustomerNumber!=''?'-':''}} {{ r.CustomerName}}
+                                </ng-template>
+                                <!-- <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"
+                                    placeholder="All Customers" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
+                                    [editable]="false" /> -->
+                                <div class="form-group col-xs-6">
+                                    <div class="inner-addon right-addon">
+                                        <i class="ion-ios-search"></i>
+                                        <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"
+                                        placeholder="All Customers" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
+                                        [editable]="false" style="border: 1px solid #aaa"/>
+                                    </div>
+                                </div>
                             </div>
                             <div style='margin-left: 100px;'>
                                 <a>
@@ -127,8 +135,17 @@
                                 <ng-template #rt let-r="result" let-t="term">
                                     {{ r.AXCustomerNumber}} {{r.AXCustomerNumber!=''?'-':''}} {{ r.CustomerName}}
                                 </ng-template>
-                                <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"                  placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
-                                    [editable]="false" />
+                                <!-- <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"
+                                    placeholder="All Customers" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
+                                    [editable]="false" /> -->
+                                <div class="form-group col-xs-6">
+                                    <div class="inner-addon right-addon">
+                                        <i class="ion-ios-search"></i>
+                                        <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"
+                                        placeholder="All Customers" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
+                                        [editable]="false" style="border: 1px solid #aaa"/>
+                                    </div>
+                                </div>
                             </div>
                             <div style='margin-left: 100px;'>
                                 <a>
@@ -195,31 +212,28 @@
         <div class="col-sm-4 head-button-container-for-report">
             <div class="row">
                 <div class="col-sm-5 padding" style="text-align:right;padding-right:0px;">
-                        <label>Select Report:</label>
+                    <label>Select Report:</label>
                 </div>
                 <div class="col-sm-7">
-                  
-                        <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                            <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option>
-                            <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
-                            <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
-                            <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
-                            <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>
-                            <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
-                            <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
-                            <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
-                            <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
-                            <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
-                            <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
-                            <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
-                            <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
-                            <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
-                            <option value="RM" *ngIf="isExternalAdmin">QuickBooks Extract</option> 
-                            <option value="AT" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Tracking</option>
-                            <option value="SP" *ngIf="isITAdmin||isInternalAdmin||isSTech">STech Productivity</option>
-                            <option value="AER" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Exception Report</option>
-                        </select>
-                  
+
+                    <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
+                        <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option>
+                        <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
+                        <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
+                        <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
+                        <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>
+                        <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
+                        <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
+                        <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
+                        <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
+                        <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
+                        <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
+                        <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
+                        <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
+                        <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
+                        <option value="RM" *ngIf="isExternalAdmin">QuickBooks Extract</option>
+                    </select>
+
                 </div>
             </div>
         </div>
@@ -262,7 +276,7 @@
             </span>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType!='SR'">
-        <!-- changes due to new requirment to add ticket status-->
+            <!-- changes due to new requirment to add ticket status-->
             <label>{{filter.ticketType == 'paper' ? 'Ticket' : 'Trip'}} Status</label>
             <!-- <select class="form-control" [(ngModel)]='filter.tripState' [disabled]="disableTrippState" (ngModelChange)="driverChange()">
                 <option [value]="0">All {{filter.ticketType == 'paper' ? 'Ticket' : 'Trip'}}</option>
@@ -276,9 +290,9 @@
                 <option [value]="1">{{filter.ticketType == 'paper' ? 'Draft' : 'HH Day End Not Done'}}</option>
                 <option [value]="2">{{filter.ticketType == 'paper' ? 'Submitted' : 'Not Approved'}}</option>
                 <option [value]="3">Approved</option>
-            </select>            
+            </select>
         </div>
-        
+
     </div>
     <div class="row" [hidden]="IsTIR">
         <div class="col-sm-4" *ngIf="filter.reportType === 'SR' || filter.reportType === 'DR'">
@@ -308,7 +322,7 @@
                         Enter Ticket Number
                     </label>
                     <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" placeholder="Enter Ticket Number">
-                        <!-- (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)"> -->
+                    <!-- (ngModelChange)="getCustomersbyTicketNumber(filter.ticketNumber)"> -->
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
                     <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
@@ -340,8 +354,8 @@
         </div>
     </div>
     <div class="top-margin" style="z-index: 999">
-        <iframe id="reportFrame" #reportFrame [ngClass]="(!onLoadFrame || (viewButtonStatus || isTIRCustomers))?'framezeroHeight':'framewithHeight'" width="100%"  style="border:1px solid rgba(0, 0, 0, 0.1)"
-            [src]='linkRpt' (load)="afterLoading();"></iframe>
+        <iframe id="reportFrame" #reportFrame [ngClass]="(!onLoadFrame || (viewButtonStatus || isTIRCustomers))?'framezeroHeight':'framewithHeight'"
+            width="100%" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt' (load)="afterLoading();"></iframe>
         <iframe *ngIf="!onLoadFrame || (viewButtonStatus || isTIRCustomers)" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)"
             [src]=''></iframe>
     </div>
