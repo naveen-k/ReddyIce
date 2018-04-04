@@ -22,13 +22,13 @@
         <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'EOD'">
             <label>Start Date</label>
             <div class="input-group">
-                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate" (dateModelChange)="getCustomers()"></date-picker>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate" (dateModelChange)="branchChangeHandler()"></date-picker>
             </div>
         </div>
         <div class="col-sm-2" [hidden]="IsTIR || filter.reportType == 'MR' || filter.reportType == 'WONS' || filter.reportType == 'EOD'">
             <label>End Date</label>
             <div class="input-group">
-                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="getCustomers()"></date-picker>
+                <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="branchChangeHandler()"></date-picker>
             </div>
         </div>
         <div class="col-sm-2" [hidden]="filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType ==='AS'
@@ -97,7 +97,14 @@
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">
                                 <label>Customer</label>
-                                <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select>
+                                <!-- <reddy-select [options]="cutommers" [(selected)]="filter.custID" (selectedChange)="selectedCustomerChange(filter.custID)"></reddy-select> -->
+                               
+                                    <ng-template #rt let-r="result" let-t="term">
+                                        {{ r.AXCustomerNumber}} {{r.AXCustomerNumber!=''?'-':''}} {{ r.CustomerName}}
+                                    </ng-template>
+                                    <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"                  placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
+                                        [editable]="false" />
+                               
                             </div>
                             <div style='margin-left: 100px;'>
                                 <a>
@@ -116,7 +123,12 @@
                         <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
                             <div class="col-sm-12">
                                 <label>Customer</label>
-                                <reddy-select [options]="fesCustomerss" [(selected)]="filter.fesCustID"></reddy-select>
+                                <!-- <reddy-select [options]="fesCustomerss" [(selected)]="filter.fesCustID"></reddy-select> -->
+                                <ng-template #rt let-r="result" let-t="term">
+                                    {{ r.AXCustomerNumber}} {{r.AXCustomerNumber!=''?'-':''}} {{ r.CustomerName}}
+                                </ng-template>
+                                <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"                  placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
+                                    [editable]="false" />
                             </div>
                             <div style='margin-left: 100px;'>
                                 <a>

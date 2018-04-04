@@ -109,7 +109,7 @@ export class CreateTicketComponent implements OnInit {
     .map(term => {
       return self.customers.filter((v: any) => {
         if (!v.CustomerTypeID || !v.Active) { return false; }
-        let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
+        let flag = (v.CustomerTypeID.toString() === this.ticket.CustomerType.toString() || ((this.ticket.CustomerType.toString()=='20')?v.CustomerTypeID.toString() === '22':false));
         if (flag) {
           term = term.trim();
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
@@ -367,7 +367,7 @@ export class CreateTicketComponent implements OnInit {
 
       if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
         const customer = this.customers.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
-        this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? customer.CustomerTypeID : this.ticket.Customer.CustomerType;
+        this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? (this.ticket.CustomerType)?this.ticket.CustomerType:customer.CustomerTypeID : (this.ticket.CustomerType)?this.ticket.CustomerType:this.ticket.Customer.CustomerType;
         this.ticket.Customer.ChainID = (customer && customer.ChainID) ? customer.ChainID : 0;
         this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
       }
@@ -790,8 +790,7 @@ export class CreateTicketComponent implements OnInit {
       this.ticket.CustomerID = this.ticket.Customer.CustomerID;
       this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
       this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
-
-      this.ticket.CustomerType = this.ticket.Customer.CustomerType;
+      this.ticket.CustomerType = (this.ticket.CustomerType)?this.ticket.CustomerType:this.ticket.Customer.CustomerType;
       if (this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false) {
         this.ticket.TicketTypeID = 26;
       }
@@ -892,6 +891,7 @@ export class CreateTicketComponent implements OnInit {
       return;
     }
     // Save ticket 
+    console.log("<<<<<<<<<<<<<<<<------------->>>>>>>>",ticket);
     this.service.saveTicket(ticket).subscribe(res => {
       this.overlayStatus = false;
       this.notification.success('', 'Ticket created successfully!');
