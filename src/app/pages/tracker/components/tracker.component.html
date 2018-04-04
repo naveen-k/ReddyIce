@@ -131,7 +131,7 @@
                                     <tr [ngStyle]="{'background': subitem.pinColor, 'color': subitem.pinTextColor}" style="border-bottom:1px solid white;">
                                         <td>
                                             <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(filter.trackerType == 1 ? subitem.ID  : subitem.WorkOrderID)">
-                                                <span class="tooltiptext">View Ticket Details</span>
+                                                <span class="tooltiptext">View {{filter.trackerType == 1 ? 'Ticket'  : 'Work Order'}} Details</span>
                                             </i>
                                         </td>
                                         <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" title="{{subitem.createdDate}}">
