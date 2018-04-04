@@ -15,7 +15,6 @@ import { debounce } from 'rxjs/operator/debounce';
     styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
-    overlayCounter:any =0;
     overlayStatus: boolean = false;
     onLoadFrame: boolean = false;
     viewButtonStatus: boolean = false;
@@ -62,25 +61,7 @@ export class ReportsComponent implements OnInit {
         RouteNumber: 0
     };
 
-    // Customer input formatter
-  inputFormatter = (res => (res.AXCustomerNumber.trim()!='')?`${res.AXCustomerNumber} - ${res.CustomerName}`:`${res.CustomerName}`);
-  search = (text$: Observable<any>) => { var self = this; return text$.debounceTime(200)
-    .distinctUntilChanged()
-    .map(term => {
-      return self.dropDownCustomers.filter((v: any) => {
-        let flag
-          term = term.trim();
-          flag = (v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1) && (this.filter.custType == v.CustomerSourceID || +this.filter.custType==0);
-            if(!flag){
-                this.filter.custID = 0;
-                this.customerstatus = this.filter.custType;
-            }
-      return flag;
-      }).slice(0, 20);
-    })
-  };
-
+    inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
     hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
     user: User;
@@ -178,10 +159,10 @@ export class ReportsComponent implements OnInit {
         }
 
         this.userTypeChangeHandler();
+        this.getCustomers();
     }
-    
+
     reportTypeChangeHandler() {
-        this.overlayStatus = true;
         this.isTIRCustomers = false;
         this.onLoadFrame = false;
         this.filter.tripState = 0;
@@ -196,7 +177,6 @@ export class ReportsComponent implements OnInit {
         this.filter.workOrderNumber = null;
         this.filter.ticketNumber = null;
         this.filter.showCustomerDropdown = false;
-        this.filter.custtID = 0;
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -207,7 +187,6 @@ export class ReportsComponent implements OnInit {
                 break;
             case 'TIR':
                 this.IsTIR = true;
-                this.overlayStatus = false;
                 break;
             case 'IOA':
             default:
@@ -250,7 +229,7 @@ export class ReportsComponent implements OnInit {
             this.branches = this.reportService.transformOptionsReddySelect(res, 'BranchID', 'BranchCode', 'BUName');
         }
         this.branchChangeHandler();
-        //this.overlayStatus = false;
+        this.overlayStatus = false;
     }
     private populateCustomerBranch() {
         if (this.filter.reportType === 'EOD') {
@@ -284,11 +263,9 @@ export class ReportsComponent implements OnInit {
     getFesCustomers() {
         this.reportService.getlistofcustomerfes(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
             //  res.unshift({ 'CustomerID': 0, 'CustomerName': 'All Customers' });
-            // this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerNumber', 'CustomerName');
-            // this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
-            // this.fesCustomerss = this.fesCustomers;
-            this.dropDownCustomers = res;
-            this.dropDownCustomers.unshift({"AXCustomerNumber": "1","CustomerID" :0,"CustomerName" :"All Customers", "CustomerSourceID" :0});
+            this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerNumber', 'CustomerName');
+            this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
+            this.fesCustomerss = this.fesCustomers;
             this.overlayStatus = false;
         }, (err) => {
             console.log("Something went wrong while fetching FES Customers");
@@ -361,12 +338,11 @@ export class ReportsComponent implements OnInit {
 
     branchChangeHandler() {
         this.overlayStatus = true;
-        this.overlayCounter =0;
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
 
         
-        this.filter.custID = '';
+        this.filter.custID = 0;
         if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
         } else {
@@ -383,33 +359,17 @@ export class ReportsComponent implements OnInit {
         // restricting unnecessary call for WONS, DST, MR, TIR reports
         if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
             this.filter.reportType != 'WONS' && this.filter.reportType != 'MR') {
-            this.overlayCounter++;
             this.reportService.getDriversbyBranch(this.filter.branch, this.user.UserId, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver, this.filter.distributor).subscribe((res) => {
                 res.unshift({ DriverId: 1, DriverName: 'All Drivers' });
                 this.drivers = this.reportService.transformOptionsReddySelect(res, 'DriverId', 'DriverName');
-                this.overlayCounter--;
-                if(this.overlayCounter<=0)
-                {
-                    this.overlayStatus = false;
-                }
-            
+                this.overlayStatus = false;
             }, (err) => { this.overlayStatus = false; });
         } else {
             this.overlayStatus = false;
         }
-        this.getCustomers();
+        // this.getCustomers();
     }
-    dateChangeHandler(){
-        if(this.filter.userType=='internal')
-        {
-            this.branchChangeHandler();
-        } else{
-            this.distributorChangeHandler();
-        }
-        
-       
 
-    }
     distributorChangeHandler() {
         const distributor = this.filter.distributor === 1 ? 0 : this.filter.distributor;
         this.reportService.getDriversbyDistributors(distributor || 0).subscribe((res) => {
@@ -417,13 +377,13 @@ export class ReportsComponent implements OnInit {
             this.driversofDist = this.reportService.transformOptionsReddySelect(res, 'UserId', 'FirstName', 'LastName', ' ');
         }, (err) => {
         });
-        this.filter.custID = '';
+        this.filter.custID = 0;
         if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
         } else {
             this.filter.driver = 1;
         }
-         this.getCustomers();
+        // this.getCustomers();
     }
 
 
@@ -481,9 +441,9 @@ export class ReportsComponent implements OnInit {
         if (custType) {
             this.customerstatus = custType;
         }
-        this.filter.custID = '';
+        this.filter.custID = 0;
         this.filter.custtID = 0;
-        //this.filterCustomers();
+        this.filterCustomers();
     }
 
 
@@ -654,7 +614,7 @@ export class ReportsComponent implements OnInit {
 
             } else if (rType === 'WOC') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=0&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.fesCustID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=0&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOC is clicked', this.linkRpt);
             } else if (rType === 'EOD') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -719,39 +679,28 @@ export class ReportsComponent implements OnInit {
                 this.getFesCustomers();
             }
         } else {
-            //this.branchChangeHandler();
+            this.branchChangeHandler();
             this.viewReport = false;
-           
             this.modifiedStartDate = this.modifyDate(this.filter.startDate);
             this.modifiedEndDate = this.modifyDate(this.filter.endDate);
             if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
                 this.filter.reportType != 'WONS' && this.filter.reportType != 'MR') {
-                this.overlayStatus = true;
-                this.overlayCounter++;
                 this.reportService
                 .getCustomerDropDownList(this.filter.branch, this.user.UserId, this.modifiedStartDate, this.modifiedEndDate, this.filter.distributor)
                 .subscribe((res) => {
-                    this.dropDownCustomers=res;
-                    this.dropDownCustomers.unshift({"AXCustomerNumber": "","CustomerID" :0,"CustomerName" :"All Customers", "CustomerSourceID" :"0"});
-                    this.overlayCounter--;
-                    if(this.overlayCounter<=0)
-                    {
-                         this.overlayStatus = false;
-                    }
-                    // const tempArr = [];
-                    // res.forEach(cus => {
-                    //     tempArr.push({
-                    //         value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
-                    //         label: `${cus.AXCustomerNumber} - ${cus.CustomerName}`,
-                    //         data: cus,
-                    //     });
-                    // });
-                    // tempArr.unshift({ value: 0, label: 'All Customers', data: {} });
-                    // this.dropDownCustomers = tempArr;
-                    // this.filterCustomers();
-                }, (err) => { 
-                    this.overlayStatus = false;
-                })
+                    //this.dropDownCustomers=res;
+                    const tempArr = [];
+                    res.forEach(cus => {
+                        tempArr.push({
+                            value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
+                            label: `${cus.AXCustomerNumber} - ${cus.CustomerName}`,
+                            data: cus,
+                        });
+                    });
+                    tempArr.unshift({ value: 0, label: 'All Customers', data: {} });
+                    this.dropDownCustomers = tempArr;
+                    this.filterCustomers();
+                }, (err) => { })
             }
         }
     }
@@ -783,17 +732,32 @@ export class ReportsComponent implements OnInit {
         });
     }
 
-    selectedCustomerChange(event) {
-        let id= event.item.CustomerID || event.item.CustomerId;
-        console.log("<<<<<<<<<<<<<<<<<<<< ",event.item);
+    selectedCustomerChange(id) {
         if (id == undefined || id == '' || id == "0") {
             this.filter.custtID = 0;
             this.customerstatus = this.filter.custType;
             return;
         }
-        this.customerstatus = event.item.CustomerSourceID;
-
-        this.filter.custtID = id;
+        let custTemp: string[] = id.split('-');
+        for (let i = 0; i < this.cutommers.length; i++) {
+            if (this.cutommers[i].data) {
+                if (this.cutommers[i].data.CustomerID) {
+                    if (this.cutommers[i].data.CustomerID == custTemp[0] && this.cutommers[i].data.CustomerSourceID == custTemp[1]) {
+                        this.customerstatus = this.cutommers[i].data.CustomerSourceID;
+                        this.filter.custtID = this.cutommers[i].data.CustomerID;
+                        break;
+                    } else if (custTemp[0] == "0") {
+                        this.filter.custtID = 0;
+                    }
+                } else {
+                    if (this.filter.custType === 0) {
+                        this.customerstatus = 0;
+                    } else {
+                        this.customerstatus = this.customerstatus;
+                    }
+                }
+            }
+        }
         this.viewReport = false;
     }
     disableTripState() {
