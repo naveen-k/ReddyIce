@@ -5,11 +5,11 @@
                 <div class="col-md-8">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin mL0">
                         <input type="radio" name="trackerType" [value]="1" [(ngModel)]="filter.trackerType" (ngModelChange)="trackerTypeChangeHandler()">
-                        <span>Handheld</span>
+                        <span>Driver</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="trackerType" [value]="2" [(ngModel)]="filter.trackerType" (ngModelChange)="trackerTypeChangeHandler()">
-                        <span>FES</span>
+                        <span>FES Tech</span>
                     </label>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                             <div class="block" style="background:blue;"></div>
                             <span class="blockContent">Unplanned Service</span>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="filter.trackerType == 1">
                             <div class="block" style="background:yellow;"></div>
                             <span class="blockContent">Did Not Service</span>
                         </div>
@@ -75,14 +75,14 @@
                             <div class="block" style="background:#ff0000;"></div>
                             <span class="blockContent">Skipped Stops</span>
                         </div>
-                        <div class="col-md-6"  [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                        <div class="col-md-6"  [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
                             <div class="block" style="background:#999900;"></div>
                             <span class="blockContent">Planned Sequence</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 center" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
-                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <div class="col-md-8 center" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin" >
                         <input type="radio" name="type" [value]="1" [(ngModel)]="filter.sequence" (ngModelChange)="sequenceChangeHandler()">
                         <span>Planned Seq</span>
                     </label>
@@ -104,7 +104,7 @@
                             <thead class="tableHeader">
                                 <tr>
                                     <th style="width: 50px; padding-left: 5px; padding-right: 5px;">Actions</th>
-                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
                                         <span>
                                             Planned
                                         </span>
@@ -134,7 +134,7 @@
                                                 <span class="tooltiptext">View {{filter.trackerType == 1 ? 'Ticket'  : 'Work Order'}} Details</span>
                                             </i>
                                         </td>
-                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" title="{{subitem.createdDate}}">
+                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" title="{{subitem.createdDate}}" *ngIf="filter.trackerType == 1">
                                             {{subitem.PlannedSequence}}
                                         </td>
                                         <td style="text-align:center;" *ngIf="!isNewTicket" >

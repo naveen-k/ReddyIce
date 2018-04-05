@@ -294,7 +294,9 @@ export class TrackerComponent implements OnInit {
     this.service[tripApiName](tripId).subscribe(res => {
       this.showSpinner = false;
       this.IsUnplanned = res.Trips[0].IsUnplanned;
-      if (this.IsUnplanned || this.searchObj.userType == 'External') { // if unplanned trip, map according 'Actual' scenario
+      if(this.filter.trackerType == 2) {
+        this.filter.sequence = 3;
+      } else if (this.IsUnplanned || this.searchObj.userType == 'External') { // if unplanned trip, map according 'Actual' scenario
         this.filter.sequence = 2;
       } else {
         this.filter.sequence = 1;
@@ -938,7 +940,9 @@ export class TrackerComponent implements OnInit {
 
   distributors: any = [];
   typeChangeHandler() {
-    if (this.searchObj.userType == 'External') {
+    if(this.filter.trackerType == 2) {
+      this.filter.sequence = 3;
+    } else if (this.searchObj.userType == 'External') {
       this.filter.sequence = 2;
     } else {
       this.filter.sequence = 1;
