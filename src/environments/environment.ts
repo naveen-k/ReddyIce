@@ -15,8 +15,8 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://frozen.reddyice.com/FESEnhancement/',
+  apiEndpoint: 'http://frozen.reddyice.com/FESEnhancement_Buat/',
   reportEndpoint: 'http://frozen.reddyice.com/FESEnhancementReport/Reports/ReportData.aspx',
-  prodLabel: '(DND)',
+  prodLabel: '(BUAT)',
   EDIUserName : 'MyiceboxEDI'
 };
