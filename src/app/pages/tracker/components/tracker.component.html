@@ -2,13 +2,25 @@
     <div class='col-md-12'>
         <ba-card cardTitle="Tracker{{userSubTitle}}" class="smart-table-container">
             <div class="row">
+                <div class="col-md-8">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin mL0">
+                        <input type="radio" name="trackerType" [value]="1" [(ngModel)]="filter.trackerType" (ngModelChange)="trackerTypeChangeHandler()">
+                        <span>Driver</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="trackerType" [value]="2" [(ngModel)]="filter.trackerType" (ngModelChange)="trackerTypeChangeHandler()">
+                        <span>FES Tech</span>
+                    </label>
+                </div>
+            </div>
+            <div class="row marginTop">
                 <div class="col-sm-2">
                     <label>Select Date</label>
                     <div class="input-group">
                         <date-picker [maxDate]="todaysDate" [(dateModel)]="tripFilterOption.tripDate" (dateModelChange)="dateChangeHandler();"></date-picker>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2" *ngIf = "filter.trackerType == 1">
                     <label>Select Driver Type</label>
                     <select [disabled]="isDistributor || user.Role?.RoleID===3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
                         <option [value]="'Internal'">RI Driver</option>
@@ -24,7 +36,7 @@
                     <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="tripFilterOption.DistributorMasterID" (selectedChange)="distributorChangeHandler()"></reddy-select>
                 </div>
                 <div class="col-sm-2" *ngIf="searchObj.userType=='Internal'">
-                    <label>Select Driver</label>
+                    <label>Select {{filter.trackerType == 1 ? "Driver" : "STech"}}</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
                         <option *ngFor="let driver of driverOnBranch | unique:'DriverName'">{{driver.DriverName}}</option>
                     </select>
@@ -39,7 +51,7 @@
                     <label>Select Trip</label>
                     <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' (change)="tripChangeHandler()">
                         <option *ngFor="let trip of driverSpecTrips | unique:'TripCode'" [value]="trip.TripCode">
-                            {{trip.TripCode}} - {{trip.RouteNumber}}
+                            {{trip.TripCode}} {{trip.RouteNumber ? '-' : ''}} {{trip.RouteNumber ? trip.RouteNumber : ''}}
                         </option>
                     </select>
                 </div>
@@ -51,7 +63,7 @@
                             <div class="block" style="background:blue;"></div>
                             <span class="blockContent">Unplanned Service</span>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="filter.trackerType == 1">
                             <div class="block" style="background:yellow;"></div>
                             <span class="blockContent">Did Not Service</span>
                         </div>
@@ -63,14 +75,14 @@
                             <div class="block" style="background:#ff0000;"></div>
                             <span class="blockContent">Skipped Stops</span>
                         </div>
-                        <div class="col-md-6"  [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                        <div class="col-md-6"  [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
                             <div class="block" style="background:#999900;"></div>
                             <span class="blockContent">Planned Sequence</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 center" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
-                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                <div class="col-md-8 center" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin" >
                         <input type="radio" name="type" [value]="1" [(ngModel)]="filter.sequence" (ngModelChange)="sequenceChangeHandler()">
                         <span>Planned Seq</span>
                     </label>
@@ -92,7 +104,7 @@
                             <thead class="tableHeader">
                                 <tr>
                                     <th style="width: 50px; padding-left: 5px; padding-right: 5px;">Actions</th>
-                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
                                         <span>
                                             Planned
                                         </span>
@@ -118,14 +130,14 @@
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
                                     <tr [ngStyle]="{'background': subitem.pinColor, 'color': subitem.pinTextColor}" style="border-bottom:1px solid white;">
                                         <td>
-                                            <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
-                                                <span class="tooltiptext">View Ticket Details</span>
+                                            <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(filter.trackerType == 1 ? subitem.ID  : subitem.WorkOrderID)">
+                                                <span class="tooltiptext">View {{filter.trackerType == 1 ? 'Ticket'  : 'Work Order'}} Details</span>
                                             </i>
                                         </td>
-                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" title="{{subitem.createdDate}}" *ngIf="filter.trackerType == 1">
                                             {{subitem.PlannedSequence}}
                                         </td>
-                                        <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
+                                        <td style="text-align:center;" *ngIf="!isNewTicket" >
                                             {{subitem.ActualSequence}}
                                         </td>
                                         <td title="{{subitem.AXCustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
