@@ -43,6 +43,7 @@ export class ReportsComponent implements OnInit {
         stech: 0,
         custID: 0,
         fesCustID: 0,
+        AssetID: 0,
         custtID: 0,
         custType: 0,
         ticketNumber: null,
@@ -58,7 +59,8 @@ export class ReportsComponent implements OnInit {
         modifiedEndDateforDriver: null,
         manifestDate: null,
         workOrderId: null,
-        RouteNumber: 0
+        RouteNumber: 0,
+        CustomerSourceID : 0
     };
 
     // Customer input formatter
@@ -196,6 +198,7 @@ export class ReportsComponent implements OnInit {
         this.filter.ticketNumber = null;
         this.filter.showCustomerDropdown = false;
         this.filter.custtID = 0;
+        this.filter.custID = '';
         switch (this.filter.reportType) {
             case 'DST':
                 this.filter.userType = 'external';
@@ -317,9 +320,11 @@ export class ReportsComponent implements OnInit {
     }
     // WOC or EOD
     stechs: any[] = [];
+    assets: any[] = [];
     private fetchSTechByBranch() {
         // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
-        if (this.filter.reportType == 'WOC') {
+        if (this.filter.reportType == 'WOC' || this.filter.reportType == 'AT'
+        || this.filter.reportType == 'SP' || this.filter.reportType == 'AER') {
             this.filter.stech = 1;
             this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
@@ -329,6 +334,21 @@ export class ReportsComponent implements OnInit {
                 console.log("Something went wrong while fetching STech");
                 this.overlayStatus = false;
             });
+            // get asset list
+            if (this.filter.reportType == 'AT') {
+                this.reportService.getAssets(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
+                    //res.unshift({ UserId: 1, STechName: 'All STech' });
+                    //this.assets = this.reportService.transformOptionsReddySelect(res, 'UserId', 'STechName');
+                    res.AssetList.unshift({ AssetID: 0, AssetName: 'All Assets' });
+                    this.assets = res;
+                    this.assets = this.reportService.transformOptionsReddySelect((res.AssetList) ? res.AssetList : res, 'AssetID', 'AssetName');
+                    this.overlayStatus = false;
+                }, (err) => {
+                    console.log("Something went wrong while fetching assets");
+                    this.overlayStatus = false;
+                });
+            }
+            //
         } else if (this.filter.reportType == 'EOD') {
             this.reportService.getSTechByBranch(this.filter.branch, this.formatDate(this.filter.manifestDate), this.formatDate(this.filter.manifestDate)).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
@@ -414,7 +434,8 @@ export class ReportsComponent implements OnInit {
         this.viewReport = false;
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
-            if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC') {
+            if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC' || this.filter.reportType == 'AT'
+            || this.filter.reportType == 'SP' || this.filter.reportType == 'AER') {
                 this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
                 this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
                 this.getCustomerBranches();
@@ -581,6 +602,9 @@ export class ReportsComponent implements OnInit {
     updateLink(rType) {
         this.viewButtonStatus = true;
         this.onLoadFrame = true;
+        if (rType == 'AT' || rType == 'AER') {
+            this.filter.CustomerSourceID = this.dropDownCustomers.filter((res)=>res.CustomerID == this.filter.custtID)[0]['CustomerSourceID'] || 0;
+        }
         if (rType !== 'TIR') {
             //this.filter.custID = this.filter.customer ? this.filter.customer.CustomerId : 0;
             this.selectedCustomerType = this.customerstatus;
@@ -652,6 +676,18 @@ export class ReportsComponent implements OnInit {
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DriverID=${this.filter.driver}&Route=${this.filter.RouteNumber}&LoggedInUserID=${this.user.UserId}`);
 
                 console.log('when SSR is clicked', this.linkRpt);
+            } else if (rType === 'AT') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&assetID=${this.filter.AssetID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=${this.filter.CustomerSourceID}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when AT is clicked', this.linkRpt);
+            } else if (rType === 'SP') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=0&LoggedInUserID=${this.user.UserId}`);
+                console.log('when SP is clicked', this.linkRpt);
+            } else if (rType === 'AER') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=${this.filter.CustomerSourceID}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when AER is clicked', this.linkRpt);
             } else {
                 return false;
             }
@@ -680,7 +716,7 @@ export class ReportsComponent implements OnInit {
     }
     getCustomers() {
         //this.branchChangeHandler(this.filter.branch)
-        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'EOD')) {
+        if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'EOD') || this.filter.reportType == 'AT') {
             this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
             if (this.filter.branch) {
