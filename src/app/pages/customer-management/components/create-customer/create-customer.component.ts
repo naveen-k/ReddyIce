@@ -404,14 +404,19 @@ export class CreateCustomerComponent implements OnInit {
         }
     }
     spaceRemoverFn(value) {
-        this.customer.CustomerName = value.replace(/^\s+|\s+$/g, '');
+        if (value && value != undefined) {
+            this.customer.CustomerName = value.replace(/^\s+|\s+$/g, '');
+        }
     }
     spaceRemoverFnforPrimaryContact(value) {
-        this.customer.PrimaryContact = value.replace(/^\s+|\s+$/g, '');
-
+        if (value && value != undefined) {
+            this.customer.PrimaryContact = value.replace(/^\s+|\s+$/g, '');
+        }
     }
     spaceRemoverFnforCity(value) {
-        this.customer.City = value.replace(/^\s+|\s+$/g, '');
+        if (value && value != undefined) {
+            this.customer.City = value.replace(/^\s+|\s+$/g, '');
+        }
     }
 }
 
