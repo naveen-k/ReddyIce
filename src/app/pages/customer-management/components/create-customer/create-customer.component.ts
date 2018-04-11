@@ -261,10 +261,10 @@ export class CreateCustomerComponent implements OnInit {
         }
     }
 
-    validateEmailID() {
+    validateEmailID(email) {
         var re = /\S+@\S+\.\S+/;
         //if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.Email)))
-        if (!re.test(this.customer.Email)) {
+        if (!re.test(email)) {
             this.notification.error('Email not valid');
             return false;
         }

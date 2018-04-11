@@ -187,7 +187,7 @@
                         <label for="example-text-input" class="col-md-12">Email</label>
                         <div class="col-md-12">
                             <input maxlength="50" [disabled]="mode === 3" [(ngModel)]='customer.Email' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
-                                type="email" class="form-control" placeholder="Email" (blur)="validateEmailID()"
+                                type="email" class="form-control" placeholder="Email" (blur)="validateEmailID(customer.Email)"
                             email />
                         </div>
                     </div>
