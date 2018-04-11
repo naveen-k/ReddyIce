@@ -290,7 +290,7 @@ export class ReportsComponent implements OnInit {
             // this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
             // this.fesCustomerss = this.fesCustomers;
             this.dropDownCustomers = res;
-            this.dropDownCustomers.unshift({"AXCustomerNumber": "1","CustomerID" :0,"CustomerName" :"All Customers", "CustomerSourceID" :0});
+            this.dropDownCustomers.unshift({"AXCustomerNumber": "","CustomerID" :0,"CustomerName" :"All Customers", "CustomerSourceID" :0});
             this.overlayStatus = false;
         }, (err) => {
             console.log("Something went wrong while fetching FES Customers");
