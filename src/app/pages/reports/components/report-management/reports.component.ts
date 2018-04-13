@@ -324,7 +324,7 @@ export class ReportsComponent implements OnInit {
     private fetchSTechByBranch() {
         // console.log('api/report/getlistoftripservicetechnician?BranchId=1&TripStartDate=01-11-2017&TripEndDate=01-11-2017');
         if (this.filter.reportType == 'WOC' || this.filter.reportType == 'AT'
-        || this.filter.reportType == 'SP' || this.filter.reportType == 'AER') {
+        || this.filter.reportType == 'SP' || this.filter.reportType == 'AER'|| this.filter.reportType == 'AMR') {
             this.filter.stech = 1;
             this.reportService.getSTechByBranch(this.filter.branch, this.filter.modifiedStartDateforDriver, this.filter.modifiedEndDateforDriver).subscribe((res) => {
                 res.unshift({ UserId: 1, STechName: 'All STech' });
@@ -435,7 +435,7 @@ export class ReportsComponent implements OnInit {
         this.filter.customer = null;
         if (this.filter.userType === 'internal') {
             if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC' || this.filter.reportType == 'AT'
-            || this.filter.reportType == 'SP' || this.filter.reportType == 'AER') {
+            || this.filter.reportType == 'SP' || this.filter.reportType == 'AER'|| this.filter.reportType == 'AMR') {
                 this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
                 this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
                 this.getCustomerBranches();
@@ -602,7 +602,7 @@ export class ReportsComponent implements OnInit {
     updateLink(rType) {
         this.viewButtonStatus = true;
         this.onLoadFrame = true;
-        if (rType == 'AT' || rType == 'AER') {
+        if (rType == 'AT' || rType == 'AER' || rType == 'AMR') {
             this.filter.CustomerSourceID = this.dropDownCustomers.filter((res)=>res.CustomerID == this.filter.custtID)[0]['CustomerSourceID'] || 0;
         }
         if (rType !== 'TIR') {
@@ -688,6 +688,10 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=${this.filter.CustomerSourceID}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when AER is clicked', this.linkRpt);
+            } else if (rType === 'AMR') {
+                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&CustType=${this.filter.CustomerSourceID}&LoggedInUserID=${this.user.UserId}`);
+                console.log('when AMR is clicked', this.linkRpt);
             } else {
                 return false;
             }
