@@ -289,6 +289,7 @@ export class ReportsComponent implements OnInit {
             // this.fesCustomers = this.reportService.transformOptionsReddySelect(res, 'CustomerID', 'CustomerNumber', 'CustomerName');
             // this.fesCustomers.unshift({ value: 0, label: 'All Customers', data: {} });
             // this.fesCustomerss = this.fesCustomers;
+            this.filter.custID = '';
             this.dropDownCustomers = res;
             this.dropDownCustomers.unshift({"AXCustomerNumber": "","CustomerID" :0,"CustomerName" :"All Customers", "CustomerSourceID" :0});
             this.overlayStatus = false;
