@@ -3,7 +3,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from '../../../user-management/user-management.interface';
 import { environment } from '../../../../../environments/environment.prod';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserService } from '../../../../shared/user.service';
 import { ReportService } from '../../reports.service';
@@ -15,6 +15,7 @@ import { debounce } from 'rxjs/operator/debounce';
     styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
+    @ViewChild('typeaheadBasic')typeaheadBasic: ElementRef;
     overlayCounter:any =0;
     overlayStatus: boolean = false;
     onLoadFrame: boolean = false;
@@ -29,6 +30,7 @@ export class ReportsComponent implements OnInit {
     isInternalDriver: boolean = false;
     isExternalDriver: boolean = false;
     isSTech: boolean = false;
+    isSearchText=false;
     filter: any = {
         startDate: null,
         todaysDate: null,
@@ -68,6 +70,12 @@ export class ReportsComponent implements OnInit {
   search = (text$: Observable<any>) => { var self = this; return text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
+        if(term.trim()!=''){
+            this.isSearchText = true;
+        } else{
+            this.isSearchText = false;
+        }
+      
       return self.dropDownCustomers.filter((v: any) => {
         let flag
           term = term.trim();
@@ -841,6 +849,17 @@ export class ReportsComponent implements OnInit {
         $('#loader').hide();
         this.viewButtonStatus = false;
         console.log("data loadedd");
+    }
+    clearSearch(){
+        //console.log("<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>..",this.filter.custID ,": ",this.typeaheadBasic.nativeElement.value);
+        var self = this;
+        setTimeout(function(){
+            self.typeaheadBasic.nativeElement.value = '';
+            self.filter.custID = '';
+            self.isSearchText = false;
+        },100);
+
+        
     }
 
 }
