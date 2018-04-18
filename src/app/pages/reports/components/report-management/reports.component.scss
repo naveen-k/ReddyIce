@@ -60,15 +60,24 @@
   }
   
   /* style glyph */
-  .inner-addon .ion-ios-search {
+  .inner-addon .ion-ios-search-strong {
     position: absolute;
     padding: 10px;
     pointer-events: none;
   }
+
+  .inner-addon .ion-close-round {
+    position: absolute;
+    padding: 10px;
+    cursor: pointer;
+  }
   
   /* align glyph */
-  .left-addon .ion-ios-search  { left:  0px;}
-  .right-addon .ion-ios-search { right: 0px;}
+  .left-addon .ion-ios-search-strong  { left:  0px;}
+  .right-addon .ion-ios-search-strong { right: 0px;}
+
+  .left-addon .ion-close-round  { left:  0px;}
+  .right-addon .ion-close-round { right: 0px;}
   
   /* add padding  */
   .left-addon input  { padding-left:  30px; }
