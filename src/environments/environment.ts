@@ -20,6 +20,7 @@ export const environment = {
   production: false,
   apiEndpoint: 'http://frozen.reddyice.com/axchangeapi/',
   reportEndpoint: 'http://frozen.reddyice.com/DashboardReportsPhase3/Reports/ReportData.aspx',
-  prodLabel: '(AX)',
+  inventoryEndpoint: 'http://frozen.reddyice.com/DA_Inventory/forms/addBom.aspx',
+  prodLabel: '(AX + Inventory)',
   EDIUserName : 'MyiceboxEDI'
 };
