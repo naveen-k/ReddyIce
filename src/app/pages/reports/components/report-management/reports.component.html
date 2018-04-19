@@ -108,8 +108,8 @@
                                 <div class="form-group col-xs-6">
                                     <div class="inner-addon right-addon">
                                         <i class="ion-ios-search-strong" *ngIf="!isSearchText"></i>
-                                        <i class="ion-close-round" *ngIf="isSearchText" (click)="clearSearch();"></i>
-                                        <input #typeaheadBasic id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"
+                                        <i class="ion-close-round" *ngIf="isSearchText && isSuported" (click)="clearSearch();"></i>
+                                        <input #typeaheadBasic id="typeahead-basic" type="text" class="form-control hidePadding" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"
                                         placeholder="All Customers" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
                                         [editable]="false" style="border: 1px solid #aaa"/>
                                     </div>
@@ -142,7 +142,7 @@
                                 <div class="form-group col-xs-6">
                                     <div class="inner-addon right-addon">
                                         <i class="ion-ios-search-strong" *ngIf="!isSearchText"></i>
-                                        <i class="ion-close-round" *ngIf="isSearchText" (click)="clearSearch();"></i>
+                                        <i class="ion-close-round" *ngIf="isSearchText && isSuported" (click)="clearSearch();"></i>
                                         <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="filter.custID" [ngbTypeahead]="search" [resultTemplate]="rt"
                                         placeholder="All Customers" [inputFormatter]="inputFormatter" (selectItem)="selectedCustomerChange($event);"
                                         [editable]="false" style="border: 1px solid #aaa"/>
