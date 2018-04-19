@@ -31,6 +31,7 @@ export class ReportsComponent implements OnInit {
     isExternalDriver: boolean = false;
     isSTech: boolean = false;
     isSearchText=false;
+    isSuported =true;
     filter: any = {
         startDate: null,
         todaysDate: null,
@@ -127,6 +128,14 @@ export class ReportsComponent implements OnInit {
 
     isRIDriver = false;
     ngOnInit() {
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf('MSIE ');
+        var trident = ua.indexOf('Trident/');
+        var edge = ua.indexOf('Edge/');
+        if (msie > 0 || trident>0 || edge>0) {
+            this.isSuported = false; 
+        }
+        
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
