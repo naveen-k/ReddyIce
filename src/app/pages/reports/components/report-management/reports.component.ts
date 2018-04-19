@@ -819,7 +819,7 @@ export class ReportsComponent implements OnInit {
             return;
         }
         this.customerstatus = event.item.CustomerSourceID;
-
+        this.isSearchText = true;
         this.filter.custtID = id;
         this.viewReport = false;
     }
