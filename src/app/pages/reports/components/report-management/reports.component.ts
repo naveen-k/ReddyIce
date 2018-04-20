@@ -68,15 +68,16 @@ export class ReportsComponent implements OnInit {
   search = (text$: Observable<any>) => { var self = this; return text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
-      return self.dropDownCustomers.filter((v: any) => {
-        let flag
-          term = term.trim();
-          flag = (v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1) && (this.filter.custType == v.CustomerSourceID || +this.filter.custType==0);
-            if(!flag){
-                this.filter.custID = 0;
-                this.customerstatus = this.filter.custType;
-            }
+        return self.dropDownCustomers.filter((v: any) => {
+            let flag
+              term = term.trim();
+              var joint = (((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString()+' - ' + v.CustomerName).toLowerCase();
+              flag = (joint.indexOf(term.toLowerCase()) > -1 || v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
+                || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1) && (this.filter.custType == v.CustomerSourceID || +this.filter.custType==0);
+                if(!flag){
+                    this.filter.custID = 0;
+                    this.customerstatus = this.filter.custType;
+                }
       return flag;
       }).slice(0, 20);
     })
