@@ -1,8 +1,6 @@
 import { CurrencyFormatter } from './pipes/currency-pipe';
-import { ModelPopupComponent } from './components/model-popup/model-popup.component';
 import { AlphaNumeric } from './directives/alpha-numeric.directive';
 import { ConcatStringPipe } from './pipes/concat-string.pipe';
-import { SelectComponent } from './components/multiple-select/multiple-select';
 import { CutStringPipe } from './pipes/cut-string.pipe';
 import { ListComponent } from './components/dual-list/list.component';
 import { DualListComponent } from './components/dual-list/dual-list.component';
@@ -11,7 +9,6 @@ import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { NumberOnlyDirective } from './directives/number-only.directive';
 import { MinValueValidatorDirective } from './directives/min-value.directive';
 import { SharedService } from './shared.service';
-import { ModalComponent } from './components/modal/modal.component';
 import { GenericSort } from './pipes/generic-sort.pipe';
 import { HttpService } from './http.service';
 import { CommonModule } from '@angular/common';
@@ -20,7 +17,6 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { NumberDecimalDirective } from './directives/number-decimal.directive';
 import { GenericFilter } from './pipes/generic-filter.pipe';
 import { NgModule } from '@angular/core';
-import { DatePicker } from './components/date-picker/date-picker.component';
 import { FormsModule } from '@angular/forms';
 import { TruncateZero } from './pipes/truncateZero.pipe';
 @NgModule({
@@ -29,7 +25,6 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
         AccordionComponent,
         AccordionGroupComponent,
         GenericSort,
-        ModalComponent,
         PaginationComponent,
         MinValueValidatorDirective,
         NumberOnlyDirective,
@@ -39,20 +34,16 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
         DualListComponent,
         ListComponent,
         CutStringPipe,
-        SelectComponent,
         AlphaNumeric,
         ConcatStringPipe,
-        ModelPopupComponent,
         CurrencyFormatter,
-        TruncateZero,
-        DatePicker
+        TruncateZero
     ],
     exports: [
         GenericFilter,
         AccordionComponent,
         AccordionGroupComponent,
         GenericSort,
-        ModalComponent,
         PaginationComponent,
         MinValueValidatorDirective,
         TicketTypePipe,
@@ -62,17 +53,13 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
         CutStringPipe,
         NumberOnlyDirective,
         NumberDecimalDirective,
-        SelectComponent,
         AlphaNumeric,
         ConcatStringPipe,
-        ModelPopupComponent,
         CurrencyFormatter,
-        TruncateZero,
-        DatePicker
+        TruncateZero
     ],
     entryComponents: [
-        ModalComponent,
-        ModelPopupComponent
+
     ],
     imports: [CommonModule,  FormsModule],
     providers: [HttpService, SharedService],
