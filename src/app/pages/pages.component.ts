@@ -17,16 +17,18 @@ export class Pages implements OnInit {
 
     private activatedRoute: ActivatedRoute,
     private router: Router) {
+      
   }
 
   ngOnInit() {
 
-    this._onRouteChange = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this._redirectToHome = event.urlAfterRedirects === '/pages';
-        this._onRouteChange.unsubscribe();
-      }
-    });
+    this.router.navigateByUrl('/login');
+    // this._onRouteChange = this.router.events.subscribe((event) => {
+    //   if (event instanceof NavigationEnd) {
+    //     this._redirectToHome = event.urlAfterRedirects === '/pages';
+    //     this._onRouteChange.unsubscribe();
+    //   }
+    // });
 
   }
 }

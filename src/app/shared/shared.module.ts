@@ -2,8 +2,6 @@ import { CurrencyFormatter } from './pipes/currency-pipe';
 import { AlphaNumeric } from './directives/alpha-numeric.directive';
 import { ConcatStringPipe } from './pipes/concat-string.pipe';
 import { CutStringPipe } from './pipes/cut-string.pipe';
-import { ListComponent } from './components/dual-list/list.component';
-import { DualListComponent } from './components/dual-list/dual-list.component';
 import { Select2Component } from './components/select2/select2.component';
 import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { NumberOnlyDirective } from './directives/number-only.directive';
@@ -31,8 +29,6 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
         NumberDecimalDirective,
         TicketTypePipe,
         Select2Component,
-        DualListComponent,
-        ListComponent,
         CutStringPipe,
         AlphaNumeric,
         ConcatStringPipe,
@@ -48,8 +44,6 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
         MinValueValidatorDirective,
         TicketTypePipe,
         Select2Component,
-        DualListComponent,
-        ListComponent,
         CutStringPipe,
         NumberOnlyDirective,
         NumberDecimalDirective,

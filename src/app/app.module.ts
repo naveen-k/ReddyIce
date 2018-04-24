@@ -1,10 +1,10 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module';
-import { AppRoutingModule} from './app.routing.module';
 import { TranslateService } from '@ngx-translate/core';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
@@ -22,11 +22,21 @@ import { CacheService } from './shared/cache.service';
     AppComponent
   ],
   imports: [
+    BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PagesModule,
+    routing,
     MaterialModule,
-    AppRoutingModule
+    SimpleNotificationsModule.forRoot(),
   ],
-  providers: [],
+  providers: [AppState,GlobalState,CacheService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(public appState: AppState) {
+  }
+}
