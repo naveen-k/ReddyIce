@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ViewContainerRef } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, Routes } from '@angular/router';
 import { GlobalState } from './global.state';
 
 @Component({
@@ -15,11 +16,18 @@ export class AppComponent implements AfterViewInit {
     timeOut: 5000,
     lastOnBottom: true,
   };
+  constructor(
+
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
+      
+  }
   ngAfterViewInit(): void {
     // hide spinner once all loaders are completed
    
   }
   goToPage(pagename){
     console.log("pagename ",pagename);
+    this.router.navigateByUrl('/'+pagename);
   }
 }
