@@ -19,4 +19,7 @@ export class AppComponent implements AfterViewInit {
     // hide spinner once all loaders are completed
    
   }
+  goToPage(pagename){
+    console.log("pagename ",pagename);
+  }
 }

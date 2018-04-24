@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { Pages } from './pages.component';
 import { ModuleWithProviders } from '@angular/core';
 import {LoginModule } from './login/login.module';
+import {RegistrationModule } from './registration/registration.module';
 // noinspection TypeScriptValidateTypes
 
 // export function loadChildren(path) { return System.import(path); };
@@ -15,10 +16,10 @@ export const routes: Routes = [
   //   path: 'forgetpassword',
   //   loadChildren: 'app/pages/forget-password/forget-password.module#ForgetPasswordModule',
   // },
-  // {
-  //   path: 'register',
-  //   loadChildren: 'app/pages/register/register.module#RegisterModule',
-  // },
+  {
+    path: 'registration',
+    loadChildren: () => RegistrationModule
+  },
   // {
   //   path: 'newregister',
   //   loadChildren: 'app/pages/register/newregister.module#NewRegisterModule',

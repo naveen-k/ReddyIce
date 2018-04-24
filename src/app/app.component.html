@@ -12,8 +12,12 @@
                 </span>
           
         </mat-toolbar>
-        <button mat-menu-item>Item 1</button>
-        <button mat-menu-item>Item 2</button>
+        <button mat-menu-item (click)="goToPage('Item 1')">Item 1</button>
+        <button mat-menu-item (click)="goToPage('Item 2')">Item 2</button>
+        <button mat-menu-item (click)="goToPage('Item 3')">Item 3</button>
+        <button mat-menu-item (click)="goToPage('Item 4')">Item 4</button>
+        <button mat-menu-item (click)="goToPage('Item 5')">Item 5</button>
+        <button mat-menu-item (click)="goToPage('Item 6')">Item 6</button>
       </mat-sidenav>
       <mat-toolbar color="primary" style="min-height:64px;">
         <span>
