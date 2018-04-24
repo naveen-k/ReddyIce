@@ -1,0 +1,79 @@
+@import "../../../theme/sass/conf/conf";
+
+.modal-content {
+  color: $dropdown-text;
+  .modal-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+    border-top-left-radius: .3rem;
+    border-top-right-radius: .3rem;
+    background: #5bc0de;
+    .modal-title{
+      font-weight: 400;
+      //font-size: 16px;
+      //text-transform: uppercase;
+      opacity: 0.9;
+      color: #000;
+    }
+    .close {
+      padding: 11px;
+      margin: -25px -22px -15px auto;
+      border-radius: 50%;
+      outline: none;
+      float: right;
+      font-size: 1.5rem;
+      font-weight: 300;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      border-radius: 25px;
+      opacity: 1;
+      border-radius: 50%;
+      border: 1px solid #fff;
+      height: 20px;
+      width: 20px;
+      z-index: 99999;
+      background: #fff;        
+    } 
+    .close:focus, .close:hover {
+      color: #e85656;
+      text-decoration: none;
+      opacity: 1;
+      background: #fff;
+      border-color: #e85656;
+    }     
+  }  
+  .modal-body {
+    padding: 15px;
+    overflow-y: auto;
+    max-height: 50vh;    
+  }  
+  .modal-footer{
+    padding: 4px;
+  }  
+}
+.add-margin-right{
+  margin-right: 20px;
+}
+
+button.close {
+  padding: 0;
+  -webkit-appearance: none;
+}
+
+button.close span{
+  position: absolute;
+  right: -2px;
+  z-index: 100000;
+  line-height: 0px;
+}
+
+.modal-buttons .btn {
+  margin-right: 20px;
+}

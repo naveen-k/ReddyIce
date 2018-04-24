@@ -1,0 +1,10 @@
+<div>
+    <list [items]="items" [heading]="'Available Products'"></list>
+    <div class="action-container">
+        <button (click)="rightClick()">Right</button>
+        <button (click)="leftClick()">Left</button>
+    </div>
+    <list [items]="selectedItems" 
+        [heading]="'Mapped Products'"
+        [rowTemplate]="mappedRowTemplate"></list>
+</div>

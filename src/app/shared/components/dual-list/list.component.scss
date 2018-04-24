@@ -1,0 +1,22 @@
+:host{
+    padding: 5px;
+}
+ul {
+    margin: 0;
+    padding: 0;
+    height: 200px;
+    overflow-y: auto;
+    border: 1px solid #5bc0de;
+    li {
+        list-style: none;
+        padding: 5px 5px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        &:hover {
+            background-color: #5bc0de;
+        }
+        &.selected {
+            background-color: #5bc0de;
+        }
+    }
+}

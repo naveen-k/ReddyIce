@@ -1,0 +1,17 @@
+:host{
+    padding: 10px;
+    width: 100%;
+}
+list {
+    display: inline-block;
+    width: 40%;
+}
+.action-container {
+    height: 200px;
+    display: inline-block;
+    width: 16%;
+    button {
+        display: inline-block;
+        width: 100%;
+    }
+}

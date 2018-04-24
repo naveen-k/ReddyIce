@@ -1,0 +1,39 @@
+<div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{modalHeader}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>    
+    </div>
+    <div class="modal-body">
+      <div [hidden]="modeltype!='branch'" class="clearfix" *ngFor="let branch of modalContent; let i = index">
+        <span>{{(i+1)}}) </span> {{branch}}
+      </div>
+      <div [hidden]="modeltype!='ticket'" class="clearfix" >
+        <ul>
+          <li *ngFor="let ticket of modalContent;">{{ticket.title}} <a *ngIf="ticket.mode=='edit'" style="cursor:pointer;" (click)="dismiss(ticket.link)">
+            &nbsp;<i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" >
+              <span class="tooltiptext">Edit</span>
+          </i>
+        </a>
+        <a *ngIf="ticket.mode=='view'" style="cursor:pointer;" (click)="dismiss(ticket.link)">
+          &nbsp;<i class="ion-eye custom-tooltip-ion" style="margin-right: 5px" >
+            <span class="tooltiptext">View</span>
+        </i>
+      </a>
+        <a *ngIf="ticket.mode=='delete'" style="cursor:pointer;" (click)="delete(ticket.TicketID)">{{ticket.title}}
+          &nbsp;
+          <i class="ion-trash-a custom-tooltip-ion" style="margin-right: 5px">
+            <span class="tooltiptext">Delete</span>
+          </i>
+          </a>
+            
+          </li>
+        </ul>
+       
+      </div>
+    </div>
+    <div class="modal-footer"></div>    
+    
+  </div>
+  

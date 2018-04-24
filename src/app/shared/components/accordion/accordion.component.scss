@@ -1,0 +1,27 @@
+.accordion-panel {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    .panel-heading {
+         border-bottom: 1px solid #9a9696;
+        padding: 10px;
+        background: #c6e0e8;
+        h5{
+            margin-bottom: 0px;
+            font-weight: normal;
+            a span{
+                color:#222 !important;
+            }
+        }
+        .icon-right{
+            float: right;
+            margin-top:-15px;
+        }
+
+    }
+    .panel-collapse{
+        padding: 15px;
+    }
+    .pointer {
+        cursor: pointer;
+    }
+}
