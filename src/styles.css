@@ -12,7 +12,11 @@ body{
     float: right;
     width: 100%;
 }
-
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+  }
 .main-container{
     width: 100%;
     height: 100%;
