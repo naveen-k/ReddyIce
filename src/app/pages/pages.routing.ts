@@ -1,9 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { Pages } from './pages.component';
 import { ModuleWithProviders } from '@angular/core';
-import { LoginModule } from './login/login.module';
-import { RegistrationModule } from './registration/registration.module';
-import { HomeModule } from './home/home.module';
 // noinspection TypeScriptValidateTypes
 
 // export function loadChildren(path) { return System.import(path); };
@@ -11,7 +8,10 @@ import { HomeModule } from './home/home.module';
 export const routes: Routes = [
   {
     path: 'login',
-    loadChildren: () => LoginModule
+    loadChildren: ()=>{
+      return <any>import('./login/login.module')
+        .then(({ LoginModule }) => LoginModule)
+      }
   },
   // {
   //   path: 'forgetpassword',
@@ -19,7 +19,10 @@ export const routes: Routes = [
   // },
   {
     path: 'registration',
-    loadChildren: () => RegistrationModule
+    loadChildren: ()=>{
+      return <any>import('./registration/registration.module')
+        .then(({ RegistrationModule }) => RegistrationModule)
+      }
   },
   // {
   //   path: 'newregister',
@@ -45,8 +48,16 @@ export const routes: Routes = [
     path: 'pages',
     component: Pages,
     children: [
-       { path: 'home', loadChildren: ()=> HomeModule },
-       { path: '', loadChildren: ()=> HomeModule },
+       { path: 'home', loadChildren: ()=>{
+        return <any>import('./home/home.module')
+          .then(({ HomeModule }) => HomeModule)
+        }
+       },
+       { path: '',  loadChildren: ()=>{
+          return <any>import('./home/home.module')
+            .then(({ HomeModule }) => HomeModule)
+          }
+        },
       // { path: 'cart-management', loadChildren: './cart-management/cart-management.module#CartManagementModule' },
       // { path: 'feedback', loadChildren: './day-end/day-end.module#DayEndModule' },
       // { path: 'history', loadChildren: './history/history.module#HistoryModule' },
