@@ -22,7 +22,7 @@ export class Pages implements OnInit {
 
   ngOnInit() {
 
-    this.router.navigateByUrl('/login');
+    //this.router.navigateByUrl('/login');
     // this._onRouteChange = this.router.events.subscribe((event) => {
     //   if (event instanceof NavigationEnd) {
     //     this._redirectToHome = event.urlAfterRedirects === '/pages';

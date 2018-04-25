@@ -1,8 +1,9 @@
 import { Routes, RouterModule } from '@angular/router';
 import { Pages } from './pages.component';
 import { ModuleWithProviders } from '@angular/core';
-import {LoginModule } from './login/login.module';
-import {RegistrationModule } from './registration/registration.module';
+import { LoginModule } from './login/login.module';
+import { RegistrationModule } from './registration/registration.module';
+import { HomeModule } from './home/home.module';
 // noinspection TypeScriptValidateTypes
 
 // export function loadChildren(path) { return System.import(path); };
@@ -44,7 +45,8 @@ export const routes: Routes = [
     path: 'pages',
     component: Pages,
     children: [
-      // { path: 'home', loadChildren: './home/home.module#HomeModule' },
+       { path: 'home', loadChildren: ()=> HomeModule },
+       { path: '', loadChildren: ()=> HomeModule },
       // { path: 'cart-management', loadChildren: './cart-management/cart-management.module#CartManagementModule' },
       // { path: 'feedback', loadChildren: './day-end/day-end.module#DayEndModule' },
       // { path: 'history', loadChildren: './history/history.module#HistoryModule' },
