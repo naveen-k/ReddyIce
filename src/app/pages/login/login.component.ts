@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
 
 @Component({
@@ -9,7 +10,8 @@ import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angula
 export class Login implements OnInit {
   loginForm: FormGroup;
   CustomerNumber: Number;
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder,private activatedRoute: ActivatedRoute,
+    private router: Router) { 
         // To initialize FormGroup  
         this.loginForm = fb.group({  
           'UserName' : [null, Validators.required],
@@ -26,5 +28,7 @@ export class Login implements OnInit {
   {  
     console.log(form);  
   }
-  
+  goToPage(pagename){
+    this.router.navigateByUrl('/'+pagename);
+  }
 }

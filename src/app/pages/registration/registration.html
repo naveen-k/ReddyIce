@@ -32,11 +32,11 @@
           <span matPrefix>+1 &nbsp;</span>
           <input type="tel" formControlName="CustomerNumber" matInput placeholder="Telephone" [(ngModel)]="customerDetail">
         </mat-form-field>
-        <mat-card-actions style="text-align:center;">
+        <mat-card-actions style="text-align:center;padding: 0 1em;">
           <button mat-raised-button color="warn" class="form-full-width">Continue</button>
         </mat-card-actions>
-        <mat-card-actions style="text-align:center;">
-          <button mat-raised-button color="primary" class="form-full-width">Login</button>
+        <mat-card-actions style="text-align:center;padding: 0 1em;">
+          <button mat-raised-button color="primary" class="form-full-width" (click)="goToPage('login')">Login</button>
         </mat-card-actions>
       </form>
 

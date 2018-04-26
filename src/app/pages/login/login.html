@@ -1,4 +1,4 @@
-<div class="flex-container" style="padding: .5em; margin-top:auto;">
+<div class="flex-container" style="padding: .5em;">
   <mat-card>
     <mat-card-header>
       <mat-card-title>Login</mat-card-title>
@@ -18,13 +18,13 @@
           </span>
           <input type="tel" formControlName="Password" matInput placeholder="Password" [(ngModel)]="customerDetail">
         </mat-form-field>
-        <mat-card-actions style="text-align:center;">
+        <mat-card-actions style="text-align:center;padding: 0 1em;">
           <button mat-raised-button color="warn" class="form-full-width">Login</button>
         </mat-card-actions>
       </form>
       <mat-divider></mat-divider>
       <mat-card-actions style="text-align:center;">
-        <button mat-button color="primary">New Registration</button>&nbsp;|&nbsp;
+        <button mat-button color="primary" (click)="goToPage('registration')">New Registration</button>&nbsp;|&nbsp;
         <button mat-button color="primary">Forgot Password</button>
       </mat-card-actions>
     </mat-card-content>
