@@ -752,7 +752,7 @@ export class ReportsComponent implements OnInit {
             this.modifiedStartDate = this.modifyDate(this.filter.startDate);
             this.modifiedEndDate = this.modifyDate(this.filter.endDate);
             if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
-                this.filter.reportType != 'WONS' && this.filter.reportType != 'MR') {
+                this.filter.reportType != 'WONS' && this.filter.reportType != 'MR' && this.filter.reportType != 'SR' && this.filter.reportType != 'RS') {
                 this.overlayStatus = true;
                 this.overlayCounter++;
                 this.reportService
