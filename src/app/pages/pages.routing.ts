@@ -24,10 +24,13 @@ export const routes: Routes = [
         .then(({ RegistrationModule }) => RegistrationModule)
       }
   },
-  // {
-  //   path: 'newregister',
-  //   loadChildren: 'app/pages/register/newregister.module#NewRegisterModule',
-  // },
+  {
+    path: 'newuser',
+    loadChildren: ()=>{
+      return <any>import('./newuser/newuser.module')
+        .then(({ NewUserModule }) => NewUserModule)
+      }
+  },
   // {
   //   path: 'newuser',
   //   loadChildren: 'app/pages/register/newuser.module#NewUserModule',

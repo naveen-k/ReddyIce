@@ -32,7 +32,8 @@ import { MatAutocompleteModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule } from '@angular/material';
+    MatTooltipModule, 
+    MatFormFieldModule } from '@angular/material';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { MatAutocompleteModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,],
+    MatTooltipModule,
+    MatFormFieldModule],
   exports: [CdkTableModule,MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -99,6 +101,7 @@ import { MatAutocompleteModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule,],
+    MatTooltipModule,
+    MatFormFieldModule],
 })
 export class MaterialModule { }

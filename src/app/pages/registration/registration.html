@@ -1,9 +1,54 @@
-<div class="flex-container">
-    <mat-card>
-      <mat-card-content>
-        <div>
-            Registration 
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<div class="flex-container" style="padding: .5em;">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>New Registration</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <div style="display: table;text-align: center; width: 100%;">
+      <div>
+        <h4 md-line>Registration with barcode</h4>
+      </div>
+      <div>
+        <i class="material-icons" style="font-size: 7em;">blur_circular</i>
+      </div>
+      <div>
+        OR
+      </div>
+    </div>
+    <mat-card-content style="padding-top: 10px;text-align:center;">
+      <mat-button-toggle-group #group="matButtonToggleGroup" (change)="getGroupValue(group.value)" value="{{groupVal}}">
+        <mat-button-toggle value="0">
+          Phone Number
+        </mat-button-toggle>
+        <mat-button-toggle value="1">
+          AxCustomer Number
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <form class="form-top" [formGroup]="regiForm" class="centerComponent">
+        <mat-form-field class="form-full-width" *ngIf="groupVal == 1">
+          <input formControlName="CustomerNumber" matInput placeholder="AxCustomer Number">
+        </mat-form-field>
+        <mat-form-field class="form-full-width" *ngIf="groupVal == 0">
+          <span matPrefix>+1 &nbsp;</span>
+          <input type="tel" formControlName="CustomerNumber" matInput placeholder="Telephone" [(ngModel)]="customerDetail">
+        </mat-form-field>
+        <mat-card-actions style="text-align:center;">
+          <button mat-raised-button color="warn" class="form-full-width">Continue</button>
+        </mat-card-actions>
+        <mat-card-actions style="text-align:center;">
+          <button mat-raised-button color="primary" class="form-full-width">Login</button>
+        </mat-card-actions>
+      </form>
+
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions style="text-align:center;" (click)="goToPage('newuser')">
+        <button mat-button color="primary" class="form-full-width">Problem in Registration?<i class="material-icons">forward</i> </button>
+    </mat-card-actions>
+  </mat-card>
+ 
+</div>
+
+   
+        
+   

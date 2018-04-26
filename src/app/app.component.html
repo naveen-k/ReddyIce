@@ -1,49 +1,49 @@
 <div style="position:absolute;top:0;left:0;right:0;bottom:0;">
     <mat-sidenav-container #sidenav style="height:100%;width:100%;">
-      <mat-sidenav mode="over" #sidenav style="min-width:220px;">
-          <mat-toolbar color="primary" style="min-height:64px;">
-              <span>
-                  <button style="background-color:transparent;border-style:none;cursor:pointer;" (click)="sidenav.close()">
-                      <i class="material-icons toolbar-link-icon" style="color:white;">menu</i>
-                  </button>
-              </span>
-              <span>
-                  <img class="log" src="./assets/img/logo.png">
+        <mat-sidenav mode="over" #sidenav style="min-width:220px;">
+            <mat-toolbar color="primary" style="min-height:64px;">
+                <span>
+                    <button style="background-color:transparent;border-style:none;cursor:pointer;" (click)="sidenav.close()">
+                        <i class="material-icons toolbar-link-icon" style="color:white;">menu</i>
+                    </button>
                 </span>
-          
-        </mat-toolbar>
-        <button mat-menu-item (click)="goToPage('login')">Item 1</button>
-        <button mat-menu-item (click)="goToPage('registration')">Item 2</button>
-        <button mat-menu-item (click)="goToPage('Item 3')">Item 3</button>
-        <button mat-menu-item (click)="goToPage('Item 4')">Item 4</button>
-        <button mat-menu-item (click)="goToPage('Item 5')">Item 5</button>
-        <button mat-menu-item (click)="goToPage('Item 6')">Item 6</button>
-      </mat-sidenav>
-      <mat-toolbar color="primary" style="min-height:64px;">
-        <span>
-            <button style="background-color:transparent;border-style:none;cursor:pointer;" (click)="sidenav.open()">
-                <i class="material-icons toolbar-link-icon" style="color:white;">menu</i>
+                <span>
+                    <img class="log" src="./assets/img/logo.png">
+                </span>
+
+            </mat-toolbar>
+            <button mat-menu-item (click)="goToPage('login')">Item 1</button>
+            <button mat-menu-item (click)="goToPage('registration')">Item 2</button>
+            <button mat-menu-item (click)="goToPage('Item 3')">Item 3</button>
+            <button mat-menu-item (click)="goToPage('Item 4')">Item 4</button>
+            <button mat-menu-item (click)="goToPage('Item 5')">Item 5</button>
+            <button mat-menu-item (click)="goToPage('Item 6')">Item 6</button>
+        </mat-sidenav>
+        <mat-toolbar color="primary" style="min-height:64px;">
+            <span>
+                <button style="background-color:transparent;border-style:none;cursor:pointer;" (click)="sidenav.open()">
+                    <i class="material-icons toolbar-link-icon" style="color:white;">menu</i>
+                </button>
+            </span>
+            <span>
+                <img class="log" src="./assets/img/logo.png">
+            </span>
+
+            <span flex class="flex"></span>
+
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
             </button>
-        </span>
-        <span>
-            <img class="log" src="./assets/img/logo.png">
-          </span>
-    
-          <span flex class="flex"></span>
-    
-          <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu" [overlapTrigger]="false">
-            <button mat-menu-item>Item 1</button>
-            <button mat-menu-item>Item 2</button>
-          </mat-menu>
-      
-      </mat-toolbar>
-      <div class="inner-sidenav-content">
-        <div>
-            <router-outlet></router-outlet>          
+            <mat-menu #menu="matMenu" [overlapTrigger]="false">
+                <button mat-menu-item>Item 1</button>
+                <button mat-menu-item>Item 2</button>
+            </mat-menu>
+
+        </mat-toolbar>
+        <div class="inner-sidenav-content">
+            <div>
+                <router-outlet></router-outlet>
+            </div>
         </div>
-      </div>
     </mat-sidenav-container>
-  </div>
+</div>

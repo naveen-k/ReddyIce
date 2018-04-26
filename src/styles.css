@@ -3,6 +3,7 @@
 body{
     padding: 0px 2px;
     margin: 0px;
+    background: #C0C0C0;
 }
 .log{
     width: 7em;
@@ -16,6 +17,7 @@ body{
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
+    padding: .5em;
   }
 .main-container{
     width: 100%;
@@ -42,4 +44,43 @@ body{
     left:0;
     right:0;
     top:64px;
+    background: #d4dbe4;
   }
+  .form-top {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+    padding-top: 20px;
+  }
+  
+  .form-full-width {
+    width: 100%;
+  }
+  .centerComponent{
+    margin-left:auto;margin-right:auto;
+  }
+  .mat-card{
+      padding:1em !important;
+  }
+  .card-header-text .mat-card-header-text    {
+    margin-left: -6px !important;
+    width: 100%;
+  }
+  .floatL {
+    float: left;
+  }
+  .cardHeaderTitle {
+    padding-top: 5px;
+    display: block;
+    float: left;
+  }
+  .cardBorder{
+    border: 1px solid rgba(0,0,0,.14);
+  }
+  .mat-card-title{
+    font-weight: 500;
+  }
+  .inputIcon .mat-form-field-flex {
+    align-items: flex-end !important;
+   
+}
