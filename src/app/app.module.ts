@@ -16,6 +16,7 @@ import { AppState, InternalStateType } from './app.service';
 import { GlobalState } from './global.state';
 import { PagesModule } from './pages/pages.module';
 import { CacheService } from './shared/cache.service';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { CacheService } from './shared/cache.service';
     routing,
     MaterialModule,
     SimpleNotificationsModule.forRoot(),
+    FlexLayoutModule,
   ],
   providers: [AppState,GlobalState,CacheService],
   bootstrap: [AppComponent]

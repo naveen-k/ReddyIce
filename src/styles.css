@@ -84,3 +84,7 @@ body{
     align-items: flex-end !important;
    
 }
+.customeCard{
+  width: 100%;
+  box-sizing: border-box;
+}

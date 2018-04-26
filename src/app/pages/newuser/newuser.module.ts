@@ -4,10 +4,11 @@ import { MaterialModule } from '../../material.module';
 import { NewUser } from './newuser.component';
 import { routing } from './newuser.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   imports: [
-    routing,MaterialModule,ReactiveFormsModule,CommonModule
+    routing,MaterialModule,ReactiveFormsModule,CommonModule,FlexLayoutModule
   ],
   declarations: [
     NewUser
