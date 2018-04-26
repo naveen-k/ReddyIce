@@ -87,7 +87,8 @@ export class CreateCustomerComponent implements OnInit {
             this.service.getCustomer(this.customerId, this.isRI).subscribe((response) => {
                 this.customer = response.CustomerDetails;
                 if (this.mode === 3 && this.isRI) {
-                    this.customer.Address = (this.customer.Address) ? this.customer.Address : this.customer.Address1 + ' ' + this.customer.Address2;
+                    // this.customer.Address = (this.customer.Address) ? this.customer.Address : this.customer.Address1 + ' ' + this.customer.Address2;
+                    this.customer.Address = (this.customer.Address) ? this.customer.Address :  this.customer.Address2; // Added as per Gaurav's mail
                 }
                 if (response.CustomerDetails.C_CustomerNumber_) {
                     this.customer.AXCustomerNumber = response.CustomerDetails.C_CustomerNumber_;
