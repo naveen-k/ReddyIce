@@ -23,6 +23,7 @@ export class ReportsComponent implements OnInit {
     cacheBranches;
     cacheRBranches;
     cacheDistributor;
+    cacheCustomers = [];
     selectedCustomerType: number = 0;
     isITAdmin: boolean = false;
     isInternalAdmin: boolean = false;
@@ -30,8 +31,8 @@ export class ReportsComponent implements OnInit {
     isInternalDriver: boolean = false;
     isExternalDriver: boolean = false;
     isSTech: boolean = false;
-    isSearchText=false;
-    isSuported =true;
+    isSearchText = false;
+    isSuported = true;
     filter: any = {
         startDate: null,
         todaysDate: null,
@@ -80,14 +81,14 @@ export class ReportsComponent implements OnInit {
 
                 return self.dropDownCustomers.filter((v: any) => {
                     let flag
-                      term = term.trim();
-                      var joint = (((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString()+' - ' + v.CustomerName).toLowerCase();
-                      flag = (joint.indexOf(term.toLowerCase()) > -1 || v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-                        || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1) && (this.filter.custType == v.CustomerSourceID || +this.filter.custType==0);
-                        if(!flag){
-                            this.filter.custID = 0;
-                            this.customerstatus = this.filter.custType;
-                        }
+                    term = term.trim();
+                    var joint = (((v.AXCustomerNumber) ? v.AXCustomerNumber : '').toString() + ' - ' + v.CustomerName).toLowerCase();
+                    flag = (joint.indexOf(term.toLowerCase()) > -1 || v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
+                        || ((v.AXCustomerNumber) ? v.AXCustomerNumber : '').toString().toLowerCase().indexOf(term.toLowerCase()) > -1) && (this.filter.custType == v.CustomerSourceID || +this.filter.custType == 0);
+                    if (!flag) {
+                        this.filter.custID = 0;
+                        this.customerstatus = this.filter.custType;
+                    }
                     return flag;
                 }).slice(0, 20);
             })
@@ -134,10 +135,10 @@ export class ReportsComponent implements OnInit {
         var msie = ua.indexOf('MSIE ');
         var trident = ua.indexOf('Trident/');
         var edge = ua.indexOf('Edge/');
-        if (msie > 0 || trident>0 || edge>0) {
-            this.isSuported = false; 
+        if (msie > 0 || trident > 0 || edge > 0) {
+            this.isSuported = false;
         }
-        
+
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -310,7 +311,7 @@ export class ReportsComponent implements OnInit {
             // this.fesCustomerss = this.fesCustomers;
             this.filter.custID = '';
             this.dropDownCustomers = res;
-            this.dropDownCustomers.unshift({ "AXCustomerNumber": "", "CustomerID": 0, "CustomerName": "All Customers", "CustomerSourceID": 0 });
+            this.dropDownCustomers.unshift({ "AXCustomerNumber": "", "CustomerID": 0, "CustomerName": "All Customers", "CustomerSourceID": 0, "BranchId": 0 });
             this.overlayStatus = false;
         }, (err) => {
             console.log("Something went wrong while fetching FES Customers");
@@ -386,7 +387,8 @@ export class ReportsComponent implements OnInit {
         this.overlayCounter = 0;
         this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
         this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
-
+        if (this.cacheCustomers.length > 0)
+            this.cacheCustomers = [];
 
         this.filter.custID = '';
         if (this.user.Role.RoleName === 'Driver') {
@@ -737,7 +739,6 @@ export class ReportsComponent implements OnInit {
         return yy + '/' + mm + '/' + dd;
     }
     getCustomers() {
-        //this.branchChangeHandler(this.filter.branch)
         if (this.filter.reportType == 'WOC' || (this.filter.reportType == 'EOD') || this.filter.reportType == 'AT') {
             this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
@@ -746,12 +747,10 @@ export class ReportsComponent implements OnInit {
                 this.getFesCustomers();
             }
         } else {
-            //this.branchChangeHandler();
             this.viewReport = false;
-
             this.modifiedStartDate = this.modifyDate(this.filter.startDate);
             this.modifiedEndDate = this.modifyDate(this.filter.endDate);
-            if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
+            if (this.cacheCustomers.length == 0 && this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
                 this.filter.reportType != 'WONS' && this.filter.reportType != 'MR' && this.filter.reportType != 'SR' && this.filter.reportType != 'RS') {
                 this.overlayStatus = true;
                 this.overlayCounter++;
@@ -759,25 +758,19 @@ export class ReportsComponent implements OnInit {
                     .getCustomerDropDownList(this.filter.branch, this.user.UserId, this.modifiedStartDate, this.modifiedEndDate, this.filter.distributor)
                     .subscribe((res) => {
                         this.dropDownCustomers = res;
-                        this.dropDownCustomers.unshift({ "AXCustomerNumber": "", "CustomerID": 0, "CustomerName": "All Customers", "CustomerSourceID": "0" });
+                        this.cacheCustomers = res;
+                        this.dropDownCustomers.unshift({ "AXCustomerNumber": "", "CustomerID": 0, "CustomerName": "All Customers", "CustomerSourceID": "0", "BranchId": 0 });
                         this.overlayCounter--;
                         if (this.overlayCounter <= 0) {
                             this.overlayStatus = false;
                         }
-                        // const tempArr = [];
-                        // res.forEach(cus => {
-                        //     tempArr.push({
-                        //         value: `${cus.CustomerID}` + '-' + `${cus.CustomerSourceID}`,
-                        //         label: `${cus.AXCustomerNumber} - ${cus.CustomerName}`,
-                        //         data: cus,
-                        //     });
-                        // });
-                        // tempArr.unshift({ value: 0, label: 'All Customers', data: {} });
-                        // this.dropDownCustomers = tempArr;
-                        // this.filterCustomers();
                     }, (err) => {
                         this.overlayStatus = false;
                     })
+            } else if (this.filter.reportType != 'DST' && this.filter.reportType != 'TIR' &&
+                this.filter.reportType != 'WONS' && this.filter.reportType != 'MR' && this.filter.reportType != 'SR' && this.filter.reportType != 'RS') {
+                this.dropDownCustomers = this.cacheCustomers.filter((item) => item.BranchId == this.filter.branch);
+                this.dropDownCustomers.unshift({ "AXCustomerNumber": "", "CustomerID": 0, "CustomerName": "All Customers", "CustomerSourceID": "0", "BranchId": 0 });
             }
         }
     }
