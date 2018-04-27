@@ -282,7 +282,9 @@ export class ReportsComponent implements OnInit {
         } else {
             this.branches = JSON.parse(JSON.stringify(this.cacheBranches));
         }
-        this.fetchSTechByBranch();
+        if (this.filter.reportType !== 'AMR') {
+            this.fetchSTechByBranch();
+        }
     }
     getCustomerBranches() {
         this.branches = [];
@@ -459,7 +461,9 @@ export class ReportsComponent implements OnInit {
                 this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
                 this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
                 this.getCustomerBranches();
-                this.getFesCustomers();
+                if (this.filter.reportType !== 'EOD' && this.filter.reportType !== 'SP') {
+                    this.getFesCustomers();
+                }
             } else if (this.filter.reportType !== 'WONS') {
                 this.getAllBranches();
             } else {
@@ -622,7 +626,7 @@ export class ReportsComponent implements OnInit {
     updateLink(rType) {
         this.viewButtonStatus = true;
         this.onLoadFrame = true;
-        if (rType == 'AT' || rType == 'AER' || rType == 'AMR') {
+        if (rType == 'WOC' || rType == 'SP' || rType == 'AT' || rType == 'AER' || rType == 'AMR') {
             this.filter.CustomerSourceID = this.dropDownCustomers.filter((res) => res.CustomerID == this.filter.custtID)[0]['CustomerSourceID'] || 0;
         }
         if (rType !== 'TIR') {
@@ -679,7 +683,7 @@ export class ReportsComponent implements OnInit {
 
             } else if (rType === 'WOC') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=0&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=${this.filter.CustomerSourceID}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when WOC is clicked', this.linkRpt);
             } else if (rType === 'EOD') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -702,7 +706,7 @@ export class ReportsComponent implements OnInit {
                 console.log('when AT is clicked', this.linkRpt);
             } else if (rType === 'SP') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
-                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=0&LoggedInUserID=${this.user.UserId}`);
+                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&CustomerID=${this.filter.custtID}&STechID=${this.filter.stech === 1 ? 0 : this.filter.stech}&CustType=${this.filter.CustomerSourceID}&LoggedInUserID=${this.user.UserId}`);
                 console.log('when SP is clicked', this.linkRpt);
             } else if (rType === 'AER') {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
@@ -743,8 +747,12 @@ export class ReportsComponent implements OnInit {
             this.filter.modifiedStartDateforDriver = this.modifyDate(this.filter.startDate);
             this.filter.modifiedEndDateforDriver = this.modifyDate(this.filter.endDate);
             if (this.filter.branch) {
-                this.fetchSTechByBranch();
-                this.getFesCustomers();
+                if (this.filter.reportType !== 'AMR') {
+                    this.fetchSTechByBranch();
+                }   
+                if (this.filter.reportType !== 'EOD' && this.filter.reportType !== 'SP') {
+                    this.getFesCustomers();
+                }
             }
         } else {
             this.viewReport = false;
