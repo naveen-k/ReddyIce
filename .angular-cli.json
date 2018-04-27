@@ -20,7 +20,9 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "assets/css/vendor/ngmaterial/ngmaterial.css"
+        "assets/css/vendor/ngmaterial/ngmaterial.css",
+        "assets/css/cp.css",
+        "assets/css/md-icon.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

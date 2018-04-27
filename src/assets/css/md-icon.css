@@ -1,0 +1,88 @@
+@font-face {
+    font-family: 'fontmd';
+    
+    src:       url('../../assets/font/material_design_iconic_font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    }
+    
+    [class^="md-icon-"], [class*=" md-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'fontmd' !important;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none; 
+    line-height: 1;
+    
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .md-icon-star:before {
+    content: "\e800";
+    }
+    .md-icon-clock:before {
+        content: "\e801";
+        
+    }
+    .md-icon-home:before {
+      content: "\e802";
+      
+    }
+    .md-icon-orderemp:before {
+        content: "\e803";
+        
+    }
+    .md-icon-order:before {
+        content: "\e804";
+        
+    }
+    .md-icon-tools:before {
+        content: "\e805";
+        
+    }
+    .md-icon-deletesolid:before {
+        content: "\e806";
+        
+    }
+    .md-icon-person:before {
+        content: "\f206";
+        
+    }
+    .md-icon-person-solid:before {
+        content: "\f207";
+        
+    }
+    .md-icon-telephone-soild:before {
+        content: "\f2be";
+        
+    }
+    .md-icon-email-soild:before {
+        content: "\f15a";
+        
+    }
+
+    .md-icon-menu:before{
+        content: "\f197"
+    }
+    .md-icon-business:before{
+        content: "\f132"
+    }
+    .md-icon-return:before {
+        content: "\e808";
+        
+    }
+    .md-icon-close:before {
+        content: "\e809";
+        
+    }
+    .md-icon-cart:before {
+        content: "\e80a";
+        
+    }
+    
+    
+  

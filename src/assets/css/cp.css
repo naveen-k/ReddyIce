@@ -1,0 +1,69 @@
+@font-face {
+    font-family: 'fontello';
+    
+    src:       url('../../assets/font/fontello.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    }
+    
+    [class^="cp-icon-"], [class*=" cp-icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'fontello' !important;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none; 
+    line-height: 1;
+    
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .cp-icon-star:before {
+    content: "\e800";
+    }
+    .cp-icon-clock:before {
+        content: "\e801";
+        
+    }
+    .cp-icon-home:before {
+      content: "\e802";
+      
+    }
+    .cp-icon-orderemp:before {
+        content: "\e803";
+        
+    }
+    .cp-icon-order:before {
+        content: "\e804";
+        
+    }
+    .cp-icon-tools:before {
+        content: "\e805";
+        
+    }
+    .cp-icon-deletesolid:before {
+        content: "\e806";
+        
+    }
+    .cp-icon-person:before {
+        content: "\e807";
+        
+    }
+    .cp-icon-return:before {
+        content: "\e808";
+        
+    }
+    .cp-icon-close:before {
+        content: "\e809";
+        
+    }
+    .cp-icon-cart:before {
+        content: "\e80a";
+        
+    }
+    
+    
+  
