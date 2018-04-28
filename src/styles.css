@@ -92,3 +92,26 @@ body{
   width: 100%;
   box-sizing: border-box;
 }
+.mainheading{
+  font-size: 16px !important;
+  font-weight: bold;
+}
+.iconbasesize {
+  
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+}
+.iconbackgraund{
+  background: #008FC0;
+  color: #fff;
+  border-radius: 20px;
+}
+.mat-toolbar.mat-primary {
+  background: #008FC0 !important;
+  color: #fff;
+}
+.mat-fab.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary {
+  background-color: #008FC0 !important;
+}
