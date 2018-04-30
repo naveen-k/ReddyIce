@@ -1,0 +1,92 @@
+<div style="padding: .5em;">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>New User Registration</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <form class="form-top" [formGroup]="newUserForm" class="centerComponent">
+    <mat-card-content >
+    
+        <div style="padding-top:.5em;">
+            <mat-card class="cardBorder">
+              <mat-card-header class="card-header-text">
+                <mat-card-title class="floatL">
+                    <i matPrefix class="material-icons floatL">person_outline</i><span class="cardHeaderTitle floatL">Personal Information</span>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-divider></mat-divider>
+             
+              <mat-card-content>
+              
+                  <mat-form-field class="form-full-width inputIcon">
+                      <span matPrefix>
+                        <i class="material-icons">person</i>&nbsp;
+                      </span>
+                    <input  formControlName="FullName" matInput placeholder="Full Name">
+                  </mat-form-field>
+                  <mat-form-field class="form-full-width inputIcon">
+                    <span matPrefix>
+                      <i class="material-icons">phone</i>&nbsp;
+                    </span>
+                    <input type="tel" formControlName="Mobile" matInput placeholder="Mobile" [(ngModel)]="Mobile">
+                  </mat-form-field>
+                  <mat-form-field class="form-full-width inputIcon">
+                      <span matPrefix>
+                        <i class="material-icons">email</i>&nbsp;
+                      </span>
+                      <input type="email" formControlName="Email" matInput placeholder="Email" [(ngModel)]="customerDetail">
+                    </mat-form-field>
+                 
+               
+          
+              </mat-card-content>
+            
+            </mat-card>
+           
+          </div>
+          <div style="padding-top:.5em;">
+              <mat-card class="cardBorder">
+                <mat-card-header class="card-header-text">
+                  <mat-card-title class="floatL">
+                    <i matPrefix  class="material-icons floatL" *ngIf="!isIE">business</i>
+                    <i matPrefix class="material-icons floatL" *ngIf="isIE">&#xE0AF;</i>
+                    <span class="cardHeaderTitle floatL">Store Information</span></mat-card-title>
+                </mat-card-header>
+                <mat-divider></mat-divider>
+               
+                <mat-card-content>
+                
+                    <mat-form-field class="form-full-width">
+                      <input formControlName="StoreName" matInput placeholder="Store Name">
+                    </mat-form-field>
+                    <mat-form-field class="form-full-width">
+                        <input  formControlName="Address" matInput placeholder="Address" [(ngModel)]="Address">
+                    </mat-form-field>
+                    <mat-form-field >
+                        <input  formControlName="City" matInput placeholder="City" [(ngModel)]="City">
+                       
+                    </mat-form-field>
+                    <mat-form-field  class="form-full-width">
+                        <input  formControlName="State" matInput placeholder="State" [(ngModel)]="State">
+                    </mat-form-field>
+                    <mat-form-field class="form-full-width">
+                        <input  formControlName="ZipCode" matInput placeholder="Zip Code" [(ngModel)]="ZipCode">
+                    </mat-form-field>          
+                </mat-card-content>
+              </mat-card> 
+             
+            </div>
+     
+
+    </mat-card-content>
+    <mat-card-actions style="text-align:center;">
+        <button mat-raised-button color="primary" >Submit</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+ 
+</div>
+
+   
+        
+   
