@@ -90,6 +90,11 @@
         content: "\f2fb";
         
     }
+
+    .md-icon-bell:before {
+        content: "\F1Fb";
+        
+    }    
     
     
     

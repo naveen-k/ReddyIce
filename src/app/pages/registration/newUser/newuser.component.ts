@@ -10,6 +10,9 @@ export class NewUserRegistration implements OnInit {
   newUserForm: FormGroup;
   CustomerNumber: Number;
   isIE:boolean = false;
+  color = 'primary';
+  checked = false;
+  disabled = false;
   constructor(private fb: FormBuilder,private activatedRoute: ActivatedRoute,
     private router: Router) { 
         // To initialize FormGroup  

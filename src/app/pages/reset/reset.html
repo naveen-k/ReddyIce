@@ -1,0 +1,21 @@
+<div class="flex-container" style="padding: .5em;">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Reset Password</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form class="form-top" [formGroup]="resetForm" class="centerComponent" style="padding-top: .9em;">
+        <mat-form-field class="form-full-width inputIcon">
+          <input formControlName="Password" matInput placeholder="Password">
+        </mat-form-field>
+        <mat-form-field class="form-full-width inputIcon">
+          <input formControlName="ConfirmPassword" matInput placeholder="Confirm Password">
+        </mat-form-field>
+        <mat-card-actions style="text-align:center;padding: 0 1em;">
+          <button mat-raised-button color="warn" class="form-full-width">Submit</button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

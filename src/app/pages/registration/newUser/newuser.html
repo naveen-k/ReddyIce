@@ -1,92 +1,112 @@
 <div style="padding: .5em;">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>New User Registration</mat-card-title>
+      <mat-card-title class="mainheading">New User Registration</mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
     <form class="form-top" [formGroup]="newUserForm" class="centerComponent">
-    <mat-card-content >
-    
-        <div style="padding-top:.5em;">
-            <mat-card class="cardBorder">
+      <mat-card-content>
+        <div class="container" fxLayout="column" fxLayout.lg="row" fxLayout.xl="row" fxLayoutGap.lg="10px" fxLayoutGap.xl="10px"
+          fxLayoutGap="0" fxLayoutAlign="center">
+          <div style="padding-top:.5em;" fxFlex="50%">
+            <mat-card class="cardBorder customeCard">
               <mat-card-header class="card-header-text">
                 <mat-card-title class="floatL">
-                    <i matPrefix class="material-icons floatL">person_outline</i><span class="cardHeaderTitle floatL">Personal Information</span>
+                  <i matPrefix class="md-icon-person floatL"></i>
+                  <span class="cardHeaderTitle floatL cardHeaderLP">Personal Information</span>
                 </mat-card-title>
               </mat-card-header>
               <mat-divider></mat-divider>
-             
               <mat-card-content>
-              
-                  <mat-form-field class="form-full-width inputIcon">
-                      <span matPrefix>
-                        <i class="material-icons">person</i>&nbsp;
-                      </span>
-                    <input  formControlName="FullName" matInput placeholder="Full Name">
-                  </mat-form-field>
-                  <mat-form-field class="form-full-width inputIcon">
-                    <span matPrefix>
-                      <i class="material-icons">phone</i>&nbsp;
-                    </span>
-                    <input type="tel" formControlName="Mobile" matInput placeholder="Mobile" [(ngModel)]="Mobile">
-                  </mat-form-field>
-                  <mat-form-field class="form-full-width inputIcon">
-                      <span matPrefix>
-                        <i class="material-icons">email</i>&nbsp;
-                      </span>
-                      <input type="email" formControlName="Email" matInput placeholder="Email" [(ngModel)]="customerDetail">
-                    </mat-form-field>
-                 
-               
-          
+                <mat-form-field class="form-full-width inputIcon">
+                  <span matPrefix>
+                    <i class="md-icon-person-solid"></i>&nbsp;
+                  </span>
+                  <input formControlName="FullName" matInput placeholder="Full Name">
+                </mat-form-field>
+                <mat-form-field class="form-full-width inputIcon">
+                  <span matPrefix>
+                    <i class="md-icon-telephone-soild"></i>&nbsp;
+                  </span>
+                  <input type="tel" formControlName="Mobile" matInput placeholder="Mobile" [(ngModel)]="Mobile">
+                </mat-form-field>
+                <mat-form-field class="form-full-width inputIcon">
+                  <span matPrefix>
+                    <i class="md-icon-email-soild"></i>&nbsp;
+                  </span>
+                  <input type="email" formControlName="Email" matInput placeholder="Email" [(ngModel)]="customerDetail">
+                </mat-form-field>
               </mat-card-content>
-            
             </mat-card>
-           
           </div>
-          <div style="padding-top:.5em;">
-              <mat-card class="cardBorder">
+          <div fxFlex="50%" style="padding-top:.5em;">
+            <mat-card class="cardBorder customeCard">
+              <mat-card-header class="card-header-text">
+                <mat-card-title class="floatL">
+                  <i matPrefix class="md-icon-business floatL"></i>
+                  <span class="cardHeaderTitle floatL cardHeaderLP">Store Information</span>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-divider></mat-divider>
+              <mat-card-content>
+                <mat-form-field class="form-full-width">
+                  <input formControlName="StoreName" matInput placeholder="Store Name" [(ngModel)]="StoreName">
+                </mat-form-field>
+                <mat-form-field class="form-full-width">
+                  <input formControlName="Address" matInput placeholder="Address" [(ngModel)]="Address">
+                </mat-form-field>
+                <mat-form-field class="form-full-width-xs set-width pad ">
+                  <input formControlName="City" matInput placeholder="City" [(ngModel)]="City">
+                </mat-form-field>
+                <mat-form-field class="form-full-width-xs set-width pad">
+                  <input formControlName="State" matInput placeholder="State" [(ngModel)]="State">
+                </mat-form-field>
+                <mat-form-field class="form-full-width-xs set-width">
+                  <input formControlName="ZipCode" matInput placeholder="Zip Code" [(ngModel)]="ZipCode">
+                </mat-form-field>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+        <div class="container" fxLayout="column" fxLayout.lg="row" fxLayout.xl="row" fxLayoutGap.lg="10px" fxLayoutGap.xl="10px"
+          fxLayoutGap="0" fxLayoutAlign="center">
+          <div style="padding-top:.5em;" fxFlex="100%">
+              <mat-card class="cardBorder customeCard">
                 <mat-card-header class="card-header-text">
                   <mat-card-title class="floatL">
-                    <i matPrefix  class="material-icons floatL" *ngIf="!isIE">business</i>
-                    <i matPrefix class="material-icons floatL" *ngIf="isIE">&#xE0AF;</i>
-                    <span class="cardHeaderTitle floatL">Store Information</span></mat-card-title>
+                    <i matPrefix class="md-icon-bell floatL"></i>
+                    <span class="cardHeaderTitle floatL cardHeaderLP">Notification Preference</span>
+                  </mat-card-title>
                 </mat-card-header>
                 <mat-divider></mat-divider>
-               
+  
                 <mat-card-content>
-                
-                    <mat-form-field class="form-full-width">
-                      <input formControlName="StoreName" matInput placeholder="Store Name">
-                    </mat-form-field>
-                    <mat-form-field class="form-full-width">
-                        <input  formControlName="Address" matInput placeholder="Address" [(ngModel)]="Address">
-                    </mat-form-field>
-                    <mat-form-field >
-                        <input  formControlName="City" matInput placeholder="City" [(ngModel)]="City">
-                       
-                    </mat-form-field>
-                    <mat-form-field  class="form-full-width">
-                        <input  formControlName="State" matInput placeholder="State" [(ngModel)]="State">
-                    </mat-form-field>
-                    <mat-form-field class="form-full-width">
-                        <input  formControlName="ZipCode" matInput placeholder="Zip Code" [(ngModel)]="ZipCode">
-                    </mat-form-field>          
+                  <div class="form-full-width ld-pad-top">
+                    Email &nbsp;
+                    <span>
+                      <mat-slide-toggle [color]="color" [checked]="checked" [disabled]="disabled" name="emailToggle"></mat-slide-toggle>
+                    </span>
+                  </div>
+                  <div class="form-full-width ld-pad-top">
+                    Text Message &nbsp;
+                    <span>
+                    <mat-slide-toggle [color]="color" [checked]="checked" [disabled]="disabled" name="textMessageToggle"></mat-slide-toggle>
+                  </span>
+                  </div>
+                  <div class="form-full-width ld-pad-top">
+                  <mat-checkbox [color]="color">I agree to the term and conditions</mat-checkbox>
+                </div>
+  
                 </mat-card-content>
-              </mat-card> 
-             
+              </mat-card>
             </div>
-     
 
-    </mat-card-content>
-    <mat-card-actions style="text-align:center;">
-        <button mat-raised-button color="primary" >Submit</button>
+        </div> 
+      </mat-card-content>
+      <mat-card-actions style="text-align:center;">
+        <button mat-raised-button color="primary">Submit</button>
       </mat-card-actions>
     </form>
   </mat-card>
- 
-</div>
 
-   
-        
-   
+</div>

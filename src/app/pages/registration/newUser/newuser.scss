@@ -12,17 +12,34 @@
 .label-font-size{
   font-size: 14px;
 }
-.form-full-width {
-  width: 20%;
-  padding-right: 1.5%;
+div.container > div{
+  display: flex;
+  flex: 1 1 3em;
+  flex-direction: row;
 }
-.form-full-width:last-child {
-  padding-right: 0px;
+
+.mat-form-field.set-width {
+  width: 31%;
 }
+
+.mat-form-field.pad {
+  padding-right: 2.8%;
+}
+
+.mat-list .mat-list-item .mat-list-item-content {
+  padding: 0px !important;
+}
+
+.ld-pad-top {
+  padding-top: 15px;
+}
+
 @media only screen 
-and (max-device-width : 767px)   {
-  .form-full-width {
-    width: 100%;
-    padding-right: 0;
+and (max-device-width : 767px) {
+  .mat-form-field.pad {
+    padding-right: 0px;
+  }
+  .mat-form-field.form-full-width-xs {
+    width: 100% !important;
   }
 }
