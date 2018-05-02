@@ -38,6 +38,13 @@ export const routes: Routes = [
         .then(({ ResetModule }) => ResetModule)
       }
   },
+  {
+    path: 'forgotpassword',
+    loadChildren: ()=>{
+      return <any>import('./forgotPassword/forgotPassword.module')
+        .then(({ ForgotPasswordModule }) => ForgotPasswordModule)
+      }
+  },
   // {
   //   path: 'newuser',
   //   loadChildren: 'app/pages/register/newuser.module#NewUserModule',
