@@ -4,7 +4,7 @@
       <mat-card-title>Login</mat-card-title>
     </mat-card-header>
     <mat-divider></mat-divider>
-    <mat-card-content>
+    <mat-card-content style="padding-top: 10px;text-align:center;" class="ls-full-width">
       <form class="form-top" [formGroup]="loginForm" class="centerComponent">
         <mat-form-field class="form-full-width inputIcon">
           <span matPrefix>
@@ -22,11 +22,19 @@
           <button mat-raised-button color="warn" class="form-full-width">Login</button>
         </mat-card-actions>
       </form>
-      <mat-divider></mat-divider>
+      <!-- <mat-divider></mat-divider>
       <mat-card-actions style="text-align:center;">
-        <button mat-button color="primary" (click)="goToPage('registration')">New Registration</button>&nbsp;|&nbsp;
-        <button mat-button color="primary">Forgot Password</button>
-      </mat-card-actions>
+        <button mat-button color="link" (click)="goToPage('registration')" class="
+        login-btm-btn-width login-btm-btn-border">New Registration</button>
+        <button mat-button color="link" class="login-btm-btn-width" (click)="goToPage('forgotpassword')">Forgot Password</button>
+      </mat-card-actions> -->
     </mat-card-content>
+    <mat-card-footer>
+        <mat-divider></mat-divider>
+        <mat-card-actions fxLayout="row" fxLayoutAlign="center center">
+          <button mat-button color="link" class="login-btm-btn-width login-btm-btn-border" (click)="goToPage('registration')">New Registration</button>
+          <button mat-button color="link" class="login-btm-btn-width" (click)="goToPage('forgotpassword')">Forgot Password</button>
+        </mat-card-actions>      
+    </mat-card-footer>       
   </mat-card>
 </div>

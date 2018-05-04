@@ -1,12 +1,17 @@
 import { Routes, RouterModule }  from '@angular/router';
-import { Home } from './home.component';
+import { Success } from './success/success.component';
+import { QuickOrder } from './quickOrder.component';
 import { ModuleWithProviders } from '@angular/core';
 
 // noinspection TypeScriptValidateTypes
 export const routes: Routes = [
   {
     path: '',
-    component: Home
+    component: QuickOrder
+   }, 
+   {
+    path: 'success',
+    component: Success
    }  
 ];
 

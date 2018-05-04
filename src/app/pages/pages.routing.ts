@@ -45,22 +45,6 @@ export const routes: Routes = [
         .then(({ ForgotPasswordModule }) => ForgotPasswordModule)
       }
   },
-  // {
-  //   path: 'newuser',
-  //   loadChildren: 'app/pages/register/newuser.module#NewUserModule',
-  // },
-  // {
-  //   path: 'newregister',
-  //   loadChildren: 'app/pages/register/newregister.module#NewRegisterModule',
-  // },
-  // {
-  //   path: 'resetpassword',
-  //   loadChildren: 'app/pages/reset-password/reset-password.module#ResetPasswordModule',
-  // },
-  // {
-  //   path: 'termsandcondition',
-  //   loadChildren: 'app/pages/termsandcondition/termsandcondition.module#TermsAndConditionModule',
-  // },
   {
     path: 'pages',
     component: Pages,
@@ -75,10 +59,21 @@ export const routes: Routes = [
             .then(({ HomeModule }) => HomeModule)
           }
         },
-      // { path: 'cart-management', loadChildren: './cart-management/cart-management.module#CartManagementModule' },
-      // { path: 'feedback', loadChildren: './day-end/day-end.module#DayEndModule' },
-      // { path: 'history', loadChildren: './history/history.module#HistoryModule' },
-      // { path: 'user-management', loadChildren: './user-management/user-management.module#TrackerModule' }
+        { path: 'quickorder',  loadChildren: ()=>{
+          return <any>import('./quickOrder/quickOrder.module')
+            .then(({ QuickOrderModule }) => QuickOrderModule)
+          }
+        },  
+        { path: 'changepassword',  loadChildren: ()=>{
+          return <any>import('./changePassword/changePassword.module')
+            .then(({ ChangePasswordModule }) => ChangePasswordModule)
+          }
+        },  
+        { path: 'profile',  loadChildren: ()=>{
+          return <any>import('./profile/profile.module')
+            .then(({ ProfileModule }) => ProfileModule)
+          }
+        }               
     ],
   },
 ];

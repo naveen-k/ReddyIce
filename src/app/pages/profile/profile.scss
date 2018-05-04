@@ -1,0 +1,45 @@
+.auth-block{
+  background: #1C2B36;
+}
+.auth-main .forgot-pass, .auth-main .forgot-pass:hover {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.cursor{
+  cursor: pointer;
+}
+.label-font-size{
+  font-size: 14px;
+}
+div.container > div{
+  display: flex;
+  flex: 1 1 3em;
+  flex-direction: row;
+}
+
+.mat-form-field.set-width {
+  width: 31%;
+}
+
+.mat-form-field.pad {
+  padding-right: 2.8%;
+}
+
+.mat-list .mat-list-item .mat-list-item-content {
+  padding: 0px !important;
+}
+
+.ld-pad-top {
+  padding-top: 15px;
+}
+
+@media only screen 
+and (max-device-width : 767px) {
+  .mat-form-field.pad {
+    padding-right: 0px;
+  }
+  .mat-form-field.form-full-width-xs {
+    width: 100% !important;
+  }
+}

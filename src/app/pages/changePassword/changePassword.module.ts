@@ -1,19 +1,18 @@
+
 import { CommonModule } from '@angular/common';  
 import { NgModule } from '@angular/core';
 import { MaterialModule } from '../../material.module';
-import { Home } from './home.component';
-import { routing } from './home.routing';
+import { ChangePassword } from './changePassword.component';
+import { routing } from './changeaPassword.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlexLayoutModule } from "@angular/flex-layout";
-
 
 @NgModule({
   imports: [
-    routing,MaterialModule,ReactiveFormsModule,CommonModule,FlexLayoutModule
+    routing,MaterialModule,ReactiveFormsModule,FormsModule,CommonModule
   ],
   declarations: [
-    Home
+    ChangePassword
   ],
   providers: [],
 })
-export class HomeModule { }
+export class ChangePasswordModule { }

@@ -12,11 +12,11 @@
                 </span>
 
             </mat-toolbar>
-            <button mat-menu-item (click)="goToPage('login')">Home</button>
-            <button mat-menu-item (click)="goToPage('registration')">Ice Order</button>
-            <button mat-menu-item (click)="goToPage('Item 3')">Repair</button>
-            <button mat-menu-item (click)="goToPage('Item 4')">Feedback History</button>
-            <button mat-menu-item (click)="goToPage('Item 5')">Quick Order</button>
+            <button mat-menu-item (click)="goToPage('login')"><i class="custom-icon icon-home"></i><span>Home</span></button>
+            <button mat-menu-item (click)="goToPage('registration')"><i class="custom-icon icon-delivery"></i>Ice Order</button>
+            <button mat-menu-item (click)="goToPage('Item 3')"><i class="custom-icon icon-settings"></i>Repair</button>
+            <button mat-menu-item (click)="goToPage('Item 4')"><i class="custom-icon icon-star"></i>Feedback History</button>
+            <button mat-menu-item (click)="goToPage('pages/quickorder/success')"><i class="custom-icon icon-history"></i>Quick Order</button>
             <!-- <button mat-menu-item (click)="goToPage('Item 6')">Item 6</button> -->
         </mat-sidenav>
         <mat-toolbar color="primary" style="min-height:64px;">
@@ -25,23 +25,66 @@
                     <i class="md-icon-menu toolbar-link-icon" style="color:white;"></i>
                 </button>
             </span>
-            <span>
+            <span class="logo">
                 <img class="log" src="./assets/img/logo.png">
             </span>
 
             <span flex class="flex"></span>
 
-            <button mat-icon-button [matMenuTriggerFor]="menu">
+            <!-- <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
-            </button>
+            </button> -->
+            <div fxflex="0 1 auto" fxlayout="row" fxlayoutalign="start center" style="flex: 0 1 auto; box-sizing: border-box; flex-direction: row; display: flex; place-content: center flex-start; align-items: center;">
+                <button aria-haspopup="true" class="user-button mat-button" [matMenuTriggerFor]="menu">
+                    <span class="mat-button-wrapper">
+                        <div fxlayout="row" fxlayoutalign="center center" style="flex-direction: row; box-sizing: border-box; display: flex; max-height: 100%; place-content: center; align-items: center;">
+                            <img class="avatar" src="assets/img/profile.jpg">
+                            <span class="username mr-12" fxHide fxShow.gt-sm>Ashish Singla</span>
+                            <mat-icon class="s-16 mat-icon material-icons" fxhide.xs="" role="img" aria-hidden="true" style="display: block;">keyboard_arrow_down</mat-icon>
+                        </div>
+                    </span>
+                    <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                    <div class="mat-button-focus-overlay"></div>
+                </button>
+
+
+            </div>
             <mat-menu #menu="matMenu" [overlapTrigger]="false">
-                <button mat-menu-item>My Profile</button>
-                <button mat-menu-item>Add Store</button>
-                <button mat-menu-item>Select Store</button>
-                <button mat-menu-item>Change Password</button>
-                <button mat-menu-item>Select Passcode</button>
-                <button mat-menu-item>About</button>
-                <button mat-menu-item>Logout</button>
+                <button mat-menu-item (click)="goToPage('pages/profile')">
+                    <mat-icon class="mat-icon material-icons" role="img">account_circle</mat-icon>
+                    <span>My Profile</span>
+                    <div class="mat-menu-ripple mat-ripple" matripple=""></div>
+                </button>
+                <button mat-menu-item>
+                    <mat-icon class="mat-icon material-icons" role="img">store</mat-icon>
+                    <span>Add Store</span>
+                    <div class="mat-menu-ripple mat-ripple" matripple=""></div>
+                </button>
+                <button mat-menu-item>
+                    <mat-icon class="mat-icon material-icons" role="img">shopping_cart</mat-icon>
+                    <span>Select Store</span>
+                    <div class="mat-menu-ripple mat-ripple" matripple=""></div>
+                </button>
+                <button mat-menu-item (click)="goToPage('pages/changepassword')">
+                    <mat-icon class="mat-icon material-icons" role="img">lock</mat-icon>
+                    <span>Change Password</span>
+                    <div class="mat-menu-ripple mat-ripple" matripple=""></div>
+                </button>
+                <button mat-menu-item>
+                    <mat-icon class="mat-icon material-icons" role="img">build</mat-icon>
+                    <span>Select Passcode</span>
+                    <div class="mat-menu-ripple mat-ripple" matripple=""></div>
+                </button>
+                <button mat-menu-item>
+                    <mat-icon class="mat-icon material-icons" role="img">person</mat-icon>
+                    <span>About</span>
+                    <div class="mat-menu-ripple mat-ripple" matripple=""></div>
+                </button>
+                <button mat-menu-item>
+                    <mat-icon class="mat-icon material-icons" role="img">exit_to_app</mat-icon>
+                    <span>Logout</span>
+                    <div class="mat-menu-ripple mat-ripple" matripple=""></div>
+                </button>
             </mat-menu>
 
         </mat-toolbar>
