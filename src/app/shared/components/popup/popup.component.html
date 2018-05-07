@@ -1,0 +1,20 @@
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title><span class="titleHeading">{{data.title}}</span></mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <mat-card-content style="padding-top: 10px;text-align:center;">
+
+
+  <p>{{data.details}}</p>
+  <mat-form-field *ngIf="data.inputRequire">
+    <input *ngIf="data.field1" matInput [(ngModel)]="data.field1" placeholder="data.field1ph">
+    <input *ngIf="data.field2" matInput [(ngModel)]="data.field2" placeholder="data.field2ph">
+  </mat-form-field>
+
+<mat-dialog-actions>
+  <button *ngIf="data.cancelButtonTitle" mat-raised-button color="primary" (click)="onNoClick()">{{data.cancelButtonTitle}}</button>
+  <button *ngIf="data.okButtonTitle" mat-raised-button color="warn" [mat-dialog-close]="data" cdkFocusInitial>{{data.okButtonTitle}}</button>
+</mat-dialog-actions>
+</mat-card-content>
+</mat-card>

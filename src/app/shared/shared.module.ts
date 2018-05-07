@@ -17,6 +17,9 @@ import { GenericFilter } from './pipes/generic-filter.pipe';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TruncateZero } from './pipes/truncateZero.pipe';
+import {PopupComponent} from './components/popup/popup.component';
+import {MatFormFieldModule,MatDialogModule} from '@angular/material';
+import {MaterialModule} from '../material.module';
 @NgModule({
     declarations: [
         GenericFilter,
@@ -33,7 +36,8 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
         AlphaNumeric,
         ConcatStringPipe,
         CurrencyFormatter,
-        TruncateZero
+        TruncateZero,
+        PopupComponent,
     ],
     exports: [
         GenericFilter,
@@ -50,12 +54,13 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
         AlphaNumeric,
         ConcatStringPipe,
         CurrencyFormatter,
-        TruncateZero
+        TruncateZero,
+        PopupComponent
     ],
     entryComponents: [
-
+        PopupComponent
     ],
-    imports: [CommonModule,  FormsModule],
+    imports: [CommonModule,  FormsModule, MatFormFieldModule,MatDialogModule,MaterialModule],
     providers: [HttpService, SharedService],
 })
 export class SharedModule {
