@@ -73,6 +73,11 @@ export const routes: Routes = [
           return <any>import('./profile/profile.module')
             .then(({ ProfileModule }) => ProfileModule)
           }
+        },  
+        { path: 'cart',  loadChildren: ()=>{
+          return <any>import('./cart/cart.module')
+            .then(({ CartModule }) => CartModule)
+          }
         }               
     ],
   },
