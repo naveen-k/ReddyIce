@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
-
+import { MatSnackBar} from '@angular/material';
 @Component({
   selector: 'login',
   templateUrl: './login.html',
@@ -11,7 +11,7 @@ export class Login implements OnInit {
   loginForm: FormGroup;
   CustomerNumber: Number;
   constructor(private fb: FormBuilder,private activatedRoute: ActivatedRoute,
-    private router: Router) { 
+    private router: Router,private snackBar: MatSnackBar) { 
         // To initialize FormGroup  
         this.loginForm = fb.group({  
           'UserName' : [null, Validators.required],
@@ -25,7 +25,9 @@ export class Login implements OnInit {
   }
   // Executed When Form Is Submitted  
   onFormSubmit(form:NgForm)  
-  {  
+  {  this.snackBar.open("Error","Invalide user credential.", {
+    duration: 2000,
+  });
     console.log(form);  
   }
   goToPage(pagename){

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
+import {ContactusComponent} from '../../contactus/contactus.component';
 @Component({
   selector: 'quick-order-success',
   templateUrl: './success.html',
@@ -8,10 +10,11 @@ import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angula
 })
 export class Success implements OnInit {
   groupVal: number = 0;
+  popupData:any ={};
   successForm: FormGroup;
   CustomerNumber: Number;
   constructor(private fb: FormBuilder,private activatedRoute: ActivatedRoute,
-    private router: Router) { 
+    private router: Router,public dialog: MatDialog) { 
         // To initialize FormGroup  
         this.successForm = fb.group({  
           'OTP' : [null, Validators.required] 
@@ -33,5 +36,15 @@ export class Success implements OnInit {
   }
   goToPage(pagename){
     this.router.navigateByUrl('/'+pagename);
+  }
+  openContactUs():void{
+    let dialogRef = this.dialog.open(ContactusComponent, {
+      width: '60%',
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.popupData = result;
+    });
   }
 }

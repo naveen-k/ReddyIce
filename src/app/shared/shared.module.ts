@@ -3,7 +3,6 @@ import { AlphaNumeric } from './directives/alpha-numeric.directive';
 import { ConcatStringPipe } from './pipes/concat-string.pipe';
 import { CutStringPipe } from './pipes/cut-string.pipe';
 import { Select2Component } from './components/select2/select2.component';
-import { TicketTypePipe } from './pipes/ticket-type.pipe';
 import { NumberOnlyDirective } from './directives/number-only.directive';
 import { MinValueValidatorDirective } from './directives/min-value.directive';
 import { SharedService } from './shared.service';
@@ -20,6 +19,8 @@ import { TruncateZero } from './pipes/truncateZero.pipe';
 import {PopupComponent} from './components/popup/popup.component';
 import {MatFormFieldModule,MatDialogModule} from '@angular/material';
 import {MaterialModule} from '../material.module';
+import { ContactusComponent } from '../pages/contactus/contactus.component';
+import { FlexLayoutModule } from "@angular/flex-layout";
 @NgModule({
     declarations: [
         GenericFilter,
@@ -30,7 +31,6 @@ import {MaterialModule} from '../material.module';
         MinValueValidatorDirective,
         NumberOnlyDirective,
         NumberDecimalDirective,
-        TicketTypePipe,
         Select2Component,
         CutStringPipe,
         AlphaNumeric,
@@ -38,6 +38,7 @@ import {MaterialModule} from '../material.module';
         CurrencyFormatter,
         TruncateZero,
         PopupComponent,
+        ContactusComponent
     ],
     exports: [
         GenericFilter,
@@ -46,7 +47,6 @@ import {MaterialModule} from '../material.module';
         GenericSort,
         PaginationComponent,
         MinValueValidatorDirective,
-        TicketTypePipe,
         Select2Component,
         CutStringPipe,
         NumberOnlyDirective,
@@ -55,12 +55,14 @@ import {MaterialModule} from '../material.module';
         ConcatStringPipe,
         CurrencyFormatter,
         TruncateZero,
-        PopupComponent
+        PopupComponent,
+        ContactusComponent
     ],
     entryComponents: [
-        PopupComponent
+        PopupComponent,
+        ContactusComponent
     ],
-    imports: [CommonModule,  FormsModule, MatFormFieldModule,MatDialogModule,MaterialModule],
+    imports: [CommonModule,  FormsModule, MatFormFieldModule,MatDialogModule,MaterialModule,FlexLayoutModule],
     providers: [HttpService, SharedService],
 })
 export class SharedModule {

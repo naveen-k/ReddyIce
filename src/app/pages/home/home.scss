@@ -12,3 +12,23 @@
 .label-font-size{
   font-size: 14px;
 }
+.itemCircle{
+  width: 6em;
+  height: 6em;
+  border-radius: 4em;
+  background-color:#008FC0;
+  margin: auto;
+  left: 0;
+  right: 0;
+  padding:1em;
+}
+
+.icon-history, .icon-delivery, .icon-settings, .icon-star{
+  color: #fff;
+  font-size: 6em;
+  vertical-align: middle;
+
+}
+.mat-grid-list {
+  position: inherit !important;
+}
