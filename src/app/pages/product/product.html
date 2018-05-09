@@ -1,0 +1,23 @@
+<div class="flex-container" style="padding: .5em;">
+  <mat-card>
+    <mat-card-content style="padding-top: 10px;">
+      <div class="flex-container remove-justification" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+        <mat-card class="card-picture" *ngFor="let picture of cartData" fxLayoutGap="0.5%" fxFlex.gt-xs="23.5%" fxFlex.sm="100%">
+          <img [src]="picture.img">
+          <mat-card-title fxLayout.gt-xs="row" fxLayout.xs="column">
+            <!-- <span>{{picture.title}}</span> -->
+          </mat-card-title>
+          <div class="p-8 pt-0" style="padding-bottom:10px;" fxLayoutAlign="center center">
+            {{picture.title}}
+          </div>
+          <mat-divider></mat-divider>
+          <div class="p-8 pt-0" style="padding-top:10px;" fxLayoutAlign="center center">
+
+              <button mat-raised-button color="accent"><i class="custom-icon md-icon-addcart"></i>Add to cart</button>
+            </div>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

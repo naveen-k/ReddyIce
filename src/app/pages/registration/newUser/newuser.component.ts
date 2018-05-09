@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
+import { fadeInAnimation } from '../../../_animations/index';
 @Component({
   selector: 'newuser',
   templateUrl: './newuser.html',
-  styleUrls: ['./newuser.scss']
+  styleUrls: ['./newuser.scss'],
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' }
 })
 export class NewUserRegistration implements OnInit {
   newUserForm: FormGroup;

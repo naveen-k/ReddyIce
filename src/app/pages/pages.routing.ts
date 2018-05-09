@@ -78,7 +78,17 @@ export const routes: Routes = [
           return <any>import('./cart/cart.module')
             .then(({ CartModule }) => CartModule)
           }
-        }               
+        },  
+        { path: 'product',  loadChildren: ()=>{
+          return <any>import('./product/product.module')
+            .then(({ ProductModule }) => ProductModule)
+          }
+        },  
+        { path: 'history',  loadChildren: ()=>{
+          return <any>import('./history/history.module')
+            .then(({ HistoryModule }) => HistoryModule)
+          }
+        }                  
     ],
   },
 ];

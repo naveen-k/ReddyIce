@@ -12,10 +12,10 @@
                 </span>
 
             </mat-toolbar>
-            <button mat-menu-item (click)="goToPage('login')"><i class="custom-icon icon-home"></i><span>Home</span></button>
-            <button mat-menu-item (click)="goToPage('registration')"><i class="custom-icon icon-delivery"></i>Ice Order</button>
+            <button mat-menu-item (click)="goToPage('pages/home')"><i class="custom-icon icon-home"></i><span>Home</span></button>
+            <button mat-menu-item (click)="goToPage('pages/product')"><i class="custom-icon icon-delivery"></i>Ice Order</button>
             <button mat-menu-item (click)="goToPage('Item 3')"><i class="custom-icon icon-settings"></i>Repair</button>
-            <button mat-menu-item (click)="goToPage('Item 4')"><i class="custom-icon icon-star"></i>Feedback History</button>
+            <button mat-menu-item (click)="goToPage('pages/history')"><i class="custom-icon icon-star"></i>Feedback History</button>
             <button mat-menu-item (click)="goToPage('pages/quickorder/success')"><i class="custom-icon icon-history"></i>Quick Order</button>
             <!-- <button mat-menu-item (click)="goToPage('Item 6')">Item 6</button> -->
         </mat-sidenav>
@@ -80,7 +80,7 @@
                     <span>About</span>
                     <div class="mat-menu-ripple mat-ripple" matripple=""></div>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="goToPage('login')">
                     <mat-icon class="mat-icon material-icons" role="img">exit_to_app</mat-icon>
                     <span>Logout</span>
                     <div class="mat-menu-ripple mat-ripple" matripple=""></div>

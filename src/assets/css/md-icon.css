@@ -94,7 +94,11 @@
     .md-icon-bell:before {
         content: "\F1Fb";
         
-    }    
+    }  
+    .md-icon-addcart:before {
+        content: "\F1Ca";
+        
+    }   
     
     
     

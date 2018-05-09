@@ -22,14 +22,29 @@
   right: 0;
   padding:1em;
   border: 0.25em solid rgb(138, 135, 135);
+  text-align: center;
+  cursor: pointer;
 }
-
+.itemCircle:hover{
+  border: 0.25em solid #008FC0;
+}
+.quickOrder{
+  background-color: #a11806;
+}
+.quickOrder:hover{
+  border: 0.25em solid #a11806;
+}
 .icon-history, .icon-delivery, .icon-settings, .icon-star{
   color: #fff;
-  font-size: 6em;
+  font-size: 4em;
   vertical-align: middle;
+  padding-right: 0px !important;
 
 }
 .mat-grid-list {
   position: inherit !important;
+}
+.homeIconTitle{
+  color:white;
+  padding-top:5px;
 }

@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
+import { slideInOutAnimation } from '../../_animations/index';
 
 @Component({
   selector: 'change-password',
   templateUrl: './changePassword.html',
-  styleUrls: ['./changePassword.scss']
+  styleUrls: ['./changePassword.scss'],
+  animations: [slideInOutAnimation],
+  host: { '[@slideInOutAnimation]': '' }
 })
 export class ChangePassword implements OnInit {
   changePasswordForm: FormGroup;

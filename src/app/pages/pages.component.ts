@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, Routes } from '@angular/router';
-
+import { slideInOutAnimation } from '../_animations/index';
 import { PAGES_MENU } from './pages.menu';
 
 @Component({
   selector: 'pages',
   template: `
         <router-outlet></router-outlet>
-    `
+    `,
+    animations: [slideInOutAnimation],
+    host: { '[@slideInOutAnimation]': '' }
 })
 export class Pages implements OnInit {
   _onRouteChange: any;

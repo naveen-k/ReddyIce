@@ -3,10 +3,13 @@ import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {PopupComponent} from '../../shared/components/popup/popup.component';
+import { slideInOutAnimation } from '../../_animations/index';
 @Component({
   selector: 'forgot-password',
   templateUrl: './forgotPassword.html',
-  styleUrls: ['./forgotPassword.scss']
+  styleUrls: ['./forgotPassword.scss'],
+  animations: [slideInOutAnimation],
+  host: { '[@slideInOutAnimation]': '' }
 })
 export class ForgotPassword implements OnInit {
   groupVal: number = 0;

@@ -1,36 +1,44 @@
-<div class="container" style="padding: .5em;">
-    <mat-card>
-       
-      <mat-card-content style="padding-top: 10px;">
-      <mat-grid-list cols="2" rowHeight="200px">
+<div class="flex-container" style="padding: .5em;">
+
+      
+  
+      <mat-grid-list cols="2" rowHeight="12em" >
+          <mat-grid-tile-header>
+              <div style="width:100%;text-align: center;"> Store: MYRTLE BEACH TENNIS CENTER</div>
+            </mat-grid-tile-header>
         <mat-grid-tile [colspan]="2">
-            <div class="itemCircle">
-              <i class="custom-icon icon-history"></i>
+            <div class="itemCircle quickOrder">
+                <i class="custom-icon icon-delivery"></i>
+                <div class="homeIconTitle">Quick Order</div>
             </div>
           </mat-grid-tile>
+        
         <mat-grid-tile>
-          <div class="itemCircle">
-            <i class="custom-icon icon-history"></i>
-          </div>
-        </mat-grid-tile>
-        <mat-grid-tile>
-            <div class="itemCircle">
+            <div class="itemCircle" (click)="goToPage('pages/product')">
                 <i class="custom-icon icon-delivery"></i>
+                <div class="homeIconTitle">Ice Order</div>
               </div>
         </mat-grid-tile>
+       
         <mat-grid-tile>
             <div class="itemCircle">
                 <i class="custom-icon icon-settings"></i>
+                <div class="homeIconTitle">Equipment Repair</div>
               </div>
         </mat-grid-tile>
         <mat-grid-tile>
             <div class="itemCircle">
                 <i class="custom-icon icon-star"></i>
+                <div class="homeIconTitle">Feedback</div>
               </div>
         </mat-grid-tile>
+        <mat-grid-tile>
+                <div class="itemCircle" (click)="goToPage('pages/history')">
+                  <i class="custom-icon icon-history"></i>
+                  <div class="homeIconTitle">History</div>
+                </div>
+              </mat-grid-tile>
       </mat-grid-list>
-    </mat-card-content>
-    </mat-card>
-     
+    
    
 </div>

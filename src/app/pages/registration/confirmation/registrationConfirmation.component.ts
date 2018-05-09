@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
+import { slideInOutAnimation } from '../../../_animations/index';
 @Component({
   selector: 'registration-confirmation',
   templateUrl: './registrationConfirmation.html',
-  styleUrls: ['./registrationConfirmation.scss']
+  styleUrls: ['./registrationConfirmation.scss'],
+  animations: [slideInOutAnimation],
+  host: { '[@slideInOutAnimation]': '' }
 })
 export class RegistrationConfirmation implements OnInit {
   groupVal: number = 0;

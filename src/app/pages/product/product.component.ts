@@ -3,13 +3,13 @@ import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
 import { slideInOutAnimation } from '../../_animations/index';
 @Component({
-  selector: 'add-cart',
-  templateUrl: './cart.html',
-  styleUrls: ['./cart.scss'],
+  selector: 'product',
+  templateUrl: './product.html',
+  styleUrls: ['./product.scss'],
   animations: [slideInOutAnimation],
   host: { '[@slideInOutAnimation]': '' }
 })
-export class Cart implements OnInit {
+export class Product implements OnInit {
   groupVal: number = 0;
   regiForm: FormGroup;
   CustomerNumber: Number;
@@ -29,107 +29,107 @@ export class Cart implements OnInit {
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 1'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 2'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 3'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 4'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 5'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 6'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 7'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 8'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 9'
       },
       {
         mode : 1,
         img : 'assets/img/cart/card1.jpg',
-        title : 'Add to cart'
+        title : 'Product 10'
       },
       {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 11'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 12'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 13'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 14'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 15'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 16'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 17'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 18'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 19'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 20'
     },
     {
       mode : 1,
       img : 'assets/img/cart/card1.jpg',
-      title : 'Add to cart'
+      title : 'Product 21'
     }
   ]
   }

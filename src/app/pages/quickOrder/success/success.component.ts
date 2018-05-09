@@ -3,10 +3,13 @@ import { ActivatedRoute, Router, Routes } from '@angular/router';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
 import {ContactusComponent} from '../../contactus/contactus.component';
+import { slideInOutAnimation } from '../../../_animations/index';
 @Component({
   selector: 'quick-order-success',
   templateUrl: './success.html',
-  styleUrls: ['./success.scss']
+  styleUrls: ['./success.scss'],
+  animations: [slideInOutAnimation],
+  host: { '[@slideInOutAnimation]': '' }
 })
 export class Success implements OnInit {
   groupVal: number = 0;

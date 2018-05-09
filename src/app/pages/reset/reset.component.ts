@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
+import { slideInOutAnimation } from '../../_animations/index';
 @Component({
   selector: 'reset',
   templateUrl: './reset.html',
-  styleUrls: ['./reset.scss']
+  styleUrls: ['./reset.scss'],
+  animations: [slideInOutAnimation],
+  host: { '[@slideInOutAnimation]': '' }
 })
 export class Reset implements OnInit {
   groupVal: number = 0;

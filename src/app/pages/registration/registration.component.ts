@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, NgForm } from '@angular/forms';
+import { fadeInAnimation } from '../../_animations/index';
 @Component({
   selector: 'registration',
   templateUrl: './registration.html',
-  styleUrls: ['./registration.scss']
+  styleUrls: ['./registration.scss'],
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' }
 })
 export class Registration implements OnInit {
   groupVal: number = 0;
