@@ -88,7 +88,12 @@ export const routes: Routes = [
           return <any>import('./history/history.module')
             .then(({ HistoryModule }) => HistoryModule)
           }
-        }                  
+        },  
+        { path: 'feedback',  loadChildren: ()=>{
+          return <any>import('./feedback/feedback.module')
+            .then(({ FeedbackModule }) => FeedbackModule)
+          }
+        }                   
     ],
   },
 ];

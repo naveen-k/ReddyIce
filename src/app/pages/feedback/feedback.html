@@ -1,0 +1,48 @@
+<div class="flex-container" style="padding: .5em;">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title><span class="titleHeading">Feedback</span></mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content style="padding-top: 10px;text-align:center;" class="ls-full-width">
+      <form class="form-top" [formGroup]="feedbackForm" class="centerComponent">
+        <div style="text-align: center">
+            <img class="log" src="../../../assets/img/logo.png">
+        </div>
+        <div style="text-align: center">
+          <span matPrefix>
+              <i class="md-icon-person floatL"></i>&nbsp;
+          </span>
+          <span matPrefix>
+              <i class="md-icon-person floatL"></i>&nbsp;
+          </span>
+          <span matPrefix>
+              <i class="md-icon-person floatL"></i>&nbsp;
+          </span>
+         
+        </div>
+        <mat-form-field class="form-full-width">
+            
+            <mat-select >
+                <mat-option *ngFor="let cat of category" [value]="cat.value">
+                  {{ cat.viewValue }}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+        <mat-form-field class="form-full-width inputIcon">
+                <textarea matInput></textarea>
+          </mat-form-field>
+        <mat-card-actions style="text-align:center;padding: 0 1em;">
+          <button mat-raised-button color="warn" (click)="onFormSubmit()">Submit</button>
+        </mat-card-actions>
+      </form>
+      <!-- <mat-divider></mat-divider>
+      <mat-card-actions style="text-align:center;">
+        <button mat-button color="link" (click)="goToPage('registration')" class="
+        login-btm-btn-width login-btm-btn-border">New Registration</button>
+        <button mat-button color="link" class="login-btm-btn-width" (click)="goToPage('forgotpassword')">Forgot Password</button>
+      </mat-card-actions> -->
+    </mat-card-content>
+   
+  </mat-card>
+</div>

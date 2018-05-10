@@ -6,62 +6,95 @@
                 <mat-tab label="Order">
                     <ng-template matTabContent>Order</ng-template>
                     <div class="flex-container remove-justification" fxLayout="column" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
-                        <mat-card class="card-picture" *ngFor="let picture of cartData">
-                            <img [src]="picture.img">
-                            <mat-card-title fxLayout.gt-xs="row" fxLayout.xs="column">
-                                <!-- <span>{{picture.title}}</span> -->
-                            </mat-card-title>
-                            <div class="p-8 pt-0" style="padding-bottom:10px;" fxLayoutAlign="center center">
-                                {{picture.title}}
-                            </div>
-                            <mat-divider></mat-divider>
-                            <div class="p-8 pt-0" style="padding-top:10px;" fxLayoutAlign="center center">
-
-                                <button mat-raised-button color="accent">
-                                    <i class="custom-icon md-icon-addcart"></i>Add to cart</button>
-                            </div>
+                        <mat-card class="card-picture" *ngFor="let order of orderData">
+                            <table style="width:100%;border:0px;"  cellpadding="2" cellspacing="0" border="0">
+                                <tr style="background-color: darkturquoise;">
+                                    <td>ORDER ID</td>
+                                    <td>{{order.Order}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Order Date</td>
+                                    <td>{{order.OrderDate}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Latest Delivery</td>
+                                    <td>{{order.LatestDelivery}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>{{order.Status}}</td>
+                                </tr>
+                            </table>
                         </mat-card>
+                        <div style="text-align: right">
+                            <button mat-button color="accent">
+                                Show More...
+                            </button>
+                        </div>
                     </div>
                 </mat-tab>
                 <mat-tab label="Equipment">
                     <ng-template matTabContent>Equipment</ng-template>
                     <div class="flex-container remove-justification" fxLayout="column" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
-                        <mat-card class="card-picture" *ngFor="let picture of cartData">
-                            <img [src]="picture.img">
-                            <mat-card-title fxLayout.gt-xs="row" fxLayout.xs="column">
-                                <!-- <span>{{picture.title}}</span> -->
-                            </mat-card-title>
-                            <div class="p-8 pt-0" style="padding-bottom:10px;" fxLayoutAlign="center center">
-                                {{picture.title}}
-                            </div>
-                            <mat-divider></mat-divider>
-                            <div class="p-8 pt-0" style="padding-top:10px;" fxLayoutAlign="center center">
 
-                                <button mat-raised-button color="accent">
-                                    <i class="custom-icon md-icon-addcart"></i>Add to cart</button>
-                            </div>
+                        <mat-card class="card-picture" *ngFor="let order of equipmentData">
+                            <table style="width:100%;border:0px;" cellpadding="2" cellspacing="0" border="0">
+                                <tr style="background-color: darkturquoise;">
+                                    <td>ORDER ID</td>
+                                    <td>{{order.Order}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Order Date</td>
+                                    <td>{{order.OrderDate}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Latest Delivery</td>
+                                    <td>{{order.LatestDelivery}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td>{{order.Status}}</td>
+                                </tr>
+                            </table>
                         </mat-card>
+
+
+
+                        <div style="text-align: right">
+                            <button mat-button color="accent">
+                                Show More...
+                            </button>
+                        </div>
                     </div>
 
                 </mat-tab>
                 <mat-tab label="Invoice">
                     <ng-template matTabContent>Invoice</ng-template>
                     <div class="flex-container remove-justification" fxLayout="column" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
-                        <mat-card class="card-picture" *ngFor="let picture of cartData">
-                            <img [src]="picture.img">
-                            <mat-card-title fxLayout.gt-xs="row" fxLayout.xs="column">
-                                <!-- <span>{{picture.title}}</span> -->
-                            </mat-card-title>
-                            <div class="p-8 pt-0" style="padding-bottom:10px;" fxLayoutAlign="center center">
-                                {{picture.title}}
-                            </div>
-                            <mat-divider></mat-divider>
-                            <div class="p-8 pt-0" style="padding-top:10px;" fxLayoutAlign="center center">
-
-                                <button mat-raised-button color="accent">
-                                    <i class="custom-icon md-icon-addcart"></i>Add to cart</button>
-                            </div>
-                        </mat-card>
+                            <mat-card class="card-picture" *ngFor="let inv of invoiceData">
+                                    <table style="width:100%;border:0px;" cellpadding="2" cellspacing="0" border="0">
+                                        <tr style="background-color: darkturquoise;">
+                                            <td>INVOICE NO</td>
+                                            <td>{{inv.InvoiceNo}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Invoice Date</td>
+                                            <td>{{inv.InvoiceDate}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Amount</td>
+                                            <td>{{inv.Amount}}</td>
+                                        </tr>
+                                    </table>
+                                </mat-card>
+        
+        
+        
+                                <div style="text-align: right">
+                                    <button mat-button color="accent">
+                                        Show More...
+                                    </button>
+                                </div>
                     </div>
                 </mat-tab>
             </mat-tab-group>

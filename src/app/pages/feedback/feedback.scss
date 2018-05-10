@@ -1,0 +1,40 @@
+.auth-block{
+  background: #1C2B36;
+}
+.auth-main .forgot-pass, .auth-main .forgot-pass:hover {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.cursor{
+  cursor: pointer;
+}
+.label-font-size{
+  font-size: 14px;
+}
+.mat-card {
+  padding-bottom: 0px !important;
+}
+.login-btm-btn-width {
+  width: 50%;
+  float: left
+}
+.login-btm-btn-border {
+  border-right: 1px solid rgba(0,0,0,.12);
+}
+.mat-card-footer 
+{
+  margin: 0 -16px -24px -16px;
+  .mat-card-actions {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 8px 0;
+    padding-top: 0px;
+    .mat-button, .mat-card-actions .mat-raised-button {
+      margin: 0px;
+    }   
+    button {
+      padding: 5px 0px;
+    } 
+  }
+}

@@ -4,10 +4,12 @@ import { Injectable } from '@angular/core';
 import {CacheService} from '../../shared/cache.service';
 
 @Injectable()
-export class HistoryService{
+export class FeedbackService {
     
    API_ENDPOINT = environment.apiEndpoint;
    
     constructor() { }
     userInfo: any;
+    
+
 }
