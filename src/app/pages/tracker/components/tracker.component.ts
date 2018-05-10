@@ -294,7 +294,7 @@ export class TrackerComponent implements OnInit {
     this.service[tripApiName](tripId).subscribe(res => {
       this.showSpinner = false;
       this.IsUnplanned = res.Trips[0].IsUnplanned;
-      if(this.filter.trackerType == 2) {
+      if (this.filter.trackerType == 2) {
         this.filter.sequence = 3;
       } else if (this.IsUnplanned || this.searchObj.userType == 'External') { // if unplanned trip, map according 'Actual' scenario
         this.filter.sequence = 2;
@@ -304,8 +304,8 @@ export class TrackerComponent implements OnInit {
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
       this.tripStartDate = res.Trips[0].TripStartDate
       if (this.selectedTrip) {
-        this.selectedTrip.map(item=>{
-            item['createdDate'] = this.sliceTime(item.Created);
+        this.selectedTrip.map(item => {
+          item['createdDate'] = this.sliceTime(item.Created);
         })
         // console.log('this.searchObj.userType',this.searchObj.userType);
         if (this.searchObj.userType != 'External') {
@@ -347,13 +347,25 @@ export class TrackerComponent implements OnInit {
           } else if (this.filter.trackerType == 1) {
             this.routeNo = 'Unplanned';
           }
-          let driversDetailsObj = {
-            DriverName: this.trips[i].DriverName,
-            TripCode: this.trips[i].TripCode,
-            TripID: this.trips[i].TripID,
-            RouteNumber: this.filter.trackerType == 1 ? this.routeNo : undefined
+          if (this.searchObj.userType == 'Internal' && this.trips[i].DistributorMasterID == null) {
+            let driversDetailsObj = {
+              DriverName: this.trips[i].DriverName,
+              TripCode: this.trips[i].TripCode,
+              TripID: this.trips[i].TripID,
+              RouteNumber: this.filter.trackerType == 1 ? this.routeNo : undefined
+            }
+            this.driverOnBranch.push(driversDetailsObj);
           }
-          this.driverOnBranch.push(driversDetailsObj);
+          else if (this.searchObj.userType == 'External' && this.trips[i].DistributorMasterID > 0) {
+            let driversDetailsObj = {
+              DriverName: this.trips[i].DriverName,
+              TripCode: this.trips[i].TripCode,
+              TripID: this.trips[i].TripID,
+              RouteNumber: this.filter.trackerType == 1 ? this.routeNo : undefined
+            }
+            this.driverOnBranch.push(driversDetailsObj);
+          }
+
         }
       }
       if (this.driverOnBranch && this.driverOnBranch.length > 0) {
@@ -713,11 +725,11 @@ export class TrackerComponent implements OnInit {
           this.filter.trackerType == 1 && (infowindowContent += 'Total Invoice : $' + '0.00' + '<br>');
         }
 
-        if(this.filter.trackerType == 2 && trips[i].AssetName != null ) {
+        if (this.filter.trackerType == 2 && trips[i].AssetName != null) {
           infowindowContent += 'Asset Name : ' + trips[i].AssetName + '<br>';
         }
 
-        if(this.filter.trackerType == 2 && trips[i].BarCode != null ) {
+        if (this.filter.trackerType == 2 && trips[i].BarCode != null) {
           infowindowContent += 'Bar Code : ' + trips[i].BarCode + '<br>';
         }
 
@@ -940,7 +952,7 @@ export class TrackerComponent implements OnInit {
 
   distributors: any = [];
   typeChangeHandler() {
-    if(this.filter.trackerType == 2) {
+    if (this.filter.trackerType == 2) {
       this.filter.sequence = 3;
     } else if (this.searchObj.userType == 'External') {
       this.filter.sequence = 2;
