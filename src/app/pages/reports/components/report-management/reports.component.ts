@@ -430,9 +430,6 @@ export class ReportsComponent implements OnInit {
         } else {
             this.distributorChangeHandler();
         }
-
-
-
     }
     distributorChangeHandler() {
         if (this.cacheCustomers.length > 0)
