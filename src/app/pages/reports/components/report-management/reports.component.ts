@@ -435,6 +435,8 @@ export class ReportsComponent implements OnInit {
 
     }
     distributorChangeHandler() {
+        if (this.cacheCustomers.length > 0)
+        this.cacheCustomers = [];
         const distributor = this.filter.distributor === 1 ? 0 : this.filter.distributor;
         this.reportService.getDriversbyDistributors(distributor || 0).subscribe((res) => {
             res.unshift({ UserId: 1, FirstName: 'All Drivers', LastName: '' });
@@ -452,6 +454,8 @@ export class ReportsComponent implements OnInit {
 
 
     userTypeChangeHandler() {
+        if (this.cacheCustomers.length > 0)
+        this.cacheCustomers = [];
         this.overlayStatus = true;
         this.viewReport = false;
         this.filter.customer = null;
