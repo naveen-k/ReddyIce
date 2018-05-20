@@ -218,27 +218,28 @@
                 </div>
                 <div class="col-sm-7">
                   
-                        <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
-                            <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option>
-                            <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
-                            <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
-                            <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
-                            <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>
-                            <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
-                            <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
-                            <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
-                            <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
-                            <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
-                            <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
-                            <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
-                            <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
-                            <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
-                            <option value="RM" *ngIf="isExternalAdmin">QuickBooks Extract</option> 
-                            <option value="AT" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Tracking</option>
-                            <option value="SP" *ngIf="isITAdmin||isInternalAdmin||isSTech">STech Productivity</option>
-                            <option value="AER" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Exception</option>
-                            <option value="AMR" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Meter Reading</option>
-                        </select>
+                    <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="reportTypeChangeHandler()">
+                        <option value="AER" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Exception</option>
+                        <option value="AMR" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Meter Reading</option>
+                        <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option> 
+                        <option value="AT" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Tracking</option>
+                        <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
+                        <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
+                        <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
+                        <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
+                        <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
+                        <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>
+                        <option value="RM" *ngIf="isExternalAdmin">QuickBooks Extract</option>
+                        <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
+                        <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
+                        <option value="SP" *ngIf="isITAdmin||isInternalAdmin||isSTech">STech Productivity</option>
+                        <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
+                        <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
+                        <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
+                        <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
+                        <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>
+                    </select>
+
                   
                 </div>
             </div>
