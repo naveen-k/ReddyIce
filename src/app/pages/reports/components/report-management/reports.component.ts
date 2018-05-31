@@ -865,6 +865,7 @@ export class ReportsComponent implements OnInit {
         setTimeout(function () {
             self.typeaheadBasic.nativeElement.value = '';
             self.filter.custID = '';
+			self.filter.custtID = 0;
             self.isSearchText = false;
         }, 100);
     }
