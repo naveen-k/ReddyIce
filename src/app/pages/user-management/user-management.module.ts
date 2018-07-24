@@ -9,6 +9,7 @@ import { UserManagementComponent } from './components/user-management/user-manag
 import { NgModule, Provider } from '@angular/core';
 import { UserManagementService } from './user-management.service';
 import { CreateUserComponent } from './components/create-user/create-user.component';
+import {HandheldUserHistoryComponent} from './components/handhelduserhistory/handhelduserhistory.component';
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
@@ -20,7 +21,7 @@ const routes: Routes = [
 
 
 @NgModule({
-    declarations: [UserManagementComponent, CreateUserComponent, DistributorFilter],
+    declarations: [UserManagementComponent, CreateUserComponent, HandheldUserHistoryComponent, DistributorFilter],
     imports: [
         SharedModule,
         Ng2SmartTableModule,

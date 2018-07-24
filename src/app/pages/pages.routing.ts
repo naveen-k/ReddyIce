@@ -33,10 +33,11 @@ export const routes: Routes = [
 
       { path: 'home', loadChildren: './home/home.module#HomeModule' },
       { path: 'customer-management', loadChildren: './customer-management/customer-management.module#CustomerManagementModule' },
-      { path: 'user-management', loadChildren: './user-management/user-management.module#UserManagementModule' },      
+      { path: 'user-management', loadChildren: './user-management/user-management.module#UserManagementModule' },
       { path: 'day-end', loadChildren: './day-end/day-end.module#DayEndModule' },
       { path: 'manual-ticket', loadChildren: './manual-tickets/manual-ticket.module#ManualTicketModule' },
       { path: 'reports', loadChildren: './reports/reports.module#ReportsModule' },
+      { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule' },
       { path: 'tracker', loadChildren: './tracker/tracker.module#TrackerModule' },
       { path: 'load', loadChildren: './load/load.module#LoadModule' },
     ],

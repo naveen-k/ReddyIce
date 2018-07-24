@@ -114,7 +114,7 @@ table.cash-table {
         padding: 5px 10px 5px 5px;
         border: 1px solid #dddddd;
         span{
-            font-weight: 400;
+            font-weight: 450;
         }
     }
 }
@@ -134,4 +134,37 @@ table.cash-table {
 }
 .padding-right{
     padding-right: 0px;
+}
+.col-sm-1 {
+    max-width: 13.5%;
+    padding-right:0;
+    flex: none;
+    padding-left: 0;
+}
+.col-sm-11{
+max-width:84.5%;
+}
+
+@media (min-width: 768px){
+
+.trip-detail-container .col-md-3 {
+ flex:none;
+    max-width: 22%;
+	padding-right:0 !important;
+	padding-left:0 !important;
+}
+
+.trip-detail-container .col-md-1 {
+ flex:none;
+    max-width: 12%;
+	padding-right:0 !important;
+	padding-left:0 !important;
+}
+
+.trip-detail-container .col-md-2 {
+ flex:none;
+    max-width: 19%;
+	padding-right:0 !important;
+	padding-left:0 !important;
+}
 }

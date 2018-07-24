@@ -21,7 +21,7 @@ export class CreateCustomerComponent implements OnInit {
 
     selectedProducts: DualListItem[] = [];
     deactivateClicked: boolean = false;
-    addedProduct: MapProducts[] = [];
+    addedProduct: any[] = [];
     newlyAddedproduct: any[] = [];
     isFromDirty: boolean = false;
     keepSorted = true;
@@ -87,10 +87,11 @@ export class CreateCustomerComponent implements OnInit {
             this.service.getCustomer(this.customerId, this.isRI).subscribe((response) => {
                 this.customer = response.CustomerDetails;
                 if (this.mode === 3 && this.isRI) {
-                    this.customer.Address = (this.customer.Address) ? this.customer.Address : this.customer.Address1 + ' ' + this.customer.Address2;
+                    // this.customer.Address = (this.customer.Address) ? this.customer.Address : this.customer.Address1 + ' ' + this.customer.Address2;
+                    this.customer.Address = (this.customer.Address) ? this.customer.Address :  this.customer.Address2; // Added as per Gaurav's mail
                 }
                 if (response.CustomerDetails.C_CustomerNumber_) {
-                    this.customer.CustomerNumber = response.CustomerDetails.C_CustomerNumber_;
+                    this.customer.AXCustomerNumber = response.CustomerDetails.C_CustomerNumber_;
                 }
                 response.ProductDetail.forEach(element => {
                     element.ProductPrice = (element.ProductPrice === null) ? 0 : element.ProductPrice.toString().indexOf('.') < 0 ? `${element.ProductPrice}.00` : element.ProductPrice;
@@ -134,18 +135,18 @@ export class CreateCustomerComponent implements OnInit {
 
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
 
-            if (this.customer.AllowReturnsameticket) {
-                this.customer.AllowReturnsameticket = 1;
+            if (this.customer.AllowReturnSameTicket) {
+                this.customer.AllowReturnSameTicket = 1;
             } else {
-                this.customer.AllowReturnsameticket = 0;
+                this.customer.AllowReturnSameTicket = 0;
             }
 
             if (this.mode === 2) {
                 ///const mAddedProduct = this.addedProduct.concat(this.newlyAddedproduct);
                 // this.customer.MappedProducts = mAddedProduct;
-
                 this.customer.EditedProducts = this.addedProduct;
-                this.customer.NewAddedProducts = this.newlyAddedproduct;
+                this.customer.NewAddedProducts = [];//this.newlyAddedproduct;
+                this.customer.EditedProducts.push(...this.newlyAddedproduct);
                 this.service.updateCustomer(this.customerId, this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('', 'Customer Edited successfully');
@@ -159,7 +160,7 @@ export class CreateCustomerComponent implements OnInit {
             } else {
                 this.customer.MappedProducts = this.addedProduct;
                 this.customer.EditedProducts = this.addedProduct;
-                this.customer.NewAddedProducts = this.addedProduct;
+                this.customer.NewAddedProducts = [];//this.addedProduct;
                 this.service.createCustomer(this.customer).subscribe((res) => {
                     if (res) {
                         this.notification.success('', 'Customer Added successfully');
@@ -214,7 +215,7 @@ export class CreateCustomerComponent implements OnInit {
 
     }
 
-    productChangeHandler(mprod, index) {
+    productChangeHandler(mprod, index,flag) {
         let mProdTemp = mprod.cProductId.split('-');
         const product = this.addedProduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
         const product1 = this.newlyAddedproduct.filter(t => t.cProductId === mprod.cProductId || t.ProductId === +mProdTemp[0]);
@@ -232,7 +233,11 @@ export class CreateCustomerComponent implements OnInit {
             activeModal.componentInstance.modalHeader = 'Warning!';
             activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
             activeModal.componentInstance.closeModalHandler = (() => {
-                this.newlyAddedproduct[index] = {};
+                if(flag === 1) {
+                     this.addedProduct[index] = {};
+                } else {
+                    this.newlyAddedproduct[index] = {}
+                }
             });
             return;
         } else {
@@ -257,8 +262,11 @@ export class CreateCustomerComponent implements OnInit {
         }
     }
 
-    validateEmailID() {
-        if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.Email))) {
+    validateEmailID(email) {
+        var re = /\S+@\S+\.\S+/;
+        //if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.customer.Email)))
+        if (email && !re.test(email)) {
+            this.notification.error('Email not valid');
             return false;
         }
         return true;
@@ -400,14 +408,19 @@ export class CreateCustomerComponent implements OnInit {
         }
     }
     spaceRemoverFn(value) {
-        this.customer.CustomerName = value.replace(/^\s+|\s+$/g, '');
+        if (value && value != undefined) {
+            this.customer.CustomerName = value.replace(/^\s+|\s+$/g, '');
+        }
     }
     spaceRemoverFnforPrimaryContact(value) {
-        this.customer.PrimaryContact = value.replace(/^\s+|\s+$/g, '');
-
+        if (value && value != undefined) {
+            this.customer.PrimaryContact = value.replace(/^\s+|\s+$/g, '');
+        }
     }
     spaceRemoverFnforCity(value) {
-        this.customer.City = value.replace(/^\s+|\s+$/g, '');
+        if (value && value != undefined) {
+            this.customer.City = value.replace(/^\s+|\s+$/g, '');
+        }
     }
 }
 

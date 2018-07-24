@@ -1,4 +1,3 @@
-
 import { ManualTicket } from './manaul-ticket.interfaces';
 import { Customer } from '../../shared/interfaces/interfaces';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
@@ -7,34 +6,38 @@ import { SharedService } from '../../shared/shared.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { CacheService } from 'app/shared/cache.service';
 
 @Injectable()
 export class ManualTicketService extends SharedService {
   result: any;
   _searchObject: any = {};
 
-  constructor(protected http: HttpService, private tmpHttp: Http) {
-    super(http);
+  constructor(protected http: HttpService, private tmpHttp: Http, 
+    protected cache:CacheService) {
+    super(http, cache);
   }
 
-  getAllTickets(createdDate, branchId): Observable<any[]> {
-    // return this.http.get('api/manualticket/getalltickets', searchObj).map((res => res.json()));
-    let url = `api/manualticket/getalltickets?CreatedDate=${createdDate}`;
-    if (branchId) {
-      url = `api/manualticket/getalltickets?CreatedDate=${createdDate}&BranchId=${branchId}`;
-    }
+  getAllTickets(createdDate, branchId,isRI,driverId,ticketSource): Observable<any[]> {
+	 let url = `api/manualticket/getalltickets?CreatedDate=${createdDate}&branchId=${branchId}&ISRI=${isRI}&DriverId=${driverId}&ticketSource=${ticketSource}`;
+   
+   
+    
     return this.http.get(url)
       .map(res => res.json())
       .map(res => res.ManualTicket)
       .map(res => {
-        res.forEach(element => {
-          element['Customer'] = {
-            CustomerID: element.CustomerID,
-            CustomerName: element.CustomerName,
-            CustomerType: element.CustomerTypeID,
-            CustomerNumber: element.CustomerNumber,
-          };
-        })
+        if (res) {
+          res.forEach(element => {
+            element['Customer'] = {
+              CustomerID: element.CustomerID,
+              CustomerName: element.CustomerName,
+              CustomerType: element.CustomerTypeID,
+              CustomerNumber: element.CustomerNumber,
+              AXCustomerNumber: element.AXCustomerNumber,
+            };
+          })
+        }
         return res;
       })
 
@@ -44,9 +47,18 @@ export class ManualTicketService extends SharedService {
     return this.http.put('api/manualticket/workflow', approveTicketsObj).map((res => res.json()));
   }
 
+  deleteAllCheckedTickets(deleteTicketsObj) {console.log(deleteTicketsObj,'deleteTicketsObj');
+    return this.http.post('api/manualticket/deletemultipleticket', deleteTicketsObj).map((res => res.json()));
+  }
+
   getTicketTypes() {
-    return this.http.get(`api/manualticket/CustomerType`)
-      .map(res => res.json());
+	   if (this.cache.has("customerTypedata")) { return this.cache.get("customerTypedata"); }
+    return this.http.get(`api/manualticket/CustomerType`).map(res => {
+		let customerTypedataset:any = [];
+	customerTypedataset = res.json();
+	this.cache.set("customerTypedata", customerTypedataset);
+	return customerTypedataset;
+	});
   }
 
   getProducts() {
@@ -88,7 +100,12 @@ export class ManualTicketService extends SharedService {
   }
 
   saveTicket(ticket: ManualTicket): Observable<any> {
-    return this.http.post(`api/manualticket`, ticket).map((res) => res.json());
+	  console.log(ticket);
+    return this.http.post(`api/manualticket`, ticket).map((res) => 
+	{console.log(res);
+		res.json();
+	}
+	);
   }
 
   updateTicket(ticket: ManualTicket): Observable<any> {
@@ -114,7 +131,10 @@ export class ManualTicketService extends SharedService {
     return this.http.delete(`api/manualticket/deleteimage?imageId=${imageID}&ticketId=${TicketID}`)
       .map(res => res.json());
   }
-
+  getSaleCreditTicket(ticketId, CustomerId, deliveryDate) {
+    return this.http.get(`api/manualticket/getcomboticketsid?TicketNumber=${ticketId}&CustomerId=${CustomerId}&DeliveryDate=${deliveryDate}`)
+      .map(res => res.json());
+  }
 
   /* fileUpload() {
     const fileObj = {

@@ -16,7 +16,7 @@
 
                 <div class="col-sm-4">
                     <label>
-                        <b>Select Branch</b>
+                        <b>Select Business Unit</b>
                     </label>
                     <div style="padding-bottom:10px;">
                         <reddy-select [options]="allBranches" [(selected)]="filter.userBranch" (selectedChange)="branchChangeHandler()"></reddy-select>
@@ -40,7 +40,7 @@
                                     <th width="5%">Actions</th>
                                     <th>
                                         <span style="cursor:pointer;" (click)="customer.sortField = 'BranchName';customer.isAsc=!customer.isAsc;">
-                                            Branch
+                                            Business Unit
                                             <i *ngIf="(customer.sortField === 'BranchName')" [ngClass]="(customer.isAsc && customer.sortField === 'BranchName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                         </span>
                                     </th>
@@ -84,7 +84,7 @@
                                     </td>
 
 
-                                    <td>{{item.BranchName}}</td>
+                                    <td>{{item.BUName}}</td>
                                     <td>{{item.DriverName}}</td>
                                     <td class="textAlignCenter">{{item.TripCode}}</td>
                                     <td class="textAlignCenter">

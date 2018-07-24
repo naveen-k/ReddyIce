@@ -58,12 +58,12 @@ declare global {
 }
 
 Number.prototype.fpArithmetic = function (op, x): number {
+  
   var n = {
     '*': this * x,
     '-': this - x,
     '+': this + x,
     '/': this / x
   }[op];
-
   return Math.round(n * 100000) / 100000;
 }

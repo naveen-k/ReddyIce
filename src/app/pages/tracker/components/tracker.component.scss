@@ -10,6 +10,12 @@
     text-align:center;
 }
 
+.refresh{
+margin-top: 24px;
+margin-bottom:5px;
+}
+
+
 .block {
     width:10px;
     height:10px;
@@ -59,4 +65,7 @@
 
 .google-maps {
     height: calc(100vh - 337px);
+}
+.radioButtonMargin.mL0 {
+    margin-left: 0px;
 }

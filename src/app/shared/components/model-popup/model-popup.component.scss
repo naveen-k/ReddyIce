@@ -68,9 +68,10 @@ button.close {
 }
 
 button.close span{
-  position: fixed;
-  top: -7px;
-  right: 0px;
+  position: absolute;
+  right: -2px;
+  z-index: 100000;
+  line-height: 0px;
 }
 
 .modal-buttons .btn {

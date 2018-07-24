@@ -55,3 +55,26 @@
 .credit-amount{
     color: red;
 }
+@media (min-width: 768px){
+
+.col-md-3 {
+ flex:none;
+    max-width: 22%;
+	padding-right:0 !important;
+	padding-left:0 !important;
+}
+
+.col-md-1 {
+ flex:none;
+    max-width: 12%;
+	padding-right:0 !important;
+	padding-left:0 !important;
+}
+
+.col-md-2 {
+ flex:none;
+    max-width: 19%;
+	padding-right:0 !important;
+	padding-left:0 !important;
+}
+}

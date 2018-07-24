@@ -1,10 +1,12 @@
 import { User } from '../../user-management/user-management.interface';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
+import 'rxjs/operator/map';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/distinctUntilChanged';
 
+import { GenericSort } from 'app/shared/pipes/generic-sort.pipe';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,39 +15,38 @@ import { ManualTicket, TicketProduct } from '../manaul-ticket.interfaces';
 import { UserService } from '../../../shared/user.service';
 import { Branch, Customer } from '../../../shared/interfaces/interfaces';
 import { ManualTicketService } from '../manual-ticket.service';
-
+import { environment } from '../../../../environments/environment';
 import { Component, OnInit } from '@angular/core';
+import { CacheService } from '../../../shared/cache.service';
+import * as _ from 'lodash';
 
 @Component({
   templateUrl: './create-ticket.component.html',
   styleUrls: ['./create-ticket.component.scss'],
+  providers: [GenericSort]
 })
 export class CreateTicketComponent implements OnInit {
+  disableEDIUser: boolean = false;
+  EDIUserName: string;
   isSubmited: boolean = false;
   pageTitle: string = 'New Manual Ticket';
-
-  ticket: ManualTicket = {} as ManualTicket;
+  ticket: any = {} as ManualTicket;
 
   // hold temp models
   tempModels: any = {
     podReceived: false,
   };
-
-  ticketTypes: any;
-
-  ticketSubTypes: any[];
-
-  branches: any[];
-
-  // List of Cutomers
+ ticketTypes: any;
+ ticketSubTypes: any[];
+ branches: any[];
+ overlayStatus: boolean = false;
+// List of Cutomers
   customers: Customer[] = [];
-
   // List of Drivers
   drivers: any[];
-
+allDrivers: any[];
   // List of distributors
   distributors: any[];
-
   // Selected Customer
   customer: Customer;
 
@@ -91,26 +92,26 @@ export class CreateTicketComponent implements OnInit {
   listFilter: any;
 
   file: any = {};
-
+ 
   acceptedPodFormat: Array<string> = ['jpg', 'jpeg', 'png', 'pdf'];
-
   // Customer input formatter
-  inputFormatter = (res => `${res.CustomerNumber} - ${res.CustomerName}`);
-
-  search = (text$: Observable<any>) => text$.debounceTime(200)
+  inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
+  distributorsCache: any = [];  
+  search = (text$: Observable<any>) => { var self = this; return text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
-      return this.customers.filter((v: any) => {
+      return self.customers.filter((v: any) => {
         if (!v.CustomerTypeID || !v.Active) { return false; }
-        let flag = v.CustomerTypeID.toString() === this.ticket.CustomerType.toString();
+        let flag = (v.CustomerTypeID.toString() === this.ticket.CustomerType.toString() || ((this.ticket.CustomerType.toString()=='20')?v.CustomerTypeID.toString() === '22':false));
         if (flag) {
           term = term.trim();
           flag = v.CustomerName.toLowerCase().indexOf(term.toLowerCase()) > -1
-            || v.CustomerNumber.toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
+            || ((v.AXCustomerNumber)?v.AXCustomerNumber:'').toString().toLowerCase().indexOf(term.toLowerCase()) > -1;
         }
         return flag;
       }).slice(0, 10);
     })
+  };
 
   date = { maxDate: {}, minDate: {} };
 
@@ -122,35 +123,58 @@ export class CreateTicketComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     protected route: Router,
     protected location: Location,
+	private cacheService: CacheService,
   ) { }
 
   ngOnInit() {
     const now = new Date();
+    this.EDIUserName = environment.EDIUserName;
     this.date.maxDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-
     // Initialize user object with current logged In user;
     this.user = this.userService.getUser();
+	if (this.user.Role.RoleID == 1 || this.user.Role.RoleID == 6) {
+      this.loadDisributors();
+    }
     this.userSubTitle = this.user.IsDistributor ? '-' + ' ' + this.user.Distributor.DistributorName : '';
-
-    // Initialize properties from searched Object of List ticket page
-    this.listFilter = this.service.getSearchedObject();
-    this.ticket.DeliveryDate = this.listFilter.CreatedDate;
-    this.ticket.BranchID = +this.listFilter.BranchId;
-    this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
-    this.ticket.UserID = this.listFilter.UserId ? +this.listFilter.UserId : 0;
-    this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
 
     // get the ticket id from route
     this.ticketId = this.activatedRoute.snapshot.params['ticketId'];
+	// Initialize properties from searched Object of List ticket page
+	this.listFilter = this.service.getSearchedObject();
 
+	this.listFilter = JSON.parse(JSON.stringify(this.listFilter));
+		
+		if (this.cacheService.has("manualfilterdata")) {
+			
+					this.cacheService.get("manualfilterdata").subscribe((res) => {
+					this.listFilter = JSON.parse(JSON.stringify(res));
+						
+					});
+	     }
+		 
+		this.ticket.DeliveryDate = this.listFilter.CreatedDate;
+		this.ticket.BranchID = (this.listFilter.BranchId === 1)?0:this.listFilter.BranchId;
+		this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
+		this.ticket.UserID = (this.listFilter.UserId > 0) ? +this.listFilter.UserId : -1;
+		this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
+	if(this.ticketId === undefined){
+		//this.ticket.BranchID = 0;
+		//this.ticket.DeliveryDate = this.date.maxDate;
+		//this.ticket.UserID = 0;
+	}
+  
     const activatedRouteObject = this.activatedRoute.snapshot.data;
     this.isReadOnly = activatedRouteObject['viewMode'];
     this.tripMode = activatedRouteObject['tripMode'];
-    let branches = activatedRouteObject['branches'];
-
+    let allbranches = JSON.parse(JSON.stringify(activatedRouteObject['branches']));
+	if(allbranches[1].value === 1){
+		allbranches.splice(1,1);
+	}
+	this.branches = JSON.parse(JSON.stringify(allbranches));
+	
     let tripTicketEditMode = activatedRouteObject['tripTicketEditMode'];
-
-    if (this.tripMode) {
+    if (this.tripMode) { 
+	
       this.initializeTripMode();
     }
 
@@ -161,49 +185,43 @@ export class CreateTicketComponent implements OnInit {
       this.hideSave = false;
     }
 
-    // Discard 'All branches' and assign to branches object, if its coming in response;
-    branches = branches.filter((b) => b != null && b.BranchID !== 1);
-    this.sortBranches(branches);
-
-    this.branches = this.service.transformOptionsReddySelect(branches, 'BranchID', 'BranchCode', 'BranchName');
-
     this.ticketTypes = activatedRouteObject['ticketTypes'];
+	
 
-    if (this.user.Role.RoleID == 1) {
-      this.loadDisributors();
-    }
-    if (this.user.IsDistributor || this.ticket.DistributorCopackerID) {
-      // this.loadCustomers();
-      this.loadDisributors();
-      if (!this.ticket.DistributorCopackerID) {
+    
+   /* if (this.user.IsDistributor || (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID > 0)) {
+      
+      if (this.ticket.DistributorCopackerID < 1) {
         // Set distributor 
         this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
       }
-    }
-
+    }*/
+	if (this.user.IsDistributor && this.ticket.DistributorCopackerID < 1) {
+        // Set distributor 
+        this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
+      }
+	 
     this.prepareTicketTypes();
 
     // load customers, if BranchID is available
-    if (this.ticket.BranchID || this.ticket.DistributorCopackerID) {
-      this.loadCustomers();
+    if (+this.ticket.BranchID > 1 || this.ticket.DistributorCopackerID) {
+      //this.loadCustomers();
     }
-
-    // load driver or distributor
-    if (this.ticket.BranchID && this.ticket.isUserTypeDistributor) {
-      this.loadDisributors(this.ticket.BranchID);
-    } else if (this.ticket.BranchID) {
-      this.loadDriversOfBranch(this.ticket.BranchID);
-    }
-
     // if ticketId is not null, consider it as edit ticket mode and load ticket object
     if (this.ticketId) {
       this.pageTitle = 'Edit Ticket Details';
       this.loadTicket(this.ticketId);
+	  
       this.hideSave = true;
     } else {
       this.hideSave = false;
+	  // load driver or distributor
+			/*if (this.ticket.BranchID > 1 && this.ticket.isUserTypeDistributor) {
+			  this.loadDisributors(this.ticket.BranchID);
+			} else if (this.ticket.BranchID > 1) {
+			  this.loadDriversOfBranch(this.ticket.BranchID);
+			}*/
     }
-
     if (this.isReadOnly) {
       this.pageTitle = 'View Ticket Details';
     }
@@ -213,12 +231,154 @@ export class CreateTicketComponent implements OnInit {
       ImageTypeID: 40,
       ImageID: this.ticket.PODImageID,
     };
+	//Load all drivers and distributors
+    this.getDrivers();
+    //this.getDistributors();
+	this.loadCustomers();
+  }
+  
+  
+  backtomainscreen(){
+	
+		if (this.isFormDirty) {
+      const activeModal = this.modalService.open(ModalComponent, {
+        size: 'sm',
+        backdrop: 'static',
+      });
+      activeModal.componentInstance.BUTTONS.OK = 'Discard';
+      activeModal.componentInstance.showCancel = true;
+      activeModal.componentInstance.modalHeader = 'Warning!';
+      activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
+      activeModal.componentInstance.closeModalHandler = (() => {
+		  
+		  if (this.cacheService.has("allFilterdTickets")) {
+			
+			this.cacheService.deleteCache("allFilterdTickets");
+			this.cacheService.set("backtomain", 'back');
+		}
+		if (this.cacheService.has("manualfilterdata")) {
+			
+					this.cacheService.get("manualfilterdata").subscribe((res) => {
+					this.listFilter = res;
+						
+					});
+	     }
+		//if(this.popupWin){this.popupWin.close();}
+		
+        this.routeToTicketListing();
+      });
+    } else {
+		 if (this.cacheService.has("allFilterdTickets")) {
+			
+			this.cacheService.deleteCache("allFilterdTickets");
+			this.cacheService.set("backtomain", 'back');
+		}
+	//	if(this.popupWin){this.popupWin.close();}
+      this.routeToTicketListing();
+	  
+    }
+}
+
+
+  getDrivers() {
+        this.service.getAllDriver().subscribe(res => {
+			
+			if(this.ticketId || this.tripMode){
+				this.drivers = JSON.parse(JSON.stringify(res));
+			}
+			this.allDrivers = JSON.parse(JSON.stringify(res));
+        });
+		
+		if(this.ticket.BranchID > 1 && !this.ticket.isUserTypeDistributor){
+		
+			this.branchChangeHandler();
+		}
+    }
+
+    getDistributors(byType: any = '') {
+        
+            this.service.getDistributerAndCopacker().subscribe(res => {
+				//res.shift();
+                this.distributors = res;
+            });
+			
+    }
+ loadTicket(ticketId) {
+    this.service.getTicketById(ticketId).subscribe(response => {
+      this.ticket = response[0];
+	  this.ticket.BranchID = this.ticket.BranchID;
+	  this.ticket.UserID = this.ticket.UserID;
+      this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
+      this.ticket.CustomerID = this.ticket.Customer.CustomerID;
+      this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
+      this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
+      this.ticket.CustomerType = (this.ticket.CustomerType)?this.ticket.CustomerType:this.ticket.Customer.CustomerType;
+      if (this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false) {
+        this.ticket.TicketTypeID = 26;
+      }
+      // Initialize to check/uncheck POD Received
+      this.tempModels.podReceived = !!this.ticket.PODImageID;
+      if (this.ticket.PODImageID) {
+        this.isDownloadable = true;
+      }
+
+      this.loadCustomers();
+      // load driver or distributor
+     /* if (this.ticket.isUserTypeDistributor) {
+        this.getDistributors();
+      } else {
+        this.loadDriversOfBranch(this.ticket.BranchID);
+      }*/
+
+      this.loadCustomerDetail(this.ticket.CustomerID, this.ticket.CustomerSourceID == 101);
+    });
+  }
+ 
+
+  loadCustomerOfBranch(branchId, callback) {
+	 
+    this.service.getBranchBasedCustomers(branchId).subscribe((res) => {
+      callback(res);
+	 
+    });
   }
 
-  initializeTripMode() {
+  loadCustomersByType(custType, callback) {
+
+    this.service.getTypeBasedCustomers(custType, this.ticket.DistributorCopackerID).subscribe((res) => {
+      callback(res);
+    });
+  }
+
+  loadCustomers() {
+    this.customers = [];
+    let cust;
+    const callback = (res) => {
+      cust = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
+
+      this.customers = cust;
+
+      if (this.ticket.Customer && this.ticket.Customer.CustomerID && cust != "No Record Found") {
+		  
+        const customer = this.customers.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
+        this.ticket.CustomerType = (customer && customer.CustomerTypeID) ? (this.ticket.CustomerType)?this.ticket.CustomerType:customer.CustomerTypeID : (this.ticket.CustomerType)?this.ticket.CustomerType:this.ticket.Customer.CustomerType;
+        this.ticket.Customer.ChainID = (customer && customer.ChainID) ? customer.ChainID : 0;
+        this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
+      }
+    };
+
+    if (+this.ticket.DistributorCopackerID > 1 && this.ticket.CustomerType) {
+      this.loadCustomersByType(this.ticket.CustomerType, callback);
+    } else if (!this.user.IsDistributor && +this.ticket.DistributorCopackerID < 1) {
+		let branchID = (this.ticket.BranchID === 0)?1:this.ticket.BranchID;
+		
+      this.loadCustomerOfBranch(branchID, callback);
+	  
+    }
+  }
+ initializeTripMode() {
     this.tripId = this.activatedRoute.snapshot.params['tripId'];
     const queryParams = this.activatedRoute.snapshot.queryParams;
-
     const sdate = new Date(queryParams.sdate);
     const edate = (queryParams.edate !== "null") ? new Date(queryParams.edate) : new Date();
 
@@ -232,7 +392,7 @@ export class CreateTicketComponent implements OnInit {
     if (this.ticket.isUserTypeDistributor) {
       this.ticket.DistributorCopackerID = +queryParams.isDistributor;
     } else {
-      this.ticket.UserID = +queryParams.driverId;
+      this.ticket.UserID = queryParams.driverId;
     }
   }
 
@@ -294,7 +454,7 @@ export class CreateTicketComponent implements OnInit {
 
     this.resetCashAndCheck();
 
-    if (this.ticket.DistributorCopackerID) {
+    if (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID > 0) {
       this.loadCustomers();
     }
   }
@@ -328,80 +488,100 @@ export class CreateTicketComponent implements OnInit {
     this.ticket.Customer = '';
     this.ticket.DistributorCopackerID = null;
     this.ticket.TicketProduct = [];
-    this.loadCustomers();
-    if (this.ticket.isUserTypeDistributor) {
-      this.loadDisributors(this.ticket.BranchID);
-    } else {
-      this.loadDriversOfBranch(this.ticket.BranchID);
-    }
-
-
+   
+	this.loadDriversOfBranch(this.ticket.BranchID);
     this.listFilter.BranchId = this.ticket.BranchID;
   }
-
-  loadCustomerOfBranch(branchId, callback) {
-    this.service.getBranchBasedCustomers(branchId).subscribe((res) => {
-      callback(res);
-    });
-  }
-
-  loadCustomersByType(custType, callback) {
-    this.service.getTypeBasedCustomers(custType, this.ticket.DistributorCopackerID).subscribe((res) => {
-      callback(res);
-    });
-  }
-
-  loadCustomers() {
-    this.customers = [];
-    const callback = (res) => {
-      this.customers = res.Customer ? res.Customer : res;
-      if (this.ticket.Customer && this.ticket.Customer.CustomerID) {
-        const customer = res.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
-        this.ticket.CustomerType = customer.CustomerTypeID;
-        this.ticket.Customer.ChainID = customer.ChainID;
-        this.resetSubTypesAndMode(this.getSelectedTicketTypeObject());
-      }
-    };
-
-    if (this.ticket.DistributorCopackerID && this.ticket.CustomerType) {
-      this.loadCustomersByType(this.ticket.CustomerType, callback);
-    } else if (!this.user.IsDistributor && !this.ticket.DistributorCopackerID) {
-      this.loadCustomerOfBranch(this.ticket.BranchID, callback);
+  onDriverSelection() {
+    let selectedUser, selectedUserName;
+    this.disableEDIUser = false;
+    selectedUser = _.filter(this.drivers, { value: this.listFilter.UserId });
+    selectedUserName = selectedUser && selectedUser.length ? selectedUser[0].label : '';
+    selectedUserName = selectedUser && selectedUser.length ? selectedUser[0].label : '';
+    console.log(selectedUserName.replace(/\s/g, "").replace(/-+/g, ''), selectedUserName);
+    if (selectedUserName && (selectedUserName.replace(/\s/g, "").replace(/-+/g, '') == this.EDIUserName)) {
+      this.ticket.CustomerType = 21;
+      this.disableEDIUser = true;
+      this.modes = [];
     }
   }
 
   loadDriversOfBranch(branchId) {
-
-    this.service.getDriverByBranch(branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
-      this.drivers = res;
-      var that = this;
-      if (this.drivers && this.drivers.length > 1) {
-        var newArray = this.drivers.filter(function (el) {
-          return el.UserId === that.ticket.UserID;
-        });
-        if (newArray.length === 0) {
-          this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].UserId : null;
+	  if (branchId != null && branchId > 1 && (this.allDrivers).length > 0){
+			let drivers = JSON.parse(JSON.stringify(this.allDrivers));
+			(drivers).shift();
+		    drivers = drivers.filter((ft) => {
+				if(ft.data.BranchID !== null){
+					return (ft.data.BranchID === branchId)?true:false;
+				}else{
+					return false;
+				}
+					
+			});
+			(drivers).unshift({"value":0,"label":"Select Driver"});
+		   this.drivers = drivers;
+		   this.loadCustomers();
+		}else{
+			this.drivers = [];
+		}
+		//return true;
+    /*if (branchId != null && branchId > 1) {
+	
+      //this.service.getDriverByBranch(null,branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
+		  
+	  // this.drivers = res;
+	  // (this.drivers).shift();
+        var that = this;
+        if (this.drivers && this.drivers.length > 1) {
+          var newArray = this.drivers.filter(function (el) {
+			  return (el.value === that.ticket.UserID)?true:false;
+          });
+          if (newArray.length === 0) {
+            this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : -1;
+          }else{
+			  this.allDrivers = newArray;
+		  }
+		  
         }
-      }
-    });
+        /**
+         * EDI Enhancement
+         */
+       /* if ((that.ticket.IsEDITicket && that.ticket.IsEDITicket === true) && this.ticket.UserID > 0 && this.ticket) {
+
+          this.drivers = [];
+          this.drivers.push({ "value": this.ticket.UserID, "label": this.ticket.UserName, 'data': { 'UserId': this.ticket.UserID, 'FirstName': this.ticket.UserID, 'LastName': this.ticket.UserID } });
+        }
+        // if(this.listFilter.UserId) {
+        //   this.onDriverSelection();
+        // }        
+     // });
+    }*/
   }
 
   loadDisributors(branchId?: any) {
-    this.service.getDistributerAndCopacker().subscribe(res => {
-      this.distributors = this.service.transformOptionsReddySelect(res, 'DistributorCopackerID', 'Name');
-    })
+	
+    if (this.distributorsCache.length == 0) {
+      this.service.getDistributerAndCopacker().subscribe(res => {
+		  this.distributors = res;
+        
+      })
+    }
+
   }
 
   customerChangeHandler(event) {
     this.ticket.CustomerID = event.item.CustomerID || event.item.CustomerId;
     this.loadCustomerDetail(this.ticket.CustomerID, event.item.IsRICustomer);
 
-    this.ticket.CustomerSourceID = (''+event.item.IsRICustomer == "true") ? 101 : 103
+    this.ticket.CustomerSourceID = ('' + event.item.IsRICustomer == "true") ? 101 : 103
     // Reset ticket details
     this.ticket.TicketProduct = [{} as TicketProduct];
   }
 
   distributorChangeHandler() {
+    this.ticket.Customer = '';
+    // this.ticket.DistributorCopackerID = null;
+    this.ticket.TicketProduct = [];
     this.loadCustomers();
     this.listFilter.DistributorID = this.ticket.DistributorCopackerID;
   }
@@ -421,24 +601,32 @@ export class CreateTicketComponent implements OnInit {
             setTimeout(callPrepareTicket, 100);
             return;
           }
+		
           this.prepareTicketProduct(res.productdetail);
         };
         setTimeout(callPrepareTicket, 100);
       }
-      this.custType = this.customer.PaymentType === 19 ? false : true;
+      this.custType = this.customer.PaymentType && this.customer.PaymentType === 19 ? false : true;
     });
   }
 
   prepareTicketProduct(productdetail) {
     this.ticket.TicketProduct.forEach(td => {
+      // if(this.ticket.RoleID === 10 && td.Rate){
+      //   td.Price = td.Rate;
+      // }
+
       if (!td.ProductID) {
         td.ProductID = productdetail[0].ProductID;
-        this.productChangeHandler(td);
+        let index = this.ticket.TicketProduct.findIndex(x => x.ProductID == td.ProductID);
+        this.productChangeHandler(td, index);
       }
       this.updateTicketDetailObject(td);
       if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID == 27)) {
         // Ticket Type is DSD
+		 //let priti = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
         td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
+		
       } else if (this.ticket.CustomerType === 21) {
         // Ticket Type is PBS
         td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
@@ -452,6 +640,7 @@ export class CreateTicketComponent implements OnInit {
       }
 
     });
+	
     this.calculateTotalSale();
   }
 
@@ -471,10 +660,10 @@ export class CreateTicketComponent implements OnInit {
     this.checkNumberValidation();
   }
 
-  productChangeHandler(ticketDetail) {
+  productChangeHandler(ticketDetail, index) {
     const product = this.ticket.TicketProduct.filter(t => t.ProductID === ticketDetail.ProductID);
     if (product.length === 2) {
-      ticketDetail.ProductID = '';
+      //ticketDetail.ProductID = '';
       const activeModal = this.modalService.open(ModalComponent, {
         size: 'sm',
         backdrop: 'static',
@@ -484,10 +673,15 @@ export class CreateTicketComponent implements OnInit {
       activeModal.componentInstance.modalHeader = 'Warning!';
       activeModal.componentInstance.modalContent = `Product already selected! You cannot select same product again.`;
       activeModal.componentInstance.closeModalHandler = (() => {
+        this.ticket.TicketProduct[index] = {ProductID: -1};
       });
       return;
     }
     product[0]['ProductSourceID'] = this.customer.productdetail.filter(pr => pr.ProductID === product[0]['ProductID'])[0]['ProductSourceID']
+    /**
+     * This code has been changed to retain the Rate EDI Enhancement
+     */
+    delete ticketDetail.Rate;
     this.updateTicketDetailObject(ticketDetail);
     this.unitChangeHandler(ticketDetail);     // called this method to update the amount on product change itself
   }
@@ -593,7 +787,9 @@ export class CreateTicketComponent implements OnInit {
         this.routeToTicketListing();
       });
     } else {
+		
       this.routeToTicketListing();
+	  
     }
   }
 
@@ -619,10 +815,12 @@ export class CreateTicketComponent implements OnInit {
         });
         if (!fileSize) {
           var msg = 'File size cannot be greater than 2MB';
+          this.overlayStatus = false;
         }
         activeModal.componentInstance.BUTTONS.OK = 'OK';
         activeModal.componentInstance.modalHeader = 'Warning!';
         activeModal.componentInstance.modalContent = `${msg}`;
+        this.overlayStatus = false;
       }
     });
 
@@ -638,6 +836,7 @@ export class CreateTicketComponent implements OnInit {
       this.service.updateFile(file).subscribe((response) => {
         this.notification.success('', 'File updated');
         this.isSubmited = false;
+        this.overlayStatus = false;
       });
       return;
     }
@@ -696,11 +895,7 @@ export class CreateTicketComponent implements OnInit {
           this.isDownloadable = false;
           this.notification.success('', "POD Image deleted successfully");
         }
-      }, (error) => {
-        if (error) {
-          this.notification.error('', 'Something went wrong while deletion of POD Image');
-        }
-      },
+      }
     );
   }
   deleteProductHandler(tdetail) {
@@ -716,6 +911,11 @@ export class CreateTicketComponent implements OnInit {
       (response) => {
         if (response) {
           this.notification.success('', 'Ticket deleted successfully');
+		   if (this.cacheService.has("allFilterdTickets")) {
+			
+			this.cacheService.deleteCache("allFilterdTickets");
+			this.cacheService.set("backtomain", 'back');
+		}
           this.routeToTicketListing();
         }
       },
@@ -727,37 +927,7 @@ export class CreateTicketComponent implements OnInit {
     );
   }
 
-  loadTicket(ticketId) {
-    this.service.getTicketById(ticketId).subscribe(response => {
-      this.ticket = response[0];
-
-      this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
-      this.ticket.CustomerID = this.ticket.Customer.CustomerID;
-      this.ticket.PODImageID = this.ticket.PODImage.PODImageID;
-      this.ticket.isUserTypeDistributor = !!this.ticket.DistributorCopackerID;
-
-      this.ticket.CustomerType = this.ticket.Customer.CustomerType;
-      if (this.ticket.CustomerType == 22 && this.ticket.IsSaleTicket == false) {
-        this.ticket.TicketTypeID = 26;
-      }
-      // Initialize to check/uncheck POD Received
-      this.tempModels.podReceived = !!this.ticket.PODImageID;
-      if (this.ticket.PODImageID) {
-        this.isDownloadable = true;
-      }
-
-      this.loadCustomers();
-
-      // load driver or distributor
-      if (this.ticket.isUserTypeDistributor) {
-        this.loadDisributors(this.ticket.BranchID);
-      } else {
-        this.loadDriversOfBranch(this.ticket.BranchID);
-      }
-
-      this.loadCustomerDetail(this.ticket.CustomerID, this.ticket.CustomerSourceID == 101);
-    });
-  }
+ 
 
   preSaveTicket() {
     this.isSubmited = true;
@@ -787,7 +957,7 @@ export class CreateTicketComponent implements OnInit {
           activeModal.componentInstance.dismissHandler = (() => {
             this.isSubmited = false;
             this.isFormDirty = true;
-          });          
+          });
         } else if (err.status === 409) {
           this.notification.error('', 'Ticket Number already in use!!!');
           this.isSubmited = false;
@@ -797,11 +967,34 @@ export class CreateTicketComponent implements OnInit {
     }
   }
 
-
+aftersuccessfulSubmit(){
+	let searchOBJ:any = {};
+			//searchOBJ.CreatedDate = this.ticket.DeliveryDate;
+			
+			if(this.ticket.isUserTypeDistributor){
+				searchOBJ.DistributorID = this.ticket.DistributorCopackerID;
+				searchOBJ.UserId = 1;
+			}else{
+				searchOBJ.UserId = this.ticket.UserID;
+			}
+			searchOBJ.userType = (this.ticket.isUserTypeDistributor) ? 'External' : 'Internal';
+			searchOBJ.BranchId = this.ticket.BranchID;
+			const now = new Date();
+            searchOBJ.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+			this.cacheService.set("manualfilterdata", searchOBJ);
+			this.cacheService.set("backtomain", 'back');
+	   if (this.cacheService.has("allFilterdTickets")) {
+			this.cacheService.deleteCache("allFilterdTickets");
+		}
+        this.routeToTicketListing();
+}
 
   saveTicket() {
+	  
+    this.overlayStatus = true;
     if (!this.validateTicket(this.ticket)) {
       this.isFormDirty = false;
+      this.overlayStatus = false;
       return;
     }
     this.isFormDirty = true;
@@ -810,26 +1003,34 @@ export class CreateTicketComponent implements OnInit {
       this.uploadFile(this.file);
       return;
     }
-
+    /**
+     * EDI Enhancement
+     */
+    if ((this.ticket.IsEDITicket && this.ticket.IsEDITicket === true) && this.ticket.TicketStatusID === 23) {
+      this.ticket.TicketStatusID = 24;
+    }
     const ticket = this.modifyTicketForSave(this.ticket);
 
     if (this.ticketId) {
       // Update ticket
 
       this.service.updateTicket(ticket).subscribe(res => {
-
+        this.overlayStatus = false;
         this.notification.success('', res);
-        this.location.back();
+        this.aftersuccessfulSubmit();
+        //this.location.back();
+
       }, err => {
         this.isFormDirty = true;
         this.isSubmited = false;
         this.notification.error('', err);
+        this.overlayStatus = false;
       });
       return;
     }
     
-    // Save ticket 
     this.service.saveTicket(ticket).subscribe(res => {
+      this.overlayStatus = false;
       this.notification.success('', 'Ticket created successfully!');
       let d: any[] = ticket.DeliveryDate.split('-');
       if (this.tripMode && d.length && d.length == 3) {
@@ -847,6 +1048,9 @@ export class CreateTicketComponent implements OnInit {
       this.isSubmited = false;
       this.isFormDirty = false;
       this.route.navigate(['../'], { relativeTo: this.activatedRoute });
+	  this.aftersuccessfulSubmit();
+	  
+	   
     }, (error) => {
       if (error) {
         if (error.status == 304) {
@@ -859,6 +1063,7 @@ export class CreateTicketComponent implements OnInit {
         this.isFormDirty = true;
       }
       this.isSubmited = false;
+      this.overlayStatus = false;
     });
   }
 
@@ -947,8 +1152,15 @@ export class CreateTicketComponent implements OnInit {
   }
 
   userTypeChangeHandler() {
-    this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = null;
-    this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = null;
+    this.disableEDIUser = false;
+    this.ticket.UserID = this.ticket.DistributorCopackerID = this.ticket.BranchID = 0;
+    this.listFilter.BranchId = this.listFilter.DistributorID = this.listFilter.UserId = 0;
+
+    // this.ticket.TicketProduct = [{} as TicketProduct];
+    this.ticket.Customer = '';
+    this.customers = [];
+    // this.ticket.DistributorCopackerID = null;
+    this.ticket.TicketProduct = [];
 
     if (this.ticket.isUserTypeDistributor) {
       this.listFilter.userType = 'External';
@@ -966,13 +1178,20 @@ export class CreateTicketComponent implements OnInit {
   updateTicketDetailObject(ticketDetail) {
     var prodDetail = {};
     prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
-    if (!prodDetail) {
-      //ticketDetail.Price = ticketDetail.Rate;
-      prodDetail = { Price: ticketDetail.Rate };
+    /**
+     * This code has been changed to retain the Rate  EDI Enhancement
+     */
+    // if (!prodDetail) {
+    //   //ticketDetail.Price = ticketDetail.Rate;
+    //   prodDetail = { Price: ticketDetail.Rate };
+    // }
+    if (ticketDetail.Rate) {
+      prodDetail = { Price: ticketDetail.Rate,IsTaxable:prodDetail['IsTaxable'] };
     }
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
     ticketDetail.TaxPercentage = this.customer.Tax;
+    ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
   }
 
 
@@ -990,23 +1209,42 @@ export class CreateTicketComponent implements OnInit {
   calculateProductTotalAmount(q, p) {
     q = q || 0;
     p = p || 0;
-    return q.fpArithmetic("*", p);
+	let priti = (+q).fpArithmetic("*", (+p));
+	
+    return (+q).fpArithmetic("*", (+p));
   }
 
   calculateTotalSale() {
     this.ticket['tempTotalUnit'] = 0;
     this.ticket.TotalSale = 0;
-
+    this.tempModels.totalTax = 0;
     this.ticket.TicketProduct.forEach((t) => {
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
-      this.ticket.TotalSale += +t['totalAmount'] || 0;
+      // this.ticket.TotalSale += +t['totalAmount'] || 0;
+      this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
+      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", ((t.productSelected.IsTaxable)?(+t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100):0));
+      //this.tempModels.totalTax = t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100;
     });
-    this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    /**
+     * hack for excluding tax for 
+     * DSD FEES: DELIVERY CHARGE - 100045 &
+     * DSD FEES: CC SERVICE CHARGE - 200418 
+     */
+    // if (this.ticket.TicketProduct.length && (this.ticket.TicketProduct[0].productSelected.ProductID == 45 ||
+    //   this.ticket.TicketProduct[0].productSelected.ProductID == 1497)) {
+    //   this.tempModels.totalTax = this.ticket.TotalSale;
+    // } else {
+    //   this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    // }
+    //this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+    //this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
     this.ticket.TaxAmount = this.tempModels.totalTax;
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }
     //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
+	this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
+	this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
   }
 
   pbsQuantityCheck() {
@@ -1058,6 +1296,7 @@ export class CreateTicketComponent implements OnInit {
 
   isPOReuquired() {
     if (this.ticket.CustomerType === 21) { return false; }
+	
     const selectedCustomer = this.customers.filter(cust => this.ticket.CustomerID === cust.CustomerId)[0];
     return selectedCustomer ? !!selectedCustomer.PORequired : false;
   }
@@ -1079,7 +1318,7 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.isPOReuquired() && !this.ticket.PONumber) {
       this.notification.error('', 'PO number is mandatory!!!');
       return false;
-    } else if (this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) {
+    } else if ((this.isPODRequired() && !this.ticket.PODImageID && !this.file.Image && (this.ticket.CustomerType == 20 || this.ticket.CustomerType == 22)) && (this.ticket && this.ticket.IsEDITicket !== true)) {
       this.notification.error('', 'POD is mandatory!!!');
       return false;
     } else if (!this.ticket.UserID && !ticket.DistributorCopackerID) {
@@ -1100,10 +1339,10 @@ export class CreateTicketComponent implements OnInit {
     } else if (this.ticketMinMaxLength) {
       this.notification.error('', 'Ticket number should be 4-10 digits long only!!!');
       return false;
-    } else if (this.ticket.CheckNumber && !this.ticket.CheckAmount) {
+    } else if (this.ticket.CheckNumber && (+this.ticket.CheckAmount <= 0)) {
       this.notification.error('', 'Check Amount is required as Check Number exists!!!');
       return false;
-    } else if (this.ticket.CheckAmount && !this.ticket.CheckNumber) {
+    } else if (+this.ticket.CheckAmount > 0 && !this.ticket.CheckNumber) {
       this.notification.error('', 'Check number is required as Check Amount exists!!!');
       return false;
     } else if (this.ticket.CustomerType === 21 && this.ticket.TicketProduct && this.pbsQuantityCheck() > 0) {

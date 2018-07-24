@@ -9,12 +9,18 @@
 //  reportEndpoint: 'http://frozen.reddyice.com/iceboxReportSqldev/Reports/ReportData.aspx',
 // apiEndpoint: 'http://frozen.reddyice.com/reddyice_dev/',
 // reportEndpoint: 'http://frozen.reddyice.com/DashboardReports/Reports/ReportData.aspx',
-// apiEndpoint: 'http://frozen.reddyice.com/IceBoxApi_Support/',
-// reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
-
+// apiEndpoint: 'http://frozen.reddyice.com/IceBoxApi_Support/',axchangeapi
+// reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',DashboardReportsPhase3
+// apiEndpoint: http://frozen.reddyice.com/reddyicephase3mock/,
+// reportEndpoint: http://frozen.reddyice.com/reddyicereportphase3mock/Reports/ReportData.aspx,
+//apiEndpoint: 'http://frozen.reddyice.com/axchangeapi/',
+//reportEndpoint: 'http://frozen.reddyice.com/DashboardReportsPhase3/Reports/ReportData.aspx',
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://frozen.reddyice.com/iceboxapisqldev/',
-  reportEndpoint: 'http://frozen.reddyice.com/iceboxReportSqldev/Reports/ReportData.aspx'
+  apiEndpoint: 'https://buat2-myicebox.reddyice.com/MyIceBoxApi/',
+  reportEndpoint: 'https://buat2-myicebox.reddyice.com/MyIceBoxReports/Reports/ReportData.aspx',
+  inventoryEndpoint: 'https://buat2-myicebox.reddyice.com/DA_Inventory/forms/addBom.aspx',
+  prodLabel: '(Performance)',
+  EDIUserName : 'MyiceboxEDI'
 };

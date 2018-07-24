@@ -14,9 +14,11 @@ export class BranchResolver implements Resolve<any[]> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,
     ) {
+		
         return this.service.getBranches(this.user.getUser().UserId);
     }
 }
+
 
 @Injectable()
 export class TicketTypesResolver implements Resolve<any> {

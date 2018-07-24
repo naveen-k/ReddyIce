@@ -1,0 +1,21 @@
+<h3 *ngIf = "userActivityLog.length">Handheld Login Activity</h3>
+<div *ngIf = "userActivityLog.length" class="vertical-scroll">
+	<table class="table table-striped table-condensed">
+		<thead class="a tableHeader">
+			<tr>
+				<th class="allign">Date Time</th>
+				<th class="allign">Phone</th>
+				<th class="allign">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor = "let loggedUser of userActivityLog" >
+				<td>{{ loggedUser.LoginDate | date: "MM/dd/yyyy" }} {{ loggedUser.LoginDate | date: "shortTime" }}</td>
+				<td>{{ loggedUser.PhoneNumber }}</td>
+				<td *ngIf = "loggedUser.IsLoggedIn" style="cursor: pointer" ><button [disabled] = "actionstatus" (click)="killprocess(loggedUser)" class = "btn btn-primary addCustBtn" >Force Logout</button></td>
+				<td *ngIf = "!loggedUser.IsLoggedIn"></td>
+			</tr>
+		</tbody>
+		
+	</table>
+</div>

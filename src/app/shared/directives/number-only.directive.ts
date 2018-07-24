@@ -6,6 +6,8 @@ export class NumberOnlyDirective {
     private el: any;
     @Input()
     numberOnly: boolean = false;
+    @Input()
+    defaultValue: any;
     @Output() ngModelChange = new EventEmitter();
 
     constructor(private elementRef: ElementRef) {
@@ -51,7 +53,12 @@ export class NumberOnlyDirective {
     @HostListener("focusout", ["$event.target.value"])
     focusout(value) {
         if (!this.numberOnly) {
-            return;
+            if(value=='' && (this.defaultValue !==undefined || this.defaultValue !==null)){
+                this.ngModelChange.emit(this.defaultValue);
+                return;
+            } else {
+                return;
+            }
         }
         if (value == '' || value == '.') {
             this.el.value = '0.00';

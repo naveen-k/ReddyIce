@@ -20,6 +20,7 @@ export class LoadComponent implements OnInit {
     branches: Array<any> = [];
     allBranches: Array<any> = [];
     drivers: Array<any> = [];
+	allDrivers: Array<any> = [];
     logedInUser: any = {};
     todaysDate: any;
     selectedDate: any;
@@ -44,58 +45,95 @@ export class LoadComponent implements OnInit {
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
+		
         this.filter.tripCode = 0;
-        this.branches = this.activatedRoute.snapshot.data['branches'];
-        if (this.branches && this.branches.length) {
-            if ((this.branches.length > 0) && (this.branches[0] === null || this.branches[0].BranchID === 1)) {
-                this.branches.shift();
-            }
-        }
-        this.allBranches = this.service.transformOptionsReddySelect(this.branches, 'BranchID', 'BranchCode', 'BranchName');
-        if(this.filter.userBranch && this.filter.userBranch>0){
-            this.getDrivers();
-        }
-        
+        this.allBranches = this.branches = JSON.parse(JSON.stringify(this.activatedRoute.snapshot.data['branches']));
+    
+		this.getDriver();
+		
         this.dateChangeHandler();
         
     }
-    getDrivers(byType: any = '') {
-        if (this.filter.userBranch === null) {
-            return;
-        }
-         
-        this.service.getDriverByBranch(this.filter.userBranch, true).subscribe(res => {
-            let objDriver = [];
-            res = res || [];
-            objDriver = this.service.transformOptionsReddySelect(res, 'UserId', 'UserName');
-            this.drivers = objDriver;
-            if(this.logedInUser.Role.RoleID === 3){
-                this.filter.userDriver = this.logedInUser.UserId;
-                this.userChangeHandler();
-            }      
+	
+	
+	 getDriver() {
+        this.service.getAllDriver().subscribe(res => {
+           this.allDrivers = JSON.parse(JSON.stringify(res));
+		   this.getUniqDriver();
+		  
         });
-        
     }
+	getUniqDriver(){
+		this.drivers = [];
+		let tempdriver:any = [];
+		let drivers = JSON.parse(JSON.stringify(this.allDrivers));
+		  (drivers).shift();
+		drivers.filter((dri) => {
+			tempdriver[dri.data.UserId] = dri;
+			
+		});
+		
+		 this.drivers = tempdriver;
+		 (this.drivers).unshift({"value":0,"label":"Select Driver"});
+	}
+
     branchChangeHandler(byType: any = '') {
-        //this.searchObj.UserId = null;
         this.logedInUser.Role.RoleID != 3 && (this.drivers = []);
         this.filteredLoads = [];
-        this.filter.userDriver = 0
         this.filter.userDriver = 0;
-        this.getDrivers(byType);
+        if (this.filter.userBranch > 1 && (this.allDrivers).length > 0){
+			let drivers = JSON.parse(JSON.stringify(this.allDrivers));
+		    (drivers).shift();
+		    drivers = drivers.filter((ft) => {
+				if(ft.data.BranchID !== null){
+					return (ft.data.BranchID === this.filter.userBranch)?true:false;
+				}else{
+					return false;
+				}
+					
+			});
+			
+			(drivers).unshift({"value":1,"label":"All - Drivers"});
+			(drivers).unshift({"value":0,"label":"Select Driver"});
+		   this.drivers = drivers;
+		}else{
+			 this.drivers = this.allDrivers;
+		}
+		
+		if(this.logedInUser.Role.RoleID === 3){
+                this.filter.userDriver = this.logedInUser.UserId;
+                this.userChangeHandler();
+           }  
     }
     userChangeHandler() {
-        this.getBranchName();
+       this.getBranchName();
         this.getDriverName();
         this.getLoadsFromList(this.filter.userBranch, this.filter.userDriver);
     }
     getBranchName(){
-        let b = this.branches.filter((b)=>b.BranchID === this.filter.userBranch);
-        this.filter.userBranchName = b[0].BranchCode +' - '+b[0].BranchName;
+		
+		let branchES = JSON.parse(JSON.stringify(this.branches));
+		    (branchES).shift();
+        let b = branchES.filter((b)=>b.data.BranchID === this.filter.userBranch);
+        this.filter.userBranchName = b[0].data.BranchCode +' - '+b[0].data.BUName;
+		
     }
     getDriverName(){
-        let d = this.drivers.filter((d)=>d.value === this.filter.userDriver);
-        this.filter.userDriverName = d[0].label;
+		let driverES = JSON.parse(JSON.stringify(this.drivers));
+		
+		(driverES).shift();
+		(driverES).shift();
+		
+		if(this.filter.userDriver > 1){
+			 let d = driverES.filter((d) => d.data.UserId === this.filter.userDriver);
+			this.filter.userDriverName = d[0].data.UserName;
+		}else if (this.filter.userDriver == 1){
+			this.filter.userDriverName = "All - Drivers";
+		}else{
+			this.filter.userDriverName = '';
+		}
+       
+		
     }
     getLoadsFromList(branchID, driverID) {
 
