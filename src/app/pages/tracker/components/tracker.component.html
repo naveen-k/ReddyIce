@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-sm-2" [hidden]="isDistributor" *ngIf="searchObj.userType=='Internal' || filter.trackerType == 2">
                     <label>Select Business Unit</label>
-                    <reddy-select [options]="allBranches" [(selected)]="tripFilterOption.branchId" (selectedChange)="refreshDataHandler('branchChange')"></reddy-select>
+                    <reddy-select [options]="branches" [(selected)]="tripFilterOption.branchId" (selectedChange)="refreshDataHandler('branchChange')"></reddy-select>
                 </div>
                 <div class="col-sm-2" *ngIf="searchObj.userType=='External' && filter.trackerType != 2 ">
                     <label>Dist./CoPacker</label>
@@ -125,12 +125,12 @@
                                             Actual
                                         </span>
                                     </th>
-                                    <th style="text-align: left;padding-left: 7px;" *ngIf="!isDistributor && searchObj.userType != 'External'">
+                                    <th style="text-align: center;padding-left: 7px;" *ngIf="!isDistributor && searchObj.userType != 'External'">
                                         <span>
                                             Customer#
                                         </span>
                                     </th>
-                                    <th style="text-align: left;padding-left: 7px;" *ngIf="isDistributor || searchObj.userType == 'External'">
+                                    <th style="text-align: center;padding-left: 7px;" *ngIf="isDistributor || searchObj.userType == 'External'">
                                         <span>
                                             Customer
                                         </span>

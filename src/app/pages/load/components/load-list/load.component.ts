@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../../shared/user.service';
 import { NotificationsService } from 'angular2-notifications';
 import { ActivatedRoute,Router } from '@angular/router';
-
+import { CacheService } from '../../../../shared/cache.service';
 
 @Component({
     templateUrl: './load.component.html',
@@ -35,9 +35,13 @@ export class LoadComponent implements OnInit {
         DriverName: '',
         DriverID: ''
     };
-    constructor(private service: LoadService, private userService: UserService,
+    constructor(
+	    private service: LoadService, private userService: UserService,
         protected notification: NotificationsService,
-        protected activatedRoute: ActivatedRoute,protected router: Router ) { }
+        protected activatedRoute: ActivatedRoute,
+		protected router: Router,
+		private cacheService: CacheService
+		) { }
 
     ngOnInit() {
         this.retainFilters('reset');
@@ -45,45 +49,61 @@ export class LoadComponent implements OnInit {
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
         this.filter = this.service.getFilter();
-		
+		this.filter = JSON.parse(JSON.stringify(this.filter));
         this.filter.tripCode = 0;
-        this.allBranches = this.branches = JSON.parse(JSON.stringify(this.activatedRoute.snapshot.data['branches']));
-    
+		this.filter.userBranch = 0;
+        this.allBranches = JSON.parse(JSON.stringify(this.activatedRoute.snapshot.data['branches']));
+		this.branches = JSON.parse(JSON.stringify(this.allBranches));
+		
+		 if ( this.allBranches.length == 2) {
+			   this.branches.shift();
+                this.filter.userBranch = this.branches[0].value;
+				
+		}else{
+			this.branches.splice(1,1);
+		}
+
 		this.getDriver();
+		if (this.cacheService.has("loadfilterdata")) {
+					this.cacheService.get("loadfilterdata").subscribe((res) => {
+					this.filter = JSON.parse(JSON.stringify(res));
+					
+					 this.branchChangeHandler();
+						
+					});
+	     }
 		
         this.dateChangeHandler();
-        
+		
+    
     }
 	
 	
 	 getDriver() {
         this.service.getAllDriver().subscribe(res => {
            this.allDrivers = JSON.parse(JSON.stringify(res));
-		   this.getUniqDriver();
+		    if (this.allBranches.length == 2) {
+			   this.branchChangeHandler();
+		   }
+		   
 		  
         });
     }
-	getUniqDriver(){
-		this.drivers = [];
-		let tempdriver:any = [];
-		let drivers = JSON.parse(JSON.stringify(this.allDrivers));
-		  (drivers).shift();
-		drivers.filter((dri) => {
-			tempdriver[dri.data.UserId] = dri;
-			
-		});
-		
-		 this.drivers = tempdriver;
-		 (this.drivers).unshift({"value":0,"label":"Select Driver"});
-	}
+	
 
     branchChangeHandler(byType: any = '') {
+		
         this.logedInUser.Role.RoleID != 3 && (this.drivers = []);
         this.filteredLoads = [];
-        this.filter.userDriver = 0;
+			if (!this.cacheService.has("loadfilterdata")) {
+				 this.filter.userDriver = 0;
+			}
+       
         if (this.filter.userBranch > 1 && (this.allDrivers).length > 0){
+
 			let drivers = JSON.parse(JSON.stringify(this.allDrivers));
-		    (drivers).shift();
+		    (drivers).splice(0,2);
+			
 		    drivers = drivers.filter((ft) => {
 				if(ft.data.BranchID !== null){
 					return (ft.data.BranchID === this.filter.userBranch)?true:false;
@@ -92,12 +112,14 @@ export class LoadComponent implements OnInit {
 				}
 					
 			});
-			
-			(drivers).unshift({"value":1,"label":"All - Drivers"});
-			(drivers).unshift({"value":0,"label":"Select Driver"});
-		   this.drivers = drivers;
-		}else{
-			 this.drivers = this.allDrivers;
+			if(drivers.length > 1){
+				(drivers).unshift({"value":0,"label":"Select Driver"});
+			}else if(drivers.length === 1){
+				this.filter.userDriver = drivers.value;
+			}else{
+				(drivers).unshift({"value":0,"label":"Driver not found"});
+			}
+			this.drivers = drivers;
 		}
 		
 		if(this.logedInUser.Role.RoleID === 3){
@@ -113,22 +135,22 @@ export class LoadComponent implements OnInit {
     getBranchName(){
 		
 		let branchES = JSON.parse(JSON.stringify(this.branches));
-		    (branchES).shift();
+	
+		if ( this.allBranches.length != 2) {
+			    (branchES).shift();
+		}
         let b = branchES.filter((b)=>b.data.BranchID === this.filter.userBranch);
         this.filter.userBranchName = b[0].data.BranchCode +' - '+b[0].data.BUName;
 		
     }
     getDriverName(){
 		let driverES = JSON.parse(JSON.stringify(this.drivers));
-		
-		(driverES).shift();
-		(driverES).shift();
-		
 		if(this.filter.userDriver > 1){
+			driverES.shift();
 			 let d = driverES.filter((d) => d.data.UserId === this.filter.userDriver);
 			this.filter.userDriverName = d[0].data.UserName;
 		}else if (this.filter.userDriver == 1){
-			this.filter.userDriverName = "All - Drivers";
+			this.filter.userDriverName = "All Drivers";
 		}else{
 			this.filter.userDriverName = '';
 		}
@@ -195,6 +217,7 @@ export class LoadComponent implements OnInit {
     dateChangeHandler() {
         this.showSpinner = true;
         this.selectedDate = this.service.formatDate(this.filter.selectedDate);
+		
         this.getLoads();
 
     }

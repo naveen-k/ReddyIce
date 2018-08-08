@@ -10,6 +10,8 @@ import { LoadModel, LoadProduct } from '../../load.interfaces';
 import { Route } from '@angular/router/src/config';
 import { environment } from '../../../../../environments/environment';
 import { debug } from 'util';
+import { Location } from '@angular/common';
+import { CacheService } from '../../../../shared/cache.service';
 
 @Component({
     templateUrl: './details.component.html',
@@ -40,7 +42,9 @@ export class DetailsComponent implements OnInit {
         private userService: UserService,
         private notification: NotificationsService,
         private modalService: NgbModal,
+		protected location: Location,
         protected router: Router,
+		private cacheService: CacheService
     ) { 
         
     }
@@ -168,14 +172,31 @@ export class DetailsComponent implements OnInit {
         this.hideAddProduct = false;
         //this.resetField(arrayIndex);
     }
+	aftersuccessfulSubmit(){
+	let searchOBJ:any = {};
+			searchOBJ.userBranch = this.loadData.BranchID;
+			searchOBJ.userDriver = this.loadData.DriverID;
+			var now = new Date(this.loadData.DeliveryDate);
+			
+            searchOBJ.selectedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+			this.cacheService.set("loadfilterdata", searchOBJ);
+            this.routeToTicketListing();
+}
+  routeToTicketListing() {
+    this.location.back();
+  }
     saveLoad() {
         this.checkValidity = false;
 
         if (!this.activatedRouteObject['LoadMode']) {
             this.loadData.loaddetails = this.newlyAddedProduct;
-            this.service.createLoadData(this.loadData).subscribe((res) => {
+			
+          this.service.createLoadData(this.loadData).subscribe((res) => {
                 this.notification.success("Success", "Load created successfully");
-                this.router.navigate(['/pages/load/list']);
+				this.backToList();
+				//this.router.navigate(['/pages/load/list']);
+				//this.aftersuccessfulSubmit();
+				
             }, (err) => {
                 this.checkValidity = true;
                 let error = JSON.parse(err._body);console.log(err,'err');
@@ -194,7 +215,8 @@ export class DetailsComponent implements OnInit {
             this.loadData.loaddetails = newLoadList;
             this.service.saveLoadDetails(this.loadId, this.loadData).subscribe((res) => {
                 this.notification.success("Success", "Load updated successfully");
-                this.router.navigate(['/pages/load/list']);
+				this.backToList();
+                //this.router.navigate(['/pages/load/list']);
             }, (err) => {
                 this.checkValidity = true;
                 err = JSON.parse(err._body);
@@ -236,9 +258,12 @@ export class DetailsComponent implements OnInit {
     }
     backToList() {
         this.showSpinner = true;
+		this.filter = JSON.parse(sessionStorage.getItem("LoadFilter"));
+		this.cacheService.set("loadfilterdata",this.filter);
         this.router.navigate(['/pages/load/list']);
     }
     getFilters(callback){
+		
         this.filter = JSON.parse(sessionStorage.getItem("LoadFilter"));
         callback.call(this);
     }

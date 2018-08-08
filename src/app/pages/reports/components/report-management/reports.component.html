@@ -291,7 +291,7 @@
                     <label class="control-label">
                         Enter Ticket Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" (ngModelChange)="refreshDataHandler('',$event)" placeholder="Enter Ticket Number">
+                    <input (keydown)="onKeydown($event)" type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.ticketNumber" (ngModelChange)="refreshDataHandler('',$event)" placeholder="Enter Ticket Number">
                 </div>
                 <div class="col-sm-4" *ngIf="filter.showCustomerDropdown">
                     <div class="row" [ngStyle]="{'padding': filter.reportType === 'SR'?'0px 0':''}">
@@ -317,7 +317,7 @@
                     <label class="control-label">
                         Enter Work Order Number
                     </label>
-                    <input type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.workOrderNumber" (ngModelChange)="refreshDataHandler('',$event)" placeholder="Enter Work Order Number">
+                    <input (keydown)="onKeydown($event)" type="text" class="form-control" [numberOnly]="false" [(ngModel)]="filter.workOrderNumber" (ngModelChange)="refreshDataHandler('',$event)" placeholder="Enter Work Order Number">
                 </div>
             </div>
         </div>

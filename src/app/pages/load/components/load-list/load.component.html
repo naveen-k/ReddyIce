@@ -19,7 +19,7 @@
                         <b>Select Business Unit</b>
                     </label>
                     <div style="padding-bottom:10px;">
-                        <reddy-select [options]="allBranches" [(selected)]="filter.userBranch" (selectedChange)="branchChangeHandler()"></reddy-select>
+                        <reddy-select [options]="branches" [(selected)]="filter.userBranch" (selectedChange)="branchChangeHandler()"></reddy-select>
                     </div>
                 </div>
                 <div class="col-sm-3">
@@ -84,7 +84,7 @@
                                     </td>
 
 
-                                    <td>{{item.BUName}}</td>
+                                    <td>{{item.BranchCode}}-{{item.BUName}}</td>
                                     <td>{{item.DriverName}}</td>
                                     <td class="textAlignCenter">{{item.TripCode}}</td>
                                     <td class="textAlignCenter">

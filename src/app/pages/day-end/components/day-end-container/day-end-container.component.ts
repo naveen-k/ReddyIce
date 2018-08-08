@@ -8,25 +8,18 @@ import { CacheService } from '../../../../shared/cache.service';
 export class DayEndContainerComponent {
     constructor(service: DayEndService, user: UserService,private cacheService: CacheService,) {
 		let filter:any = {};
-      /*  if(this.cacheService.has("filterdata")){
-			
-	this.cacheService.get("filterdata").subscribe((response) => {
-		
-	filter = response;
-	
-	}); 
-
-}else{*/
+     
 	filter = service.getFilter();
 	const now = new Date();
 	filter.tripState = 0;
+	
 	filter.selectedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 	//filter.userBranch = user.getUser().Branch ? user.getUser().Branch.BranchID : null;
 	
 	const logedInUser = user.getUser();
         if (logedInUser.IsDistributor) {
             filter.type = 'distributor';
-          //  filter.userBranch = logedInUser.Distributor.DistributorMasterId || logedInUser.Distributor.DistributorMasterID;
+          //filter.userBranch = logedInUser.Distributor.DistributorMasterId || logedInUser.Distributor.DistributorMasterID;
         } else {
             filter.type = 'internal';
         }

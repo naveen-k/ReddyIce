@@ -28,7 +28,7 @@
             <label>Dist./CoPacker</label>
             <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="searchObj.DistributorID" (selectedChange)="refreshDataHandler('distributorChange')"></reddy-select>
         </div>
-		<div class="col-sm-1">
+		<div class="col-sm-1" [hidden]= "searchObj.userType === 'External'">
             <label>Driver</label>
             <reddy-select [options]="drivers" [(selected)]="searchObj.UserId" (selectedChange)= "refreshDataHandler();"></reddy-select>
         </div>

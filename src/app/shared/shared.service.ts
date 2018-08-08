@@ -39,7 +39,7 @@ export class SharedService {
 		let driverUser:any[] = res.User;
 		let driverDataset:any = [];
 		driverDataset = this.transformOptionsdriverSelect(driverUser, 'UserId', 'FirstName', 'LastName');
-		driverDataset.unshift({"value":0,"label":"Select Driver"});//,data:{'BranchID':null}
+		driverDataset.unshift({"value":0,"label":"Select Driver","data":{'UserId':0,'FirstName':'Select','LastName':'Driver'}});//,data:{'BranchID':null}
 		this.cacheService.set("driverscache", driverDataset);
 		return driverDataset;
 		});

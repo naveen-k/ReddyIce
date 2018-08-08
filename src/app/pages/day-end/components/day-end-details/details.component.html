@@ -7,7 +7,7 @@
             <div class="head-button-container">
                 <button class="btn btn-danger pull-right" 
                 [disabled]="!active_approveBtn"
-                *ngIf='headerData.IsClosed && (((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || (logedInUser.Role.RoleID == 2 && ((logedInUser.IsDistributor && !logedInUser.IsSeasonal) || logedInUser.IsRIInternal)) || logedInUser.Role.RoleID == 1 ||logedInUser.Role.RoleID == 6)&& (headerData.TripStatusID == 23 || headerData.TripStatusID == 24))'
+                *ngIf='headerData.IsClosed && (((userRoleId==3 && logedInUser.IsChecker) || logedInUser.Role.RoleID == 7 || (logedInUser.Role.RoleID == 2 && ((logedInUser.IsDistributor && !logedInUser.IsSeasonal) || logedInUser.IsRIInternal)) || logedInUser.Role.RoleID == 1 ||logedInUser.Role.RoleID == 6) && (headerData.TripStatusID == 23 || headerData.TripStatusID == 24))'
                     (click)="approveTrip(25);" >Approve</button>
                
 				<button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']" (click)="backtomainscreen()">Back</button>
@@ -68,7 +68,7 @@
                         </div>
 						<div class="col-md-3">
                             <span>Trip Approved:</span>
-                            <label *ngIf = "headerData.tripapproved != null">{{ headerData.tripapproved}}</label>
+                            <label *ngIf = "headerData.tripapproved != null">{{ headerData.tripapproved }}</label>
 							<label *ngIf = "headerData.tripapproved === null">NA</label>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
                             <div class="col-md-6 padding-eater">
                             </div>
                             <div class="col-md-6 pull-right">
-                                <button class="btn btn-danger pull-right" [hidden]='headerData.TripStatusID == 25 && headerData.BranchID != ""' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
+                                <button class="btn btn-danger pull-right" [hidden]='(headerData.TripStatusID == 25 && headerData.BranchID != "") || (userRoleId==3 && !logedInUser.IsChecker) || (userRoleId==2 && logedInUser.IsDistributor && logedInUser.IsSeasonal)' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
                                     [queryParams]="{branchId:headerData.BranchID, driverId:headerData.UserID, isDistributor:headerData.DistributorMasterID, sdate:headerData.TripStartDate, edate:headerData.TripEndDate}">Create Ticket</button>
                             </div>
                             <div class="col-md-12 page-header">
@@ -211,12 +211,14 @@
                                             </td>
                                             <td>
                                                 <span>Issued: </span>
-                                                <input [(ngModel)]='headerData.PalletLoadQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || headerData.UnitApprovedBy || headerData.TripStatusID == 25 || !headerData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
+                                                <input [(ngModel)]='headerData.PalletLoadQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || (headerData.UnitsApprovedBy != null ) || headerData.TripStatusID == 25 ||
+ !headerData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
                                                     type="text" [numberOnly]>
                                             </td>
                                             <td>
                                                 <span>Returned: </span>
-                                                <input [(ngModel)]='headerData.PalletReturnQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || headerData.UnitApprovedBy || headerData.TripStatusID == 25 || !headerData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
+                                                <input [(ngModel)]='headerData.PalletReturnQuantity' [disabled]='(userRoleId==3 && !logedInUser.IsChecker) || (headerData.UnitsApprovedBy != null ) || headerData.TripStatusID == 25 ||
+ !headerData.IsClosed || (userRoleId==2 && logedInUser.IsSeasonal)' style="width:70px"
                                                     type="text" [numberOnly]>
                                             </td>
 											<td *ngIf = "headerData.UnitApproverName != null">
@@ -244,7 +246,7 @@
                             <div class="col-sm-1">
                                 <button class="btn btn-danger pull-right"
                                 [disabled]="headerData.TripStatusID == 23" 
-                                [hidden]="headerData.UnitsApprovedBy != null" 
+                                [hidden]="(userRoleId==3 && !logedInUser.IsChecker) || headerData.UnitsApprovedBy != null || (userRoleId==2 && logedInUser.IsDistributor && logedInUser.IsSeasonal)" 
                                 (click)="handlerUnitReconSubmit()">Submit</button>
                             </div>
 

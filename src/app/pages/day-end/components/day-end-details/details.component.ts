@@ -344,8 +344,8 @@ backtomainscreen(statusId?: number ){
        
         let objToSave = {
             TripId: this.tripId,
-            PalletLoadQuantity: this.tripData.PalletLoadQuantity,
-            PalletReturnQuantity: this.tripData.PalletReturnQuantity,
+            PalletLoadQuantity: this.headerData.PalletLoadQuantity,
+            PalletReturnQuantity: this.headerData.PalletReturnQuantity,
             LoadReturnDamageModel: this.unitReconciliation.concat(this.newlyAddedProduct)
         }
         this.service.saveUnitReconciliation(objToSave).subscribe((res) => {
@@ -778,6 +778,8 @@ getTimeStamp(){
     }
     printUnitData(){
         let tbody = '', thead = '', table = '';
+	   this.headerData.UnitApproverName = this.headerData.UnitApproverName == null ?'NA':this.headerData.UnitApproverName;
+	   this.headerData.UnitsApproved = this.headerData.UnitsApproved == null ?'NA':this.headerData.UnitsApproved;
         let topTable = `
             <table cellpadding="5" border=1 style="border-collapse: collapse;">
                 <tbody>
@@ -792,6 +794,17 @@ getTimeStamp(){
                         <td>
                             <span>Returned: </span>
                             <input type="text" value="${this.headerData.PalletReturnQuantity}" min="0" disabled>
+                        </td>
+						
+                        <td>
+                            <span>Units Approved By: </span>
+                        </td>
+						<td>${this.headerData.UnitApproverName}</td>
+                        <td>
+                            <span>Units Approved: </span
+						</td>
+						<td>
+                           ${this.headerData.UnitsApproved}
                         </td>
                     </tr>
                 </tbody>
@@ -1045,7 +1058,9 @@ thead =`<thead>
         let selectedData = '';
         let sdateData = this.date.transform(this.headerData.TripStartDate);
         let edateData = this.date.transform(this.headerData.TripEndDate);
-        let tripStatus = this.tripStatus(this.headerData.TripStatusID)
+        let tripStatus = this.tripStatus(this.headerData.TripStatusID);
+		this.headerData.TripApprovedBY = (this.headerData.TripApprovedBY == null)?"NA":this.headerData.TripApprovedBY;
+		this.headerData.tripapproved = (this.headerData.tripapproved == null)?"NA":this.headerData.tripapproved;
         selectedData = `<table cellpadding="5" border=1 style="border-collapse: collapse;" width="100%"><tr><td><table width="100%">
         <thead>
         <tr>
@@ -1054,6 +1069,8 @@ thead =`<thead>
             <th align="left">Trip Code:</th>
             <th align="left">HH Day End:</th>
             <th align="left">Trip Start Date:</th>
+			<th align="left">Trip Approved By:</th>
+			
             
         </tr>
         <tr>
@@ -1062,7 +1079,8 @@ thead =`<thead>
             <td align="left">${this.headerData.TripCode}</td>
             <td align="left">${(this.headerData.IsClosed)?'Yes':'No'}</td>
             <td align="left">${sdateData}</td>
-            
+			<td align="left">${this.headerData.TripApprovedBY}</td>
+           
         </tr>
         <tr>
             <th align="left">Driver:</th>
@@ -1070,6 +1088,7 @@ thead =`<thead>
             <th align="left">Status:</th>
             <th align="left">ERP Processed:</th>
             <th align="left">Trip End Date:</th>
+			<th align="left">Trip Approved:</th>
         </tr>
         <tr>
             <td align="left">${this.headerData.DriverName}</td>
@@ -1077,6 +1096,7 @@ thead =`<thead>
             <td align="left">${tripStatus}</td>
             <td align="left">${(this.headerData.IsProcessed)?'Yes':'No'}</td>
             <td align="left">${edateData}</td>
+			<td align="left">${this.headerData.tripapproved}</td>
         </tr>
         </thead>
         </table></td></tr></table>`;

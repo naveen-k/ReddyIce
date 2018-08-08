@@ -24,6 +24,7 @@ export class TrackerComponent implements OnInit {
   }
   todaysDate: any;
   allBranches: any;
+  branches: any;
   allTrips: any = {};
   showSpinner: boolean = false;
   trips: any = [];
@@ -109,10 +110,23 @@ export class TrackerComponent implements OnInit {
     this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 	this.service.getBranches(this.user.UserId).subscribe((res) => {
 			 this.allBranches = JSON.parse(JSON.stringify(res));
-			 if(this.allBranches[1].value === 1){
-				this.allBranches.splice(1,1);
+			 this.branches = JSON.parse(JSON.stringify(this.allBranches));
+			  if(this.allBranches[1].value === 1){
+				this.branches.splice(1,1);
 			}
-			 this.tripFilterOption.branchId = 0;
+			 if (this.allBranches.length == 2) {
+				let AllBranches = JSON.parse(JSON.stringify(this.allBranches));
+				AllBranches.shift();
+				this.branches = AllBranches;
+                this.tripFilterOption.branchId = AllBranches[0].value;
+				this.branchChangeHandler();
+			}else{
+				this.tripFilterOption.branchId = 0;
+			}
+			
+			
+			 
+			 
 		 
 	});
 	
@@ -242,6 +256,7 @@ gettracketcacheData(){
         this.filter.sequence = 1;
       }
       this.selectedTrip = res.Trips[0].TripTicketList; // creating array based on driver and tripcode selected
+	 
       this.tripStartDate = res.Trips[0].TripStartDate;
       
 
@@ -254,8 +269,8 @@ gettracketcacheData(){
         this.selectedTrip.map(item => {
           item['createdDate'] = this.sliceTime(item.Created);
         })
-        
-        if (this.searchObj.userType != 'External') {
+       
+        if (this.searchObj.userType != 'External' && !this.IsUnplanned) {
           this.selectedTrip.sort(this.comparator); // sorting planned sequence
         }
 		//this.sequenceChangeHandler();
@@ -795,8 +810,6 @@ getFestTechRouts(checkcalltype:string = null){
 
   distributors: any = [];
   typeChangeHandler() {
-	  
-	  
     if (this.filter.trackerType == 2) {
 		this.searchObj.userType = 'Internal';
       this.filter.sequence = 3;
@@ -805,7 +818,17 @@ getFestTechRouts(checkcalltype:string = null){
     } else {
       this.filter.sequence = 1;
     }
-    this.tripFilterOption.branchId = 0;
+	
+	 if (this.allBranches.length == 2 && this.searchObj.userType == 'Internal') {
+				let AllBranches = JSON.parse(JSON.stringify(this.allBranches));
+				AllBranches.shift();
+				this.branches = AllBranches;
+                this.tripFilterOption.branchId = AllBranches[0].value;
+				this.branchChangeHandler();
+	}else{
+		 this.tripFilterOption.branchId = 0;
+	}
+   
 	if (!this.isDistributor) {
 		 this.tripFilterOption.DistributorMasterID = 0;
 	}

@@ -44,6 +44,7 @@ export class CreateTicketComponent implements OnInit {
   customers: Customer[] = [];
   // List of Drivers
   drivers: any[];
+  driverData:any[];
 allDrivers: any[];
   // List of distributors
   distributors: any[];
@@ -145,10 +146,8 @@ allDrivers: any[];
 	this.listFilter = JSON.parse(JSON.stringify(this.listFilter));
 		
 		if (this.cacheService.has("manualfilterdata")) {
-			
 					this.cacheService.get("manualfilterdata").subscribe((res) => {
 					this.listFilter = JSON.parse(JSON.stringify(res));
-						
 					});
 	     }
 		 
@@ -157,12 +156,7 @@ allDrivers: any[];
 		this.ticket.isUserTypeDistributor = this.listFilter.userType ? this.listFilter.userType !== 'Internal' : null;
 		this.ticket.UserID = (this.listFilter.UserId > 0) ? +this.listFilter.UserId : -1;
 		this.ticket.DistributorCopackerID = +this.listFilter.DistributorID;
-	if(this.ticketId === undefined){
-		//this.ticket.BranchID = 0;
-		//this.ticket.DeliveryDate = this.date.maxDate;
-		//this.ticket.UserID = 0;
-	}
-  
+
     const activatedRouteObject = this.activatedRoute.snapshot.data;
     this.isReadOnly = activatedRouteObject['viewMode'];
     this.tripMode = activatedRouteObject['tripMode'];
@@ -170,6 +164,16 @@ allDrivers: any[];
 	if(allbranches[1].value === 1){
 		allbranches.splice(1,1);
 	}
+	if ( allbranches.length == 2) {
+				
+				allbranches.shift();
+                this.ticket.BranchID = allbranches[0].value;
+	}
+	
+	
+		
+		
+		
 	this.branches = JSON.parse(JSON.stringify(allbranches));
 	
     let tripTicketEditMode = activatedRouteObject['tripTicketEditMode'];
@@ -188,14 +192,6 @@ allDrivers: any[];
     this.ticketTypes = activatedRouteObject['ticketTypes'];
 	
 
-    
-   /* if (this.user.IsDistributor || (this.ticket.DistributorCopackerID && this.ticket.DistributorCopackerID > 0)) {
-      
-      if (this.ticket.DistributorCopackerID < 1) {
-        // Set distributor 
-        this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
-      }
-    }*/
 	if (this.user.IsDistributor && this.ticket.DistributorCopackerID < 1) {
         // Set distributor 
         this.ticket.DistributorCopackerID = this.user.Distributor.DistributorMasterId;
@@ -215,12 +211,7 @@ allDrivers: any[];
       this.hideSave = true;
     } else {
       this.hideSave = false;
-	  // load driver or distributor
-			/*if (this.ticket.BranchID > 1 && this.ticket.isUserTypeDistributor) {
-			  this.loadDisributors(this.ticket.BranchID);
-			} else if (this.ticket.BranchID > 1) {
-			  this.loadDriversOfBranch(this.ticket.BranchID);
-			}*/
+	
     }
     if (this.isReadOnly) {
       this.pageTitle = 'View Ticket Details';
@@ -233,7 +224,7 @@ allDrivers: any[];
     };
 	//Load all drivers and distributors
     this.getDrivers();
-    //this.getDistributors();
+    this.getDistributors();
 	this.loadCustomers();
   }
   
@@ -278,23 +269,58 @@ allDrivers: any[];
 	  
     }
 }
-
-
   getDrivers() {
         this.service.getAllDriver().subscribe(res => {
+			this.allDrivers = JSON.parse(JSON.stringify(res));
+			this.getUniqDriver();
+			/*let driverData = JSON.parse(JSON.stringify(this.allDrivers));
+			
+			 driverData = driverData.filter((res) => {
+				if(res != null){
+					return true;
+				}else{
+					return false;
+				}
+			});*/
 			
 			if(this.ticketId || this.tripMode){
-				this.drivers = JSON.parse(JSON.stringify(res));
+				
+				this.drivers = this.driverData;
 			}
-			this.allDrivers = JSON.parse(JSON.stringify(res));
+			
+		
         });
-		
 		if(this.ticket.BranchID > 1 && !this.ticket.isUserTypeDistributor){
-		
 			this.branchChangeHandler();
 		}
     }
-
+	getUniqDriver(){
+		let tempdriver:any = [];
+		let drivers = JSON.parse(JSON.stringify(this.allDrivers));
+		(drivers).splice(0,2);
+		
+		drivers.filter((dri) => {
+			
+		
+			if(!this.user.IsDistributor && dri.data.IsRIInternal ){
+			
+				tempdriver[dri.data.UserId] = dri;
+			}
+			if(this.user.IsDistributor && !dri.data.IsRIInternal ){
+				
+				
+				tempdriver[dri.data.UserId] = dri;
+			}
+			
+		});
+		
+		this.driverData = tempdriver;
+		
+		 (this.driverData).unshift({"value":0,"label":"Select Driver"});
+		 
+		 
+		 
+	}
     getDistributors(byType: any = '') {
         
             this.service.getDistributerAndCopacker().subscribe(res => {
@@ -304,6 +330,7 @@ allDrivers: any[];
 			
     }
  loadTicket(ticketId) {
+	
     this.service.getTicketById(ticketId).subscribe(response => {
       this.ticket = response[0];
 	  this.ticket.BranchID = this.ticket.BranchID;
@@ -488,7 +515,6 @@ allDrivers: any[];
     this.ticket.Customer = '';
     this.ticket.DistributorCopackerID = null;
     this.ticket.TicketProduct = [];
-   
 	this.loadDriversOfBranch(this.ticket.BranchID);
     this.listFilter.BranchId = this.ticket.BranchID;
   }
@@ -509,17 +535,30 @@ allDrivers: any[];
   loadDriversOfBranch(branchId) {
 	  if (branchId != null && branchId > 1 && (this.allDrivers).length > 0){
 			let drivers = JSON.parse(JSON.stringify(this.allDrivers));
+			
+			 /*driverData = driverData.filter((res) => {
+				if(res != null){
+					return true;
+				}else{
+					return false;
+				}
+				
+			});*/
+		
 			(drivers).shift();
 		    drivers = drivers.filter((ft) => {
+				
 				if(ft.data.BranchID !== null){
 					return (ft.data.BranchID === branchId)?true:false;
 				}else{
-					return false;
+					
 				}
 					
 			});
 			(drivers).unshift({"value":0,"label":"Select Driver"});
+			this.drivers = [];
 		   this.drivers = drivers;
+		  
 		   this.loadCustomers();
 		}else{
 			this.drivers = [];
@@ -979,11 +1018,25 @@ aftersuccessfulSubmit(){
 			}
 			searchOBJ.userType = (this.ticket.isUserTypeDistributor) ? 'External' : 'Internal';
 			searchOBJ.BranchId = this.ticket.BranchID;
-			const now = new Date();
-            searchOBJ.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+			searchOBJ.ticketSource = 1;
+			if((this.ticketId) ){
+				if (this.cacheService.has("manualfilterdata")) {
+			
+					this.cacheService.get("manualfilterdata").subscribe((res) => {
+					let filterdata = JSON.parse(JSON.stringify(res));
+					searchOBJ.CreatedDate = { year: filterdata.CreatedDate.year, month: filterdata.CreatedDate.month, day: filterdata.CreatedDate.day };
+					});
+				}
+				
+			}else{
+				const now = new Date();
+				searchOBJ.CreatedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+			
+			}
+			
 			this.cacheService.set("manualfilterdata", searchOBJ);
 			this.cacheService.set("backtomain", 'back');
-	   if (this.cacheService.has("allFilterdTickets")) {
+	    if (this.cacheService.has("allFilterdTickets")) {
 			this.cacheService.deleteCache("allFilterdTickets");
 		}
         this.routeToTicketListing();
@@ -1135,9 +1188,9 @@ aftersuccessfulSubmit(){
       this.resetCashAndCheck();
     }
     ticket.TotalAmount = (Number.parseFloat((ticket.CheckAmount) ? ticket.CheckAmount.toString() : '0') || 0) + (Number.parseFloat((ticket.CashAmount) ? ticket.CashAmount.toString() : '0') + 0);
-    console.info(ticket.CashAmount);
-    console.info(ticket.CheckAmount);
-    console.info(ticket.TotalAmount);
+    //console.info(ticket.CashAmount);
+   // console.info(ticket.CheckAmount);
+   // console.info(ticket.TotalAmount);
   }
 
   convertToDate(date: string): any {

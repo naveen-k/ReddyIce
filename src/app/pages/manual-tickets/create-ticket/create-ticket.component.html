@@ -303,7 +303,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale + ticket.TaxAmount | currencyFormatter}}</b>
+                                                <b>{{ticket.TotalSale*1 + ticket.TaxAmount*1 | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>

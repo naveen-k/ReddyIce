@@ -99,29 +99,33 @@ export class TicketListComponent implements OnInit {
 		this.isDistributorExist = this.user.IsDistributor;
         this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
         // load all branches
+		
         this.allBranches = JSON.parse(JSON.stringify(this.activatedRoute.snapshot.data['branches']));
 		
        this.searchObj = this.service.getSearchedObject();
 		this.searchObj = JSON.parse(JSON.stringify(this.searchObj));
-		
+		 this.searchObj.BranchId = 0;
 		 this.getDrivers();
 		 this.getDistributors();
 		
-		if (!this.searchObj.BranchId && this.allBranches.length != 2) {
-                this.searchObj.BranchId = 0;
-        }else if (!this.searchObj.BranchId && this.allBranches.length === 2) {
-			this.searchObj.BranchId = 1;
-		}
-		
+		if (typeof this.allBranches !== 'undefined' && this.allBranches.length == 2) {
+				this.allBranches.shift();
+                this.searchObj.BranchId = this.allBranches[0].value;
+				this.branchChangeHandler();
+				
+				
+        }
+		this.searchObj.ticketSource = 1;
 		
 		if (this.cacheService.has("manualfilterdata")) {
 			
 					this.cacheService.get("manualfilterdata").subscribe((res) => {
 					this.searchObj = JSON.parse(JSON.stringify(res));
+					this.getUniqDriver();
 						
 					});
 	     }
-		this.searchObj.ticketSource = 1;
+		
         const now = new Date();
 		this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
 		 if (this.cacheService.has("manualTicketRefreshtime")) {
@@ -156,7 +160,9 @@ export class TicketListComponent implements OnInit {
 			}
 			
 			if (this.user.IsDistributor && this.user.Distributor.DistributorMasterId && this.searchObj.DistributorID <= 1) {
+				
             this.searchObj.DistributorID = this.user.Distributor.DistributorMasterId;
+			this.getUniqDriver();
         }
         
 		 this.validateData();
@@ -165,7 +171,7 @@ export class TicketListComponent implements OnInit {
 	
 	validateData(){
 		
-		if((this.searchObj.UserId && this.searchObj.BranchId  && this.searchObj.userType === "Internal") || (this.searchObj.UserId && this.searchObj.DistributorID && this.searchObj.userType === "External")  )
+		if((this.searchObj.UserId && this.searchObj.BranchId  && this.searchObj.userType === "Internal") || (this.searchObj.DistributorID && this.searchObj.userType === "External")  )
 		{
 			
 			this.buttonAction = true;
@@ -183,9 +189,9 @@ export class TicketListComponent implements OnInit {
 			this.userTypeChangeHandler();
 		}else if( byType ==='branchChange' ){
 			this.branchChangeHandler();
-		}else if( byType ==='distributorChange' ){
+		}/*else if( byType ==='distributorChange' ){
 			this.distributorChangeHandler();
-		}
+		}*/
 		
 		this.validateData();
 		if(this.allFilterdTickets){
@@ -199,20 +205,28 @@ export class TicketListComponent implements OnInit {
     getDrivers() {
         this.service.getAllDriver().subscribe(res => {
            this.allDrivers = JSON.parse(JSON.stringify(res));
-		   this.getUniqDriver();
+		  if (typeof this.allBranches !== 'undefined' &&  this.allBranches.length == 2) {
+			   this.getUniqDriver();
+		   }
+		   
         });
     }
 	getUniqDriver(){
 		this.drivers = [];
 		let tempdriver:any = [];
 		let drivers = JSON.parse(JSON.stringify(this.allDrivers));
+		
 		  (drivers).shift();
+	
 		drivers.filter((dri) => {
-			if(this.searchObj.userType === 'Internal' && dri.data.DistributorCopackerID === null ){
-				
+			if(this.searchObj.userType === 'Internal' && dri.data.IsRIInternal && dri.data.IsRIInternal != null ){
+			
 				tempdriver[dri.data.UserId] = dri;
 			}
-			if(this.searchObj.userType === 'External' && dri.data.DistributorCopackerID != null ){
+			else if(this.searchObj.userType === 'External' && !dri.data.IsRIInternal && dri.data.IsRIInternal != null ){
+				 
+				tempdriver[dri.data.UserId] = dri;
+			}else if(dri.data.IsDistributor && dri.data.IsRIInternal  && dri.data.IsRIInternal != null ){
 				
 				tempdriver[dri.data.UserId] = dri;
 			}
@@ -220,10 +234,7 @@ export class TicketListComponent implements OnInit {
 		});
 		
 		 this.drivers = tempdriver;
-		 if(this.searchObj.userType === 'External'){
-			 	(this.drivers).unshift({"value":1,"label":"All Drivers"});
-		 }
-		
+		(this.drivers).unshift({"value":1,"label":"All Drivers"});
 		 (this.drivers).unshift({"value":0,"label":"Select Driver"});
 		 
 	}
@@ -303,7 +314,7 @@ export class TicketListComponent implements OnInit {
 	}
 	
 	sourceChangeHandler(){
-		
+		//nothing
 	}
 	
 	getTimeStamp(){
@@ -435,10 +446,23 @@ export class TicketListComponent implements OnInit {
     }
 
     userTypeChangeHandler() {
-     this.searchObj.BranchId = 0;
+    
 	 this.searchObj.UserId = 0;
 	 this.searchObj.DistributorID = 0;
-	 this.getUniqDriver();
+	 this.drivers = [];
+	if (typeof this.allBranches !== 'undefined' && this.allBranches.length == 1) {
+				
+			this.searchObj.BranchId = this.allBranches[0].value;
+			this.branchChangeHandler();
+        }else{
+			this.searchObj.BranchId = 0;
+		}
+	  
+	/* if (this.allBranches.length  2) {
+			   this.getUniqDriver();
+	}else{
+		 this.searchObj.BranchId = 0;
+	}*/
 	 return true;
     }
 	branchChangeHandler(){
@@ -447,6 +471,7 @@ export class TicketListComponent implements OnInit {
 			let drivers = JSON.parse(JSON.stringify(this.allDrivers));
 		    (drivers).shift();
 		    drivers = drivers.filter((ft) => {
+			
 				if(ft.data.BranchID !== null){
 					return (ft.data.BranchID === this.searchObj.BranchId)?true:false;
 				}else{
@@ -460,8 +485,10 @@ export class TicketListComponent implements OnInit {
 			}
 			(drivers).unshift({"value":0,"label":"Select Driver"});
 		   this.drivers = drivers;
-		}else{
+		}else if( this.searchObj.BranchId === 1){
 			this.getUniqDriver();
+		}else{
+			this.drivers = [];
 		}
 		this.searchObj.UserId = 0;
 	}
@@ -483,7 +510,7 @@ export class TicketListComponent implements OnInit {
 			(this.drivers).unshift({"value":1,"label":"All Drivers"});
 			(this.drivers).unshift({"value":0,"label":"Select Driver"});
 		}else{
-			this.getUniqDriver();
+			this.drivers = [];
 		}
 		
          this.searchObj.UserId = 0;   

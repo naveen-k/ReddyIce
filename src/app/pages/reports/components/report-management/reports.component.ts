@@ -155,10 +155,12 @@ export class ReportsComponent implements OnInit {
             this.isRIDriver = true;
         }
         if (this.user.IsDistributor) {
+			
             this.filter.userType = 'external';
             this.filter.reportType = 'DST';
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
             this.userSubTitle = `- ${this.user.Distributor.DistributorName}`;
+			
         }
 
         if (this.user.Role.RoleName === 'Driver') {
@@ -213,7 +215,6 @@ export class ReportsComponent implements OnInit {
 						
 					});
 	     }
-	
         this.userTypeChangeHandler();
 		this.getDrivers();
 		if (this.filter.reportType == 'MR' && this.filter.branch > 0) {
@@ -228,7 +229,6 @@ export class ReportsComponent implements OnInit {
 			this.fetchSTechByBranch();
 			
 		}
-       
 		this.getCustomers();
 		this.validateData();
 		
@@ -334,7 +334,14 @@ export class ReportsComponent implements OnInit {
         this.viewReport = false;
         this.filter.customer = null;
 		this.filter.stech = 0;
-		this.filter.branch = 0;
+		if (typeof this.Allbranches !== 'undefined' && this.Allbranches.length == 2) {
+			this.branches = JSON.parse(JSON.stringify(this.Allbranches));
+			this.branches.shift();
+            this.filter.branch = this.branches[0].value;
+		}else{
+			this.filter.branch = 0;
+		}
+		
 		this.filter.driver = 0;
 		
         this.filter.workOrderNumber = null;
@@ -351,11 +358,10 @@ export class ReportsComponent implements OnInit {
 			this.filter.distributor = 0;
 			this.filter.userType = 'internal';
 		}
-		//if(this.drivers.length === 0 && this.filter.reportType != 'MR'){
 			if(this.filter.reportType != 'MR' && this.filter.reportType != 'WOC' && this.filter.reportType != 'SP' ){
 			
 			this.getDrivers();
-			if(this.filter.userType != 'external'){
+			if(typeof this.Allbranches !== 'undefined'  && this.filter.userType != 'external' && this.Allbranches.length != 2 ){
 				this.branches = JSON.parse(JSON.stringify(this.Allbranches));
 			}
 			
@@ -366,8 +372,14 @@ export class ReportsComponent implements OnInit {
 				 this.drivers = [];
 				 this.routes = [];
 				 let branch = JSON.parse(JSON.stringify(this.branches));
-				 branch.splice(1,1);
-				 this.branches = branch;
+				 if (typeof this.Allbranches !== 'undefined'  && this.Allbranches.length > 2) {
+					 branch.splice(1,1);
+					this.branches = branch;
+				 }
+				 if (typeof this.Allbranches !== 'undefined'  && this.Allbranches.length == 2) {
+					  this.branchChangeHandler();
+				 }
+				
                 break;
 				case 'SP':
 				case 'AT':
@@ -376,6 +388,15 @@ export class ReportsComponent implements OnInit {
 				 this.branches = branchname;*/
 				 this.stechs = [];
 				 this.assets = [];
+				 if (typeof this.Allbranches !== 'undefined'  && this.Allbranches.length == 2) {
+					this.branches = JSON.parse(JSON.stringify(this.Allbranches));
+					this.branches.shift();
+					this.filter.branch = this.branches[0].value;
+				}else{
+					this.branches = JSON.parse(JSON.stringify(this.Allbranches));
+					this.filter.branch = 0;
+				}
+				 
 				this.fetchSTechByBranch();
 				break;
 				
@@ -383,31 +404,36 @@ export class ReportsComponent implements OnInit {
 				case 'WOC':
 				case 'AER':
 				case 'AT':
-				/*let branchlist = JSON.parse(JSON.stringify(this.branches));
-				 branchlist.splice(1,1);
-				 this.branches = branchlist;*/
 				 this.stechs = [];
 				 
                  this.fetchSTechByBranch();
                 break;
-            case 'TIR':
+				case 'TIR':
                 this.IsTIR = true;
                 break;
 				 
-		case 'WOC':
-			this.IsTIR = true;
-			break;
-            case 'DST':
-			
-			if (!(this.distributors.length)){
-				this.getDistributors();
-			}
-			
-                if (this.user.Role.RoleID === 2) {
-                    this.yesFlag = true;
-                }
-			 this.filter.userType = 'external';
-			 break;
+				case 'WOC':
+				this.IsTIR = true;
+				break;
+				case 'TR':
+				case 'RM':
+				case 'SRT':
+				case 'SR':
+				if(this.filter.userType === 'external' && this.user.IsDistributor){
+					this.getUniqDriver();
+				}
+				break;
+				case 'DST':
+				
+				if (!(this.distributors.length)){
+					this.getDistributors();
+				}
+				
+					if (this.user.Role.RoleID === 2) {
+						this.yesFlag = true;
+					}
+				 this.filter.userType = 'external';
+				 break;
         }
 		this.filter.istir = this.IsTIR; 
 		this.cacheService.set("reportfilterdata",this.filter);
@@ -418,7 +444,14 @@ export class ReportsComponent implements OnInit {
 	getAllBranches() {
         this.reportService.getBranches(this.user.UserId).subscribe((res) => {
 			this.Allbranches = JSON.parse(JSON.stringify(res));
-			 this.branches = JSON.parse(JSON.stringify(res));
+			this.branches = JSON.parse(JSON.stringify(res));
+			 
+			 if (this.branches.length == 2) {
+				this.branches.shift();
+                this.filter.branch = this.branches[0].value;
+				
+			}
+			
 		});
         
     }
@@ -548,7 +581,7 @@ export class ReportsComponent implements OnInit {
        
 
         // restricting unnecessary call for driver select after branch selection
-		if((onaction === "onaction") && this.filter.reportType != 'AER' && this.filter.reportType != 'AMR' && this.filter.reportType != 'AT' && this.filter.reportType != 'MR' && this.filter.reportType != 'EOD' && this.filter.reportType != 'SP' && this.filter.reportType != 'TIR' && this.filter.reportType != 'WOC' && this.filter.reportType != 'WONS'){
+		if( (onaction === "onaction") && this.filter.reportType != 'AER' && this.filter.reportType != 'AMR' && this.filter.reportType != 'AT' && this.filter.reportType != 'MR' && this.filter.reportType != 'EOD' && this.filter.reportType != 'SP' && this.filter.reportType != 'TIR' && this.filter.reportType != 'WOC' && this.filter.reportType != 'WONS'){
 			this.selectedBranchDriver();
 		}
 		
@@ -638,8 +671,10 @@ export class ReportsComponent implements OnInit {
 			
 			
 		   this.drivers = drivers;
-		}else{
+		}else if( this.filter.branch === 1){
 			this.getUniqDriver();
+		}else{
+			this.drivers = [];
 		}
 		this.filter.driver = 0;
 		
@@ -648,10 +683,17 @@ export class ReportsComponent implements OnInit {
 	 getDrivers() {
         this.reportService.getAllDriver().subscribe(res => {
            this.allDrivers = JSON.parse(JSON.stringify(res));
-		   this.getUniqDriver();
-		   //this.drivers = JSON.parse(JSON.stringify(res));
-		  // this.driversofDist =JSON.parse(JSON.stringify(res));
-		 
+		   if((this.filter.userType === 'external' && this.user.IsDistributor) ){
+					this.getUniqDriver();
+					
+			}else{
+				this.drivers = [];
+			 this.driversofDist = [];
+			}
+			if(typeof this.Allbranches !== 'undefined' &&  this.Allbranches.length == 2){
+				this.selectedBranchDriver();
+			}
+			
         });
     }
 	getUniqDriver(){
@@ -660,11 +702,14 @@ export class ReportsComponent implements OnInit {
 		let drivers = JSON.parse(JSON.stringify(this.allDrivers));
 		  (drivers).shift();
 		drivers.filter((dri) => {
-			if(this.filter.userType === 'internal' && dri.data.DistributorCopackerID === null ){
+			if(this.filter.userType === 'internal' && dri.data.IsRIInternal  && dri.data.IsRIInternal != null){
 				
 				tempdriver[dri.data.UserId] = dri;
 			}
-			if(this.filter.userType === 'external' && dri.data.DistributorCopackerID != null ){
+			else if(this.filter.userType === 'external' && !dri.data.IsRIInternal  && dri.data.IsRIInternal != null ){
+				
+				tempdriver[dri.data.UserId] = dri;
+			}else if(dri.data.IsDistributor && dri.data.IsRIInternal  && dri.data.IsRIInternal != null ){
 				
 				tempdriver[dri.data.UserId] = dri;
 			}
@@ -672,9 +717,7 @@ export class ReportsComponent implements OnInit {
 		});
 		
 		 this.drivers = tempdriver;
-		  if(this.filter.userType === 'external'){
-			 	(this.drivers).unshift({"value":1,"label":"All - Drivers"});
-		 }
+		(this.drivers).unshift({"value":1,"label":"All - Drivers"});
 		 (this.drivers).unshift({"value":0,"label":"Select Driver"});
 		 this.driversofDist = this.drivers;
 		 
@@ -707,9 +750,14 @@ export class ReportsComponent implements OnInit {
     }
     userTypeChangeHandler() {
         this.filter.customer = null;
+		this.filter.branch = 0;
+		if(!(this.filter.userType === 'external' && this.user.IsDistributor)){
+			this.filter.distributor = 0;
+		}
+		
         if (this.filter.userType === 'internal') {
 			this.getAllBranches();
-			this.getUniqDriver();
+			//this.getUniqDriver();
             if (this.filter.reportType == 'EOD' || this.filter.reportType == 'WOC' || this.filter.reportType == 'AT'
                 || this.filter.reportType == 'SP' || this.filter.reportType == 'AER' || this.filter.reportType == 'AMR') {
 					
@@ -722,9 +770,16 @@ export class ReportsComponent implements OnInit {
             }
         } else {
             this.getDistributors();
-			this.getUniqDriver();
+			
+			//this.getUniqDriver();
         }
-        
+        this.driversofDist = [];
+		if(typeof this.Allbranches !== 'undefined' && this.Allbranches.length == 2){
+				this.selectedBranchDriver();
+		}else{
+			this.drivers = [];
+		}
+		
 		if (this.user.Role.RoleName === 'Driver') {
             this.filter.driver = this.user.UserId;
         } else if(!(this.cacheService.has("reportfilterdata"))){
@@ -1072,6 +1127,13 @@ export class ReportsComponent implements OnInit {
             return false;
         });
     }
+onKeydown(event) {
+  if (event.key === "Enter") {
+	if(this.filter.reportType === "WONS" || this.filter.reportType === "TIR"){
+		this.updateLink(this.filter.reportType);
+	}
+  }
+}
 
     selectedCustomerChangeHandler(event) {
         let id = event.item.CustomerID || event.item.CustomerId;

@@ -173,7 +173,9 @@ export class TicketDetailsComponent implements OnInit {
         let sdateData = this.date.transform(this.headerData.TripStartDate);
         let edateData = this.date.transform(this.headerData.TripEndDate);
         let tripStatus = this.tripStatus(this.headerData.TripStatusID);
-		
+		this.headerData.TripApprovedBY = (this.headerData.TripApprovedBY == null)?"NA":this.headerData.TripApprovedBY;
+		this.headerData.tripapproved = (this.headerData.tripapproved == null)?"NA":this.headerData.tripapproved;
+        
 		
         selectedData = `<table cellpadding="5" border=1 style="border-collapse: collapse;" width="100%"><tr><td><table width="100%">
         <thead>
@@ -183,6 +185,7 @@ export class TicketDetailsComponent implements OnInit {
             <th align="left">Driver:</th>
             <th align="left">HH Day End:</th>
             <th align="left">Trip Start Date:</th>
+			<th align="left">Trip Approved By:</th>
             
         </tr>        
         <tr>
@@ -191,6 +194,7 @@ export class TicketDetailsComponent implements OnInit {
             <td align="left">${this.headerData.DriverName}</td>
             <td align="left">${(this.headerData.IsClosed)?'Yes':'No'}</td>
             <td align="left">${sdateData}</td>
+			<td align="left">${this.headerData.TripApprovedBY}</td>
             
         </tr>
         <tr>
@@ -199,6 +203,7 @@ export class TicketDetailsComponent implements OnInit {
             <th align="left">Status:</th>
             <th align="left">ERP Processed:</th>
             <th align="left">Trip End Date:</th>
+			<th align="left">Trip Approved:</th>
         </tr>
         <tr>
             <td align="left">${this.headerData.TripCode}</td>
@@ -206,6 +211,7 @@ export class TicketDetailsComponent implements OnInit {
             <td align="left">${tripStatus}</td>
             <td align="left">${(this.headerData.IsProcessed)?'Yes':'No'}</td>
             <td align="left">${edateData != null ? edateData : ''}</td>
+			<td align="left">${this.headerData.tripapproved}</td>
         </tr>
         </thead>
         </table></td></tr></table>`;

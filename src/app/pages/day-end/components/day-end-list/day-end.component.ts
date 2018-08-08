@@ -46,18 +46,20 @@ export class DayEndComponent implements OnInit {
         const now = new Date();
         this.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.logedInUser = this.userService.getUser();
+		this.filter = this.service.getFilter();
+	    this.filter = JSON.parse(JSON.stringify(this.filter));
+		this.filter.userBranch = 0;
 	this.service.getBranches(this.logedInUser.UserId).subscribe((res) => {
 			 this.branches = JSON.parse(JSON.stringify(res));
-		 
+			 if ( (this.branches.length) == 2) {
+				this.branches.shift();
+                this.filter.userBranch = this.branches[0].value;
+				this.validateData();
+			}
 		});
 		this.getDrivers();
-		this.filter = this.service.getFilter();
-	this.filter = JSON.parse(JSON.stringify(this.filter));
-		if (!this.filter.userBranch && this.branches.length != 2) {
-                this.filter.userBranch = 0;
-        }else if (!this.filter.userBranch && this.branches.length === 2) {
-			this.filter.userBranch = 1;
-		}
+		
+		
 		if(this.cacheService.has("filterdata")){
 			
 			this.cacheService.get("filterdata").subscribe((response) => {
@@ -136,11 +138,11 @@ export class DayEndComponent implements OnInit {
 		let drivers = JSON.parse(JSON.stringify(this.allDrivers));
 		  (drivers).shift();
 		drivers.filter((dri) => {
-			if(this.filter.type === 'internal' && dri.data.DistributorCopackerID === null ){
+			if(this.filter.type === 'internal' && dri.data.IsRIInternal ){
 				
 				tempdriver[dri.data.UserId] = dri;
 			}
-			if(this.filter.type === 'distributor' && dri.data.DistributorCopackerID != null ){
+			if(this.filter.type === 'distributor' && !dri.data.IsRIInternal ){
 				
 				tempdriver[dri.data.UserId] = dri;
 			}
@@ -160,7 +162,15 @@ refreshDataHandler(byType: any = '')
 {
 	if(byType === "yes"){
 		
+		if ( (this.branches.length) == 2 && this.filter.type === 'internal') {
+				 
+			this.filter.userBranch = this.branches[1].value;
+			
+		}else{
 			this.filter.userBranch = 0;
+		}
+			
+			
 	}
 	this.validateData();
 	if(this.trips){
