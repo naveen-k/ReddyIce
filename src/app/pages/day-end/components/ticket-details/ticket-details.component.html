@@ -1,70 +1,83 @@
 <div class="row">
     <div class=" col-md-12">
-        <ba-card cardTitle="Trip Details {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
+        <ba-card cardTitle="Trip Detail {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
             <div class="head-button-container">
-                <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==24 && user.IsDistributor && user.Role.RoleID == 2" [disabled]="!tripData.IsClosed"
+                <button class="btn btn-danger pull-right" *ngIf="headerData.TripStatusID==24 && user.IsDistributor && user.Role.RoleID == 2" [disabled]="!headerData.IsClosed"
                     (click)="submitTickets(25)">Approve</button>
-                <button class="btn btn-danger pull-right" *ngIf="tripData.TripStatusID==23 && user.IsDistributor && user.Role.RoleID == 3" [disabled]="!tripData.IsClosed"
+                <button class="btn btn-danger pull-right" *ngIf="headerData.TripStatusID==23 && user.IsDistributor && user.Role.RoleID == 3" [disabled]="!headerData.IsClosed"
                     (click)="submitTickets(24)">Submit</button>
-                <button class="btn btn-danger pull-right add-margin-right" [routerLink]="['../../']">Back</button>
+                <button class="btn btn-danger pull-right add-margin-right" (click)="backtomainscreen()">Back</button>
+                <button class="btn btn-danger pull-right add-margin-right" (click)="printReconciliation()" [disabled]="!printStatus">Print</button>
             </div>
             <div class="row">
                 <div class=" col-md-12">
                     <div class="row page-header bold-head">
                         <div class="col-md-3">
-                            <span>Branch:</span>
-                            <label>{{tripData.BranchCode}} - {{tripData.BranchName}}</label>
+                            <span>Business Unit:</span>
+                            <label>{{headerData.BranchCode}} - {{headerData.BUName}}</label>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <span>Route:</span>
-                            <label>{{tripData.IsUnplanned?'Unplanned':tripData.RouteNumber}}</label>
+                            <label>{{headerData.IsUnplanned?'Unplanned':headerData.RouteNumber}}</label>
                         </div>
-                        <div class="col-md-2">
-                            <span>Driver:</span>
-                            <label>{{tripData.DriverName}}</label>
+                         <div class="col-md-1">
+                            <span>Trip Code:</span>
+                            <label>{{headerData.TripCode}}</label>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <span>HH Day End:</span>
-                            <label>{{tripData.IsClosed?'Yes':'No'}}</label>
+                            <label>{{headerData.IsClosed?'Yes':'No'}}</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <span>Trip Start Date:</span>
-                            <label>{{tripData.TripStartDate|date}}</label>
+                            <label>{{headerData.TripStartDate|date}}</label>
+                        </div>
+						<div class="col-md-3">
+                            <span>Trip Approved By:</span>
+							<label *ngIf = "headerData.TripApprovedBY != null">{{ headerData.TripApprovedBY }}</label>
+							<label *ngIf = "headerData.TripApprovedBY === null">NA</label>
                         </div>
                     </div>
                     <div class="row page-header bold-head">
-                        <div class="col-md-3">
-                            <span>Trip Code:</span>
-                            <label>{{tripData.TripCode}}</label>
+					<div class="col-md-3">
+                            <span>Driver:</span>
+                            <label>{{headerData.DriverName}}</label>
                         </div>
-                        <div class="col-md-2">
+						
+                       
+                        <div class="col-md-1">
                             <span>Truck:</span>
-                            <label>{{tripData.TruckID}}</label>
+                            <label>{{headerData.TruckID}}</label>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div>
                                 <span>Status:</span>
-                                <label>{{tripStatus(tripData.TripStatusID)}}</label>
+                                <label>{{tripStatus(headerData.TripStatusID)}}</label>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <span>ERP Processed:</span>
-                            <label>{{tripData.IsProcessed?'Yes':'No'}}</label>
+                            <label>{{headerData.IsProcessed?'Yes':'No'}}</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <span>Trip End Date:</span>
-                            <label>{{tripData.TripEndDate|date}}</label>
+                            <label>{{ headerData.TripEndDate|date }}</label>
+                        </div>
+						<div class="col-md-3">
+                            <span>Trip Approved:</span>
+                            <label *ngIf = "headerData.tripapproved != null">{{ headerData.tripapproved}}</label>
+							<label *ngIf = "headerData.tripapproved === null">NA</label>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row page-header">
                 <div class="col-sm-6">
-                    <h3>Ticket Details</h3>
+                    <h3>Ticket Detail</h3>
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-danger pull-right" *ngIf='tripData.TripStatusID == 23 || tripData.TripStatusID == 24' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
-                        [queryParams]="{branchId:tripData.BranchID, driverId:tripData.UserID, isDistributor:tripData.DistributorMasterID, sdate:tripData.TripStartDate, edate:tripData.TripEndDate}">Create Ticket</button>
+                    <button class="btn btn-danger pull-right" *ngIf='(headerData.TripStatusID == 23 || headerData.TripStatusID == 24) && !user.IsRIInternal' [routerLink]="['../../../manual-ticket/trip-ticket',tripId]"
+                        [queryParams]="{branchId:headerData.BranchID, driverId:headerData.UserID, isDistributor:headerData.DistributorMasterID, sdate:headerData.TripStartDate, edate:headerData.TripEndDate}">Create Ticket</button>
                 </div>
                 <div class="col-sm-12 page-header">
                     <table class="table table-striped">
@@ -84,9 +97,9 @@
                                     </span>
                                 </th>
                                 <th>
-                                    <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;">
+                                    <span style="cursor:pointer;" (click)="customer.sortField = 'AXCustomerNumber';customer.isAsc=!customer.isAsc;">
                                         Customer 
-                                        <i *ngIf="(customer.sortField == 'CustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                                        <i *ngIf="(customer.sortField == 'AXCustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'AXCustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
                                 <th class="textRightPadd">
@@ -101,10 +114,10 @@
                                         <i *ngIf="(customer.sortField === 'checkCashAmount')" [ngClass]="(customer.isAsc && customer.sortField === 'checkCashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
                                     </span>
                                 </th>
-                                <th class="textRightPadd" *ngIf="user.Role.RoleID!='3'">
+                                <th class="textRightPadd" *ngIf="user.Role.RoleID!='3'" [hidden]="logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false'">
                                     Drayage
                                 </th>
-                                <th class="textRightPadd" *ngIf="user.Role.RoleID!='3'">
+                                <th class="textRightPadd" *ngIf="user.Role.RoleID!='3'" [hidden]="logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false'">
                                     Buyback
                                 </th>
                                 <th class="text-align-center">
@@ -113,27 +126,26 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            <tr *ngFor="let item of tripData?.TripTicketList|sort:customer.sortField:customer.isAsc">
+                            <tr *ngFor="let item of tripData | sort:customer.sortField:customer.isAsc">
                                 <td>
                                     <i class="ion-iphone custom-tooltip-ion" style="margin: 0 5px" *ngIf="!item.IsPaperTicket"><span class="tooltiptext">HH Ticket</span></i>
                                     <i class="ion-ios-book custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket"><span class="tooltiptext">Paper Ticket</span></i>
-                                    <i class="ion-edit custom-tooltip-ion custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket" [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]"><span class="tooltiptext">Edit</span></i>
+                                    <i class="ion-edit custom-tooltip-ion custom-tooltip-ion" style="margin: 0 5px" *ngIf="item.IsPaperTicket && headerData.TripStatusID != 25" [routerLink]="['../../../manual-ticket/ticket-trip',item.ID]"><span class="tooltiptext">Edit</span></i>
                                     <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.ID)" >
                                         <span class="tooltiptext">View </span>
                                     </i>
                                 </td>
                                 <td class="text-align-left">{{item.TicketNumber }}</td>
                                 <td>{{item.ticketType}}</td>                                
-                                <td><span [title]="item.CustomerNumber +'-'+ item.CustomerName">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:20 }}</span></td>                                
+                                <td><span [title]="item.AXCustomerNumber +'-'+ item.CustomerName">{{item.AXCustomerNumber }} - {{item.CustomerName | cutString:true:20 }}</span></td>                                
                                 <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}"><span *ngIf="item.TicketTypeID === 27">(</span>{{ item.amount | currencyFormatter }}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                 <td class="textRightPadd" ><span *ngIf="item.CashAmount || item.CheckAmount" [hidden]="item.TicketTypeID == 30">{{ item.checkCashAmount | currencyFormatter }}</span><span *ngIf="item.TicketTypeID == 30">$0.00</span></td>
                                 <!--td class="textRightPadd" ></td-->                                
                                 <!--td class="textRightPadd" *ngIf="!item.CashAmount && !item.CheckAmount"></td-->
-                                <td class="textRightPadd" [hidden]="item.Drayage" *ngIf="user.Role.RoleID!='3'"></td>
-                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.Drayage" *ngIf="user.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
-                                <td class="textRightPadd" [hidden]="item.BuyBack" *ngIf="user.Role.RoleID!='3'"></td>
-                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="!item.BuyBack" *ngIf="user.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                <td class="textRightPadd" [hidden]="(logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false') || item.Drayage" *ngIf="user.Role.RoleID!='3'"></td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="(logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false') || !item.Drayage" *ngIf="user.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.Drayage| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
+                                <td class="textRightPadd" [hidden]="(logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false') || item.BuyBack" *ngIf="user.Role.RoleID!='3'"></td>
+                                <td class="textRightPadd" [ngClass]="{'credit-amount':item.TicketTypeID === 27}" [hidden]="(logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false') || !item.BuyBack" *ngIf="user.Role.RoleID!='3'"><span *ngIf="item.TicketTypeID === 27">(</span>{{item.BuyBack| currencyFormatter}}<span *ngIf="item.TicketTypeID === 27">)</span></td>
                                 <td class="text-align-center">
                                     <input type="checkbox" disabled name="riInternal" [checked]="item.CustomerSourceID===101">
                                 </td>
@@ -142,8 +154,8 @@
                                 <td colspan="4"><b>Total</b></td>                                
                                 <td class="textRightPadd"><b>{{total.totalInvoice | currencyFormatter}}</b></td>
                                 <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currencyFormatter}}</b></td>
-                                <td class="textRightPadd" *ngIf="user.Role.RoleID!='3'" ><b>{{total.totalDrayage | currencyFormatter}}</b></td>
-                                <td class="textRightPadd" *ngIf="user.Role.RoleID!='3'"><b>{{total.totalBuyBack | currencyFormatter}}</b></td>
+                                <td class="textRightPadd" *ngIf="user.Role.RoleID!='3'" [hidden]="(logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false')"><b>{{total.totalDrayage | currencyFormatter}}</b></td>
+                                <td class="textRightPadd" *ngIf="user.Role.RoleID!='3'" [hidden]="(logedInUser.IsDistributor ? logedInUser.Distributor ? logedInUser.Distributor.IsCopacker : false : 'false')"><b>{{total.totalBuyBack | currencyFormatter}}</b></td>
                                 <!-- <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDistAmt | currencyFormatter}}</b></td> -->
                                 <td></td>
                             </tr>

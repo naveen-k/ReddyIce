@@ -1,13 +1,36 @@
 /**
 * Start Override default bootstarp CSS
 */
-
+.col-sm-2{
+	max-width: 17%;
+    padding-right: 5px;
+	padding-left: 8px;
+}
+.col-sm-1{
+	max-width: 13.5%;
+    padding-right: 5px;
+	flex:none;
+	padding-left: 8px;
+}
+.refreshbtn strong {
+    font-weight: 500;
+	font-size:11px;
+}
 fieldset {
     border: 1px solid #5bc0de;
     padding: 0.35em 0.625em 0.75em;
     margin: 5px 0;
 }
-
+.refershContainer{
+    text-align: center;
+    top: calc(50% - 25px);
+    margin: auto;
+}
+.refershMes {
+    color: green;
+    font-size: 13px;
+    font-weight: 500;
+}
 legend {
     width: auto;
     font-size: 15px;
@@ -176,3 +199,48 @@ a.collapse-menu-link {
 simple-notification .icon svg {
     height: 50% !important;
 }
+
+@media only screen and (max-width: 767px) {
+    .al-content {
+        padding: 4px 16px !important;
+      }          
+}
+@media only screen and (max-width: 500px) {
+    .al-content {
+        padding: 4px 16px !important;
+      }       
+}
+
+.inner-addon {
+    ::-webkit-input-placeholder { /* Chrome */
+       color: black;
+       opacity: 1;
+     }
+      :-ms-input-placeholder { /* IE 10+ */
+       color: black;
+       opacity: 1;
+     }
+     ::-moz-placeholder { /* Firefox 19+ */
+       color: black;
+       opacity: 1;
+     }
+      :-moz-placeholder { /* Firefox 4 - 18 */
+       color: black;
+       opacity: 1;
+     }  
+   
+     .dropdown-item.active, .dropdown-item:active {
+       background-color: #5bc0de !important;
+     }
+     
+     .dropdown-menu {
+       max-height: 200px;
+       max-width: 350px;
+       overflow: auto;
+     }
+     
+     .dropdown-item {
+       line-height: 1.25;
+       padding:3px 0px 3px 10px;
+     }
+ } 

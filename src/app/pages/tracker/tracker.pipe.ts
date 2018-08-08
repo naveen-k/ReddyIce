@@ -7,9 +7,9 @@ import * as _ from 'lodash';
 })
 
 export class UniquePipe implements PipeTransform {
-    transform(value: any): any{
+    transform(value: any, uniqueOn: any): any{
         if(value!== undefined && value!== null){
-            return _.uniqBy(value, 'DriverName');
+            return _.uniqBy(value, uniqueOn);
         }
         return value;
     }

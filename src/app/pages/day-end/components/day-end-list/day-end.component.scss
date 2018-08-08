@@ -10,9 +10,23 @@
     text-align: right;
 }
 
+
+.table{
+margin-top:10px;
+}
 .cash-reconciliation-table {
     width: 100%
 }
+.refresh{
+margin-top: 7px;
+margin-bottom:5px;
+}
+
+.refreshsift{
+margin-top: 24px;
+margin-bottom:5px;
+}
+
 
 .table-text-align{
     padding-left: 8px;
@@ -36,3 +50,8 @@
 .padBtm-10{
     padding-bottom:10px;
 }
+.head-button-container {
+    position: absolute;
+    right: 15px;
+    top: -52px;
+  }

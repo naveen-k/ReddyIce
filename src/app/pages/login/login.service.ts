@@ -3,13 +3,14 @@ import { UserService } from '../../shared/user.service';
 import { Observable } from 'rxjs/Rx';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Injectable } from '@angular/core';
+import {CacheService} from '../../shared/cache.service';
 
 @Injectable()
 export class LoginService {
     
    API_ENDPOINT = environment.apiEndpoint;
    
-    constructor(private http: Http, private userService: UserService) { }
+    constructor(private http: Http, private userService: UserService,private cacheService:CacheService) { }
     userInfo: any;
     login(data: any): Observable<any> {
          const headers = new Headers();
@@ -32,6 +33,7 @@ export class LoginService {
     }
 
     signOut() {
+        this.cacheService.deleteCache();
         localStorage.setItem('auth_token', '');
         localStorage.setItem('userId', '');
         localStorage.setItem('user_token', '');

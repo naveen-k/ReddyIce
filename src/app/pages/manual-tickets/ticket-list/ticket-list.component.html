@@ -1,187 +1,233 @@
+<div [hidden]="!overlayStatus" style="top:65px;bottom:0;left:0;right:0;height:calc(100% - 65px); opacity:0.5;background:gray;z-index:999;position:absolute;">
+    <div style="margin:auto;position:fixed;top:50%;left:50%;">
+        <img src="assets/reddyIce/spinner.gif " width='25px'>
+    </div>
+</div>
 <ba-card cardTitle="Manual Ticket List {{userSubTitle}}" baCardClass="with-scroll" class="smart-table-container" #customer>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-1">
             <label>Select Date</label>
             <div class="input-group">
-                <date-picker [maxDate]="todaysDate" [(dateModel)]="searchObj.CreatedDate" (dateModelChange)="getSearchedTickets();dateChangeHandler();"></date-picker>
+                <date-picker [maxDate]="todaysDate" [(dateModel)]="searchObj.CreatedDate" (dateModelChange)="refreshDataHandler();"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1">
             <label>Select Driver Type</label>
-            <select [disabled]="user.IsDistributor || user.Role.RoleID == 3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+            <select (change) = "refreshDataHandler('userTypeChange')" [disabled]="user.IsDistributor || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7" class="form-control"
+                id="exampleSelect1" [(ngModel)]="searchObj.userType">
                 <option [value]="'Internal'">RI Driver</option>
                 <option [value]="'External'">Dist./CoPacker</option>
             </select>
         </div>
-        <div class="col-sm-3" *ngIf="!user.IsDistributor" [hidden]="searchObj.userType=='External'">
-            <label>Select Branch</label>
-            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange)="branchChangeHandler()"></reddy-select>            
+        <div class="col-sm-1" [hidden]= "searchObj.userType === 'External'">
+            <label>Select Business Unit</label>
+            <reddy-select [options]="allBranches" [(selected)]="searchObj.BranchId" (selectedChange) = "refreshDataHandler('branchChange');"></reddy-select>
         </div>
-        <div class="col-sm-2" [hidden]="searchObj.userType!='Internal'">
+        
+        <div class="col-sm-1" [hidden]= "searchObj.userType === 'Internal'">
+            <label>Dist./CoPacker</label>
+            <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="searchObj.DistributorID" (selectedChange)="refreshDataHandler('distributorChange')"></reddy-select>
+        </div>
+		<div class="col-sm-1" [hidden]= "searchObj.userType === 'External'">
             <label>Driver</label>
-            <select [disabled]="user.IsDistributor" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.UserId" (ngModelChange)="userChangeHandler('byuser')">
-                <option *ngFor="let obj of drivers" [value]="obj.UserId">
-                    {{obj.FirstName}} {{obj.LastName}}
-                </option>
-            </select>
+            <reddy-select [options]="drivers" [(selected)]="searchObj.UserId" (selectedChange)= "refreshDataHandler();"></reddy-select>
         </div>
-        <div class="col-sm-2" [hidden]="searchObj.userType=='Internal'">
-            <label>Dist./CoPacker</label>            
-            <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="searchObj.DistributorID" (selectedChange)="userChangeHandler()"></reddy-select>
+		<div class="col-sm-1" >
+			<label>Source</label>
+			<select class="form-control" [(ngModel)]="searchObj.ticketSource" (change) = "refreshDataHandler('sourceChange');">
+				<option [value]="0">All Tickets</option>
+				<option [value]="1">Manual</option>
+				<option [value]="2">EDI</option>
+				<option [value]="3">Routeman</option>
+			</select>
+		</div>
+        
+		
+		<div class="col-sm-2 refreshbtn">
+			<div *ngIf = "refreshTimestamp != '' " style = "float:left;width:100%"><strong>Last Updated: {{ refreshTimestamp }}</strong></div>
+            <button *ngIf = "refreshTimestamp != '' "  (click)="getRefreshTrip()" [disabled] = "!buttonAction"  class="refresh btn btn-primary" >View Tickets</button>
+			<button *ngIf = "refreshTimestamp === '' " (click)="getRefreshTrip()" [disabled] = "!buttonAction"  class="refreshsift btn btn-primary" >View Tickets</button>
+			
         </div>
-        <div class="col-sm-3">
+		<div class="col-sm-1">
             <label>Search</label>
-            <input type="text" class="form-control" id="input01" [(ngModel)]="searchString" placeholder="Search">
+            <input type="text" class="form-control" id="input01" [(ngModel)]="searchString" placeholder="Search" (ngModelChange)="searchItem();">
         </div>
+		
         <div class="col-sm-2 createTicketBtn">
-            <button [routerLink]="['../ticket']" class="btn btn-primary addCustBtn pull-right">
+            <button [routerLink]="['../ticket']" (click)="overlayStatus = true" class="btn btn-primary addCustBtn pull-right">
                 Create Ticket
             </button>
         </div>
     </div>
-    <div class="table-container">
+    <div class="table-container" style="overflow-x:auto;">
         <table class="table table-striped table-condensed">
             <thead class="tableHeader">
                 <tr>
-                    <th style="width:112px;">
-                        <button [disabled]="!allTickets.length || disableApprove" class="btn btn-primary" (click)="approveCheckedTickets()" style="margin:-5px;">
-                            Approve
-                        </button>
+                    <th style="padding-left: 2px;padding-right: 2px;" *ngIf="allTickets.length > 0">
+                        <span title="Select/Unselect All">
+                            <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();" />
+                        </span>
                     </th>
-                    <th class="table-id thVerticalAlign actionAlignCenter" style="width:91px;">Actions</th>
-                    <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TicketNumber';customer.isAsc=!customer.isAsc;">
-                          Ticket #
-                           <i *ngIf="(customer.sortField == 'TicketNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                    <th style="padding-left: 6px;padding-right: 2px;"> 
+                      
+                        <i class="ion-checkmark custom-tooltip-ion approveAllButton marginR8" (click)="approveCheckedTickets()" *ngIf="allTickets.length || !disableApprove" [ngStyle]="{color:!disableApprove ? 'red' : 'grey'}" [style.cursor]="!disableApprove ? 'pointer' :''">
+                            <span class="tooltiptext">Approve</span>
+                        </i>
+
+                        <i class="ion-trash-a custom-tooltip-ion approveAllButton marginR5" (click)="approveCheckedTickets('delete')" *ngIf="allTickets.length" [ngStyle]="{color:!disableApprove ? 'red' : 'grey'}" [style.cursor]="!disableApprove ? 'pointer' :''">
+                            <span class="tooltiptext">Delete</span>
+                        </i>
+                    </th>
+                    <th class="table-id thVerticalAlign actionAlignCenter" style="width: 8%;">Actions</th>
+                    <th class="thVerticalAlign table-text-align width-ticket">
+                        <span class="cursorPointer" (click)="customer.sortField = 'ticketwithRefNo';customer.isAsc=!customer.isAsc;sortable('ticketwithRefNo');">
+                            Ticket #
+                            <i *ngIf="(customer.sortField == 'ticketwithRefNo')" [ngClass]="(customer.isAsc && customer.sortField == 'ticketwithRefNo' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TicketTypeID';customer.isAsc=!customer.isAsc;sortable('TicketTypeID');">
                             Ticket Type
-                            <i *ngIf="(customer.sortField == 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'TicketTypeID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketTypeID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
-                    <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerTitle';customer.isAsc=!customer.isAsc;">
-                          Customer
-                          <i *ngIf="(customer.sortField == 'CustomerTitle')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTitle' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                    <th class="thVerticalAlign table-text-align width-customer">
+                        <span class="cursorPointer" (click)="customer.sortField = 'CustomerTitle';customer.isAsc=!customer.isAsc;sortable('CustomerTitle');">
+                            Customer
+                            <i *ngIf="(customer.sortField == 'CustomerTitle')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerTitle' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
-                    <th class="thVerticalAlign table-text-align" [hidden]="searchObj.userType!='Internal'">
-                        <span class="cursorPointer" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;">
+                    <th class="thVerticalAlign table-text-align width-driver" [hidden]="searchObj.userType!='Internal'">
+                        <span class="cursorPointer" (click)="customer.sortField = 'UserName';customer.isAsc=!customer.isAsc;sortable('UserName');">
                             Driver
-                            <i *ngIf="(customer.sortField == 'UserName')" [ngClass]="(customer.isAsc && customer.sortField == 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'UserName')" [ngClass]="(customer.isAsc && customer.sortField == 'UserName' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'TotalSaleWithTax';customer.isAsc=!customer.isAsc;">
+                        <span class="cursorPointer" (click)="customer.sortField = 'TotalSaleWithTax';customer.isAsc=!customer.isAsc;sortable('TotalSaleWithTax');">
                             Total Sale
-                            <i *ngIf="(customer.sortField == 'TotalSaleWithTax')" [ngClass]="(customer.isAsc && customer.sortField == 'TotalSaleWithTax' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                            <i *ngIf="(customer.sortField == 'TotalSaleWithTax')" [ngClass]="(customer.isAsc && customer.sortField == 'TotalSaleWithTax' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                     <th class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;">
-                             Received Amt
-                            <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                        <span class="cursorPointer" (click)="customer.sortField = 'CashAmount';customer.isAsc=!customer.isAsc;sortable('CashAmount');">
+                            Received Amt
+                            <i *ngIf="(customer.sortField == 'CashAmount')" [ngClass]="(customer.isAsc && customer.sortField == 'CashAmount' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
-                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;">
+                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding" [hidden]="user.IsDistributor ? user.Distributor ? user.Distributor.IsCopacker : false : 'false'">
+                        <span class="cursorPointer" (click)="customer.sortField = 'Drayage';customer.isAsc=!customer.isAsc;sortable('Drayage');">
                             Drayage
-                            <i *ngIf="(customer.sortField == 'Drayage')" [ngClass]="(customer.isAsc && customer.sortField == 'Drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'Drayage')" [ngClass]="(customer.isAsc && customer.sortField == 'Drayage' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
-                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding">
-                        <span class="cursorPointer" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;">
+                    <th *ngIf="user.IsDistributor" class="thVerticalAlign textAlignRight amtPadding" [hidden]="user.IsDistributor ? user.Distributor ? user.Distributor.IsCopacker : false : 'false'">
+                        <span class="cursorPointer" (click)="customer.sortField = 'BuyBack';customer.isAsc=!customer.isAsc;sortable('BuyBack');">
                             Buyback
-                            <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
+                            <i *ngIf="(customer.sortField == 'BuyBack')" [ngClass]="(customer.isAsc && customer.sortField == 'BuyBack' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                         </span>
                     </th>
                     <th class="thVerticalAlign table-text-align">
-                        <span class="cursorPointer" (click)="customer.sortField = 'DeliveryDate';customer.isAsc=!customer.isAsc;">
-                          Delivery Date
-                          <i *ngIf="(customer.sortField == 'DeliveryDate')" [ngClass]="(customer.isAsc && customer.sortField == 'DeliveryDate' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                        <span class="cursorPointer" (click)="customer.sortField = 'DeliveryDate';customer.isAsc=!customer.isAsc;sortable('DeliveryDate');">
+                            Delivery Date
+                            <i *ngIf="(customer.sortField == 'DeliveryDate')" [ngClass]="(customer.isAsc && customer.sortField == 'DeliveryDate' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
-                    <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;" class="thVerticalAlign textAlignCenter statusPadding">
-                        <span class="cursorPointer">
-                          Status
-                          <i *ngIf="(customer.sortField == 'TicketStatusID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketStatusID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i> 
-                      </span>
+                    <th (click)="customer.sortField = 'TicketStatusID';customer.isAsc=!customer.isAsc;sortable('TicketStatusID');" class="thVerticalAlign textAlignCenter">
+                        <span class="cursorPointer" style="padding-left: 0px;text-align: center;">
+                            Status
+                            <i *ngIf="(customer.sortField == 'TicketStatusID')" [ngClass]="(customer.isAsc && customer.sortField == 'TicketStatusID' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                        </span>
                     </th>
                 </tr>
             </thead>
-            <tbody>                
-                <tr *ngFor="let item of (allTickets | ticketFilter:searchObj.userType:(searchObj.userType === 'Internal')?searchObj.UserId:searchObj.DistributorID ) | filter:searchString:['TicketNumber', 'UserName', 'CustomerName', 'CustomerNumber', 'CashAmount', 'TotalSale', 'ticketType'] | sort:customer.sortField:customer.isAsc; let i=index">
-                    <td>
-                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler()"
+            <tbody>
+                <tr valign="middle" *ngFor="let item of allFilterdTickets| sort:customer.sortField:customer.isAsc;  let i=index">
+                    <td *ngIf="allTickets.length > 0">
+                        <input type="checkbox" name="manualTicketMultiSelect" [(ngModel)]="item.selected" (ngModelChange)="ticketSelectionHandler();checkIfAllSelected();"
                             [disabled]="item.TicketStatusID == 25 || item.TicketStatusID == 23">
                     </td>
+                    <td></td>
                     <td class="table-id" style="cursor: pointer" *ngIf="!isNewTicket">
                         <i class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px" (click)="viewTicket(item.TicketID)">
                             <span class="tooltiptext">View Ticket Details</span>
                         </i>
-                        <a [routerLink]="['../view/'+item.TicketID]">
+                        <a *ngIf="!(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" [routerLink]="['../view/'+item.TicketID]"
+                            (click)="overlayStatus = true;">
                             <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">View</span>
                             </i>
                         </a>
-                        <!-- <a [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID!=23">
+                        <a *ngIf="item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale'" (click)="showTicketChoice(item.TicketNumber, item.CustomerID, item.DeliveryDate,'view')">
+                            <i class="ion-eye custom-tooltip-ion" style="margin-right: 5px">
+                                <span class="tooltiptext">View</span>
+                            </i>
+                        </a>
+                      
+                        <a *ngIf="!(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" [routerLink]="['../ticket/'+item.TicketID]"
+                            [hidden]="item.TicketStatusID==25">
                             <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
                                 <span class="tooltiptext">Edit</span>
                             </i>
                         </a>
-                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID!==23" (click)="deleteTicket(item.TicketID)">
+                        <a *ngIf="(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" (click)="showTicketChoice(item.TicketNumber, item.CustomerID, item.DeliveryDate,'edit')"
+                            [hidden]="item.TicketStatusID==25">
+                            <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                                <span class="tooltiptext">Edit</span>
+                            </i>
+                        </a>
+                        <i *ngIf="!(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" class="ion-trash-a custom-tooltip-ion"
+                            [hidden]="item.TicketStatusID==25" (click)="deleteTicket(item.TicketID);overlayStatus = true;">
                             <span class="tooltiptext">Delete</span>
-                        </i> -->
-                        <a [routerLink]="['../ticket/'+item.TicketID]" [hidden]="item.TicketStatusID==25">
-                            <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
-                                <span class="tooltiptext">Edit</span>
-                            </i>
-                        </a>
-                        <i class="ion-trash-a custom-tooltip-ion" [hidden]="item.TicketStatusID==25" (click)="deleteTicket(item.TicketID)">
+                        </i>
+                        <i *ngIf="(item.ticketType =='Sale & Credit' || item.ticketType =='Credit & Sale')" class="ion-trash-a custom-tooltip-ion"
+                            [hidden]="item.TicketStatusID==25" (click)="showTicketChoice(item.TicketNumber, item.CustomerID, item.DeliveryDate,'delete');">
                             <span class="tooltiptext">Delete</span>
                         </i>
                     </td>
-                    <td>{{ item.TicketNumber }}</td>
-                    <!-- <td>{{ item.IsSaleTicket|ticketType: item.Customer }}</td> -->
+                    <td>
+                        <span [title]="item.ticketwithRefNo">{{item.ticketwithRefNo}}</span>
+                    </td>
                     <td>{{ item.ticketType }}</td>
-                    <td><span [title]="item.CustomerTitle">{{item.CustomerNumber }} - {{item.CustomerName | cutString:true:10 }}</span></td>
+                    <td>
+                        <span [title]="item.CustomerTitle">{{item.AXCustomerNumber }} - {{item.CustomerName}}</span>
+                    </td>
                     <td [hidden]="searchObj.userType!='Internal'">{{item.UserName}}</td>
                     <td class="textAlignRight" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.TotalSaleWithTax | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="item.CashAmount || item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{ item.CheckAmount + item.CashAmount | currencyFormatter }}</td>
                     <td class="textAlignRight" *ngIf="!item.CashAmount && !item.CheckAmount" [ngClass]="{'credit-amount':item.TicketTypeID === 27}">{{item.TotalAmount | currencyFormatter }}</td>
-                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.Drayage | currencyFormatter }}</td>
-                    <td *ngIf="user.IsDistributor" class="textAlignRight">{{ item.BuyBack | currencyFormatter }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight" [hidden]="user.IsDistributor ? user.Distributor ? user.Distributor.IsCopacker : false : 'false'">{{ item.Drayage | currencyFormatter }}</td>
+                    <td *ngIf="user.IsDistributor" class="textAlignRight" [hidden]="user.IsDistributor ? user.Distributor ? user.Distributor.IsCopacker : false : 'false'">{{ item.BuyBack | currencyFormatter }}</td>
                     <td>{{item.DeliveryDate|date}}</td>
                     <td class="textAlignCenter">
-                        <i class="custom-tooltip-ion">
-                            <img src="assets/reddyIce/draftTicket.png" *ngIf="item.TicketStatusID == 23" width="15">
-                            <span class="tooltiptext">Draft</span>
+                        <div class="tooltip-position">
+                        <i class="custom-tooltip-ion" *ngIf="item.TicketStatusID == 23">
+                            <img src="assets/reddyIce/draftTicket.png" width="15">
+                            <div class="customTooltiptext">Draft</div>
                         </i>
-                        <i class="custom-tooltip-ion">
-                            <img src="assets/reddyIce/submitTicket.png" *ngIf="item.TicketStatusID == 24" width="18">
-                            <span class="tooltiptext">Submitted</span>
+                        <i class="custom-tooltip-ion" *ngIf="item.TicketStatusID == 24">
+                            <img src="assets/reddyIce/submitTicket.png" width="18">
+                            <div class="customTooltiptext">Submitted</div>
                         </i>
-                        <i class="custom-tooltip-ion">
-                            <img src="assets/reddyIce/approveTicket.png" *ngIf="item.TicketStatusID == 25" width="15">
-                            <span class="tooltiptext">Approved</span>
+                        <i class="custom-tooltip-ion" *ngIf="item.TicketStatusID == 25">
+                            <img src="assets/reddyIce/approveTicket.png" width="15">
+                            <div class="customTooltiptext">Approved</div>
                         </i>
+                        </div>
                     </td>
                 </tr>
-                <!--<tr *ngIf="(allTickets.length && allTickets.length>0)">
-                    <td colspan="6" [hidden]="user.IsDistributor"><b>Total({{allTickets.length}})</b></td> 
-                    <td style="text-align: center;" colspan="5" [hidden]="!user.IsDistributor"><b>Total</b></td>                                
-                    <td class="textRightPadd"><b>{{total.totalInvoice | currencyFormatter}}</b></td>
-                    <td class="textRightPadd"><b>{{total.totalCash + total.totalCheck | currencyFormatter}}</b></td>
-                    <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalDrayage | currencyFormatter}}</b></td>
-                    <td class="textRightPadd" *ngIf="!user.IsRIInternal"><b>{{total.totalBuyBack | currencyFormatter}}</b></td>
-                    <td></td>
-                </tr>-->
+               
             </tbody>
         </table>
-        <div class='spinnerContainer' [hidden]='!showSpinner'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-        <div *ngIf="(!allTickets.length && !showSpinner) || (allTickets.length==0 && !showSpinner)" class='marginTopCenter'> No data found </div>
-    </div>
+        <div class='spinnerContainer' [hidden]='!showSpinner'>
+            <a>
+                <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+            </a>
+        </div>
+        <div *ngIf= "this.nodataMessage === '' || allFilterdTickets.length" style = "background-color:rgba(0, 0, 0, 0.1);font-size:16px;padding: 11px;text-align:center;">{{refreshMessage}}</div>
+		<div *ngIf= "this.nodataMessage != '' && !allFilterdTickets.length" style = "background-color:rgba(0, 0, 0, 0.1);font-size:16px;padding: 11px;text-align:center;">{{nodataMessage}}</div>
     
+	</div>
+
 </ba-card>

@@ -21,6 +21,7 @@ export class UserManagementComponent implements OnInit {
   isNewUser: boolean = false;
   selectedUser = {};
   newUser: any = {};
+  loggedUserdata: any = {};
   hideColumn: boolean = false;
   isDistributorAdmin: boolean = false;
   cardTitle: string;
@@ -53,6 +54,7 @@ export class UserManagementComponent implements OnInit {
     this.action = 'create';
     this.rightCardOpen = !this.rightCardOpen;
     this.isNewUser = true;
+	
     this.hideColumn = !this.hideColumn;
     this.cardTitle = 'Create New User';
     this.newUser = <User>{
@@ -67,12 +69,30 @@ export class UserManagementComponent implements OnInit {
       IsSeasonal: true,
       // IsRIInternal: false,
     };
+    if(this.action === 'create'){
+      document.forms['userForm'].reset();
+    }
   }
 
   formChangedHandler() {
     this.formIsDirty = true;
   }
-
+forcelogOut(loggedUser){
+	console.log(loggedUser);
+	this.service.Killhistory(loggedUser.UserActivityLogID,loggedUser).subscribe((res) => {
+			this.notification.success('Success', 'User session has been logged out successfully.');
+			
+      this.rightCardOpen = !this.rightCardOpen;
+      this.isNewUser = false;
+      this.formIsDirty = false;
+      const userId = localStorage.getItem('UserID');
+      this.getUserList(parseInt(userId));
+		
+			},(error) => {
+				error = JSON.parse(error._body);
+				this.notification.error('Error', error.Message);
+			});
+}
   closeRightCard() {
     if (this.formIsDirty) {
       const activeModal = this.modalService.open(ModalComponent, {
@@ -158,6 +178,21 @@ export class UserManagementComponent implements OnInit {
     }
 
     this.action = 'edit';
+	this.loggedUserdata = {};
+	this.service.GetUserHistory(user.UserId).subscribe((res) => {
+		//console.log(res);
+		
+		if(res.length){
+			this.loggedUserdata = res[0];
+		}
+		console.log(this.loggedUserdata);	
+		}, err => {
+					console.log(err);
+					this.loggedUserdata = {};
+         }
+		
+		
+		);
     this.newUser = Object.assign({}, user);
     //this.newUser.BranchID = user.Branch ? user.Branch.BranchID : '';
     this.newUser.Branch = user.Branch;
@@ -206,6 +241,13 @@ export class UserManagementComponent implements OnInit {
       this.newUser.DistributorMasterID = user.Distributor ? user.Distributor.DistributorMasterId : '';
       this.isNewUser = false;
       this.action = 'view';
+	  this.loggedUserdata = {};
+	  this.service.GetUserHistory(user.UserId).subscribe((res) => {
+		if(res.length){
+			this.loggedUserdata = res[0];
+		}
+		console.log(this.loggedUserdata);	
+		});
       if (!this.rightCardOpen) {
         this.rightCardOpen = !this.rightCardOpen;
         this.hideColumn = !this.hideColumn;
@@ -317,7 +359,7 @@ export class UserManagementComponent implements OnInit {
           this.filterBranch = this.userBranches[0].BranchID;
         }
       }
-      this.allBranches = this.service.transformOptionsReddySelect(this.userBranches, 'BranchID', 'BranchCode', 'BranchName');
+      this.allBranches = this.service.transformOptionsReddySelect(this.userBranches, 'BranchID', 'BranchCode', 'BUName');
       if (!this.isDistributorExist) {
         this.getDistributors();
       }
@@ -379,10 +421,10 @@ export class UserManagementComponent implements OnInit {
 
 
   formatUser(user: any = '') {
-    user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BranchName : 'NA')}`;
+    user.tmp_branch = `${(user.Branch ? user.Branch.BranchCode : 'NA')} - ${(user.Branch ? user.Branch.BUName : 'NA')}`;
     if (user.Branch) {
       user.concatBranch = user.Branch.map(function (elem) {
-        return elem.BranchName;
+        return elem.BUName;
       }).join(",");
 
       user.concatCode = user.Branch.map(function (elem) {
@@ -390,7 +432,7 @@ export class UserManagementComponent implements OnInit {
       }).join(",");
 
       user.concatBranchCode = user.Branch.map(function (elem) {
-        return elem.BranchCode + ' - ' + elem.BranchName;
+        return elem.BranchCode + ' - ' + elem.BUName;
       }).join(",");
     }
     user['tmp_role'] = `${(user.Role ? user.Role.RoleName : '')}`;
@@ -445,7 +487,7 @@ export class UserManagementComponent implements OnInit {
     branches.find((val) => {
       if (typeof val === 'object') {
         if (val['IsActive'] === true) {
-          cstring.push(val['BranchCode'] + ' - ' + val['BranchName']);
+          cstring.push(val['BranchCode'] + ' - ' + val['BUName']);
         }
       }
 
@@ -453,7 +495,7 @@ export class UserManagementComponent implements OnInit {
 
     let branch = cstring;
     activeModal.componentInstance.showCancel = false;
-    activeModal.componentInstance.modalHeader = `Selected branches of ${username}`;
+    activeModal.componentInstance.modalHeader = `Selected Business Unit of ${username}`;
     activeModal.componentInstance.modalContent = branch;
     activeModal.componentInstance.closeModalHandler = (() => {
 

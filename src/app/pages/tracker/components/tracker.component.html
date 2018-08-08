@@ -1,48 +1,65 @@
 <div class="row">
     <div class='col-md-12'>
-        <ba-card cardTitle="Tracker{{userSubTitle}}" baCardClass="medium-card" class="smart-table-container">
-            <div class="row">
+        <ba-card cardTitle="Tracker{{userSubTitle}}" class="smart-table-container">
+            <div class="row" *ngIf="user.IsRIInternal">
+                <div class="col-md-8">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin mL0">
+                        <input type="radio" name="trackerType" [value]="1" [(ngModel)]="filter.trackerType" (ngModelChange)="refreshDataHandler('typeChange');">
+                        <span>Driver</span>
+                    </label>
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
+                        <input type="radio" name="trackerType" [value]="2" [(ngModel)]="filter.trackerType" (ngModelChange)="refreshDataHandler('typeChange');">
+                        <span>FES Tech</span>
+                    </label>
+                </div>
+            </div>
+            <div class="row marginTop">
                 <div class="col-sm-2">
                     <label>Select Date</label>
                     <div class="input-group">
-                        <date-picker [maxDate]="todaysDate" [(dateModel)]="tripFilterOption.tripDate" (dateModelChange)="dateChangeHandler();"></date-picker>
+                        <date-picker [maxDate]="todaysDate" [(dateModel)]="tripFilterOption.tripDate" (dateModelChange)="refreshDataHandler('dateChange');"></date-picker>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2" *ngIf = "filter.trackerType == 1">
                     <label>Select Driver Type</label>
-                    <select [disabled]="isDistributor || user.Role?.RoleID===3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="typeChangeHandler()">
+                    <select [disabled]="isDistributor || user.Role?.RoleID===3" class="form-control" id="exampleSelect1" [(ngModel)]="searchObj.userType" (ngModelChange)="refreshDataHandler('typeChange');">
                         <option [value]="'Internal'">RI Driver</option>
                         <option [value]="'External'">Dist./CoPacker</option>
                     </select>
                 </div>
-                <div class="col-sm-3" [hidden]="isDistributor" *ngIf="searchObj.userType=='Internal'">
-                    <label>Select Branch</label>
-                    <reddy-select [options]="allBranches" [(selected)]="tripFilterOption.branchId" (selectedChange)="branchChangeHandler()"></reddy-select>
+                <div class="col-sm-2" [hidden]="isDistributor" *ngIf="searchObj.userType=='Internal' || filter.trackerType == 2">
+                    <label>Select Business Unit</label>
+                    <reddy-select [options]="branches" [(selected)]="tripFilterOption.branchId" (selectedChange)="refreshDataHandler('branchChange')"></reddy-select>
                 </div>
-                <div class="col-sm-3" *ngIf="searchObj.userType=='External'">
+                <div class="col-sm-2" *ngIf="searchObj.userType=='External' && filter.trackerType != 2 ">
                     <label>Dist./CoPacker</label>
-                    <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="tripFilterOption.DistributorMasterID" (selectedChange)="distributorChangeHandler()"></reddy-select>
+                    <reddy-select [disabled]="user.IsDistributor" [options]="distributors" [(selected)]="tripFilterOption.DistributorMasterID" (selectedChange)= "refreshDataHandler('branchChange')" ></reddy-select>
                 </div>
                 <div class="col-sm-2" *ngIf="searchObj.userType=='Internal'">
-                    <label>Select Driver</label>
-                    <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
-                        <option *ngFor="let driver of driverOnBranch | unique">{{driver.DriverName}}</option>
+                    <label>Select {{filter.trackerType == 1 ? "Driver" : "STech"}}</label>
+                    <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="refreshDataHandler('driverChange')">
+                        <option *ngFor="let driver of driverOnBranch | unique:'DriverName'" [value]= "driver.DriverName"> {{driver.DriverName}}</option>
                     </select>
                 </div>
                 <div class="col-sm-2" *ngIf="searchObj.userType=='External'">
                     <label>Select Driver</label>
-                    <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="driverChangeHandler()">
-                        <option *ngFor="let driver of driverOndistributor | unique">{{driver.DriverName}}</option>
+                    <select class="form-control" [(ngModel)]='tripFilterOption.DriverName' (change)="refreshDataHandler('driverChange')">
+                        <option *ngFor="let driver of driverOndistributor | unique:'DriverName'" [value]="driver.DriverName" >{{driver.DriverName}}</option>
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label>Select Trip</label>
-                    <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' (change)="tripChangeHandler()">
-                        <option *ngFor="let trip of driverSpecTrips">
-                            {{trip.TripCode}}
+                    <select class="form-control" [(ngModel)]='tripFilterOption.TripCode' >
+                        <option *ngFor="let trip of driverSpecTrips | unique:'TripCode'" [value]="trip.TripCode">
+                            {{trip.TripCode}} {{trip.RouteNumber ? '-' : ''}} {{trip.RouteNumber ? trip.RouteNumber : ''}}
                         </option>
                     </select>
                 </div>
+				<div class="col-sm-2 refreshbtn">
+				
+			   <button [disabled] = "!buttonAction" class="refresh btn btn-primary" (click)="tripChangeHandler()">View Trip</button>
+			
+				</div>
             </div>
             <div class="row marginTop">
                 <div class="col-md-4">
@@ -51,47 +68,54 @@
                             <div class="block" style="background:blue;"></div>
                             <span class="blockContent">Unplanned Service</span>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="filter.trackerType == 1">
                             <div class="block" style="background:yellow;"></div>
                             <span class="blockContent">Did Not Service</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                        <div class="col-md-6" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
                             <div class="block" style="background:#90EE90;"></div>
                             <span class="blockContent">Planned Service</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                        <div class="col-md-6" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
                             <div class="block" style="background:#ff0000;"></div>
                             <span class="blockContent">Skipped Stops</span>
                         </div>
-                        <div class="col-md-6"  [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                        <div class="col-md-6"  [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
                             <div class="block" style="background:#999900;"></div>
                             <span class="blockContent">Planned Sequence</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 center" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
-                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" checked (click)="sequenceChangeHandler(1)">
+                <div class="col-md-8 center" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
+                    <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin" >
+                        <input type="radio" name="type" [value]="1" [(ngModel)]="filter.sequence" (ngModelChange)="sequenceChangeHandler()">
                         <span>Planned Seq</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" (click)="sequenceChangeHandler(2)">
+                        <input type="radio" name="type" [value]="2" [(ngModel)]="filter.sequence" (ngModelChange)="sequenceChangeHandler()">
                         <span>Actual Delivery Seq</span>
                     </label>
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input type="radio" name="type" (click)="sequenceChangeHandler(3)">
+                        <input type="radio" name="type" [value]="3" [(ngModel)]="filter.sequence" (ngModelChange)="sequenceChangeHandler()">
                         <span>Planned & Actual Seq</span>
                     </label>
                 </div>
             </div>
             <div class="row marginTop">
-                <div class="col-md-4"style="padding-right:0;">
-                    <div class="table-container" style="height:350px; overflow-y:scroll;">
+			 <div class="col-md-12">
+			 <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
+			 <div *ngIf="(selectedTrip && selectedTrip.length == 0 && !showSpinner && refreshMessage === '') " style = 'background-color:rgba(0, 0, 0, 0.1);font-size:16px;padding: 11px;text-align:center;margin-top:10px;'> No data found </div>
+			 
+			  <div *ngIf="(selectedTrip && selectedTrip.length === 0 && !showSpinner && refreshMessage != '') || (!selectedTrip && !showSpinner)" style = 'background-color:rgba(0, 0, 0, 0.1);font-size:16px;padding: 11px;text-align:center;margin-top:10px;'>{{refreshMessage}} </div>
+			 </div>
+                <div *ngIf = "(refreshMessage === '' && selectedTrip && selectedTrip.length != 0 && !showSpinner )" class="col-md-4"style="padding-right:0;">
+                    <!-- <div class="table-container" style="height:350px; overflow-y:scroll;"> -->
+                    <div class="table-container">
                         <table class="table table-striped table-condensed">
                             <thead class="tableHeader">
                                 <tr>
                                     <th style="width: 50px; padding-left: 5px; padding-right: 5px;">Actions</th>
-                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
                                         <span>
                                             Planned
                                         </span>
@@ -101,12 +125,12 @@
                                             Actual
                                         </span>
                                     </th>
-                                    <th style="text-align: left;padding-left: 7px;" *ngIf="!isDistributor && searchObj.userType != 'External'">
+                                    <th style="text-align: center;padding-left: 7px;" *ngIf="!isDistributor && searchObj.userType != 'External'">
                                         <span>
                                             Customer#
                                         </span>
                                     </th>
-                                    <th style="text-align: left;padding-left: 7px;" *ngIf="isDistributor || searchObj.userType == 'External'">
+                                    <th style="text-align: center;padding-left: 7px;" *ngIf="isDistributor || searchObj.userType == 'External'">
                                         <span>
                                             Customer
                                         </span>
@@ -115,33 +139,34 @@
                             </thead>
                             <tbody>
                                 <ng-template ngFor let-subitem [ngForOf]="selectedTrip" let-subitemIndex="index">
-                                    <tr>
+                                    <tr [ngStyle]="{'background': subitem.pinColor, 'color': subitem.pinTextColor}" style="border-bottom:1px solid white;">
                                         <td>
-                                            <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(subitem.ID)">
-                                                <span class="tooltiptext">View Ticket Details</span>
+                                            <i [hidden]="selectedTrip.OrderID != null && selectedTrip.TicketNumber == null" class="ion-ios-information-outline custom-tooltip-ion" style="margin-right: 5px; cursor: pointer;" (click)="viewTicket(filter.trackerType == 1 ? subitem.ID  : subitem.WorkOrderID)">
+                                                <span class="tooltiptext">View {{filter.trackerType == 1 ? 'Ticket'  : 'Work Order'}} Details</span>
                                             </i>
                                         </td>
-                                        <td style="text-align:center;" [hidden]="isDistributor || searchObj.userType == 'External' || IsUnplanned">
+                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" title="{{subitem.createdDate}}" *ngIf="filter.trackerType == 1">
                                             {{subitem.PlannedSequence}}
                                         </td>
-                                        <td style="text-align:center;" *ngIf="!isNewTicket" title="{{sliceTime(subitem.Created)}}">
+                                        <td style="text-align:center;" *ngIf="!isNewTicket" >
                                             {{subitem.ActualSequence}}
                                         </td>
-                                        <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
-                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:true:20}}
+                                        <td title="{{subitem.AXCustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
+                                            {{subitem.AXCustomerNumber}} - {{subitem.CustomerName | cutString:true:20}}
                                         </td>
-                                        <td title="{{subitem.CustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
-                                            {{subitem.CustomerNumber}} - {{subitem.CustomerName | cutString:false:15}}
+                                        <td title="{{subitem.AXCustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
+                                            {{subitem.AXCustomerNumber}} - {{subitem.CustomerName | cutString:false:15}}
                                         </td>
                                     </tr>
                                 </ng-template>
                             </tbody>
                         </table>
-                        <div style='text-align:center'> <a> <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'></a> </div>
-                        <div *ngIf="(selectedTrip && !selectedTrip.length && !showSpinner) || (!selectedTrip && !showSpinner)" style='text-align:center; margin-top:10px;'> No data found </div>
+                        
+                        
                     </div>
                 </div>
-                <div class="col-md-8" style="overflow-y: hidden;height: 384px;">
+                <!-- <div class="col-md-8" style="overflow-y: hidden;height: 384px;"> -->
+                <div class="col-md-8" [hidden] = "googlemapdivStatus" >
                     <ba-card cardTitle="Route Map">
                         <div class="google-maps"></div>
                     </ba-card>

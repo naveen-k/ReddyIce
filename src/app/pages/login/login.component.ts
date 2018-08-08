@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { NotificationsService } from 'angular2-notifications';
 import { ForgetPasswordService } from '../forget-password/forget-apssword.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'login',
@@ -22,6 +23,7 @@ export class Login implements OnInit {
   submitted: boolean = false;
   isLoginMode: boolean = true;
   isProcessing: boolean = false;
+  prodLabel: string = '';
 
   constructor(
     private userService: UserService,
@@ -52,6 +54,7 @@ export class Login implements OnInit {
     // Just to make sure `auth_token` is clear when, landed on this page
     this.loginService.signOut();
     const user = this.userService.getUserForAutoLogin();
+    this.prodLabel = environment.prodLabel;
     if (user) {
       this.autoLoginUser(user);
     }

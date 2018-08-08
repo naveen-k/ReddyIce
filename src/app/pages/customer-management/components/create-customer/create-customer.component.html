@@ -14,7 +14,7 @@
             <div class="row" [hidden]="mode===1">
                 <label for="example-text-input" class="col-md-12">Customer Number <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                 <div class="col-md-12">
-                    <input maxlength="8" numberOnly [disabled]="mode ===3||mode ===2" id="typeahead-basic" type="text" [(ngModel)]="customer.CustomerNumber"
+                    <input maxlength="8" numberOnly [disabled]="mode ===3||mode ===2" id="typeahead-basic" type="text" [(ngModel)]="customer.AXCustomerNumber"
                         class="form-control" placeholder="Customer Number" (ngModelChange)="formFlagHandler()" />
                 </div>
             </div>
@@ -78,13 +78,13 @@
                     <div class="row">
                         <label for="example-text-input" class="col-sm-7">Allow Credit on Same Ticket</label>
                         <div class="col-sm-5">
-                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnsameticket' (ngModelChange)="formFlagHandler()"
+                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.AllowReturnSameTicket' (ngModelChange)="formFlagHandler()"
                                 class="checkbox-size" />
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row box-top-margin">
+            <!-- <div class="row box-top-margin">
 
                 <label for="example-text-input" class="col-md-12">Tax Percentage</label>
                 <div class="col-md-12">
@@ -92,7 +92,7 @@
                         (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="number" step="0.01" class="form-control"
                         placeholder="Tax Percentage" />
                 </div>
-            </div>
+            </div> -->
             <!-- <div class="row box-top-margin">
                 <label for="example-text-input" class="col-md-5 col-form-label">Chain</label>
                 <div class="col-md-7 padding-eater">
@@ -120,9 +120,9 @@
                 </div>
             </div>
             <div class="row box-top-margin">
-                <label for="example-text-input" class="col-md-12">Notes for Memo (It will print on Invoice)</label>
+                <label for="example-text-input" class="col-md-12">Notes for Memo (Max length 50 Charecters)</label>
                 <div class="col-md-12">
-                    <input [disabled]="mode ===3" maxlength="500" [(ngModel)]='customer.NotesForMemo' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
+                    <input [disabled]="mode ===3" maxlength="50" [(ngModel)]='customer.NotesForMemo' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
                         type="text" class="form-control" placeholder="Notes for Memo" />
                 </div>
             </div>
@@ -187,7 +187,7 @@
                         <label for="example-text-input" class="col-md-12">Email</label>
                         <div class="col-md-12">
                             <input maxlength="50" [disabled]="mode === 3" [(ngModel)]='customer.Email' (ngModelChange)="formFlagHandler()" id="typeahead-basic"
-                                type="email" class="form-control" placeholder="Email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                type="email" class="form-control" placeholder="Email" (blur)="validateEmailID(customer.Email)"
                             email />
                         </div>
                     </div>
@@ -199,6 +199,7 @@
                         <thead class="tableHeader">
                             <th>Product <sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></th>
                             <th class="right">Price ($)<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></th>
+							<th class="right">Tax Percentage<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></th>
                             <th style="width:100px" class="remove-padding"><button [hidden]="mode ===3" (click)="addProduct();formFlagHandler()" class="btn btn-danger"
                                     style="margin-top:2px;">Add Product</button></th>
                         </thead>
@@ -222,6 +223,9 @@
                                 <td class="td-width right">
                                     <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
                                 </td>
+								<td class="td-width">
+                                    <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="text" [numberOnly]="true" [(ngModel)]="mprod.TaxPercentage">
+                                </td>
                                 <td>
                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" [hidden]="mode===3" (click)="editProductPrice(mode,j)">
                                             <span class="tooltiptext">Edit</span>
@@ -237,7 +241,7 @@
                             <tr *ngFor="let mprod of addedProduct; let k=index">
                                 <td class="text-align-left">
                                     <select [disabled]="!addProductCheck[k]" class="form-control prodListElement" name="cProductId" [(ngModel)]="mprod.cProductId"
-                                        (ngModelChange)="productChangeHandler(mprod)">
+                                        (ngModelChange)="productChangeHandler(mprod,k,1)">
                                                 <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                     {{prod.DisplayName}}  
                                                 </option>
@@ -245,6 +249,9 @@
                                 </td>
                                 <td class="td-width">
                                     <input [disabled]="!addProductCheck[k]" class="form-control right prodListElement" type="text" [numberOnly]="true" step="0.01" [(ngModel)]="mprod.ProductPrice">
+                                </td>
+								<td class="td-width">
+                                    <input [disabled]="!addProductCheck[k]" class="form-control right prodListElement" type="text" [numberOnly]="true" step="0.01" [(ngModel)]="mprod.TaxPercentage">
                                 </td>
                                 <td>
                                     <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,k)">
@@ -260,7 +267,7 @@
                             <tr *ngFor="let mprod of newlyAddedproduct; let i=index">
                                     <td class="text-align-left">
                                         <select [disabled]="!addNewProductCheck[i]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
-                                            (ngModelChange)="productChangeHandler(mprod, i)">
+                                            (ngModelChange)="productChangeHandler(mprod, i,2)">
                                             <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
                                                 {{prod.DisplayName}}
                                             </option>
@@ -269,6 +276,9 @@
                                     <td class="td-width">
                                         <input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
                                     </td>
+									<td class="td-width">
+										<input style="margin-top:5px;" [disabled]="!addNewProductCheck[i]" class="form-control right" type="text" [numberOnly]="true" [(ngModel)]="mprod.TaxPercentage">
+                                </td>
                                     <td style="padding-top:3px;">
                                         <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px" (click)="editProductPrice(mode,i)">
                                             <span class="tooltiptext">Edit</span>
