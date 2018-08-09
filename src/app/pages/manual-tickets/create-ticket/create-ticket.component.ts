@@ -615,6 +615,7 @@ allDrivers: any[];
     this.ticket.CustomerSourceID = ('' + event.item.IsRICustomer == "true") ? 101 : 103
     // Reset ticket details
     this.ticket.TicketProduct = [{} as TicketProduct];
+	
   }
 
   distributorChangeHandler() {
@@ -637,11 +638,12 @@ allDrivers: any[];
       if (res.productdetail.length) {
         const callPrepareTicket = () => {
           if (!this.ticket.CustomerType) {
+			  
             setTimeout(callPrepareTicket, 100);
             return;
           }
 		
-          this.prepareTicketProduct(res.productdetail);
+         this.prepareTicketProduct(res.productdetail);
         };
         setTimeout(callPrepareTicket, 100);
       }
@@ -651,10 +653,7 @@ allDrivers: any[];
 
   prepareTicketProduct(productdetail) {
     this.ticket.TicketProduct.forEach(td => {
-      // if(this.ticket.RoleID === 10 && td.Rate){
-      //   td.Price = td.Rate;
-      // }
-
+      
       if (!td.ProductID) {
         td.ProductID = productdetail[0].ProductID;
         let index = this.ticket.TicketProduct.findIndex(x => x.ProductID == td.ProductID);
@@ -663,7 +662,7 @@ allDrivers: any[];
       this.updateTicketDetailObject(td);
       if (this.ticket.CustomerType === 20 || (this.ticket.CustomerType === 22 && this.ticket.IsSaleTicket && this.ticket.TicketTypeID == 27)) {
         // Ticket Type is DSD
-		 //let priti = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
+		
         td['totalAmount'] = this.calculateProductTotalAmount(td.Quantity, td['productSelected']['Price']);
 		
       } else if (this.ticket.CustomerType === 21) {
@@ -1234,16 +1233,14 @@ aftersuccessfulSubmit(){
     /**
      * This code has been changed to retain the Rate  EDI Enhancement
      */
-    // if (!prodDetail) {
-    //   //ticketDetail.Price = ticketDetail.Rate;
-    //   prodDetail = { Price: ticketDetail.Rate };
-    // }
+   
     if (ticketDetail.Rate) {
-      prodDetail = { Price: ticketDetail.Rate,IsTaxable:prodDetail['IsTaxable'] };
+      prodDetail = { Price: ticketDetail.Rate,IsTaxable:prodDetail['IsTaxable'], TaxPercentage:prodDetail['TaxPercentage']};
     }
     ticketDetail['productSelected'] = prodDetail;
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
-    ticketDetail.TaxPercentage = this.customer.Tax;
+   // ticketDetail.TaxPercentage = this.customer.Tax;
+   ticketDetail.TaxPercentage = ticketDetail['productSelected'].TaxPercentage;
     ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
   }
 
@@ -1272,10 +1269,11 @@ aftersuccessfulSubmit(){
     this.ticket.TotalSale = 0;
     this.tempModels.totalTax = 0;
     this.ticket.TicketProduct.forEach((t) => {
+	
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       // this.ticket.TotalSale += +t['totalAmount'] || 0;
       this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
-      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", ((t.productSelected.IsTaxable)?(+t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100):0));
+      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", ((t.productSelected.IsTaxable)?(+t['totalAmount'].fpArithmetic("*", t.TaxPercentage) / 100):0));
       //this.tempModels.totalTax = t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100;
     });
     /**
