@@ -96,6 +96,7 @@ export interface MapProducts {
     ProductName: string;
     ExternalProductId: number;
     ProductPrice: number;
+	TaxPercentage:number;
     ExternalCustomerId: number;
     IsInternal: boolean;
     IsActive: boolean;

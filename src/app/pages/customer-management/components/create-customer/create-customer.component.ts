@@ -85,7 +85,7 @@ export class CreateCustomerComponent implements OnInit {
 
         if (this.mode === 2 || this.mode === 3) {
             this.service.getCustomer(this.customerId, this.isRI).subscribe((response) => {
-				console.log(response);
+				
                 this.customer = response.CustomerDetails;
 				
                 if (this.mode === 3 && this.isRI) {
@@ -134,6 +134,7 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     save() {
+			
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
 			
 
