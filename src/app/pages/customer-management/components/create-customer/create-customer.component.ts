@@ -388,10 +388,29 @@ export class CreateCustomerComponent implements OnInit {
             }
         });
     }
-    formFlagHandler() {
+    formFlagHandler(taxfieldclick:any = null) {
         this.isFromDirty = true;
-        if (!this.customer.IsTaxassble) {
-            this.customer['TaxPercentage'] = 0;
+        if (!this.customer.IsTaxassble && taxfieldclick === 'yes' ) {
+			const activeModal = this.modalService.open(ModalComponent, {
+                size: 'sm',
+                backdrop: 'static',
+            });
+            activeModal.componentInstance.BUTTONS.OK = 'OK';
+            activeModal.componentInstance.showCancel = true;
+            activeModal.componentInstance.modalHeader = 'Warning!';
+            activeModal.componentInstance.modalContent = `After this action tax percentage value for each product would be zero.`;
+            activeModal.componentInstance.closeModalHandler = (() => {
+               this.addedProduct.forEach((res) => {
+				 res['TaxPercentage'] = 0;
+			   });
+			    this.newlyAddedproduct.forEach((val) => {
+				 val['TaxPercentage'] = 0;
+			   });
+			   
+            });
+			activeModal.componentInstance.dismissHandler = (() => {
+               this.customer.IsTaxassble = true;
+            });
         }
     }
     backClickHandler() {
