@@ -78,7 +78,6 @@ export class UserManagementComponent implements OnInit {
     this.formIsDirty = true;
   }
 forcelogOut(loggedUser){
-	console.log(loggedUser);
 	this.service.Killhistory(loggedUser.UserActivityLogID,loggedUser).subscribe((res) => {
 			this.notification.success('Success', 'User session has been logged out successfully.');
 			
@@ -180,12 +179,9 @@ forcelogOut(loggedUser){
     this.action = 'edit';
 	this.loggedUserdata = {};
 	this.service.GetUserHistory(user.UserId).subscribe((res) => {
-		//console.log(res);
-		
 		if(res.length){
 			this.loggedUserdata = res[0];
-		}
-		console.log(this.loggedUserdata);	
+		}	
 		}, err => {
 					console.log(err);
 					this.loggedUserdata = {};
@@ -246,7 +242,6 @@ forcelogOut(loggedUser){
 		if(res.length){
 			this.loggedUserdata = res[0];
 		}
-		console.log(this.loggedUserdata);	
 		});
       if (!this.rightCardOpen) {
         this.rightCardOpen = !this.rightCardOpen;
