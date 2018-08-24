@@ -1,0 +1,68 @@
+<form *ngIf = "matchedlookup" #lookupForm="ngForm" class="lookup-form" name="lookUpForm">
+  <button type="submit" class="btn btn-primary userMgmtSaveBtn" [disabled]="!lookupForm.form.valid"
+    (click)="onSubmit()">Save</button>
+
+  <div class="row page-header rowContainer first-form-row">
+    <div class="col-md-6  page-header">
+      <label for="lookup_text" class="control-label">
+        {{matchedlookup.ValueLabel}}
+        <sup style="color:red;">*</sup>
+      </label>
+     <input alphaNumeric [acceptSpace]="true" type="text" class="form-control" id="lookupText" placeholder="{{matchedlookup.ValueLabel}}"
+        minlength="1" [(ngModel)]="lookupItem.Value" name="lookupText" #lookupText="ngModel" required (ngModelChange)="changeHandler(lookupItem)"
+         maxlength="45"> 
+	 <div *ngIf="lookupText.invalid && (lookupText.dirty || lookupText.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="lookupText.errors.required" class="custom-tooltip bottom">{{matchedlookup.ValueLabel}} is required</div>
+      </div>
+      
+    </div>
+    <div *ngIf = "matchedlookup.Text1 != NULL" class="col-md-6  page-header">
+      <label for="lookup_desc" class="control-label">
+        {{matchedlookup.Text1}}
+        <sup style="color:red;">*</sup>
+      </label>
+      <input alphaNumeric [acceptSpace]="true" type="text" class="form-control" id="lookupDesc" placeholder="{{matchedlookup.Text1}}"
+        minlength="1" [(ngModel)]="lookupItem.Text" name="lookupdesc" #lookupText="ngModel" required
+         maxlength="45"> 
+	    <div *ngIf="lookupText.invalid && (lookupText.dirty || lookupText.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="lookupText.errors.required" class="custom-tooltip bottom">{{matchedlookup.Text1}} is required</div>
+      </div>
+      
+    </div>
+	<div *ngIf = "matchedlookup.Text2 != NULL" class="col-md-6  page-header">
+      <label for="lookup_desc" class="control-label">
+        {{matchedlookup.Text2}}
+        <sup style="color:red;">*</sup>
+      </label>
+      <input alphaNumeric [acceptSpace]="true" type="text" class="form-control" id="lookupDesc" placeholder="{{matchedlookup.Text2}}"
+        minlength="1" [(ngModel)]="lookupItem.Text2" name="lookupdesc" #lookupText="ngModel" required
+         maxlength="45"> 
+	    <div *ngIf="lookupText.invalid && (lookupText.dirty || lookupText.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="lookupText.errors.required" class="custom-tooltip bottom">{{matchedlookup.Text2}} is required</div>
+      </div>
+      
+    </div>
+	<div *ngIf = "matchedlookup.Numeric1 != NULL" class="col-md-6  page-header">
+      <label for="lookup_desc" class="control-label">
+        {{matchedlookup.Numeric1}}
+        <sup style="color:red;">*</sup>
+      </label>
+      <input alphaNumeric [acceptSpace]="true" type="text" class="form-control" id="lookupDesc" placeholder="{{matchedlookup.Numeric1}}"
+        minlength="1" [(ngModel)]="lookupItem.Text2" name="lookupdesc" #lookupText="ngModel" required
+         maxlength="45"> 
+	    <div *ngIf="lookupText.invalid && (lookupText.dirty || lookupText.touched)" class="error-message">
+        <i class="ion-android-alert showError"></i>
+        <div *ngIf="lookupText.errors.required" class="custom-tooltip bottom">{{matchedlookup.Numeric1}} is required</div>
+      </div>
+      
+    </div>
+  </div>
+    
+</form>
+<div class="col-md-6  page-header">
+      	  <ba-checkbox [(ngModel)]="lookupItem.Status" [label]="'Is Active?'" [ngModelOptions]="{standalone: true}" [disabled]="isNewLookup"></ba-checkbox>
+	    
+    </div>

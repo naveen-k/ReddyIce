@@ -1,0 +1,112 @@
+<div class="row lookup-details">
+<div class="col-md-6" [ngClass]="{'col-md-12':!rightCardOpen, 'col-md-6':rightCardOpen}">
+<ba-card cardTitle="{{title}}" baCardClass="with-scroll" class="smart-table-container">
+<div class="row">
+        <div class="col-md-12 add-new-lookup">
+
+          <div style="float:right; width:60%; width:auto;">
+            <button [disabled] = "!matchedlookupType || rightCardOpen" (click)="showNewLookup($event)" class="btn btn-primary addCustBtn" >
+              Add LookUp
+            </button>
+          </div>
+
+        </div>
+      </div>
+            <div class="row" style="min-height:51px;">
+                <div class="col-sm-3 col-md-3">
+                    <select class="form-control" [(ngModel)]="matchedlookupType" (ngModelChange)="changeLookupTypeHandler();">
+                        <option [ngValue] = 0>Select Lookup Type</option>
+                        <option *ngFor = "let lookuptype of lookuptypes" [ngValue] = "lookuptype">{{lookuptype.ValueLabel}}</option>
+                        
+                      </select>
+                </div>
+				
+				<div class="col-sm-2 col-md-2" >
+				
+				  <select class="form-control" [(ngModel)]="lookupStatus" (ngModelChange)="changeLookupTypeHandler();">
+					<option value="Active">Active</option>
+					<option value="InActive" >InActive</option>
+					<option value="All">All</option>
+				  </select>
+				</div>
+            </div>
+            <div class="vertical-scroll">
+                <table *ngIf="idDataLoaded" class="table table-striped table-condensed">
+                  <thead class="a tableHeader">
+                    <tr>
+                      <th class="allign">Actions</th>
+                      <th class="allign">
+                        <span>{{matchedlookupType.ValueLabel}}</span>
+                      </th>
+					  <th *ngIf = "matchedlookupType.Text1 != NULL" class="allign">
+                        <span>{{matchedlookupType.Text1}}</span>
+                      </th>
+					  <th *ngIf = "matchedlookupType.Text2 != NULL" class="allign">
+                        <span>{{matchedlookupType.Text2}}</span>
+                      </th>
+					  <th *ngIf = "matchedlookupType.Numeric1 != NULL" class="allign">
+                        <span>{{matchedlookupType.Numeric1}}</span>
+                      </th>
+					  <th class="allign">
+                        <span>Active</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor = "let item of lookupoptions">
+                        <td *ngIf = "item.IsEditable" class="table-id" style="cursor: pointer">
+                            <i class="ion-edit custom-tooltip-ion" (click)="onEditClicked(item)" style="margin-right: 5px">
+                            <span class="tooltiptext">Edit</span>
+                            </i>
+                            <i *ngIf = "item.Status" class="ion-trash-a custom-tooltip-ion"  (click)="deleteLookupItem(item)" >
+							  <span class="tooltiptext">Deactivate</span>
+							</i>
+						</td>	
+						<td *ngIf = "!item.IsEditable" class="table-id deact">
+							 <i class="ion-edit custom-tooltip-ion" style="margin-right: 5px">
+                            <span class="tooltiptext">Edit</span>
+                            </i>
+                            <i *ngIf = "item.Status" class="ion-trash-a custom-tooltip-ion" >
+							  <span class="tooltiptext">Deactivate</span>
+							</i>
+                        </td>
+						<td class="userCell">
+                                <span>{{item.Value}}</span>
+                        </td>
+                        <td *ngIf = "matchedlookupType.Text1 != NULL" class="userCell">
+                            <span *ngIf = "item.Text === null">NULL</span>
+							<span *ngIf = "item.Text != null">{{item.Text}}</span>
+                        </td>
+						<td *ngIf = "matchedlookupType.Text2 != NULL" class="userCell">
+                            <span *ngIf = "item.Text2 === null">NULL</span>
+							<span *ngIf = "item.Text != null" >{{item.Text2}}</span>
+                        </td>
+						<td *ngIf = "matchedlookupType.Numeric1 != NULL" class="userCell">
+							<span *ngIf = "item.Numeric1 === null">NULL</span>
+							<span *ngIf = "item.Text != null" >{{item.Numeric1}}</span>
+                        </td>
+						
+                        <td class="userCell">
+                            <span *ngIf = "item.Status">Yes</span>
+							<span *ngIf = "!item.Status">No</span>
+							
+                        </td>
+                    </tr>
+					<tr *ngIf="!lookupoptions.length" class="text-center">
+					  <td colspan="10">No data found</td>
+					</tr>
+                  </tbody>   
+                </table>
+            
+			</div> 
+        
+</ba-card>
+</div>
+<div *ngIf = "action === 'create' || action === 'edit' " [hidden]="!rightCardOpen" class="col-lg-6 col-md-12" [ngClass]="{'col-md-12':rightCardOpen, 'col-md-6':!rightCardOpen}">
+  <ba-card [cardTitle]="cardTitle" baCardClass="with-scroll" class="smart-table-container">
+      <span (click)="closeRightCard()" class="ion-close-round addCustCloseIcon"></span>
+	   <create-lookup [isNewLookup] = "isNewLookup" [matchedlookup] = "matchedlookupType" [lookupItem] = "newlookupItem" (onUpdatelookupItem) = "onUpdatelookupItem($event)" (onSavelookupItem) = "onSavelookupItem($event)"></create-lookup>
+  </ba-card>
+
+  </div>
+ </div>
