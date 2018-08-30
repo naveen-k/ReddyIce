@@ -157,7 +157,7 @@ export class ReportsComponent implements OnInit {
         if (this.user.IsDistributor) {
 			
             this.filter.userType = 'external';
-            this.filter.reportType = 'DST';
+            this.filter.reportType = 'DST' || 'DHH';
             this.filter.distributor = this.user.Distributor.DistributorMasterId;
             this.userSubTitle = `- ${this.user.Distributor.DistributorName}`;
 			
@@ -295,7 +295,7 @@ export class ReportsComponent implements OnInit {
 			this.buttonAction = true;
 			
 		}
-		else if((this.filter.reportType === 'DST') && this.filter.distributor){
+		else if((this.filter.reportType === 'DST' || this.filter.reportType === 'DHH') && this.filter.distributor){
 			
 			this.buttonAction = true;
 			
@@ -433,7 +433,19 @@ export class ReportsComponent implements OnInit {
 						this.yesFlag = true;
 					}
 				 this.filter.userType = 'external';
-				 break;
+                 break;
+                 
+                 case 'DHH':
+                 
+                 if (!(this.distributors.length)){
+                     this.getDistributors();
+                 }
+                 
+                     if (this.user.Role.RoleID === 2) {
+                         this.yesFlag = true;
+                     }
+                  this.filter.userType = 'external';
+                  break;
         }
 		this.filter.istir = this.IsTIR; 
 		this.cacheService.set("reportfilterdata",this.filter);
@@ -1023,7 +1035,12 @@ export class ReportsComponent implements OnInit {
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${this.filter.custtID}`);
 
-            } else if (rType === 'IOA') {
+            }else if (rType === 'DHH') {
+                
+                                this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
+                                    (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=false&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&LoggedInUserID=${this.user.UserId}&CustType=${this.filter.custType}&CustomerID=${this.filter.custtID}`);
+                
+         } else if (rType === 'IOA') {
 
                 this.linkRpt = this.sanitizer.bypassSecurityTrustResourceUrl
                     (environment.reportEndpoint + `?Rtype=${this.filter.reportType}&StartDate=${this.formatDate(this.filter.startDate)}&EndDate=${this.formatDate(this.filter.endDate)}&IsRI=${this.filter.userType === 'internal'}&BranchID=${this.filter.branch === 1 ? 0 : this.filter.branch}&DistributorID=${this.filter.distributor === 1 ? 0 : this.filter.distributor}&DriverID=${this.filter.driver === 1 ? 0 : this.filter.driver}&LoggedInUserID=${this.user.UserId}&CustType=${this.selectedCustomerType}&CustomerID=${this.filter.custtID}`);

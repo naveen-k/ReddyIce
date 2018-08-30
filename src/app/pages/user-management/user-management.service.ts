@@ -28,10 +28,10 @@ export class UserManagementService extends SharedService {
 //console.log(res);	   
        ) .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
 	}
-	Killhistory(UserActivitylogId:number,loggedUser:any):Observable<any> {
+	Killhistory(UserActivitylogId:number,Source:string):Observable<any> {
 		
 		console.log(UserActivitylogId);
-		return this.http.put(`api/user/KillUserSession?id=${UserActivitylogId}`,loggedUser).map((res => res.json())).map((res)=>{
+		return this.http.get(`api/user/KillUserSession?id=${UserActivitylogId}&source=${Source}`).map((res => res.json())).map((res)=>{
            return res;
         });
        

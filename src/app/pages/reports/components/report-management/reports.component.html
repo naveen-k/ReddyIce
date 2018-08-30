@@ -28,7 +28,7 @@
                 <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="refreshDataHandler('dateChange',$event);"></date-picker>
             </div>
         </div>
-        <div class="col-sm-2" [hidden] = "filter.reportType === 'AS' ||filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || IsTIR || filter.reportType == 'WOC'
+        <div class="col-sm-2" [hidden] = "filter.reportType === 'AS' ||filter.reportType === 'MR' || filter.reportType === 'DR'||filter.reportType==='IOA'||user.IsDistributor || filter.reportType === 'DST' || filter.reportType === 'DHH'  || IsTIR || filter.reportType == 'WOC'
         || filter.reportType == 'EOD' || filter.reportType == 'WONS' || filter.reportType == 'SSR' || filter.reportType == 'AT'
         || filter.reportType === 'SP' || filter.reportType === 'AER' || filter.reportType === 'AMR'">
             <div class="row">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-sm-4">
                     <input type="radio" name="userType" value="internal" [(ngModel)]="filter.userType" (ngModelChange)="refreshDataHandler('userTypeChange',$event)"
-                        [disabled]="user.IsDistributor || filter.reportType === 'DST'">
+                        [disabled]="user.IsDistributor || filter.reportType === 'DST' || filter.reportType === 'DHH'">
                     <label class="top-margin">
                         <b>RI</b>
                     </label>
@@ -79,12 +79,12 @@
             </div>
         </ng-container>
         <ng-container *ngIf="!(IsTIR || filter.reportType == 'WONS') && filter.userType === 'external'">
-            <div class="col-sm-2" [hidden]="filter.reportType === 'DST' || filter.reportType === 'MR'">
+            <div class="col-sm-2" [hidden]="filter.reportType === 'DST' || filter.reportType === 'MR' || filter.reportType === 'DHH'">
                 <label>Driver</label>
                 <reddy-select [disabled]="isDriver" [options]="driversofDist" [(selected)]="filter.driver" (selectedChange)="refreshDataHandler('',$event)"></reddy-select>
             </div>
         </ng-container>
-        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST'||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
+        <div class="col-sm-2" [hidden]="!user.IsDistributor||(filter.reportType==='SRT' && filter.userType == 'internal')||filter.reportType==='DST' || filter.reportType === 'DHH' ||filter.reportType==='RS'||filter.reportType==='SR'||IsTIR">
             <label>Select Customer Source</label>
             <select class="form-control" [(ngModel)]='filter.custType' (ngModelChange)="customerTypeChange(filter.custType);">
                 <option [value]="0">All Customers</option>
@@ -93,13 +93,13 @@
             </select>
         </div>
        
-        <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
+        <div class="col-sm-2" *ngIf="!(IsTIR || filter.reportType == 'WONS')" [hidden]="filter.reportType==='MR' || filter.reportType==='DST' || filter.reportType === 'DHH' ||
         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS' || filter.reportType == 'WOC'
         || filter.reportType == 'EOD'||filter.reportType==='SSR' || filter.reportType == 'AT' || filter.reportType == 'SP'
         || filter.reportType == 'AER' || filter.reportType == 'AMR'">
             <div class="row">
                 <ng-container>
-                    <div class="col-sm-12" [hidden]="filter.reportType==='MR' || filter.reportType==='DST'||
+                    <div class="col-sm-12" [hidden]="filter.reportType==='MR' || filter.reportType==='DST' || filter.reportType === 'DHH' ||
                         filter.reportType==='RS'||IsTIR||filter.reportType==='SR' || filter.reportType == 'WONS' || filter.reportType == 'WOC'
                         || filter.reportType == 'EOD'|| filter.reportType == 'SSR' || filter.reportType == 'AT' || filter.reportType == 'SP'
                         || filter.reportType == 'AER' || filter.reportType == 'AMR'">
@@ -197,6 +197,7 @@
                         <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
                         <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
                         <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
+                        <option value="DHH" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor HH Subscription</option>
                         <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
                         <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
                         <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>

@@ -10,9 +10,13 @@
 		</thead>
 		<tbody>
 			<tr *ngFor = "let loggedUser of userActivityLog" >
-				<td>{{ loggedUser.LoginDate | date: "MM/dd/yyyy" }} {{ loggedUser.LoginDate | date: "shortTime" }}</td>
+				<td>{{ loggedUser.CurrentDateTime | date: "MM/dd/yyyy" }} {{ loggedUser.CurrentDateTime | date: "shortTime" }}</td>
 				<td>{{ loggedUser.PhoneNumber }}</td>
-				<td *ngIf = "loggedUser.IsLoggedIn" style="cursor: pointer" ><button [disabled] = "actionstatus" (click)="killprocess(loggedUser)" class = "btn btn-primary addCustBtn" >Force Logout</button></td>
+				<td *ngIf = "loggedUser.IsLoggedIn" style="cursor: pointer" >
+					<button [disabled] = "actionstatus" (click)="killprocess(loggedUser)" class = "btn btn-primary addCustBtn" >
+							<span *ngIf = "loggedUser.Source.toLowerCase() === 'hh'">Logout-Driver App</span>
+							<span *ngIf = "loggedUser.Source.toLowerCase() === 'fes'">Logout-FES App</span> 
+					</button></td>
 				<td *ngIf = "!loggedUser.IsLoggedIn"></td>
 			</tr>
 		</tbody>
