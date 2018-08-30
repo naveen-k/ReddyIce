@@ -33,6 +33,7 @@ export class ReportsComponent implements OnInit {
     isSearchText = false;
     isSuported = true;
 	routes: any = [];
+	reportOptions:any;
 	Allbranches:any;
     filter: any = {startDate: null,todaysDate: null,
         endDate: null,
@@ -141,7 +142,7 @@ export class ReportsComponent implements OnInit {
         if (msie > 0 || trident > 0 || edge > 0) {
             this.isSuported = false;
         }
-
+		this.getReportOptions();
         const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
@@ -233,6 +234,12 @@ export class ReportsComponent implements OnInit {
 		this.validateData();
 		
     }
+	getReportOptions(){
+		
+		this.reportService.getreportoptions(49).subscribe((response) => {
+					this.reportOptions = response;
+		});
+	}
 	refreshDataHandler(byType: any = '',event)
 	{
 		if(byType === "userTypeChange"){

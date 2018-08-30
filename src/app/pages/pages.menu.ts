@@ -111,6 +111,18 @@ export const PAGES_MENU = [
           },
         },
       },
+	  {
+        path: 'lookup',
+        data: {
+          menu: {
+            title: 'Lookup',
+            icon: 'ion-clipboard',
+            selected: false,
+            expanded: false,
+            order: 0,
+          },
+        },
+      },
       {
         path: 'load',
         data: {
