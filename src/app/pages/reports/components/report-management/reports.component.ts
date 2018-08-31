@@ -237,7 +237,7 @@ export class ReportsComponent implements OnInit {
 	getReportOptions(){
 		
 		this.reportService.getreportoptions(49).subscribe((response) => {
-					this.reportOptions = response;
+					this.reportOptions = response.ReportNames;
 		});
 	}
 	refreshDataHandler(byType: any = '',event)
@@ -596,9 +596,6 @@ export class ReportsComponent implements OnInit {
     }
     branchChangeHandler(onaction:string = '') {
 		this.filter.driver = 0;
-        
-       
-
         // restricting unnecessary call for driver select after branch selection
 		if( (onaction === "onaction") && this.filter.reportType != 'AER' && this.filter.reportType != 'AMR' && this.filter.reportType != 'AT' && this.filter.reportType != 'MR' && this.filter.reportType != 'EOD' && this.filter.reportType != 'SP' && this.filter.reportType != 'TIR' && this.filter.reportType != 'WOC' && this.filter.reportType != 'WONS'){
 			this.selectedBranchDriver();

@@ -26,6 +26,7 @@ import { CacheService } from '../../../shared/cache.service';
     providers: [TicketFilter, GenericFilter, GenericSort,ManualListPipe]
 })
 export class TicketListComponent implements OnInit {
+	sourceOptions:any;
 	refreshSpinner:boolean = false;
 	refreshCheck:boolean = false;
 	buttonAction:boolean = false;
@@ -99,7 +100,7 @@ export class TicketListComponent implements OnInit {
 		this.isDistributorExist = this.user.IsDistributor;
         this.userSubTitle = (this.isDistributorExist) ? '-' + ' ' + this.user.Distributor.DistributorName : '';
         // load all branches
-		
+		this.getSourceOptions();
         this.allBranches = JSON.parse(JSON.stringify(this.activatedRoute.snapshot.data['branches']));
 		
        this.searchObj = this.service.getSearchedObject();
@@ -244,7 +245,12 @@ export class TicketListComponent implements OnInit {
                 this.distributors = res;
             });
     }
-  
+  getSourceOptions(){
+		
+		this.service.getsourceoptions(50).subscribe((response) => {
+					this.sourceOptions = response;
+		});
+	}
 	
 	getRefreshTrip(){
         const searchObj = JSON.parse(JSON.stringify(this.searchObj));

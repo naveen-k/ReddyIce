@@ -16,7 +16,7 @@ export class ReportService extends SharedService {
         super(http, cache);
     }
 	getreportoptions(lookUpDefId: number):  Observable<any> {
-        const url = `api/Lookup?lookUpDefId=${lookUpDefId}`;
+        const url = `api/report/GetReportName`;
        return this.http.get(url).map((res) =>  
         res.json()
        );

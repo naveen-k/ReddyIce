@@ -35,10 +35,8 @@
 		<div class="col-sm-1" >
 			<label>Source</label>
 			<select class="form-control" [(ngModel)]="searchObj.ticketSource" (change) = "refreshDataHandler('sourceChange');">
-				<option [value]="0">All Tickets</option>
-				<option [value]="1">Manual</option>
-				<option [value]="2">EDI</option>
-				<option [value]="3">Routeman</option>
+			<option *ngFor = "let sourceOption of sourceOptions" value = "{{sourceOption.Text}}">{{sourceOption.Value}}</option> 
+			
 			</select>
 		</div>
         
