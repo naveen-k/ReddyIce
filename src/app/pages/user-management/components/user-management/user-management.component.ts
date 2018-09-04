@@ -78,14 +78,17 @@ export class UserManagementComponent implements OnInit {
     this.formIsDirty = true;
   }
 forcelogOut(loggedUser){
+	console.log(loggedUser);
 	this.service.Killhistory(loggedUser.UserActivityLogID,loggedUser.Source).subscribe((res) => {
 			this.notification.success('Success', 'User session has been logged out successfully.');
 			
       this.rightCardOpen = !this.rightCardOpen;
       this.isNewUser = false;
       this.formIsDirty = false;
-      const userId = localStorage.getItem('UserID');
-      this.getUserList(parseInt(loggedUser.UserID)); //GAurav
+      //const userId = localStorage.getItem('UserID');
+	   //const userId = localStorage.getItem('userId');
+	  //console.log(userId);
+      //this.getUserList(parseInt(userId)); 
 		
 			},(error) => {
 				error = JSON.parse(error._body);
