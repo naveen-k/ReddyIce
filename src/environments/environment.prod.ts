@@ -5,8 +5,8 @@
 
 export const environment = {
   production: true,
-  apiEndpoint: 'http://192.168.30.115/LookUpKillSession/',
- // apiEndpoint: 'https://buat2-myicebox.reddyice.com/KillSessionAPI/',
+  //apiEndpoint: 'http://192.168.30.115/LookUpKillSession/',
+  apiEndpoint: 'https://buat-myicebox.reddyice.com/myiceboxAPI/',
   reportEndpoint: 'https://buat2-myicebox.reddyice.com/MyIceBoxReports/Reports/ReportData.aspx',
   inventoryEndpoint: 'https://buat2-myicebox.reddyice.com/DA_Inventory/forms/addBom.aspx',
   prodLabel: '(Performance)',
