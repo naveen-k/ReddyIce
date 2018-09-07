@@ -278,7 +278,7 @@
                                             <td class="textAlignRight">{{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="!tdetail.productSelected?.IsTaxable || isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">

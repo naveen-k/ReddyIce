@@ -1229,6 +1229,7 @@ aftersuccessfulSubmit(){
    */
   updateTicketDetailObject(ticketDetail) {
     var prodDetail = {};
+	console.log(ticketDetail);
     prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
     /**
      * This code has been changed to retain the Rate  EDI Enhancement
@@ -1241,7 +1242,9 @@ aftersuccessfulSubmit(){
     ticketDetail.Rate = ticketDetail['productSelected'].Price;
    // ticketDetail.TaxPercentage = this.customer.Tax;
    ticketDetail.TaxPercentage = ticketDetail['productSelected'].TaxPercentage;
-    ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
+    //ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
+	ticketDetail.Quantity = (ticketDetail.Quantity>1)?ticketDetail.Quantity:1;
+	
   }
 
 
@@ -1273,7 +1276,7 @@ aftersuccessfulSubmit(){
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
       // this.ticket.TotalSale += +t['totalAmount'] || 0;
       this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
-      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", ((t.productSelected.IsTaxable)?(+t['totalAmount'].fpArithmetic("*", t.TaxPercentage) / 100):0));
+      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", (+t['totalAmount'].fpArithmetic("*", t.TaxPercentage) / 100));
       //this.tempModels.totalTax = t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100;
     });
     /**
@@ -1281,19 +1284,11 @@ aftersuccessfulSubmit(){
      * DSD FEES: DELIVERY CHARGE - 100045 &
      * DSD FEES: CC SERVICE CHARGE - 200418 
      */
-    // if (this.ticket.TicketProduct.length && (this.ticket.TicketProduct[0].productSelected.ProductID == 45 ||
-    //   this.ticket.TicketProduct[0].productSelected.ProductID == 1497)) {
-    //   this.tempModels.totalTax = this.ticket.TotalSale;
-    // } else {
-    //   this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
-    // }
-    //this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
-    //this.tempModels.totalTax = this.ticket.TotalSale.fpArithmetic("*", this.customer.Tax) / 100;
+   
     this.ticket.TaxAmount = this.tempModels.totalTax;
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }
-    //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
 	this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
 	this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
   }
