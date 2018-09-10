@@ -190,27 +190,7 @@
                 <div class="col-sm-7">
                   
                     <select class="form-control" [(ngModel)]="filter.reportType" (ngModelChange)="refreshDataHandler('reportTypeChange',$event)">
-					<option *ngFor = "let reportOption of reportOptions" value = "{{reportOption.Value}}">{{reportOption.ReportName}}</option> 
-                        <!-- <option value="AER" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Exception</option>
-                        <option value="AMR" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Meter Reading</option>
-                        <option value="AS" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Asset Scan</option> 
-                        <option value="AT" *ngIf="isITAdmin||isInternalAdmin||isSTech">Assets Tracking</option>
-                        <option value="DR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Deposit Register</option>
-                        <option value="MR" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Delivery Status</option>
-                        <option value="DST" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor Statement</option>
-                        <option value="DHH" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin">Distributor HH Subscription</option>
-                        <option value="EOD" *ngIf="isITAdmin||isInternalAdmin||isSTech">End Of Day</option>
-                        <option value="IOA" *ngIf="isITAdmin||isInternalAdmin||isInternalDriver">Inventory on Arrival</option>
-                        <option value="TR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Invoice List</option>
-                        <option value="RM" *ngIf="isExternalAdmin">QuickBooks Extract</option>
-                        <option value="SRT" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Sales</option>
-                        <option value="SSR" *ngIf="isITAdmin||isInternalAdmin">Skipped Stops</option>
-                        <option value="SP" *ngIf="isITAdmin||isInternalAdmin||isSTech">STech Productivity</option>
-                        <option value="TIR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Ticket Number</option>
-                        <option value="SR" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Trip Details</option>
-                        <option value="RS" *ngIf="isITAdmin||isInternalAdmin||isExternalAdmin||isInternalDriver||isExternalDriver">Unit Summary</option>
-                        <option value="WOC" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Count</option>
-                        <option value="WONS" *ngIf="isITAdmin||isInternalAdmin||isSTech">Work Order Number</option>-->
+					<option *ngFor = "let reportOption of reportOptions" value = "{{reportOption.Value}}">{{reportOption.ReportName}}</option>
                     </select>
 
                 </div>
@@ -327,7 +307,7 @@
 	<div *ngIf= "refreshMessage != ''" style = "background-color:rgba(0, 0, 0, 0.1);font-size:16px;padding: 11px;text-align:center;">{{refreshMessage}}</div>
 
         <iframe id="reportFrame" #reportFrame [ngClass]="(!onLoadFrame || (viewButtonStatus || isTIRCustomers))?'framezeroHeight':'framewithHeight'"
-            width="100%" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt' (load)="afterLoading();"></iframe>
+            width="100%" style="border:1px solid rgba(0, 0, 0, 0.1)" [src]='linkRpt | safeurl' (load)="afterLoading();"></iframe>
      
 	    <div *ngIf= "refreshMessage === ''" class="top-margin" style="z-index: 999">
 	  <iframe *ngIf="!onLoadFrame || (viewButtonStatus || isTIRCustomers)" width="100%" height="400px" style="border:1px solid rgba(0, 0, 0, 0.1)"
