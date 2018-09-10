@@ -4,11 +4,12 @@
 //   reportEndpoint: 'https://myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
 
 export const environment = {
-  production: true,
+  production: false,
   //apiEndpoint: 'http://192.168.30.115/LookUpKillSession/',
-  apiEndpoint: 'https://buat-myicebox.reddyice.com/myiceboxAPI/',
-  reportEndpoint: 'https://buat2-myicebox.reddyice.com/MyIceBoxReports/Reports/ReportData.aspx',
-  inventoryEndpoint: 'https://buat2-myicebox.reddyice.com/DA_Inventory/forms/addBom.aspx',
-  prodLabel: '(Performance)',
-  EDIUserName: 'MyiceboxEDI'
+  apiEndpoint: 'https://buat-myicebox.reddyice.com/MyIceboxApi/',
+   reportEndpoint: 'https://buat-myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
+   inventoryEndpoint: 'https://buat-myicebox.reddyice.com/Inventory_Icebox/forms/addBom.aspx',
+   prodLabel: '(BUAT )',
+   EDIUserName: 'MyiceboxEDI'
+
 };
