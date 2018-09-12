@@ -17,7 +17,12 @@ export class ManualTicketService extends SharedService {
     protected cache:CacheService) {
     super(http, cache);
   }
-
+  getsourceoptions(lookUpDefType: string):  Observable<any> {
+        const url = `api/GetLookUp?lookUpDefType=${lookUpDefType}`;
+       return this.http.get(url).map((res) =>  
+        res.json()
+       );
+	}
   getAllTickets(createdDate, branchId,isRI,driverId,ticketSource): Observable<any[]> {
 	 let url = `api/manualticket/getalltickets?CreatedDate=${createdDate}&branchId=${branchId}&ISRI=${isRI}&DriverId=${driverId}&ticketSource=${ticketSource}`;
    

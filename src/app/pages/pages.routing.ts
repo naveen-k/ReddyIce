@@ -40,6 +40,8 @@ export const routes: Routes = [
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule' },
       { path: 'tracker', loadChildren: './tracker/tracker.module#TrackerModule' },
       { path: 'load', loadChildren: './load/load.module#LoadModule' },
+	/*	{ path: 'LookUp', loadChildren: './lookup/lookup.module#LookupModule' },
+	   { path: 'customer-maintenance', loadChildren: './customer-maintenance/customer-maintenance.module#CustomerMaintenanceModule' } */
     ],
   },
 ];

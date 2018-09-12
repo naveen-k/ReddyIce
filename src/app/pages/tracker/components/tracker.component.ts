@@ -813,9 +813,9 @@ getFestTechRouts(checkcalltype:string = null){
     if (this.filter.trackerType == 2) {
 		this.searchObj.userType = 'Internal';
       this.filter.sequence = 3;
-    } else if (this.searchObj.userType == 'External') {
+    }/* else if (this.searchObj.userType == 'External') {
       this.filter.sequence = 2;
-    } else {
+    } */else if(this.filter.trackerType == 1) {
       this.filter.sequence = 1;
     }
 	

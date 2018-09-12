@@ -380,10 +380,18 @@ allDrivers: any[];
   loadCustomers() {
     this.customers = [];
     let cust;
+    let sortedcustomer;
     const callback = (res) => {
       cust = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
-
-      this.customers = cust;
+		 if(cust.length > 0 && cust != "No Record Found"){
+					  sortedcustomer = cust.sort((a, b) => {
+					if (a.CustomerName < b.CustomerName) return -1;
+					else if (a.CustomerName > b.CustomerName) return 1;
+					else return 0;
+				  });
+			  
+			 }
+		this.customers = sortedcustomer;
 
       if (this.ticket.Customer && this.ticket.Customer.CustomerID && cust != "No Record Found") {
 		  

@@ -15,6 +15,13 @@ export class ReportService extends SharedService {
     ) {
         super(http, cache);
     }
+	getreportoptions(lookUpDefId: number):  Observable<any> {
+        const url = `api/report/GetReportName`;
+       return this.http.get(url).map((res) =>  
+        res.json()
+       );
+	}
+	
 	getDriverByBranchList(TripDate, branchId,ISRI, endDate) {
    let url = `api/trip/GetTripforTracker?TripStartDate=${TripDate}&branchId=${branchId}&ISRI=${ISRI}&EndDate=${endDate}`;
     return this.http.get(url)
