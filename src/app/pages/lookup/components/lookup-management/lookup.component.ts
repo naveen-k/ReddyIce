@@ -29,7 +29,6 @@ export class LookupComponent implements OnInit {
 	matchedlookupType:any = 0;
 	lookupStatus: string = 'Active';
 	test:any;
-	//IsEditable:boolean = true; //todo
 	idDataLoaded:boolean = false;
 	isNewLookup: boolean = false;
 	newlookupItem:any = {};
@@ -111,20 +110,8 @@ export class LookupComponent implements OnInit {
 	closeRightCard() {
 		
 		  this.rightCardOpen = !this.rightCardOpen;
-		  //this.action = '';
-			this.isNewLookup = false;
-		/*   const activeModal = this.modalService.open(ModalComponent, {
-          size: 'sm',
-          backdrop: 'static',
-          });
-		  activeModal.componentInstance.BUTTONS.OK = 'Discard';
-		  activeModal.componentInstance.showCancel = true;
-		  activeModal.componentInstance.modalHeader = 'Warning!';
-		  activeModal.componentInstance.modalContent = `You have unsaved changes, do you want to discard?`;
-		  activeModal.componentInstance.closeModalHandler = (() => {
-			this.rightCardOpen = !this.rightCardOpen;
-		  });
-		*/
+		  this.isNewLookup = false;
+		
 	  }
 deleteLookupItem(lookupItem){
 	
