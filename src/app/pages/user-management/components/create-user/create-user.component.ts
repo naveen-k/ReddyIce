@@ -133,7 +133,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
             }
         }
-        //this.pushBranches();
+        
     }
     @Output() onSaveUser: EventEmitter<any> = new EventEmitter();
     @Output() onUpdateUser: EventEmitter<any> = new EventEmitter();
@@ -192,9 +192,8 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
     userSelected(_user) {
         this.riUserName = '';
         this.showList = false;
-        console.log(_user);
         const user = this.searchedUsers[_user];
-        console.log(user);
+       
         if (!user) { return; }
         this.user.FirstName = user.givenName || '';    //[0].split(' ')[0] || '';
         this.user.LastName = user.displayname || ''; //? user.displayname[0].split(' ')[1] : '';
@@ -248,8 +247,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         } else {
             this.user.Branch = [];
         }
-        //console.log(this.selectedBranch);
-        //console.log(this.user);
         this.isNewUser ? this.onSaveUser.emit(this.user) : this.onUpdateUser.emit(this.user);
     }
     private populateIseriseRoute() {
@@ -274,31 +271,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             }
 
         }
-        /**
-         * Start -- ISeriesRouteNumber code is commented as per client requirment in Phase 3.
-         */
-        // if (this.showIseries === true && (user.ISeriesRouteNumber === undefined || user.ISeriesRouteNumber === null || user.ISeriesRouteNumber == 0)) {
-        //     this.notification.error('ISeriesRoute Number is mandatory!!!');
-        //     return false;
-        // }
-        // if (!this.showIseries && this.selectedBranch && this.selectedBranch.length && this.selectedBranch.length > 0) {
-        //     if (this.user.RoleID == '3' || this.user.RoleID == '6') {
-        //         var check = true;
-        //         for (let i = 0; i < this.selectedBranch.length; i++) {
-        //             if (this.selectedBranch[i].IseriesRouteNumber === undefined || this.selectedBranch[i].IseriesRouteNumber === null || this.selectedBranch[i].IseriesRouteNumber == '') {
-        //                 this.notification.error('All ISeriesRoute Number is mandatory!!!');
-        //                 check = false;
-        //                 break;
-        //             }
-
-        //         }
-        //         return check;
-        //     }
-        // }
-        /**
-         * End -- ISeriesRouteNumber code is commented as per client requirment in Phase 3.
-         */
-
         return true;
     }
 
@@ -406,7 +378,7 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         const ckeck = this.validateEmail(email);
         if (ckeck) {
             this.userService.isUserExist(email).subscribe((res) => {
-                // console.log(res);
+               
                 if (res.Message === 'Email already exists') {
                     this.isEmailExist = true;
                 } else {
@@ -438,7 +410,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
             this.user.RoleID = roleID;
             this.userBranch = this.userBranch.filter(u => u != 1);
             this.cBranches = this.tBranches;
-            console.log(this.cBranches);
 
             if (this.cBranches[0].value && this.cBranches[0].value === 1) {
                 this.cBranches.shift();
@@ -488,7 +459,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
         this.user.FirstName = value.replace(/^\s+|\s+$/g, '');
     }
     riChangeHandler(status) {
-        console.log(status);
         this.hideISeriesRoute();
         if (status) {
             this.user.FirstName = '';
@@ -571,7 +541,6 @@ export class CreateUserComponent implements OnInit, AfterContentInit {
 
     }
     isAllFeildsChecked() {
-        console.log(this.user.FirstName);
         if (this.user.FirstName == '' || this.user.LastName == '' || this.user.EmailID == ''
             || this.user.RoleID == undefined) {
             this.isFormValid = false;

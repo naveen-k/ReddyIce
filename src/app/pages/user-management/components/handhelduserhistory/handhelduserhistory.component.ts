@@ -57,46 +57,6 @@ export class HandheldUserHistoryComponent implements OnInit {
 	
     ngOnInit() { }
 	killprocess(loggedUser){
-		console.log(loggedUser);
-		/*const activeModal = this.modalService.open(ModalComponent, {
-			size: 'sm',
-			backdrop: 'static',
-		});
-	let trip_date = new Date(loggedUser.LoginDate);
-		let tripdate = (trip_date.getMonth() + 1) + '/' + trip_date.getDate() + '/' +  trip_date.getFullYear();*/
-	/*if(!this.IsClosed && this.IsCCPayment){
-		activeModal.componentInstance.BUTTONS.OK = 'OK';
-		activeModal.componentInstance.showCancel = false;
-		activeModal.componentInstance.modalHeader = 'Warning!';
-		activeModal.componentInstance.modalContent = 'There is an open trip found on ' + tripdate + ' and Can not kill this user session, there is an open trip with CC transaction';
-		
-	}else if(!this.IsClosed){
-		
-		activeModal.componentInstance.BUTTONS.OK = 'OK';
-		activeModal.componentInstance.showCancel = true;
-		activeModal.componentInstance.modalHeader = 'Warning!';
-		activeModal.componentInstance.modalContent = 'There is an open trip found on ' + tripdate +  ' Date';
-		activeModal.componentInstance.closeModalHandler = (() => {
-			this.umService.Killhistory(loggedUser.UserActivityLogID,loggedUser).subscribe((res) => {
-			this.notification.success('Success', 'Session has killed successfully.');
-		
-			},(error) => {
-				error = JSON.parse(error._body);
-				this.notification.error('Error', error.Message);
-			});
-		});
-	}else{*/
-	this.forceLogOut.emit(loggedUser);
-		/*this.umService.Killhistory(loggedUser.UserActivityLogID,loggedUser).subscribe((res) => {
-			
-			
-			this.notification.success('Success', 'User session has been logged out successfully.');
-		
-			},(error) => {
-				error = JSON.parse(error._body);
-				this.notification.error('Error', error.Message);
-			});*/
-	//}
-		
- }
+		this.forceLogOut.emit(loggedUser);
+	}
 }
