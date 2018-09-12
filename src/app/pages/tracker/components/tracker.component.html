@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 center" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
+                <div class="col-md-8 center" *ngIf="filter.trackerType == 1">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin" >
                         <input type="radio" name="type" [value]="1" [(ngModel)]="filter.sequence" (ngModelChange)="sequenceChangeHandler()">
                         <span>Planned Seq</span>
