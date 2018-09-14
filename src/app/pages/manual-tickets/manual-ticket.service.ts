@@ -105,9 +105,8 @@ export class ManualTicketService extends SharedService {
   }
 
   saveTicket(ticket: ManualTicket): Observable<any> {
-	  console.log(ticket);
     return this.http.post(`api/manualticket`, ticket).map((res) => 
-	{console.log(res);
+	{
 		res.json();
 	}
 	);

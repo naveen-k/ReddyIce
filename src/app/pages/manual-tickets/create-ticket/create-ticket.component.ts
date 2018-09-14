@@ -332,7 +332,8 @@ allDrivers: any[];
  loadTicket(ticketId) {
 	
     this.service.getTicketById(ticketId).subscribe(response => {
-      this.ticket = response[0];
+		console.log(response[0]);
+      this.ticket = JSON.parse(JSON.stringify(response[0]));
 	  this.ticket.BranchID = this.ticket.BranchID;
 	  this.ticket.UserID = this.ticket.UserID;
       this.ticket.DeliveryDate = this.convertToDate(this.ticket.DeliveryDate);
@@ -571,38 +572,7 @@ allDrivers: any[];
 		}else{
 			this.drivers = [];
 		}
-		//return true;
-    /*if (branchId != null && branchId > 1) {
-	
-      //this.service.getDriverByBranch(null,branchId, !this.ticket.isUserTypeDistributor).subscribe(res => {
-		  
-	  // this.drivers = res;
-	  // (this.drivers).shift();
-        var that = this;
-        if (this.drivers && this.drivers.length > 1) {
-          var newArray = this.drivers.filter(function (el) {
-			  return (el.value === that.ticket.UserID)?true:false;
-          });
-          if (newArray.length === 0) {
-            this.ticket.UserID = (this.drivers.length > 0) ? this.drivers[0].value : -1;
-          }else{
-			  this.allDrivers = newArray;
-		  }
-		  
-        }
-        /**
-         * EDI Enhancement
-         */
-       /* if ((that.ticket.IsEDITicket && that.ticket.IsEDITicket === true) && this.ticket.UserID > 0 && this.ticket) {
-
-          this.drivers = [];
-          this.drivers.push({ "value": this.ticket.UserID, "label": this.ticket.UserName, 'data': { 'UserId': this.ticket.UserID, 'FirstName': this.ticket.UserID, 'LastName': this.ticket.UserID } });
-        }
-        // if(this.listFilter.UserId) {
-        //   this.onDriverSelection();
-        // }        
-     // });
-    }*/
+		
   }
 
   loadDisributors(branchId?: any) {
@@ -640,6 +610,7 @@ allDrivers: any[];
   }
 
   loadCustomerDetail(customerId, isRICustomer: boolean = true) {
+	  
     this.service.getCustomerDetail(customerId, isRICustomer).subscribe((res) => {
       this.customer = res;
       // set first product selected
@@ -661,7 +632,6 @@ allDrivers: any[];
 
   prepareTicketProduct(productdetail) {
     this.ticket.TicketProduct.forEach(td => {
-      
       if (!td.ProductID) {
         td.ProductID = productdetail[0].ProductID;
         let index = this.ticket.TicketProduct.findIndex(x => x.ProductID == td.ProductID);
@@ -1237,20 +1207,32 @@ aftersuccessfulSubmit(){
    */
   updateTicketDetailObject(ticketDetail) {
     var prodDetail = {};
-	console.log(ticketDetail);
-    prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
-    /**
-     * This code has been changed to retain the Rate  EDI Enhancement
-     */
+	console.log(this.customer.productdetail);
+	JSON.parse(JSON.stringify(this.ticket.TicketProduct));
+    
+    
+    
+	
+	
+   if(this.isReadOnly){
+	   let ticket_productdata = JSON.parse(JSON.stringify(this.ticket.TicketProduct));
+	   console.log(ticket_productdata);
+	   prodDetail = ticket_productdata.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+	   if (ticketDetail.Rate) {
+		  prodDetail = { Price: prodDetail['Rate'],IsTaxable:prodDetail['IsTaxable'], TaxPercentage:prodDetail['TaxPercentage']};
+		}
+		console.log(prodDetail);
+   }else{
+	   prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
+	   if (ticketDetail.Rate) {
+		  prodDetail = { Price: prodDetail['Price'],IsTaxable:prodDetail['IsTaxable'], TaxPercentage:prodDetail['TaxPercentage']};
+		}
+		
+   }
    
-    if (ticketDetail.Rate) {
-      prodDetail = { Price: ticketDetail.Rate,IsTaxable:prodDetail['IsTaxable'], TaxPercentage:prodDetail['TaxPercentage']};
-    }
-    ticketDetail['productSelected'] = prodDetail;
-    ticketDetail.Rate = ticketDetail['productSelected'].Price;
-   // ticketDetail.TaxPercentage = this.customer.Tax;
-   ticketDetail.TaxPercentage = ticketDetail['productSelected'].TaxPercentage;
-    //ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
+   ticketDetail['productSelected'] = prodDetail;
+		ticketDetail.Rate = ticketDetail['productSelected'].Price;
+	    ticketDetail.TaxPercentage = ticketDetail['productSelected'].TaxPercentage;
 	ticketDetail.Quantity = (ticketDetail.Quantity>1)?ticketDetail.Quantity:1;
 	
   }
