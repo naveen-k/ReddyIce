@@ -1318,7 +1318,7 @@ aftersuccessfulSubmit(){
         if ((!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) &&
           (this.ticket.TicketProduct[i].StartMeterReading !== 0 && this.ticket.TicketProduct[i]['EndMeterReading'] !== 0)) {
           this.mreadingCount += 1;
-        } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
+        } else if (!(this.ticket.TicketProduct[i]['EndMeterReading'] > this.ticket.TicketProduct[i].StartMeterReading) ) {
           this.readingCheck = true;
         } else {
           this.readingCheck = false;
@@ -1423,7 +1423,7 @@ aftersuccessfulSubmit(){
         this.notification.error('', 'All fields are mandatory for the products in the product list for PBM Meter Reading Customer type!!!');
         return false;
       } else if (this.readingCheck) {
-        this.notification.error('', 'Previous Reading cannot be greater than Current Reading!!!');
+        this.notification.error('', 'Current Reading should be greater than Previous Reading. Please recheck your all added products !!!');
         return false;
       } else {
         return true;
