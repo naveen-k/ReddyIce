@@ -80,14 +80,18 @@ export class CustomerManagementComponent implements OnInit {
     getAllCustomers() {
         this.showSpinner = true;
         this.service.getAllCustomers().subscribe((res) => {
-            this.customers = res;
-            //this.cutommers = res;
+			let sortedcustomer;
+			 if(res.length > 0){
+					  sortedcustomer = res.sort((a, b) => {
+					if (a.CustomerName < b.CustomerName) return -1;
+					else if (a.CustomerName > b.CustomerName) return 1;
+					else return 0;
+				  });
+			  
+			 }
+           this.customers = sortedcustomer;
             this.showSpinner = false;
-            // console.log(this.customers);
-            // this.riCustomer = 3;
-            // this.isActtive = 3;
             this.sequenceChangeHandler();
-            //this.usertypeChangeHandler(3);
         }, (err) => {
             // console.log(err);
         });
