@@ -72,21 +72,21 @@
                             <div class="block" style="background:yellow;"></div>
                             <span class="blockContent">Did Not Service</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                        <div class="col-md-6">
                             <div class="block" style="background:#90EE90;"></div>
-                            <span class="blockContent">Planned Service</span>
+                            <span class="blockContent">Actual Sequence</span>
                         </div>
-                        <div class="col-md-6" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned">
+                        <div class="col-md-6">
                             <div class="block" style="background:#ff0000;"></div>
                             <span class="blockContent">Skipped Stops</span>
                         </div>
-                        <div class="col-md-6"  [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
+                        <div class="col-md-6" *ngIf="filter.trackerType == 1">
                             <div class="block" style="background:#999900;"></div>
                             <span class="blockContent">Planned Sequence</span>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 center" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
+                <div class="col-md-8 center" *ngIf="filter.trackerType == 1">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin" >
                         <input type="radio" name="type" [value]="1" [(ngModel)]="filter.sequence" (ngModelChange)="sequenceChangeHandler()">
                         <span>Planned Seq</span>
@@ -115,7 +115,7 @@
                             <thead class="tableHeader">
                                 <tr>
                                     <th style="width: 50px; padding-left: 5px; padding-right: 5px;">Actions</th>
-                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" *ngIf="filter.trackerType == 1">
+                                    <th style="width: 50px; padding-left: 5px; padding-right: 5px;" *ngIf="filter.trackerType == 1">
                                         <span>
                                             Planned
                                         </span>
@@ -145,16 +145,14 @@
                                                 <span class="tooltiptext">View {{filter.trackerType == 1 ? 'Ticket'  : 'Work Order'}} Details</span>
                                             </i>
                                         </td>
-                                        <td style="text-align:center;" [hidden]="isDistributor || (searchObj.userType == 'External' && !isSeasonal) || IsUnplanned" title="{{subitem.createdDate}}" *ngIf="filter.trackerType == 1">
+                                        <td style="text-align:center;" title="{{subitem.createdDate}}" *ngIf="filter.trackerType == 1">
                                             {{subitem.PlannedSequence}}
                                         </td>
                                         <td style="text-align:center;" *ngIf="!isNewTicket" >
                                             {{subitem.ActualSequence}}
                                         </td>
-                                        <td title="{{subitem.AXCustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="isDistributor">
-                                            {{subitem.AXCustomerNumber}} - {{subitem.CustomerName | cutString:true:20}}
-                                        </td>
-                                        <td title="{{subitem.AXCustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;" [hidden]="!isDistributor">
+                                       
+                                        <td title="{{subitem.AXCustomerNumber}} - {{subitem.CustomerName}}" style="text-align: left;">
                                             {{subitem.AXCustomerNumber}} - {{subitem.CustomerName | cutString:false:15}}
                                         </td>
                                     </tr>

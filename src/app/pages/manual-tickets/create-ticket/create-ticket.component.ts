@@ -98,7 +98,9 @@ allDrivers: any[];
   // Customer input formatter
   inputFormatter = (res => `${res.AXCustomerNumber} - ${res.CustomerName}`);
   distributorsCache: any = [];  
-  search = (text$: Observable<any>) => { var self = this; return text$.debounceTime(200)
+  search = (text$: Observable<any>) => {
+	  var self = this; 
+	  return text$.debounceTime(200)
     .distinctUntilChanged()
     .map(term => {
       return self.customers.filter((v: any) => {
@@ -380,11 +382,21 @@ allDrivers: any[];
   loadCustomers() {
     this.customers = [];
     let cust;
+	 let sortedcustomer;
     const callback = (res) => {
       cust = res.Customer ? res.Customer : res.GetDistributorCopackerCustomerData ? res.GetDistributorCopackerCustomerData : res;
-
-      this.customers = cust;
-
+	 if(cust.length > 0 && cust != "No Record Found"){
+			  sortedcustomer = cust.sort((a, b) => {
+			if (a.CustomerName < b.CustomerName) return -1;
+			else if (a.CustomerName > b.CustomerName) return 1;
+			else return 0;
+		  });
+      
+	 }
+		this.customers = sortedcustomer;
+	 
+	
+//console.log(this.customers);
       if (this.ticket.Customer && this.ticket.Customer.CustomerID && cust != "No Record Found") {
 		  
         const customer = this.customers.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
@@ -535,16 +547,6 @@ allDrivers: any[];
   loadDriversOfBranch(branchId) {
 	  if (branchId != null && branchId > 1 && (this.allDrivers).length > 0){
 			let drivers = JSON.parse(JSON.stringify(this.allDrivers));
-			
-			 /*driverData = driverData.filter((res) => {
-				if(res != null){
-					return true;
-				}else{
-					return false;
-				}
-				
-			});*/
-		
 			(drivers).shift();
 		    drivers = drivers.filter((ft) => {
 				
@@ -1234,10 +1236,7 @@ aftersuccessfulSubmit(){
     /**
      * This code has been changed to retain the Rate  EDI Enhancement
      */
-    // if (!prodDetail) {
-    //   //ticketDetail.Price = ticketDetail.Rate;
-    //   prodDetail = { Price: ticketDetail.Rate };
-    // }
+    
     if (ticketDetail.Rate) {
       prodDetail = { Price: ticketDetail.Rate,IsTaxable:prodDetail['IsTaxable'] };
     }
@@ -1335,7 +1334,7 @@ aftersuccessfulSubmit(){
         if ((!this.ticket.TicketProduct[i].StartMeterReading || !this.ticket.TicketProduct[i]['EndMeterReading']) &&
           (this.ticket.TicketProduct[i].StartMeterReading !== 0 && this.ticket.TicketProduct[i]['EndMeterReading'] !== 0)) {
           this.mreadingCount += 1;
-        } else if (this.ticket.TicketProduct[i].StartMeterReading > this.ticket.TicketProduct[i]['EndMeterReading']) {
+        } else if (!(this.ticket.TicketProduct[i]['EndMeterReading'] > this.ticket.TicketProduct[i].StartMeterReading)) {
           this.readingCheck = true;
         } else {
           this.readingCheck = false;
@@ -1440,7 +1439,7 @@ aftersuccessfulSubmit(){
         this.notification.error('', 'All fields are mandatory for the products in the product list for PBM Meter Reading Customer type!!!');
         return false;
       } else if (this.readingCheck) {
-        this.notification.error('', 'Previous Reading cannot be greater than Current Reading!!!');
+        this.notification.error('', 'Current Reading should be greater than Previous Reading. Please recheck your all added products !!!');
         return false;
       } else {
         return true;

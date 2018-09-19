@@ -1097,8 +1097,19 @@ export class ReportsComponent implements OnInit {
         return yy + '/' + mm + '/' + dd;
     }
     getCustomers() {
+		
 		  this.reportService.getCustomerDropDownList(this.user.IsRIInternal,this.filter.distributor).subscribe((res) => {
-						this.dropDownCustomers = res;
+			this.dropDownCustomers = res;
+			let sortedcustomer;
+			if(this.dropDownCustomers.length > 0){
+			  sortedcustomer = this.dropDownCustomers.sort((a, b) => {
+			if (a.CustomerName < b.CustomerName) return -1;
+			else if (a.CustomerName > b.CustomerName) return 1;
+			else return 0;
+		  });
+      
+	 }
+		this.dropDownCustomers = sortedcustomer;
            });
     }
 

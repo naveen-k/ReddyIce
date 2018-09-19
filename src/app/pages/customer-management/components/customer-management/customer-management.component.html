@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4" style="padding-top:8px;">
+        <div class="col-sm-3" style="padding-top:8px;">
             <div class="row">
                 <div class="col-sm-1">
                     <label>
@@ -64,7 +64,7 @@
 				
             </div>
         </div>
-    <div class='col-sm-2'>
+    <div class='col-sm-3'>
                         <pagination [tableData]="cutommers |filter:customer.searchString:['AXCustomerNumber', 'CustomerName', 'IsRICustomer', 'PaymentTypeName', 'PrimaryContact', 'CustomerTypeName'] | sort:customer.sortField:customer.isAsc "
                             [(currentPage)]="paginationData" [sortingOrder]="customer.isAsc" style="float: right;" [showPages]="false"></pagination>
                 </div>
