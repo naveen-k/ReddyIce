@@ -1252,8 +1252,7 @@ aftersuccessfulSubmit(){
    // ticketDetail.TaxPercentage = this.customer.Tax;
    ticketDetail.TaxPercentage = ticketDetail['productSelected'].TaxPercentage;
     //ticketDetail.Quantity = (!prodDetail['IsTaxable'])?(ticketDetail.Quantity>1)?ticketDetail.Quantity:1:ticketDetail.Quantity;
-	ticketDetail.Quantity = (ticketDetail.Quantity>1)?ticketDetail.Quantity:1;
-	
+	//ticketDetail.Quantity = (ticketDetail.Quantity>1)?ticketDetail.Quantity:1;
   }
 
 
