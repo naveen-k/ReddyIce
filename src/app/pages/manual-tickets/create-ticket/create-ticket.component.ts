@@ -1233,7 +1233,7 @@ aftersuccessfulSubmit(){
    ticketDetail['productSelected'] = prodDetail;
 		ticketDetail.Rate = ticketDetail['productSelected'].Price;
 	    ticketDetail.TaxPercentage = ticketDetail['productSelected'].TaxPercentage;
-	ticketDetail.Quantity = (ticketDetail.Quantity>1)?ticketDetail.Quantity:1;
+	//ticketDetail.Quantity = (ticketDetail.Quantity>1)?ticketDetail.Quantity:;
 	
   }
 

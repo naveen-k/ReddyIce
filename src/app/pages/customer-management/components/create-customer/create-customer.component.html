@@ -58,11 +58,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <label for="example-text-input" class="col-md-5 col-form-label text-align-center">IsDex?</label>
-                <div class="col-md-1 padding-eater text-alignment">
-                    <input [disabled]="mode ===3" type="checkbox" [(ngModel)]='customer.IsDex' (ngModelChange)="formFlagHandler()" class="checkbox-size" />
-
-                </div> -->
                 <div class="col-md-4">
                     <div class="row">
                         <label for="example-text-input" class="col-sm-7">IsActive</label>
@@ -72,7 +67,27 @@
                         </div>
                     </div>
                 </div>
+				
             </div>
+			  <!--  <div class="row box-top-margin">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <label for="example-text-input" class="col-sm-7">Is PO required ?</label>
+                        <div class="col-sm-5">
+                            <input type="checkbox" [disabled]="mode===3" [(ngModel)]='customer.IsPO' (ngModelChange)="formFlagHandler()"
+                                class="checkbox-size" />
+						</div>
+                    </div>
+                </div>
+            </div>
+			<div class="row box-top-margin">
+
+                <label [hidden] = "!customer.IsPO" for="example-text-input" class="col-md-12">PO Number</label>
+                <div class="col-md-12">
+                    <input [hidden] = "!customer.IsPO" numberOnly [(ngModel)]='customer.PoNumber' (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="text" class="form-control"
+                        placeholder="PO Number" />
+                </div>
+            </div> -->
             <div class="row box-top-margin">
                 <div class="col-sm-12">
                     <div class="row">
@@ -84,31 +99,7 @@
                     </div>
                 </div>
             </div>
-		<!--<div class="row box-top-margin">
-
-                <label for="example-text-input" class="col-md-12">Tax Percentage</label>
-                <div class="col-md-12">
-                    <input maxlength="6" numberOnly="true" [disabled]="mode ===3 || !customer.IsTaxassble" [(ngModel)]='customer.TaxPercentage'
-                        (ngModelChange)="formFlagHandler()" id="typeahead-basic" type="number" step="0.01" class="form-control"
-                        placeholder="Tax Percentage" />
-                </div>
-            </div>-->
-            <!-- <div class="row box-top-margin">
-                <label for="example-text-input" class="col-md-5 col-form-label">Chain</label>
-                <div class="col-md-7 padding-eater">
-                    <select [disabled]="mode ===3" [(ngModel)]="customer.ChainID" (ngModelChange)="formFlagHandler()" class="form-control">
-                        <option *ngFor="let chain of chains" [value]="chain.ChainId">{{chain.ChainName}}</option>
-                    </select> -->
-            <!-- <reddy-select [disabled]="mode===3" [options]="chains" [(selected)]="customer.ChainID" (selectedChange)="formFlagHandler()"></reddy-select>
-                </div>
-            </div> -->
-            <!-- <div class="row box-top-margin">
-                <label for="example-text-input" class="col-md-5 col-form-label">DUNS Number</label>
-                <div class="col-md-7 padding-eater">
-                    <input [disabled]="mode ===3" maxlength="10" type="text" numberOnly [(ngModel)]='customer.DUNSNumber' (ngModelChange)="formFlagHandler()" class="form-control" />
-                </div>
-            </div> -->
-
+		
         </div>
         <div class="col-md-8 page-header">
 
@@ -131,11 +122,7 @@
                     <div class="row box-top-margin">
                         <label for="example-text-input" class="col-md-12">State&nbsp;<sup [hidden]="mode===3" _ngcontent-c16="" style="color:red;">*</sup></label>
                         <div class="col-md-12">
-                            <!-- <input [hidden]="mode ===2 ||mode ===1 " [disabled]="mode===3" [(ngModel)]='customer.State' id="typeahead-basic" type="text" class="form-control" placeholder="State"
-                                />   -->
-                            <!-- <select [disabled]="mode ===3" [(ngModel)]="customer.State" (ngModelChange)="formFlagHandler()" class="form-control">
-                                        <option *ngFor="let state of allStates" [value]="state.StateId">{{state.StateName}}</option>
-                                    </select> -->
+                           
                             <reddy-select [disabled]="mode ===3" [options]="allStates" [(selected)]="customer.State" (selectedChange)="formFlagHandler()"></reddy-select>
                         </div>
                     </div>
@@ -203,22 +190,12 @@
                             <th style="width:100px" class="remove-padding"><button [hidden]="mode ===3" (click)="addProduct();formFlagHandler()" class="btn btn-danger"
                                     style="margin-top:2px;">Add Product</button></th>
                         </thead>
-                        <!-- <thead>
-                                <th>Product</th>
-                                <th>Price $</th>
-                                <th></th>
-                            </thead> -->
+                      
                         <tbody *ngIf="mode === 3 || mode === 2">
                             <tr *ngFor="let mprod of addedProduct; let j=index">
                                 <ng-container *ngIf="mprod.IsActive">
                                     <td class="text-align-left">
                                         {{mprod.DisplayName}}
-                                        <!-- <select [disabled]="!addNewProductCheck[j]" class="form-control prodListElement " name="cProductId" [(ngModel)]="mprod.cProductId"
-                                    (ngModelChange)="productChangeHandler(mprod)">
-                                        <option *ngFor="let prod of products" [value]="prod.ProductId +'-'+prod.IsInternal"> 
-                                            {{prod.DisplayName}}
-                                        </option>
-                                    </select> -->
                                 </td>
                                 <td class="td-width right">
                                     <input [disabled]="mode===3 || !addProductCheck[j]" class="form-control right prodListElement" type="text" [numberOnly]="true" [(ngModel)]="mprod.ProductPrice">
@@ -292,10 +269,6 @@
 
                     </table>
                 </div>
-                <!-- <ng-template #rowTemplate let-ctx="item">
-                            <span>{{ctx.label}} </span> <input type="number" [(ngModel)]="ctx.data.Price" style="width: 70px;">
-                        </ng-template>
-                        <dual-list [mappedRowTemplate]="rowTemplate" [items]="products" [(selectedItems)]="selectedProducts"></dual-list> -->
             </div>
         </div>
     </div>

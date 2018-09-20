@@ -60,6 +60,7 @@ export class CreateCustomerComponent implements OnInit {
             this.isView = false;
         }
         this.customer['Active'] = true;
+		this.customer['IsPO'] = false;
     }
 
     ngOnInit() {
@@ -134,6 +135,7 @@ export class CreateCustomerComponent implements OnInit {
     }
 
     save() {
+		//console.log(this.customer);
 			
         if (this.validateCustomer(this.customer, this.newlyAddedproduct, this.addedProduct, this.mode)) {
 			
