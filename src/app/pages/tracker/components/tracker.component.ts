@@ -801,7 +801,7 @@ getFestTechRouts(checkcalltype:string = null){
         this.filter.trackerType == 1 ?
           environment.reportEndpoint + "?Rtype=TK&TicketID=" + ticketID :
           environment.reportEndpoint + "?Rtype=WONS&WOID=" + ticketID + "&LoggedInUserID=" + this.user.UserId : '';
-      window.open(reportUrl, "Ticket", "width=900,height=600,resizable=yes,scrollbars=1");
+      window.open(reportUrl, "Ticket", "width=560,height=700,resizable=yes,scrollbars=1");
     } else {
       this.notification.error("Ticket preview unavailable!!");
     }
