@@ -1295,8 +1295,10 @@ aftersuccessfulSubmit(){
       this.ticket.TotalSale = 0;
     }
     //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
-	this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
-	this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
+	//Gaurav: added round off 2 places decimail
+  var multiplier = Math.pow(10, 2);
+  this.ticket.TotalSale = Math.round(this.ticket.TotalSale.toFixed(2));
+ this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;
   }
 
   pbsQuantityCheck() {
