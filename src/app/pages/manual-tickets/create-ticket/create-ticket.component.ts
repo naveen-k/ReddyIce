@@ -1276,7 +1276,6 @@ aftersuccessfulSubmit(){
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }
-	
 	//this.ticket.TotalSale = 12.135;
 	//this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
 	//this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
@@ -1285,7 +1284,6 @@ aftersuccessfulSubmit(){
 	/*var multiplier = Math.pow(10, 2);
    this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
 	this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;*/
-	
   }
 
   pbsQuantityCheck() {
