@@ -332,7 +332,7 @@ allDrivers: any[];
  loadTicket(ticketId) {
 	
     this.service.getTicketById(ticketId).subscribe(response => {
-		console.log(response[0]);
+		
       this.ticket = JSON.parse(JSON.stringify(response[0]));
 	  this.ticket.BranchID = this.ticket.BranchID;
 	  this.ticket.UserID = this.ticket.UserID;
@@ -1165,9 +1165,7 @@ aftersuccessfulSubmit(){
       this.resetCashAndCheck();
     }
     ticket.TotalAmount = (Number.parseFloat((ticket.CheckAmount) ? ticket.CheckAmount.toString() : '0') || 0) + (Number.parseFloat((ticket.CashAmount) ? ticket.CashAmount.toString() : '0') + 0);
-    //console.info(ticket.CashAmount);
-   // console.info(ticket.CheckAmount);
-   // console.info(ticket.TotalAmount);
+   
   }
 
   convertToDate(date: string): any {
@@ -1207,7 +1205,6 @@ aftersuccessfulSubmit(){
    */
   updateTicketDetailObject(ticketDetail) {
     var prodDetail = {};
-	console.log(this.customer.productdetail);
 	JSON.parse(JSON.stringify(this.ticket.TicketProduct));
     
     
@@ -1216,12 +1213,12 @@ aftersuccessfulSubmit(){
 	
    if(this.isReadOnly){
 	   let ticket_productdata = JSON.parse(JSON.stringify(this.ticket.TicketProduct));
-	   console.log(ticket_productdata);
+	  
 	   prodDetail = ticket_productdata.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
 	   if (ticketDetail.Rate) {
 		  prodDetail = { Price: prodDetail['Rate'],IsTaxable:prodDetail['IsTaxable'], TaxPercentage:prodDetail['TaxPercentage']};
 		}
-		console.log(prodDetail);
+	
    }else{
 	   prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
 	   if (ticketDetail.Rate) {
@@ -1279,8 +1276,16 @@ aftersuccessfulSubmit(){
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }
-	this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
-	this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
+	
+	//this.ticket.TotalSale = 12.135;
+	//this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
+	//this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
+	
+	
+	/*var multiplier = Math.pow(10, 2);
+   this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
+	this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;*/
+	
   }
 
   pbsQuantityCheck() {

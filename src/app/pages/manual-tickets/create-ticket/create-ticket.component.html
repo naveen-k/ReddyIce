@@ -280,7 +280,7 @@
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
@@ -293,7 +293,7 @@
                                                 <b>Total Tax</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TaxAmount | currencyFormatter}}</b>
+                                                <b>{{ticket.TaxAmount}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
