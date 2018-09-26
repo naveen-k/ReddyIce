@@ -1206,11 +1206,6 @@ aftersuccessfulSubmit(){
   updateTicketDetailObject(ticketDetail) {
     var prodDetail = {};
 	JSON.parse(JSON.stringify(this.ticket.TicketProduct));
-    
-    
-    
-	
-	
    if(this.isReadOnly){
 	   let ticket_productdata = JSON.parse(JSON.stringify(this.ticket.TicketProduct));
 	  
