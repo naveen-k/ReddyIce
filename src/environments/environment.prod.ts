@@ -5,11 +5,11 @@
 
 export const environment = {
   production: false,
-  //apiEndpoint: 'http://192.168.30.115/LookUpKillSession/',
-  apiEndpoint: 'https://buat-myicebox.reddyice.com/MyIceboxApi/',
-   reportEndpoint: 'https://buat-myicebox.reddyice.com/DashBoardReportsProd/Reports/ReportData.aspx',
-   inventoryEndpoint: 'https://buat-myicebox.reddyice.com/Inventory_Icebox/forms/addBom.aspx',
-   prodLabel: '(BUAT )',
-   EDIUserName: 'MyiceboxEDI'
+  //apiEndpoint: 'http://192.168.30.115/MyIceApi_Support/',
+  apiEndpoint: 'https://buat-myicebox.reddyice.com/myiceboxAPI/',
+  reportEndpoint: 'https://buat-myicebox.reddyice.com/MyIceBoxReports/Reports/ReportData.aspx',
+  inventoryEndpoint: 'https://buat-myicebox.reddyice.com/Inventory_Icebox/forms/addBom.aspx',
+  prodLabel: '(BUAT)',
+  EDIUserName : 'MyiceboxEDI'
 
 };
