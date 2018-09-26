@@ -394,9 +394,7 @@ allDrivers: any[];
       
 	 }
 		this.customers = sortedcustomer;
-	 
 	
-//console.log(this.customers);
       if (this.ticket.Customer && this.ticket.Customer.CustomerID && cust != "No Record Found") {
 		  
         const customer = this.customers.filter(c => c.CustomerId === this.ticket.Customer.CustomerID)[0];
@@ -1295,8 +1293,8 @@ aftersuccessfulSubmit(){
       this.ticket.TotalSale = 0;
     }
     //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
-	this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
-	this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
+	//this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
+	//this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
   }
 
   pbsQuantityCheck() {
