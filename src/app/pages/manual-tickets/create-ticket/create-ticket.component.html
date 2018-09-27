@@ -275,12 +275,12 @@
                                                 </select>
                                             </td>
                                             <!--Alok: Removed currencyFormatter for unit price -->
-                                            <td class="textAlignRight">{{tdetail.productSelected?.Price}}</td>
+                                            <td class="textAlignRight">{{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
                                             </td>
-                                            <td class="textAlignRight">{{tdetail.totalAmount}}</td>
+                                            <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
                                                 <a href="javascript:void();" (click)="deleteProductHandler(tdetail);isFormDirty=true;">
                                                     <i class="ion-trash-a"></i>
@@ -293,7 +293,7 @@
                                                 <b>Total Tax</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TaxAmount}}</b>
+                                                <b>{{ticket.TaxAmount | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -303,7 +303,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale*1 + ticket.TaxAmount*1 | currencyFormatter}}</b>
+                                                <b>{{ticket.TotalInvoice | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>

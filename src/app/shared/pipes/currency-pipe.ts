@@ -6,14 +6,16 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class CurrencyFormatter implements PipeTransform {
     transform(value: any, symbol:boolean=true) {
 		//console.log(value);
-		
+		var multiplier = Math.pow(10, 2);
+  
         if (!value) { value = 0 }
         if (value < 0) {
-			value = parseFloat(value).toFixed(2);
+			//value = parseFloat(value).toFixed(2);
+			 value = Math.round(value * multiplier) / multiplier;
             value = `-$${-value}`;
          }
         else {
-			value = parseFloat(value).toFixed(2);
+			 value = Math.round(value * multiplier) / multiplier;
             value = `$${value}`;
         }
 

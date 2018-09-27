@@ -1204,6 +1204,7 @@ aftersuccessfulSubmit(){
    * Calculation 
    */
   updateTicketDetailObject(ticketDetail) {
+	 // console.log(ticketDetail);
     var prodDetail = {};
 	JSON.parse(JSON.stringify(this.ticket.TicketProduct));
    if(this.isReadOnly){
@@ -1275,10 +1276,12 @@ aftersuccessfulSubmit(){
 	//this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
 	//this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
 	
-	
-	/*var multiplier = Math.pow(10, 2);
-   this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
-	this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;*/
+	this.ticket.TotalInvoice = JSON.parse(JSON.stringify(this.ticket.TotalSale)) + JSON.parse(JSON.stringify(this.ticket.TaxAmount));
+	var multiplier = Math.pow(10, 2);
+   this.ticket.TotalInvoice = Math.round(this.ticket.TotalInvoice * multiplier) / multiplier;
+   this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;
+   this.ticket.TotalSale = Math.round(this.ticket.TotalSale * multiplier) / multiplier;
+   //console.log(this.ticket);
   }
 
   pbsQuantityCheck() {
