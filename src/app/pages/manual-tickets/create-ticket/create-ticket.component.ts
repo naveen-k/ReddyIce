@@ -1227,6 +1227,7 @@ aftersuccessfulSubmit(){
    * Calculation 
    */
   updateTicketDetailObject(ticketDetail) {
+	   console.log(ticketDetail);
     var prodDetail = {};
     prodDetail = this.customer.productdetail.filter(pr => pr.ProductID === ticketDetail.ProductID)[0];
     /**
@@ -1292,10 +1293,13 @@ aftersuccessfulSubmit(){
     }
     //this.ticket.TotalSale = this.ticket.TotalSale + (this.ticket.TotalSale * this.customer.Tax) / 100;
 
-	//this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
-	//this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
-
-	
+	//this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(6);
+	//this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(6);
+	this.ticket.TotalInvoice = JSON.parse(JSON.stringify(this.ticket.TotalSale)) + JSON.parse(JSON.stringify(this.ticket.TaxAmount));
+	var multiplier = Math.pow(10, 2);
+   this.ticket.TotalInvoice = Math.round(this.ticket.TotalInvoice * multiplier) / multiplier;
+   this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;
+   this.ticket.TotalSale = Math.round(this.ticket.TotalSale * multiplier) / multiplier;
   }
 
   pbsQuantityCheck() {
