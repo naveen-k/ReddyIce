@@ -1254,34 +1254,26 @@ aftersuccessfulSubmit(){
     this.ticket['tempTotalUnit'] = 0;
     this.ticket.TotalSale = 0;
     this.tempModels.totalTax = 0;
+	var multiplier = Math.pow(10, 2);
     this.ticket.TicketProduct.forEach((t) => {
 	
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
-      // this.ticket.TotalSale += +t['totalAmount'] || 0;
-      this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
-      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", (+t['totalAmount'].fpArithmetic("*", t.TaxPercentage) / 100));
-      //this.tempModels.totalTax = t['totalAmount'].fpArithmetic("*", this.customer.Tax) / 100;
+	  t['totalAmount'] = Math.round(t['totalAmount'] * multiplier) / multiplier;
+	   this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
+	  var line_item_tax = t['totalAmount'].fpArithmetic("*", t.TaxPercentage) / 100;
+      this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", (+line_item_tax));
     });
-    /**
-     * hack for excluding tax for 
-     * DSD FEES: DELIVERY CHARGE - 100045 &
-     * DSD FEES: CC SERVICE CHARGE - 200418 
-     */
+    
    
     this.ticket.TaxAmount = this.tempModels.totalTax;
+	this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;
+	
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
     }
-	//this.ticket.TotalSale = 12.135;
-	//this.ticket.TotalSale = (this.ticket.TotalSale).toFixed(2);
-	//this.ticket.TaxAmount = (this.ticket.TaxAmount).toFixed(2);
 	
-	this.ticket.TotalInvoice = JSON.parse(JSON.stringify(this.ticket.TotalSale)) + JSON.parse(JSON.stringify(this.ticket.TaxAmount));
-	var multiplier = Math.pow(10, 2);
-   this.ticket.TotalInvoice = Math.round(this.ticket.TotalInvoice * multiplier) / multiplier;
-   this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;
-   this.ticket.TotalSale = Math.round(this.ticket.TotalSale * multiplier) / multiplier;
-   //console.log(this.ticket);
+	this.ticket.TotalInvoice = this.ticket.TotalSale + this.ticket.TaxAmount;
+
   }
 
   pbsQuantityCheck() {
