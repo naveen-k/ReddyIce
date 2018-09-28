@@ -1255,12 +1255,14 @@ aftersuccessfulSubmit(){
     this.ticket.TotalSale = 0;
     this.tempModels.totalTax = 0;
 	var multiplier = Math.pow(10, 2);
+	var multiplier_line_item_tax = Math.pow(10, 5);
     this.ticket.TicketProduct.forEach((t) => {
 	
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
 	  t['totalAmount'] = Math.round(t['totalAmount'] * multiplier) / multiplier;
 	   this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
 	  var line_item_tax = t['totalAmount'].fpArithmetic("*", t.TaxPercentage) / 100;
+	  line_item_tax = Math.round(line_item_tax * multiplier_line_item_tax) / multiplier_line_item_tax;
       this.tempModels.totalTax = +this.tempModels.totalTax.fpArithmetic("+", (+line_item_tax));
     });
     
