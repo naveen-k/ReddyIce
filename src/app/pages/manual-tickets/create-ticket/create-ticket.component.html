@@ -275,7 +275,7 @@
                                                 </select>
                                             </td>
                                             <!--Alok: Removed currencyFormatter for unit price -->
-                                            <td class="textAlignRight">{{tdetail.productSelected?.Price | currencyFormatter}}</td>
+                                            <td class="textAlignRight">{{tdetail.productSelected?.Price}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="!tdetail.productSelected?.IsTaxable || isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
