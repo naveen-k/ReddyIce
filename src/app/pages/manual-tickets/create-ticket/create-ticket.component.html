@@ -275,7 +275,7 @@
                                                 </select>
                                             </td>
                                             <!--Alok: Removed currencyFormatter for unit price -->
-                                            <td class="textAlignRight">{{tdetail.productSelected?.Price}}</td>
+                                            <td class="textAlignRight">${{tdetail.productSelected?.Price}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
@@ -353,7 +353,7 @@
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                 </select>
                                             </td>
-                                            <td>{{tdetail.productSelected?.Price | currencyFormatter}}</td>
+                                            <td>${{tdetail.productSelected?.Price}}</td>
                                             <td *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==26">
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading"
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)"
@@ -430,7 +430,7 @@
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                 </select>
                                             </td>
-                                            <td class="textAlignRight"> {{tdetail.productSelected?.Price | currencyFormatter}}</td>
+                                            <td class="textAlignRight"> ${{tdetail.productSelected?.Price}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags"
                                                     (ngModelChange)="bagsChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
@@ -505,7 +505,7 @@
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                 </select>
                                             </td>
-                                            <td>{{tdetail.productSelected?.Price | currencyFormatter}}</td>
+                                            <td>${{tdetail.productSelected?.Price}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">

@@ -1256,8 +1256,12 @@ aftersuccessfulSubmit(){
     this.tempModels.totalTax = 0;
 	var multiplier = Math.pow(10, 2);
 	var multiplier_line_item_tax = Math.pow(10, 5);
+	//console.log(this.ticket);
     this.ticket.TicketProduct.forEach((t) => {
-	
+		var price:any;
+		price =( +t['productSelected']['Price'])|| 0;
+		 price = (+price).toFixed(5);
+	  t['productSelected']['Price'] = price;
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
 	  t['totalAmount'] = Math.round(t['totalAmount'] * multiplier) / multiplier;
 	   this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
