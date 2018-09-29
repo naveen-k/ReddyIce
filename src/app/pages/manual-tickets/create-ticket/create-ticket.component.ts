@@ -1270,6 +1270,10 @@ aftersuccessfulSubmit(){
 	var multiplier = Math.pow(10, 2);
 	var multiplier_line_item_tax = Math.pow(10, 5);
     this.ticket.TicketProduct.forEach((t) => {
+		var price:any;
+		price =( +t['productSelected']['Price'])|| 0;
+		 price = (+price).toFixed(5);
+	  t['productSelected']['Price'] = price;
       this.ticket['tempTotalUnit'] += +t.Quantity || 0;
 	  t['totalAmount'] = Math.round(t['totalAmount'] * multiplier) / multiplier;
 	   this.ticket.TotalSale = +this.ticket.TotalSale.fpArithmetic("+", +t['totalAmount'] || 0);
@@ -1279,10 +1283,8 @@ aftersuccessfulSubmit(){
      
     });
    
-   
    this.ticket.TaxAmount = this.tempModels.totalTax;
 	this.ticket.TaxAmount = Math.round(this.ticket.TaxAmount * multiplier) / multiplier;
-	
 	
     if (this.ticket.CustomerType == 22 && !this.ticket.IsSaleTicket) {
       this.ticket.TotalSale = 0;
