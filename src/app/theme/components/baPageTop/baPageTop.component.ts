@@ -3,6 +3,7 @@ import {Component, Input,OnInit} from '@angular/core';
 import {GlobalState} from '../../../global.state';
 
 import { UserService } from '../../../shared/user.service';
+import { SignoutService } from '../../../shared/signout.service';
 
 @Component({
   selector: 'ba-page-top',
@@ -16,12 +17,13 @@ export class BaPageTop implements OnInit {
   public isMenuCollapsed:boolean = false;
   public logedInUser:any={};
   public showReset:boolean=false;
-
+  
   ngOnInit() {
     
   }
 
-  constructor(private _state:GlobalState, private userService: UserService) {
+  constructor(private _state:GlobalState, private userService: UserService,
+      private singOutService: SignoutService) {
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;
     });
@@ -38,5 +40,9 @@ export class BaPageTop implements OnInit {
 
   public scrolledChanged(isScrolled) {
     this.isScrolled = isScrolled;
+  }
+
+  signOut() {
+    this.singOutService.signoutFlag = true;
   }
 }

@@ -6,6 +6,7 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
 import { NotificationsService } from 'angular2-notifications';
 import { ForgetPasswordService } from '../forget-password/forget-apssword.service';
 import { environment } from '../../../environments/environment';
+import { SignoutService } from '../../shared/signout.service';
 
 @Component({
   selector: 'login',
@@ -24,6 +25,7 @@ export class Login implements OnInit {
   isLoginMode: boolean = true;
   isProcessing: boolean = false;
   prodLabel: string = '';
+  signOutFlag: boolean;
 
   constructor(
     private userService: UserService,
@@ -31,7 +33,8 @@ export class Login implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private notification: NotificationsService,
-    private fpService: ForgetPasswordService) {
+    private fpService: ForgetPasswordService,
+    private signoutService: SignoutService) {
 
     this.fpForm = fb.group({
       // 'forgotUsername': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -53,10 +56,19 @@ export class Login implements OnInit {
   ngOnInit() {
     // Just to make sure `auth_token` is clear when, landed on this page
     this.loginService.signOut();
-    const user = this.userService.getUserForAutoLogin();
+    // const user = this.userService.getUserForAutoLogin();
     this.prodLabel = environment.prodLabel;
-    if (user) {
-      this.autoLoginUser(user);
+    // if (user) {
+    //   this.autoLoginUser(user);
+    // }
+    this.signOutFlag = this.signoutService.signoutFlag;
+    const email = localStorage.getItem('email');
+    const password = localStorage.getItem('password');
+    if(email && password && !this.signOutFlag) {
+      this.autoLoginUser({
+        email,
+        password
+      });    
     }
   }
 
@@ -70,10 +82,12 @@ export class Login implements OnInit {
 
         this.loginService.login(user).subscribe((res) => {
           this.isProcessing = false;
-
+          
           if (res.IsNewUser !== 'False' && !res.IsRIInternal) {
             this.router.navigate(['resetpassword']);
           } else {
+            localStorage.setItem('email', values['email']);
+            localStorage.setItem('password', values['password']);
             this.router.navigate(['']);
           }
         }, (error) => {
@@ -102,6 +116,7 @@ export class Login implements OnInit {
 
   autoLoginUser(values) {
     const user = `username=${values['email']}&password=${values['password']}&grant_type=password`;
+    this.isProcessing = true;
     this.loginService.login(user).subscribe((res) => {
       if (res.IsNewUser !== 'False') {
         this.router.navigate(['resetpassword']);

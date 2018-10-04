@@ -19,6 +19,8 @@ import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 import { CacheService } from 'app/shared/cache.service';
+import { LoginService } from './pages/login/login.service';
+import { SignoutService } from './shared/signout.service';
 // Application wide providers
 const APP_PROVIDERS = [
   AppState,
@@ -56,7 +58,8 @@ export type StoreType = {
   
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS,
-    CacheService
+    CacheService,
+    SignoutService
   ],
 })
 
