@@ -10,14 +10,14 @@ export class LoginService {
     
    API_ENDPOINT = environment.apiEndpoint;
    
-    constructor(private http: Http, private userService: UserService,private cacheService:CacheService) { }
+    constructor(private http: Http, private userService: UserService,private cacheService:CacheService) {}
     userInfo: any;
     login(data: any): Observable<any> {
-         const headers = new Headers();
+        const headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        //headers.append('Accept', 'application/x-www-form-urlencoded');
         const options = new RequestOptions({ 'headers': headers });
         return this.http.post(`${this.API_ENDPOINT}api/token`, data, options).map((res) => res.json()).map((res) => {
+			//console.log(data);
             this.userInfo = res;
             localStorage.setItem('auth_token', res.access_token);
             localStorage.setItem('userId', res.UserID);
@@ -37,7 +37,24 @@ export class LoginService {
         localStorage.setItem('auth_token', '');
         localStorage.setItem('userId', '');
         localStorage.setItem('user_token', '');
+		localStorage.setItem('email', '');
+        localStorage.setItem('password', '');
+		 let data = {isAutoLogin:0};
+		this.autoLogin(data);
         // localStorage.clear();
     }
+	autoLogin(data): Observable<any> {
+		//const headers = new Headers();
+       // headers.append('Content-Type', 'application/x-www-form-urlencoded');
+       // const options = new RequestOptions({ 'headers': headers });
+		        return this.http.put(`${this.API_ENDPOINT}AutoLogin?isAutoLogin=1&UserID=${data.UserID}`,data).map((res => 
+				//{
+					res.json()
+					//console.log(res);
+					//return 1;
+				//}
+					
+					));
+			}
 
 }

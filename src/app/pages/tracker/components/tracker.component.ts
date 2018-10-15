@@ -493,6 +493,7 @@ getFestTechRouts(checkcalltype:string = null){
 
   drawMapPath() {
     let el = this._elementRef.nativeElement.querySelector('.google-maps');
+	GoogleMapsLoader.KEY = 'AIzaSyCnsVlGwlCzbJq1r_KG9Y97QhU63XftqtA';
     GoogleMapsLoader.load((google) => {
       this.map = new google.maps.Map(el, {
         center: new google.maps.LatLng(32.736259, -96.864586),

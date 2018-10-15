@@ -6,8 +6,6 @@ import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
 import { CacheService } from 'app/shared/cache.service';
 import 'rxjs/add/operator/share';
-//import { BehaviorSubject } from 'rxjs';
-// import { User } from '../user-management.interface';
 
 @Injectable()
 export class DayEndService extends SharedService {

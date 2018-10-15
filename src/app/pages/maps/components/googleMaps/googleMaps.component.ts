@@ -13,7 +13,7 @@ export class GoogleMaps {
 
   ngAfterViewInit() {
     let el = this._elementRef.nativeElement.querySelector('.google-maps');
-
+GoogleMapsLoader.KEY = 'AIzaSyCnsVlGwlCzbJq1r_KG9Y97QhU63XftqtA';
     // TODO: do not load this each time as we already have the library after first attempt
     GoogleMapsLoader.load((google) => {
       new google.maps.Map(el, {

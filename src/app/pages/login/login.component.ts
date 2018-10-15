@@ -22,6 +22,7 @@ export class Login implements OnInit {
   password: AbstractControl;
   forgotEmail: AbstractControl;
   forgotUsername: AbstractControl;
+  autologincheck: AbstractControl;
   submitted: boolean = false;
   isLoginMode: boolean = true;
   isProcessing: boolean = false;
@@ -44,11 +45,13 @@ export class Login implements OnInit {
     this.loginForm = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+	  'autologincheck': [false],
 
     });
 
 
     this.email = this.loginForm.controls['email'];
+	this.autologincheck = this.loginForm.controls['autologincheck'];
     this.password = this.loginForm.controls['password'];
     this.forgotUsername = this.fpForm.controls['forgotUsername'];
     this.forgotEmail = this.fpForm.controls['forgotEmail'];
@@ -63,6 +66,7 @@ export class Login implements OnInit {
     //   this.autoLoginUser(user);
     // }
     this.signOutFlag = this.signoutService.signoutFlag;
+	console.log(this.signOutFlag);
     const email = localStorage.getItem('email');
     const password = localStorage.getItem('password');
     if(email && password && !this.signOutFlag) {
@@ -74,6 +78,7 @@ export class Login implements OnInit {
   }
 
   onSubmit(values: Object): void {
+	
     this.isProcessing = true;
     this.submitted = true;
     if (this.isLoginMode) {
@@ -87,8 +92,19 @@ export class Login implements OnInit {
           if (res.IsNewUser !== 'False' && !res.IsRIInternal) {
             this.router.navigate(['resetpassword']);
           } else {
-            localStorage.setItem('email', values['email']);
-            localStorage.setItem('password', values['password']);
+			  if(values['autologincheck']){
+				  let data = {isAutoLogin:1,UserID:4171};
+				  this.loginService.autoLogin(data).subscribe((res) => {
+				 localStorage.setItem('email', values['email']);
+                 localStorage.setItem('password', values['password']);
+				});
+			  }else{
+				  localStorage.setItem('email', '');
+				  localStorage.setItem('password', '');
+			  }
+			
+           
+			
             this.router.navigate(['']);
           }
         }, (error) => {
