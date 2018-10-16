@@ -1,0 +1,100 @@
+<ba-card cardTitle="Change Request List" baCardClass="with-scroll" class="smart-table-container">
+	<div class="row">
+        <div class="col-md-12 add-new-request">
+          <div style="float:right; width:60%; width:auto;">
+            <button [routerLink]="['/create-request']" class="btn btn-primary addCustBtn" (click)="overlayStatus = true">
+             New Request
+            </button>
+          </div>
+
+        </div>
+    </div>
+	<div class="row">
+		<div class="col-sm-2" >
+			<label>Start Date</label>
+			<div class="input-group">
+				<date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate" (dateModelChange)="refreshDataHandler('dateChange');"></date-picker>
+			</div>
+		</div>
+		<div class="col-sm-2" >
+			<label>End Date</label>
+			<div class="input-group">
+				<date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.endDate" (dateModelChange)="refreshDataHandler('dateChange');"></date-picker>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<label>Type of Request:</label>
+			<div class="input-group">
+				<select class="form-control" [(ngModel)]="filter.requestType" (ngModelChange)="refreshDataHandler('requestTypeChange')">
+					<option value="AER" >Assets Exception</option>
+					<option value="AMR" >Assets Meter Reading</option>
+				   
+				</select>
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<label>Status:</label>
+			<div class="input-group">
+				<select class="form-control" [(ngModel)]="filter.requestStatus" (ngModelChange)="refreshDataHandler('requestTypeChange')">
+					<option value="all" >All Status</option>
+				   
+				</select>
+			</div>
+		</div>
+		<div class="col-sm-2" >
+					<!-- <div *ngIf = "refreshTimestamp != '' " style = "float:left;width:100%;" ><strong>Last Updated: {{ refreshTimestamp }}</strong></div>
+                   <button *ngIf = "refreshTimestamp != '' " (click)="getRefreshTrip()" [disabled] = "!buttonAction" class="refresh btn btn-primary" >View Trips</button> -->
+					<button  class="btn btn-primary" (click)="getRequestList()"[disabled] = "buttonAction" >View Requests</button>
+					
+        </div>
+	</div>
+	<div class="row" >
+                <div class="col-sm-12">
+                    <div class="overflow-x">
+                        <table class="table table-striped" >
+                            <thead class="tableHeader" id="day-end-list-head">
+                                <tr>
+                                    <th>Actions</th>
+                                    <th>
+                                        <span style="cursor:pointer;">
+                                            Customer
+										</span>
+                                    </th>
+                                    <th>
+                                        <span style="cursor:pointer;">
+                                            Submitter
+										</span>
+                                    </th>
+									<th>
+                                        <span style="cursor:pointer;">
+                                            Request Type
+										</span>
+                                    </th>
+									<th>
+                                        <span style="cursor:pointer;">
+                                            Market
+										</span>
+                                    </th>
+                                    <th class="textAlignCenter">
+                                        Approver
+                                    </th>
+                                    <th class="textAlignCenter">
+                                        Status
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+								
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div class='spinnerContainer' [hidden]='!showSpinner' style = 'margin-top:200px;'>
+                <a>
+                    <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
+                </a>
+            </div> -->
+</ba-card>

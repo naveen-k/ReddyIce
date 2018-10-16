@@ -1,6 +1,6 @@
 <ba-card cardTitle="Customer List {{userSubTitle}}" #customer>
-    <div class="row">
-        <div class="col-sm-3">
+    <div class="row" style = "margin-left:-9px;margin-right:-9px;">
+        <div class="col-sm-2">
             <input type="text" class="form-control" [(ngModel)]="customer.searchString" placeholder="Search">
         </div>
         <div class="col-md-3 head-button-container">
@@ -15,14 +15,14 @@
         </div>
         <div class="col-sm-4" style="padding-top:8px;">
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <label>
                         <span>
                             <b>RI Customer?</b>
                         </span>
                     </label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                     <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
                         <input type="radio" name="type" [value]="1"  [(ngModel)]="riCustomer" (ngModelChange)="sequenceChangeHandler()">
                         <span>Yes</span>
@@ -38,9 +38,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-5" style="padding-top:8px;">
+        <div class="col-sm-4" style="padding-top:8px;">
             <div class="row">
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <label>
                         <span>
                             <b>Status</b>
@@ -61,21 +61,26 @@
                         <span>Both</span>
                     </label>
                 </div>
+				
             </div>
         </div>
-    </div>
+    <div class='col-sm-2'>
+                        <pagination [tableData]="cutommers |filter:customer.searchString:['AXCustomerNumber', 'CustomerName', 'IsRICustomer', 'PaymentTypeName', 'PrimaryContact', 'CustomerTypeName'] | sort:customer.sortField:customer.isAsc "
+                            [(currentPage)]="paginationData" [sortingOrder]="customer.isAsc" style="float: right;" [showPages]="false"></pagination>
+                </div>
+	</div>
     <div class="page-header">
-        <div class="row">
+         <!--<div class="row">
             <div class="col-sm-12">
                 <div class="row">
                     <div class="col-sm-6"></div>
-                    <div class='col-sm-6' style="padding-right: 30px;">
-                        <pagination [tableData]="cutommers |filter:customer.searchString:['CustomerNumber', 'CustomerName', 'IsRICustomer', 'PaymentTypeName', 'PrimaryContact', 'CustomerTypeName'] | sort:customer.sortField:customer.isAsc "
+                   <div class='col-sm-6' style="padding-right: 30px;">
+                        <pagination [tableData]="cutommers |filter:customer.searchString:['AXCustomerNumber', 'CustomerName', 'IsRICustomer', 'PaymentTypeName', 'PrimaryContact', 'CustomerTypeName'] | sort:customer.sortField:customer.isAsc "
                             [(currentPage)]="paginationData" [sortingOrder]="customer.isAsc" style="float: right;" [showPages]="false"></pagination>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row">
             <div class="col-sm-12">
                 <table class="table table-striped">
@@ -83,9 +88,9 @@
                         <tr>
                             <th class="table-id">Actions</th>
                             <th class="alignLeft">
-                                <span style="cursor:pointer;" (click)="customer.sortField = 'CustomerNumber';customer.isAsc=!customer.isAsc;">
+                                <span style="cursor:pointer;" (click)="customer.sortField = 'AXCustomerNumber';customer.isAsc=!customer.isAsc;">
                                     Customer #
-                                    <i *ngIf="(customer.sortField == 'CustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'CustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
+                                    <i *ngIf="(customer.sortField == 'AXCustomerNumber')" [ngClass]="(customer.isAsc && customer.sortField == 'AXCustomerNumber' ? 'fa fa-chevron-up' : 'fa fa-chevron-down')"></i>
                                 </span>
                             </th>
                             <th class="alignLeft">
@@ -135,7 +140,7 @@
                                         <span class="tooltiptext">Inactive</span>
                                     </i>
                                 </td>
-                                <td>{{ cust.CustomerNumber }}</td>
+                                <td>{{ cust.AXCustomerNumber }}</td>
                                 <td>{{ cust.CustomerName }}</td>
                                 <td class="text-alignment-center">
                                     <input type="checkbox" value="" disabled [checked]=cust.IsRICustomer>
@@ -158,7 +163,7 @@
                                 <span class="tooltiptext">View</span>
                             </i>
                         </td>
-                        <td>{{ cust.CustomerNumber }}</td>
+                        <td>{{ cust.AXCustomerNumber }}</td>
                         <td>{{ cust.CustomerName }}</td>
                         <td class="text-alignment-center">
                             <input type="checkbox" value="" disabled [checked]=cust.IsRICustomer>
@@ -183,7 +188,7 @@
                                 <span class="tooltiptext">View</span>
                             </i>
                         </td>
-                        <td>{{ cust.CustomerNumber }}</td>
+                        <td>{{ cust.AXCustomerNumber }}</td>
                         <td>{{ cust.CustomerName }}</td>
                         <td class="text-alignment-center">
                             <input type="checkbox" value="" disabled [checked]=cust.IsRICustomer>

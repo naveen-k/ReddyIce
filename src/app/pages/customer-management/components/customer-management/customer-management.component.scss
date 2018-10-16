@@ -1,5 +1,12 @@
 @import '../../../../theme/sass/smartTable';
-
+.col-sm-2{
+flex: 0 0 19%;
+max-width: 19%;
+}
+.col-sm-4{
+flex: 0 0 28%;
+max-width: 28%;
+}
 .page-header {
     margin: 20px 0;
 };

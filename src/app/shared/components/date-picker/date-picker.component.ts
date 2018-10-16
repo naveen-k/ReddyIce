@@ -28,7 +28,7 @@ import { NgbInputDatepicker } from "@ng-bootstrap/ng-bootstrap/datepicker/datepi
                         disabled>
                     </td>
                     <td>
-                        <button class="input-group-addon" (click)="d.toggle()"  type="button">
+                        <button class="input-group-addon" (click)="d.toggle()"  type="button" [disabled]="disabled">
                             <i class="ion-calendar"></i>
                         </button>
                     </td>
@@ -76,6 +76,8 @@ export class DatePicker {
 
     @Input()
     minDate: any;
+    @Input()
+    disabled: any = false;
 
     changeHandler(){
         this.dateModelChange.emit(this.dateModel);

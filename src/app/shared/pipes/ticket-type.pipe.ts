@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'ticketType'
 })
 export class TicketTypePipe implements PipeTransform {
-    transform(value: number, customer: any, ticketTypeId: number) {
+    transform(value: number, customer: any, ticketTypeId: number, Is_PBM_DSD: number = 0) {
         if (ticketTypeId === 29) {
             return 'DNS'
         } else if (ticketTypeId === 28) {
@@ -11,7 +11,7 @@ export class TicketTypePipe implements PipeTransform {
         } else if (ticketTypeId === 30) {
             return 'Void'
         } else if (ticketTypeId === 110) {
-            return 'Credit & Sale';
+            return 'Sale & Credit';
         } else if (customer.CustomerType === 20) {
             if (ticketTypeId === 26) {
                 return 'Sale';
@@ -20,9 +20,9 @@ export class TicketTypePipe implements PipeTransform {
             }
         } else if (customer.CustomerType === 22) {
             if (value && ticketTypeId === 26) {
-                return 'PBM - Sale';
+                return Is_PBM_DSD === 1 ? 'Sale' : 'PBM - Sale';
             } else if (value && ticketTypeId === 27) {
-                return 'PBM - Credit';
+                Is_PBM_DSD === 1 ? 'Credit' : 'PBM - Credit';
             } else {
                 return 'PBM - Cons';
             }

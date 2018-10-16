@@ -18,10 +18,7 @@ import { AppState, InternalStateType } from './app.service';
 import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
-// import { AngularDualListBoxModule } from 'angular-dual-listbox';
-
-
-
+import { CacheService } from 'app/shared/cache.service';
 // Application wide providers
 const APP_PROVIDERS = [
   AppState,
@@ -59,6 +56,7 @@ export type StoreType = {
   
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS,
+    CacheService
   ],
 })
 

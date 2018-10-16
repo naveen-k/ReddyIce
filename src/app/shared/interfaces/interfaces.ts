@@ -42,8 +42,7 @@ export interface Customer {
     CustomerTypeCode: string;
     latitude: string;
     longitude: string;
-    AllowReturnsameticket: any;
-    //AllowReturnSameTicket: any;
+    AllowReturnSameTicket: any;
     FreightCodePriceFile: string;
     MobileIn: boolean;
     SoldBy: string;
@@ -73,6 +72,7 @@ export interface Customer {
     ChainID: number;
     sChainID: string;
     NotesForMemo: any;
+    AXCustomerNumber: any;
 }
 export interface MProducts {
     ExternalCustomerProductID: number;
@@ -96,6 +96,7 @@ export interface MapProducts {
     ProductName: string;
     ExternalProductId: number;
     ProductPrice: number;
+	TaxPercentage:number;
     ExternalCustomerId: number;
     IsInternal: boolean;
     IsActive: boolean;

@@ -1,3 +1,9 @@
+<div [hidden]="!overlayStatus" style="top:65px;bottom:0;left:0;right:0;height:calc(100% - 65px); opacity:0.5;background:gray;z-index:999;position:absolute;">
+    <div style="margin:auto;position:absolute;top:50%;left:50%;">
+        <img src="assets/reddyIce/spinner.gif " width='25px'>
+    </div>
+</div>
+
 <ba-card cardTitle="{{pageTitle}} {{userSubTitle}}" id="newTicket">
     <img src="assets/reddyIce/submitTicket.png" *ngIf="!activatedRoute.snapshot.params.ticketId || ticket.TicketStatusID == 24 || ticket.TicketStatusID == 23"
         width="18" class="newTicketTitleStatusIcon">
@@ -6,7 +12,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
-                <button class="btn btn-danger buttonMargin" (click)="onCancelClick()">Back</button>
+                <button class="btn btn-danger buttonMargin" (click)="backtomainscreen()">Back</button>
                 <button class="btn btn-danger" style="margin-left:10px;" (click)="approveTicket()" [hidden]="(!ticket.TicketID || ticket.TicketStatusID == 23 || ticket.TicketStatusID == 25) || tripMode === true">
                     Approve
                 </button>
@@ -16,7 +22,7 @@
                     (click)="deleteTicket()">
                     Delete
                 </button>
-                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="!isFormDirty || isSubmited">
+                <button class="btn btn-danger buttonMargin" (click)="preSaveTicket();" [hidden]="isReadOnly" [disabled]="ticket.IsEDITicket !==true &&  (!isFormDirty || isSubmited)">
                     Submit
                 </button>
             </div>
@@ -35,8 +41,8 @@
                             <span>RI Driver</span>
                         </label>
                         <label class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input [disabled]="user.IsDistributor || !!ticket.TicketID || user.Role.RoleID == 3" type="radio" name="driverType" [value]="true"
-                                [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
+                            <input [disabled]="user.IsDistributor || !!ticket.TicketID || user.Role.RoleID == 3 || user.Role.RoleID == 5 || user.Role.RoleID == 7"
+                                type="radio" name="driverType" [value]="true" [(ngModel)]="ticket.isUserTypeDistributor" (ngModelChange)="userTypeChangeHandler();isFormDirty=true;">
                             <span>Distributor/CoPacker</span>
                         </label>
                     </div>
@@ -54,7 +60,7 @@
                 </div>
                 <div class="row" [hidden]="ticket.isUserTypeDistributor">
                     <label for="example-text-input" class="col-sm-4 col-form-label">
-                        Branch:
+                        Business Unit:
                         <sup style="color:red;">*</sup>
                     </label>
                     <div class="col-sm-7">
@@ -68,10 +74,8 @@
                         <sup style="color:red;">*</sup>
                     </label>
                     <div class="col-sm-7">
-                        <select [disabled]="ticketId" class="form-control" name="customer" [(ngModel)]="ticket.UserID" [disabled]="isReadOnly || tripMode"
-                            (ngModelChange)="listFilter.UserId = +ticket.UserID;isFormDirty=true">
-                            <option *ngFor="let driver of drivers" [ngValue]="driver.UserId"> {{driver.FirstName}} {{driver.LastName}} </option>
-                        </select>
+                      
+                        <reddy-select [disabled]="ticketId || isReadOnly || tripMode" [options]="drivers" [(selected)]="ticket.UserID" (selectedChange)="listFilter.UserId = ticket.UserID;isFormDirty=true;"></reddy-select>
                     </div>
                 </div>
                 <div class="row" [hidden]="!ticket.isUserTypeDistributor">
@@ -87,23 +91,31 @@
             <div class="row">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Delivery Date:</label>
                 <div class="col-sm-5 input-group">
-                    <date-picker [minDate]="date.minDate" [maxDate]="date.maxDate" [(dateModel)]="ticket.DeliveryDate" (dateModelChange)="isFormDirty=true;"></date-picker>
+                    <date-picker [minDate]="date.minDate" [maxDate]="date.maxDate" [(dateModel)]="ticket.DeliveryDate" (dateModelChange)="isFormDirty=true;"
+                        [disabled]="isReadOnly"></date-picker>
                 </div>
             </div>
-            <div class="row" [style.visibility]="(ticket.CustomerType == 21 ||(ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
+            <div class="row" [style.visibility]="((ticket.CustomerType == 21 && ticket.IsEDITicket !=true) || (ticket.CustomerType == 22 && !ticket.IsSaleTicket))?'hidden':'visible'">
                 <label for="example-text-input" class="col-sm-3 col-form-label">Type:</label>
                 <div class="col-sm-7">
                     <label [hidden]="isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input [disabled]="ticket.CustomerType == 22 && !!ticket.TicketID" type="radio" name="type" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID"
-                            (ngModelChange)="typeChangeHandler();isFormDirty=true;">
+                        <input [disabled]="(ticket.CustomerType == 22 && !!ticket.TicketID) || ticket.IsEDITicket == true" type="radio" name="type"
+                            [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" (ngModelChange)="typeChangeHandler();isFormDirty=true;">
                         <span>{{sType.Value}}</span>
                     </label>
                     <!--Hack for displaying disabled in case of read only mode-->
                     <label [hidden]="!isReadOnly" *ngFor="let sType of ticketSubTypes" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                        <input [disabled]="ticket.CustomerType == 22 && !!ticket.TicketID" type="radio" name="type1" [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID"
-                            [disabled]="true">
+                        <input [disabled]="ticket.CustomerType == 22 && !!ticket.TicketID || ticket.IsEDITicket == true" type="radio" name="type1"
+                            [value]="sType.ID" [(ngModel)]="ticket.TicketTypeID" [disabled]="true">
                         <span>{{sType.Value}}</span>
                     </label>
+                </div>
+            </div>
+            <div class="row" *ngIf="ticket.IsEDITicket == true && (ticket.TicketReferenceId != null && ticket.TicketReferenceId != '')">
+                <label for="example-text-input" class="col-sm-3 col-form-label">Ticket Reference&nbsp;#:</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" [(ngModel)]="ticket.TicketReferenceId" [disabled]="true" name="TicketReferenceId"
+                        #TicketReferenceId="ngModel">
                 </div>
             </div>
         </div>
@@ -114,7 +126,8 @@
                     <label for="example-text-input" class="col-sm-4 col-form-label">Customer Type:</label>
                     <div class="col-sm-8">
                         <label [hidden]="isReadOnly || ticket.TicketID" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
-                            <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.CustomerType" (ngModelChange)="customerTypeChangeHandler();isFormDirty=true;">
+                            <input type="radio" name="ticketType" [value]="tType.ID" [(ngModel)]="ticket.CustomerType" (ngModelChange)="customerTypeChangeHandler();isFormDirty=true;"
+                                [disabled]="disableEDIUser">
                             <span>{{tType.Value}}</span>
                         </label>
                         <label [hidden]="!ticket.TicketID" *ngFor="let tType of ticketTypes?.CustomerType" class="radioItem radio-inline custom-radio nowrap radioButtonMargin">
@@ -130,7 +143,7 @@
                     </label>
                     <div class="col-sm-6">
                         <ng-template #rt let-r="result" let-t="term">
-                            {{ r.CustomerNumber}} - {{ r.CustomerName}}
+                            {{ r.AXCustomerNumber}} - {{ r.CustomerName}}
                         </ng-template>
                         <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="ticket.Customer" [ngbTypeahead]="search" [resultTemplate]="rt"
                             placeholder="Search Customer" [inputFormatter]="inputFormatter" (selectItem)="customerChangeHandler($event);isFormDirty=true;"
@@ -244,28 +257,28 @@
                                         <th class="textAlignRight">Amount</th>
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
-                                        <tr *ngFor="let tdetail of ticket?.TicketProduct">
-                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                    <tbody *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
+                                        <tr *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
+                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && ((customer?.productdetail && tdetail.ProductID == -1) || customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
                                                 </select>
                                             </td>
-                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
+                                            <td id="prodDSD" *ngIf="(customer?.productdetail !== null) && !((customer?.productdetail && tdetail.ProductID == -1) || customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                 </select>
                                             </td>
                                             <!--Alok: Removed currencyFormatter for unit price -->
-                                            <td class="textAlignRight">{{tdetail.productSelected?.Price | truncateZero}}</td>
+                                            <td class="textAlignRight">{{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td class="textAlignRight">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly || !tdetail.ProductID || tdetail.ProductID == -1">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
@@ -290,7 +303,7 @@
                                                 <b>Total Amount</b>
                                             </td>
                                             <td class="textAlignRight">
-                                                <b>{{ticket.TotalSale + ticket.TaxAmount | currencyFormatter}}</b>
+                                                <b>{{ticket.TotalSale*1 + ticket.TaxAmount*1 | currencyFormatter}}</b>
                                             </td>
                                             <td [hidden]="isReadOnly"></td>
                                         </tr>
@@ -323,10 +336,10 @@
                                         <th>Amount</th>
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
-                                        <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct">
+                                    <tbody *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
+                                        <tr id="prodMR" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail | isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
@@ -334,13 +347,13 @@
                                             </td>
                                             <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                 </select>
                                             </td>
-                                            <td>{{tdetail.productSelected?.Price | truncateZero}}</td>
+                                            <td>{{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==26">
                                                 <input type="number" min="0" oninput="validity.valid||(value='');" minValue class="form-control prodListElement" [(ngModel)]="tdetail.StartMeterReading"
                                                     (ngModelChange)="readingChangeHandler(tdetail);isFormDirty=true;" (blur)="tdetail.EndMeterReading = tdetail.EndMeterReading < tdetail.StartMeterReading?tdetail.StartMeterReading:tdetail.EndMeterReading;readingChangeHandler(tdetail)"
@@ -353,7 +366,7 @@
                                             </td>
                                             <td *ngIf="ticket.CustomerType == 22 && ticket.IsSaleTicket && ticket.TicketTypeID ==27">
                                                 <input type="number" min="1" oninput="validity.valid||(value='');" class="form-control textAlignRight prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="!tdetail.productSelected?.IsTaxable || isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">
@@ -400,10 +413,10 @@
                                         <!--<th>Amount</th>-->
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
-                                        <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct">
+                                    <tbody  *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
+                                        <tr id="prodI" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
@@ -411,13 +424,13 @@
                                             </td>
                                             <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                 </select>
                                             </td>
-                                            <td class="textAlignRight"> {{tdetail.productSelected?.Price | truncateZero}}</td>
+                                            <td class="textAlignRight"> {{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.DeliveredBags"
                                                     (ngModelChange)="bagsChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
@@ -475,10 +488,10 @@
                                         <th>Amount</th>
                                         <th class="textAlignCenter" [hidden]="isReadOnly">Action</th>
                                     </thead>
-                                    <tbody>
-                                        <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct">
+                                    <tbody *ngIf="ticket?.TicketProduct.length >0 && ticket?.TicketProduct[0].ProductID">
+                                        <tr id="prodPBS" *ngFor="let tdetail of ticket?.TicketProduct;let i = index">
                                             <td *ngIf="(customer?.productdetail !== null) && (customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="isReadOnly">
                                                     <option *ngFor="let pdetail of customer?.productdetail" [ngValue]="pdetail.ProductID">
                                                         {{pdetail.DisplayName}} </option>
@@ -486,20 +499,20 @@
                                             </td>
                                             <td *ngIf="(customer?.productdetail !== null) && !(customer?.productdetail |isExistFilter:'ProductID':tdetail.ProductID)">
 
-                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail)"
+                                                <select class="form-control prodListElement" name="product" [(ngModel)]="tdetail.ProductID" (ngModelChange)="productChangeHandler(tdetail,i)"
                                                     [disabled]="true">
                                                     <option [ngValue]="tdetail.ProductID">
                                                         {{tdetail.ProductName}} - {{tdetail.ProductCode}} </option>
                                                 </select>
                                             </td>
-                                            <td>{{tdetail.productSelected?.Price | truncateZero}}</td>
+                                            <td>{{tdetail.productSelected?.Price | currencyFormatter}}</td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.CurrentInventory"
                                                     (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
                                             </td>
                                             <td>
                                                 <input maxlength="9" numberOnly oninput="validity.valid||(value='');" class="form-control prodListElement" [(ngModel)]="tdetail.Quantity"
-                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="isReadOnly">
+                                                    (ngModelChange)="unitChangeHandler(tdetail);isFormDirty=true;" [disabled]="!tdetail.productSelected?.IsTaxable || isReadOnly">
                                             </td>
                                             <td class="textAlignRight">{{tdetail.totalAmount | currencyFormatter}}</td>
                                             <td class="textAlignCenter" [hidden]="isReadOnly || tdetail.ProductSourceId">

@@ -1,0 +1,20 @@
+@import '../../../../theme/sass/smartTable';
+
+.vertical-scroll{
+    max-height: 215px;
+    overflow-y: auto;
+	overflow-x:hidden;
+}
+
+.btn {
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.1s ease;
+    padding: 0.20rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.table > tbody > tr > td {
+       line-height: 30px;
+}
+	

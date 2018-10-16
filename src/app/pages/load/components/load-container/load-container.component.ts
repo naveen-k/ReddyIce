@@ -19,7 +19,8 @@ export class LoadContainerComponent {
         const now = new Date();
         
         filter.selectedDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-        filter.userBranch = user.getUser().Branch ? user.getUser().Branch.BranchID : null;
+        //filter.userBranch = user.getUser().Branch ? user.getUser().Branch.BranchID : null;
         //filter.userDriver = localStorage.getItem('userId') || '';
+		filter.userBranch = 0;
     }
 }

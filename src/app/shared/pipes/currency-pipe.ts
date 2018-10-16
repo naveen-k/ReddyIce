@@ -5,11 +5,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CurrencyFormatter implements PipeTransform {
     transform(value: any, symbol:boolean=true) {
+		//console.log(value);
+		
         if (!value) { value = 0 }
         if (value < 0) {
+			value = parseFloat(value).toFixed(2);
             value = `-$${-value}`;
          }
         else {
+			value = parseFloat(value).toFixed(2);
             value = `$${value}`;
         }
 
@@ -20,6 +24,7 @@ export class CurrencyFormatter implements PipeTransform {
                 return `${value.replace('$','')}.00`;
             }
         }
+		
         value = value + '00';
         if(symbol){
             return value.substring(0, value.indexOf('.') + 3);

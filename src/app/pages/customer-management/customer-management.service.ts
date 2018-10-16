@@ -4,6 +4,7 @@ import { UserService } from '../../shared/user.service';
 import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 import { HttpService } from '../../shared/http.service';
 import { Observable } from 'rxjs/Rx';
+import { CacheService } from 'app/shared/cache.service';
 
 @Injectable()
 export class CustomerManagementService extends SharedService {
@@ -11,8 +12,9 @@ export class CustomerManagementService extends SharedService {
   constructor(
     protected http: HttpService,
     private userService: UserService,
+    protected cache: CacheService
   ) {
-    super(http);
+    super(http, cache);
   }
 
   getAllCustomers() {
@@ -45,6 +47,7 @@ export class CustomerManagementService extends SharedService {
     return this.http.delete('api/deleteexternalcustomer', options).map((res => res.json()));
   }
   createCustomer(data) {
+	  console.log(data);
     return this.http.post('api/createexternalcustomer', data).map((res => res.json()));
   }
   updateCustomer(custId, data) {
