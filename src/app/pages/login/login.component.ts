@@ -58,15 +58,18 @@ export class Login implements OnInit {
   }
 
   ngOnInit() {
-    // Just to make sure `auth_token` is clear when, landed on this page
-    this.loginService.signOut();
+	  let userid = localStorage.getItem('userId');
+    let data = {isAutoLogin:0,UserID:userid};
+	this.loginService.autoLogin(data).subscribe((res) => {
+	this.loginService.signOut();
+	});
+    
     // const user = this.userService.getUserForAutoLogin();
     this.prodLabel = environment.prodLabel;
     // if (user) {
     //   this.autoLoginUser(user);
     // }
     this.signOutFlag = this.signoutService.signoutFlag;
-	console.log(this.signOutFlag);
     const email = localStorage.getItem('email');
     const password = localStorage.getItem('password');
     if(email && password && !this.signOutFlag) {
@@ -88,12 +91,11 @@ export class Login implements OnInit {
 
         this.loginService.login(user).subscribe((res) => {
           this.isProcessing = false;
-          
           if (res.IsNewUser !== 'False' && !res.IsRIInternal) {
             this.router.navigate(['resetpassword']);
           } else {
 			  if(values['autologincheck']){
-				  let data = {isAutoLogin:1,UserID:4171};
+				  let data = {isAutoLogin:1,UserID:res.UserID};
 				  this.loginService.autoLogin(data).subscribe((res) => {
 				 localStorage.setItem('email', values['email']);
                  localStorage.setItem('password', values['password']);
@@ -104,7 +106,6 @@ export class Login implements OnInit {
 			  }
 			
            
-			
             this.router.navigate(['']);
           }
         }, (error) => {
