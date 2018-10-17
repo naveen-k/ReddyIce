@@ -7,7 +7,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { ForgetPasswordService } from '../forget-password/forget-apssword.service';
 import { environment } from '../../../environments/environment';
 import { SignoutService } from '../../shared/signout.service';
-
+import * as CryptoJS from 'crypto-js';
 @Component({
   selector: 'login',
   templateUrl: './login.html',
@@ -58,7 +58,7 @@ export class Login implements OnInit {
   }
 
   ngOnInit() {
-	  let userid = localStorage.getItem('userId');
+	 let userid = localStorage.getItem('userId');
     let data = {isAutoLogin:0,UserID:userid};
 	this.loginService.autoLogin(data).subscribe((res) => {
 	this.loginService.signOut();
@@ -71,7 +71,11 @@ export class Login implements OnInit {
     // }
     this.signOutFlag = this.signoutService.signoutFlag;
     const email = localStorage.getItem('email');
-    const password = localStorage.getItem('password');
+	var ciphertextpassword = localStorage.getItem('password');
+	var bytes  = CryptoJS.AES.decrypt(ciphertextpassword.toString(), 'ReddyicePassword');
+	const password = bytes.toString(CryptoJS.enc.Utf8);
+
+    
     if(email && password && !this.signOutFlag) {
       this.autoLoginUser({
         email,
@@ -98,7 +102,8 @@ export class Login implements OnInit {
 				  let data = {isAutoLogin:1,UserID:res.UserID};
 				  this.loginService.autoLogin(data).subscribe((res) => {
 				 localStorage.setItem('email', values['email']);
-                 localStorage.setItem('password', values['password']);
+				 var ciphertext = CryptoJS.AES.encrypt(values['password'], 'ReddyicePassword');
+                 localStorage.setItem('password', ciphertext);
 				});
 			  }else{
 				  localStorage.setItem('email', '');

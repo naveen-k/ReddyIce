@@ -19,8 +19,6 @@ import { ModelPopupComponent } from '../../../../shared/components/model-popup/m
 })
 export class HandheldUserHistoryComponent implements OnInit {
 	private _loggedUserdata: any;
-	//IsCCPayment:boolean;
-	//IsClosed:boolean;
 	actionstatus:boolean = false;
 	userActivityLog:any = {};
 	@Input() userid: number; 
@@ -41,11 +39,8 @@ export class HandheldUserHistoryComponent implements OnInit {
 		}else{
 			this.actionstatus = false;
 		}
-		//this.IsCCPayment = val.IsCCPayment;
-		//this.IsClosed = val.IsClosed;
 		this.userActivityLog = val.userActivityLog;
 		
-		console.log(val);
 		this._loggedUserdata = val;
 		
 	}

@@ -3,6 +3,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { UserDetails } from './user.interface';
 import { HttpService } from './http.service';
+import * as CryptoJS from 'crypto-js';
 @Injectable()
 export class UserService {
     userDetails: UserDetails;
@@ -32,14 +33,16 @@ export class UserService {
             return res.json();
         });
     }
-    setPrivateKeys(values) {
-        // this.privateKeys = values;        
+    setPrivateKeys(values) {        
         values = values || '';
-        localStorage.setItem('privateKeys', JSON.stringify(values));
+		var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(values), 'ReddyicePassword');
+        localStorage.setItem('privateKeys', ciphertext);
     }
 
     getPrivateKeys(): any {
-        return JSON.parse(localStorage.getItem('privateKeys'));
+		var ciphertext = localStorage.getItem('privateKeys');
+	var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), 'ReddyicePassword');
+	return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     }
 
     getUserForAutoLogin() {

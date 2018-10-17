@@ -40,6 +40,8 @@ export class LoginService {
         localStorage.setItem('user_token', '');
 		localStorage.setItem('email', '');
         localStorage.setItem('password', '');
+		localStorage.setItem('privateKeys', '');
+		localStorage.setItem('user', '');
     }
 	autoLogin(data:any): Observable<any> {
 		return this.http.get(`${this.API_ENDPOINT}api/AutoLogin?UserID=${data.UserID}&isAutoLogin=${data.isAutoLogin}`).map((res => 
