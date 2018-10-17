@@ -1,5 +1,6 @@
 <ba-card cardTitle="Change Request List" baCardClass="with-scroll" class="smart-table-container">
-	<div class="row">
+    <div class="customer-maintenance">
+    <div class="row">
         <div class="col-md-12 add-new-request">
           <div style="float:right; width:60%; width:auto;">
             <button [routerLink]="['/create-request']" class="btn btn-primary addCustBtn" (click)="overlayStatus = true">
@@ -23,29 +24,27 @@
 			</div>
 		</div>
 		<div class="col-sm-3">
-			<label>Type of Request:</label>
+			<label>Type of Request</label>
 			<div class="input-group">
-				<select class="form-control" [(ngModel)]="filter.requestType" (ngModelChange)="refreshDataHandler('requestTypeChange')">
-					<option value="AER" >Assets Exception</option>
+                <select class="form-control" 
+                 [(ngModel)]="filter.requestType" (ngModelChange)="refreshDataHandler('requestTypeChange')">
+                    <option value="SRP" >Select Request Type</option>
+                    <option value="AER" >Assets Exception</option>
 					<option value="AMR" >Assets Meter Reading</option>
-				   
 				</select>
 			</div>
 		</div>
-		<div class="col-sm-3">
-			<label>Status:</label>
+		<div class="col-sm-2">
+			<label>Status</label>
 			<div class="input-group">
 				<select class="form-control" [(ngModel)]="filter.requestStatus" (ngModelChange)="refreshDataHandler('requestTypeChange')">
 					<option value="all" >All Status</option>
-				   
 				</select>
 			</div>
 		</div>
-		<div class="col-sm-2" >
-					<!-- <div *ngIf = "refreshTimestamp != '' " style = "float:left;width:100%;" ><strong>Last Updated: {{ refreshTimestamp }}</strong></div>
-                   <button *ngIf = "refreshTimestamp != '' " (click)="getRefreshTrip()" [disabled] = "!buttonAction" class="refresh btn btn-primary" >View Trips</button> -->
-					<button  class="btn btn-primary" (click)="getRequestList()"[disabled] = "buttonAction" >View Requests</button>
-					
+		<div class="col-sm-2 offset-sm-1" >
+            <button  class="btn btn-primary" (click)="getRequestList()"[disabled] = "buttonAction"
+            style="margin-top: 25px" >View Request</button>
         </div>
 	</div>
 	<div class="row" >
@@ -54,7 +53,7 @@
                         <table class="table table-striped" >
                             <thead class="tableHeader" id="day-end-list-head">
                                 <tr>
-                                    <th>Actions</th>
+                                    <th>Action</th>
                                     <th>
                                         <span style="cursor:pointer;">
                                             Customer
@@ -84,8 +83,75 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
-								
+                                <tr>
+                                    <td style="padding-left: 0">
+                                        <i  class="ion-eye custom-tooltip-ion"
+                                            style="margin-right: 2px">
+                                            <span class="tooltiptext">View</span>
+                                        </i>
+                                        <i  class="ion-edit custom-tooltip-ion"
+                                            style="margin-right: 2px">
+                                            <span class="tooltiptext">Edit</span>
+                                        </i>
+                                        <i  class="ion-trash-a custom-tooltip-ion"
+                                            style="margin-right: 2px">
+                                            <span class="tooltiptext">Delete</span>
+                                        </i>
+                                    </td>
+                                    <td>083123-WAL-MART-6966</td>
+                                    <td>Jeanette Perkins</td>
+                                    <td>Update Existing Customer</td>
+                                    <td>Dallas</td>
+                                    <td>swatson@reddyice.com</td>
+                                    <td>Pending for approval</td>
+                                </tr>
+
+                                <tr>
+                                        <td style="padding-left: 0">
+                                                <i  class="ion-eye custom-tooltip-ion"
+                                                    style="margin-right: 2px">
+                                                    <span class="tooltiptext">View</span>
+                                                </i>
+                                                <i  class="ion-edit custom-tooltip-ion"
+                                                    style="margin-right: 2px">
+                                                    <span class="tooltiptext">Edit</span>
+                                                </i>
+                                                <i  class="ion-trash-a custom-tooltip-ion"
+                                                    style="margin-right: 2px">
+                                                    <span class="tooltiptext">Delete</span>
+                                                </i>
+                                            </td>
+                                    <td>083123-WAL-MART-6966</td>
+                                    <td>Jeanette Perkins</td>
+                                    <td>Update Existing Customer</td>
+                                    <td>Dallas</td>
+                                    <td>swatson@reddyice.com</td>
+                                    <td>Pending for approval</td>
+                                </tr>
+
+                                <tr>
+                                        <td style="padding-left: 0">
+                                                <i  class="ion-eye custom-tooltip-ion"
+                                                    style="margin-right: 2px">
+                                                    <span class="tooltiptext">View</span>
+                                                </i>
+                                                <i  class="ion-edit custom-tooltip-ion"
+                                                    style="margin-right: 2px">
+                                                    <span class="tooltiptext">Edit</span>
+                                                </i>
+                                                <i  class="ion-trash-a custom-tooltip-ion"
+                                                    style="margin-right: 2px">
+                                                    <span class="tooltiptext">Delete</span>
+                                                </i>
+                                            </td>
+                                    <td>083123-WAL-MART-6966</td>
+                                    <td>Jeanette Perkins</td>
+                                    <td>Update Existing Customer</td>
+                                    <td>Dallas</td>
+                                    <td>swatson@reddyice.com</td>
+                                    <td>Pending for approval</td>
+                                </tr>
+
                             </tbody>
                         </table>
 
@@ -97,4 +163,5 @@
                     <img [hidden]='!showSpinner' src="assets/reddyIce/spinner.gif " width='25px'>
                 </a>
             </div> -->
+        </div>
 </ba-card>

@@ -1,15 +1,17 @@
 <ul id="al-sidebar-list" class="al-sidebar-list" baSlimScroll [baSlimScrollOptions]="{height: menuHeight}"
     (mouseleave)="hoverElemTop=outOfArea">
-<li _ngcontent-c7="" class="al-sidebar-list-item" ng-reflect-ng-class="[object Object]" title="Customer Maintenance">
-<a _ngcontent-c7="" class="al-sidebar-list-link" ng-reflect-router-link="/,pages,customer-maintenance" href="#/pages/customer-maintenance">
-  <i _ngcontent-c7="" class="ion-person"></i><span _ngcontent-c7="" translate="" ng-reflect-translate="">Customer Maintenance</span>
-  </a>
-</li>
   <ba-menu-item
     [menuItem]="item"
     (itemHover)="hoverItem($event)"
     (toggleSubMenu)="toggleSubMenu($event)"
     *ngFor="let item of menuItems"></ba-menu-item>
+
+  <li _ngcontent-c7="" class="al-sidebar-list-item" ng-reflect-ng-class="[object Object]" title="Customer Maintenance">
+    <a _ngcontent-c7="" class="al-sidebar-list-link" ng-reflect-router-link="/,pages,customer-maintenance" href="#/pages/customer-maintenance">
+      <i _ngcontent-c7="" class="ion-person"></i><span _ngcontent-c7="" translate="" ng-reflect-translate="">Customer Maintenance</span>
+    </a>
+  </li>
+      
 	
 </ul>
 

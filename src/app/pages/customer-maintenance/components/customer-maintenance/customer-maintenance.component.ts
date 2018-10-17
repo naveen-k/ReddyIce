@@ -15,7 +15,7 @@ export class CustomerMaintenanceComponent implements OnInit {
 		startDate: null,
 		todaysDate: null,
 		endDate: null,
-		requestType:'AER',
+		requestType:'SRP',
 		requestStatus:'all'
 	};
 	buttonAction:boolean = false;

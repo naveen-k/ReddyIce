@@ -9,6 +9,10 @@ select{
     max-height:100%;
 }
 
+label {
+  margin-left: 5px;
+}
+
 .deact{
 cursor:not-allowed;
 opacity:0.5;
@@ -53,3 +57,11 @@ opacity:0.5;
   left: calc(50% - 25px);
   margin: auto;
 }
+
+.customer-maintenance {
+  height: 100vh;
+}
+
+.table > thead > tr > th:first-child {
+  text-align: left;
+} 
