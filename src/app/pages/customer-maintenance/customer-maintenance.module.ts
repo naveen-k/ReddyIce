@@ -3,22 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgaModule } from '../../theme/nga.module';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
 import { CustomerMaintenanceComponent } from './components/customer-maintenance/customer-maintenance.component';
 import { CreateRequestComponent } from './components/create-request/create-request.component';
 import { NgModule } from '@angular/core';
-const routes: Routes = [
-    {
-        path: '',
-        component: CustomerMaintenanceComponent,
-    },
-];
-
+import { routing } from './customer-maintenance.routing';
+import { CustomerMaintenancePageComponent } from './customer-maintenance-component';
 
 @NgModule({
-    declarations: [CustomerMaintenanceComponent,CreateRequestComponent],
-    imports: [CommonModule, RouterModule.forChild(routes), NgaModule, CommonModule, FormsModule, NgbModule, SharedModule],
+    declarations: [CustomerMaintenancePageComponent,CustomerMaintenanceComponent,CreateRequestComponent],
+    imports: [CommonModule, routing, NgaModule, CommonModule, FormsModule, NgbModule, SharedModule]
 })
-export class CustomerMaintenanceModule {
-
-}
+export class CustomerMaintenanceModule { }

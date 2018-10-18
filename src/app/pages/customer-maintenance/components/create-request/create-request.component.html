@@ -1,1 +1,229 @@
-kljkljkljkljkljl
+<ba-card cardTitle="{{pageTitle}}" id="newTicket">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-right head-button-container">
+                <button class="btn btn-danger buttonMargin">Back</button>
+                <button class="btn btn-danger" style="margin-left:10px;" disabled>Submit</button>                
+            </div>
+
+            <div class="row">
+                    <div class="col-sm-12">
+                        <fieldset>
+                            <legend>Select Customer</legend>
+                                <div class="row">
+                                    <label for="example-text-input" class="col-sm-1 col-form-label">
+                                        Business Unit:
+                                        <sup style="color:red;">*</sup>                                        
+                                    </label>
+                                    <input type="text" class="form-control col-sm-2" id="usr">
+                                    
+                                    
+                                    <label class="col-sm-2 col-form-label"> AX Customer Number: </label>
+                                    <p class="col-sm-1 col-form-label">127634753</p>
+
+                                    <label class="col-sm-2 col-form-label"> Primary Delivery BU: </label>
+                                    <p class="col-sm-2 col-form-label">113-REDDY ICE - EUREKA</p>
+                                </div>
+                                <div class="row" style="margin-top: 10px">
+                                    <label class="col-sm-1 col-form-label">Type of Request</label>
+                                    <div class="input-group col-sm-3">
+                                        <select class="form-control" 
+                                            [(ngModel)]="filter.requestType">
+                                            <option value="SRP" >Select Request Type</option>
+                                            <option value="AER" >Activate</option>
+                                            <option value="AMR" >De-Activate</option>
+                                        </select>
+                                    </div>
+                                </div>    
+                        </fieldset>
+                    </div>                                        
+            </div>
+
+            <div class="row">
+                    <div class="col-sm-12">
+                        <fieldset>
+                            <legend>Information</legend>
+                                <div class="row">
+                                    <div class="col-sm-3 col-form-label">
+                                        <label for="comment">Reason For Change</label>
+                                        <textarea class="form-control"></textarea>
+                                    </div>
+                                    <div class="col-sm-3 col-form-label">
+                                        <label for="comment">Comment</label>
+                                        <textarea class="form-control"></textarea>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                            <label for="comment">Comments</label>
+                                            <div class="overflow-x">
+                                                <table class="table table-striped" >
+                                                    <thead class="tableHeader" id="day-end-list-head">
+                                                        <tr>
+                                                            <th>Comment</th>
+                                                            <th>Date</th>
+                                                            <th>User</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                        
+                                            </div>
+                                        </div>
+                                </div>
+                        </fieldset>
+                    </div>                                        
+            </div>
+
+            <div class="row">
+                    <div class="col-sm-12">
+                        <fieldset>
+                            <legend>Change Request</legend>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                            <label for="comment">Comments</label>
+                                            <div class="overflow-x">
+                                                <table class="table table-borderless" >
+                                                    <thead class="tableHeader" id="day-end-list-head">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Existing Value</th>
+                                                            <th style="text-align:center">New Value</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Invoice & Delivery on Hold</td>
+                                                            <td>Acive</td>
+                                                            <td>
+                                                                <div class="col-sm-6 offset-sm-3" style="padding-top: 2px;">
+                                                                    <select class="form-control" 
+                                                                        [(ngModel)]="filter.requestType">
+                                                                        <option value="SRP" >Select Request Type</option>
+                                                                        <option value="AER" >Activate</option>
+                                                                        <option value="AMR" >De-Activate</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Effective Date</td>
+                                                            <td>NA</td>
+                                                            <td>
+                                                                <div class="col-sm-6 offset-sm-3 date-picker">
+                                                                    <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate"></date-picker>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Deactivation Reason Code</td>
+                                                            <td>NA</td>
+                                                            <td>
+                                                                    <div class="col-sm-6 offset-sm-3" style="padding-top: 2px;">
+                                                                        <select class="form-control" 
+                                                                            [(ngModel)]="filter.requestType">
+                                                                            <option value="SRP" >Select Request Type</option>
+                                                                            <option value="AER" >Activate</option>
+                                                                            <option value="AMR" >De-Activate</option>
+                                                                        </select>
+                                                                    </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                        
+                                            </div>
+                                        </div>
+                                </div>
+                        </fieldset>
+                    </div>                                        
+            </div>
+
+            <div class="row">
+                    <div class="col-sm-12">
+                        <fieldset>
+                            <legend>Change Request Item</legend>
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-danger pull-right">Add Product</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">                                            
+                                            <div class="overflow-x">
+                                                <table class="table table-borderless" >
+                                                    <thead class="tableHeader" id="day-end-list-head">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Price</th>
+                                                            <th>Drayage</th>
+                                                            <th>Buy Back</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>100028# 10-BLOACK ICE</td>
+                                                            <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
+                                                            <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
+                                                            <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>
+                                                            <td style="padding-top:5px">
+                                                                <i  class="ion-compose custom-tooltip-ion">
+                                                                    <span class="tooltiptext">Edit</span>
+                                                                </i>
+                                                                <i  class="ion-trash-a custom-tooltip-ion">
+                                                                    <span class="tooltiptext">Delete</span>
+                                                                </i>
+                                                            </td>                                                            
+                                                        </tr>
+
+                                                        <tr>
+                                                                <td>100028# 10-BLOACK ICE</td>
+                                                                <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
+                                                                <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
+                                                                <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>
+                                                                <td style="padding-top:5px">
+                                                                    <i  class="ion-compose custom-tooltip-ion">
+                                                                        <span class="tooltiptext">Edit</span>
+                                                                    </i>
+                                                                    <i  class="ion-trash-a custom-tooltip-ion">
+                                                                        <span class="tooltiptext">Delete</span>
+                                                                    </i>
+                                                                </td>                                                            
+                                                            </tr>
+
+                                                            <tr>
+                                                                    <td>100028# 10-BLOACK ICE</td>
+                                                                    <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
+                                                                    <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
+                                                                    <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>
+                                                                    <td style="padding-top:5px">
+                                                                        <i  class="ion-compose custom-tooltip-ion">
+                                                                            <span class="tooltiptext">Edit</span>
+                                                                        </i>
+                                                                        <i  class="ion-trash-a custom-tooltip-ion">
+                                                                            <span class="tooltiptext">Delete</span>
+                                                                        </i>
+                                                                    </td>                                                            
+                                                                </tr>
+                                                    </tbody>
+                                                </table>
+                        
+                                            </div>
+                                        </div>
+                                </div>
+                        </fieldset>
+                    </div>                                        
+            </div>
+
+            
+        </div>
+    </div>    
+</ba-card>
