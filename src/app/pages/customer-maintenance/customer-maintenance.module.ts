@@ -8,9 +8,27 @@ import { CreateRequestComponent } from './components/create-request/create-reque
 import { NgModule } from '@angular/core';
 import { routing } from './customer-maintenance.routing';
 import { CustomerMaintenancePageComponent } from './customer-maintenance-component';
+import { CustomerMaintenanceService } from './customer-maintenance.service';
 
 @NgModule({
-    declarations: [CustomerMaintenancePageComponent,CustomerMaintenanceComponent,CreateRequestComponent],
-    imports: [CommonModule, routing, NgaModule, CommonModule, FormsModule, NgbModule, SharedModule]
+    declarations: [
+        CustomerMaintenancePageComponent,
+        CustomerMaintenanceComponent,
+        CreateRequestComponent,
+    ],
+
+    imports: [
+        CommonModule, 
+        routing, 
+        NgaModule, 
+        CommonModule, 
+        FormsModule, 
+        NgbModule, 
+        SharedModule,
+    ],
+
+    providers: [
+        CustomerMaintenanceService,
+    ]
 })
 export class CustomerMaintenanceModule { }

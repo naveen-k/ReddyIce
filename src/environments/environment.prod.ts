@@ -1,8 +1,8 @@
 export const environment = {
     production: true,
-    apiEndpoint: 'https://buat-myicebox.reddyice.com/myiceboxAPI/',
+    apiEndpoint: 'https://buat2-myicebox.reddyice.com/CustomerMaintenanceApi/',
     reportEndpoint: 'https://buat2-myicebox.reddyice.com/MyIceBoxReports/Reports/ReportData.aspx',
     inventoryEndpoint: 'https://buat2-myicebox.reddyice.com/DA_Inventory/forms/addBom.aspx',
-    prodLabel: '(Performance)',
+    prodLabel: '(Customer Maintenance)',
     EDIUserName: 'MyiceboxEDI'
 };

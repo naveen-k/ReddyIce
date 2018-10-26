@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { any } from 'codelyzer/util/function';
 import { ActivatedRoute } from '@angular/router';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { CustomerMaintenanceService } from '../../customer-maintenance.service';
 
 
 @Component({
@@ -15,24 +16,37 @@ export class CustomerMaintenanceComponent implements OnInit {
 		startDate: null,
 		todaysDate: null,
 		endDate: null,
-		requestType:'SRP',
-		requestStatus:'all'
+		requestType: '0',
+		requestStatus: '0'
 	};
-	buttonAction:boolean = false;
-	constructor( private route: ActivatedRoute) {}
+	buttonAction: boolean = false;
+	requestTypes = [];
+	status = [];
+	requests = [];
+	constructor( private route: ActivatedRoute,
+		private custMaintenanceService: CustomerMaintenanceService) {}
 	
 	ngOnInit() {
 		const now = new Date();
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
+		
+		this.custMaintenanceService.getRequestType()
+			.subscribe((resp) => this.requestTypes = resp);
+		
+		this.custMaintenanceService.getStatus()
+			.subscribe((resp) => this.status = resp);
+		
+		this.custMaintenanceService.getAllRequests()
+			.subscribe((resp) => this.requests = resp);
 	}
 
-refreshDataHandler(byType: any = ''){
-	if( byType ==='dateChange' ){
-			//this.dateChangeHandler();
+	refreshDataHandler(byType: any = ''){
+		if( byType === 'dateChange' ){
+				//this.dateChangeHandler();
+		}
 	}
-}
 	dateChangeHandler() {
 		
 	}
@@ -42,11 +56,12 @@ refreshDataHandler(byType: any = ''){
         if (mm < 10) { mm = '0' + mm }
         if (dd < 10) { dd = '0' + dd }
         return yy + '/' + mm + '/' + dd;
-    }
+	}
+	
 	getRequestList(){
-this.filter.modifystartDate = this.modifyDate(this.filter.startDate);
+		this.filter.modifystartDate = this.modifyDate(this.filter.startDate);
 		this.filter.modifyendDate = this.modifyDate(this.filter.endDate);
-console.log(this.filter);
+		// console.log(this.filter);
 	}
 
 }

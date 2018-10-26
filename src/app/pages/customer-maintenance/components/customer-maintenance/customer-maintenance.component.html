@@ -28,9 +28,7 @@
 			<div class="input-group">
                 <select class="form-control" 
                  [(ngModel)]="filter.requestType">
-                    <option value="SRP" >Select Request Type</option>
-                    <option value="AER" >Assets Exception</option>
-					<option value="AMR" >Assets Meter Reading</option>
+                    <option *ngFor="let req of requestTypes" [value]="req.Id" >{{ req.Name }}</option>                    
 				</select>
 			</div>
 		</div>
@@ -38,12 +36,12 @@
 			<label>Status</label>
 			<div class="input-group">
 				<select class="form-control" [(ngModel)]="filter.requestStatus">
-					<option value="all" >All Status</option>
+					<option *ngFor="let stat of status" [value]="stat.Id" >{{stat.Name}}</option>
 				</select>
 			</div>
 		</div>
 		<div class="col-sm-2 offset-sm-1" >
-            <button  class="btn btn-primary" (click)="getRequestList()"[disabled] = "buttonAction"
+            <button  class="btn btn-primary" [disabled] = "buttonAction"
             style="margin-top: 25px" >View Request</button>
         </div>
 	</div>
@@ -83,7 +81,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr *ngFor="let request of requests">
                                     <td style="padding-left: 0">
                                         <i  class="ion-eye custom-tooltip-ion"
                                             style="margin-right: 2px">
@@ -98,58 +96,12 @@
                                             <span class="tooltiptext">Delete</span>
                                         </i>
                                     </td>
-                                    <td>083123-WAL-MART-6966</td>
-                                    <td>Jeanette Perkins</td>
-                                    <td>Update Existing Customer</td>
-                                    <td>Dallas</td>
-                                    <td>swatson@reddyice.com</td>
-                                    <td>Pending for approval</td>
-                                </tr>
-
-                                <tr>
-                                        <td style="padding-left: 0">
-                                                <i  class="ion-eye custom-tooltip-ion"
-                                                    style="margin-right: 2px">
-                                                    <span class="tooltiptext">View</span>
-                                                </i>
-                                                <i  class="ion-edit custom-tooltip-ion"
-                                                    style="margin-right: 2px">
-                                                    <span class="tooltiptext">Edit</span>
-                                                </i>
-                                                <i  class="ion-trash-a custom-tooltip-ion"
-                                                    style="margin-right: 2px">
-                                                    <span class="tooltiptext">Delete</span>
-                                                </i>
-                                            </td>
-                                    <td>083123-WAL-MART-6966</td>
-                                    <td>Jeanette Perkins</td>
-                                    <td>Update Existing Customer</td>
-                                    <td>Dallas</td>
-                                    <td>swatson@reddyice.com</td>
-                                    <td>Pending for approval</td>
-                                </tr>
-
-                                <tr>
-                                        <td style="padding-left: 0">
-                                                <i  class="ion-eye custom-tooltip-ion"
-                                                    style="margin-right: 2px">
-                                                    <span class="tooltiptext">View</span>
-                                                </i>
-                                                <i  class="ion-edit custom-tooltip-ion"
-                                                    style="margin-right: 2px">
-                                                    <span class="tooltiptext">Edit</span>
-                                                </i>
-                                                <i  class="ion-trash-a custom-tooltip-ion"
-                                                    style="margin-right: 2px">
-                                                    <span class="tooltiptext">Delete</span>
-                                                </i>
-                                            </td>
-                                    <td>083123-WAL-MART-6966</td>
-                                    <td>Jeanette Perkins</td>
-                                    <td>Update Existing Customer</td>
-                                    <td>Dallas</td>
-                                    <td>swatson@reddyice.com</td>
-                                    <td>Pending for approval</td>
+                                    <td>{{request.CustomerName}}</td>
+                                    <td style="text-transform: capitalize;">{{request.SubmitterName}}</td>
+                                    <td style="text-transform: capitalize;">{{request.RequestType}}</td>
+                                    <td>{{request.Market}}</td>
+                                    <td>{{request.Approver}}</td>
+                                    <td>{{request.status}}</td>
                                 </tr>
 
                             </tbody>
