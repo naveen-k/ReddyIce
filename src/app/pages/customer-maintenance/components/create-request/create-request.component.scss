@@ -14,6 +14,10 @@ label {
     text-align: left;
 }
 
+.form-control:focus {
+  border-color: #cbcbcb;
+}
+
 .table > tbody > tr > td:first-child {
     text-align: left;
 }
@@ -23,14 +27,22 @@ i {
     cursor: pointer;
 }
 
-::ng-deep date-picker td {
-    padding-left: 0;
-    padding-right: 0;
+:host /deep/ .table td{
+    padding: 0 !important;
+    border-top: none
 }
 
 .table > tbody > tr > td {
     border: none;
     vertical-align: middle;
+}
+
+.header-table > tbody > tr {
+  margin-bottom: 5px;
+}
+
+.table > tbody > tr:first-child {
+  margin-top: 10px;
 }
 
 .buttonMargin {

@@ -28,10 +28,11 @@
                                     <label class="col-sm-1 col-form-label">Type of Request</label>
                                     <div class="input-group col-sm-3">
                                         <select class="form-control" 
-                                            [(ngModel)]="filter.requestType">
-                                            <option value="SRP" >Select Request Type</option>
-                                            <option value="AER" >Activate</option>
-                                            <option value="AMR" >De-Activate</option>
+                                            [(ngModel)]="filter.requestType"
+                                            (change)="changeRequest()">
+                                            <option value="0" >Select Request Type</option>
+                                            <option value="1" >Request Type 1</option>
+                                            <option value="2" >Request Type 2</option>
                                         </select>
                                     </div>
                                 </div>    
@@ -76,74 +77,63 @@
                                             </div>
                                         </div>
                                 </div>
-                        </fieldset>
-                    </div>                                        
+                        </fieldset>                       
+                    </div>
             </div>
 
-            <div class="row">
+            <div class="row" *ngIf="changeRequests.length" style="min-height: 200px">
                     <div class="col-sm-12">
                         <fieldset>
                             <legend>Change Request</legend>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                            <label for="comment">Comments</label>
                                             <div class="overflow-x">
-                                                <table class="table table-borderless" >
+                                                <table class="table table-borderless header-table" style="min-height: 100px">
                                                     <thead class="tableHeader" id="day-end-list-head">
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Existing Value</th>
-                                                            <th style="text-align:center">New Value</th>
+                                                        <tr class="d-flex">
+                                                            <th class="col-4">#</th>
+                                                            <th class="col-3 offset-1" style="padding-left:0">Existing Value</th>
+                                                            <th class="col-4" style="text-align:center">New Value</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Invoice & Delivery on Hold</td>
-                                                            <td>Acive</td>
-                                                            <td>
-                                                                <div class="col-sm-6 offset-sm-3" style="padding-top: 2px;">
+                                                    <tbody *ngIf="!showLoader">
+                                                        <tr *ngFor="let changeReq of changeRequests" class="d-flex">
+                                                            <td class="col-4" style="text-transform:capitalize">{{changeReq.FieldName}}</td>
+                                                            <td class="col-3 offset-1">{{changeReq.ExistingValue}}</td>
+                                                            
+                                                            <td class="col-3 offset-1">
+                                                                <div *ngIf="changeReq.DataType === 'Select'" style="padding-top: 2px;">
                                                                     <select class="form-control" 
-                                                                        [(ngModel)]="filter.requestType">
-                                                                        <option value="SRP" >Select Request Type</option>
-                                                                        <option value="AER" >Activate</option>
-                                                                        <option value="AMR" >De-Activate</option>
+                                                                        >
+                                                                        <option *ngFor= "let req of changeReq.DataSet" [value]="req.Id" >{{req.Value}}</option>
                                                                     </select>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
 
-                                                        <tr>
-                                                            <td>Effective Date</td>
-                                                            <td>NA</td>
-                                                            <td>
-                                                                <div class="col-sm-6 offset-sm-3 date-picker">
-                                                                    <date-picker [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate"></date-picker>
+                                                                <div *ngIf="changeReq.DataType === 'Date'">
+                                                                    <date-picker class="picker" [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate"></date-picker>
                                                                 </div>
-                                                            </td>
-                                                        </tr>
 
-                                                        <tr>
-                                                            <td>Deactivation Reason Code</td>
-                                                            <td>NA</td>
-                                                            <td>
-                                                                    <div class="col-sm-6 offset-sm-3" style="padding-top: 2px;">
-                                                                        <select class="form-control" 
-                                                                            [(ngModel)]="filter.requestType">
-                                                                            <option value="SRP" >Select Request Type</option>
-                                                                            <option value="AER" >Activate</option>
-                                                                            <option value="AMR" >De-Activate</option>
-                                                                        </select>
-                                                                    </div>
+                                                                <div *ngIf="changeReq.DataType === 'Input'">
+                                                                    <input type="text" class="form-control">
+                                                                </div>
+
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                        
                                             </div>
                                         </div>
                                 </div>
-                        </fieldset>
+                        </fieldset>                        
                     </div>                                        
+            </div>
+
+            <div *ngIf="showLoader" style='top:50%;bottom:0;left:0;right:0;height:10vh;z-index:999;position:absolute;'>
+
+                <div style="margin:auto;position:absolute;top:50%;left:50%;">
+            
+                    <img src="assets/reddyIce/spinner.gif " width='25px'>
+                </div>
             </div>
 
             <div class="row">

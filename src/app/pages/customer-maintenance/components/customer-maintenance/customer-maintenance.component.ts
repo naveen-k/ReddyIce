@@ -36,8 +36,10 @@ export class CustomerMaintenanceComponent implements OnInit {
 			.subscribe((resp) => this.requestTypes = resp);
 		
 		this.custMaintenanceService.getStatus()
-			.subscribe((resp) => this.status = resp);
-		
+			.subscribe((resp) => this.status = resp);		
+	}
+
+	getRequestList() {
 		this.custMaintenanceService.getAllRequests()
 			.subscribe((resp) => this.requests = resp);
 	}
@@ -47,21 +49,18 @@ export class CustomerMaintenanceComponent implements OnInit {
 				//this.dateChangeHandler();
 		}
 	}
-	dateChangeHandler() {
-		
-	}
-	modifyDate(modifyDate) {
-        if (!modifyDate.year) { return ''; }
-        let yy = modifyDate.year, mm = modifyDate.month, dd = modifyDate.day;
-        if (mm < 10) { mm = '0' + mm }
-        if (dd < 10) { dd = '0' + dd }
-        return yy + '/' + mm + '/' + dd;
-	}
+	// modifyDate(modifyDate) {
+    //     if (!modifyDate.year) { return ''; }
+    //     let yy = modifyDate.year, mm = modifyDate.month, dd = modifyDate.day;
+    //     if (mm < 10) { mm = '0' + mm }
+    //     if (dd < 10) { dd = '0' + dd }
+    //     return yy + '/' + mm + '/' + dd;
+	// }
 	
-	getRequestList(){
-		this.filter.modifystartDate = this.modifyDate(this.filter.startDate);
-		this.filter.modifyendDate = this.modifyDate(this.filter.endDate);
-		// console.log(this.filter);
-	}
+	// getRequestList() {
+	// 	this.filter.modifystartDate = this.modifyDate(this.filter.startDate);
+	// 	this.filter.modifyendDate = this.modifyDate(this.filter.endDate);
+	// 	// console.log(this.filter);
+	// }
 
 }

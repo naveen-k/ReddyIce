@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../../../../environments/environment.prod';
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
+import { CustomerMaintenanceService } from '../../customer-maintenance.service';
 
 @Component({
   templateUrl: './create-request.component.html',
@@ -13,19 +14,17 @@ export class CreateRequestComponent implements OnInit {
 		startDate: null,
 		todaysDate: null,
 		endDate: null,
-		requestType:'SRP',
+		requestType: 0,
 		requestStatus:'all'
-	};
+  };
+  showLoader = false;
   pageTitle: string = 'New Change Request';
-  customers = [
-    {value: 0, label: 'Select Customer'},
-    {value: 1, label: 'Jhon Doe'},
-    {value: 2, label: 'Jane Doe'},
-  ];
-
+  changeRequests = [];
+  
   constructor(
     public activatedRoute: ActivatedRoute,
     protected route: Router,
+    private custMaintenanceService: CustomerMaintenanceService
   ) { }
 
   ngOnInit() { 
@@ -33,11 +32,24 @@ export class CreateRequestComponent implements OnInit {
         this.filter.startDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.endDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
         this.filter.todaysDate = { year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() };
-   }
+    }
 
-   backtomainscreen() {
-    this.route.navigate(['view-request']);  
-   }
- 
+  changeRequest() {
+    this.showLoader = true;
+    this.custMaintenanceService.getChangeRequests(this.filter.requestType)
+      .subscribe(resp => {
+        if (resp.length) {
+          this.changeRequests = resp[0].RequestHeader;
+        } else {
+          this.changeRequests = [];
+        }
+        this.showLoader = false;
+      });
+  }
+
+  backtomainscreen() {
+  this.route.navigate(['view-request']);  
+  }
+
 
 }

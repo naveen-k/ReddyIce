@@ -21,4 +21,11 @@ export class CustomerMaintenanceService {
         .map((res) => res.json());
     }
 
+    getChangeRequests(id: string) {
+        return this.http.get(`api/CustomerMaintenance/GetChangeRequestFields`, { 
+            params: { id }
+         })
+        .map((res) => res.json());
+    }
+
 }

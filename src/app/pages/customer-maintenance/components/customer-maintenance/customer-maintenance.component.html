@@ -28,7 +28,7 @@
 			<div class="input-group">
                 <select class="form-control" 
                  [(ngModel)]="filter.requestType">
-                    <option *ngFor="let req of requestTypes" [value]="req.Id" >{{ req.Name }}</option>                    
+                    <option *ngFor="let req of requestTypes" [value]="req.Id" >{{ req.Value }}</option>                    
 				</select>
 			</div>
 		</div>
@@ -36,13 +36,13 @@
 			<label>Status</label>
 			<div class="input-group">
 				<select class="form-control" [(ngModel)]="filter.requestStatus">
-					<option *ngFor="let stat of status" [value]="stat.Id" >{{stat.Name}}</option>
+					<option *ngFor="let stat of status" [value]="stat.Id" >{{stat.Value}}</option>
 				</select>
 			</div>
 		</div>
 		<div class="col-sm-2 offset-sm-1" >
             <button  class="btn btn-primary" [disabled] = "buttonAction"
-            style="margin-top: 25px" >View Request</button>
+            style="margin-top: 25px" (click)="getRequestList()">View Request</button>
         </div>
 	</div>
 	<div class="row" >
@@ -80,7 +80,14 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody *ngIf="!requests.length">
+                                <tr>
+                                    <td class="text-center" colspan="10" style="font-size:16px;">
+                                        Please click View Request button to get latest data
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="requests.length">
                                 <tr *ngFor="let request of requests">
                                     <td style="padding-left: 0">
                                         <i  class="ion-eye custom-tooltip-ion"
@@ -103,7 +110,6 @@
                                     <td>{{request.Approver}}</td>
                                     <td>{{request.status}}</td>
                                 </tr>
-
                             </tbody>
                         </table>
 
