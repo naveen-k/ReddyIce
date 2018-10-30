@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="pull-right head-button-container">
-                <button class="btn btn-danger buttonMargin">Back</button>
+                <button class="btn btn-danger buttonMargin" (click)="back()">Back</button>
                 <button class="btn btn-danger" style="margin-left:10px;" disabled>Submit</button>                
             </div>
 
@@ -31,8 +31,8 @@
                                             [(ngModel)]="filter.requestType"
                                             (change)="changeRequest()">
                                             <option value="0" >Select Request Type</option>
-                                            <option value="1" >Request Type 1</option>
-                                            <option value="2" >Request Type 2</option>
+                                            <option value="1" >Update Existing Customer</option>
+                                            <option value="2" >Update New Customer</option>
                                         </select>
                                     </div>
                                 </div>    

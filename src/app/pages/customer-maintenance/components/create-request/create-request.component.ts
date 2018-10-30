@@ -23,7 +23,7 @@ export class CreateRequestComponent implements OnInit {
   
   constructor(
     public activatedRoute: ActivatedRoute,
-    protected route: Router,
+    protected router: Router,
     private custMaintenanceService: CustomerMaintenanceService
   ) { }
 
@@ -47,8 +47,8 @@ export class CreateRequestComponent implements OnInit {
       });
   }
 
-  backtomainscreen() {
-  this.route.navigate(['view-request']);  
+  back() {
+    this.router.navigate(['pages', 'customer-maintenance', 'view-request']);  
   }
 
 

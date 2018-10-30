@@ -16,7 +16,7 @@ export class CustomerMaintenanceComponent implements OnInit {
 		startDate: null,
 		todaysDate: null,
 		endDate: null,
-		requestType: '0',
+		requestType: '1',
 		requestStatus: '0'
 	};
 	buttonAction: boolean = false;
@@ -48,6 +48,11 @@ export class CustomerMaintenanceComponent implements OnInit {
 		if( byType === 'dateChange' ){
 				//this.dateChangeHandler();
 		}
+	}
+
+	deleteRequest(request) {
+		const index = this.requests.indexOf(request);
+		this.requests.splice(index,1);
 	}
 	// modifyDate(modifyDate) {
     //     if (!modifyDate.year) { return ''; }

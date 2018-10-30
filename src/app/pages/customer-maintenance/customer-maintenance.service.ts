@@ -7,7 +7,7 @@ export class CustomerMaintenanceService {
     constructor(private http: HttpService) { }
 
     getRequestType() {
-        return this.http.get(`api/CustomerMaintenance/GetAllChangeRequestStatus`)
+        return this.http.get(`api/CustomerMaintenance/GetAllChangeRequestTypes`)
         .map((res) => res.json());
     }
 

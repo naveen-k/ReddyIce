@@ -27,8 +27,9 @@
 			<label>Type of Request</label>
 			<div class="input-group">
                 <select class="form-control" 
-                 [(ngModel)]="filter.requestType">
-                    <option *ngFor="let req of requestTypes" [value]="req.Id" >{{ req.Value }}</option>                    
+                 [(ngModel)]="filter.requestType" style="text-transform: capitalize;">
+                    <option *ngFor="let req of requestTypes" [value]="req.Id"
+                    >{{ req.Value }}</option>                    
 				</select>
 			</div>
 		</div>
@@ -91,15 +92,16 @@
                                 <tr *ngFor="let request of requests">
                                     <td style="padding-left: 0">
                                         <i  class="ion-eye custom-tooltip-ion"
-                                            style="margin-right: 2px">
+                                            style="margin-right: 2px; cursor: pointer;">
                                             <span class="tooltiptext">View</span>
                                         </i>
                                         <i  class="ion-edit custom-tooltip-ion"
-                                            style="margin-right: 2px">
+                                            style="margin-right: 2px; cursor: pointer;">
                                             <span class="tooltiptext">Edit</span>
                                         </i>
                                         <i  class="ion-trash-a custom-tooltip-ion"
-                                            style="margin-right: 2px">
+                                            style="margin-right: 2px; cursor: pointer;"
+                                            (click)="deleteRequest(request)">
                                             <span class="tooltiptext">Delete</span>
                                         </i>
                                     </td>
