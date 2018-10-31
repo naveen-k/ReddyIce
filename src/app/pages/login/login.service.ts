@@ -40,4 +40,11 @@ export class LoginService {
         localStorage.clear();
     }
 
+    checkUserLoginStatus() {
+        const authToken = localStorage.getItem('auth_token'); 
+        if (authToken && authToken !== '') return true;
+        
+        return false;
+    }
+
 }

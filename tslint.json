@@ -9,7 +9,7 @@
     "max-line-length": [true, 150],
     "class-name": true,
     "comment-format": [true, "check-space"],
-    "indent": [true, "spaces"],
+    "indent": [false, "spaces"],
     "eofline": true,
     "no-duplicate-variable": true,
     "no-eval": true,

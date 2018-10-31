@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { Pages } from './pages.component';
 import { ModuleWithProviders } from '@angular/core';
+import { AuthGuard } from './auth-guard.service';
 // noinspection TypeScriptValidateTypes
 
 // export function loadChildren(path) { return System.import(path); };
@@ -9,6 +10,7 @@ export const routes: Routes = [
   {
     path: 'opentracker',
     loadChildren: 'app/pages/tracker/tracker.module#TrackerModule',
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
@@ -29,6 +31,7 @@ export const routes: Routes = [
   {
     path: 'pages',
     component: Pages,
+    canActivate: [AuthGuard],
     children: [
 
       { path: 'home', loadChildren: './home/home.module#HomeModule' },
