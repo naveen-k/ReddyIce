@@ -1,219 +1,201 @@
 <ba-card cardTitle="{{pageTitle}}" id="newTicket">
+  <form #f="ngForm" (ngSubmit)="submit(f.value)">
     <div class="row">
-        <div class="col-sm-12">
-            <div class="pull-right head-button-container">
-                <button class="btn btn-danger buttonMargin" (click)="back()">Back</button>
-                <button class="btn btn-danger" style="margin-left:10px;" disabled>Submit</button>                
-            </div>
-
-            <div class="row">
-                    <div class="col-sm-12">
-                        <fieldset>
-                            <legend>Select Customer</legend>
-                                <div class="row">
-                                    <label for="example-text-input" class="col-sm-1 col-form-label">
-                                        Customer:
-                                        <sup style="color:red;">*</sup>                                        
-                                    </label>
-                                    <input type="text" class="form-control col-sm-2" id="usr">
-                                    
-                                    
-                                    <label class="col-sm-2 col-form-label"> AX Customer Number: </label>
-                                    <p class="col-sm-1 col-form-label">127634753</p>
-
-                                    <label class="col-sm-2 col-form-label"> Primary Delivery BU: </label>
-                                    <p class="col-sm-2 col-form-label">113-REDDY ICE - EUREKA</p>
-                                </div>
-                                <div class="row" style="margin-top: 10px">
-                                    <label class="col-sm-1 col-form-label">Type of Request</label>
-                                    <div class="input-group col-sm-3">
-                                        <select class="form-control" 
-                                            [(ngModel)]="filter.requestType"
-                                            (change)="changeRequest()">
-                                            <option value="0" >Select Request Type</option>
-                                            <option value="1" >Update Existing Customer</option>
-                                            <option value="2" >Update New Customer</option>
-                                        </select>
-                                    </div>
-                                </div>    
-                        </fieldset>
-                    </div>                                        
-            </div>
-
-            <div class="row">
-                    <div class="col-sm-12">
-                        <fieldset>
-                            <legend>Information</legend>
-                                <div class="row">
-                                    <div class="col-sm-3 col-form-label">
-                                        <label for="comment">Reason For Change</label>
-                                        <textarea class="form-control"></textarea>
-                                    </div>
-                                    <div class="col-sm-3 col-form-label">
-                                        <label for="comment">Comment</label>
-                                        <textarea class="form-control"></textarea>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                            <label for="comment">Comments</label>
-                                            <div class="overflow-x">
-                                                <table class="table table-striped" >
-                                                    <thead class="tableHeader" id="day-end-list-head">
-                                                        <tr>
-                                                            <th>Comment</th>
-                                                            <th>Date</th>
-                                                            <th>User</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                        
-                                            </div>
-                                        </div>
-                                </div>
-                        </fieldset>                       
-                    </div>
-            </div>
-
-            <div class="row" *ngIf="changeRequests.length" style="min-height: 200px">
-                    <div class="col-sm-12">
-                        <fieldset>
-                            <legend>Change Request</legend>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                            <div class="overflow-x">
-                                                <table class="table table-borderless header-table" style="min-height: 100px">
-                                                    <thead class="tableHeader" id="day-end-list-head">
-                                                        <tr class="d-flex">
-                                                            <th class="col-4">#</th>
-                                                            <th class="col-3 offset-1" style="padding-left:0">Existing Value</th>
-                                                            <th class="col-4" style="text-align:center">New Value</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody *ngIf="!showLoader">
-                                                        <tr *ngFor="let changeReq of changeRequests" class="d-flex">
-                                                            <td class="col-4" style="text-transform:capitalize">{{changeReq.FieldName}}</td>
-                                                            <td class="col-3 offset-1">{{changeReq.ExistingValue}}</td>
-                                                            
-                                                            <td class="col-3 offset-1">
-                                                                <div *ngIf="changeReq.DataType === 'Select'" style="padding-top: 2px;">
-                                                                    <select class="form-control" 
-                                                                        >
-                                                                        <option *ngFor= "let req of changeReq.DataSet" [value]="req.Id" >{{req.Value}}</option>
-                                                                    </select>
-                                                                </div>
-
-                                                                <div *ngIf="changeReq.DataType === 'Date'">
-                                                                    <date-picker class="picker" [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate"></date-picker>
-                                                                </div>
-
-                                                                <div *ngIf="changeReq.DataType === 'Input'">
-                                                                    <input type="text" class="form-control">
-                                                                </div>
-
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                </div>
-                        </fieldset>                        
-                    </div>                                        
-            </div>
-
-            <div *ngIf="showLoader" style='top:50%;bottom:0;left:0;right:0;height:10vh;z-index:999;position:absolute;'>
-
-                <div style="margin:auto;position:absolute;top:50%;left:50%;">
-            
-                    <img src="assets/reddyIce/spinner.gif " width='25px'>
-                </div>
-            </div>
-
-            <div class="row">
-                    <div class="col-sm-12">
-                        <fieldset>
-                            <legend>Change Request Item</legend>
-                            <div class="row">
-                                    <div class="col-sm-12">
-                                        <button class="btn btn-danger pull-right">Add Product</button>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">                                            
-                                            <div class="overflow-x">
-                                                <table class="table table-borderless" >
-                                                    <thead class="tableHeader" id="day-end-list-head">
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Price</th>
-                                                            <th>Drayage</th>
-                                                            <th>Buy Back</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>100028# 10-BLOACK ICE</td>
-                                                            <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
-                                                            <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
-                                                            <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>
-                                                            <td style="padding-top:5px">
-                                                                <i  class="ion-compose custom-tooltip-ion">
-                                                                    <span class="tooltiptext">Edit</span>
-                                                                </i>
-                                                                <i  class="ion-trash-a custom-tooltip-ion">
-                                                                    <span class="tooltiptext">Delete</span>
-                                                                </i>
-                                                            </td>                                                            
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td>100028# 10-BLOACK ICE</td>
-                                                                <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
-                                                                <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
-                                                                <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>
-                                                                <td style="padding-top:5px">
-                                                                    <i  class="ion-compose custom-tooltip-ion">
-                                                                        <span class="tooltiptext">Edit</span>
-                                                                    </i>
-                                                                    <i  class="ion-trash-a custom-tooltip-ion">
-                                                                        <span class="tooltiptext">Delete</span>
-                                                                    </i>
-                                                                </td>                                                            
-                                                            </tr>
-
-                                                            <tr>
-                                                                    <td>100028# 10-BLOACK ICE</td>
-                                                                    <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
-                                                                    <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>                                                            
-                                                                    <td><input type="text" class="form-control col-sm-8" style="margin-top: 3px"></td>
-                                                                    <td style="padding-top:5px">
-                                                                        <i  class="ion-compose custom-tooltip-ion">
-                                                                            <span class="tooltiptext">Edit</span>
-                                                                        </i>
-                                                                        <i  class="ion-trash-a custom-tooltip-ion">
-                                                                            <span class="tooltiptext">Delete</span>
-                                                                        </i>
-                                                                    </td>                                                            
-                                                                </tr>
-                                                    </tbody>
-                                                </table>
-                        
-                                            </div>
-                                        </div>
-                                </div>
-                        </fieldset>
-                    </div>                                        
-            </div>
-
-            
+      <div class="col-sm-12">
+        <div class="pull-right head-button-container">
+          <button type="button" class="btn btn-danger buttonMargin" (click)="back()">Back</button>
+          <button class="btn btn-danger" style="margin-left:10px;">Submit</button>
         </div>
-    </div>    
+
+        <div class="row">
+          <div class="col-sm-12">
+            <fieldset>
+              <legend>Select Customer</legend>
+              <div class="row">
+                <label for="example-text-input" class="col-sm-1 col-form-label">
+                  Customer:
+                  <sup style="color:red;">*</sup>
+                </label>
+                <input #customer="ngModel" ngModel name="customer" type="text" class="form-control col-sm-2"
+                  id="usr">
+
+
+                <label class="col-sm-2 col-form-label"> AX Customer Number: </label>
+                <p class="col-sm-1 col-form-label">127634753</p>
+
+                <label class="col-sm-2 col-form-label"> Primary Delivery BU: </label>
+                <p class="col-sm-2 col-form-label">113-REDDY ICE - EUREKA</p>
+              </div>
+              <div class="row" style="margin-top: 10px">
+                <label class="col-sm-1 col-form-label">Type of Request</label>
+                <div class="input-group col-sm-3">
+                  <select class="form-control" [(ngModel)]="filter.requestType" name="requestType" (change)="changeRequest()">
+                    <option value="0">Select Request Type</option>
+                    <option value="1">Update Existing Customer</option>
+                    <option value="2">Update New Customer</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <fieldset>
+              <legend>Information</legend>
+              <div class="row">
+                <div class="col-sm-3 col-form-label">
+                  <label for="comment">Reason For Change</label>
+                  <textarea #reason="ngModel" ngModel name="reason" class="form-control"></textarea>
+                </div>
+                <div class="col-sm-3 col-form-label">
+                  <label for="comment">Comment</label>
+                  <textarea name="comment" #comment="ngModel" ngModel class="form-control"></textarea>
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="comment">Comments</label>
+                  <div class="overflow-x">
+                    <table class="table table-striped">
+                      <thead class="tableHeader" id="day-end-list-head">
+                        <tr>
+                          <th>Comment</th>
+                          <th>Date</th>
+                          <th>User</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="changeRequests.length" style="min-height: 200px">
+          <div class="col-sm-12">
+            <fieldset>
+              <legend>Change Request</legend>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="overflow-x">
+                    <table class="table table-borderless header-table" style="min-height: 100px">
+                      <thead class="tableHeader" id="day-end-list-head">
+                        <tr class="d-flex">
+                          <th class="col-4">#</th>
+                          <th class="col-3 offset-1" style="padding-left:0">Existing Value</th>
+                          <th class="col-4" style="text-align:center">New Value</th>
+                        </tr>
+                      </thead>
+                      <tbody *ngIf="!showLoader">
+                        <tr *ngFor="let changeReq of changeRequests" class="d-flex">
+                          <td class="col-4" style="text-transform:capitalize">{{changeReq.FieldName}}</td>
+                          <td class="col-3 offset-1">{{changeReq.ExistingValue}}</td>
+
+                          <td class="col-3 offset-1">
+                            <div *ngIf="changeReq.DataType === 'Select'" style="padding-top: 2px;">
+                              <select class="form-control" [name]="changeReq.FieldName" #{{changeReq.FieldName}}="ngModel" ngModel>
+                                <option *ngFor="let req of changeReq.DataSet" [value]="req.Id">{{req.Value}}</option>
+                              </select>
+                            </div>
+
+                            <div *ngIf="changeReq.DataType === 'Date'">
+                              <date-picker class="picker" [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate"></date-picker>
+                            </div>
+
+                            <div *ngIf="changeReq.DataType === 'Input'">
+                              <input type="text" class="form-control" [name]="changeReq.FieldName" #{{changeReq.FieldName}}="ngModel" ngModel>
+                            </div>
+
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div *ngIf="showLoader" style='top:50%;bottom:0;left:0;right:0;height:10vh;z-index:999;position:absolute;'>
+
+          <div style="margin:auto;position:absolute;top:50%;left:50%;">
+
+            <img src="assets/reddyIce/spinner.gif " width='25px'>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="requestItems.length > 0">
+          <div class="col-sm-12">
+            <fieldset>
+              <legend>Change Request Item</legend>
+              <div class="row">
+                <div class="col-sm-12">
+                  <button class="btn btn-danger pull-right">Add Product</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="overflow-x">
+                    <table class="table table-borderless request-item-table">
+                      <thead class="tableHeader" id="day-end-list-head">
+                        <tr>
+                          <th class="text-center" *ngFor="let title of reqItemData.ItemFieldsTitle">{{title.FieldName}}</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of reqItemData.ItemFieldsValues">
+                          <td style="vertical-align: bottom; padding-right: 10px !important;">{{item.FieldName}}</td>
+                            <td *ngFor="let field of item.LineItems">
+                              <div *ngIf="field.DataType === 'Select'" class="form-group text-center">
+                                <label style="margin-bottom: 0"> {{field.Old_Value}} </label>
+                                <select class="form-control" [name]="field.Old_Value" #{{field.Old_Value}}="ngModel" ngModel>
+                                  <option *ngFor="let req of field.DataSet" [value]="req.Id">{{req.Value}}</option>
+                                </select>
+                              </div>
+
+                              <div *ngIf="field.DataType === 'Date'" class="form-group text-center">
+                                <label style="margin-bottom: 0"> {{field.Old_Value}} </label>
+                                <date-picker class="picker" [maxDate]="filter.todaysDate" [(dateModel)]="filter.startDate"></date-picker>
+                              </div>
+      
+                              <div *ngIf="field.DataType === 'Input'" class="form-group text-center">
+                              <label style="margin-bottom: 0"> {{field.Old_Value}} </label>
+                              <input type="text" [name]="field.Old_Value" #{{field.Old_Value}}="ngModel" ngModel class="form-control">
+                              </div>
+                            </td>
+                            <td style="text-align: center;vertical-align: bottom;">
+                              <i class="ion-compose custom-tooltip-ion">
+                                <span class="tooltiptext">Edit</span>
+                              </i>
+                              <i class="ion-trash-a custom-tooltip-ion">
+                                <span class="tooltiptext">Delete</span>
+                              </i>
+                            </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </form>
 </ba-card>

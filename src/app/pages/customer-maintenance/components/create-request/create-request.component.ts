@@ -4,6 +4,7 @@ import { environment } from '../../../../../environments/environment.prod';
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { CustomerMaintenanceService } from '../../customer-maintenance.service';
+import { ReqItem } from './mock-data';
 
 @Component({
   templateUrl: './create-request.component.html',
@@ -20,6 +21,9 @@ export class CreateRequestComponent implements OnInit {
   showLoader = false;
   pageTitle: string = 'New Change Request';
   changeRequests = [];
+  requestItems = [];
+
+  reqItemData = new ReqItem().reqItem;
   
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -40,8 +44,10 @@ export class CreateRequestComponent implements OnInit {
       .subscribe(resp => {
         if (resp.length) {
           this.changeRequests = resp[0].RequestHeader;
+          this.requestItems = resp[0].RequestItem;
         } else {
           this.changeRequests = [];
+          this.requestItems = [];
         }
         this.showLoader = false;
       });
@@ -49,6 +55,10 @@ export class CreateRequestComponent implements OnInit {
 
   back() {
     this.router.navigate(['pages', 'customer-maintenance', 'view-request']);  
+  }
+
+  submit(request) {
+    console.log("Form value===>", request);
   }
 
 
